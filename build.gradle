@@ -1,0 +1,298 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+}
+
+group = 'edu.upenn.psych.memory'
+version = '0.00'
+
+// Project configuration
+ext {
+    programProperName = 'Penn TotalRecall'
+    programShortName = 'TotalRecall'
+    programExtensionlessFilename = 'PennTotalRecall'
+    unixName = 'penntotalrecall'
+    maintainerName = 'Yuvi Masory'
+    maintainerEmail = 'memory-software@psych.upenn.edu'
+    uniqueIdentifier = 'edu.upenn.psych.memory.totalrecall'
+    orgName = 'Computational Memory Lab, UPenn'
+    homepage = 'http://memory.psych.upenn.edu/TotalRecall'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+application {
+    mainClass = 'control.Start'
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    // XML processing libraries
+    implementation 'dom4j:dom4j:1.6.1'
+    implementation 'jaxen:jaxen:1.1.1'
+    implementation 'org.jdom:jdom:1.1.3' // Updated version
+    implementation 'xalan:xalan:2.7.3' // Updated version
+    implementation 'xerces:xercesImpl:2.12.2' // Updated version
+    implementation 'xml-apis:xml-apis:1.4.01' // Updated version
+    implementation 'xom:xom:1.3.9' // Updated version
+    
+    // ICU for internationalization
+    implementation 'com.ibm.icu:icu4j:74.2' // Updated version
+    
+    // JNA for native library access
+    implementation 'net.java.dev.jna:jna:5.14.0' // Updated version
+    
+    // Scala dependencies from Maven Central
+    implementation 'org.scala-lang:scala-library:2.9.1'
+    testImplementation 'org.scalatest:scalatest_2.9.0:1.6.1'
+    
+    // Log4j for testing
+    testImplementation 'log4j:log4j:1.2.17'
+    
+    // Local JAR dependencies that don't have Maven equivalents
+    implementation name: 'OrangeExtensions-1.1', version: '1.1'
+    implementation name: 'signalproc', version: 'unknown'
+    implementation name: 'swing-shortcut-manager_2.9.1-0.3.0', version: '0.3.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['test']
+        }
+    }
+}
+
+// Configure JAR manifest
+jar {
+    archiveFileName = "${programExtensionlessFilename}.jar"
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass.get(),
+            'Class-Path': '.',
+            'Built-By': System.getProperty('user.name'),
+            'Implementation-Vendor': orgName,
+            'Implementation-Title': programProperName
+        )
+    }
+    
+    // Include all dependencies in the JAR (fat JAR)
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Clean task
+clean {
+    delete 'classes', 'dist', 'tmp'
+}
+
+// Custom tasks for native compilation
+task compileNative {
+    group = 'build'
+    description = 'Compile native audio system (64-bit only)'
+    
+    doLast {
+        if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+            // Windows build using vcbuild (64-bit)
+            exec {
+                workingDir 'native/fmod/build/windows'
+                commandLine 'vcbuild', 'libpenntotalrecall_fmod.vcproj'
+            }
+        } else if (System.getProperty('os.name').toLowerCase().contains('linux')) {
+            // Linux build using make (64-bit only)
+            exec {
+                workingDir 'native/fmod/build/posix'
+                commandLine 'make', 'Linux_64_only'
+            }
+        } else {
+            // Mac build using make
+            exec {
+                workingDir 'native/fmod/build/posix'
+                commandLine 'make'
+            }
+        }
+    }
+}
+
+// Platform-specific packaging tasks
+task packageWindowsExe {
+    group = 'packaging'
+    description = 'Create Windows .exe using jpackage (Java 14+)'
+    dependsOn jar, compileNative
+    
+    doLast {
+        def jarFile = jar.archiveFile.get().asFile
+        def exeDir = file("${buildDir}/windows")
+        exeDir.mkdirs()
+        
+        // Use jpackage (requires Java 14+) 
+        exec {
+            commandLine 'jpackage',
+                '--input', jarFile.parent,
+                '--main-jar', jarFile.name,
+                '--main-class', application.mainClass.get(),
+                '--name', programProperName,
+                '--app-version', version,
+                '--description', 'Audio annotation tool for research',
+                '--vendor', orgName,
+                '--icon', 'deploy/windows/headphones.ico',
+                '--dest', exeDir,
+                '--type', 'app-image',
+                '--win-console'
+        }
+        
+        println "Windows .exe created in ${exeDir}"
+    }
+}
+
+task packageWindowsInstaller {
+    group = 'packaging'
+    description = 'Create Windows MSI installer using jpackage (Java 14+)'
+    dependsOn jar, compileNative
+    
+    doLast {
+        def jarFile = jar.archiveFile.get().asFile
+        def installerDir = file("${buildDir}/windows-installer")
+        installerDir.mkdirs()
+        
+        // Use jpackage to create MSI installer
+        exec {
+            commandLine 'jpackage',
+                '--input', jarFile.parent,
+                '--main-jar', jarFile.name,
+                '--main-class', application.mainClass.get(),
+                '--name', programProperName,
+                '--app-version', version,
+                '--description', 'Audio annotation tool for research',
+                '--vendor', orgName,
+                '--icon', 'deploy/windows/headphones.ico',
+                '--dest', installerDir,
+                '--type', 'msi',
+                '--win-console',
+                '--win-menu',
+                '--win-shortcut'
+        }
+        
+        println "Windows MSI installer created in ${installerDir}"
+    }
+}
+
+task packageMacApp {
+    group = 'packaging'
+    description = 'Create Mac .app bundle using jpackage (Java 14+)'
+    dependsOn jar, compileNative
+    
+    doLast {
+        def jarFile = jar.archiveFile.get().asFile
+        def appDir = file("${buildDir}/mac")
+        appDir.mkdirs()
+        
+        // Use jpackage (requires Java 14+)
+        exec {
+            commandLine 'jpackage',
+                '--input', jarFile.parent,
+                '--main-jar', jarFile.name,
+                '--main-class', application.mainClass.get(),
+                '--name', programProperName,
+                '--app-version', version,
+                '--description', 'Audio annotation tool for research',
+                '--vendor', orgName,
+                '--mac-package-identifier', uniqueIdentifier,
+                '--icon', 'deploy/mac/headphones.icns',
+                '--dest', appDir,
+                '--type', 'app-image'
+        }
+        
+        println "Mac .app created in ${appDir}"
+    }
+}
+
+task packageLinuxDeb {
+    group = 'packaging'
+    description = 'Create Debian package using jpackage (Java 14+)'
+    dependsOn jar, compileNative
+    
+    doLast {
+        def jarFile = jar.archiveFile.get().asFile
+        def debDir = file("${buildDir}/linux")
+        debDir.mkdirs()
+        
+        // Use jpackage to create DEB package
+        exec {
+            commandLine 'jpackage',
+                '--input', jarFile.parent,
+                '--main-jar', jarFile.name,
+                '--main-class', application.mainClass.get(),
+                '--name', unixName,
+                '--app-version', version,
+                '--description', 'Audio annotation tool for research',
+                '--vendor', orgName,
+                '--icon', 'resources/images/headphones48.png',
+                '--dest', debDir,
+                '--type', 'deb',
+                '--linux-menu-group', 'AudioVideo',
+                '--linux-shortcut'
+        }
+        
+        println "Debian package created in ${debDir}"
+    }
+}
+
+// Distribution configuration
+distributions {
+    main {
+        distributionBaseName = programExtensionlessFilename
+        contents {
+            from jar
+            from 'deploy/all'
+            from('native/fmod/lib') {
+                into 'lib'
+            }
+        }
+    }
+}
+
+// Test configuration
+test {
+    useJUnit()
+    
+    // Custom test task that runs the manual test suite
+    doLast {
+        println "To run manual tests, execute: java -cp build/libs/${programExtensionlessFilename}.jar edu.upenn.psych.memory.totalrecall.tests.RunTests"
+    }
+}
+
+// Version compatibility check
+task checkJavaVersion {
+    doLast {
+        def javaVersion = JavaVersion.current()
+        if (javaVersion < JavaVersion.VERSION_1_8) {
+            throw new GradleException("Java 8 or higher is required. Current version: ${javaVersion}")
+        }
+        println "Java version check passed: ${javaVersion}"
+    }
+}
+
+// Make version check run before compilation
+compileJava.dependsOn checkJavaVersion
