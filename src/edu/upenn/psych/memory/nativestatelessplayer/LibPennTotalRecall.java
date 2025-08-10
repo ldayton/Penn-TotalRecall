@@ -24,6 +24,8 @@ import com.sun.jna.Native;
  * 
  * WARNING if using FMOD implementation: streamPosition() must be called frequently in order to cause FMOD's system to update.
  * 
+ * Updated for FMOD Core API compatibility.
+ * 
  * @author Yuvi Masory
  */
 public final class LibPennTotalRecall {

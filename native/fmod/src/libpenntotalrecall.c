@@ -15,13 +15,12 @@
 */
 
 /*
- * Implementation of libpenntotalrecall using FMOD.
+ * Implementation of libpenntotalrecall using FMOD Core.
  *
  * Author: Yuvi Masory
+ * Updated for FMOD Core API
  *
  * WARNING streamPosition() must be called frequently in order to cause FMOD's system to update.
- *
- * See Apache Ant build.xml that came with this project to see which compilers this has been tested on.
  */
  
 
@@ -36,18 +35,29 @@
 #include <memory.h>
 
 //library info
-const unsigned int revisionNumber = 1;
-const char* libName = "FMOD implementation of LibPennTotalRecall";
+const unsigned int revisionNumber = 2;
+const char* libName = "FMOD Core implementation of LibPennTotalRecall";
 
 //playback state
+typedef enum {
+    STATE_UNINITIALIZED,
+    STATE_SYSTEM_CREATED,
+    STATE_SYSTEM_INITIALIZED,
+    STATE_SOUND_LOADED,
+    STATE_PLAYING,
+    STATE_ERROR
+} PlaybackState;
+
 FMOD_SYSTEM *fmsystem = NULL;
 FMOD_SOUND *sound = NULL;
 FMOD_CHANNEL *channel = NULL;
 FMOD_CREATESOUNDEXINFO soundInfo;
 int lastStartFrame = 0;
-
+PlaybackState currentState = STATE_UNINITIALIZED;
 
 static void printError(FMOD_RESULT result);
+static void cleanupResources(void);
+static int validateState(PlaybackState expected);
 
 
 
@@ -59,10 +69,9 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     float inputRate;
 	FMOD_RESULT result = FMOD_OK;
 
-	if (fmsystem != NULL || sound != NULL || channel != NULL || lastStartFrame != 0) {
-		fprintf(stderr, "startPlayback() called in inconsistent state, trying to correct\n");
-		stopPlayback();
-		return -4;
+	if (currentState != STATE_UNINITIALIZED) {
+		fprintf(stderr, "startPlayback() called while already initialized, cleaning up first\n");
+		cleanupResources();
 	}
 
     if (startFrame < 0) {
@@ -71,63 +80,67 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     }
 
     if (endFrame <= startFrame) {
-    	fprintf(stderr, "startPlayback() given an endFrame (%lld) <= startFrame (%lld)", endFrame, startFrame);
-		stopPlayback();
+    	fprintf(stderr, "startPlayback() given an endFrame (%lld) <= startFrame (%lld)\n", endFrame, startFrame);
+		cleanupResources();
 		return -1;
     }
 
 	lastStartFrame = startFrame;
 
-	result = FMOD_System_Create(&fmsystem);
+	result = FMOD_System_Create(&fmsystem, FMOD_VERSION);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System_Create() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -1;
 	}
+	currentState = STATE_SYSTEM_CREATED;
 
 	result = FMOD_System_Init(fmsystem, 32, FMOD_INIT_NORMAL, NULL);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System.init() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -1;
 	}
+	currentState = STATE_SYSTEM_INITIALIZED;
 
 	memset(&soundInfo, 0, sizeof(FMOD_CREATESOUNDEXINFO));
 	soundInfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
 	soundInfo.initialseekposition = startFrame;
 	soundInfo.initialseekpostype = FMOD_TIMEUNIT_PCM;
 
-	result = FMOD_System_CreateSound(fmsystem, filename, FMOD_SOFTWARE | FMOD_CREATESTREAM | FMOD_LOOP_OFF, &soundInfo, &sound);
+	result = FMOD_System_CreateSound(fmsystem, filename, FMOD_CREATESTREAM | FMOD_LOOP_OFF, &soundInfo, &sound);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System.createSound() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -3;
 	}
+	currentState = STATE_SOUND_LOADED;
 
     result = FMOD_Sound_GetDefaults(sound, &inputRate, NULL, NULL, NULL);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System.getDefaults() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -3;
 	}
 
-
-	result = FMOD_System_PlaySound(fmsystem, FMOD_CHANNEL_FREE, sound, TRUE, &channel);
+	result = FMOD_System_PlaySound(fmsystem, sound, NULL, 1, &channel);
 	if (result != FMOD_OK) {
 		fprintf(stderr, "exceptional return value for FMOD::System.playSound() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -1;
 	}
+	currentState = STATE_PLAYING;
 
-    result = FMOD_System_GetDSPBufferSize(fmsystem, &startDelayFrames, 0);
+    result = FMOD_System_GetDSPBufferSize(fmsystem, &startDelayFrames, NULL);
     if (result != FMOD_OK) {
       fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
       fprintf(stderr, "cannot determine buffer size\n");
+      cleanupResources();
       return -1;
     }
     startDelayFrames *= 2;
@@ -136,6 +149,7 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     if (result != FMOD_OK) {
       fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
       fprintf(stderr, "cannot determine output format\n");
+      cleanupResources();
       return -1;
     }
 
@@ -144,11 +158,11 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     hiclock = hitime;
     loclock = lotime;
     FMOD_64BIT_ADD(hiclock, loclock, 0, startDelayFrames);
-    result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_START, hiclock, loclock);
+    result = FMOD_Channel_SetDelay(channel, hiclock, loclock, 1);
 	if (result != FMOD_OK) {
-        fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() [start] in startPlayback()\n");
+        fprintf(stderr, "exceptional return value for FMOD::Channel.setDelay() [start] in startPlayback()\n");
         printError(result);
-		stopPlayback();
+		cleanupResources();
         return -1;
     }
 
@@ -158,27 +172,28 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
     hiclock = hitime;
     loclock = lotime;
     FMOD_64BIT_ADD(hiclock, loclock, 0, endDelayFrames);
-    result = FMOD_Channel_SetDelay(channel, FMOD_DELAYTYPE_DSPCLOCK_END, hiclock, loclock);
+    result = FMOD_Channel_SetDelay(channel, hiclock, loclock, 0);
     if (result != FMOD_OK) {
       fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
-      fprintf(stderr, "exceptional return value for FMOD::Chanel.setDelay() [end] in startPlayback()\n");
+      fprintf(stderr, "exceptional return value for FMOD::Channel.setDelay() [end] in startPlayback()\n");
+      cleanupResources();
       return -1;
     }
 
 
-	result = FMOD_Channel_SetVolume(channel, 1);
+	result = FMOD_Channel_SetVolume(channel, 1.0f);
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
 		fprintf(stderr, "exceptional return value for FMOD::Channel.setVolume() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -1;
 	}
 
-	result = FMOD_Channel_SetPaused(channel, FALSE);
+	result = FMOD_Channel_SetPaused(channel, 0);
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
 		fprintf(stderr, "exceptional return value for FMOD::Channel.setPaused() in startPlayback()\n");
 		printError(result);
-		stopPlayback();
+		cleanupResources();
 		return -1;
 	}
 
@@ -189,49 +204,20 @@ EXPORT_DLL int startPlayback(char* filename, long long startFrame, long long end
 
 EXPORT_DLL long long stopPlayback(void)
 {
-	FMOD_RESULT result = FMOD_OK;
-	long long toReturn;
+	long long toReturn = 0;
 
-	if (fmsystem == NULL || sound == NULL || channel == NULL) {
-		fprintf(stderr, "stopPlayback() called in inconsistent state\n");
+	if (currentState == STATE_UNINITIALIZED) {
+		fprintf(stderr, "stopPlayback() called but playback not active\n");
+		return 0;
 	}
 
-	toReturn = streamPosition();
+	// Get current position before cleanup
+	if (currentState >= STATE_PLAYING && channel != NULL) {
+		toReturn = streamPosition();
+	}
 
-    if(sound != NULL) {
-      result = FMOD_Sound_Release(sound);
-    
-      if (result != FMOD_OK) {
-		fprintf(stderr, "exceptional return value for FMOD::Sound.release() in stopPlayback()\n");
-		printError(result);
-		return -1;
-      }
-    }
-
-    if(fmsystem != NULL) {
-      result = FMOD_System_Close(fmsystem);
-      if (result != FMOD_OK) {
-		fprintf(stderr, "exceptional return value for FMOD::System.close() in stopPlayback()\n");
-		printError(result);
-		return -1;
-      }
-    }
-
-    if(fmsystem != NULL) {
-      result = FMOD_System_Release(fmsystem);
-      if (result != FMOD_OK) {
-		fprintf(stderr, "exceptional return value for FMOD::System.release() in stopPlayback()\n");
-		printError(result);
-		return -1;
-      }
-    }
-
-	fmsystem = NULL;
-	sound = NULL;
-	channel = NULL;
-	lastStartFrame = 0;
-
-	return toReturn - lastStartFrame;
+	cleanupResources();
+	return toReturn;
 }
 
 EXPORT_DLL long long streamPosition(void)
@@ -239,8 +225,7 @@ EXPORT_DLL long long streamPosition(void)
 	FMOD_RESULT result = FMOD_OK;
 	unsigned int frames = 0;
 
-	if (fmsystem == NULL || sound == NULL || channel == NULL) {
-		fprintf(stderr, "streamPosition() called in inconsistent state\n");
+	if (!validateState(STATE_PLAYING)) {
 		return -1;
 	}
 
@@ -261,7 +246,7 @@ EXPORT_DLL int playbackInProgress(void)
 	FMOD_RESULT result = FMOD_OK;
 	int playing = 0;
 
-	if (channel == NULL) {
+	if (currentState < STATE_PLAYING || channel == NULL) {
 		return 0;
 	}
 
@@ -269,6 +254,7 @@ EXPORT_DLL int playbackInProgress(void)
 	if ((result != FMOD_OK) && (result != FMOD_ERR_INVALID_HANDLE) && (result != FMOD_ERR_CHANNEL_STOLEN)) {
 		fprintf(stderr, "exceptional return value for FMOD::Channel.isPlaying() in playbackInProgress()\n");
 		printError(result);
+		return 0; // Assume not playing on error
 	}
 
 	return playing;
@@ -287,4 +273,68 @@ EXPORT_DLL const char* getLibraryName(void)
 static void printError(FMOD_RESULT result)
 {
     fprintf(stderr, "FMOD error: (%d) %s\n", result, FMOD_ErrorString(result));
+}
+
+static void cleanupResources(void)
+{
+    FMOD_RESULT result;
+
+    // Clean up in reverse order of creation
+    if (sound != NULL) {
+        result = FMOD_Sound_Release(sound);
+        if (result != FMOD_OK) {
+            fprintf(stderr, "Warning: FMOD_Sound_Release failed during cleanup\n");
+            printError(result);
+        }
+        sound = NULL;
+    }
+
+    if (fmsystem != NULL) {
+        result = FMOD_System_Close(fmsystem);
+        if (result != FMOD_OK) {
+            fprintf(stderr, "Warning: FMOD_System_Close failed during cleanup\n");
+            printError(result);
+        }
+        
+        result = FMOD_System_Release(fmsystem);
+        if (result != FMOD_OK) {
+            fprintf(stderr, "Warning: FMOD_System_Release failed during cleanup\n");
+            printError(result);
+        }
+        fmsystem = NULL;
+    }
+
+    // Clear all state
+    channel = NULL;
+    lastStartFrame = 0;
+    currentState = STATE_UNINITIALIZED;
+}
+
+static int validateState(PlaybackState expected)
+{
+    if (currentState < expected) {
+        fprintf(stderr, "Invalid state: expected at least %d, current is %d\n", expected, currentState);
+        return 0;
+    }
+    
+    // Verify pointers match state expectations
+    if (expected >= STATE_SYSTEM_CREATED && fmsystem == NULL) {
+        fprintf(stderr, "State inconsistency: expected system created but fmsystem is NULL\n");
+        currentState = STATE_ERROR;
+        return 0;
+    }
+    
+    if (expected >= STATE_SOUND_LOADED && sound == NULL) {
+        fprintf(stderr, "State inconsistency: expected sound loaded but sound is NULL\n");
+        currentState = STATE_ERROR;
+        return 0;
+    }
+    
+    if (expected >= STATE_PLAYING && channel == NULL) {
+        fprintf(stderr, "State inconsistency: expected playing but channel is NULL\n");
+        currentState = STATE_ERROR;
+        return 0;
+    }
+    
+    return 1;
 }

@@ -21,6 +21,8 @@
  *
  * WARNING for FMOD implementations: streamPosition() must be called frequently in order to cause FMOD's system to update.
  *
+ * Updated for FMOD Core API compatibility.
+ *
  * Author: Yuvi Masory
  */
  
