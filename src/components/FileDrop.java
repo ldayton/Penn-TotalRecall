@@ -1,17 +1,3 @@
-//    This file is part of Penn TotalRecall <http://memory.psych.upenn.edu/TotalRecall>.
-//
-//    TotalRecall is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, version 3 only.
-//
-//    TotalRecall is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
-
 package components;
 
 import java.awt.datatransfer.DataFlavor;
@@ -56,8 +42,6 @@ import java.io.Reader;
  * <p><em>Original author: Robert Harder, rharder@usa.net</em></p>
  * <p>2007-09-12 Nathan Blomquist -- Linux (KDE/Gnome) support added.</p>
  *
- * @author  Robert Harder
- * @author  rharder@users.sf.net
  * @version 1.0.1
  */
 @SuppressWarnings({ "rawtypes", "unchecked", "unused" })
@@ -655,8 +639,6 @@ public class FileDrop
      *
      * <p>I'm releasing this code into the Public Domain. Enjoy.</p>
      * 
-     * @author  Robert Harder
-     * @author  rob@iharder.net
      * @version 1.2
      */
     public static class Event extends java.util.EventObject {
@@ -733,8 +715,6 @@ public class FileDrop
      *
      * <p>I'm releasing this code into the Public Domain. Enjoy.</p>
      * 
-     * @author  Robert Harder
-     * @author  rob@iharder.net
      * @version 1.2
      */
     public static class TransferableObject implements java.awt.datatransfer.Transferable
@@ -924,7 +904,6 @@ public class FileDrop
          * on the {@link TransferableObject}, the {@link Fetcher}'s
          * {@link #getObject getObject()} method will be called.
          *
-         * @author Copyright 2001, Robert Harder
          * @version 1.1
          * @since 1.1
          */

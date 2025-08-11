@@ -1,0 +1,4 @@
+- Fix Apple EAWT compatibility issue for modern Java
+- Mac integrations
+- Linux support
+- Windows support

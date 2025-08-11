@@ -1,17 +1,3 @@
-//    This file is part of Penn TotalRecall <http://memory.psych.upenn.edu/TotalRecall>.
-//
-//    TotalRecall is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, version 3 only.
-//
-//    TotalRecall is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
-
 package components.audiofiles;
 
 import info.Constants;
@@ -44,7 +30,6 @@ import control.CurAudio;
  * <p>Note: Access to this component from outside the package is limited to the public static methods provided in this class.
  * Code outside the package cannot and should not try to access the internal list, model, or other components directly.
  * 
- * @author Yuvi Masory
  */
 public class AudioFileDisplay extends JScrollPane {
 

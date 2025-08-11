@@ -13,7 +13,7 @@ ext {
     programShortName = 'TotalRecall'
     programExtensionlessFilename = 'PennTotalRecall'
     unixName = 'penntotalrecall'
-    maintainerName = 'Yuvi Masory'
+    maintainerName = 'Lily Dayton'
     maintainerEmail = 'memory-software@psych.upenn.edu'
     uniqueIdentifier = 'edu.upenn.psych.memory.totalrecall'
     orgName = 'Computational Memory Lab, UPenn'

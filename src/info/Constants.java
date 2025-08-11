@@ -1,25 +1,9 @@
-//    This file is part of Penn TotalRecall <http://memory.psych.upenn.edu/TotalRecall>.
-//
-//    TotalRecall is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, version 3 only.
-//
-//    TotalRecall is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
-
 package info;
 
 /**
  * Central location for many kinds of constants other than those used by GUI components.
  * 
  * Constants used directly by GUI components are stored in GUIConstants.
- * 
- * @author Yuvi Masory
  */
 public class Constants {
 	
@@ -49,10 +33,6 @@ public class Constants {
 	 */
 	public static final String programVersionDelimiter = "\\.";
 	
-	/**
-	 * List of all authors, ordered chronologically by date of involvement, separated by commas.
-	 */
-	public static final String authorString = "Yuvi Masory";
 	
 	/**
 	 * Maintainer, to whom bugs are reported.
