@@ -55,9 +55,10 @@ public class Start {
 	private Start() {
 		System.out.println(Constants.programName + " current directory: " + new File(".").getAbsolutePath());
 		System.out.println(Constants.programName + " detected architecture: " + System.getProperty("sun.arch.data.model"));
-		if(SysInfo.sys.isMacOSX) {
-			MacOSXCustomizer.customizeForMacOSX();
-		}
+		// Temporarily disabled macOS customization due to deprecated Apple EAWT APIs
+		// if(SysInfo.sys.isMacOSX) {
+		// 	MacOSXCustomizer.customizeForMacOSX();
+		// }
 		
 		try {
 			if(SysInfo.sys.useMetalLAF) {

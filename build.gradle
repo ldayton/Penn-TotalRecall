@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'edu.upenn.psych.memory'
-version = '0.00'
+version = '1.0.0'
 
 // Project configuration
 ext {
@@ -21,8 +21,8 @@ ext {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 application {
@@ -107,111 +107,39 @@ clean {
     delete 'classes', 'dist', 'tmp'
 }
 
-// Custom tasks for native compilation
-task compileNative {
-    group = 'build'
-    description = 'Compile native audio system (64-bit only)'
-    
-    doLast {
-        if (System.getProperty('os.name').toLowerCase().contains('windows')) {
-            // Windows build using vcbuild (64-bit)
-            exec {
-                workingDir 'native/fmod/build/windows'
-                commandLine 'vcbuild', 'libpenntotalrecall_fmod.vcproj'
-            }
-        } else if (System.getProperty('os.name').toLowerCase().contains('linux')) {
-            // Linux build using make (64-bit only)
-            exec {
-                workingDir 'native/fmod/build/posix'
-                commandLine 'make', 'Linux_64_only'
-            }
-        } else {
-            // Mac build using make
-            exec {
-                workingDir 'native/fmod/build/posix'
-                commandLine 'make'
-            }
-        }
-    }
-}
+// No native compilation needed - using direct FMOD Core JNA binding
 
-// Platform-specific packaging tasks
-task packageWindowsExe {
-    group = 'packaging'
-    description = 'Create Windows .exe using jpackage (Java 14+)'
-    dependsOn jar, compileNative
-    
-    doLast {
-        def jarFile = jar.archiveFile.get().asFile
-        def exeDir = file("${buildDir}/windows")
-        exeDir.mkdirs()
-        
-        // Use jpackage (requires Java 14+) 
-        exec {
-            commandLine 'jpackage',
-                '--input', jarFile.parent,
-                '--main-jar', jarFile.name,
-                '--main-class', application.mainClass.get(),
-                '--name', programProperName,
-                '--app-version', version,
-                '--description', 'Audio annotation tool for research',
-                '--vendor', orgName,
-                '--icon', 'deploy/windows/headphones.ico',
-                '--dest', exeDir,
-                '--type', 'app-image',
-                '--win-console'
-        }
-        
-        println "Windows .exe created in ${exeDir}"
-    }
-}
-
-task packageWindowsInstaller {
-    group = 'packaging'
-    description = 'Create Windows MSI installer using jpackage (Java 14+)'
-    dependsOn jar, compileNative
-    
-    doLast {
-        def jarFile = jar.archiveFile.get().asFile
-        def installerDir = file("${buildDir}/windows-installer")
-        installerDir.mkdirs()
-        
-        // Use jpackage to create MSI installer
-        exec {
-            commandLine 'jpackage',
-                '--input', jarFile.parent,
-                '--main-jar', jarFile.name,
-                '--main-class', application.mainClass.get(),
-                '--name', programProperName,
-                '--app-version', version,
-                '--description', 'Audio annotation tool for research',
-                '--vendor', orgName,
-                '--icon', 'deploy/windows/headphones.ico',
-                '--dest', installerDir,
-                '--type', 'msi',
-                '--win-console',
-                '--win-menu',
-                '--win-shortcut'
-        }
-        
-        println "Windows MSI installer created in ${installerDir}"
-    }
-}
+// MacOS-only packaging
 
 task packageMacApp {
     group = 'packaging'
     description = 'Create Mac .app bundle using jpackage (Java 14+)'
-    dependsOn jar, compileNative
+    dependsOn jar
     
     doLast {
         def jarFile = jar.archiveFile.get().asFile
         def appDir = file("${buildDir}/mac")
         appDir.mkdirs()
         
+        // Copy JAR and FMOD libraries to input directory
+        def inputDir = file("${buildDir}/jpackage-input")
+        def libDir = file("${inputDir}/lib")
+        inputDir.mkdirs()
+        libDir.mkdirs()
+        
+        copy {
+            from jarFile
+            into inputDir
+        }
+        copy {
+            from 'native/fmod/lib/macos'
+            into libDir
+        }
+        
         // Use jpackage (requires Java 14+)
         exec {
             commandLine 'jpackage',
-                '--input', jarFile.parent,
+                '--input', inputDir,
                 '--main-jar', jarFile.name,
                 '--main-class', application.mainClass.get(),
                 '--name', programProperName,
@@ -228,36 +156,6 @@ task packageMacApp {
     }
 }
 
-task packageLinuxDeb {
-    group = 'packaging'
-    description = 'Create Debian package using jpackage (Java 14+)'
-    dependsOn jar, compileNative
-    
-    doLast {
-        def jarFile = jar.archiveFile.get().asFile
-        def debDir = file("${buildDir}/linux")
-        debDir.mkdirs()
-        
-        // Use jpackage to create DEB package
-        exec {
-            commandLine 'jpackage',
-                '--input', jarFile.parent,
-                '--main-jar', jarFile.name,
-                '--main-class', application.mainClass.get(),
-                '--name', unixName,
-                '--app-version', version,
-                '--description', 'Audio annotation tool for research',
-                '--vendor', orgName,
-                '--icon', 'resources/images/headphones48.png',
-                '--dest', debDir,
-                '--type', 'deb',
-                '--linux-menu-group', 'AudioVideo',
-                '--linux-shortcut'
-        }
-        
-        println "Debian package created in ${debDir}"
-    }
-}
 
 // Distribution configuration
 distributions {
@@ -266,7 +164,7 @@ distributions {
         contents {
             from jar
             from 'deploy/all'
-            from('native/fmod/lib') {
+            from('native/fmod/lib/macos') {
                 into 'lib'
             }
         }
@@ -279,7 +177,7 @@ test {
     
     // Custom test task that runs the manual test suite
     doLast {
-        println "To run manual tests, execute: java -cp build/libs/${programExtensionlessFilename}.jar edu.upenn.psych.memory.totalrecall.tests.RunTests"
+        println "To run manual tests, execute: java -cp build/libs/${programExtensionlessFilename}.jar audio.tests.RunTests"
     }
 }
 
@@ -287,8 +185,8 @@ test {
 task checkJavaVersion {
     doLast {
         def javaVersion = JavaVersion.current()
-        if (javaVersion < JavaVersion.VERSION_1_8) {
-            throw new GradleException("Java 8 or higher is required. Current version: ${javaVersion}")
+        if (javaVersion < JavaVersion.VERSION_17) {
+            throw new GradleException("Java 17 or higher is required. Current version: ${javaVersion}")
         }
         println "Java version check passed: ${javaVersion}"
     }
