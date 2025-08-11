@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 import components.waveform.WaveformDisplay;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Zooms the waveform display in/out.

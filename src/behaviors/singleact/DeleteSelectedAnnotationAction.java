@@ -22,7 +22,7 @@ import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformDisplay;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 public class DeleteSelectedAnnotationAction extends IdentifiedSingleAction {
 

@@ -12,7 +12,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
 
-package edu.upenn.psych.memory.precisionplayer;
+package audio;
 
 import java.util.List;
 

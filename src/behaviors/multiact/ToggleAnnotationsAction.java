@@ -23,7 +23,7 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Tries to move the audio position to the next/previous {@link components.annotations.Annotation}, relative to current audio position.

@@ -38,7 +38,7 @@ import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.

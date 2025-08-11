@@ -12,7 +12,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
 
-package edu.upenn.psych.memory.nativestatelessplayer;
+package audio;
 
 import info.Constants;
 import info.SysInfo;
@@ -22,10 +22,10 @@ import java.util.List;
 
 import behaviors.UpdatingAction;
 
-import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
-import edu.upenn.psych.memory.precisionplayer.PrecisionEventLauncher;
-import edu.upenn.psych.memory.precisionplayer.PrecisionListener;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionEvent;
+import audio.PrecisionEventLauncher;
+import audio.PrecisionListener;
+import audio.PrecisionPlayer;
 
 public class NativeStatelessPlaybackThread extends Thread {
 	

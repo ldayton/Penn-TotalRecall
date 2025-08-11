@@ -28,7 +28,7 @@ import util.OSPath;
 import components.audiofiles.AudioFile.AudioFilePathException;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Marks the current annotation file complete and then switches program state to reflect that no audio file is open.

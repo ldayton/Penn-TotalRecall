@@ -37,7 +37,7 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Commits a user's annotation, updating the annotation file and program window as appropriate.

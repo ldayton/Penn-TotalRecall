@@ -23,7 +23,7 @@ import java.util.Map;
 import components.MyFrame;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Sets the audio position forward/backward one of several pre-defined amounts, in response to user request.

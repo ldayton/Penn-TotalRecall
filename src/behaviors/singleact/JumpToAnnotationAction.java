@@ -24,7 +24,7 @@ import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationTable;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 public class JumpToAnnotationAction extends IdentifiedSingleAction {
 
