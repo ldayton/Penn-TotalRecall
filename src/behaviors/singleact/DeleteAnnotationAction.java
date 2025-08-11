@@ -1,95 +1,94 @@
 package behaviors.singleact;
 
-import info.Constants;
-
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.Action;
-
-import util.GiveMessage;
-import util.OSPath;
-
 import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
-
 import control.CurAudio;
+import info.Constants;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.Action;
+import util.GiveMessage;
+import util.OSPath;
 
 /**
  * Deletes an annotation that has already been committed to a temporary annotation file.
- * 
- * If the annotations is the last available, also deletes the temporary annotation file, which should at this point be empty.
- * 
+ *
+ * <p>If the annotations is the last available, also deletes the temporary annotation file, which
+ * should at this point be empty.
  */
 public class DeleteAnnotationAction extends IdentifiedSingleAction {
 
-	private int rowIndex;
-	private Annotation annToDelete;
+    private int rowIndex;
+    private Annotation annToDelete;
 
-	/**
-	 * Creates an <code>Action</code> that will delete the annotation matching the provided argument.
-	 * 
-	 * @param rowIndex
-	 * @param annToDelete
-	 */
-	public DeleteAnnotationAction(int rowIndex) {
-		this.rowIndex = rowIndex;
-		this.annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rowIndex];
-		this.putValue(Action.NAME, "Delete Annotation");
-	}
+    /**
+     * Creates an <code>Action</code> that will delete the annotation matching the provided
+     * argument.
+     *
+     * @param rowIndex
+     * @param annToDelete
+     */
+    public DeleteAnnotationAction(int rowIndex) {
+        this.rowIndex = rowIndex;
+        this.annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rowIndex];
+        this.putValue(Action.NAME, "Delete Annotation");
+    }
 
-	/**
-	 * Performs the action by calling {@link AnnotationFileParser#removeAnnotation(Annotation, File)}.
-	 * 
-	 * Warns on failure using dialogs.
-	 * 
-	 * @param e The <code>ActionEvent</code> provided by the trigger
-	 */
-	@Override	
-	public void actionPerformed(ActionEvent e) {
-		super.actionPerformed(e);
-		String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
-		String desiredPath = OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
-		File oFile = new File(desiredPath);
-		
-		boolean success = false;
-		try {
-			success = AnnotationFileParser.removeAnnotation(annToDelete, oFile);
-		}
-		catch(IOException ex) {
-			ex.printStackTrace();
-			success = false;
-		}
-		if(success) {
-			AnnotationDisplay.removeAnnotation(rowIndex);
-			
-			//no annotations left after removal, so delete file too
-			if(AnnotationDisplay.getNumAnnotations() == 0) {
-				if(oFile.delete() == false) {
-					GiveMessage.errorMessage("Deletion of annotation successful, but could not remove temporary annotation file.");
-				}
-			}
-		}
-		else {
-			GiveMessage.errorMessage("Deletion not successful. Files may be damaged. Check file system.");
-		}
-		
-		MyMenu.updateActions();
-	}
+    /**
+     * Performs the action by calling {@link AnnotationFileParser#removeAnnotation(Annotation,
+     * File)}.
+     *
+     * <p>Warns on failure using dialogs.
+     *
+     * @param e The <code>ActionEvent</code> provided by the trigger
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
+        String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
+        String desiredPath =
+                OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
+        File oFile = new File(desiredPath);
 
-	/**
-	 * The user can delete an annotation when audio is open and there is at least one annotation to the current file.
-	 */
-	@Override
-	public void update() {
-		if(CurAudio.audioOpen() && AnnotationDisplay.getNumAnnotations() > 0) {
-			setEnabled(true);
-		}
-		else {
-			setEnabled(false);
-		}
-	}
+        boolean success = false;
+        try {
+            success = AnnotationFileParser.removeAnnotation(annToDelete, oFile);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            success = false;
+        }
+        if (success) {
+            AnnotationDisplay.removeAnnotation(rowIndex);
+
+            // no annotations left after removal, so delete file too
+            if (AnnotationDisplay.getNumAnnotations() == 0) {
+                if (oFile.delete() == false) {
+                    GiveMessage.errorMessage(
+                            "Deletion of annotation successful, but could not remove temporary"
+                                    + " annotation file.");
+                }
+            }
+        } else {
+            GiveMessage.errorMessage(
+                    "Deletion not successful. Files may be damaged. Check file system.");
+        }
+
+        MyMenu.updateActions();
+    }
+
+    /**
+     * The user can delete an annotation when audio is open and there is at least one annotation to
+     * the current file.
+     */
+    @Override
+    public void update() {
+        if (CurAudio.audioOpen() && AnnotationDisplay.getNumAnnotations() > 0) {
+            setEnabled(true);
+        } else {
+            setEnabled(false);
+        }
+    }
 }

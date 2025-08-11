@@ -1,59 +1,52 @@
 package behaviors.singleact;
 
-import java.awt.event.ActionEvent;
-
-import util.GiveMessage;
-
+import audio.PrecisionPlayer;
 import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationTable;
-
 import control.CurAudio;
-import audio.PrecisionPlayer;
+import java.awt.event.ActionEvent;
+import util.GiveMessage;
 
 public class JumpToAnnotationAction extends IdentifiedSingleAction {
 
+    public JumpToAnnotationAction() {}
 
-	public JumpToAnnotationAction() {
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        super.actionPerformed(e);
+        Annotation targetAnn = AnnotationTable.popSelectedAnnotation();
+        if (targetAnn == null) {
+            System.err.println("selection is invalid, can't jump to Annotation");
+        } else {
+            long curFrame = CurAudio.getMaster().millisToFrames(targetAnn.getTime());
+            if (curFrame < 0 || curFrame > CurAudio.getMaster().durationInFrames() - 1) {
+                GiveMessage.errorMessage(
+                        "The annotation I am jumpting to isn't in range.\n"
+                                + "Please check annotation file for errors.");
+                return;
+            }
+            CurAudio.setAudioProgressAndUpdateActions(curFrame);
+            CurAudio.getPlayer().queuePlayAt(curFrame);
+        }
+        MyFrame.getInstance().requestFocusInWindow();
+    }
 
-	@Override	
-	public void actionPerformed(ActionEvent e) {
-		super.actionPerformed(e);
-		Annotation targetAnn = AnnotationTable.popSelectedAnnotation();
-		if(targetAnn == null) {
-			System.err.println("selection is invalid, can't jump to Annotation");
-		}
-		else {
-			long curFrame = CurAudio.getMaster().millisToFrames(targetAnn.getTime());
-			if(curFrame < 0 || curFrame > CurAudio.getMaster().durationInFrames() - 1) {
-				GiveMessage.errorMessage("The annotation I am jumpting to isn't in range.\nPlease check annotation file for errors."); 
-				return;
-			}
-			CurAudio.setAudioProgressAndUpdateActions(curFrame);
-			CurAudio.getPlayer().queuePlayAt(curFrame);
-		}
-		MyFrame.getInstance().requestFocusInWindow();
-	}
-
-	@Override
-	public void update() {
-		if(CurAudio.audioOpen()) {
-			if(CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
-				setEnabled(false);
-			}
-			else {
-				if(AnnotationDisplay.getNumAnnotations() > 0) {
-					setEnabled(true);
-				}
-				else {
-					setEnabled(false);
-				}
-			}
-		}
-		else {
-			setEnabled(false);
-		}
-	}
+    @Override
+    public void update() {
+        if (CurAudio.audioOpen()) {
+            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+                setEnabled(false);
+            } else {
+                if (AnnotationDisplay.getNumAnnotations() > 0) {
+                    setEnabled(true);
+                } else {
+                    setEnabled(false);
+                }
+            }
+        } else {
+            setEnabled(false);
+        }
+    }
 }

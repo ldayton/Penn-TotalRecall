@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'distribution'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'edu.upenn.psych.memory'
@@ -194,3 +195,14 @@ task checkJavaVersion {
 
 // Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
+
+// Spotless code formatting configuration
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat('1.22.0').aosp().reflowLongStrings()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

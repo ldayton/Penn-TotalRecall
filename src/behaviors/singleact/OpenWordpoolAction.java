@@ -1,123 +1,122 @@
 package behaviors.singleact;
 
+import components.MyFrame;
+import components.wordpool.WordpoolDisplay;
+import components.wordpool.WordpoolFileParser;
+import components.wordpool.WordpoolWord;
+import control.CurAudio;
 import info.Constants;
 import info.SysInfo;
 import info.UserPrefs;
-
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
-
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
-
 import util.GiveMessage;
 import util.OSPath;
 
-import components.MyFrame;
-import components.wordpool.WordpoolDisplay;
-import components.wordpool.WordpoolFileParser;
-import components.wordpool.WordpoolWord;
-
-import control.CurAudio;
-
 /**
- * Presents a file chooser to the user and then adds words from the selected file to the {@link components.wordpool.WordpoolDisplay}.
- * 
+ * Presents a file chooser to the user and then adds words from the selected file to the {@link
+ * components.wordpool.WordpoolDisplay}.
  */
 public class OpenWordpoolAction extends IdentifiedSingleAction {
 
-	public OpenWordpoolAction() {
-	}
+    public OpenWordpoolAction() {}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		super.actionPerformed(arg0);
-		String maybeLastPath = UserPrefs.prefs.get(UserPrefs.openWordpoolPath, SysInfo.sys.userHomeDir);
-		if(new File(maybeLastPath).exists() == false) {
-			maybeLastPath = SysInfo.sys.userHomeDir;
-		}
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        super.actionPerformed(arg0);
+        String maybeLastPath =
+                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, SysInfo.sys.userHomeDir);
+        if (new File(maybeLastPath).exists() == false) {
+            maybeLastPath = SysInfo.sys.userHomeDir;
+        }
 
-		String title = "Open Wordpool File";
-		String path = null;
-		if(SysInfo.sys.useAWTFileChoosers) {
-			FileDialog fd = new FileDialog(MyFrame.getInstance(), title);
-			fd.setDirectory(maybeLastPath);
-			fd.setFilenameFilter(new FilenameFilter(){
-				public boolean accept(File dir, String name) {
-					return name.toLowerCase().endsWith(Constants.wordpoolFileExtension);
-				}				
-			});
-			fd.setVisible(true);
-			path = fd.getDirectory() + fd.getFile();
-		}
-		else {
-			JFileChooser jfc = new JFileChooser(maybeLastPath);
-			jfc.setDialogTitle(title);
-			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			jfc.setFileFilter(new FileFilter() {
-				@Override
-				public boolean accept(File f) {
-					if(f.isDirectory()) {
-						return true;
-					}
-					if(f.getName().toLowerCase().endsWith(Constants.wordpoolFileExtension)) {
-						return true;
-					}
-					else {
-						return false;
-					}
-				}
-				@Override
-				public String getDescription() {
-					return "Text (.txt) Files";
-				}
-			});
-			int result = jfc.showOpenDialog(MyFrame.getInstance());
-			if (result == JFileChooser.APPROVE_OPTION) {
-				path = jfc.getSelectedFile().getPath();
-			}
-		}
+        String title = "Open Wordpool File";
+        String path = null;
+        if (SysInfo.sys.useAWTFileChoosers) {
+            FileDialog fd = new FileDialog(MyFrame.getInstance(), title);
+            fd.setDirectory(maybeLastPath);
+            fd.setFilenameFilter(
+                    new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            return name.toLowerCase().endsWith(Constants.wordpoolFileExtension);
+                        }
+                    });
+            fd.setVisible(true);
+            path = fd.getDirectory() + fd.getFile();
+        } else {
+            JFileChooser jfc = new JFileChooser(maybeLastPath);
+            jfc.setDialogTitle(title);
+            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            jfc.setFileFilter(
+                    new FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            if (f.isDirectory()) {
+                                return true;
+                            }
+                            if (f.getName()
+                                    .toLowerCase()
+                                    .endsWith(Constants.wordpoolFileExtension)) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
 
-		if(path != null) {
-			File chosenFile = new File(path);
-			if(chosenFile.isFile()) {
-				UserPrefs.prefs.put(UserPrefs.openWordpoolPath, new File(path).getParentFile().getPath());	
-				switchWordpool(chosenFile);
-			}
-		}
-	}
+                        @Override
+                        public String getDescription() {
+                            return "Text (.txt) Files";
+                        }
+                    });
+            int result = jfc.showOpenDialog(MyFrame.getInstance());
+            if (result == JFileChooser.APPROVE_OPTION) {
+                path = jfc.getSelectedFile().getPath();
+            }
+        }
 
-	/**
-	 * <code>OpenWordpoolAction</code> is always enabled.
-	 */
-	@Override
-	public void update() {}
+        if (path != null) {
+            File chosenFile = new File(path);
+            if (chosenFile.isFile()) {
+                UserPrefs.prefs.put(
+                        UserPrefs.openWordpoolPath, new File(path).getParentFile().getPath());
+                switchWordpool(chosenFile);
+            }
+        }
+    }
 
-	public static void switchWordpool(File file) {
-		try {
-			List<WordpoolWord> words = WordpoolFileParser.parse(file, false);
-			WordpoolDisplay.removeAllWords();
-			WordpoolDisplay.addWordpoolWords(words);
+    /** <code>OpenWordpoolAction</code> is always enabled. */
+    @Override
+    public void update() {}
 
-			if(CurAudio.audioOpen()) {
-				File lstFile = new File(OSPath.basename(CurAudio.getCurrentAudioFileAbsolutePath()) + "." + Constants.lstFileExtension);
-				if(lstFile.exists()) {
-					try {
-						WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
-					} 
-					catch(IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			GiveMessage.errorMessage("Cannot process wordpool file!");			
-		}
-	}
+    public static void switchWordpool(File file) {
+        try {
+            List<WordpoolWord> words = WordpoolFileParser.parse(file, false);
+            WordpoolDisplay.removeAllWords();
+            WordpoolDisplay.addWordpoolWords(words);
+
+            if (CurAudio.audioOpen()) {
+                File lstFile =
+                        new File(
+                                OSPath.basename(CurAudio.getCurrentAudioFileAbsolutePath())
+                                        + "."
+                                        + Constants.lstFileExtension);
+                if (lstFile.exists()) {
+                    try {
+                        WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            GiveMessage.errorMessage("Cannot process wordpool file!");
+        }
+    }
 }
