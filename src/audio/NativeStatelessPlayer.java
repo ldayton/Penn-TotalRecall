@@ -12,7 +12,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with TotalRecall.  If not, see <http://www.gnu.org/licenses/>.
 
-package edu.upenn.psych.memory.nativestatelessplayer;
+package audio;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,10 +25,10 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
-import edu.upenn.psych.memory.precisionplayer.PrecisionEventLauncher;
-import edu.upenn.psych.memory.precisionplayer.PrecisionListener;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionEvent;
+import audio.PrecisionEventLauncher;
+import audio.PrecisionListener;
+import audio.PrecisionPlayer;
 
 public class NativeStatelessPlayer implements PrecisionPlayer {
 	

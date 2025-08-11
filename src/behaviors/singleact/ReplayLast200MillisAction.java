@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 import components.waveform.MyGlassPane;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been crossed. 

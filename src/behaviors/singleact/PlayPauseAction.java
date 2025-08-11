@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 import components.MyFrame;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Plays or "pauses" audio.

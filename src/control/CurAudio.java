@@ -41,8 +41,8 @@ import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 
-import edu.upenn.psych.memory.nativestatelessplayer.NativeStatelessPlayer;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.NativeStatelessPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * Static-only class that stores the eseential state of the program.

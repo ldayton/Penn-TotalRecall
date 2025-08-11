@@ -23,7 +23,7 @@ import behaviors.singleact.ReplayLast200MillisAction;
 import components.MyMenu;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 /**
  * A combination of {@link behaviors.singleact.ReplayLast200MillisAction} and {@link behaviors.multiact.SeekAction}.

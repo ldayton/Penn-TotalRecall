@@ -18,8 +18,8 @@ import util.GiveMessage;
 import components.MyMenu;
 import components.MySplitPane;
 
-import edu.upenn.psych.memory.precisionplayer.PrecisionEvent;
-import edu.upenn.psych.memory.precisionplayer.PrecisionListener;
+import audio.PrecisionEvent;
+import audio.PrecisionListener;
 
 /**
  * Keeps display and actions up to date with audio playback.

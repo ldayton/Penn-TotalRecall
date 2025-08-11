@@ -9,7 +9,7 @@ import components.MyFrame;
 import components.waveform.WaveformDisplay;
 
 import control.CurAudio;
-import edu.upenn.psych.memory.precisionplayer.PrecisionPlayer;
+import audio.PrecisionPlayer;
 
 public class ScreenSeekAction extends IdentifiedMultiAction {
 
