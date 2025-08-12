@@ -1,0 +1,110 @@
+version: 2.1
+
+# Define executors
+executors:
+  macos-executor:
+    macos:
+      xcode: "15.4"  # Latest stable Xcode for macOS Sonoma
+    resource_class: macos.m1.medium.gen1
+    environment:
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+
+# Define jobs
+jobs:
+  build-and-test:
+    executor: macos-executor
+    steps:
+      - checkout
+      
+      # Cache Gradle dependencies
+      - restore_cache:
+          keys:
+            - gradle-cache-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - gradle-cache-v1-{{ checksum "build.gradle" }}
+            - gradle-cache-v1-
+      
+      # Cache Gradle wrapper
+      - restore_cache:
+          keys:
+            - gradle-wrapper-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - gradle-wrapper-v1-
+      
+      # Install Java 21 (CircleCI macOS comes with older Java versions)
+      - run:
+          name: Install Java 21
+          command: |
+            brew install openjdk@21
+            echo 'export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"' >> $BASH_ENV
+            source $BASH_ENV
+            java -version
+      
+      # Make Gradle wrapper executable
+      - run:
+          name: Make Gradle wrapper executable
+          command: chmod +x ./gradlew
+      
+      # Run Spotless check (code formatting)
+      - run:
+          name: Code formatting check
+          command: ./gradlew spotlessCheck
+      
+      # Run tests
+      - run:
+          name: Run tests
+          command: ./gradlew test
+      
+      # Build .app bundle
+      - run:
+          name: Build macOS .app bundle
+          command: ./gradlew packageMacApp
+      
+      # Build DMG installer
+      - run:
+          name: Build DMG installer
+          command: ./gradlew packageMacDmg
+      
+      # Store test results
+      - store_test_results:
+          path: build/test-results/test
+      
+      # Store test reports
+      - store_artifacts:
+          path: build/reports/tests/test
+          destination: test-reports
+      
+      # Store .app bundle as artifact
+      - store_artifacts:
+          path: tmp/mac/Penn TotalRecall.app
+          destination: Penn TotalRecall.app
+      
+      # Store DMG as artifact
+      - store_artifacts:
+          path: tmp/mac/Penn TotalRecall-1.0.0.dmg
+          destination: Penn TotalRecall-1.0.0.dmg
+      
+      # Store Gradle cache
+      - save_cache:
+          key: gradle-cache-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+      
+      # Store Gradle wrapper cache
+      - save_cache:
+          key: gradle-wrapper-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+            - gradle/wrapper
+
+# Define workflows
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+                - /feature\/.*/
+                - /hotfix\/.*/
