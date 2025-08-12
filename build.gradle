@@ -96,15 +96,15 @@ task createCustomRuntime {
             delete customRuntimeDir
         }
         
-        exec {
-            commandLine 'jlink',
+        providers.exec {
+            commandLine('jlink',
                 '--add-modules', 'java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.xml',
                 '--strip-debug',
                 '--no-man-pages',
                 '--no-header-files',
                 '--compress=2',
-                '--output', customRuntimeDir.absolutePath
-        }
+                '--output', customRuntimeDir.absolutePath)
+        }.result.get()
         
         println "Custom runtime created at ${customRuntimeDir}"
     }
@@ -139,8 +139,8 @@ task packageMacApp {
         }
         
         // Use jpackage (requires Java 14+)
-        exec {
-            commandLine 'jpackage',
+        providers.exec {
+            commandLine('jpackage',
                 '--input', inputDir,
                 '--main-jar', jarFile.name,
                 '--main-class', application.mainClass.get(),
@@ -152,8 +152,8 @@ task packageMacApp {
                 '--icon', 'packaging/macos/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
-                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath
-        }
+                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath)
+        }.result.get()
         
         // Copy FMOD libraries to standard macOS .app location  
         def frameworksDir = file("${appBundle}/Contents/Frameworks")
@@ -187,8 +187,8 @@ task packageMacDmg {
         dmgDir.listFiles().findAll { it.name.endsWith('.dmg') }.each { it.delete() }
         
         // Create DMG from existing .app bundle using jpackage
-        exec {
-            commandLine 'jpackage',
+        providers.exec {
+            commandLine('jpackage',
                 '--app-image', appBundle.absolutePath,
                 '--name', programProperName,
                 '--app-version', version,
@@ -200,8 +200,8 @@ task packageMacDmg {
                 '--resource-dir', 'packaging/macos',
                 '--dest', dmgDir,
                 '--type', 'dmg',
-                '--verbose'
-        }
+                '--verbose')
+        }.result.get()
         
         def generatedDmg = file("${dmgDir}/${programProperName}-${version}.dmg")
         if (generatedDmg.exists()) {

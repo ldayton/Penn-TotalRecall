@@ -8,7 +8,7 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 
 ### Core Technologies
 - **Java 21** - LTS runtime (bundled with app)
-- **Gradle 8.10.2** - Build system with modern plugins
+- **Gradle 9.0.0** - Build system with modern plugins
 - **FMOD Core** - High-performance audio engine via JNA
 - **Swing** - Desktop GUI framework
 - **JUnit 5** - Testing framework
