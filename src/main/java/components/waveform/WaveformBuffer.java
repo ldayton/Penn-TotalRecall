@@ -1,8 +1,6 @@
 package components.waveform;
 
 import control.CurAudio;
-import de.dfki.lt.signalproc.filter.BandPassFilter;
-import de.dfki.lt.signalproc.util.AudioDoubleDataSource;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
@@ -18,6 +16,8 @@ import java.text.DecimalFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import marytts.signalproc.filter.BandPassFilter;
+import marytts.util.data.audio.AudioDoubleDataSource;
 
 /**
  * Handler for buffered portions of the waveform image.

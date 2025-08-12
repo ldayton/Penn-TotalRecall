@@ -35,10 +35,16 @@ public class Start {
                 Constants.programName
                         + " detected architecture: "
                         + System.getProperty("sun.arch.data.model"));
-        // Temporarily disabled macOS customization due to deprecated Apple EAWT APIs
-        // if(SysInfo.sys.isMacOSX) {
-        // 	MacOSXCustomizer.customizeForMacOSX();
-        // }
+        // Configure macOS integration using modern Desktop API
+        if (SysInfo.sys.isMacOSX) {
+            try {
+                components.MacOSIntegration.integrateWithMacOS();
+                System.out.println(
+                        "macOS integration: " + components.MacOSIntegration.getIntegrationStatus());
+            } catch (UnsupportedOperationException e) {
+                System.err.println("macOS integration not available: " + e.getMessage());
+            }
+        }
 
         try {
             if (SysInfo.sys.useMetalLAF) {

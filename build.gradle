@@ -2,9 +2,9 @@ plugins {
     id 'java'
     id 'application'
     id 'distribution'
-    id 'com.diffplug.spotless' version '6.25.0'
-    id 'net.ltgt.errorprone' version '4.1.0'
-    id 'com.github.ben-manes.versions' version '0.51.0'  // Dependency update checker
+    id 'com.diffplug.spotless' version '7.2.+'
+    id 'net.ltgt.errorprone' version '4.3.+'
+    id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
 }
 
 group = 'edu.upenn.psych.memory'
@@ -34,47 +34,20 @@ application {
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'lib'
-    }
 }
 
 dependencies {
-    // XML processing libraries
-    implementation 'dom4j:dom4j:1.6.1'
-    implementation 'jaxen:jaxen:1.1.1'
-    implementation 'org.jdom:jdom:1.1.3' // Updated version
-    implementation 'xalan:xalan:2.7.3' // Updated version
-    implementation 'xerces:xercesImpl:2.12.2' // Updated version
-    implementation 'xml-apis:xml-apis:1.4.01' // Updated version
-    implementation 'xom:xom:1.3.9' // Updated version
+    implementation 'net.java.dev.jna:jna:5.17.+'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.+'
+    implementation('de.dfki.mary:marytts-signalproc:5.2.+') {
+        exclude group: 'gov.nist.math', module: 'Jampack'
+        exclude group: 'com.twmacinta', module: 'fast-md5'
+    }
     
-    // ICU for internationalization
-    implementation 'com.ibm.icu:icu4j:74.2' // Updated version
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.+'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.+'
     
-    // JNA for native library access
-    implementation 'net.java.dev.jna:jna:5.14.0' // Updated version
-    
-    // Scala dependencies from Maven Central
-    implementation 'org.scala-lang:scala-library:2.9.1'
-    testImplementation 'org.scalatest:scalatest_2.9.0:1.6.1'
-    
-    // Modern testing framework
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    
-    // Jackson XML processing for shortcuts
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
-    
-    // Log4j for testing
-    testImplementation 'log4j:log4j:1.2.17'
-    
-    // ErrorProne static analysis
-    errorprone 'com.google.errorprone:error_prone_core:2.35.1'
-    
-    // Local JAR dependencies that don't have Maven equivalents
-    implementation name: 'OrangeExtensions-1.1', version: '1.1'
-    implementation name: 'signalproc', version: 'unknown'
+    errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 }
 
 // Using standard Gradle layout:
