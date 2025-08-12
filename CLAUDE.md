@@ -241,3 +241,4 @@ This codebase has been extensively modernized and follows current Java best prac
 
 **Result:** Clean, maintainable, modern Java 21 codebase with zero legacy dependencies.
 - don't put claude ads in git commits
+- use GitHub Releases API for dial-home version checking
