@@ -110,12 +110,39 @@ clean {
 
 // No native compilation needed - using direct FMOD Core JNA binding
 
+// Create minimal Java runtime with jlink
+task createCustomRuntime {
+    group = 'packaging'
+    description = 'Create minimal Java runtime using jlink'
+    
+    doLast {
+        def customRuntimeDir = file("${buildDir}/custom-runtime")
+        
+        // Delete existing runtime if it exists
+        if (customRuntimeDir.exists()) {
+            delete customRuntimeDir
+        }
+        
+        exec {
+            commandLine 'jlink',
+                '--add-modules', 'java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.xml',
+                '--strip-debug',
+                '--no-man-pages',
+                '--no-header-files',
+                '--compress=2',
+                '--output', customRuntimeDir.absolutePath
+        }
+        
+        println "Custom runtime created at ${customRuntimeDir}"
+    }
+}
+
 // MacOS-only packaging
 
 task packageMacApp {
     group = 'packaging'
     description = 'Create Mac .app bundle using jpackage (Java 14+)'
-    dependsOn jar
+    dependsOn jar, createCustomRuntime
     
     doLast {
         def jarFile = jar.archiveFile.get().asFile
@@ -152,7 +179,7 @@ task packageMacApp {
                 '--icon', 'deploy/mac/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
-                '--runtime-image', System.getProperty('java.home')
+                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath
         }
         
         // Copy FMOD libraries to standard macOS .app location  
@@ -160,7 +187,7 @@ task packageMacApp {
         frameworksDir.mkdirs()
         
         copy {
-            from 'native/fmod/lib/macos'
+            from 'native/fmod/lib/macos/libfmod.dylib'
             into frameworksDir
         }
         
