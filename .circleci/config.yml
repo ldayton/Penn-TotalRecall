@@ -72,11 +72,6 @@ jobs:
           path: build/reports/tests/test
           destination: test-reports
       
-      # Store .app bundle as artifact
-      - store_artifacts:
-          path: tmp/mac/Penn TotalRecall.app
-          destination: Penn TotalRecall.app
-      
       # Store DMG as artifact
       - store_artifacts:
           path: tmp/mac/Penn TotalRecall-1.0.0.dmg
