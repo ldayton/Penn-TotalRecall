@@ -1,9 +1,6 @@
 package control;
 
 import behaviors.UpdatingAction;
-import edu.upenn.psych.memory.shortcutmanager.Shortcut;
-import edu.upenn.psych.memory.shortcutmanager.XAction;
-import edu.upenn.psych.memory.shortcutmanager.XActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +8,9 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
-import scala.Option;
+import shortcuts.Shortcut;
+import shortcuts.XAction;
+import shortcuts.XActionListener;
 
 /**
  * Storage class that associates <code>Objects</code> with {@link util.ActionIdentification} and
@@ -44,10 +43,10 @@ public class XActionManager {
     public static XActionListener listener =
             new XActionListener() {
                 @Override
-                public void xActionUpdated(XAction xact, Option<Shortcut> old) {
-                    String id = xact.id();
+                public void xActionUpdated(XAction xact, Shortcut oldShortcut) {
+                    String id = xact.getId();
                     xactionsMap.put(id, xact);
-                    update(xact.id(), old);
+                    update(xact.getId(), oldShortcut);
                 }
             };
 
@@ -59,9 +58,9 @@ public class XActionManager {
     public static KeyStroke lookup(String id) {
         XAction xact = xactionsMap.get(id);
         if (xact != null) {
-            Shortcut shorty = xact.javaShortcut();
+            Shortcut shorty = xact.getJavaShortcut();
             if (shorty != null) {
-                return shorty.stroke();
+                return shorty.stroke;
             }
         }
         return null;
@@ -97,16 +96,16 @@ public class XActionManager {
         update(id, null);
     }
 
-    private static void update(String id, Option<Shortcut> old) {
+    private static void update(String id, Shortcut oldShortcut) {
         Set<UpdatingAction> actions = listenersMap.get(id);
         XAction xact = xactionsMap.get(id);
         if (xact != null) {
-            Shortcut shorty = xact.javaShortcut();
-            KeyStroke stroke = shorty == null ? null : shorty.stroke();
+            Shortcut shorty = xact.getJavaShortcut();
+            KeyStroke stroke = shorty == null ? null : shorty.stroke;
             if (actions != null) {
                 for (UpdatingAction action : actions) {
                     action.putValue(Action.NAME, xact.name());
-                    String tooltip = xact.javaTooltip();
+                    String tooltip = xact.getJavaTooltip();
                     action.putValue(Action.SHORT_DESCRIPTION, tooltip);
                     action.putValue(Action.ACCELERATOR_KEY, stroke);
                 }
@@ -115,13 +114,7 @@ public class XActionManager {
             if (inputMapPairs != null) {
                 for (Pair<Object, InputMap> pair : inputMapPairs) {
                     InputMap inputMap = pair.u;
-                    Shortcut oldShortcut;
-                    if (old == null) {
-                        oldShortcut = null;
-                    } else {
-                        oldShortcut = old.isDefined() ? old.get() : null;
-                    }
-                    KeyStroke oldStroke = oldShortcut == null ? null : oldShortcut.stroke();
+                    KeyStroke oldStroke = oldShortcut == null ? null : oldShortcut.stroke;
                     Object inputMapKey = pair.t;
                     if (oldStroke != null) {
                         inputMap.remove(oldStroke);

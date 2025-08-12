@@ -1,8 +1,8 @@
 package components;
 
 import control.XActionManager;
-import edu.upenn.psych.memory.shortcutmanager.ShortcutManager;
 import java.net.URL;
+import shortcuts.ShortcutManager;
 
 public class ShortcutFrame extends ShortcutManager {
 

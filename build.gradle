@@ -3,6 +3,8 @@ plugins {
     id 'application'
     id 'distribution'
     id 'com.diffplug.spotless' version '6.25.0'
+    id 'net.ltgt.errorprone' version '4.1.0'
+    id 'com.github.ben-manes.versions' version '0.51.0'  // Dependency update checker
 }
 
 group = 'edu.upenn.psych.memory'
@@ -61,13 +63,18 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     
+    // Jackson XML processing for shortcuts
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
+    
     // Log4j for testing
     testImplementation 'log4j:log4j:1.2.17'
+    
+    // ErrorProne static analysis
+    errorprone 'com.google.errorprone:error_prone_core:2.35.1'
     
     // Local JAR dependencies that don't have Maven equivalents
     implementation name: 'OrangeExtensions-1.1', version: '1.1'
     implementation name: 'signalproc', version: 'unknown'
-    implementation name: 'swing-shortcut-manager_2.9.1-0.3.0', version: '0.3.0'
 }
 
 // Using standard Gradle layout:

@@ -1,4 +1,10 @@
-- Fix Apple EAWT compatibility issue for modern Java
-- Mac integrations
+- Build
+  - CircleCI build
+  - Eliminate most libs
+  - Debug version with FMOD logging lib, and higher logging level
+- Mac integration
+  - EAWT compatibility issue for modern Java
+  - Menu bar
+  - Obscure key names in shortcut manager
 - Linux support
 - Windows support

@@ -51,7 +51,7 @@ public class Start {
             e.printStackTrace();
         }
 
-        ShortcutFrame.instance.toString(); // initialize
+        var unused = ShortcutFrame.instance.toString(); // initialize
         MyFrame.getInstance(); // creates all the components, so after this line everything is
         // made, just not visible
         MyFrame.getInstance().setFocusTraversalPolicy(new MyFocusTraversalPolicy());
