@@ -57,6 +57,33 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 - Fixed API compatibility issues during library upgrades
 - Added wildcarded dependency versions for automatic updates
 
+### ✅ Project Structure Modernization  
+- **Eliminated lib/ directory** - No more local JAR files
+- **Eliminated native/ directory** - Moved to standard Gradle resources
+- **Reorganized FMOD libraries** - Now in `src/main/resources/fmod/macos/`
+- **Standard Gradle layout** - All resources follow conventions
+
+## Project Structure (Modern & Clean)
+
+```
+Penn-TotalRecall/
+├── src/main/java/                    # Standard Gradle Java sources
+│   ├── audio/                        # FMOD JNA bindings & tests
+│   ├── components/                   # Swing UI components  
+│   ├── control/                      # Application controllers
+│   ├── shortcuts/                    # Integrated shortcut manager
+│   └── util/                         # Utility classes
+├── src/main/resources/               # Standard Gradle resources
+│   ├── fmod/macos/                   # FMOD native libraries
+│   ├── images/                       # Application icons
+│   └── actions.xml                   # Shortcut definitions
+├── src/test/java/                    # JUnit 5 tests
+├── deploy/                           # Packaging assets
+├── build.gradle                      # Modern build configuration
+├── CLAUDE.md                         # This development guide
+└── No lib/ or native/ directories!   # Pure Maven dependencies
+```
+
 ## Current Dependencies (Minimal & Modern)
 
 ```gradle
@@ -88,7 +115,8 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 
 ### Packaging
 ```bash
-./gradlew packageMacApp        # Create self-contained macOS .app
+./gradlew packageMacApp        # Create self-contained macOS .app bundle
+./gradlew packageMacDmg        # Create macOS .dmg installer for distribution
 ./gradlew jar                  # Create fat JAR with all dependencies
 ```
 
@@ -117,10 +145,14 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 - `control/XActionManager.java` - Keyboard shortcut management
 - `shortcuts/` - Integrated shortcut manager (former JAR dependency)
 
-### Configuration
+### Resources & Configuration
 - `build.gradle` - Modern build configuration with plugins
-- `src/main/resources/actions.xml` - Keyboard shortcut definitions
-- `deploy/` - Application resources and packaging assets
+- `src/main/resources/actions.xml` - Keyboard shortcut definitions  
+- `src/main/resources/fmod/macos/` - FMOD native libraries
+- `src/main/resources/images/` - Application icons and graphics
+- `deploy/mac/` - DMG presentation assets (background, volume icon, DS_Store layout)
+- `deploy/all/` - Sample files included in distributions
+- `CLAUDE.md` - This development guide
 
 ## TODO - Remaining Tasks
 
@@ -147,7 +179,13 @@ implementation 'group:artifact:major.minor.+'
 ### Audio Development
 - Always test with `FMODTimingTest` for timing regressions
 - Use synchronized access for thread-safe audio operations
-- FMOD libraries are in `native/fmod/lib/macos/`
+- FMOD libraries are in `src/main/resources/fmod/macos/`
+
+### DMG Packaging
+- `packageMacDmg` creates professional DMG using pure jpackage approach
+- Self-contained installer with embedded Java runtime
+- No native system dependencies beyond Java/jpackage
+- Uses `deploy/mac/headphones.icns` for app icon in DMG
 
 ### UI Development
 - Follow existing Swing patterns in `components/`
@@ -184,3 +222,22 @@ implementation 'group:artifact:major.minor.+'
 - **Modern APIs only** - no deprecated API usage
 
 This codebase has been extensively modernized and follows current Java best practices.
+
+## Modernization Impact Summary
+
+**Before modernization:**
+- 15+ JAR dependencies (13MB+ in lib/)
+- Legacy C compilation required  
+- Deprecated Apple EAWT APIs
+- Ant-based build system
+- 16-year-old signal processing library
+
+**After modernization:**
+- 6 total dependencies (all from Maven Central)  
+- Pure Java + JNA implementation
+- Modern Java 21 Desktop APIs
+- Modern Gradle with auto-updating dependencies
+- Current libraries with 14+ years of improvements
+
+**Result:** Clean, maintainable, modern Java 21 codebase with zero legacy dependencies.
+- don't put claude ads in git commits

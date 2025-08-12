@@ -119,7 +119,7 @@ task packageMacApp {
     
     doLast {
         def jarFile = jar.archiveFile.get().asFile
-        def appDir = file("${buildDir}/mac")
+        def appDir = file("tmp/mac")  // Same directory as DMG output
         
         // Clean existing app bundle
         def appBundle = file("${appDir}/${programProperName}.app")
@@ -149,7 +149,7 @@ task packageMacApp {
                 '--description', 'Audio annotation tool for research',
                 '--vendor', orgName,
                 '--mac-package-identifier', uniqueIdentifier,
-                '--icon', 'deploy/mac/headphones.icns',
+                '--icon', 'packaging/macos/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
                 '--runtime-image', file("${buildDir}/custom-runtime").absolutePath
@@ -160,11 +160,59 @@ task packageMacApp {
         frameworksDir.mkdirs()
         
         copy {
-            from 'native/fmod/lib/macos/libfmod.dylib'
+            from 'src/main/resources/fmod/macos/libfmod.dylib'
             into frameworksDir
         }
         
         println "Mac .app created in ${appDir}"
+    }
+}
+
+// DMG packaging - pure Gradle/Java approach  
+task packageMacDmg {
+    group = 'packaging'
+    description = 'Create Mac .dmg installer from existing .app bundle'
+    dependsOn packageMacApp  // Use the .app created by packageMacApp
+    
+    doLast {
+        def dmgDir = file("tmp/mac")  // Same directory as .app bundle
+        def appBundle = file("${dmgDir}/${programProperName}.app")
+        
+        // Verify .app bundle exists
+        if (!appBundle.exists()) {
+            throw new GradleException("App bundle not found: ${appBundle.absolutePath}")
+        }
+        
+        // Clean any existing DMG files
+        dmgDir.listFiles().findAll { it.name.endsWith('.dmg') }.each { it.delete() }
+        
+        // Create DMG from existing .app bundle using jpackage
+        exec {
+            commandLine 'jpackage',
+                '--app-image', appBundle.absolutePath,
+                '--name', programProperName,
+                '--app-version', version,
+                '--description', 'Audio annotation tool for research',
+                '--vendor', orgName,
+                '--copyright', 'Copyright © 2024 University of Pennsylvania',
+                '--mac-package-identifier', uniqueIdentifier,
+                '--mac-package-name', programProperName,
+                '--resource-dir', 'packaging/macos',
+                '--dest', dmgDir,
+                '--type', 'dmg',
+                '--verbose'
+        }
+        
+        def generatedDmg = file("${dmgDir}/${programProperName}-${version}.dmg")
+        if (generatedDmg.exists()) {
+            def dmgSize = String.format("%.1f MB", generatedDmg.length() / (1024 * 1024))
+            println "✅ DMG created: ${generatedDmg.name} (${dmgSize})"
+            println "📦 Packaged existing .app bundle: ${appBundle.name}"
+            println "🍎 Ready for distribution - no additional dependencies required"
+            println "📍 Location: ${generatedDmg.absolutePath}"
+        } else {
+            throw new GradleException("DMG creation failed - file not found")
+        }
     }
 }
 
@@ -175,8 +223,8 @@ distributions {
         distributionBaseName = programExtensionlessFilename
         contents {
             from jar
-            from 'deploy/all'
-            from('native/fmod/lib/macos') {
+            from 'packaging/samples'
+            from('src/main/resources/fmod/macos') {
                 into 'lib'
             }
         }
@@ -194,7 +242,7 @@ test {
     }
     
     // Set up JNA library path for FMOD during testing
-    systemProperty 'jna.library.path', 'native/fmod/lib/macos'
+    systemProperty 'jna.library.path', 'src/main/resources/fmod/macos'
     
     // Custom test task that runs the manual test suite
     doLast {
