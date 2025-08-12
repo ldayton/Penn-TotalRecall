@@ -22,8 +22,8 @@ ext {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 application {
@@ -120,21 +120,22 @@ task packageMacApp {
     doLast {
         def jarFile = jar.archiveFile.get().asFile
         def appDir = file("${buildDir}/mac")
+        
+        // Clean existing app bundle
+        def appBundle = file("${appDir}/${programProperName}.app")
+        if (appBundle.exists()) {
+            delete appBundle
+        }
+        
         appDir.mkdirs()
         
-        // Copy JAR and FMOD libraries to input directory
+        // Copy JAR to input directory
         def inputDir = file("${buildDir}/jpackage-input")
-        def libDir = file("${inputDir}/lib")
         inputDir.mkdirs()
-        libDir.mkdirs()
         
         copy {
             from jarFile
             into inputDir
-        }
-        copy {
-            from 'native/fmod/lib/macos'
-            into libDir
         }
         
         // Use jpackage (requires Java 14+)
@@ -150,7 +151,17 @@ task packageMacApp {
                 '--mac-package-identifier', uniqueIdentifier,
                 '--icon', 'deploy/mac/headphones.icns',
                 '--dest', appDir,
-                '--type', 'app-image'
+                '--type', 'app-image',
+                '--runtime-image', System.getProperty('java.home')
+        }
+        
+        // Copy FMOD libraries to standard macOS .app location  
+        def frameworksDir = file("${appBundle}/Contents/Frameworks")
+        frameworksDir.mkdirs()
+        
+        copy {
+            from 'native/fmod/lib/macos'
+            into frameworksDir
         }
         
         println "Mac .app created in ${appDir}"
@@ -186,8 +197,8 @@ test {
 task checkJavaVersion {
     doLast {
         def javaVersion = JavaVersion.current()
-        if (javaVersion < JavaVersion.VERSION_17) {
-            throw new GradleException("Java 17 or higher is required. Current version: ${javaVersion}")
+        if (javaVersion < JavaVersion.VERSION_21) {
+            throw new GradleException("Java 21 or higher is required. Current version: ${javaVersion}")
         }
         println "Java version check passed: ${javaVersion}"
     }
