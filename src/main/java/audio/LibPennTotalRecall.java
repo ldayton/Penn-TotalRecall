@@ -90,7 +90,9 @@ public final class LibPennTotalRecall {
     private static final int FMOD_VERSION = 0x00020309;
     private static final int FMOD_INIT_NORMAL = 0x00000000;
     private static final int FMOD_CREATESAMPLE = 0x00000002;
-    private static final int FMOD_TIMEUNIT_PCM = 0x00000001;
+    private static final int FMOD_TIMEUNIT_MS = 0x00000001;
+    private static final int FMOD_TIMEUNIT_PCM =
+            0x00000002; // This is the correct value for PCM samples!
     private static final int FMOD_OK = 0;
 
     // FMOD Core instance
