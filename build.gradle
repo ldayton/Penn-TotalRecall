@@ -12,6 +12,7 @@ version = '1.0.0'
 
 // Project configuration
 ext {
+    javaVersion = JavaVersion.VERSION_23
     programProperName = 'Penn TotalRecall'
     programShortName = 'TotalRecall'
     programExtensionlessFilename = 'PennTotalRecall'
@@ -24,8 +25,8 @@ ext {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 }
 
 application {
@@ -253,11 +254,11 @@ test {
 // Version compatibility check
 task checkJavaVersion {
     doLast {
-        def javaVersion = JavaVersion.current()
-        if (javaVersion < JavaVersion.VERSION_21) {
-            throw new GradleException("Java 21 or higher is required. Current version: ${javaVersion}")
+        def currentJavaVersion = JavaVersion.current()
+        if (currentJavaVersion < project.ext.javaVersion) {
+            throw new GradleException("Java ${project.ext.javaVersion} or higher is required. Current version: ${currentJavaVersion}")
         }
-        println "Java version check passed: ${javaVersion}"
+        println "Java version check passed: ${currentJavaVersion}"
     }
 }
 
