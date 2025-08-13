@@ -3,7 +3,7 @@ package components;
 import behaviors.singleact.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
-import control.Start;
+import control.Main;
 import info.GUIConstants;
 import info.SysInfo;
 import java.awt.KeyEventPostProcessor;
@@ -111,7 +111,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
      */
     @SuppressWarnings("all")
     public boolean postProcessKeyEvent(KeyEvent e) {
-        if (Start.DEBUG_FOCUS) {
+        if (Main.DEBUG_FOCUS) {
             if (e.getKeyLocation() == KeyEvent.KEY_LOCATION_UNKNOWN) {
                 System.out.println(getFocusOwner());
             }

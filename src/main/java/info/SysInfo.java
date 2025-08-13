@@ -1,6 +1,6 @@
 package info;
 
-import control.Start;
+import control.Main;
 import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import javax.swing.JOptionPane;
 
 /**
  * Collects system-specific information.
@@ -28,8 +27,6 @@ public class SysInfo {
     public final boolean isWindowsAny;
     public final boolean isWindows7;
     public final boolean isSolaris;
-    public final boolean isJava5;
-    public final boolean isJava6;
 
     public final int menuKey;
     public final int chunkSizeInSeconds;
@@ -71,24 +68,6 @@ public class SysInfo {
             launchedWithJWS = true;
         }
 
-        String jreVersion = System.getProperty("java.runtime.version");
-        if (jreVersion == null) {
-            isJava5 = false;
-            isJava6 = false;
-        } else {
-            if (jreVersion.startsWith("1.5")) {
-                isJava5 = true;
-                isJava6 = false;
-            } else if (jreVersion.startsWith("1.6")) {
-                isJava6 = true;
-                isJava5 = false;
-            } else {
-                System.err.println("I don't understand what version of Java you are running");
-                isJava5 = false;
-                isJava6 = false;
-            }
-        }
-
         // determine current operating system
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName == null) {
@@ -126,23 +105,6 @@ public class SysInfo {
                         isMacAny =
                                 isWindowsAny = isWindows7 = isMacOSX = isLinux = isOpenJDK = false;
                 System.err.println("cannot recognize your operating system");
-            }
-        }
-
-        if (isLinux && isJava5) {
-            if (runningCompiz()) {
-                System.err.println("Compiz detected, exiting.");
-                JOptionPane.showMessageDialog(
-                        null,
-                        Constants.programName
-                                + " has detected you are running Compiz and Java 5, which are"
-                                + " incompatible.\n"
-                                + "Please either upgrade to Java 6 or turn off Compiz.\n"
-                                + "In Ubuntu you can turn off Compiz through System -> Preferences"
-                                + " -> Appearance -> Visual Effects -> None\n",
-                        GUIConstants.errorDialogTitle,
-                        JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
             }
         }
 
@@ -269,11 +231,7 @@ public class SysInfo {
             preferencesString = "Preferences";
             useMnemonics = true;
 
-            if (isJava5) {
-                useMetalLAF = true;
-            } else {
-                useMetalLAF = false;
-            }
+            useMetalLAF = false;
 
             //			//the Swing imitation of ClearLooks LAF doesn't draw menu item borders correctly,
             // so use Java LAF "Metal" instead
@@ -349,7 +307,7 @@ public class SysInfo {
 
         // annotation optimizations
         mouseMode = true;
-        if (Start.developerMode()) {
+        if (Main.developerMode()) {
             forceListen = false;
         } else {
             forceListen = false;

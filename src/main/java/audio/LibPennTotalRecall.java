@@ -5,6 +5,8 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import control.Main;
+import java.io.File;
 
 /**
  * Direct FMOD Core JNA interface for audio playback.
@@ -14,9 +16,31 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public final class LibPennTotalRecall {
 
+    // Load FMOD library based on developer mode
+    private static FMODCore loadFMODLibrary() {
+        try {
+            if (Main.developerMode()) {
+                // In developer mode, load directly from the project filesystem
+                String projectDir = System.getProperty("user.dir");
+                String libraryPath = projectDir + "/src/main/resources/fmod/macos/libfmod.dylib";
+                File libraryFile = new File(libraryPath);
+                if (!libraryFile.exists()) {
+                    throw new RuntimeException("FMOD library not found at: " + libraryPath);
+                }
+                System.out.println("Loading FMOD from developer path: " + libraryPath);
+                return Native.loadLibrary(libraryFile.getAbsolutePath(), FMODCore.class);
+            } else {
+                // In production, library should be bundled with the .app
+                return Native.loadLibrary("fmod", FMODCore.class);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load FMOD library", e);
+        }
+    }
+
     // FMOD Core JNA interface
     interface FMODCore extends Library {
-        FMODCore INSTANCE = Native.loadLibrary("fmod", FMODCore.class);
+        FMODCore INSTANCE = loadFMODLibrary();
 
         // FMOD System functions
         int FMOD_System_Create(PointerByReference system, int headerversion);
