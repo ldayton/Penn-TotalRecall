@@ -271,6 +271,11 @@ task checkJavaVersion {
 // Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
 
+// Configure compiler to show all warnings but not fail build
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:all']
+}
+
 // Spotless code formatting configuration
 spotless {
     java {

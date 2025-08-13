@@ -29,6 +29,7 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     private AnnotationTableCellRenderer render;
 
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private AnnotationTable() {
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
@@ -117,6 +118,7 @@ public class AnnotationTable extends JTable implements FocusListener {
         return render;
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
         int anchor = getSelectionModel().getAnchorSelectionIndex();
         if (anchor >= 0) {
@@ -128,6 +130,7 @@ public class AnnotationTable extends JTable implements FocusListener {
         }
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         if (e.isTemporary() == false) {
             clearSelection();

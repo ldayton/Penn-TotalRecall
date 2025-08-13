@@ -65,6 +65,7 @@ public class MyCollection<E extends Comparable<? super E>> implements Iterable<E
         list.clear();
     }
 
+    @Override
     public Iterator<E> iterator() {
         return list.iterator();
     }

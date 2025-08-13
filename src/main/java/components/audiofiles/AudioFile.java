@@ -114,8 +114,8 @@ public class AudioFile extends File {
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AudioFile) {
-            if (((AudioFile) o).getAbsolutePath().equals(getAbsolutePath())) {
+        if (o instanceof AudioFile audioFile) {
+            if (audioFile.getAbsolutePath().equals(getAbsolutePath())) {
                 return true;
             }
         }
@@ -193,7 +193,7 @@ public class AudioFile extends File {
      * Exception thrown when this <code>AudioFile</code>'s directory contains both temporary and
      * final annotation files for this <code>AudioFile</code>.
      */
-    public class AudioFilePathException extends Exception {
+    public static class AudioFilePathException extends Exception {
         private AudioFilePathException(String str) {
             super(str);
         }

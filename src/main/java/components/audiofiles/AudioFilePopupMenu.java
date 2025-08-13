@@ -40,6 +40,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
         JMenuItem del =
                 new JMenuItem(
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 AudioFileList.getInstance().getModel().removeElementAt(index);
                             }

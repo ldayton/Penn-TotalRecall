@@ -48,8 +48,8 @@ public class GiveMessage {
                         new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")),
                         null,
                         "");
-        if (input instanceof String) {
-            return (String) input;
+        if (input instanceof String string) {
+            return string;
         } else {
             return null;
         }

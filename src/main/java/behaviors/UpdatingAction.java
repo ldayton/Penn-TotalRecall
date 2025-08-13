@@ -4,6 +4,7 @@ import components.MyMenu;
 import control.XActionManager;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 
 /**
@@ -28,12 +29,13 @@ public abstract class UpdatingAction extends AbstractAction {
         XActionManager.registerAction(this, e);
     }
 
-    private static ArrayList<Long> stamps = new ArrayList<Long>();
+    private static List<Long> stamps = new ArrayList<>();
 
-    public static ArrayList<Long> getStamps() {
+    public static List<Long> getStamps() {
         return stamps;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getWhen() == 0) {
             System.out.println("zero: " + getClass());

@@ -1,6 +1,5 @@
 package info;
 
-import control.Main;
 import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -8,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 /**
  * Collects system-specific information.
@@ -69,7 +70,7 @@ public class SysInfo {
         }
 
         // determine current operating system
-        String osName = System.getProperty("os.name").toLowerCase();
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if (osName == null) {
             isSolaris =
                     isMacOSX = isMacAny = isLinux = isWindowsAny = isWindows7 = isOpenJDK = false;
@@ -88,7 +89,7 @@ public class SysInfo {
                 if (vmName == null) {
                     isOpenJDK = false;
                 } else {
-                    isOpenJDK = vmName.toLowerCase().contains("openjdk");
+                    isOpenJDK = vmName.toLowerCase(Locale.ROOT).contains("openjdk");
                 }
             } else if (osName.contains("mac os x")) {
                 isMacOSX = true;
@@ -116,7 +117,7 @@ public class SysInfo {
 
         // detect GNOME/KDE in Linux
         if (isLinux) {
-            String desktopVar = System.getenv("DESKTOP_SESSION").toLowerCase();
+            String desktopVar = System.getenv("DESKTOP_SESSION").toLowerCase(Locale.ROOT);
             if (desktopVar == null) {
                 isGNOME = false;
                 isKDE = false;
@@ -142,7 +143,7 @@ public class SysInfo {
             try {
                 curDir = new File(".").getCanonicalPath();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Failed to get canonical path: " + e.getMessage());
             }
             if (curDir == null) {
                 userHomeDir = "";
@@ -189,22 +190,14 @@ public class SysInfo {
 
         // modifier key for menu actions, and its name
         menuKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-        switch (menuKey) {
-            case (Event.CTRL_MASK):
-                menuKeyString = "Control";
-                break;
-            case (KeyEvent.META_MASK):
-                menuKeyString = (isLinux ? "Meta" : "Command");
-                break;
-            case (KeyEvent.ALT_MASK):
-                menuKeyString = (isMacAny ? "Option" : "Alt");
-                break;
-            case (KeyEvent.SHIFT_MASK):
-                menuKeyString = "Shift";
-                break;
-            default:
-                menuKeyString = "MenuKey";
-        }
+        menuKeyString =
+                switch (menuKey) {
+                    case Event.CTRL_MASK -> "Control";
+                    case KeyEvent.META_MASK -> (isLinux ? "Meta" : "Command");
+                    case KeyEvent.ALT_MASK -> (isMacAny ? "Option" : "Alt");
+                    case KeyEvent.SHIFT_MASK -> "Shift";
+                    default -> "MenuKey";
+                };
 
         // customize appearance
         if (isMacOSX) {
@@ -255,6 +248,7 @@ public class SysInfo {
             Class.forName("org.classpath.icedtea.pulseaudio.PulseAudioSourceDataLine");
             pulseAudioDefined = true;
         } catch (Throwable t) {
+            // Class not found - PulseAudio not available
         }
         pulseAudioSystem = pulseAudioDefined;
 
@@ -307,42 +301,13 @@ public class SysInfo {
 
         // annotation optimizations
         mouseMode = true;
-        if (Main.developerMode()) {
-            forceListen = false;
-        } else {
-            forceListen = false;
-        }
+        forceListen = false;
 
         // pretty waveform
         bandpassFilter = true; // essential for making words discernable
         useAudioDataSmoothingForWaveform = true; // essential for thickening the waveform
         useWaveformImageDataSmoothing = true; // prettier but blockier
         antiAliasWaveform = false; // no preference for it
-    }
-
-    private boolean runningCompiz() {
-        try {
-            File ps = new File("/bin/ps");
-            ProcessBuilder pb = new ProcessBuilder(ps.getAbsolutePath(), "-A");
-            Process psProc = pb.start();
-            psProc.waitFor();
-
-            // read the output of ps
-            BufferedReader br = new BufferedReader(new InputStreamReader(psProc.getInputStream()));
-            boolean runningCompiz = false;
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                line = line.toLowerCase();
-                if ((line.endsWith("compiz")) || (line.endsWith("compiz.real"))) {
-                    runningCompiz = true;
-                    break;
-                }
-            }
-            return runningCompiz;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     @SuppressWarnings("unused")
@@ -357,11 +322,13 @@ public class SysInfo {
                             gconf.getAbsolutePath(), "-g", "/desktop/gnome/interface/gtk_theme");
             Process psProc = pb.start();
             psProc.waitFor();
-            BufferedReader br = new BufferedReader(new InputStreamReader(psProc.getInputStream()));
+            BufferedReader br =
+                    new BufferedReader(
+                            new InputStreamReader(psProc.getInputStream(), StandardCharsets.UTF_8));
             boolean clearlooks = false;
             String line = null;
             while ((line = br.readLine()) != null) {
-                if ((line.toLowerCase().contains("clearlooks"))) {
+                if (line.toLowerCase(Locale.ROOT).contains("clearlooks")) {
                     clearlooks = true;
                     break;
                 }

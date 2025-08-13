@@ -42,6 +42,7 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
                 && otherVersion.getMinorNumber() == getMinorNumber();
     }
 
+    @Override
     public int compareTo(ProgramVersion otherVersion) {
         if (this.equals(otherVersion)) {
             return 0;

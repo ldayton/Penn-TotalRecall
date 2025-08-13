@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -99,8 +100,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                 Math.max(
                         (int) prefScrollPane.getPreferredSize().getWidth(),
                         buttonPanelPrefferedSize);
-        int frameHeight =
-                (int) (((double) 2 / (double) 3) * (MyFrame.getInstance().getSize().getHeight()));
+        int frameHeight = (int) ((2.0 / 3.0) * MyFrame.getInstance().getSize().getHeight());
         setSize(frameWidth + 40, frameHeight);
 
         // let escape button be used to request preferences window closed
@@ -112,6 +112,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                 .put(
                         "exit",
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 instance.windowClosing(
                                         new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
@@ -212,8 +213,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * @return All the <code>AbstractPreferenceDisplays</code> that are nested in any level in this
      *     <code>PreferencesFrame</code>
      */
-    protected ArrayList<AbstractPreferenceDisplay> getAbstractPreferences() {
-        ArrayList<AbstractPreferenceDisplay> allPrefs = new ArrayList<AbstractPreferenceDisplay>();
+    protected List<AbstractPreferenceDisplay> getAbstractPreferences() {
+        List<AbstractPreferenceDisplay> allPrefs = new ArrayList<>();
         Component[] allComps = prefPanel.getComponents();
         for (int i = 0; i < allComps.length; i++) {
             if (allComps[i] instanceof AbstractPreferenceDisplay) {
@@ -230,8 +231,9 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * invisible. However, if changes are detected, the user will be warned that preferences will be
      * lost (reverted to saved values) if he/she decides to exit.
      */
+    @Override
     public void windowClosing(WindowEvent e) {
-        ArrayList<AbstractPreferenceDisplay> allPrefs =
+        List<AbstractPreferenceDisplay> allPrefs =
                 PreferencesFrame.getInstance().getAbstractPreferences();
         boolean somethingChanged = false;
         for (AbstractPreferenceDisplay pref : allPrefs) {
@@ -264,21 +266,27 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     }
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowActivated(WindowEvent e) {}
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowClosed(WindowEvent e) {}
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowDeactivated(WindowEvent e) {}
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowDeiconified(WindowEvent e) {}
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowIconified(WindowEvent e) {}
 
     /** empty implementation {@inheritDoc} */
+    @Override
     public void windowOpened(WindowEvent e) {}
 
     /**

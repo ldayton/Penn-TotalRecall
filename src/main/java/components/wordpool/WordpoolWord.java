@@ -1,5 +1,7 @@
 package components.wordpool;
 
+import java.util.Locale;
+
 /**
  * Represents a word that the annotator can select and commit to a particular timestamp in the audio file.
  *
@@ -30,7 +32,7 @@ public class WordpoolWord implements Comparable<WordpoolWord> {
      */
     public WordpoolWord(String myStr, int num) {
         this.num = num;
-        this.myStr = myStr.toUpperCase();
+        this.myStr = myStr.toUpperCase(Locale.ROOT);
         this.isLst = false;
     }
 
@@ -39,6 +41,7 @@ public class WordpoolWord implements Comparable<WordpoolWord> {
      *
      * <p>{@inheritDoc}
      */
+    @Override
     public int compareTo(WordpoolWord w) {
         if (this.equals(w)) {
             return 0;

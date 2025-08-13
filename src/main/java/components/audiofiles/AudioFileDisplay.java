@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -37,6 +38,7 @@ public class AudioFileDisplay extends JScrollPane {
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private AudioFileDisplay() {
         list = AudioFileList.getInstance();
         getViewport().setView(list);
@@ -174,7 +176,7 @@ public class AudioFileDisplay extends JScrollPane {
      */
     private static boolean extensionSupported(String name) {
         for (String ext : Constants.audioFormatsLowerCase) {
-            if (name.toLowerCase().endsWith(ext)) {
+            if (name.toLowerCase(Locale.ROOT).endsWith(ext)) {
                 return true;
             }
         }

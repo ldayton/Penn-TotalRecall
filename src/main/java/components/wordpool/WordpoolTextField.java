@@ -107,6 +107,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                 .put(
                         "clear",
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 setText("");
                                 MyFrame.getInstance().requestFocusInWindow();
@@ -119,6 +120,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         return new WordpoolDocument();
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getModifiers() == 0) { // no modifiers
             if (e.getKeyCode() == KeyEvent.VK_TAB) {
@@ -176,8 +178,10 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         setText(getText().substring(0, pos));
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {}
 
+    @Override
     public void keyTyped(KeyEvent e) {}
 
     protected static WordpoolTextField getInstance() {
@@ -191,11 +195,13 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         return getInstance();
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
         setSelectionStart(0);
         setSelectionEnd(0);
         setCaretPosition(getText().length());
     }
 
+    @Override
     public void focusLost(FocusEvent e) {}
 }

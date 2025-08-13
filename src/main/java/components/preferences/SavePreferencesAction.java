@@ -3,6 +3,7 @@ package components.preferences;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import util.GiveMessage;
 
@@ -17,11 +18,12 @@ public class SavePreferencesAction extends AbstractAction {
      * BadPreferenceException}s generated are stored and displayed as a batch to the user, with the
      * <code>PreferenceFrame</code> remaining open.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
-        ArrayList<AbstractPreferenceDisplay> allPrefs =
+        List<AbstractPreferenceDisplay> allPrefs =
                 PreferencesFrame.getInstance().getAbstractPreferences();
         boolean closeWindow = true;
-        ArrayList<BadPreferenceException> errorMessages = new ArrayList<BadPreferenceException>();
+        List<BadPreferenceException> errorMessages = new ArrayList<>();
         for (int i = 0; i < allPrefs.size(); i++) {
             try {
                 allPrefs.get(i).save();

@@ -1,5 +1,7 @@
 package info;
 
+import java.util.List;
+
 /**
  * Central location for many kinds of constants other than those used by GUI components.
  *
@@ -72,7 +74,7 @@ public class Constants {
      * List of extensions of supported audio file formats, all in lower case. The program does not
      * guarantee that every sound file with one of these extension is supported.
      */
-    public static final String[] audioFormatsLowerCase = {"wav", "wave"};
+    public static final List<String> audioFormatsLowerCase = List.of("wav", "wave");
 
     /** String used by annotators to mark sound intrusions that aren't a word. */
     public static final String intrusionSoundString = "<>";

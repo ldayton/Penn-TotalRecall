@@ -36,14 +36,17 @@ public class AnnotationTableModel implements TableModel {
         sortedAnns = new ArrayList<Annotation>();
     }
 
+    @Override
     public int getColumnCount() {
         return columnCount;
     }
 
+    @Override
     public int getRowCount() {
         return sortedAnns.size();
     }
 
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
         if (columnIndex > columnClasses.length || columnIndex < 0) {
             throw new IllegalArgumentException(colErr);
@@ -51,18 +54,22 @@ public class AnnotationTableModel implements TableModel {
         return columnClasses[columnIndex];
     }
 
+    @Override
     public boolean isCellEditable(int row, int col) {
         return false;
     }
 
+    @Override
     public void addTableModelListener(TableModelListener l) {
         listeners.add(l);
     }
 
+    @Override
     public void removeTableModelListener(TableModelListener l) {
         listeners.remove(l);
     }
 
+    @Override
     public String getColumnName(int columnIndex) {
         if (columnIndex > columnClasses.length || columnIndex < 0) {
             throw new IllegalArgumentException(colErr);
@@ -70,6 +77,7 @@ public class AnnotationTableModel implements TableModel {
         return columnNames[columnIndex];
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (rowIndex < 0 || rowIndex > sortedAnns.size()) {
             throw new IllegalArgumentException(rowErr);
@@ -90,6 +98,7 @@ public class AnnotationTableModel implements TableModel {
         throw new IllegalStateException(stateErr);
     }
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         throw new UnsupportedOperationException(
                 "setting table values not supported, use add/remove annotation methods");

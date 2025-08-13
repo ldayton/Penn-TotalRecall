@@ -32,8 +32,7 @@ public class Annotation implements Comparable<Annotation> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Annotation) {
-            Annotation a = (Annotation) o;
+        if (o instanceof Annotation a) {
             if (getText().equals(a.getText())) {
                 if (getTime() == a.getTime()) {
                     if (getWordNum() == a.getWordNum()) {
@@ -52,7 +51,8 @@ public class Annotation implements Comparable<Annotation> {
         return "Annotation: " + text + " " + time + " ms " + " #" + wordNum;
     }
 
+    @Override
     public int compareTo(Annotation o) {
-        return (new Double(getTime()).compareTo(o.getTime()));
+        return Double.compare(getTime(), o.getTime());
     }
 }

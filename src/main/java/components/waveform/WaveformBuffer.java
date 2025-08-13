@@ -437,8 +437,7 @@ public class WaveformBuffer extends Buffer {
          * In keeping with the Java API's recommendation, calls <code>Graphics.dispose()</code> on
          * the stored image's <code>Graphics</code> context.
          */
-        @Override
-        public void finalize() {
+        public void dispose() {
             image.getGraphics().dispose();
         }
 

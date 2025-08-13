@@ -148,7 +148,7 @@ class LibPennTotalRecallTest {
 
             // Position should still be relative (around 550ms worth of frames, not startFrame +
             // 550ms)
-            long expectedPos = (actualSampleRate * 550) / 1000; // ~550ms in frames
+            long expectedPos = (actualSampleRate * 550L) / 1000; // ~550ms in frames
             long tolerance = actualSampleRate / 5; // 200ms tolerance
 
             assertTrue(laterPos > 0, "Position should be positive");
@@ -175,8 +175,8 @@ class LibPennTotalRecallTest {
         long stopPos = lib.stopPlayback();
 
         // Should have played roughly 500ms worth of frames (±200ms tolerance)
-        long expectedFrames = (actualSampleRate * 500) / 1000;
-        long tolerance = (actualSampleRate * 200) / 1000;
+        long expectedFrames = (actualSampleRate * 500L) / 1000;
+        long tolerance = (actualSampleRate * 200L) / 1000;
 
         assertTrue(
                 stopPos > expectedFrames - tolerance && stopPos < expectedFrames + tolerance,

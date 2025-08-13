@@ -36,6 +36,7 @@ public class WordpoolDocument extends PlainDocument implements DocumentListener 
     }
 
     /** Empty implementation. {@inheritDoc} */
+    @Override
     public void changedUpdate(DocumentEvent e) {}
 
     /**
@@ -44,6 +45,7 @@ public class WordpoolDocument extends PlainDocument implements DocumentListener 
      *
      * @param e The <code>DocumentEvent</code> provided by the trigger.
      */
+    @Override
     public void insertUpdate(DocumentEvent e) {
         String nWord = WordpoolTextField.getInstance().getText();
         WordpoolList.getInstance().getModel().hideWordsStartingWith(nWord);
@@ -56,6 +58,7 @@ public class WordpoolDocument extends PlainDocument implements DocumentListener 
      *
      * @param e The <code>DocumentEvent</code> provided by the trigger.
      */
+    @Override
     public void removeUpdate(DocumentEvent e) {
         WordpoolList.getInstance()
                 .getModel()

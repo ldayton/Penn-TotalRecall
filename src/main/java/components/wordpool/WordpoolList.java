@@ -24,6 +24,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
 
     WordpoolListCellRenderer render;
 
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private WordpoolList() {
         model = new WordpoolListModel();
         setModel(model);
@@ -67,6 +68,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
                 .put(
                         "insert_word",
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 Object[] objs = getSelectedValues();
                                 if (objs.length
@@ -132,6 +134,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
     }
 
     /** Handler for the event that this <code>WordpoolList</code> gains focus. */
+    @Override
     public void focusGained(FocusEvent e) {
         int anchor = getAnchorSelectionIndex();
         if (anchor >= 0) {
@@ -146,12 +149,15 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
      *
      * <p>Asks the containing <code>AudioFileDisplay</code> to stop looking focused.
      */
+    @Override
     public void focusLost(FocusEvent e) {
         clearSelection();
     }
 
     /**
-     * @return
+     * Gets the first word from the model.
+     *
+     * @return The first WordpoolWord, or null if the model is empty
      */
     protected static WordpoolWord getFirstWord() {
         if (model.getSize() > 0) {
@@ -181,6 +187,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
      *
      * @param e The MouseEvent provided by the trigger
      */
+    @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
             int index = locationToIndex(e.getPoint());
@@ -192,17 +199,22 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
     }
 
     /** Empty implementation. */
+    @Override
     public void mouseEntered(MouseEvent e) {}
 
     /** Empty implementation. */
+    @Override
     public void mouseExited(MouseEvent e) {}
 
     /** Empty implementation. */
+    @Override
     public void mousePressed(MouseEvent e) {}
 
     /** Empty implementation. */
+    @Override
     public void mouseReleased(MouseEvent e) {}
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (getSelectedIndex() == 0) {
@@ -211,7 +223,9 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {}
 
+    @Override
     public void keyTyped(KeyEvent e) {}
 }

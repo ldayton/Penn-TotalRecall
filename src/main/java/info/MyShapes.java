@@ -57,7 +57,7 @@ public class MyShapes {
     /**
      * Creates a titled border with the provided title and border color.
      *
-     * <p>Uses {@link #getBorderTitleFont()} for title <code>Font</code>.
+     * <p>Uses the default system font for the title.
      *
      * @param title The title
      * @param c The color for the border line

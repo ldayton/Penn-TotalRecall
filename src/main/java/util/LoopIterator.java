@@ -56,6 +56,7 @@ public class LoopIterator<T> implements Iterator<T> {
      *
      * @return <tt>true</tt> if the iteration has more elements
      */
+    @Override
     public boolean hasNext() {
         return hasMore;
     }
@@ -66,6 +67,7 @@ public class LoopIterator<T> implements Iterator<T> {
      * @return T The next element
      * @throws NoSuchElementException If there are no more elements to return
      */
+    @Override
     public T next() {
         if (hasMore == false) {
             throw new NoSuchElementException("there are no more elements");
@@ -95,6 +97,7 @@ public class LoopIterator<T> implements Iterator<T> {
      *
      * @throws UnsupportedOperationException In all cases
      */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
     }

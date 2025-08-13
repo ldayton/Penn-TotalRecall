@@ -3,6 +3,7 @@ package components.wordpool;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -26,6 +27,7 @@ public class WordpoolListModel implements ListModel {
         listeners = new HashSet<ListDataListener>();
     }
 
+    @Override
     public Object getElementAt(int index) {
         if (index < 0 || index >= collection.size()) {
             throw new IllegalArgumentException("index not in wordpool list: " + index);
@@ -33,6 +35,7 @@ public class WordpoolListModel implements ListModel {
         return collection.get(index);
     }
 
+    @Override
     public int getSize() {
         return collection.size();
     }
@@ -45,9 +48,7 @@ public class WordpoolListModel implements ListModel {
                         "adding wordpool words with negative line numbers is not allowed");
                 continue;
             }
-            if (collection.contains(w) || hiddenWords.contains(w)) {
-                continue;
-            } else {
+            if (!collection.contains(w) && !hiddenWords.contains(w)) {
                 collection.add(w);
             }
         }
@@ -112,7 +113,7 @@ public class WordpoolListModel implements ListModel {
         ArrayList<WordpoolWord> toRemove = new ArrayList<WordpoolWord>();
         for (int i = 0; i < collection.size(); i++) {
             WordpoolWord w = collection.get(i);
-            if (w.getText().toUpperCase().startsWith(prefix.toUpperCase()) == false) {
+            if (!w.getText().toUpperCase(Locale.ROOT).startsWith(prefix.toUpperCase(Locale.ROOT))) {
                 toRemove.add(w);
                 hiddenWords.add(w);
             }
@@ -129,7 +130,7 @@ public class WordpoolListModel implements ListModel {
     protected void restoreWordsStartingWith(String prefix) {
         for (Object o : hiddenWords.toArray()) {
             WordpoolWord w = (WordpoolWord) o;
-            if (w.getText().toUpperCase().startsWith(prefix.toUpperCase())) {
+            if (w.getText().toUpperCase(Locale.ROOT).startsWith(prefix.toUpperCase(Locale.ROOT))) {
                 collection.add(w);
                 hiddenWords.remove(w);
             }
@@ -155,11 +156,13 @@ public class WordpoolListModel implements ListModel {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addListDataListener(ListDataListener l) {
         listeners.add(l);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeListDataListener(ListDataListener l) {
         listeners.remove(l);
     }

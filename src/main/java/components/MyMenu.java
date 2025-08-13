@@ -61,14 +61,15 @@ public class MyMenu extends JMenuBar {
     private static boolean macLF;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private MyMenu() {
-        allActions = new HashSet<UpdatingAction>();
+        allActions = new HashSet<>();
         macLF =
                 SysInfo.sys.isMacOSX
-                        && (UIManager.getLookAndFeel()
+                        && UIManager.getLookAndFeel()
                                 .getClass()
                                 .getName()
-                                .equals(UIManager.getSystemLookAndFeelClassName()));
+                                .equals(UIManager.getSystemLookAndFeelClassName());
         initFileMenu();
         initControlsMenu();
         initAnnotationMenu();
@@ -120,6 +121,7 @@ public class MyMenu extends JMenuBar {
         workaroundAction = new PlayPauseAction(false);
         jmiPlayPause.addActionListener(
                 new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
                         workaroundAction.actionPerformed(e);
                     }
@@ -229,10 +231,10 @@ public class MyMenu extends JMenuBar {
 
     public static void updateSeekActions() {
         for (UpdatingAction ia : allActions) {
-            if (ia instanceof SeekAction) {
-                ((SeekAction) (ia)).updateSeekAmount();
-            } else if (ia instanceof Last200PlusMoveAction) {
-                ((Last200PlusMoveAction) (ia)).updateSeekAmount();
+            if (ia instanceof SeekAction seekAction) {
+                seekAction.updateSeekAmount();
+            } else if (ia instanceof Last200PlusMoveAction moveAction) {
+                moveAction.updateSeekAmount();
             }
         }
     }

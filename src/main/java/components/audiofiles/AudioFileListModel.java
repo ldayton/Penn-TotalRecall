@@ -33,6 +33,7 @@ public class AudioFileListModel implements ListModel, ChangeListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public AudioFile getElementAt(int index) {
         if (index < 0 || index >= collection.size()) {
             return null;
@@ -89,6 +90,7 @@ public class AudioFileListModel implements ListModel, ChangeListener {
      *
      * @return The size of the list containing the <code>AudioFiles</code>
      */
+    @Override
     public int getSize() {
         return collection.size();
     }
@@ -98,6 +100,7 @@ public class AudioFileListModel implements ListModel, ChangeListener {
      *
      * <p>Re-sorts the data using {@link java.util.Collections#sort(List)} and requests a repaint.
      */
+    @Override
     public void stateChanged(ChangeEvent e) {
         collection.sort();
         for (ListDataListener ldl : listeners) {
@@ -107,11 +110,13 @@ public class AudioFileListModel implements ListModel, ChangeListener {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addListDataListener(ListDataListener l) {
         listeners.add(l);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void removeListDataListener(ListDataListener l) {
         listeners.remove(l);
     }

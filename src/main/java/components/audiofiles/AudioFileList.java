@@ -61,6 +61,7 @@ public class AudioFileList extends JList implements FocusListener {
                 .put(
                         "remove file",
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 Object[] objs = getSelectedValues();
                                 int index = getSelectedIndex();
@@ -98,6 +99,7 @@ public class AudioFileList extends JList implements FocusListener {
                 .put(
                         "switch",
                         new AbstractAction() {
+                            @Override
                             public void actionPerformed(ActionEvent e) {
                                 Object[] objs = getSelectedValues();
                                 if (objs.length
@@ -173,6 +175,7 @@ public class AudioFileList extends JList implements FocusListener {
     }
 
     /** Handler for the event that this <code>AudioFileList</code> gains focus. */
+    @Override
     public void focusGained(FocusEvent e) {
         int anchor = getAnchorSelectionIndex();
         if (anchor >= 0) {
@@ -183,6 +186,7 @@ public class AudioFileList extends JList implements FocusListener {
     }
 
     /** Handler for event that this <code>AudioFileList</code> loses focus. */
+    @Override
     public void focusLost(FocusEvent e) {
         if (e.isTemporary() == false) {
             clearSelection();

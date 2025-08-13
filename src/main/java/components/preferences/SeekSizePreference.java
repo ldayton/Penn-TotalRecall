@@ -33,17 +33,12 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     protected SeekSizePreference(String title, ShiftSize size) {
         super(title);
         this.size = size;
-        switch (size) {
-            case SMALL_SHIFT:
-                defValue = UserPrefs.defaultSmallShift;
-                break;
-            case MEDIUM_SHIFT:
-                defValue = UserPrefs.defaultMediumShift;
-                break;
-            case LARGE_SHIFT:
-                defValue = UserPrefs.defaultLargeShift;
-                break;
-        }
+        defValue =
+                switch (size) {
+                    case SMALL_SHIFT -> UserPrefs.defaultSmallShift;
+                    case MEDIUM_SHIFT -> UserPrefs.defaultMediumShift;
+                    case LARGE_SHIFT -> UserPrefs.defaultLargeShift;
+                };
         spinner = new JSpinner();
         SpinnerNumberModel model = new SpinnerNumberModel();
         model.setStepSize(step);
@@ -57,15 +52,11 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private int getCurrentVal() {
-        switch (size) {
-            case SMALL_SHIFT:
-                return UserPrefs.getSmallShift();
-            case MEDIUM_SHIFT:
-                return UserPrefs.getMediumShift();
-            case LARGE_SHIFT:
-                return UserPrefs.getLargeShift();
-        }
-        return minVal;
+        return switch (size) {
+            case SMALL_SHIFT -> UserPrefs.getSmallShift();
+            case MEDIUM_SHIFT -> UserPrefs.getMediumShift();
+            case LARGE_SHIFT -> UserPrefs.getLargeShift();
+        };
     }
 
     @Override
@@ -82,6 +73,7 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
         try {
             num = format.parse(curContents);
         } catch (ParseException e) {
+            // Ignore parse exception - num will remain null and be handled below
         }
         if (num == null) {
             return true;
@@ -106,15 +98,9 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
 
     private void saveVal(int nVal) {
         switch (size) {
-            case SMALL_SHIFT:
-                UserPrefs.setSmallShift(nVal);
-                break;
-            case MEDIUM_SHIFT:
-                UserPrefs.setMediumShift(nVal);
-                break;
-            case LARGE_SHIFT:
-                UserPrefs.setLargeShift(nVal);
-                break;
+            case SMALL_SHIFT -> UserPrefs.setSmallShift(nVal);
+            case MEDIUM_SHIFT -> UserPrefs.setMediumShift(nVal);
+            case LARGE_SHIFT -> UserPrefs.setLargeShift(nVal);
         }
     }
 }

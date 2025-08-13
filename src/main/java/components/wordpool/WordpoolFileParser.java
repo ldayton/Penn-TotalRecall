@@ -2,8 +2,9 @@ package components.wordpool;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ public class WordpoolFileParser {
     public static List<WordpoolWord> parse(File file, boolean suppressLineNumbers)
             throws IOException {
         BufferedReader br;
-        br = new BufferedReader(new FileReader(file));
+        br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8);
         ArrayList<WordpoolWord> words = new ArrayList<WordpoolWord>();
         String line;
         int lineNum = 0;

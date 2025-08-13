@@ -24,6 +24,7 @@ public class AnnotationDisplay extends JScrollPane {
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private AnnotationDisplay() {
         table = AnnotationTable.getInstance();
         getViewport().setView(table);

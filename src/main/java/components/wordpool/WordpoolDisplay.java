@@ -36,6 +36,7 @@ public class WordpoolDisplay extends JPanel {
      * Creates a new instance of the component, initializing internal components, listeners, and
      * various aspects of appearance.
      */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     private WordpoolDisplay() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         field = WordpoolTextField.getInstance();
@@ -96,7 +97,7 @@ public class WordpoolDisplay extends JPanel {
     /**
      * Adds the provided <code>WordpoolWords</code> to the component for display.
      *
-     * @param words
+     * @param words The list of WordpoolWords to add for display
      */
     public static void addWordpoolWords(List<WordpoolWord> words) {
         WordpoolList.getInstance().getModel().addElements(words);

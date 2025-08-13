@@ -64,7 +64,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      * Evaluates whether the mouse event is a popup trigger on this platform, and launches a popup
      * context menu if appropriate.
      *
-     * @param e
+     * @param e the mouse event to evaluate
      */
     public void evaluatePopup(MouseEvent e) {
         if (e.isPopupTrigger()) {

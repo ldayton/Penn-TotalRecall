@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Checks remote server (in a separate thread) for updates and informs user accordingly.
@@ -37,6 +38,7 @@ public class CheckUpdatesThread implements Runnable {
      * <p>Opens a connection to a remote server, parses an version file, and informs user if an
      * update is available.
      */
+    @Override
     public void run() {
         //		System.out.println("-- Checking for Updates --");
         if (updateAvailable()) {
@@ -87,7 +89,8 @@ public class CheckUpdatesThread implements Runnable {
                             + " java"
                             + System.getProperty("java.version"));
             InputStream is = connection.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            BufferedReader br =
+                    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String firstLine = br.readLine();
             if (firstLine != null) {
                 ProgramVersion curVersion = ProgramVersion.getCurrentVersionNumber();

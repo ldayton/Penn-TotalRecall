@@ -35,9 +35,9 @@
     <bytecodeTargetLevel target="23" />
   </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_STRING" value="&quot;-Xplugin:ErrorProne &quot; -XDcompilePolicy=simple -XDshould-stop.ifError=FLOW -XDshouldStopPolicyIfError=FLOW" />
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Werror &quot;-Xplugin:ErrorProne &quot; -XDcompilePolicy=simple -XDshould-stop.ifError=FLOW -XDshouldStopPolicyIfError=FLOW" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="penn-totalrecall.test" options="&quot;-Xplugin:ErrorProne -XepCompilingTestOnlyCode&quot; -XDcompilePolicy=simple -XDshould-stop.ifError=FLOW -XDshouldStopPolicyIfError=FLOW" />
+      <module name="penn-totalrecall.test" options="-Werror &quot;-Xplugin:ErrorProne -XepCompilingTestOnlyCode&quot; -XDcompilePolicy=simple -XDshould-stop.ifError=FLOW -XDshouldStopPolicyIfError=FLOW" />
     </option>
   </component>
 </project>

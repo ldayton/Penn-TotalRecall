@@ -17,6 +17,7 @@ public class WordpoolScrollPane extends JScrollPane {
      * Creates a new <code>WordpoolScrollPane</code>, initializing the view to <code>WordpoolList
      * </code> and key bindings.
      */
+    @SuppressWarnings("StaticAssignmentInConstructor")
     protected WordpoolScrollPane() {
         setOpaque(false);
         list = WordpoolList.getInstance();
