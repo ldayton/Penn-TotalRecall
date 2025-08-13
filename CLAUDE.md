@@ -157,7 +157,6 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 ## TODO - Remaining Tasks
 
 ### Build System
-- [ ] **CircleCI build** - Set up continuous integration
 - [ ] **Debug version** - FMOD logging lib and higher logging levels  
 
 ### Platform Support

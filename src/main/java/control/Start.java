@@ -46,16 +46,7 @@ public class Start {
             }
         }
 
-        try {
-            if (SysInfo.sys.useMetalLAF) {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } else {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        com.formdev.flatlaf.FlatLightLaf.setup();
 
         var unused = ShortcutFrame.instance.toString(); // initialize
         MyFrame.getInstance(); // creates all the components, so after this line everything is
