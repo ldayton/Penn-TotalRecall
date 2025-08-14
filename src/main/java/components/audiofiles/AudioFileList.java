@@ -16,7 +16,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
-public class AudioFileList extends JList implements FocusListener {
+public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private static AudioFileList instance;
 
@@ -63,7 +63,8 @@ public class AudioFileList extends JList implements FocusListener {
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                Object[] objs = getSelectedValues();
+                                var selectedValues = getSelectedValuesList();
+                                Object[] objs = selectedValues.toArray();
                                 int index = getSelectedIndex();
                                 if (index < 0) {
                                     return;
@@ -101,7 +102,8 @@ public class AudioFileList extends JList implements FocusListener {
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                Object[] objs = getSelectedValues();
+                                var selectedValues = getSelectedValuesList();
+                                Object[] objs = selectedValues.toArray();
                                 if (objs.length
                                         == 1) { // in case multiple selection mode is used in the
                                     // future

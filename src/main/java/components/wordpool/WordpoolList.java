@@ -16,7 +16,8 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
-public class WordpoolList extends JList<WordpoolWord> implements FocusListener, MouseListener, KeyListener {
+public class WordpoolList extends JList<WordpoolWord>
+        implements FocusListener, MouseListener, KeyListener {
 
     private static WordpoolListModel model;
 

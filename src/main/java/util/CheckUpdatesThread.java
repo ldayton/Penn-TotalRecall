@@ -79,7 +79,7 @@ public class CheckUpdatesThread implements Runnable {
     private static boolean updateAvailable() {
         URL url = null;
         try {
-            url = new URL(SysInfo.sys.updateAddress);
+            url = new java.net.URI(SysInfo.sys.updateAddress).toURL();
             URLConnection connection = url.openConnection();
             connection.setRequestProperty(
                     "User-Agent",
@@ -100,7 +100,7 @@ public class CheckUpdatesThread implements Runnable {
                 }
             }
             return false;
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | java.net.URISyntaxException e) {
             e.printStackTrace();
             return false;
         } catch (IOException e) {

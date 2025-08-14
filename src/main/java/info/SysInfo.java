@@ -1,8 +1,7 @@
 package info;
 
-import java.awt.Event;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -189,13 +188,13 @@ public class SysInfo {
                         + Constants.licenseSite;
 
         // modifier key for menu actions, and its name
-        menuKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+        menuKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
         menuKeyString =
                 switch (menuKey) {
-                    case Event.CTRL_MASK -> "Control";
-                    case KeyEvent.META_MASK -> (isLinux ? "Meta" : "Command");
-                    case KeyEvent.ALT_MASK -> (isMacAny ? "Option" : "Alt");
-                    case KeyEvent.SHIFT_MASK -> "Shift";
+                    case InputEvent.CTRL_DOWN_MASK -> "Control";
+                    case InputEvent.META_DOWN_MASK -> (isLinux ? "Meta" : "Command");
+                    case InputEvent.ALT_DOWN_MASK -> (isMacAny ? "Option" : "Alt");
+                    case InputEvent.SHIFT_DOWN_MASK -> "Shift";
                     default -> "MenuKey";
                 };
 

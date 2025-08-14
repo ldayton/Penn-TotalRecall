@@ -21,7 +21,7 @@ import util.MyCollection;
 // This class assumes that the ListDataListener (often javax.swing.plaf.basic.BasicListUI$Handler by
 // default),
 // will repaint the AudioFileList after ListDataEvents>.
-public class AudioFileListModel implements ListModel, ChangeListener {
+public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener {
 
     private MyCollection<AudioFile> collection;
     private HashSet<ListDataListener> listeners;

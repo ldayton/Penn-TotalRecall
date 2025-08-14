@@ -180,6 +180,12 @@ implementation 'group:artifact:major.minor.+'
 - Use synchronized access for thread-safe audio operations
 - FMOD libraries are in `src/main/resources/fmod/macos/`
 
+### Viewing All Compiler Warnings
+Gradle's incremental compilation hides warnings on unchanged files. To see all warnings:
+```bash
+./gradlew clean --no-build-cache --rerun-tasks compileJava
+```
+
 ### DMG Packaging
 - `packageMacDmg` creates professional DMG using pure jpackage approach
 - Self-contained installer with embedded Java runtime

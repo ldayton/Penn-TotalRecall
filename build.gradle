@@ -257,10 +257,11 @@ test {
 
 // Version compatibility check
 task checkJavaVersion {
+    def requiredJavaVersion = javaVersion // Capture at configuration time
     doLast {
         def currentJavaVersion = JavaVersion.current()
-        if (currentJavaVersion < project.ext.javaVersion) {
-            throw new GradleException("Java ${project.ext.javaVersion} or higher is required. Current version: ${currentJavaVersion}")
+        if (currentJavaVersion < requiredJavaVersion) {
+            throw new GradleException("Java ${requiredJavaVersion} or higher is required. Current version: ${currentJavaVersion}")
         }
         println "Java version check passed: ${currentJavaVersion}"
     }
@@ -269,7 +270,7 @@ task checkJavaVersion {
 // Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
 
-// Configure compiler to show all warnings but not fail build
+// Configure compiler to show all warnings and fail on warnings
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:all', '-Xlint:-serial']
 }
