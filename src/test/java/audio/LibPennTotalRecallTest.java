@@ -61,7 +61,7 @@ class LibPennTotalRecallTest {
         List<Long> timestamps = new ArrayList<>();
 
         // Start playback (use actual sample rate and ensure we don't exceed file length)
-        long endFrame = Math.min(actualSampleRate * 5, totalFrames); // 5 seconds or file length
+        long endFrame = Math.min(actualSampleRate * 5L, totalFrames); // 5 seconds or file length
         int result = lib.startPlayback(testFile.getAbsolutePath(), 0, endFrame);
         assertEquals(0, result, "Playback should start successfully");
         assertTrue(lib.playbackInProgress(), "Should be playing");
@@ -95,10 +95,10 @@ class LibPennTotalRecallTest {
 
         // Check position roughly matches elapsed time
         // First and last valid positions
-        long firstPos = positions.get(0);
-        long lastPos = positions.get(positions.size() - 1);
-        long firstTime = timestamps.get(0);
-        long lastTime = timestamps.get(timestamps.size() - 1);
+        long firstPos = positions.getFirst();
+        long lastPos = positions.getLast();
+        long firstTime = timestamps.getFirst();
+        long lastTime = timestamps.getLast();
 
         long framesElapsed = lastPos - firstPos;
         long msElapsed = lastTime - firstTime;
@@ -124,7 +124,7 @@ class LibPennTotalRecallTest {
         // Start playback at 1 second into the file
         long startFrame = actualSampleRate; // 1 second
         long endFrame =
-                Math.min(startFrame + actualSampleRate * 2, totalFrames); // Play for 2 seconds
+                Math.min(startFrame + actualSampleRate * 2L, totalFrames); // Play for 2 seconds
 
         assertTrue(startFrame < totalFrames, "Start frame should be within file");
 
@@ -166,7 +166,7 @@ class LibPennTotalRecallTest {
     @Test
     @DisplayName("stop returns reasonable position")
     void stopReturnsReasonablePosition() throws InterruptedException {
-        long endFrame = Math.min(actualSampleRate * 10, totalFrames);
+        long endFrame = Math.min(actualSampleRate * 10L, totalFrames);
         int result = lib.startPlayback(testFile.getAbsolutePath(), 0, endFrame);
         assertEquals(0, result, "Playback should start successfully");
 
