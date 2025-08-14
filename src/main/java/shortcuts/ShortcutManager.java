@@ -226,7 +226,8 @@ class ShortcutTable extends JTable {
                     XAction newXAction = rowXAction.withShortcut(null);
                     doSwap(newXAction);
                 } else if (!maskKeyCodes.contains(code)) {
-                    var enteredShortcut = new Shortcut(KeyStroke.getKeyStroke(code, modifiers));
+                    var enteredShortcut =
+                            Shortcut.forCurrentPlatform(KeyStroke.getKeyStroke(code, modifiers));
                     var rowXAction = shortcutTableModel.xactionForRow(selectedRow);
                     var newXAction = rowXAction.withShortcut(enteredShortcut);
 

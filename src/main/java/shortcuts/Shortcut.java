@@ -1,161 +1,155 @@
 package shortcuts;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import static java.util.stream.Collectors.joining;
+
+import control.PlatformProvider;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 import javax.swing.KeyStroke;
 
 public class Shortcut {
+    private static final Set<String> ACTION_WORDS = Set.of("typed", "pressed", "released");
+
     public final KeyStroke stroke;
     private final String internalForm;
+    private final PlatformProvider platform;
 
-    private static final boolean IS_MAC =
-            System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("mac");
     private static final String INTERNAL_FORM_DELIMITER = " ";
 
-    // PC key names
-    private static final String PC_CTRL = "Ctrl";
-    private static final String PC_ALT = "Alt";
-    private static final String PC_SHIFT = "Shift";
-    private static final String PC_META = "Meta";
-
-    // Mac key symbols
-    private static final String MAC_CTRL = "^";
-    private static final String MAC_OPTION = "⌥";
-    private static final String MAC_SHIFT = "⇧";
-    private static final String MAC_COMMAND = "⌘";
-
-    private static final String SYS_SEP = IS_MAC ? "" : "+";
-
-    private static final Map<String, KeyMapping> MAC_MAP = createMacMap();
-    private static final List<String> MAC_ORDER =
-            List.of(MAC_CTRL, MAC_OPTION, MAC_SHIFT, MAC_COMMAND);
-    private static final List<String> PC_ORDER = List.of(PC_SHIFT, PC_CTRL, PC_ALT);
-
-    private record KeyMapping(String pc, String mac) {}
-
-    private static Map<String, KeyMapping> createMacMap() {
-        Map<String, KeyMapping> map = new HashMap<>();
-        map.put("control", new KeyMapping(PC_CTRL, MAC_CTRL));
-        map.put("alt", new KeyMapping(PC_ALT, MAC_OPTION));
-        map.put("shift", new KeyMapping(PC_SHIFT, MAC_SHIFT));
-        map.put("meta", new KeyMapping(PC_META, MAC_COMMAND));
-        map.put("BACK_SPACE", new KeyMapping("BackSpace", "⌫"));
-        map.put("DELETE", new KeyMapping("Del", "⌦"));
-        map.put("ENTER", new KeyMapping("Enter", "↩"));
-        map.put("ESCAPE", new KeyMapping("Esc", "⎋"));
-        map.put("HOME", new KeyMapping("Home", "\u2196"));
-        map.put("END", new KeyMapping("End", "\u2198"));
-        map.put("PAGE_UP", new KeyMapping("PgUp", "PgUp"));
-        map.put("PAGE_DOWN", new KeyMapping("PgDn", "PgDn"));
-        map.put("LEFT", new KeyMapping("Left", "←"));
-        map.put("RIGHT", new KeyMapping("Right", "→"));
-        map.put("UP", new KeyMapping("Up", "↑"));
-        map.put("DOWN", new KeyMapping("Down", "↓"));
-        map.put("TAB", new KeyMapping("Tab", "Tab"));
-        return map;
+    public Shortcut(KeyStroke stroke, PlatformProvider platform) {
+        this.stroke = Objects.requireNonNull(stroke);
+        this.platform = Objects.requireNonNull(platform);
+        this.internalForm = ModernKeyUtils.getInternalForm(stroke);
     }
 
-    public Shortcut(KeyStroke stroke) {
-        this.stroke = stroke;
-        String internal = UnsafeKeyUtils.getInternalFormOrNull(stroke);
-        if (internal == null) {
-            throw new RuntimeException(
-                    """
-                    sorry, I refuse to create a Shortcut whose KeyStroke has no \
-                    valid internalForm field according to UnsafeKeyUtils.java""");
-        }
-        this.internalForm = internal;
+    // Factory methods for convenience
+    public static Shortcut forCurrentPlatform(KeyStroke stroke) {
+        Objects.requireNonNull(stroke);
+        return new Shortcut(stroke, PlatformProvider.detect());
+    }
+
+    public static Shortcut forPlatform(KeyStroke stroke, PlatformProvider platform) {
+        Objects.requireNonNull(stroke);
+        Objects.requireNonNull(platform);
+        return new Shortcut(stroke, platform);
     }
 
     public String getInternalForm() {
         return internalForm;
     }
 
-    private boolean sortKeys(String a, String b) {
-        List<String> order = IS_MAC ? MAC_ORDER : PC_ORDER;
-        int indexA = order.indexOf(a);
-        int indexB = order.indexOf(b);
-
-        if (indexA == -1 && indexB == -1) {
-            return true; // arbitrary choice
-        }
-        if (indexA != -1 && indexB == -1) {
-            return true;
-        }
-        if (indexA == -1 && indexB != -1) {
-            return false;
-        }
-        return indexA < indexB;
-    }
-
     @Override
     public String toString() {
-        List<String> parts = separateInternalForm(internalForm);
-        List<String> newParts = new ArrayList<>();
+        List<String> keys =
+                Stream.of(internalForm.split(INTERNAL_FORM_DELIMITER))
+                        .filter(key -> !ACTION_WORDS.contains(key))
+                        .map(
+                                key -> {
+                                    String symbol = platform.getKeySymbol(key);
+                                    String displayKey = symbol != null ? symbol : key;
+                                    return isSymbol(displayKey)
+                                            ? displayKey
+                                            : capitalizeKey(displayKey);
+                                })
+                        .toList();
 
-        for (String s : parts) {
-            KeyMapping mapping = MAC_MAP.get(s);
-            if (mapping != null) {
-                newParts.add(IS_MAC ? mapping.mac : mapping.pc);
-            } else {
-                newParts.add(s);
-            }
-        }
-
-        newParts.removeAll(List.of("typed", "pressed", "released"));
-
-        // Capitalize first letter of each part
-        for (int i = 0; i < newParts.size(); i++) {
-            String part = newParts.get(i).toLowerCase(Locale.ROOT);
-            if (!part.isEmpty()) {
-                newParts.set(i, Character.toUpperCase(part.charAt(0)) + part.substring(1));
-            }
-        }
-
-        // Sort keys
-        newParts.sort((a, b) -> sortKeys(a, b) ? -1 : 1);
-
-        return String.join(SYS_SEP, newParts);
+        List<String> keyOrder = platform.getKeyOrder();
+        return Stream.concat(
+                        keyOrder.stream().filter(keys::contains),
+                        keys.stream().filter(key -> !keyOrder.contains(key)))
+                .collect(joining(platform.getKeySeparator()));
     }
 
-    public static List<String> separateInternalForm(String internalForm) {
-        return List.of(internalForm.split(INTERNAL_FORM_DELIMITER));
+    private boolean isSymbol(String key) {
+        Objects.requireNonNull(key);
+        // Check if this is a Unicode symbol (Mac keys) or already-formatted PC key
+        return (key.length() == 1
+                        && (key.equals("⌘")
+                                || key.equals("⌥")
+                                || key.equals("⇧")
+                                || key.equals("^")
+                                || key.equals("↩")
+                                || key.equals("⌫")
+                                || key.equals("⌦")
+                                || key.equals("⎋")
+                                || key.equals("←")
+                                || key.equals("→")
+                                || key.equals("↑")
+                                || key.equals("↓")))
+                ||
+                // PC platform pre-formatted keys that shouldn't be capitalized
+                (key.equals("PgUp")
+                        || key.equals("PgDn")
+                        || key.equals("BackSpace")
+                        || key.equals("Del")
+                        || key.equals("Enter")
+                        || key.equals("Esc")
+                        || key.equals("Home")
+                        || key.equals("End")
+                        || key.equals("Left")
+                        || key.equals("Right")
+                        || key.equals("Up")
+                        || key.equals("Down")
+                        || key.equals("Tab")
+                        || key.equals("Ctrl")
+                        || key.equals("Alt")
+                        || key.equals("Shift")
+                        || key.equals("Meta"));
+    }
+
+    private String capitalizeKey(String key) {
+        Objects.requireNonNull(key);
+        return switch (key) {
+            case "" -> key;
+            case "SPACE" -> "Space";
+            case "PAGE_UP" -> "PgUp";
+            case "PAGE_DOWN" -> "PgDn";
+            case String s when s.startsWith("NUMPAD") && s.length() == 7 -> "Num " + s.charAt(6);
+            default -> {
+                String lower = key.toLowerCase(Locale.ROOT);
+                yield Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
+            }
+        };
     }
 
     public static Shortcut fromInternalForm(String internalForm) {
+        Objects.requireNonNull(internalForm);
         KeyStroke stroke = KeyStroke.getKeyStroke(internalForm);
-        if (stroke != null) {
-            return new Shortcut(stroke);
-        } else {
-            System.err.println(
-                    "KeyStroke.getKeyStroke could not parse allegedly internal form: "
-                            + internalForm);
-            return null;
+        if (stroke == null) {
+            throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
+        return new Shortcut(stroke, PlatformProvider.detect());
+    }
+
+    public static Shortcut fromExternalForm(
+            List<String> maskKeyExternalForms,
+            List<String> nonMaskKeyExternalForms,
+            PlatformProvider platform) {
+        Objects.requireNonNull(maskKeyExternalForms);
+        Objects.requireNonNull(nonMaskKeyExternalForms);
+        Objects.requireNonNull(platform);
+        String internalShortcutForm =
+                Stream.concat(
+                                maskKeyExternalForms.stream().map(platform::externalToInternalForm),
+                                nonMaskKeyExternalForms.stream()
+                                        .map(platform::externalToInternalForm))
+                        .collect(joining(INTERNAL_FORM_DELIMITER));
+        KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
+        if (stroke == null) {
+            throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
+        }
+        return new Shortcut(stroke, platform);
     }
 
     public static Shortcut fromExternalForm(
             List<String> maskKeyExternalForms, List<String> nonMaskKeyExternalForms) {
-        List<String> maskKeyInternalForms = new ArrayList<>();
-        for (String form : maskKeyExternalForms) {
-            maskKeyInternalForms.add(Key.external2InternalForm(form));
-        }
-
-        List<String> nonMaskKeyInternalForms = new ArrayList<>();
-        for (String form : nonMaskKeyExternalForms) {
-            nonMaskKeyInternalForms.add(Key.external2InternalForm(form));
-        }
-
-        String internalShortcutForm =
-                String.join(INTERNAL_FORM_DELIMITER, maskKeyInternalForms)
-                        + INTERNAL_FORM_DELIMITER
-                        + String.join(INTERNAL_FORM_DELIMITER, nonMaskKeyInternalForms);
-
-        return fromInternalForm(internalShortcutForm);
+        Objects.requireNonNull(maskKeyExternalForms);
+        Objects.requireNonNull(nonMaskKeyExternalForms);
+        return fromExternalForm(
+                maskKeyExternalForms, nonMaskKeyExternalForms, PlatformProvider.detect());
     }
 
     @Override
@@ -172,24 +166,5 @@ public class Shortcut {
     @Override
     public int hashCode() {
         return Objects.hash(stroke);
-    }
-
-    public static class Key {
-        private static final String EXTERNAL_MENU = "menu";
-        private static final String EXTERNAL_COMMAND = "command";
-
-        public static final String INTERNAL_ALT = "alt";
-        public static final String INTERNAL_CTRL = "ctrl";
-        public static final String INTERNAL_ESCAPE = "ESCAPE";
-        public static final String INTERNAL_META = "meta";
-        public static final String INTERNAL_SHIFT = "shift";
-
-        public static String external2InternalForm(String str) {
-            return switch (str) {
-                case EXTERNAL_MENU -> IS_MAC ? INTERNAL_META : INTERNAL_CTRL;
-                case EXTERNAL_COMMAND -> INTERNAL_META;
-                default -> str;
-            };
-        }
     }
 }
