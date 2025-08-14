@@ -29,7 +29,7 @@ public abstract class UpdatingAction extends AbstractAction {
         XActionManager.registerAction(this, e);
     }
 
-    private static List<Long> stamps = new ArrayList<>();
+    private static final List<Long> stamps = new ArrayList<>();
 
     public static List<Long> getStamps() {
         return stamps;

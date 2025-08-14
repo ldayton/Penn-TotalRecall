@@ -65,11 +65,11 @@ public interface PrecisionPlayer {
      *
      * <p><code>PLAYING</code>: Indicates that main playback is currently in progress.
      */
-    public static enum Status {
+    enum Status {
         BUSY,
         READY,
         PLAYING
-    };
+    }
 
     /**
      * Opens and initializes the provided file.
@@ -91,7 +91,7 @@ public interface PrecisionPlayer {
      * @throws IOException If the provided file cannot be read
      * @throws UnsupportedAudioFileException If the provided file is not of a supported format
      */
-    public void open(String fileName)
+    void open(String fileName)
             throws FileNotFoundException, IOException, UnsupportedAudioFileException;
 
     /**
@@ -106,9 +106,9 @@ public interface PrecisionPlayer {
      * @param frame The audio frame from which to start playback
      * @throws IllegalArgumentException If the provided frame is not present the audio file
      */
-    public void playAt(long frame) throws IllegalArgumentException;
+    void playAt(long frame) throws IllegalArgumentException;
 
-    public void playAt(long startFrame, long endFrame) throws IllegalArgumentException;
+    void playAt(long startFrame, long endFrame) throws IllegalArgumentException;
 
     /**
      * Starts short-interval playback at <code>startFrame</code>, and stops playing at <code>
@@ -138,7 +138,7 @@ public interface PrecisionPlayer {
      * @throws IllegalArgumentException If endFrame >= startFrame, or if either is not in the
      *     boundary of the audio file
      */
-    public void playShortInterval(long startFrame, long endFrame) throws IllegalArgumentException;
+    void playShortInterval(long startFrame, long endFrame) throws IllegalArgumentException;
 
     /**
      * Stops main playback and returns "hearing" frame.
@@ -161,7 +161,7 @@ public interface PrecisionPlayer {
      * @return The "hearing" frame at the time playback is stopped or -1 if main playback is not in
      *     progress..
      */
-    public long stop();
+    long stop();
 
     /**
      * Gives warning that <code>playAt(int)</code> may soon be called.
@@ -179,7 +179,7 @@ public interface PrecisionPlayer {
      *
      * @param frame The predicted argument to an upcoming <code>playAt(int)</code> call.
      */
-    public void queuePlayAt(long frame);
+    void queuePlayAt(long frame);
 
     /**
      * Gives warning that <code>playInterval(startFrame, endFrame)</code> may soon be called.
@@ -201,7 +201,7 @@ public interface PrecisionPlayer {
      * @param endFrame The predicted endFrame argument to the next <code>
      *     queueShortInterval(int, int)</code> call
      */
-    public void queueShortInterval(long startFrame, long endFrame);
+    void queueShortInterval(long startFrame, long endFrame);
 
     /**
      * Adjusts the perceived loudness of main playback.
@@ -214,7 +214,7 @@ public interface PrecisionPlayer {
      *
      * @param loudness An integer between 0 and 100, where 0 is mute and 100 is maximum loudness
      */
-    public void setLoudness(int loudness);
+    void setLoudness(int loudness);
 
     /**
      * Returns the perceived loudness of main playback.
@@ -227,7 +227,7 @@ public interface PrecisionPlayer {
      *
      * @return An integer between 0 and 100, where 0 is mute and 100 is maximum loudness
      */
-    public int getLoudness();
+    int getLoudness();
 
     /**
      * Returns one of the status codes defined in this interface.
@@ -236,7 +236,7 @@ public interface PrecisionPlayer {
      *
      * @return One of the status enums defined in this interface
      */
-    public Status getStatus();
+    Status getStatus();
 
     /**
      * Adds a <code>PrecisionListener</code> to receive notifications from this <code>
@@ -247,7 +247,7 @@ public interface PrecisionPlayer {
      * @param listener The <code>PrecisionListener</code> to receive notifications from this <code>
      *     PrecisionPlayer</code>.
      */
-    public void addListener(PrecisionListener listener);
+    void addListener(PrecisionListener listener);
 
     /**
      * Indicates whether <code>getLoudness()</code> and <code>setLoudness()</code> calls will be
@@ -259,5 +259,5 @@ public interface PrecisionPlayer {
      * @return <code>true</code> iff this <code>PrecisionPlayer</code> supports adjustment and
      *     querying of playback loudness
      */
-    public boolean isLoudnessControlSupported();
+    boolean isLoudnessControlSupported();
 }

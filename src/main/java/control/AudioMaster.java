@@ -32,7 +32,7 @@ public class AudioMaster {
     private static final int BITS_PER_BYTE = 8;
 
     // from constructor
-    private AudioFile audioFile;
+    private final AudioFile audioFile;
 
     // from AudioInputStream
     private long numSampleFrames;

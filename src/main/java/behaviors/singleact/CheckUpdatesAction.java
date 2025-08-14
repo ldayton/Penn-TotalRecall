@@ -6,7 +6,7 @@ import util.CheckUpdatesThread;
 /** Launches a {@link util.CheckUpdatesThread}. */
 public class CheckUpdatesAction extends IdentifiedSingleAction {
 
-    private boolean informEitherWay;
+    private final boolean informEitherWay;
 
     /**
      * Creates an instance of the <code>Action</code>.

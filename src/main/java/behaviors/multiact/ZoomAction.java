@@ -14,12 +14,12 @@ import java.awt.event.ActionEvent;
 public class ZoomAction extends IdentifiedMultiAction {
 
     /** Defines the zoom direction of a <code>ZoomAction</code> instance. */
-    public static enum Direction {
+    public enum Direction {
         IN,
         OUT
-    };
+    }
 
-    private Direction dir;
+    private final Direction dir;
 
     public ZoomAction(Direction dir) {
         super(dir);

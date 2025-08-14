@@ -13,7 +13,7 @@ public class NativeStatelessPlaybackThread extends Thread {
     private final List<PrecisionListener> listeners;
     private final NativeStatelessPlayer myPlayer;
     private final File audioFile;
-    private LibPennTotalRecall myLib;
+    private final LibPennTotalRecall myLib;
 
     private volatile boolean finish;
 

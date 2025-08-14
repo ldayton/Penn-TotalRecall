@@ -19,9 +19,9 @@ public class WordpoolWord implements Comparable<WordpoolWord> {
 
     private boolean isLst;
 
-    private int num;
+    private final int num;
 
-    private String myStr;
+    private final String myStr;
 
     /**
      * Creates a new instance with the given parameters.

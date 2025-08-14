@@ -10,7 +10,7 @@ public class ShortcutFrame extends ShortcutManager {
         super(url, namespace, XActionManager.listener);
     }
 
-    public static ShortcutFrame instance =
+    public static final ShortcutFrame instance =
             new ShortcutFrame(
                     ShortcutFrame.class.getResource("/actions.xml"),
                     "/edu/upenn/psych/memory/penntotalrecall");

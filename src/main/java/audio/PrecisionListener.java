@@ -14,7 +14,7 @@ public interface PrecisionListener {
      * <p>This notification is given in the same thread as main playback. If handlers take too long
      * to run, playback may be disturbed.
      */
-    public void progress(long frames);
+    void progress(long frames);
 
     /**
      * Indicates that one of the <code>PrecisionEvents</code> has occurred in main playback.
@@ -24,5 +24,5 @@ public interface PrecisionListener {
      * <p>This notification is given in an independent thread. Handlers may execute lengthy code
      * without disturbing main playback.
      */
-    public void stateUpdated(PrecisionEvent pe);
+    void stateUpdated(PrecisionEvent pe);
 }

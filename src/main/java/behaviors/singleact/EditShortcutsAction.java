@@ -17,4 +17,3 @@ public class EditShortcutsAction extends IdentifiedSingleAction {
     @Override
     public void update() {}
 }
-;

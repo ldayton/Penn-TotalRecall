@@ -144,7 +144,7 @@ public class AudioFileDisplay extends JScrollPane {
                 JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
                 String message =
                         "Switch to file "
-                                + file.toString()
+                                + file
                                 + "?\nYour changes to the current file will not be lost.";
                 Object[] params = {message, checkbox};
                 int response =

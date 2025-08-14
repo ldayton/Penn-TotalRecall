@@ -16,7 +16,7 @@ public class PlayPauseAction extends IdentifiedSingleAction {
     private static final String playText = "Play";
     private static final String pauseText = "Pause";
 
-    private boolean isDummy;
+    private final boolean isDummy;
 
     /**
      * Dummy actions don't actually perform the action, they are used only for the benefit of visual

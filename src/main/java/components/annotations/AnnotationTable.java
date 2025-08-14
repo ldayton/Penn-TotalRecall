@@ -27,7 +27,7 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     private static AnnotationTableModel model;
 
-    private AnnotationTableCellRenderer render;
+    private final AnnotationTableCellRenderer render;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     private AnnotationTable() {

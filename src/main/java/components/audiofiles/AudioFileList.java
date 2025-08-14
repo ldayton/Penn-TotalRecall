@@ -20,9 +20,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private static AudioFileList instance;
 
-    private AudioFileListModel model;
+    private final AudioFileListModel model;
 
-    private AudioFileListCellRenderer render;
+    private final AudioFileListCellRenderer render;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,

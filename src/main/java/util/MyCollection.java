@@ -8,8 +8,8 @@ import java.util.Iterator;
 
 public class MyCollection<E extends Comparable<? super E>> implements Iterable<E> {
 
-    private HashSet<E> set;
-    private ArrayList<E> list;
+    private final HashSet<E> set;
+    private final ArrayList<E> list;
 
     public MyCollection() {
         set = new HashSet<E>();

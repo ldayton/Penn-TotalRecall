@@ -23,7 +23,7 @@ public class WordpoolList extends JList<WordpoolWord>
 
     private static WordpoolList instance;
 
-    WordpoolListCellRenderer render;
+    final WordpoolListCellRenderer render;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     private WordpoolList() {

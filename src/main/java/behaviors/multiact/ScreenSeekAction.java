@@ -10,12 +10,12 @@ import java.awt.event.ActionEvent;
 
 public class ScreenSeekAction extends IdentifiedMultiAction {
 
-    public static enum Dir {
+    public enum Dir {
         FORWARD,
         BACKWARD
     }
 
-    private Dir dir;
+    private final Dir dir;
 
     public ScreenSeekAction(Dir dir) {
         super(dir);

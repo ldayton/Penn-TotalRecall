@@ -15,10 +15,10 @@ import util.MyCollection;
 // will repaint the WordpoolList after ListDataEvents>.
 public class WordpoolListModel implements ListModel<WordpoolWord> {
 
-    private MyCollection<WordpoolWord> collection;
+    private final MyCollection<WordpoolWord> collection;
 
-    private HashSet<ListDataListener> listeners;
-    private HashSet<WordpoolWord> hiddenWords;
+    private final HashSet<ListDataListener> listeners;
+    private final HashSet<WordpoolWord> hiddenWords;
 
     public WordpoolListModel() {
         super();

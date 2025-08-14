@@ -1,7 +1,6 @@
 package audio;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
 
     private PrecisionPlayer.Status status;
 
-    private List<PrecisionListener> listeners;
+    private final List<PrecisionListener> listeners;
 
     private File audioFile;
     private long lastFrame;
@@ -32,8 +31,7 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
         // lib.getLibraryRevisionNumber());
     }
 
-    public void open(String fileName)
-            throws FileNotFoundException, IOException, UnsupportedAudioFileException {
+    public void open(String fileName) throws IOException, UnsupportedAudioFileException {
         audioFile = new File(fileName);
         status = PrecisionPlayer.Status.READY;
         notifyEvent(PrecisionEvent.EventCode.OPENED, -1, null);

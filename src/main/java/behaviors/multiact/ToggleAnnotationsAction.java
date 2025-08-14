@@ -16,12 +16,12 @@ import util.GiveMessage;
  */
 public class ToggleAnnotationsAction extends IdentifiedMultiAction {
     /** Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance. */
-    public static enum Direction {
+    public enum Direction {
         FORWARD,
         BACKWARD
-    };
+    }
 
-    private Direction myDir;
+    private final Direction myDir;
 
     /**
      * Create an action with the direction presets given by the provided <code>Enum</code>.

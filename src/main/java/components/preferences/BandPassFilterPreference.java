@@ -28,10 +28,10 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
     // by the time the input verifier is made in the constructor,
     // minField's getText() must return a string parseable to
     // an integer >= maxField's
-    private JTextField minField;
-    private JTextField maxField;
+    private final JTextField minField;
+    private final JTextField maxField;
 
-    private String prefTitle;
+    private final String prefTitle;
 
     /**
      * Creates a new <code>BandPasFilterPreference</code> with the provided title.
@@ -146,8 +146,8 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
      */
     private class NondecreasingPositiveIntegerVerifier extends InputVerifier {
 
-        JTextField minComp;
-        JTextField maxComp;
+        final JTextField minComp;
+        final JTextField maxComp;
 
         /**
          * Creates a new <code>NondecreasingPositiveIntegerVerifier</code> with the provided <code>

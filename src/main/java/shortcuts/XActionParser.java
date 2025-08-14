@@ -122,7 +122,7 @@ public class XActionParser {
     private static final class ActionsRoot {
         @JacksonXmlElementWrapper(useWrapping = false)
         @JsonProperty("action")
-        public List<ActionElement> actions = new ArrayList<>();
+        public final List<ActionElement> actions = new ArrayList<>();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -150,11 +150,11 @@ public class XActionParser {
     private static final class ShortcutElement {
         @JacksonXmlElementWrapper(useWrapping = false)
         @JsonProperty("mask")
-        public List<KeyElement> masks = new ArrayList<>();
+        public final List<KeyElement> masks = new ArrayList<>();
 
         @JacksonXmlElementWrapper(useWrapping = false)
         @JsonProperty("key")
-        public List<KeyElement> keys = new ArrayList<>();
+        public final List<KeyElement> keys = new ArrayList<>();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

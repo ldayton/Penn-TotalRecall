@@ -19,13 +19,13 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
 
     private boolean lastPref = false;
 
-    private JRadioButton trueButton;
-    private JRadioButton falseButton;
+    private final JRadioButton trueButton;
+    private final JRadioButton falseButton;
 
-    private boolean defValue;
+    private final boolean defValue;
 
-    private String prefKey;
-    private String prefTitle;
+    private final String prefKey;
+    private final String prefTitle;
 
     /**
      * Creates a new <code>BooleanPreferences</code> hooked up to the provided Preferences object,

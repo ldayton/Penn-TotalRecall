@@ -21,15 +21,14 @@ import util.OSPath;
  */
 public class DeleteAnnotationAction extends IdentifiedSingleAction {
 
-    private int rowIndex;
-    private Annotation annToDelete;
+    private final int rowIndex;
+    private final Annotation annToDelete;
 
     /**
      * Creates an <code>Action</code> that will delete the annotation matching the provided
      * argument.
      *
      * @param rowIndex
-     * @param annToDelete
      */
     public DeleteAnnotationAction(int rowIndex) {
         this.rowIndex = rowIndex;

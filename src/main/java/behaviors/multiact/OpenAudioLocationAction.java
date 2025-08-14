@@ -18,13 +18,13 @@ import javax.swing.filechooser.FileFilter;
  */
 public class OpenAudioLocationAction extends IdentifiedMultiAction {
 
-    public static enum SelectionMode {
+    public enum SelectionMode {
         FILES_ONLY,
         DIRECTORIES_ONLY,
         FILES_AND_DIRECTORIES
     }
 
-    private SelectionMode mode;
+    private final SelectionMode mode;
 
     public OpenAudioLocationAction(SelectionMode mode) {
         super(mode);

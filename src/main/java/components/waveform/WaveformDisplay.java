@@ -412,5 +412,4 @@ public class WaveformDisplay extends JComponent {
             repaint();
         }
     }
-    ;
 }

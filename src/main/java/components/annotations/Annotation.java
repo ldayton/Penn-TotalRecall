@@ -3,9 +3,9 @@ package components.annotations;
 /** Note: this class has a natural ordering that is inconsistent with equals. */
 public class Annotation implements Comparable<Annotation> {
 
-    private int wordNum;
-    private double time;
-    private String text;
+    private final int wordNum;
+    private final double time;
+    private final String text;
 
     public Annotation(double time, int wordNum, String text) {
         this.time = time;

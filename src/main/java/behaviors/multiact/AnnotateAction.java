@@ -24,19 +24,14 @@ import util.OSPath;
 /** Commits a user's annotation, updating the annotation file and program window as appropriate. */
 public class AnnotateAction extends IdentifiedMultiAction {
 
-    public static enum Mode {
+    public enum Mode {
         INTRUSION,
         REGULAR
-    };
+    }
 
-    private Mode mode;
+    private final Mode mode;
 
-    /**
-     * Create an <code>Action</code> corresponding to an intrusion or a normal annotation.
-     *
-     * @param isIntrusion Whether the annotations committed by this <code>Action</code> are
-     *     intrusions
-     */
+    /** Create an <code>Action</code> corresponding to an intrusion or a normal annotation. */
     public AnnotateAction(Mode mode) {
         super(mode);
         this.mode = mode;
@@ -167,7 +162,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 WordpoolDisplay.clearText();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                GiveMessage.errorMessage("Error comitting annotation! Check files for damage.");
+                GiveMessage.errorMessage("Error committing annotation! Check files for damage.");
             }
         }
 

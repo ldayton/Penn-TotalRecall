@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
  */
 public class AudioFileListMouseAdapter extends MouseAdapter {
 
-    private AudioFileList list;
+    private final AudioFileList list;
 
     /**
      * Creates a mouse adapter that can act on the <code>AudioFileList</code> on whose behalf it is

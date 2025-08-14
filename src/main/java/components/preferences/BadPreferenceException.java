@@ -3,7 +3,7 @@ package components.preferences;
 /** Exception thrown when an attempt is made to store in an ill-formatted or illegal preference. */
 public class BadPreferenceException extends Exception {
 
-    private String prefName;
+    private final String prefName;
 
     /**
      * Creates a new <code>BadPreferenceException</code>.

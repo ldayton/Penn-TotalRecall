@@ -23,8 +23,8 @@ import util.MyCollection;
 // will repaint the AudioFileList after ListDataEvents>.
 public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener {
 
-    private MyCollection<AudioFile> collection;
-    private HashSet<ListDataListener> listeners;
+    private final MyCollection<AudioFile> collection;
+    private final HashSet<ListDataListener> listeners;
 
     /** Creates a new <code>AudioFileListModel</code>. */
     protected AudioFileListModel() {

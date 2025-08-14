@@ -11,9 +11,9 @@ import java.util.prefs.Preferences;
  */
 public class UserPrefs {
 
-    private static int curSmallShift = -1;
-    private static int curMediumShift = -1;
-    private static int curLargeShift = -1;
+    private static final int curSmallShift = -1;
+    private static final int curMediumShift = -1;
+    private static final int curLargeShift = -1;
 
     /**
      * A Preferences object that persistently stores a key-value tree for this user only. This is

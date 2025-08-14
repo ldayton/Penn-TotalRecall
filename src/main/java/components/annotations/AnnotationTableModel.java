@@ -18,7 +18,7 @@ public class AnnotationTableModel implements TableModel {
     // involves more than changing the next three lines
     // some of the methods below make assumptions about the number of columns and the Annotation
     // methods they hook up to
-    // doing this in a perfectly programmed worled would involve storing an array of Method objects
+    // doing this in a perfectly programmed world would involve storing an array of Method objects
     private static final int columnCount = 3;
     private static final Class<?>[] columnClasses =
             new Class<?>[] {Double.class, String.class, Integer.class};

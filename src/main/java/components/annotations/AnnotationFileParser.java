@@ -44,11 +44,7 @@ public class AnnotationFileParser {
     }
 
     private static String makeLine(Annotation ann) {
-        return ann.getTime()
-                + delimiter.toString()
-                + ann.getWordNum()
-                + delimiter.toString()
-                + ann.getText();
+        return ann.getTime() + delimiter.toString() + ann.getWordNum() + delimiter + ann.getText();
     }
 
     /**

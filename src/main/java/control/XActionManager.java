@@ -34,13 +34,13 @@ public class XActionManager {
 
     private XActionManager() {}
 
-    private static HashMap<String, Set<UpdatingAction>> listenersMap =
+    private static final HashMap<String, Set<UpdatingAction>> listenersMap =
             new HashMap<String, Set<UpdatingAction>>();
-    private static HashMap<String, XAction> xactionsMap = new HashMap<String, XAction>();
-    private static HashMap<String, ArrayList<Pair<Object, InputMap>>> inputMapMap =
+    private static final HashMap<String, XAction> xactionsMap = new HashMap<String, XAction>();
+    private static final HashMap<String, ArrayList<Pair<Object, InputMap>>> inputMapMap =
             new HashMap<String, ArrayList<Pair<Object, InputMap>>>();
 
-    public static XActionListener listener =
+    public static final XActionListener listener =
             new XActionListener() {
                 @Override
                 public void xActionUpdated(XAction xact, Shortcut oldShortcut) {

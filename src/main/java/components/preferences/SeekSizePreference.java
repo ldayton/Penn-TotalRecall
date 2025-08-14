@@ -18,17 +18,17 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     private static final int minVal = 1;
     private static final int step = 5;
 
-    private JSpinner spinner;
+    private final JSpinner spinner;
 
-    private int defValue;
+    private final int defValue;
 
     public enum ShiftSize {
         SMALL_SHIFT,
         MEDIUM_SHIFT,
         LARGE_SHIFT
-    };
+    }
 
-    private ShiftSize size;
+    private final ShiftSize size;
 
     protected SeekSizePreference(String title, ShiftSize size) {
         super(title);
@@ -90,7 +90,7 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     @Override
-    protected boolean save() throws BadPreferenceException {
+    protected boolean save() {
         saveVal((Integer) spinner.getValue());
         MyMenu.updateSeekActions();
         return true;

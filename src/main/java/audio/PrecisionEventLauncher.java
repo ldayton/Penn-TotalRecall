@@ -8,10 +8,10 @@ import java.util.List;
  */
 public class PrecisionEventLauncher extends Thread {
 
-    private long position;
-    private PrecisionEvent.EventCode code;
-    private List<PrecisionListener> listeners;
-    private String errorMessage;
+    private final long position;
+    private final PrecisionEvent.EventCode code;
+    private final List<PrecisionListener> listeners;
+    private final String errorMessage;
 
     /**
      * Prepares a launcher thread with the provided parameters.

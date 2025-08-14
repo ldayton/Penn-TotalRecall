@@ -42,7 +42,7 @@ public class CurAudio {
     private static long[] firstFrameArray;
     private static int totalNumOfChunks;
 
-    private static Stack<Long> playHistory = new Stack<Long>();
+    private static final Stack<Long> playHistory = new Stack<Long>();
 
     private static WaveformBuffer waveformBuffer;
 

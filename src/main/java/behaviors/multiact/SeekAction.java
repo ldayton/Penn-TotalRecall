@@ -17,20 +17,20 @@ import java.util.Map;
 public class SeekAction extends IdentifiedMultiAction {
 
     /** Defines the seek direction and magnitude of a <code>SeekAction</code> instance. */
-    public static enum SeekAmount {
+    public enum SeekAmount {
         FORWARD_SMALL,
         BACKWARD_SMALL,
         FORWARD_MEDIUM,
         BACKWARD_MEDIUM,
         FORWARD_LARGE,
         BACKWARD_LARGE
-    };
+    }
 
     private int shift;
 
     private static Map<SeekAmount, Integer> timeMap;
 
-    private SeekAmount amount;
+    private final SeekAmount amount;
 
     /**
      * Create an action with the direction and amount presets given by the provided <code>Enum

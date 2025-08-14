@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 /** Mouse adapter for the <code>AnnotationTable</code>. */
 public class AnnotationTableMouseAdapter extends MouseAdapter {
 
-    private AnnotationTable table;
+    private final AnnotationTable table;
 
     protected AnnotationTableMouseAdapter(AnnotationTable table) {
         this.table = table;

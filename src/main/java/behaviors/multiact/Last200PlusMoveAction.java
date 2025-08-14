@@ -13,15 +13,15 @@ import java.awt.event.ActionEvent;
  */
 public class Last200PlusMoveAction extends IdentifiedMultiAction {
 
-    public static enum Direction {
+    public enum Direction {
         BACKWARD,
         FORWARD
-    };
+    }
 
-    private ReplayLast200MillisAction replayer;
+    private final ReplayLast200MillisAction replayer;
 
     private int shift;
-    private Direction dir;
+    private final Direction dir;
 
     public Last200PlusMoveAction(Direction dir) {
         super(dir);

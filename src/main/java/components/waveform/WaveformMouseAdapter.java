@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
 /** Mouse adapter for the waveform display, for use when {@link info.Constants#mouseMode}. */
 public class WaveformMouseAdapter implements MouseMotionListener, MouseListener {
 
-    private Component source;
+    private final Component source;
 
     protected WaveformMouseAdapter(Component source) {
         this.source = source;

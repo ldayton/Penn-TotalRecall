@@ -8,8 +8,8 @@ package util;
  */
 public class ActionIdentification {
 
-    private String actionName;
-    private String toolTip;
+    private final String actionName;
+    private final String toolTip;
 
     /**
      * Simple constructor passed properties of an AbstractAction.

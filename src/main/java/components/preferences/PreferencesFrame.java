@@ -37,7 +37,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     private static PreferencesFrame instance;
 
     private JPanel prefPanel;
-    private JScrollPane prefScrollPane;
+    private final JScrollPane prefScrollPane;
     private JPanel buttonPanel;
 
     /**

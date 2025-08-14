@@ -23,7 +23,7 @@ import util.OSPath;
  */
 public class AudioFile extends File {
 
-    private HashSet<ChangeListener> listeners; // notified when completion status changes
+    private final HashSet<ChangeListener> listeners; // notified when completion status changes
 
     private boolean done; // whether or not the AudioFile is done being annotated.
 

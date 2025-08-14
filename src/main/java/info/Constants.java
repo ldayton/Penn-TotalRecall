@@ -95,7 +95,7 @@ public class Constants {
                     + "Begin Header. [Do not edit before this line. Never edit with an instance of"
                     + " the program open.]";
 
-    public static int timeout = 15000;
+    public static final int timeout = 15000;
 
     /** Private constructor to prevent instantiation. */
     private Constants() {}

@@ -19,7 +19,7 @@ public class PrecisionEvent {
      * </code> indicates <code>PrecisionPlayer.stop()</code> is done executing. <code>EOM</code>
      * indicates playback has reached the end of the audio media.
      */
-    public static enum EventCode {
+    public enum EventCode {
         OPENED,
         PLAYING,
         STOPPED,
@@ -27,10 +27,10 @@ public class PrecisionEvent {
         ERROR
     }
 
-    private long frame;
-    private String errorMessage;
+    private final long frame;
+    private final String errorMessage;
 
-    private EventCode code;
+    private final EventCode code;
 
     /**
      * Constructor for Event. <code>OPENED</code> events take place at frame -1. <code>PLAYING

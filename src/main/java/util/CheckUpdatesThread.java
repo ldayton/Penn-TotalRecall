@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CheckUpdatesThread implements Runnable {
 
-    private boolean informEitherWay;
+    private final boolean informEitherWay;
 
     /**
      * Creates a new update checking thread. User is always notified if updates are available.
