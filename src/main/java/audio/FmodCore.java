@@ -7,14 +7,39 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import control.Main;
 import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Direct FMOD Core JNA interface for audio playback.
  *
  * <p>Replaces the C wrapper library with direct Java calls to FMOD Core API. Maintains the same
  * interface as the original LibPennTotalRecall for compatibility.
+ *
+ * <p>This wrapper provides a simplified Java interface to FMOD Core's audio playback capabilities,
+ * specifically designed for precise frame-based audio playback with real-time position tracking.
+ * All audio operations are thread-safe and positions are reported in PCM sample frames.
  */
-public final class LibPennTotalRecall {
+public final class FmodCore {
+
+    private static final Logger logger = LoggerFactory.getLogger(FmodCore.class);
+
+    private static final class FmodConstants {
+        static final int VERSION = 0x00020309;
+        static final int INIT_NORMAL = 0x00000000;
+        static final int CREATE_SAMPLE = 0x00000002;
+        static final int TIMEUNIT_MS = 0x00000001;
+        static final int TIMEUNIT_PCM = 0x00000002;
+        static final int OK = 0;
+    }
+
+    private static final class ErrorCodes {
+        static final int SUCCESS = 0;
+        static final int UNSPECIFIED_ERROR = -1;
+        static final int NO_AUDIO_DEVICES = -2;
+        static final int FILE_NOT_FOUND = -3;
+        static final int INCONSISTENT_STATE = -4;
+    }
 
     // Load FMOD library based on developer mode
     private static FMODCore loadFMODLibrary() {
@@ -27,7 +52,7 @@ public final class LibPennTotalRecall {
                 if (!libraryFile.exists()) {
                     throw new RuntimeException("FMOD library not found at: " + libraryPath);
                 }
-                System.out.println("Loading FMOD from developer path: " + libraryPath);
+                logger.debug("Loading FMOD from developer path: " + libraryPath);
                 return Native.loadLibrary(libraryFile.getAbsolutePath(), FMODCore.class);
             } else {
                 // In production, library should be bundled with the .app
@@ -86,15 +111,6 @@ public final class LibPennTotalRecall {
         int FMOD_Channel_SetPosition(Pointer channel, long position, int postype);
     }
 
-    // FMOD Constants
-    private static final int FMOD_VERSION = 0x00020309;
-    private static final int FMOD_INIT_NORMAL = 0x00000000;
-    private static final int FMOD_CREATESAMPLE = 0x00000002;
-    private static final int FMOD_TIMEUNIT_MS = 0x00000001;
-    private static final int FMOD_TIMEUNIT_PCM =
-            0x00000002; // This is the correct value for PCM samples!
-    private static final int FMOD_OK = 0;
-
     // FMOD Core instance
     private static final FMODCore fmod = FMODCore.INSTANCE;
 
@@ -108,9 +124,9 @@ public final class LibPennTotalRecall {
     private static boolean autoStopped = false;
     private static final Object lock = new Object();
 
-    public static final LibPennTotalRecall instance = new LibPennTotalRecall();
+    public static final FmodCore instance = new FmodCore();
 
-    private LibPennTotalRecall() {}
+    private FmodCore() {}
 
     // Initialize FMOD system if not already done
     private static synchronized boolean ensureInitialized() {
@@ -120,14 +136,14 @@ public final class LibPennTotalRecall {
 
         try {
             PointerByReference systemRef = new PointerByReference();
-            int result = fmod.FMOD_System_Create(systemRef, FMOD_VERSION);
-            if (result != FMOD_OK) {
+            int result = fmod.FMOD_System_Create(systemRef, FmodConstants.VERSION);
+            if (result != FmodConstants.OK) {
                 return false;
             }
 
             system = systemRef.getValue();
-            result = fmod.FMOD_System_Init(system, 32, FMOD_INIT_NORMAL, null);
-            if (result != FMOD_OK) {
+            result = fmod.FMOD_System_Init(system, 32, FmodConstants.INIT_NORMAL, null);
+            if (result != FmodConstants.OK) {
                 fmod.FMOD_System_Release(system);
                 system = null;
                 return false;
@@ -141,16 +157,20 @@ public final class LibPennTotalRecall {
     }
 
     /**
-     * Tells native library to playback audio immediately.
+     * Starts audio playback of a sound file from a specified frame range.
      *
-     * <p>0 return value indicates playback successful. Negative return values indicate an error.
-     * Specifically: -1 - unspecified error -2 - no audio devices found -3 - unable to find or use
-     * file -4 - inconsistent state (e.g. playbackInProgress())
+     * <p>This method loads a sound file using FMOD_System_CreateSound, creates a playback channel
+     * with FMOD_System_PlaySound, positions to the start frame using FMOD_Channel_SetPosition, and
+     * begins playback.
      *
-     * @param canonicalPath File path
-     * @param startFrame First frame of audio in the file to render
-     * @param endFrame Last frame of audio in the file to render
-     * @return Return-code, see above
+     * <p>The audio system will automatically stop playback when it reaches the end frame. Position
+     * reporting via streamPosition() will be relative to the start frame.
+     *
+     * @param canonicalPath Absolute file path to the audio file to play
+     * @param startFrame First audio frame to play (0-based, PCM sample index)
+     * @param endFrame Last audio frame to play (exclusive, PCM sample index)
+     * @return Error code: 0 = success, -1 = unspecified error, -2 = no audio devices found, -3 =
+     *     unable to find or use file, -4 = inconsistent state (already playing)
      */
     public int startPlayback(String canonicalPath, long startFrame, long endFrame) {
         synchronized (lock) {
@@ -171,9 +191,9 @@ public final class LibPennTotalRecall {
                 PointerByReference soundRef = new PointerByReference();
                 int result =
                         fmod.FMOD_System_CreateSound(
-                                system, canonicalPath, FMOD_CREATESAMPLE, null, soundRef);
-                if (result != FMOD_OK) {
-                    return -3; // unable to find or use file
+                                system, canonicalPath, FmodConstants.CREATE_SAMPLE, null, soundRef);
+                if (result != FmodConstants.OK) {
+                    return ErrorCodes.FILE_NOT_FOUND;
                 }
                 currentSound = soundRef.getValue();
 
@@ -182,49 +202,56 @@ public final class LibPennTotalRecall {
                 result =
                         fmod.FMOD_System_PlaySound(
                                 system, currentSound, null, 1, channelRef); // 1 = paused
-                if (result != FMOD_OK) {
+                if (result != FmodConstants.OK) {
                     fmod.FMOD_Sound_Release(currentSound);
                     currentSound = null;
-                    return -1; // unspecified error
+                    return ErrorCodes.UNSPECIFIED_ERROR;
                 }
                 currentChannel = channelRef.getValue();
 
                 // Set start position
                 result =
                         fmod.FMOD_Channel_SetPosition(
-                                currentChannel, startFrame, FMOD_TIMEUNIT_PCM);
-                if (result != FMOD_OK) {
+                                currentChannel, startFrame, FmodConstants.TIMEUNIT_PCM);
+                if (result != FmodConstants.OK) {
                     cleanup();
-                    return -1; // unspecified error
+                    return ErrorCodes.UNSPECIFIED_ERROR;
                 }
 
                 // Store frame range for position-based stopping
-                LibPennTotalRecall.startFrame = startFrame;
-                LibPennTotalRecall.endFrame = endFrame;
+                FmodCore.startFrame = startFrame;
+                FmodCore.endFrame = endFrame;
 
                 // Unpause to start playback
                 result = fmod.FMOD_Channel_SetPaused(currentChannel, 0); // 0 = not paused
-                if (result != FMOD_OK) {
+                if (result != FmodConstants.OK) {
                     cleanup();
-                    return -1; // unspecified error
+                    return ErrorCodes.UNSPECIFIED_ERROR;
                 }
 
                 // Update FMOD system
                 fmod.FMOD_System_Update(system);
 
-                return 0; // success
+                return ErrorCodes.SUCCESS;
 
             } catch (Exception e) {
                 cleanup();
-                return -1; // unspecified error
+                return ErrorCodes.UNSPECIFIED_ERROR;
             }
         }
     }
 
     /**
-     * Tells native library to stop audio playback immediately.
+     * Stops audio playback immediately and returns the current playback position.
      *
-     * @return The hearing frame, relative to start frame, or -1 if audio not playing
+     * <p>This method calls FMOD_Channel_Stop to halt playback and releases associated resources.
+     * The returned position represents how many frames were played relative to the start frame
+     * specified in startPlayback().
+     *
+     * <p>If called when no audio is playing, returns -1. This method is safe to call multiple
+     * times.
+     *
+     * @return Current playback position in frames relative to start frame, or -1 if not playing
      */
     public long stopPlayback() {
         synchronized (lock) {
@@ -251,9 +278,16 @@ public final class LibPennTotalRecall {
     }
 
     /**
-     * Asks the native library for the hearing frame.
+     * Returns the current audio playback position in frames.
      *
-     * @return The hearing frame, relative to start frame, or -1 if audio not playing
+     * <p>This method calls FMOD_Channel_GetPosition with FMOD_TIMEUNIT_PCM to retrieve the current
+     * playback position. The position is relative to the start frame specified in startPlayback(),
+     * not the absolute position in the file.
+     *
+     * <p>Position updates occur in real-time during playback and can be used for progress tracking,
+     * synchronization, or seeking verification.
+     *
+     * @return Current playback position in frames relative to start frame, or -1 if not playing
      */
     public long streamPosition() {
         synchronized (lock) {
@@ -273,8 +307,10 @@ public final class LibPennTotalRecall {
 
         try {
             IntByReference position = new IntByReference();
-            int result = fmod.FMOD_Channel_GetPosition(currentChannel, position, FMOD_TIMEUNIT_PCM);
-            if (result != FMOD_OK) {
+            int result =
+                    fmod.FMOD_Channel_GetPosition(
+                            currentChannel, position, FmodConstants.TIMEUNIT_PCM);
+            if (result != FmodConstants.OK) {
                 return -1;
             }
 
@@ -293,7 +329,22 @@ public final class LibPennTotalRecall {
         }
     }
 
-    /** Asks the native library whether audio is currently being rendered. */
+    /**
+     * Determines whether audio playback is currently active.
+     *
+     * <p>This method calls FMOD_Channel_IsPlaying to check the current playback state and also
+     * verifies that the audio position hasn't exceeded the specified end frame. The method will
+     * return false if:
+     *
+     * <ul>
+     *   <li>No audio channel is active
+     *   <li>FMOD reports the channel is not playing
+     *   <li>Playback has reached or exceeded the end frame
+     *   <li>Auto-stop has been triggered
+     * </ul>
+     *
+     * @return true if audio is actively playing within the specified range, false otherwise
+     */
     public boolean playbackInProgress() {
         synchronized (lock) {
             return playbackInProgressInternal();
@@ -308,7 +359,7 @@ public final class LibPennTotalRecall {
         try {
             IntByReference isPlaying = new IntByReference();
             int result = fmod.FMOD_Channel_IsPlaying(currentChannel, isPlaying);
-            if (result != FMOD_OK) {
+            if (result != FmodConstants.OK) {
                 return false;
             }
 
@@ -317,8 +368,10 @@ public final class LibPennTotalRecall {
             // Check for end-frame stopping (only if still playing)
             if (playing && endFrame > 0 && endFrame > startFrame) {
                 IntByReference position = new IntByReference();
-                result = fmod.FMOD_Channel_GetPosition(currentChannel, position, FMOD_TIMEUNIT_PCM);
-                if (result == FMOD_OK && position.getValue() >= endFrame) {
+                result =
+                        fmod.FMOD_Channel_GetPosition(
+                                currentChannel, position, FmodConstants.TIMEUNIT_PCM);
+                if (result == FmodConstants.OK && position.getValue() >= endFrame) {
                     checkAndAutoStop();
                     return false;
                 }
@@ -330,7 +383,23 @@ public final class LibPennTotalRecall {
         }
     }
 
-    /** Returns the version of the native library being used. */
+    /**
+     * Retrieves the version number of the loaded FMOD Core library.
+     *
+     * <p>This method calls FMOD_System_GetVersion to query the runtime version of the FMOD library.
+     * The version is returned as a 32-bit integer in hexadecimal format where:
+     *
+     * <ul>
+     *   <li>Upper 16 bits = major version
+     *   <li>Next 8 bits = minor version
+     *   <li>Lower 8 bits = development version
+     * </ul>
+     *
+     * <p>For example, version 2.03.09 would be returned as 0x00020309. Returns -1 if the FMOD
+     * system is not initialized or version cannot be retrieved.
+     *
+     * @return FMOD library version as integer, or -1 if unavailable
+     */
     public int getLibraryRevisionNumber() {
         synchronized (lock) {
             if (!ensureInitialized()) {
@@ -340,7 +409,7 @@ public final class LibPennTotalRecall {
             try {
                 IntByReference version = new IntByReference();
                 int result = fmod.FMOD_System_GetVersion(system, version);
-                if (result != FMOD_OK) {
+                if (result != FmodConstants.OK) {
                     return -1;
                 }
                 return version.getValue();

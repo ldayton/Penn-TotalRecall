@@ -21,7 +21,7 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
 
     private NativeStatelessPlaybackThread mainThread;
     private NativeStatelessPlaybackThread shortThread;
-    private final LibPennTotalRecall lib = LibPennTotalRecall.instance;
+    private final FmodCore lib = FmodCore.instance;
 
     /** Creates an new player, with status <code>BUSY</code>. */
     public NativeStatelessPlayer() {

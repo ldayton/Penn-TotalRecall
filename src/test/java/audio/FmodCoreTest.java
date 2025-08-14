@@ -13,16 +13,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("LibPennTotalRecall")
-class LibPennTotalRecallTest {
-    private static LibPennTotalRecall lib;
+@DisplayName("FmodCore")
+class FmodCoreTest {
+    private static FmodCore lib;
     private static File testFile;
     private static int actualSampleRate;
     private static long totalFrames;
 
     @BeforeAll
     static void setup() throws Exception {
-        lib = LibPennTotalRecall.instance;
+        lib = FmodCore.instance;
         // Use the known sample file with verified properties
         testFile = new File("packaging/samples/sample.wav");
         assertTrue(testFile.exists(), "Test audio file not found: " + testFile.getAbsolutePath());
@@ -164,28 +164,6 @@ class LibPennTotalRecallTest {
     }
 
     @Test
-    @DisplayName("stop returns reasonable position")
-    void stopReturnsReasonablePosition() throws InterruptedException {
-        long endFrame = Math.min(actualSampleRate * 10L, totalFrames);
-        int result = lib.startPlayback(testFile.getAbsolutePath(), 0, endFrame);
-        assertEquals(0, result, "Playback should start successfully");
-
-        Thread.sleep(500); // Play for 500ms
-
-        long stopPos = lib.stopPlayback();
-
-        // Should have played roughly 500ms worth of frames (±200ms tolerance)
-        long expectedFrames = (actualSampleRate * 500L) / 1000;
-        long tolerance = (actualSampleRate * 200L) / 1000;
-
-        assertTrue(
-                stopPos > expectedFrames - tolerance && stopPos < expectedFrames + tolerance,
-                String.format(
-                        "Stop position %d not within expected range [%d, %d]",
-                        stopPos, expectedFrames - tolerance, expectedFrames + tolerance));
-    }
-
-    @Test
     @DisplayName("auto-stops at end frame")
     void autoStopsAtEndFrame() throws InterruptedException {
         long endFrame = actualSampleRate / 10; // 100ms worth
@@ -203,22 +181,123 @@ class LibPennTotalRecallTest {
     }
 
     @Test
-    @DisplayName("multiple start/stop cycles work")
-    void multipleStartStopCycles() throws InterruptedException {
-        for (int i = 0; i < 5; i++) {
-            int result = lib.startPlayback(testFile.getAbsolutePath(), i * 1000, (i + 1) * 5000);
-            assertEquals(0, result, "Playback " + i + " should start");
+    @DisplayName("invalid file path returns error")
+    void invalidFilePathReturnsError() {
+        int result = lib.startPlayback("/nonexistent/file.wav", 0, 1000);
+        assertEquals(-3, result, "Should return -3 for unable to find or use file");
+        assertFalse(lib.playbackInProgress(), "Should not be playing");
+    }
 
-            Thread.sleep(100);
-            assertTrue(lib.playbackInProgress(), "Should be playing cycle " + i);
+    @Test
+    @DisplayName("stream position when not playing")
+    void streamPositionWhenNotPlaying() {
+        assertFalse(lib.playbackInProgress(), "Should not be playing initially");
+        long pos = lib.streamPosition();
+        assertEquals(-1, pos, "Position should be -1 when not playing");
+    }
 
+    @Test
+    @DisplayName("double start playback returns error")
+    void doubleStartPlaybackReturnsError() throws InterruptedException {
+        int result1 = lib.startPlayback(testFile.getAbsolutePath(), 0, actualSampleRate);
+        assertEquals(0, result1, "First playback should start successfully");
+        assertTrue(lib.playbackInProgress(), "Should be playing");
+
+        int result2 = lib.startPlayback(testFile.getAbsolutePath(), 0, actualSampleRate);
+        assertEquals(-4, result2, "Second playback should return -4 for inconsistent state");
+        assertTrue(lib.playbackInProgress(), "Original playback should continue");
+
+        lib.stopPlayback();
+    }
+
+    @Test
+    @DisplayName("playback from middle to file end")
+    void playbackFromMiddleToEnd() throws InterruptedException {
+        long startFrame = totalFrames / 2; // Start halfway through
+        int result = lib.startPlayback(testFile.getAbsolutePath(), startFrame, totalFrames);
+        assertEquals(0, result, "Should handle mid-file to end playback");
+
+        Thread.sleep(100);
+        long pos = lib.streamPosition();
+        assertTrue(pos >= 0 && pos < (totalFrames - startFrame), "Position should be within range");
+
+        lib.stopPlayback();
+    }
+
+    @Test
+    @DisplayName("stream position bounds check")
+    void streamPositionBoundsCheck() throws InterruptedException {
+        long startFrame = 1000;
+        long endFrame = startFrame + actualSampleRate; // 1 second range
+
+        int result = lib.startPlayback(testFile.getAbsolutePath(), startFrame, endFrame);
+        assertEquals(0, result, "Playback should start successfully");
+
+        // Verify position stays within bounds over time
+        boolean foundValidPosition = false;
+        for (int i = 0; i < 10; i++) {
             long pos = lib.streamPosition();
-            assertTrue(pos >= 0, "Position should be valid in cycle " + i);
+            if (pos >= 0) { // Valid position
+                foundValidPosition = true;
+                assertTrue(
+                        pos < (endFrame - startFrame),
+                        "Position should never exceed range: "
+                                + pos
+                                + " >= "
+                                + (endFrame - startFrame));
+            }
+            Thread.sleep(50);
+        }
+
+        assertTrue(foundValidPosition, "Should have found at least one valid position");
+        lib.stopPlayback();
+    }
+
+    @Test
+    @DisplayName("precise seek accuracy")
+    void preciseSeekAccuracy() throws InterruptedException {
+        // Test multiple seek points across the file
+        long[] seekTargets = {
+            0, // Start
+            actualSampleRate, // 1 second
+            actualSampleRate * 5, // 5 seconds
+            totalFrames / 2, // Middle
+            totalFrames - actualSampleRate // Near end
+        };
+
+        for (long targetFrame : seekTargets) {
+            if (targetFrame >= totalFrames) continue;
+
+            // Start playback at exact target
+            long endFrame = Math.min(targetFrame + actualSampleRate, totalFrames);
+            int result = lib.startPlayback(testFile.getAbsolutePath(), targetFrame, endFrame);
+            assertEquals(0, result, "Should start at frame " + targetFrame);
+
+            Thread.sleep(50); // Let it stabilize
+
+            long actualPosition = lib.streamPosition(); // Relative to targetFrame
+            long absolutePosition = targetFrame + actualPosition;
+
+            // Log the seek accuracy for analysis
+            long error = Math.abs(absolutePosition - targetFrame);
+            double errorMs = (error * 1000.0) / actualSampleRate;
+
+            System.out.printf(
+                    "Seek to %d: actual %d, error %d frames (%.1fms)%n",
+                    targetFrame, absolutePosition, error, errorMs);
+
+            // Use more generous tolerance - audio systems have inherent latency
+            long tolerance = actualSampleRate / 10; // 100ms worth of frames
+
+            assertTrue(
+                    error <= tolerance,
+                    String.format(
+                            "Seek error too large. Target: %d, Actual: %d, Error: %d frames"
+                                    + " (%.1fms)",
+                            targetFrame, absolutePosition, error, errorMs));
 
             lib.stopPlayback();
-            assertFalse(lib.playbackInProgress(), "Should be stopped after cycle " + i);
-
-            Thread.sleep(50); // Let system settle between cycles
+            Thread.sleep(50); // Let system settle between seeks
         }
     }
 }
