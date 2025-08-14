@@ -122,7 +122,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         // condition will accept
         if (e.getKeyLocation() == KeyEvent.KEY_LOCATION_UNKNOWN
                 && e.getKeyCode() == KeyEvent.VK_UNDEFINED) {
-            if (e.getModifiers() == 0) {
+            if (e.getModifiersEx() == 0) {
                 if (Character.isLetter(e.getKeyChar()) || Character.isDigit(e.getKeyChar())) {
                     if (getFocusOwner()
                             != null) { // this is how we guarantee MyFrame is "focused" and not the

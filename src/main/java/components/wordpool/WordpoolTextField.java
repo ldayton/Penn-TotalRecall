@@ -45,7 +45,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         getActionMap().put("annotate regular", new AnnotateAction(AnnotateAction.Mode.REGULAR));
 
         Set<AWTKeyStroke> keys = new HashSet<AWTKeyStroke>();
-        keys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_MASK, false));
+        keys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK, false));
         setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keys);
 
         addKeyListener(this);
@@ -54,19 +54,19 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         if (UserPrefs.prefs.getBoolean(UserPrefs.useEmacs, UserPrefs.defaultUseEmacs)) {
             JTextComponent.KeyBinding[] newBindings = {
                 new JTextComponent.KeyBinding(
-                        KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK, false),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK, false),
                         DefaultEditorKit.beginLineAction),
                 new JTextComponent.KeyBinding(
-                        KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK, false),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK, false),
                         DefaultEditorKit.endLineAction),
                 new JTextComponent.KeyBinding(
-                        KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK, false),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK, false),
                         DefaultEditorKit.backwardAction),
                 new JTextComponent.KeyBinding(
-                        KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK, false),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK, false),
                         DefaultEditorKit.forwardAction),
                 new JTextComponent.KeyBinding(
-                        KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_MASK, false),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK, false),
                         DefaultEditorKit.deleteNextCharAction)
             };
 
@@ -117,12 +117,14 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     @Override
     protected Document createDefaultModel() {
-        return new WordpoolDocument();
+        WordpoolDocument doc = new WordpoolDocument();
+        doc.initialize();
+        return doc;
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getModifiers() == 0) { // no modifiers
+        if (e.getModifiersEx() == 0) { // no modifiers
             if (e.getKeyCode() == KeyEvent.VK_TAB) {
                 if (getText().length() == 0) {
                     getFocusCycleRootAncestor()
@@ -159,7 +161,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
             }
         }
         // emacs key bindings
-        if (e.getModifiers() == InputEvent.CTRL_MASK) {
+        if (e.getModifiersEx() == InputEvent.CTRL_DOWN_MASK) {
             if (e.getKeyCode() == KeyEvent.VK_K) {
                 emacsKillLine();
             } else if (e.getKeyCode() == KeyEvent.VK_Y) {

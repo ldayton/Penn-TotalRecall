@@ -3,7 +3,6 @@ plugins {
     id 'application'
     id 'distribution'
     id 'com.diffplug.spotless' version '7.2.+'
-    id 'net.ltgt.errorprone' version '4.3.+'
     id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
 }
 
@@ -54,7 +53,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:5.14.+'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.+'
     
-    errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 }
 
 // Using standard Gradle layout:
@@ -273,7 +271,7 @@ compileJava.dependsOn checkJavaVersion
 
 // Configure compiler to show all warnings but not fail build
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += ['-Xlint:all']
+    options.compilerArgs += ['-Xlint:all', '-Xlint:-serial']
 }
 
 // Spotless code formatting configuration

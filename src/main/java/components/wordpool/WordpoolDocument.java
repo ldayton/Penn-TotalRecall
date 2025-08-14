@@ -13,6 +13,13 @@ import javax.swing.text.PlainDocument;
 public class WordpoolDocument extends PlainDocument implements DocumentListener {
 
     protected WordpoolDocument() {
+        // Document listener added after construction to avoid this-escape warning
+    }
+    
+    /**
+     * Initializes the document listener. Must be called after construction.
+     */
+    protected void initialize() {
         addDocumentListener(this);
     }
 

@@ -74,6 +74,7 @@ public class Main {
         logger.debug("Running {} in developer mode", Constants.programName);
         SwingUtilities.invokeLater(
                 new Runnable() {
+                    @Override
                     public void run() {
                         new Main();
                     }

@@ -155,7 +155,7 @@ public final class MacOSIntegration {
     public static boolean isIntegrationSupported() {
         return Desktop.isDesktopSupported()
                 && Taskbar.isTaskbarSupported()
-                && System.getProperty("os.name", "").toLowerCase().contains("mac");
+                && System.getProperty("os.name", "").toLowerCase(java.util.Locale.ROOT).contains("mac");
     }
 
     /**

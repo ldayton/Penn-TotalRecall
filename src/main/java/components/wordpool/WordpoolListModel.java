@@ -13,7 +13,7 @@ import util.MyCollection;
 // This class assumes that the ListDataListener (often javax.swing.plaf.basic.BasicListUI$Handler by
 // default),
 // will repaint the WordpoolList after ListDataEvents>.
-public class WordpoolListModel implements ListModel {
+public class WordpoolListModel implements ListModel<WordpoolWord> {
 
     private MyCollection<WordpoolWord> collection;
 
@@ -28,7 +28,7 @@ public class WordpoolListModel implements ListModel {
     }
 
     @Override
-    public Object getElementAt(int index) {
+    public WordpoolWord getElementAt(int index) {
         if (index < 0 || index >= collection.size()) {
             throw new IllegalArgumentException("index not in wordpool list: " + index);
         }

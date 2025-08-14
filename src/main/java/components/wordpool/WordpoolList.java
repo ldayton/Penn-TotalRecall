@@ -16,7 +16,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
-public class WordpoolList extends JList implements FocusListener, MouseListener, KeyListener {
+public class WordpoolList extends JList<WordpoolWord> implements FocusListener, MouseListener, KeyListener {
 
     private static WordpoolListModel model;
 
@@ -70,7 +70,8 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                Object[] objs = getSelectedValues();
+                                var selectedValues = getSelectedValuesList();
+                                Object[] objs = selectedValues.toArray();
                                 if (objs.length
                                         == 1) { // in case multiple selection mode is used in the
                                     // future
@@ -161,7 +162,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
      */
     protected static WordpoolWord getFirstWord() {
         if (model.getSize() > 0) {
-            return (WordpoolWord) model.getElementAt(0);
+            return model.getElementAt(0);
         } else {
             return null;
         }
@@ -192,7 +193,7 @@ public class WordpoolList extends JList implements FocusListener, MouseListener,
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
             int index = locationToIndex(e.getPoint());
             if (index >= 0) {
-                WordpoolWord clickedWord = (WordpoolWord) model.getElementAt(index);
+                WordpoolWord clickedWord = model.getElementAt(index);
                 WordpoolDisplay.switchToFocusAndClobber(clickedWord.getText());
             }
         }
