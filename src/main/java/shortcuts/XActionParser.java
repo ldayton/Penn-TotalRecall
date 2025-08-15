@@ -114,7 +114,7 @@ public class XActionParser {
             }
         }
 
-        return Shortcut.fromExternalForm(maskKeyNames, nonMaskKeyNames);
+        return Shortcut.fromXmlForm(maskKeyNames, nonMaskKeyNames);
     }
 
     @JacksonXmlRootElement(localName = "actions")

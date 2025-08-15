@@ -151,6 +151,28 @@ public class Shortcut {
                 maskKeyExternalForms, nonMaskKeyExternalForms, Environment.getInstance());
     }
 
+    /**
+     * Creates a Shortcut from XML keynames specifically for actions.xml parsing. This method uses
+     * XML-specific conversion separate from display formatting.
+     */
+    public static Shortcut fromXmlForm(
+            List<String> maskKeyXmlNames, List<String> nonMaskKeyXmlNames) {
+        Objects.requireNonNull(maskKeyXmlNames);
+        Objects.requireNonNull(nonMaskKeyXmlNames);
+
+        Environment env = Environment.getInstance();
+        String internalShortcutForm =
+                Stream.concat(
+                                maskKeyXmlNames.stream().map(env::xmlKeynameToInternalForm),
+                                nonMaskKeyXmlNames.stream().map(env::xmlKeynameToInternalForm))
+                        .collect(joining(INTERNAL_FORM_DELIMITER));
+        KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
+        if (stroke == null) {
+            throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
+        }
+        return new Shortcut(stroke, env);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -160,16 +160,6 @@ task packageMacApp {
                 '--runtime-image', file("${buildDir}/custom-runtime").absolutePath)
         }.result.get()
         
-        // Copy FMOD libraries to standard macOS .app location
-        // NOTE: Only copy standard library, NOT logging library (libfmodL.dylib)
-        // Production packages should not include debug/logging libraries
-        def frameworksDir = file("${appBundle}/Contents/Frameworks")
-        frameworksDir.mkdirs()
-        
-        copy {
-            from 'src/main/resources/fmod/macos/libfmod.dylib'  // Standard library only
-            into frameworksDir
-        }
         
         println "Mac .app created in ${appDir}"
     }
@@ -231,21 +221,31 @@ distributions {
         contents {
             from jar
             from 'packaging/samples'
-            from('src/main/resources/fmod/macos') {
-                into 'lib'
-            }
         }
+    }
+}
+
+// Helper function to load environment-specific config and apply to task
+def loadEnvironmentConfig(task, String env) {
+    def configFile = file("src/main/resources/${env}.properties")
+    if (configFile.exists()) {
+        def props = new Properties()
+        configFile.withInputStream { props.load(it) }
+        props.each { key, value ->
+            task.systemProperty key, value
+        }
+        println "Loaded ${env} configuration: ${props.size()} properties"
+    } else {
+        println "Configuration file not found: ${configFile.path}"
     }
 }
 
 // Test configuration
 test {
-    useJUnitPlatform {
-        // Skip audio hardware tests on CI environments
-        if (System.getenv('CI') == 'true') {
-            excludeTags 'audio-hardware'
-        }
-    }
+    // Detect CI environment
+    def isCI = System.getenv('CI') == 'true' || 
+               System.getenv('GITHUB_ACTIONS') == 'true' ||
+               System.getenv('BUILDKITE') == 'true'
     
     // Enable detailed test output
     testLogging {
@@ -253,8 +253,36 @@ test {
         showStandardStreams = true
     }
     
-    // Set up JNA library path for FMOD during testing
-    systemProperty 'jna.library.path', 'src/main/resources/fmod/macos'
+    // Load configuration properties to determine test behavior
+    def configProps = new Properties()
+    
+    // Always load development configuration as baseline
+    def devConfigFile = file("src/main/resources/development.properties")
+    if (devConfigFile.exists()) {
+        devConfigFile.withInputStream { configProps.load(it) }
+    }
+    
+    // In CI environments, override with CI-specific settings
+    if (isCI) {
+        def ciConfigFile = file("src/main/resources/ci.properties")
+        if (ciConfigFile.exists()) {
+            ciConfigFile.withInputStream { configProps.load(it) }
+        }
+    }
+    
+    useJUnitPlatform {
+        // Use the loaded property to control audio test exclusion
+        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
+        if (audioHardwareAvailable == 'false') {
+            excludeTags 'audio-hardware'
+        }
+    }
+    
+    // Also apply these properties to the test task for runtime use
+    loadEnvironmentConfig(test, 'development')
+    if (isCI) {
+        loadEnvironmentConfig(test, 'ci')
+    }
     
     // Custom test task that runs the manual test suite
     doLast {
@@ -342,10 +370,9 @@ task runDev(type: JavaExec) {
     description = 'Run application in development mode with unpackaged FMOD loading'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = application.mainClass
-    systemProperty 'fmod.loading.mode', 'unpackaged'
     
-    // Set up JNA library path for development
-    systemProperty 'jna.library.path', 'src/main/resources/fmod/macos'
+    // Load development configuration
+    loadEnvironmentConfig(runDev, 'development')
 }
 
 // Spotless code formatting configuration

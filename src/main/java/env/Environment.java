@@ -48,10 +48,10 @@ public class Environment {
 
     private Environment() {
         this.platform = Platform.detect();
+        this.userHomeDir = System.getProperty("user.home");
         this.config = loadConfiguration();
 
         // Compute and cache frequently used values
-        this.userHomeDir = System.getProperty("user.home");
         this.aboutMessage = buildAboutMessage();
         this.menuKey = computeMenuKey();
         this.chunkSizeInSeconds = computeChunkSize();
@@ -120,11 +120,7 @@ public class Environment {
             return userLaf;
         }
 
-        // Platform-specific defaults
-        return switch (platform) {
-            case MACOS -> "com.formdev.flatlaf.FlatMacLightLaf";
-            case WINDOWS, LINUX -> "com.formdev.flatlaf.FlatLightLaf";
-        };
+        return config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf");
     }
 
     private void configureNativeIntegration() {
@@ -574,6 +570,34 @@ public class Environment {
     }
 
     // =============================================================================
+    // XML-SPECIFIC SHORTCUT METHODS
+    // =============================================================================
+
+    /**
+     * Converts XML keynames from actions.xml to internal KeyStroke format. This is separate from
+     * display formatting and specifically handles the XML schema.
+     */
+    public String xmlKeynameToInternalForm(String xmlKeyname) {
+        // Handle cross-platform "menu" modifier: Command on Mac, Ctrl on Windows/Linux
+        if ("menu".equals(xmlKeyname)) {
+            return switch (platform) {
+                case MACOS -> "meta";
+                case WINDOWS, LINUX -> "ctrl";
+            };
+        }
+
+        // Handle other common XML keynames to internal format
+        return switch (xmlKeyname.toLowerCase()) {
+            case "alt" -> "alt";
+            case "shift" -> "shift";
+            case "ctrl" -> "ctrl";
+            case "command" -> "meta"; // Explicit command for Mac
+                // Key names (non-modifiers) - pass through uppercase
+            default -> xmlKeyname.toUpperCase();
+        };
+    }
+
+    // =============================================================================
     // SHORTCUT HELPER METHODS
     // =============================================================================
 
@@ -634,13 +658,14 @@ public class Environment {
             case "↓" -> "DOWN";
             case "←" -> "LEFT";
             case "→" -> "RIGHT";
-            default -> externalKey.toUpperCase(); // Use as-is for regular keys
+            default -> externalKey.toUpperCase(); // Uppercase key names (A, B, C, etc.)
         };
     }
 
     private String pcExternalToInternal(String externalKey) {
         // Convert PC display text back to internal KeyStroke format
         return switch (externalKey.toLowerCase()) {
+            case "menu" -> "ctrl"; // Cross-platform "menu" = Ctrl on Windows/Linux
             case "win" -> "meta";
             case "alt" -> "alt";
             case "shift" -> "shift";

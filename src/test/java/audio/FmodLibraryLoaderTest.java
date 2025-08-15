@@ -35,23 +35,15 @@ class FmodLibraryLoaderTest {
     }
 
     @Test
-    @DisplayName("AppConfig provides default FMOD library type as STANDARD")
-    void testDefaultFmodLibraryType() {
+    @DisplayName("AppConfig provides FMOD loading mode from environment configuration")
+    void testFmodLoadingModeFromEnvironment() {
         AppConfig config = AppConfig.getInstance();
 
-        // Default should be STANDARD (production-safe)
-        FmodLibraryType defaultType = config.getFmodLibraryType();
-        assertEquals(FmodLibraryType.STANDARD, defaultType);
-    }
-
-    @Test
-    @DisplayName("AppConfig provides default FMOD loading mode as PACKAGED")
-    void testDefaultFmodLoadingMode() {
-        AppConfig config = AppConfig.getInstance();
-
-        // Default should be PACKAGED
-        LibraryLoadingMode defaultMode = config.getFmodLoadingMode();
-        assertEquals(LibraryLoadingMode.PACKAGED, defaultMode);
+        // In development environment, should be UNPACKAGED
+        // In CI environment, should also be UNPACKAGED (both run from source)
+        // Only production packages use PACKAGED
+        LibraryLoadingMode mode = config.getFmodLoadingMode();
+        assertEquals(LibraryLoadingMode.UNPACKAGED, mode);
     }
 
     @Test
