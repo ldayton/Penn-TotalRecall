@@ -604,7 +604,6 @@ public class Environment {
             case "tab" -> "⇥";
             case "enter", "return" -> "↩";
             case "delete" -> "⌫";
-            case "space" -> "␣";
             case "escape" -> "⎋";
             case "up" -> "↑";
             case "down" -> "↓";
@@ -637,7 +636,7 @@ public class Environment {
 
     private String macExternalToInternal(String externalKey) {
         // Convert Mac display symbols back to internal KeyStroke format
-        return switch (externalKey) {
+        return switch (externalKey.toLowerCase()) {
             case "⌘" -> "meta";
             case "⌥" -> "alt";
             case "⇧" -> "shift";
@@ -645,12 +644,21 @@ public class Environment {
             case "⇥" -> "TAB";
             case "↩" -> "ENTER";
             case "⌫" -> "DELETE";
-            case "␣" -> "SPACE";
             case "⎋" -> "ESCAPE";
             case "↑" -> "UP";
             case "↓" -> "DOWN";
             case "←" -> "LEFT";
             case "→" -> "RIGHT";
+            case "menu" -> "meta"; // Cross-platform "menu" = Command on Mac
+            case "command", "cmd" -> "meta";
+            case "option" -> "alt";
+            case "control", "ctrl" -> "ctrl";
+            case "shift" -> "shift";
+            case "space" -> "SPACE";
+            case "tab" -> "TAB";
+            case "enter", "return" -> "ENTER";
+            case "delete" -> "DELETE";
+            case "escape", "esc" -> "ESCAPE";
             default -> externalKey.toUpperCase(); // Uppercase key names (A, B, C, etc.)
         };
     }
@@ -659,6 +667,7 @@ public class Environment {
         // Convert PC display text back to internal KeyStroke format
         return switch (externalKey.toLowerCase()) {
             case "menu" -> "ctrl"; // Cross-platform "menu" = Ctrl on Windows/Linux
+            case "command" -> "meta"; // Command key maps to meta on PC too
             case "win" -> "meta";
             case "alt" -> "alt";
             case "shift" -> "shift";

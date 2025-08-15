@@ -197,7 +197,7 @@ public class ShortcutTest {
             KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
             Shortcut macShortcut = Shortcut.forPlatform(stroke, macEnv);
-            Shortcut pcShortcut = Shortcut.forPlatform(stroke, macEnv);
+            Shortcut pcShortcut = Shortcut.forPlatform(stroke, pcEnv);
 
             // Should produce different representations
             assertNotEquals(macShortcut.toString(), pcShortcut.toString());
@@ -367,7 +367,7 @@ public class ShortcutTest {
             KeyStroke pcCopy = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
 
             String macResult = new Shortcut(macCopy, macEnv).toString();
-            String pcResult = new Shortcut(pcCopy, macEnv).toString();
+            String pcResult = new Shortcut(pcCopy, pcEnv).toString();
 
             assertEquals("⌘C", macResult);
             assertEquals("Ctrl+C", pcResult);
