@@ -135,6 +135,23 @@ curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" 
   https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/job/JOB_NUMBER
 ```
 
+### Quick Build Status Check
+
+```bash
+# Check latest pipeline status
+curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline | \
+  jq '.items[0] | {number, status: .state, commit: .vcs.commit.subject}'
+
+# Get current build step status (shows which step is running/failed)
+LATEST_JOB=$(curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline | \
+  jq -r '.items[0].number')
+curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v1.1/project/github/ldayton/Penn-TotalRecall/$LATEST_JOB | \
+  jq -r '.steps[] | select(.name) | (.name + ": " + (.actions[0].status // "unknown"))'
+```
+
 **Note:** CircleCI CLI doesn't have direct workflow commands - use API calls above for build status checking.
 
 ### Packaging
@@ -233,6 +250,10 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 - **No comments** unless specifically requested
 - **Java 23 features** preferred (no legacy fallbacks needed)
 - **Concise responses** - avoid explaining code unless asked
+
+### Git Commits
+- **No advertising in commit messages** - never include "Generated with Claude Code" or similar promotional text
+- **Clean, descriptive commit messages** focusing on what changed and why
 
 ### Build System
 - **Pure Maven Central** dependencies only
