@@ -113,6 +113,30 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 ./gradlew dependencyUpdates    # Check for dependency updates
 ```
 
+### CircleCI Build Diagnostics
+
+After authenticating with `circleci setup`, check build status using API:
+
+```bash
+# Get recent pipelines for project
+curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline
+
+# Get workflow status for specific pipeline (get pipeline ID from above)
+curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/pipeline/PIPELINE_ID/workflow
+
+# Get job details from failed workflow (get workflow ID from above)
+curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/workflow/WORKFLOW_ID/job
+
+# Get detailed job logs (get job number from above)
+curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
+  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/job/JOB_NUMBER
+```
+
+**Note:** CircleCI CLI doesn't have direct workflow commands - use API calls above for build status checking.
+
 ### Packaging
 ```bash
 ./gradlew packageMacApp        # Create self-contained macOS .app bundle

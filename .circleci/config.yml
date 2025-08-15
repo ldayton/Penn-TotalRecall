@@ -33,13 +33,16 @@ jobs:
       - run:
           name: Install Oracle Java 23
           command: |
-            curl -L -o jdk-23_macos-aarch64_bin.tar.gz "https://download.oracle.com/java/23/latest/jdk-23_macos-aarch64_bin.tar.gz"
+            # Download Oracle JDK 23 for macOS ARM64
+            curl -L -o jdk-23_macos-aarch64_bin.tar.gz "https://download.oracle.com/java/23/archive/jdk-23.0.1_macos-aarch64_bin.tar.gz"
             tar -xzf jdk-23_macos-aarch64_bin.tar.gz
-            sudo mv jdk-23.jdk /Library/Java/JavaVirtualMachines/
-            echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home' >> $BASH_ENV
+            sudo mv jdk-23.0.1.jdk /Library/Java/JavaVirtualMachines/
+            echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-23.0.1.jdk/Contents/Home' >> $BASH_ENV
             echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
             source $BASH_ENV
+            # Verify installation
             java -version
+            javac -version
       
       # Make Gradle wrapper executable
       - run:
