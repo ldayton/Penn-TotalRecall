@@ -3,6 +3,7 @@ package components;
 import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
 import info.UserPrefs;
+import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import lombok.NonNull;
@@ -33,6 +34,7 @@ public class WindowManager {
      *
      * @param prefs the PreferencesProvider for storing and retrieving window state
      */
+    @Inject
     public WindowManager(@NonNull PreferencesProvider prefs) {
         this.prefs = prefs;
     }

@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.formdev:flatlaf:3.5.+'
     implementation 'org.slf4j:slf4j-api:2.0.+'
     implementation 'ch.qos.logback:logback-classic:1.5.+'
+    implementation 'com.google.inject:guice:7.0.+'
     
     compileOnly 'org.projectlombok:lombok:1.18.+'
     annotationProcessor 'org.projectlombok:lombok:1.18.+'

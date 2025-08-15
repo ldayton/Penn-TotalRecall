@@ -1,17 +1,10 @@
 package control;
 
-import components.MyFocusTraversalPolicy;
-import components.MyFrame;
-import components.MyMenu;
-import components.MySplitPane;
-import components.WindowManager;
-import env.AppConfig;
-import env.Environment;
+import di.GuiceBootstrap;
 import info.Constants;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.UpdateChecker;
 
 /** Entry point of the entire program. */
 public class Main {
@@ -37,20 +30,11 @@ public class Main {
         if (integrationTestMode) {
             AudioIntegrationMode.exitWithTestResult(AudioIntegrationMode.runTest());
         } else {
-            // Normal GUI mode
+            // Normal GUI mode with Guice DI
             SwingUtilities.invokeLater(
                     () -> {
-                        var env = new Environment();
-                        var windowManager = new WindowManager();
-                        env.initializeLookAndFeel();
-                        var mainFrame = MyFrame.createInstance(env);
-                        mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
-                        MyMenu.updateActions();
-                        windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());
-                        mainFrame.setVisible(true);
-
-                        // Check for updates after UI is ready (async, non-blocking)
-                        new UpdateChecker(new AppConfig()).checkForUpdateOnStartup();
+                        GuiceBootstrap bootstrap = GuiceBootstrap.create();
+                        bootstrap.startApplication();
                     });
         }
     }

@@ -6,6 +6,7 @@ import env.Environment;
 import env.FmodLibraryType;
 import env.LibraryLoadingMode;
 import java.io.File;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ public class FmodLibraryLoader {
     private final Environment env;
 
     /** Constructor for dependency injection. */
-    public FmodLibraryLoader(AppConfig config, Environment env) {
+    public FmodLibraryLoader(@NonNull AppConfig config, @NonNull Environment env) {
         this.config = config;
         this.env = env;
     }

@@ -1,6 +1,7 @@
 package util;
 
 import env.AppConfig;
+import jakarta.inject.Inject;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,6 +28,7 @@ public class UpdateChecker {
         this(config, HttpClient.newHttpClient());
     }
 
+    @Inject
     public UpdateChecker(@NonNull AppConfig config, @NonNull HttpClient httpClient) {
         this.releasesApiUrl = config.getReleasesApiUrl();
         this.releasesPageUrl = config.getReleasesPageUrl();
