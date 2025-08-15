@@ -4,7 +4,7 @@ plugins {
     id 'distribution'
     id 'com.diffplug.spotless' version '7.2.+'
     id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
-    id 'org.jetbrains.qodana' version '2025.1.1'
+    id 'org.jetbrains.qodana' version '2025.2.1'
 }
 
 group = 'edu.upenn.psych.memory'
@@ -14,14 +14,10 @@ version = '1.0.0'
 ext {
     javaVersion = JavaVersion.VERSION_24
     programProperName = 'Penn TotalRecall'
-    programShortName = 'TotalRecall'
     programExtensionlessFilename = 'PennTotalRecall'
-    unixName = 'penntotalrecall'
     maintainerName = 'Lily Dayton'
-    maintainerEmail = 'memory-software@psych.upenn.edu'
-    uniqueIdentifier = 'edu.upenn.psych.memory.totalrecall'
+    maintainerEmail = 'lily.dayton.3@gmail.com'
     orgName = 'Computational Memory Lab, UPenn'
-    homepage = 'http://memory.psych.upenn.edu/TotalRecall'
     nativeAccessJvmArgs = ['--enable-native-access=ALL-UNNAMED']
 }
 
@@ -88,15 +84,13 @@ clean {
     delete 'classes', 'dist', 'tmp'
 }
 
-// No native compilation needed - using direct FMOD Core JNA binding
-
 // Create minimal Java runtime with jlink
-task createCustomRuntime {
+tasks.register('createCustomRuntime') {
     group = 'packaging'
     description = 'Create minimal Java runtime using jlink'
     
     doLast {
-        def customRuntimeDir = file("${buildDir}/custom-runtime")
+        def customRuntimeDir = file("${layout.buildDirectory.get().asFile}/custom-runtime")
         
         // Delete existing runtime if it exists
         if (customRuntimeDir.exists()) {
@@ -119,7 +113,7 @@ task createCustomRuntime {
 
 // MacOS-only packaging
 
-task packageMacApp {
+tasks.register('packageMacApp') {
     group = 'packaging'
     description = 'Create Mac .app bundle using jpackage'
     dependsOn jar, createCustomRuntime
@@ -137,7 +131,7 @@ task packageMacApp {
         appDir.mkdirs()
         
         // Copy JAR to input directory
-        def inputDir = file("${buildDir}/jpackage-input")
+        def inputDir = file("${layout.buildDirectory.get().asFile}/jpackage-input")
         inputDir.mkdirs()
         
         copy {
@@ -159,7 +153,7 @@ task packageMacApp {
                 '--icon', 'packaging/macos/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
-                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath,
+                '--runtime-image', file("${layout.buildDirectory.get().asFile}/custom-runtime").absolutePath,
                 '--java-options', nativeAccessJvmArgs.join(' '))
         }.result.get()
         
@@ -178,7 +172,7 @@ task packageMacApp {
 }
 
 // DMG packaging - pure Gradle/Java approach  
-task packageMacDmg {
+tasks.register('packageMacDmg') {
     group = 'packaging'
     description = 'Create Mac .dmg installer from existing .app bundle'
     dependsOn packageMacApp  // Use the .app created by packageMacApp
@@ -306,7 +300,7 @@ test {
 }
 
 // Integration test for packaged .app FMOD loading
-task testPackagedFmodLoading {
+tasks.register('testPackagedFmodLoading') {
     group = 'verification'
     description = 'Integration test: Build .app and verify FMOD loading works in packaged environment'
     dependsOn packageMacApp, testClasses
@@ -333,7 +327,7 @@ task testPackagedFmodLoading {
         try {
             def result = providers.exec {
                 commandLine appExecutable.absolutePath, '--integration-test'
-                timeout = java.time.Duration.ofSeconds(12) // Kill if it takes longer than 12 seconds (slightly more than Java timeout)
+                timeout = Duration.ofSeconds(12) // Kill if it takes longer than 12 seconds (slightly more than Java timeout)
                 ignoreExitValue = true
             }.result.get()
             
@@ -349,7 +343,7 @@ task testPackagedFmodLoading {
 }
 
 // Version compatibility check
-task checkJavaVersion {
+tasks.register('checkJavaVersion') {
     def requiredJavaVersion = javaVersion // Capture at configuration time
     doLast {
         def currentJavaVersion = JavaVersion.current()
@@ -369,7 +363,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 // Development task - run with FMOD in unpackaged mode
-task runDev(type: JavaExec) {
+tasks.register('runDev', JavaExec) {
     group = 'application'
     description = 'Run application in development mode with unpackaged FMOD loading'
     classpath = sourceSets.main.runtimeClasspath
