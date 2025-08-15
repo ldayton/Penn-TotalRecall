@@ -238,7 +238,12 @@ distributions {
 
 // Test configuration
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        // Skip audio hardware tests on CI environments
+        if (System.getenv('CI') == 'true') {
+            excludeTags 'audio-hardware'
+        }
+    }
     
     // Enable detailed test output
     testLogging {

@@ -4,10 +4,11 @@ version: 2.1
 executors:
   macos-executor:
     macos:
-      xcode: "15.4"  # Latest stable Xcode for macOS Sonoma
-    resource_class: macos.m1.medium.gen1
+      xcode: "none"  # No Xcode needed for Java builds
+    resource_class: macos.m4.pro.medium
     environment:
-      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.workers.max=6 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
+      CI: "true"
 
 # Define jobs
 jobs:
@@ -16,58 +17,56 @@ jobs:
     steps:
       - checkout
       
-      # Cache Gradle dependencies
+      # Cache Java installation
       - restore_cache:
           keys:
-            - gradle-cache-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-            - gradle-cache-v1-{{ checksum "build.gradle" }}
-            - gradle-cache-v1-
+            - java-23-v1-{{ arch }}
+            - java-23-v1-
       
-      # Cache Gradle wrapper
+      # Cache only downloads (dependencies and Gradle wrapper)
       - restore_cache:
           keys:
-            - gradle-wrapper-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-            - gradle-wrapper-v1-
+            - gradle-downloads-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+            - gradle-downloads-v1-{{ checksum "build.gradle" }}
+            - gradle-downloads-v1-
       
-      # Install Oracle Java 23 (CircleCI macOS comes with older Java versions)
+      # Install Oracle Java 23 (cached for performance)
       - run:
           name: Install Oracle Java 23
           command: |
-            # Download Oracle JDK 23 for macOS ARM64
-            curl -L -o jdk-23_macos-aarch64_bin.tar.gz "https://download.oracle.com/java/23/archive/jdk-23.0.1_macos-aarch64_bin.tar.gz"
-            tar -xzf jdk-23_macos-aarch64_bin.tar.gz
-            sudo mv jdk-23.0.1.jdk /Library/Java/JavaVirtualMachines/
+            if [ -d "/Library/Java/JavaVirtualMachines/jdk-23.0.1.jdk" ]; then
+              echo "Java 23 already installed (cached)"
+            else
+              echo "Downloading Oracle JDK 23..."
+              curl -L -o jdk-23_macos-aarch64_bin.tar.gz "https://download.oracle.com/java/23/archive/jdk-23.0.1_macos-aarch64_bin.tar.gz"
+              tar -xzf jdk-23_macos-aarch64_bin.tar.gz
+              sudo mv jdk-23.0.1.jdk /Library/Java/JavaVirtualMachines/
+              rm jdk-23_macos-aarch64_bin.tar.gz
+            fi
             echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-23.0.1.jdk/Contents/Home' >> $BASH_ENV
             echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
             source $BASH_ENV
-            # Verify installation
             java -version
-            javac -version
       
       # Make Gradle wrapper executable
       - run:
           name: Make Gradle wrapper executable
           command: chmod +x ./gradlew
       
-      # Run Spotless check (code formatting)
+      # Fast compilation and formatting check (fail early)
       - run:
-          name: Code formatting check
-          command: ./gradlew spotlessCheck
+          name: Compile and check formatting
+          command: ./gradlew compileJava spotlessCheck
       
-      # Run tests
+      # Run tests (skips audio tests on CI)
       - run:
           name: Run tests
           command: ./gradlew test
       
-      # Build .app bundle
+      # Build distribution packages (only if tests pass)
       - run:
-          name: Build macOS .app bundle
-          command: ./gradlew packageMacApp
-      
-      # Build DMG installer
-      - run:
-          name: Build DMG installer
-          command: ./gradlew packageMacDmg
+          name: Build macOS packages
+          command: ./gradlew packageMacApp packageMacDmg
       
       # Store test results
       - store_test_results:
@@ -83,18 +82,19 @@ jobs:
           path: tmp/mac/Penn TotalRecall-1.0.0.dmg
           destination: Penn TotalRecall-1.0.0.dmg
       
-      # Store Gradle cache
+      # Save Java installation cache
       - save_cache:
-          key: gradle-cache-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: java-23-v1-{{ arch }}
           paths:
-            - ~/.gradle/caches
-            - ~/.gradle/wrapper
+            - /Library/Java/JavaVirtualMachines/jdk-23.0.1.jdk
       
-      # Store Gradle wrapper cache
+      # Save only download caches (not build outputs)
       - save_cache:
-          key: gradle-wrapper-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: gradle-downloads-v1-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
           paths:
-            - gradle/wrapper
+            - ~/.gradle/caches/modules-2          # Downloaded dependencies only
+            - ~/.gradle/wrapper                   # Gradle distribution
+            - gradle/wrapper                      # Project wrapper files
 
 # Define workflows
 workflows:

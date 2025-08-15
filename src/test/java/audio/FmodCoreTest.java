@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("FmodCore")
+@AudioHardware
 class FmodCoreTest {
     private static FmodCore lib;
     private static File testFile;
