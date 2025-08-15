@@ -1,12 +1,9 @@
 package audio;
 
 import com.sun.jna.Library;
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import control.Main;
-import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,26 +38,10 @@ public final class FmodCore {
         static final int INCONSISTENT_STATE = -4;
     }
 
-    // Load FMOD library based on developer mode
+    // Load FMOD library using dedicated loader
     private static FMODCore loadFMODLibrary() {
-        try {
-            if (Main.developerMode()) {
-                // In developer mode, load directly from the project filesystem
-                String projectDir = System.getProperty("user.dir");
-                String libraryPath = projectDir + "/src/main/resources/fmod/macos/libfmod.dylib";
-                File libraryFile = new File(libraryPath);
-                if (!libraryFile.exists()) {
-                    throw new RuntimeException("FMOD library not found at: " + libraryPath);
-                }
-                logger.debug("Loading FMOD from developer path: " + libraryPath);
-                return Native.loadLibrary(libraryFile.getAbsolutePath(), FMODCore.class);
-            } else {
-                // In production, library should be bundled with the .app
-                return Native.loadLibrary("fmod", FMODCore.class);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load FMOD library", e);
-        }
+        FmodLibraryLoader loader = new FmodLibraryLoader();
+        return loader.loadLibrary(FMODCore.class);
     }
 
     // FMOD Core JNA interface

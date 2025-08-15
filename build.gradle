@@ -260,6 +260,60 @@ test {
     }
 }
 
+// Integration test for packaged .app FMOD loading
+task testPackagedFmodLoading {
+    group = 'verification'
+    description = 'Integration test: Build .app and verify FMOD loading works in packaged environment'
+    dependsOn packageMacApp, testClasses
+    
+    doLast {
+        def appBundle = file("tmp/mac/${programProperName}.app")
+        if (!appBundle.exists()) {
+            throw new GradleException("App bundle not found: ${appBundle.absolutePath}")
+        }
+        
+        // Verify FMOD library exists in .app bundle
+        def fmodLib = file("${appBundle}/Contents/Frameworks/libfmod.dylib")
+        if (!fmodLib.exists()) {
+            throw new GradleException("FMOD library not found in app bundle: ${fmodLib.absolutePath}")
+        }
+        
+        println "🧪 Running FMOD loading integration test in packaged .app..."
+        println "📦 App bundle: ${appBundle.name}"
+        println "🔗 FMOD library: ${fmodLib.name}"
+        
+        // Extract test harness and dependencies to temp location
+        def tempDir = file("${buildDir}/integration-test")
+        tempDir.mkdirs()
+        
+        // Copy test classes and dependencies
+        copy {
+            from sourceSets.test.output.classesDirs
+            from sourceSets.main.output.classesDirs
+            from configurations.runtimeClasspath
+            into tempDir
+        }
+        
+        try {
+            def result = providers.exec {
+                workingDir tempDir
+                commandLine 'java', 
+                    '-cp', '.:*',
+                    'integration.FmodLoadingTestHarness'
+                ignoreExitValue = true
+            }.result.get()
+            
+            if (result.exitValue == 0) {
+                println "✅ Integration test PASSED: FMOD loads correctly in packaged environment"
+            } else {
+                throw new GradleException("❌ Integration test FAILED: Exit code ${result.exitValue}")
+            }
+        } catch (Exception e) {
+            throw new GradleException("❌ Integration test execution failed: ${e.message}", e)
+        }
+    }
+}
+
 // Version compatibility check
 task checkJavaVersion {
     def requiredJavaVersion = javaVersion // Capture at configuration time
@@ -278,6 +332,18 @@ compileJava.dependsOn checkJavaVersion
 // Configure compiler to show all warnings and fail on warnings
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:all', '-Xlint:-serial']
+}
+
+// Development task - run with FMOD in unpackaged mode
+task runDev(type: JavaExec) {
+    group = 'application'
+    description = 'Run application in development mode with unpackaged FMOD loading'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = application.mainClass
+    systemProperty 'fmod.loading.mode', 'unpackaged'
+    
+    // Set up JNA library path for development
+    systemProperty 'jna.library.path', 'src/main/resources/fmod/macos'
 }
 
 // Spotless code formatting configuration

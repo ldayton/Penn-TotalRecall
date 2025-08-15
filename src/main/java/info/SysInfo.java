@@ -37,7 +37,6 @@ public class SysInfo {
 
     public final String aboutMessage;
     public final String userHomeDir;
-    public final String updateAddress;
     public final String preferencesString;
 
     private SysInfo() {
@@ -83,15 +82,6 @@ public class SysInfo {
             }
         } else {
             userHomeDir = homeVal;
-        }
-
-        // what is the correct update file location?
-        if (isMacOSX) {
-            updateAddress =
-                    "http://memory.psych.upenn.edu/files/software/TotalRecall/version_files/mac_version.txt";
-        } else {
-            updateAddress =
-                    "http://memory.psych.upenn.edu/files/software/TotalRecall/version_files/windows_version.txt";
         }
 
         // generate string displayed for "About this Program"

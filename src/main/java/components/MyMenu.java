@@ -8,7 +8,6 @@ import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
-import behaviors.singleact.CheckUpdatesAction;
 import behaviors.singleact.DoneAction;
 import behaviors.singleact.EditShortcutsAction;
 import behaviors.singleact.ExitAction;
@@ -204,10 +203,8 @@ public class MyMenu extends JMenuBar {
     private void initHelpMenu() {
         JMenu jmHelp = new JMenu("Help");
         JMenuItem jmiVisitMemLab = new JMenuItem(new VisitTutorialSiteAction());
-        JMenuItem jmiCheckUpdates = new JMenuItem(new CheckUpdatesAction(true));
         JMenuItem jmiKeys = new JMenuItem(new TipsMessageAction());
         jmHelp.add(jmiVisitMemLab);
-        jmHelp.add(jmiCheckUpdates);
         jmHelp.add(jmiKeys);
         if (macLF == false) {
             jmHelp.addSeparator();

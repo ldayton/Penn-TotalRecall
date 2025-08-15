@@ -42,9 +42,6 @@ public class Constants {
     /** Affiliation of organization distributing the program. */
     public static final String orgAffiliationName = "University of Pennsylvania";
 
-    /** Web address of program download webpage. */
-    public static final String downloadSite = "http://memory.psych.upenn.edu/TotalRecall";
-
     /** Web address of program tutorial webpage. */
     public static final String tutorialSite = "http://memory.psych.upenn.edu/TotalRecall";
 
