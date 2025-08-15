@@ -161,27 +161,39 @@ for JOB_NUM in $JOB_LIST; do
                     echo -e "\n${YELLOW}📋 Output from '${TARGET_STEP}':${NC}"
                     
                     # Try multiple approaches to get logs
-                    # 1. Try v1.1 API output_url
-                    OUTPUT_URL=$(echo "$JOB_DETAILS" | jq -r --arg step "$TARGET_STEP" '.steps[] | select(.name == $step) | .actions[0].output_url')
+                    LOG_OUTPUT=""
                     
-                    if [ "$OUTPUT_URL" != "null" ] && [ -n "$OUTPUT_URL" ]; then
-                        LOG_OUTPUT=$(curl -s -H "Circle-Token: $TOKEN" "$OUTPUT_URL" 2>/dev/null)
-                        if [ -n "$LOG_OUTPUT" ]; then
-                            echo "$LOG_OUTPUT" | tail -30 | sed 's/^/   /'
-                            echo -e "\n${BLUE}💡 Last 30 lines via v1.1 API${NC}"
+                    # 1. Try step-based log access using step number and action index
+                    STEP_NUM=$(echo "$JOB_DETAILS" | jq -r --arg step "$TARGET_STEP" '.steps[] | select(.name == $step) | .actions[0].step')
+                    ACTION_INDEX=$(echo "$JOB_DETAILS" | jq -r --arg step "$TARGET_STEP" '.steps[] | select(.name == $step) | .actions[0].index')
+                    
+                    if [ "$STEP_NUM" != "null" ] && [ "$ACTION_INDEX" != "null" ]; then
+                        LOG_DATA=$(curl -s -H "Circle-Token: $TOKEN" "$API_BASE/v1.1/project/github/ldayton/Penn-TotalRecall/$JOB_NUM/output/$STEP_NUM/$ACTION_INDEX" 2>/dev/null)
+                        if [ $? -eq 0 ] && [ -n "$LOG_DATA" ]; then
+                            # Parse the JSON log format and extract messages
+                            LOG_OUTPUT=$(echo "$LOG_DATA" | jq -r '.[].message' 2>/dev/null | tail -50)
+                            if [ -n "$LOG_OUTPUT" ]; then
+                                echo "$LOG_OUTPUT" | tail -30 | sed 's/\\r\\n/\n/g' | sed 's/^/   /'
+                                echo -e "\n${BLUE}💡 Last 30 lines via step-based API${NC}"
+                            fi
                         fi
                     fi
                     
-                    # 2. If that fails, try v2 API for step details
+                    # 2. Fallback to output_url if available and step-based failed
                     if [ -z "$LOG_OUTPUT" ]; then
-                        # Get step details from v2 API
-                        V2_JOB=$(curl -s -H "Circle-Token: $TOKEN" "$API_BASE/v2/project/$PROJECT_SLUG/job/$JOB_NUM")
-                        if [ $? -eq 0 ]; then
-                            echo -e "   ${YELLOW}v1.1 logs unavailable, trying v2 API...${NC}"
-                            # v2 API might have different log access patterns
-                        else
-                            echo -e "   ${YELLOW}Logs not accessible via API${NC}"
+                        OUTPUT_URL=$(echo "$JOB_DETAILS" | jq -r --arg step "$TARGET_STEP" '.steps[] | select(.name == $step) | .actions[0].output_url')
+                        if [ "$OUTPUT_URL" != "null" ] && [ -n "$OUTPUT_URL" ] && [ "$OUTPUT_URL" != "" ]; then
+                            LOG_OUTPUT=$(curl -s -H "Circle-Token: $TOKEN" "$OUTPUT_URL" 2>/dev/null)
+                            if [ -n "$LOG_OUTPUT" ]; then
+                                echo "$LOG_OUTPUT" | tail -30 | sed 's/^/   /'
+                                echo -e "\n${BLUE}💡 Last 30 lines via output_url${NC}"
+                            fi
                         fi
+                    fi
+                    
+                    # 3. If still no logs, indicate unavailable
+                    if [ -z "$LOG_OUTPUT" ]; then
+                        echo -e "   ${YELLOW}Live logs not accessible via API (step: $STEP_NUM, action: $ACTION_INDEX)${NC}"
                     fi
                     
                     # 3. Always show the web URL for full logs
