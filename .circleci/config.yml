@@ -3,7 +3,8 @@ version: 2.1
 # Define executors
 executors:
   macos-executor:
-    resource_class: macos.m4.pro.medium
+    macos:
+      resource_class: macos.m4.pro.medium
     environment:
       GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.workers.max=6 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
       CI: "true"
