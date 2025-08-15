@@ -2,7 +2,7 @@ package components.wordpool;
 
 import behaviors.multiact.AnnotateAction;
 import components.MyFrame;
-import info.SysInfo;
+import env.Environment;
 import info.UserPrefs;
 import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
@@ -84,21 +84,27 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK, false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, SysInfo.sys.menuKey, false), "none");
+                .put(
+                        KeyStroke.getKeyStroke(
+                                KeyEvent.VK_RIGHT, Environment.getInstance().getMenuKey(), false),
+                        "none");
         getInputMap(JComponent.WHEN_FOCUSED)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, SysInfo.sys.menuKey, false), "none");
+                .put(
+                        KeyStroke.getKeyStroke(
+                                KeyEvent.VK_LEFT, Environment.getInstance().getMenuKey(), false),
+                        "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_RIGHT,
-                                SysInfo.sys.menuKey + InputEvent.SHIFT_DOWN_MASK,
+                                Environment.getInstance().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_LEFT,
-                                SysInfo.sys.menuKey + InputEvent.SHIFT_DOWN_MASK,
+                                Environment.getInstance().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)

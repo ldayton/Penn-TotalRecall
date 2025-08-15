@@ -160,12 +160,14 @@ task packageMacApp {
                 '--runtime-image', file("${buildDir}/custom-runtime").absolutePath)
         }.result.get()
         
-        // Copy FMOD libraries to standard macOS .app location  
+        // Copy FMOD libraries to standard macOS .app location
+        // NOTE: Only copy standard library, NOT logging library (libfmodL.dylib)
+        // Production packages should not include debug/logging libraries
         def frameworksDir = file("${appBundle}/Contents/Frameworks")
         frameworksDir.mkdirs()
         
         copy {
-            from 'src/main/resources/fmod/macos/libfmod.dylib'
+            from 'src/main/resources/fmod/macos/libfmod.dylib'  // Standard library only
             into frameworksDir
         }
         

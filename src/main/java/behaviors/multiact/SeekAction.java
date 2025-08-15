@@ -3,7 +3,6 @@ package behaviors.multiact;
 import audio.PrecisionPlayer;
 import components.MyFrame;
 import control.CurAudio;
-import info.SysInfo;
 import info.UserPrefs;
 import java.awt.event.ActionEvent;
 import java.util.Map;
@@ -72,9 +71,6 @@ public class SeekAction extends IdentifiedMultiAction {
         } else if (naivePosition >= frameLength) {
             finalPosition = frameLength - 1;
         }
-        if (SysInfo.sys.forceListen) {
-            finalPosition = Math.min(finalPosition, CurAudio.getListener().getGreatestProgress());
-        }
 
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
         CurAudio.getPlayer().queuePlayAt(finalPosition);
@@ -91,14 +87,7 @@ public class SeekAction extends IdentifiedMultiAction {
             if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
-                boolean canSkipForward;
-                if (SysInfo.sys.forceListen) {
-                    canSkipForward =
-                            CurAudio.getAudioProgress()
-                                    < CurAudio.getListener().getGreatestProgress();
-                } else {
-                    canSkipForward = true;
-                }
+                boolean canSkipForward = true;
                 if (CurAudio.getAudioProgress() <= 0) {
                     if (canSkipForward
                             && (amount == SeekAmount.FORWARD_SMALL

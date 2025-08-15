@@ -13,9 +13,9 @@ import components.waveform.WaveformBuffer;
 import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
+import env.Environment;
 import info.Constants;
 import info.GUIConstants;
-import info.SysInfo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -99,7 +99,8 @@ public class CurAudio {
             MyFrame.getInstance()
                     .setTitle(GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
 
-            chunkSize = SysInfo.sys.chunkSizeInSeconds * (long) master.frameRate();
+            chunkSize =
+                    Environment.getInstance().getChunkSizeInSeconds() * (long) master.frameRate();
             totalNumOfChunks =
                     (int) Math.ceil((double) master.durationInFrames() / (double) chunkSize);
             lastFrameArray = new long[totalNumOfChunks];

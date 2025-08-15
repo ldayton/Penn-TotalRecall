@@ -1,8 +1,8 @@
 package audio;
 
 import behaviors.UpdatingAction;
+import env.Environment;
 import info.Constants;
-import info.SysInfo;
 import java.io.File;
 import java.util.List;
 import org.slf4j.Logger;
@@ -105,13 +105,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                     }
                 }
                 if (myLib.playbackInProgress() == false) {
-                    if (SysInfo.sys.isWindowsAny) { // Fix Issue 9
-                        try {
-                            Thread.sleep(150);
-                        } catch (InterruptedException e) {
-                            logger.debug("Sleep interrupted during Windows workaround", e);
-                        }
-                    }
+                    Environment.getInstance().applyAudioWorkarounds(); // Fix Issue 9
                     break;
                 }
                 try {

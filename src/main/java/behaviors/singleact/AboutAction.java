@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import info.SysInfo;
+import env.Environment;
 import java.awt.event.ActionEvent;
 import util.GiveMessage;
 
@@ -11,7 +11,7 @@ public class AboutAction extends IdentifiedSingleAction {
 
     /** Performs the action using a dialog. */
     public void actionPerformed(ActionEvent e) {
-        GiveMessage.infoMessage(SysInfo.sys.aboutMessage);
+        GiveMessage.infoMessage(Environment.getInstance().getAboutMessage());
     }
 
     /** <code>AboutAction</code> is always enabled. */

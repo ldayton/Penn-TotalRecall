@@ -1,4 +1,4 @@
-package util;
+package env;
 
 /**
  * Determines how native libraries should be loaded by the application.

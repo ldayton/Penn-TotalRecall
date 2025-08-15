@@ -1,6 +1,5 @@
-package util;
+package env;
 
-import info.SysInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +29,10 @@ public class AppConfig {
 
     // Configuration keys
     private static final String FMOD_LOADING_MODE_KEY = "fmod.loading.mode";
+    private static final String FMOD_LIBRARY_TYPE_KEY = "fmod.library.type";
     private static final String FMOD_LIBRARY_PATH_MACOS_KEY = "fmod.library.path.macos";
+    private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
+    private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
 
     // Singleton instance
     private static volatile AppConfig instance;
@@ -75,12 +77,48 @@ public class AppConfig {
     }
 
     /**
-     * Gets the FMOD library path for macOS development mode.
+     * Gets the FMOD library type (standard or logging).
      *
+     * @return the library type, defaults to STANDARD if not configured
+     */
+    public FmodLibraryType getFmodLibraryType() {
+        String type = getPropertyWithSystemOverride(FMOD_LIBRARY_TYPE_KEY, "standard");
+        try {
+            return FmodLibraryType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            logger.warn(
+                    "Invalid FMOD library type '{}', defaulting to STANDARD. Valid values: {}",
+                    type,
+                    java.util.Arrays.toString(FmodLibraryType.values()));
+            return FmodLibraryType.STANDARD;
+        }
+    }
+
+    /**
+     * Gets the custom FMOD library path for the specified platform.
+     *
+     * @param platform the target platform
      * @return the library path, or null if not configured
      */
+    public String getFmodLibraryPath(Platform platform) {
+        String key =
+                switch (platform) {
+                    case MACOS -> FMOD_LIBRARY_PATH_MACOS_KEY;
+                    case LINUX -> FMOD_LIBRARY_PATH_LINUX_KEY;
+                    case WINDOWS -> FMOD_LIBRARY_PATH_WINDOWS_KEY;
+                };
+        return getPropertyWithSystemOverride(key);
+    }
+
+    /**
+     * Gets the FMOD library path for macOS development mode.
+     *
+     * @deprecated Use getFmodLibraryPath(Platform.MACOS) instead
+     * @return the library path, or null if not configured
+     */
+    @Deprecated
     public String getFmodLibraryPathMacOS() {
-        return getPropertyWithSystemOverride(FMOD_LIBRARY_PATH_MACOS_KEY);
+        return getFmodLibraryPath(Platform.MACOS);
     }
 
     /**
@@ -172,11 +210,12 @@ public class AppConfig {
      */
     private File getUserConfigFile() {
         String configDir;
-        if (SysInfo.sys.isMacOSX) {
+        Platform platform = Platform.detect();
+        if (platform == Platform.MACOS) {
             configDir =
                     System.getProperty("user.home")
                             + "/Library/Application Support/Penn TotalRecall";
-        } else if (SysInfo.sys.isWindowsAny) {
+        } else if (platform == Platform.WINDOWS) {
             configDir = System.getenv("APPDATA") + "\\Penn TotalRecall";
         } else {
             // Linux/Unix

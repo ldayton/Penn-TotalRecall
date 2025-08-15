@@ -1,10 +1,8 @@
 package components.annotations;
 
 import components.MyFrame;
-import control.CurAudio;
 import info.GUIConstants;
 import info.MyShapes;
-import info.SysInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -64,22 +62,12 @@ public class AnnotationDisplay extends JScrollPane {
         if (ann == null) {
             throw new IllegalArgumentException("annotation/s cannot be null");
         }
-        if (SysInfo.sys.forceListen) {
-            CurAudio.getListener()
-                    .offerGreatestProgress(CurAudio.getMaster().millisToFrames(ann.getTime()));
-        }
         table.getModel().addElement(ann);
     }
 
     public static void addAnnotations(Iterable<Annotation> anns) {
         if (anns == null) {
             throw new IllegalArgumentException("annotations cannot be null");
-        }
-        if (SysInfo.sys.forceListen) {
-            for (Annotation a : anns) {
-                CurAudio.getListener()
-                        .offerGreatestProgress(CurAudio.getMaster().millisToFrames(a.getTime()));
-            }
         }
         table.getModel().addElements(anns);
     }

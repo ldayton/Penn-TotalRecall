@@ -20,7 +20,8 @@ import behaviors.singleact.ReturnToLastPositionAction;
 import behaviors.singleact.StopAction;
 import behaviors.singleact.TipsMessageAction;
 import behaviors.singleact.VisitTutorialSiteAction;
-import info.SysInfo;
+import env.Environment;
+import env.Platform;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -67,7 +68,7 @@ public class MyMenu extends JMenuBar {
     private MyMenu() {
         allActions = new HashSet<>();
         macLF =
-                SysInfo.sys.isMacOSX
+                Environment.getInstance().getPlatform() == Platform.MACOS
                         && UIManager.getLookAndFeel()
                                 .getClass()
                                 .getName()
@@ -83,7 +84,7 @@ public class MyMenu extends JMenuBar {
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
         JMenuItem jmiOpenWordpool = new JMenuItem(new OpenWordpoolAction());
-        if (SysInfo.sys.useAWTFileChoosers) {
+        if (Environment.getInstance().shouldUseAWTFileChoosers()) {
             OpenAudioLocationAction openFileAction =
                     new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
             JMenuItem jmiOpenAudioFile = new JMenuItem(openFileAction);

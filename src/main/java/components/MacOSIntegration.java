@@ -2,7 +2,7 @@ package components;
 
 import behaviors.singleact.ExitAction;
 import behaviors.singleact.PreferencesAction;
-import info.SysInfo;
+import env.Environment;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
@@ -75,7 +75,7 @@ public final class MacOSIntegration {
         if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
             desktop.setAboutHandler(
                     e -> {
-                        GiveMessage.infoMessage(SysInfo.sys.aboutMessage);
+                        GiveMessage.infoMessage(Environment.getInstance().getAboutMessage());
                     });
         }
 

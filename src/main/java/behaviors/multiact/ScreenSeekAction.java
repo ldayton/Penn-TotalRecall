@@ -5,7 +5,6 @@ import components.MyFrame;
 import components.waveform.WaveformDisplay;
 import control.CurAudio;
 import info.GUIConstants;
-import info.SysInfo;
 import java.awt.event.ActionEvent;
 
 public class ScreenSeekAction extends IdentifiedMultiAction {
@@ -48,9 +47,6 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
         } else if (naivePosition >= frameLength) {
             finalPosition = frameLength - 1;
         }
-        if (SysInfo.sys.forceListen) {
-            finalPosition = Math.min(finalPosition, CurAudio.getListener().getGreatestProgress());
-        }
 
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
         CurAudio.getPlayer().queuePlayAt(finalPosition);
@@ -63,14 +59,7 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
             if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
-                boolean canSkipForward;
-                if (SysInfo.sys.forceListen) {
-                    canSkipForward =
-                            CurAudio.getAudioProgress()
-                                    < CurAudio.getListener().getGreatestProgress();
-                } else {
-                    canSkipForward = true;
-                }
+                boolean canSkipForward = true;
                 if (CurAudio.getAudioProgress() <= 0) {
                     if (canSkipForward && (dir == Dir.FORWARD)) {
                         setEnabled(true);

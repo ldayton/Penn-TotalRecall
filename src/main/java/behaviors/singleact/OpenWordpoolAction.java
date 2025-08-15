@@ -5,8 +5,8 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
 import control.CurAudio;
+import env.Environment;
 import info.Constants;
-import info.SysInfo;
 import info.UserPrefs;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
@@ -34,14 +34,15 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
     public void actionPerformed(ActionEvent arg0) {
         super.actionPerformed(arg0);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, SysInfo.sys.userHomeDir);
+                UserPrefs.prefs.get(
+                        UserPrefs.openWordpoolPath, Environment.getInstance().getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = SysInfo.sys.userHomeDir;
+            maybeLastPath = Environment.getInstance().getUserHomeDir();
         }
 
         String title = "Open Wordpool File";
         String path = null;
-        if (SysInfo.sys.useAWTFileChoosers) {
+        if (Environment.getInstance().shouldUseAWTFileChoosers()) {
             FileDialog fd = new FileDialog(MyFrame.getInstance(), title);
             fd.setDirectory(maybeLastPath);
             fd.setFilenameFilter(

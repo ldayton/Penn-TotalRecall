@@ -1,10 +1,10 @@
 package integration;
 
 import audio.FmodCore;
+import env.AppConfig;
+import env.LibraryLoadingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.AppConfig;
-import util.LibraryLoadingMode;
 
 /**
  * Integration test harness for FMOD library loading.

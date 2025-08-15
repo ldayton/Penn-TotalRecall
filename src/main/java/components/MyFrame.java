@@ -4,8 +4,8 @@ import behaviors.singleact.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
 import control.Main;
+import env.Environment;
 import info.GUIConstants;
-import info.SysInfo;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -58,21 +58,12 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         // accept drag and drop of directories and files
         new FileDrop(this, new FileDropListener());
 
-        // replace the java coffee cup icon on the top left of windows in such platforms as Windows
-        // and Linux
-        if (SysInfo.sys.isWindows7) {
-            setIconImage(
-                    Toolkit.getDefaultToolkit()
-                            .getImage(
-                                    MyFrame.class.getResource(
-                                            "/images/headphones48.png"))); // bigger icon for
-            // windows 7's revamped
-            // task bar
-        } else {
-            setIconImage(
-                    Toolkit.getDefaultToolkit()
-                            .getImage(MyFrame.class.getResource("/images/headphones16.png")));
-        }
+        // Set application icon (platform-specific sizing)
+        setIconImage(
+                Toolkit.getDefaultToolkit()
+                        .getImage(
+                                MyFrame.class.getResource(
+                                        Environment.getInstance().getAppIconPath())));
 
         // this is default, but double checking because focusability is needed for
         // MyFocusTraversalPolicy to be used

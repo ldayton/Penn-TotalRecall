@@ -5,7 +5,6 @@ import behaviors.multiact.AnnotateAction;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
 import info.Constants;
-import info.SysInfo;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import org.slf4j.Logger;
@@ -68,13 +67,6 @@ public class DoneAction extends IdentifiedSingleAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (SysInfo.sys.forceListen) {
-                if (CurAudio.getListener().getGreatestProgress()
-                        < CurAudio.getMaster().durationInFrames() - 1) {
-                    setEnabled(false);
-                    return;
-                }
-            }
             if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING == false) {
                 setEnabled(true);
             } else {

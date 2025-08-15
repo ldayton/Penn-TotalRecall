@@ -1,8 +1,9 @@
 package components.preferences;
 
 import components.MyFrame;
+import env.Environment;
+import env.Platform;
 import info.GUIConstants;
-import info.SysInfo;
 import info.UserPrefs;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -56,7 +57,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
 
-        setTitle(SysInfo.sys.preferencesString);
+        setTitle(Environment.getInstance().getPreferencesString());
 
         // the content pane will have two main areas, one for preference choosers
         // (AbstractPreferenceDisplays), and one for the save/restore defaults buttons
@@ -150,7 +151,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         "No",
                         UserPrefs.defaultWarnFileSwitch);
         prefPanel.add(warnSwitchPref);
-        if (SysInfo.sys.isMacOSX == false) {
+        if (Environment.getInstance().getPlatform() != Platform.MACOS) {
             BooleanPreference useEmacs =
                     new BooleanPreference(
                             "Use Emacs Keybindings",

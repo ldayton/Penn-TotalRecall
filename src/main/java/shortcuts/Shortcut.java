@@ -2,7 +2,7 @@ package shortcuts;
 
 import static java.util.stream.Collectors.joining;
 
-import control.PlatformProvider;
+import env.Environment;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -15,26 +15,26 @@ public class Shortcut {
 
     public final KeyStroke stroke;
     private final String internalForm;
-    private final PlatformProvider platform;
+    private final Environment env;
 
     private static final String INTERNAL_FORM_DELIMITER = " ";
 
-    public Shortcut(KeyStroke stroke, PlatformProvider platform) {
+    public Shortcut(KeyStroke stroke, Environment env) {
         this.stroke = Objects.requireNonNull(stroke);
-        this.platform = Objects.requireNonNull(platform);
+        this.env = Objects.requireNonNull(env);
         this.internalForm = ModernKeyUtils.getInternalForm(stroke);
     }
 
     // Factory methods for convenience
     public static Shortcut forCurrentPlatform(KeyStroke stroke) {
         Objects.requireNonNull(stroke);
-        return new Shortcut(stroke, PlatformProvider.detect());
+        return new Shortcut(stroke, Environment.getInstance());
     }
 
-    public static Shortcut forPlatform(KeyStroke stroke, PlatformProvider platform) {
+    public static Shortcut forPlatform(KeyStroke stroke, Environment env) {
         Objects.requireNonNull(stroke);
-        Objects.requireNonNull(platform);
-        return new Shortcut(stroke, platform);
+        Objects.requireNonNull(env);
+        return new Shortcut(stroke, env);
     }
 
     public String getInternalForm() {
@@ -48,7 +48,7 @@ public class Shortcut {
                         .filter(key -> !ACTION_WORDS.contains(key))
                         .map(
                                 key -> {
-                                    String symbol = platform.getKeySymbol(key);
+                                    String symbol = env.getKeySymbol(key);
                                     String displayKey = symbol != null ? symbol : key;
                                     return isSymbol(displayKey)
                                             ? displayKey
@@ -56,11 +56,11 @@ public class Shortcut {
                                 })
                         .toList();
 
-        List<String> keyOrder = platform.getKeyOrder();
+        List<String> keyOrder = env.getKeyOrder();
         return Stream.concat(
                         keyOrder.stream().filter(keys::contains),
                         keys.stream().filter(key -> !keyOrder.contains(key)))
-                .collect(joining(platform.getKeySeparator()));
+                .collect(joining(env.getKeySeparator()));
     }
 
     private boolean isSymbol(String key) {
@@ -121,27 +121,26 @@ public class Shortcut {
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
-        return new Shortcut(stroke, PlatformProvider.detect());
+        return new Shortcut(stroke, Environment.getInstance());
     }
 
     public static Shortcut fromExternalForm(
             List<String> maskKeyExternalForms,
             List<String> nonMaskKeyExternalForms,
-            PlatformProvider platform) {
+            Environment env) {
         Objects.requireNonNull(maskKeyExternalForms);
         Objects.requireNonNull(nonMaskKeyExternalForms);
-        Objects.requireNonNull(platform);
+        Objects.requireNonNull(env);
         String internalShortcutForm =
                 Stream.concat(
-                                maskKeyExternalForms.stream().map(platform::externalToInternalForm),
-                                nonMaskKeyExternalForms.stream()
-                                        .map(platform::externalToInternalForm))
+                                maskKeyExternalForms.stream().map(env::externalToInternalForm),
+                                nonMaskKeyExternalForms.stream().map(env::externalToInternalForm))
                         .collect(joining(INTERNAL_FORM_DELIMITER));
         KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
         }
-        return new Shortcut(stroke, platform);
+        return new Shortcut(stroke, env);
     }
 
     public static Shortcut fromExternalForm(
@@ -149,7 +148,7 @@ public class Shortcut {
         Objects.requireNonNull(maskKeyExternalForms);
         Objects.requireNonNull(nonMaskKeyExternalForms);
         return fromExternalForm(
-                maskKeyExternalForms, nonMaskKeyExternalForms, PlatformProvider.detect());
+                maskKeyExternalForms, nonMaskKeyExternalForms, Environment.getInstance());
     }
 
     @Override

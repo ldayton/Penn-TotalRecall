@@ -1,13 +1,12 @@
 package components.waveform;
 
 import control.CurAudio;
+import env.Environment;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
-import info.SysInfo;
 import info.UserPrefs;
 import java.awt.AlphaComposite;
-import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
@@ -63,7 +62,9 @@ public class WaveformBuffer extends Buffer {
     public WaveformBuffer() {
         finish = false;
         numChunks = CurAudio.lastChunkNum() + 1;
-        chunkWidthInPixels = GUIConstants.zoomlessPixelsPerSecond * SysInfo.sys.chunkSizeInSeconds;
+        chunkWidthInPixels =
+                GUIConstants.zoomlessPixelsPerSecond
+                        * Environment.getInstance().getChunkSizeInSeconds();
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
@@ -289,9 +290,6 @@ public class WaveformBuffer extends Buffer {
             for (int i = 0; i < chunkWidthInPixels; i += GUIConstants.zoomlessPixelsPerSecond) {
                 g2d.setColor(MyColors.waveformScaleLineColor);
                 g2d.drawLine(i, 0, i, height - 1);
-                if (SysInfo.sys.doubleDraw) {
-                    g2d.drawLine(i, 0, i, height - 1);
-                }
                 g2d.setColor(MyColors.waveformScaleTextColor);
                 g2d.drawString(secFormat.format(counter), i + 5, height - 5);
                 counter++;
@@ -311,19 +309,8 @@ public class WaveformBuffer extends Buffer {
                 topY = (int) (refLinePos - scaledSample);
                 bottomY = (int) (refLinePos + scaledSample);
 
-                if (SysInfo.sys.antiAliasWaveform) {
-                    Composite originalAc = g2d.getComposite();
-                    g2d.setComposite(antiAliasingComposite);
-                    g2d.drawLine(i + 1, refLinePos, i + 1, topY);
-                    g2d.drawLine(i + 1, refLinePos, i + 1, bottomY);
-                    g2d.setComposite(originalAc);
-                }
                 g2d.drawLine(i, refLinePos, i, topY);
                 g2d.drawLine(i, refLinePos, i, bottomY);
-                if (SysInfo.sys.doubleDraw) {
-                    g2d.drawLine(i, refLinePos, i, topY);
-                    g2d.drawLine(i, refLinePos, i, bottomY);
-                }
             }
         }
 
@@ -343,7 +330,7 @@ public class WaveformBuffer extends Buffer {
             long toSkip =
                     (long)
                             (chunkNum
-                                    * SysInfo.sys.chunkSizeInSeconds
+                                    * Environment.getInstance().getChunkSizeInSeconds()
                                     * CurAudio.getMaster().frameRate()
                                     * (CurAudio.getMaster().frameSizeInBytes()));
             if (chunkNum > 0) {
@@ -367,35 +354,30 @@ public class WaveformBuffer extends Buffer {
                     new double
                             [(int)
                                             (CurAudio.getMaster().frameRate()
-                                                    * SysInfo.sys.chunkSizeInSeconds)
+                                                    * Environment.getInstance()
+                                                            .getChunkSizeInSeconds())
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 
-            if (SysInfo.sys.bandpassFilter) {
-                filter.apply(adds).getData(samples);
-            } else {
-                adds.getData(samples);
-            }
+            filter.apply(adds).getData(samples);
 
             // make the waveform prettier by smoothing the audio data (~60ms)
-            if (SysInfo.sys.useAudioDataSmoothingForWaveform) {
-                double[] copy = new double[samples.length];
-                System.arraycopy(samples, 0, copy, 0, copy.length);
-                final int window = 20;
-                double biggestInWindow;
-                int start;
-                int end;
-                for (int i = 0; i < samples.length; i++) {
-                    biggestInWindow = 0;
-                    start = Math.max(0, i - window);
-                    end = Math.min(samples.length, i + window);
-                    for (int j = start; j < end; j++) {
-                        biggestInWindow = Math.max(biggestInWindow, Math.abs(copy[j]));
-                    }
-                    samples[i] = biggestInWindow;
+            double[] copy = new double[samples.length];
+            System.arraycopy(samples, 0, copy, 0, copy.length);
+            final int window = 20;
+            double biggestInWindow;
+            int start;
+            int end;
+            for (int i = 0; i < samples.length; i++) {
+                biggestInWindow = 0;
+                start = Math.max(0, i - window);
+                end = Math.min(samples.length, i + window);
+                for (int j = start; j < end; j++) {
+                    biggestInWindow = Math.max(biggestInWindow, Math.abs(copy[j]));
                 }
-                copy = null;
+                samples[i] = biggestInWindow;
             }
+            copy = null;
 
             // extract some of the samples for representation as pixels
             double[] valsToDraw = new double[chunkWidthInPixels];
@@ -409,27 +391,25 @@ public class WaveformBuffer extends Buffer {
                 valsToDraw[i] = samples[index];
             }
 
-            if (SysInfo.sys.useWaveformImageDataSmoothing) {
-                // make the waveform prettier by smoothing the pixels
-                for (int j = 0; j < 1; j++) {
-                    double[] copy2 = new double[valsToDraw.length];
-                    System.arraycopy(valsToDraw, 0, copy2, 0, valsToDraw.length);
-                    for (int i = 1; i < copy2.length - 1; i++) {
-                        if (copy2[i] > copy2[i - 1]) {
-                            if (copy2[i] > copy2[i + 1]) {
-                                valsToDraw[i] = Math.max(copy2[i + 1], copy2[i - 1]);
-                            }
+            // make the waveform prettier by smoothing the pixels
+            for (int j = 0; j < 1; j++) {
+                double[] copy2 = new double[valsToDraw.length];
+                System.arraycopy(valsToDraw, 0, copy2, 0, valsToDraw.length);
+                for (int i = 1; i < copy2.length - 1; i++) {
+                    if (copy2[i] > copy2[i - 1]) {
+                        if (copy2[i] > copy2[i + 1]) {
+                            valsToDraw[i] = Math.max(copy2[i + 1], copy2[i - 1]);
                         }
                     }
-                    for (int i = 1; i < copy2.length - 1; i++) {
-                        if (copy2[i] < copy2[i - 1]) {
-                            if (copy2[i] < copy2[i + 1]) {
-                                valsToDraw[i] = Math.min(copy2[i + 1], copy2[i - 1]);
-                            }
-                        }
-                    }
-                    copy2 = null;
                 }
+                for (int i = 1; i < copy2.length - 1; i++) {
+                    if (copy2[i] < copy2[i - 1]) {
+                        if (copy2[i] < copy2[i + 1]) {
+                            valsToDraw[i] = Math.min(copy2[i + 1], copy2[i - 1]);
+                        }
+                    }
+                }
+                copy2 = null;
             }
 
             return valsToDraw;

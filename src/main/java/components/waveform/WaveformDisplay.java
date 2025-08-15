@@ -6,10 +6,10 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
 import control.CurAudio;
+import env.Environment;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
-import info.SysInfo;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -67,10 +67,8 @@ public class WaveformDisplay extends JComponent {
                         MyFrame.getInstance().requestFocusInWindow();
                     }
                 });
-        if (SysInfo.sys.mouseMode) {
-            addMouseListener(new WaveformMouseAdapter(this));
-            addMouseMotionListener(new WaveformMouseAdapter(this));
-        }
+        addMouseListener(new WaveformMouseAdapter(this));
+        addMouseMotionListener(new WaveformMouseAdapter(this));
     }
 
     public static WaveformDisplay getInstance() {
@@ -188,11 +186,11 @@ public class WaveformDisplay extends JComponent {
             logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
         } else if (progressBarXPos > getWidth() - 1) {
             if (refreshWidth == getWidth()) {
-                if (SysInfo.sys.interpolateFrames == false
-                        || Math.abs(refreshFrame - CurAudio.getMaster().durationInFrames())
-                                > CurAudio.getMaster()
-                                        .secondsToFrames(
-                                                SysInfo.sys.interplationToleratedErrorZoneInSec)) {
+                if (Math.abs(refreshFrame - CurAudio.getMaster().durationInFrames())
+                        > CurAudio.getMaster()
+                                .secondsToFrames(
+                                        Environment.getInstance()
+                                                .getInterpolationToleratedErrorZoneInSec())) {
                     logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
                 }
             }
@@ -325,7 +323,7 @@ public class WaveformDisplay extends JComponent {
             maxFramesError =
                     CurAudio.getMaster().secondsToFrames(1)
                             / GUIConstants.zoomlessPixelsPerSecond
-                            * SysInfo.sys.maxInterpolatedPixels;
+                            * Environment.getInstance().getMaxInterpolatedPixels();
             bufferedFrame = -1;
             bufferedWidth = -1;
             bufferedHeight = -1;
@@ -342,46 +340,32 @@ public class WaveformDisplay extends JComponent {
             int numAnns = AnnotationDisplay.getNumAnnotations();
             boolean isPlaying = CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING;
 
-            if (SysInfo.sys.interpolateFrames) {
-                long curTime;
-                if (SysInfo.sys.nanoInterplation) {
-                    curTime = System.nanoTime();
-                } else {
-                    curTime = System.currentTimeMillis();
+            long curTime = System.nanoTime();
+            if (isPlaying && wasPlaying) {
+                long changeMillis = curTime - lastTime;
+                refreshFrame += CurAudio.getMaster().nanosToFrames(changeMillis);
+                if (refreshFrame > lastFrame) {
+                    refreshFrame = lastFrame;
                 }
-                if (isPlaying && wasPlaying) {
-                    long changeMillis = curTime - lastTime;
-                    if (SysInfo.sys.nanoInterplation) {
-                        refreshFrame += CurAudio.getMaster().nanosToFrames(changeMillis);
-                    } else {
-                        refreshFrame += CurAudio.getMaster().millisToFrames(changeMillis);
+                if (Math.abs(refreshFrame - realRefreshFrame) > maxFramesError) {
+                    if (Math.abs(refreshFrame - lastFrame)
+                            > CurAudio.getMaster()
+                                    .secondsToFrames(
+                                            Environment.getInstance()
+                                                    .getInterpolationToleratedErrorZoneInSec())) {
+                        logger.warn(
+                                "interpolation error greater than "
+                                        + Environment.getInstance().getMaxInterpolatedPixels()
+                                        + " pixels: "
+                                        + Math.abs(refreshFrame - realRefreshFrame)
+                                        + " (frames)");
+                        refreshFrame = realRefreshFrame;
                     }
-                    if (refreshFrame > lastFrame) {
-                        refreshFrame = lastFrame;
-                    }
-                    if (Math.abs(refreshFrame - realRefreshFrame) > maxFramesError) {
-                        if (SysInfo.sys.interpolateFrames == false
-                                || Math.abs(refreshFrame - lastFrame)
-                                        > CurAudio.getMaster()
-                                                .secondsToFrames(
-                                                        SysInfo.sys
-                                                                .interplationToleratedErrorZoneInSec)) {
-                            logger.warn(
-                                    "interpolation error greater than "
-                                            + SysInfo.sys.maxInterpolatedPixels
-                                            + " pixels: "
-                                            + Math.abs(refreshFrame - realRefreshFrame)
-                                            + " (frames)");
-                            refreshFrame = realRefreshFrame;
-                        }
-                    }
-                } else {
-                    refreshFrame = realRefreshFrame;
                 }
-                lastTime = curTime;
             } else {
                 refreshFrame = realRefreshFrame;
             }
+            lastTime = curTime;
 
             if (chunkInProgress == false
                     && refreshFrame == bufferedFrame

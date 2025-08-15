@@ -1,29 +1,34 @@
 package audio;
 
 import com.sun.jna.Native;
+import env.AppConfig;
+import env.Environment;
+import env.FmodLibraryType;
+import env.LibraryLoadingMode;
+import env.Platform;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.AppConfig;
-import util.LibraryLoadingMode;
 
 /** Handles loading of the FMOD native library using application configuration. */
 public class FmodLibraryLoader {
     private static final Logger logger = LoggerFactory.getLogger(FmodLibraryLoader.class);
     private final AppConfig config;
+    private final Environment env;
 
     /** Default constructor using application configuration. */
     public FmodLibraryLoader() {
-        this(AppConfig.getInstance());
+        this(AppConfig.getInstance(), Environment.getInstance());
     }
 
     /** Constructor for dependency injection. */
-    public FmodLibraryLoader(AppConfig config) {
+    public FmodLibraryLoader(AppConfig config, Environment env) {
         this.config = config;
+        this.env = env;
     }
 
     /**
-     * Loads the FMOD library using configured loading mode.
+     * Loads the FMOD library using configured loading mode and library type.
      *
      * @param interfaceClass The JNA interface class to load
      * @return The loaded library instance
@@ -32,14 +37,21 @@ public class FmodLibraryLoader {
     public <T> T loadLibrary(Class<T> interfaceClass) {
         try {
             LibraryLoadingMode mode = config.getFmodLoadingMode();
-            logger.debug("Loading FMOD library in {} mode", mode);
+            FmodLibraryType libraryType = config.getFmodLibraryType();
+            Platform platform = env.getPlatform();
+
+            logger.debug(
+                    "Loading FMOD library: mode={}, type={}, platform={}",
+                    mode,
+                    libraryType,
+                    platform);
 
             switch (mode) {
                 case UNPACKAGED:
-                    return loadUnpackaged(interfaceClass);
+                    return loadUnpackaged(interfaceClass, libraryType);
                 case PACKAGED:
                 default:
-                    return loadPackaged(interfaceClass);
+                    return loadPackaged(interfaceClass, libraryType);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load FMOD library", e);
@@ -50,11 +62,12 @@ public class FmodLibraryLoader {
      * Loads FMOD library from development filesystem paths.
      *
      * @param interfaceClass The JNA interface class to load
+     * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T> T loadUnpackaged(Class<T> interfaceClass) {
-        // Try custom path from configuration first
-        String customPath = config.getFmodLibraryPathMacOS();
+    private <T> T loadUnpackaged(Class<T> interfaceClass, FmodLibraryType libraryType) {
+        // Try custom path from configuration first (supports all platforms)
+        String customPath = config.getFmodLibraryPath(env.getPlatform());
         if (customPath != null) {
             File customFile = new File(customPath);
             if (customFile.exists()) {
@@ -65,26 +78,51 @@ public class FmodLibraryLoader {
             }
         }
 
-        // Fall back to default development path
+        // Fall back to default development path for current platform
         String projectDir = System.getProperty("user.dir");
-        String defaultPath = projectDir + "/src/main/resources/fmod/macos/libfmod.dylib";
-        File defaultFile = new File(defaultPath);
-        if (!defaultFile.exists()) {
-            throw new RuntimeException("FMOD library not found at: " + defaultPath);
+        String relativePath = env.getFmodLibraryDevelopmentPath(libraryType);
+        String fullPath = projectDir + "/" + relativePath;
+
+        File libraryFile = new File(fullPath);
+        if (!libraryFile.exists()) {
+            throw new RuntimeException(
+                    "FMOD library not found at: "
+                            + fullPath
+                            + " (platform="
+                            + env.getPlatform()
+                            + ", type="
+                            + libraryType
+                            + ")");
         }
 
-        logger.debug("Loading FMOD from default unpackaged path: {}", defaultPath);
-        return Native.loadLibrary(defaultFile.getAbsolutePath(), interfaceClass);
+        logger.debug("Loading FMOD from unpackaged path: {}", fullPath);
+        return Native.loadLibrary(libraryFile.getAbsolutePath(), interfaceClass);
     }
 
     /**
      * Loads FMOD library from standard system library path (packaged mode).
      *
      * @param interfaceClass The JNA interface class to load
+     * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T> T loadPackaged(Class<T> interfaceClass) {
-        logger.debug("Loading FMOD from system library path");
-        return Native.loadLibrary("fmod", interfaceClass);
+    private <T> T loadPackaged(Class<T> interfaceClass, FmodLibraryType libraryType) {
+        // For packaged mode, we use the system library name without path
+        // The exact library depends on the platform and type
+        String libraryName = getSystemLibraryName(libraryType);
+
+        logger.debug("Loading FMOD from system library path: {}", libraryName);
+        return Native.loadLibrary(libraryName, interfaceClass);
+    }
+
+    /**
+     * Gets the system library name for JNA loading (without file extension).
+     *
+     * @param libraryType The library type (standard or logging)
+     * @return The library name for Native.loadLibrary()
+     */
+    private String getSystemLibraryName(FmodLibraryType libraryType) {
+        // All platforms use the same naming convention
+        return libraryType == FmodLibraryType.LOGGING ? "fmodL" : "fmod";
     }
 }

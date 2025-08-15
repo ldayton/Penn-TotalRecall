@@ -6,6 +6,7 @@ import components.MyMenu;
 import components.MySplitPane;
 import components.ShortcutFrame;
 import components.WindowManager;
+import env.Environment;
 import info.Constants;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
@@ -24,11 +25,9 @@ public class Main {
      * launches main program window. Creates and runs thread to check for updates.
      */
     private Main() {
-        // Configure macOS integration
-        components.MacOSIntegration.integrateWithMacOS();
-        logger.debug("macOS integration: {}", components.MacOSIntegration.getIntegrationStatus());
-
-        com.formdev.flatlaf.FlatLightLaf.setup();
+        // Initialize environment and configure Look & Feel
+        Environment env = Environment.getInstance();
+        env.initializeLookAndFeel();
 
         var unused = ShortcutFrame.instance.toString(); // initialize
         MyFrame.getInstance(); // creates all the components, so after this line everything is

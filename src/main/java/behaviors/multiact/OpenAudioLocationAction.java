@@ -2,8 +2,8 @@ package behaviors.multiact;
 
 import components.MyFrame;
 import components.audiofiles.AudioFileDisplay;
+import env.Environment;
 import info.Constants;
-import info.SysInfo;
 import info.UserPrefs;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
@@ -40,9 +40,10 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openLocationPath, SysInfo.sys.userHomeDir);
+                UserPrefs.prefs.get(
+                        UserPrefs.openLocationPath, Environment.getInstance().getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = SysInfo.sys.userHomeDir;
+            maybeLastPath = Environment.getInstance().getUserHomeDir();
         }
 
         String path = null;
