@@ -33,6 +33,7 @@ public class AppConfig {
     private static final String FMOD_LIBRARY_PATH_MACOS_KEY = "fmod.library.path.macos";
     private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
     private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
+    private static final String AUDIO_HARDWARE_AVAILABLE_KEY = "audio.hardware.available";
 
     private final Properties properties;
 
@@ -90,6 +91,23 @@ public class AppConfig {
                     case WINDOWS -> FMOD_LIBRARY_PATH_WINDOWS_KEY;
                 };
         return getPropertyWithSystemOverride(key);
+    }
+
+    /**
+     * Determines whether audio hardware is available for testing.
+     *
+     * <p>This controls FMOD output mode configuration:
+     *
+     * <ul>
+     *   <li>true (default) - Use AUTODETECT mode for real audio hardware
+     *   <li>false - Use NOSOUND_NRT mode for headless CI testing
+     * </ul>
+     *
+     * @return true if audio hardware is available, false for headless environments
+     */
+    public boolean isAudioHardwareAvailable() {
+        return Boolean.parseBoolean(
+                getPropertyWithSystemOverride(AUDIO_HARDWARE_AVAILABLE_KEY, "true"));
     }
 
     /**

@@ -30,6 +30,11 @@ public final class FmodCore {
         static final int OK = 0;
     }
 
+    private static final class OutputTypes {
+        static final int FMOD_OUTPUTTYPE_AUTODETECT = 0;
+        static final int FMOD_OUTPUTTYPE_NOSOUND_NRT = 10; // Non-real-time no sound
+    }
+
     private static final class ErrorCodes {
         static final int SUCCESS = 0;
         static final int UNSPECIFIED_ERROR = -1;
@@ -53,6 +58,8 @@ public final class FmodCore {
         int FMOD_System_Create(PointerByReference system, int headerversion);
 
         int FMOD_System_Init(Pointer system, int maxchannels, int flags, Pointer extradriverdata);
+
+        int FMOD_System_SetOutput(Pointer system, int output);
 
         int FMOD_System_Close(Pointer system);
 
@@ -104,11 +111,16 @@ public final class FmodCore {
     private static long endFrame = 0;
     private static boolean initialized = false;
     private static boolean autoStopped = false;
+    private static int configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
     private static final Object lock = new Object();
 
-    public static final FmodCore instance = new FmodCore();
+    public static final FmodCore instance = new FmodCore(new env.AppConfig());
 
-    private FmodCore() {}
+    private final env.AppConfig appConfig;
+
+    private FmodCore(env.AppConfig appConfig) {
+        this.appConfig = appConfig;
+    }
 
     // Initialize FMOD system if not already done
     private static synchronized boolean ensureInitialized() {
@@ -117,6 +129,17 @@ public final class FmodCore {
         }
 
         try {
+            // Auto-configure output mode based on environment (unless manually configured)
+            if (configuredOutputType == OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
+                if (!instance.appConfig.isAudioHardwareAvailable()) {
+                    configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
+                    logger.info(
+                            "FMOD configured for NOSOUND_NRT mode (no audio hardware available)");
+                } else {
+                    logger.info("FMOD configured for AUTODETECT mode (audio hardware available)");
+                }
+            }
+
             PointerByReference systemRef = new PointerByReference();
             int result = fmod.FMOD_System_Create(systemRef, FmodConstants.VERSION);
             if (result != FmodConstants.OK) {
@@ -124,6 +147,17 @@ public final class FmodCore {
             }
 
             system = systemRef.getValue();
+
+            // Set output type if configured (must be called before Init)
+            if (configuredOutputType != OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
+                result = fmod.FMOD_System_SetOutput(system, configuredOutputType);
+                if (result != FmodConstants.OK) {
+                    fmod.FMOD_System_Release(system);
+                    system = null;
+                    return false;
+                }
+            }
+
             result = fmod.FMOD_System_Init(system, 32, FmodConstants.INIT_NORMAL, null);
             if (result != FmodConstants.OK) {
                 fmod.FMOD_System_Release(system);
@@ -404,6 +438,41 @@ public final class FmodCore {
     /** Returns the name of the native library being used. */
     public String getLibraryName() {
         return "FMOD Core (JNA Direct)";
+    }
+
+    /**
+     * Configures the FMOD output type before system initialization.
+     *
+     * <p>This method must be called before any audio operations. It sets the output mode that will
+     * be used when the FMOD system is initialized.
+     *
+     * <p>Common output types:
+     *
+     * <ul>
+     *   <li>AUTODETECT - Automatically detect best available output (default)
+     *   <li>NOSOUND_NRT - No audio output, non-real-time mode for testing
+     * </ul>
+     *
+     * @param outputMode The FMOD output type constant
+     * @throws IllegalStateException if FMOD system is already initialized
+     */
+    public static synchronized void configureOutputMode(String outputMode) {
+        if (initialized) {
+            throw new IllegalStateException(
+                    "Cannot configure output mode after FMOD system is initialized");
+        }
+
+        switch (outputMode.toLowerCase()) {
+            case "nosound":
+                configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
+                logger.info("FMOD configured for NOSOUND_NRT mode (testing)");
+                break;
+            case "autodetect":
+            default:
+                configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
+                logger.info("FMOD configured for AUTODETECT mode (normal)");
+                break;
+        }
     }
 
     // Auto-stop helper - must be called within synchronized block

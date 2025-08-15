@@ -292,11 +292,6 @@ test {
     if (isCI) {
         loadEnvironmentConfig(test, 'ci')
     }
-    
-    // Custom test task that runs the manual test suite
-    doLast {
-        println "To run manual tests, execute: java -cp build/libs/${programExtensionlessFilename}.jar audio.tests.RunTests"
-    }
 }
 
 // Integration test for packaged .app FMOD loading
