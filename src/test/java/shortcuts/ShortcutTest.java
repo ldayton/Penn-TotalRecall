@@ -3,6 +3,7 @@ package shortcuts;
 import static org.junit.jupiter.api.Assertions.*;
 
 import env.Environment;
+import env.Platform;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
@@ -34,6 +35,9 @@ import org.junit.jupiter.api.Test;
  */
 public class ShortcutTest {
 
+    private final Environment macEnv = new Environment(Platform.MACOS);
+    private final Environment pcEnv = new Environment(Platform.WINDOWS);
+
     @Nested
     @DisplayName("Platform-specific representations")
     class PlatformSpecificTests {
@@ -41,7 +45,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Mac Command+S should show as ⌘S")
         void macCommandSShouldShowAsCommandSymbolS() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
             KeyStroke cmdS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK);
             Shortcut shortcut = new Shortcut(cmdS, mac);
 
@@ -51,7 +55,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Mac Control+S should show as ^S")
         void macControlSShouldShowAsControlSymbolS() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
             KeyStroke ctrlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
             Shortcut shortcut = new Shortcut(ctrlS, mac);
 
@@ -61,7 +65,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Mac Shift+Command+A should show as ⇧⌘A")
         void macShiftCommandAShouldShowAsShiftCommandSymbolsA() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
             KeyStroke shiftCmdA =
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_A, InputEvent.SHIFT_DOWN_MASK | InputEvent.META_DOWN_MASK);
@@ -73,7 +77,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Mac all modifiers should show as ^⌥⇧⌘A")
         void macAllModifiersShouldShowInCorrectOrder() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
             KeyStroke complexKey =
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_A,
@@ -89,7 +93,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("PC Control+S should show as Ctrl+S")
         void pcControlSShouldShowAsCtrlPlusS() {
-            Environment pc = Environment.getInstance();
+            Environment pc = pcEnv;
             KeyStroke ctrlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
             Shortcut shortcut = new Shortcut(ctrlS, pc);
 
@@ -99,7 +103,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("PC PageUp should use proper capitalization")
         void pcPageUpShouldUseProperCapitalization() {
-            Environment pc = Environment.getInstance();
+            Environment pc = pcEnv;
             KeyStroke pageUp = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
             Shortcut shortcut = new Shortcut(pageUp, pc);
 
@@ -114,7 +118,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("PC multiple modifiers should use plus separators")
         void pcMultipleModifiersShouldUsePlusSeparators() {
-            Environment pc = Environment.getInstance();
+            Environment pc = pcEnv;
             KeyStroke complexKey =
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_A,
@@ -141,8 +145,8 @@ public class ShortcutTest {
         @Test
         @DisplayName("Function keys should display as F1, F2, etc")
         void functionKeysShouldDisplayCorrectly() {
-            Environment mac = Environment.getInstance();
-            Environment pc = Environment.getInstance();
+            Environment mac = macEnv;
+            Environment pc = pcEnv;
 
             KeyStroke f1 = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
             KeyStroke f12 = KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0);
@@ -161,7 +165,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Numpad keys should show user-friendly names")
         void numpadKeysShouldShowUserFriendlyNames() {
-            Environment pc = Environment.getInstance();
+            Environment pc = pcEnv;
 
             KeyStroke numpad1 = KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD1, 0);
             KeyStroke numpadEnter =
@@ -173,8 +177,8 @@ public class ShortcutTest {
         @Test
         @DisplayName("Space key should show as Space")
         void spaceKeyShouldShowAsSpace() {
-            Environment mac = Environment.getInstance();
-            Environment pc = Environment.getInstance();
+            Environment mac = macEnv;
+            Environment pc = pcEnv;
 
             KeyStroke space = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
 
@@ -192,8 +196,8 @@ public class ShortcutTest {
         void platformDetectionWorksCorrectly() {
             KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
-            Shortcut macShortcut = Shortcut.forPlatform(stroke, Environment.getInstance());
-            Shortcut pcShortcut = Shortcut.forPlatform(stroke, Environment.getInstance());
+            Shortcut macShortcut = Shortcut.forPlatform(stroke, macEnv);
+            Shortcut pcShortcut = Shortcut.forPlatform(stroke, macEnv);
 
             // Should produce different representations
             assertNotEquals(macShortcut.toString(), pcShortcut.toString());
@@ -207,8 +211,8 @@ public class ShortcutTest {
         @Test
         @DisplayName("Menu key maps differently on Mac vs PC")
         void menuKeyMapsDifferentlyOnMacVsPC() {
-            Environment mac = Environment.getInstance();
-            Environment pc = Environment.getInstance();
+            Environment mac = macEnv;
+            Environment pc = pcEnv;
 
             assertEquals("meta", mac.externalToInternalForm("menu"));
             assertEquals("ctrl", pc.externalToInternalForm("menu"));
@@ -224,7 +228,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Constructor rejects KeyStroke with no internal form")
         void constructorRejectsKeystrokeWithNoInternalForm() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
 
             // This might create a KeyStroke that UnsafeKeyUtils can't handle
             KeyStroke invalidStroke = KeyStroke.getKeyStroke("invalid");
@@ -252,7 +256,7 @@ public class ShortcutTest {
         void fromInternalFormHandlesInvalidInputGracefully() {
             assertThrows(
                     RuntimeException.class,
-                    () -> Shortcut.fromInternalForm("invalid keystroke format"));
+                    () -> Shortcut.fromInternalForm("invalid keystroke format", macEnv));
         }
     }
 
@@ -263,7 +267,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Very long modifier combinations should be readable")
         void veryLongModifierCombinationsShouldBeReadable() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
 
             // All possible modifiers + function key
             KeyStroke complexStroke =
@@ -285,8 +289,8 @@ public class ShortcutTest {
         @Test
         @DisplayName("Single key shortcuts show just the key")
         void singleKeyShortcutsShowJustTheKey() {
-            Environment mac = Environment.getInstance();
-            Environment pc = Environment.getInstance();
+            Environment mac = macEnv;
+            Environment pc = pcEnv;
 
             KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 
@@ -297,7 +301,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Modifier-only combinations handled appropriately")
         void modifierOnlyCombinationsHandledAppropriately() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
 
             // Just Shift key pressed (no other key)
             KeyStroke justShift = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
@@ -318,7 +322,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("Mac shortcuts should never use + separator")
         void macShortcutsShouldNeverUsePlusSeparator() {
-            Environment mac = Environment.getInstance();
+            Environment mac = macEnv;
 
             // Test various combinations
             KeyStroke[] testStrokes = {
@@ -340,7 +344,7 @@ public class ShortcutTest {
         @Test
         @DisplayName("PC shortcuts should always use + separator for modifiers")
         void pcShortcutsShouldAlwaysUsePlusSeparatorForModifiers() {
-            Environment pc = Environment.getInstance();
+            Environment pc = pcEnv;
 
             KeyStroke ctrlAltS =
                     KeyStroke.getKeyStroke(
@@ -362,8 +366,8 @@ public class ShortcutTest {
             KeyStroke macCopy = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK);
             KeyStroke pcCopy = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
 
-            String macResult = new Shortcut(macCopy, Environment.getInstance()).toString();
-            String pcResult = new Shortcut(pcCopy, Environment.getInstance()).toString();
+            String macResult = new Shortcut(macCopy, macEnv).toString();
+            String pcResult = new Shortcut(pcCopy, macEnv).toString();
 
             assertEquals("⌘C", macResult);
             assertEquals("Ctrl+C", pcResult);

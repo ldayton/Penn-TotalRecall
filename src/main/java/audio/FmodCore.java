@@ -40,7 +40,8 @@ public final class FmodCore {
 
     // Load FMOD library using dedicated loader
     private static FMODCore loadFMODLibrary() {
-        FmodLibraryLoader loader = new FmodLibraryLoader();
+        FmodLibraryLoader loader =
+                new FmodLibraryLoader(new env.AppConfig(), new env.Environment());
         return loader.loadLibrary(FMODCore.class);
     }
 

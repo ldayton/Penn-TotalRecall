@@ -63,12 +63,15 @@ public class MyMenu extends JMenuBar {
 
     private static boolean macLF;
 
+    private final Environment environment;
+
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private MyMenu() {
+    private MyMenu(Environment environment) {
+        this.environment = environment;
         allActions = new HashSet<>();
         macLF =
-                Environment.getInstance().getPlatform() == Platform.MACOS
+                environment.getPlatform() == Platform.MACOS
                         && UIManager.getLookAndFeel()
                                 .getClass()
                                 .getName()
@@ -84,7 +87,7 @@ public class MyMenu extends JMenuBar {
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
         JMenuItem jmiOpenWordpool = new JMenuItem(new OpenWordpoolAction());
-        if (Environment.getInstance().shouldUseAWTFileChoosers()) {
+        if (environment.shouldUseAWTFileChoosers()) {
             OpenAudioLocationAction openFileAction =
                     new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
             JMenuItem jmiOpenAudioFile = new JMenuItem(openFileAction);
@@ -262,7 +265,15 @@ public class MyMenu extends JMenuBar {
      */
     public static MyMenu getInstance() {
         if (instance == null) {
-            instance = new MyMenu();
+            throw new IllegalStateException(
+                    "MyMenu not initialized. Call createInstance(Environment) first.");
+        }
+        return instance;
+    }
+
+    public static MyMenu createInstance(Environment environment) {
+        if (instance == null) {
+            instance = new MyMenu(environment);
         }
         return instance;
     }

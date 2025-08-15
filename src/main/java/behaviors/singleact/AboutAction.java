@@ -11,7 +11,7 @@ public class AboutAction extends IdentifiedSingleAction {
 
     /** Performs the action using a dialog. */
     public void actionPerformed(ActionEvent e) {
-        GiveMessage.infoMessage(Environment.getInstance().getAboutMessage());
+        GiveMessage.infoMessage(new Environment().getAboutMessage());
     }
 
     /** <code>AboutAction</code> is always enabled. */

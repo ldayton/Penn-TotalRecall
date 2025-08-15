@@ -16,11 +16,6 @@ public class FmodLibraryLoader {
     private final AppConfig config;
     private final Environment env;
 
-    /** Default constructor using application configuration. */
-    public FmodLibraryLoader() {
-        this(AppConfig.getInstance(), Environment.getInstance());
-    }
-
     /** Constructor for dependency injection. */
     public FmodLibraryLoader(AppConfig config, Environment env) {
         this.config = config;

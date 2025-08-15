@@ -63,8 +63,7 @@ public class WaveformBuffer extends Buffer {
         finish = false;
         numChunks = CurAudio.lastChunkNum() + 1;
         chunkWidthInPixels =
-                GUIConstants.zoomlessPixelsPerSecond
-                        * Environment.getInstance().getChunkSizeInSeconds();
+                GUIConstants.zoomlessPixelsPerSecond * new Environment().getChunkSizeInSeconds();
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
@@ -330,7 +329,7 @@ public class WaveformBuffer extends Buffer {
             long toSkip =
                     (long)
                             (chunkNum
-                                    * Environment.getInstance().getChunkSizeInSeconds()
+                                    * new Environment().getChunkSizeInSeconds()
                                     * CurAudio.getMaster().frameRate()
                                     * (CurAudio.getMaster().frameSizeInBytes()));
             if (chunkNum > 0) {
@@ -354,8 +353,7 @@ public class WaveformBuffer extends Buffer {
                     new double
                             [(int)
                                             (CurAudio.getMaster().frameRate()
-                                                    * Environment.getInstance()
-                                                            .getChunkSizeInSeconds())
+                                                    * new Environment().getChunkSizeInSeconds())
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 

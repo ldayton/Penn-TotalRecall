@@ -4,6 +4,7 @@ plugins {
     id 'distribution'
     id 'com.diffplug.spotless' version '7.2.+'
     id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
+    id 'org.jetbrains.qodana' version '2025.1.1'
 }
 
 group = 'edu.upenn.psych.memory'
@@ -11,7 +12,7 @@ version = '1.0.0'
 
 // Project configuration
 ext {
-    javaVersion = JavaVersion.VERSION_23
+    javaVersion = JavaVersion.VERSION_24
     programProperName = 'Penn TotalRecall'
     programShortName = 'TotalRecall'
     programExtensionlessFilename = 'PennTotalRecall'

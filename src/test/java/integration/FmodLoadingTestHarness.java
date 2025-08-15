@@ -35,7 +35,7 @@ public class FmodLoadingTestHarness {
             logger.info("================================");
 
             // Display configuration information
-            AppConfig config = AppConfig.getInstance();
+            AppConfig config = new AppConfig();
             LibraryLoadingMode mode = config.getFmodLoadingMode();
             logger.info("Library loading mode: " + mode);
 

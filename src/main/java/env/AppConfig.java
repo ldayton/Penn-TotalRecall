@@ -34,28 +34,10 @@ public class AppConfig {
     private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
     private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
 
-    // Singleton instance
-    private static volatile AppConfig instance;
     private final Properties properties;
 
-    private AppConfig() {
+    public AppConfig() {
         this.properties = loadConfiguration();
-    }
-
-    /**
-     * Gets the singleton configuration instance.
-     *
-     * @return the application configuration
-     */
-    public static AppConfig getInstance() {
-        if (instance == null) {
-            synchronized (AppConfig.class) {
-                if (instance == null) {
-                    instance = new AppConfig();
-                }
-            }
-        }
-        return instance;
     }
 
     /**

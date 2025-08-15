@@ -1,6 +1,7 @@
 package behaviors.singleact;
 
 import components.preferences.PreferencesFrame;
+import env.Environment;
 import java.awt.event.ActionEvent;
 
 /** Launches the preferences window. */
@@ -18,7 +19,7 @@ public class PreferencesAction extends IdentifiedSingleAction {
      */
     public void actionPerformed(ActionEvent e) {
         if (prefs == null) {
-            prefs = PreferencesFrame.getInstance();
+            prefs = PreferencesFrame.createInstance(new Environment());
             prefs.setVisible(true);
         }
         prefs.setVisible(true);

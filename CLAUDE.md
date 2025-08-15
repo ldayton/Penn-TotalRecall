@@ -7,7 +7,7 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 ## Architecture & Technologies
 
 ### Core Technologies
-- **Java 23** - Latest runtime (bundled with app)
+- **Java 24** - Latest runtime (bundled with app)
 - **Gradle 9.0.0** - Build system with modern plugins
 - **FMOD Core** - High-performance audio engine via JNA
 - **Swing** - Desktop GUI framework
@@ -47,7 +47,7 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 
 ### ✅ macOS Integration Modernization
 - Replaced deprecated Apple EAWT APIs with modern Desktop API
-- Created `MacOSIntegration.java` using Java 23 features
+- Created `MacOSIntegration.java` using Java 24 features
 - Proper About/Preferences/Quit menu integration
 - Taskbar/Dock icon and progress support
 
@@ -220,14 +220,14 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 ### Code Quality
 - Run `./gradlew spotlessApply` before commits
 - ErrorProne analysis runs automatically on compile
-- Use Java 23 features (records, pattern matching, etc.)
+- Use Java 24 features (records, pattern matching, etc.)
 
 ## Notes for AI Assistants
 
 ### Code Style
 - **Google Java Format** enforced via Spotless
 - **No comments** unless specifically requested
-- **Java 23 features** preferred (no legacy fallbacks needed)
+- **Java 24 features** preferred (no legacy fallbacks needed)
 - **Concise responses** - avoid explaining code unless asked
 
 ### Git Commits
@@ -257,7 +257,7 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 
 ### Platform Considerations
 - **macOS primary target** - bundled .app with embedded JVM
-- **Java 23** - no version compatibility concerns
+- **Java 24** - no version compatibility concerns
 - **Modern APIs only** - no deprecated API usage
 
 This codebase has been extensively modernized and follows current Java best practices.
@@ -274,10 +274,10 @@ This codebase has been extensively modernized and follows current Java best prac
 **After modernization:**
 - 6 total dependencies (all from Maven Central)  
 - Pure Java + JNA implementation
-- Modern Java 23 Desktop APIs
+- Modern Java 24 Desktop APIs
 - Modern Gradle with auto-updating dependencies
 - Current libraries with 14+ years of improvements
 
-**Result:** Clean, maintainable, modern Java 23 codebase with zero legacy dependencies.
+**Result:** Clean, maintainable, modern Java 24 codebase with zero legacy dependencies.
 - don't put claude ads in git commits
 - use GitHub Releases API for dial-home version checking

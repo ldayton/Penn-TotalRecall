@@ -34,15 +34,14 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
     public void actionPerformed(ActionEvent arg0) {
         super.actionPerformed(arg0);
         String maybeLastPath =
-                UserPrefs.prefs.get(
-                        UserPrefs.openWordpoolPath, Environment.getInstance().getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, new Environment().getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = Environment.getInstance().getUserHomeDir();
+            maybeLastPath = new Environment().getUserHomeDir();
         }
 
         String title = "Open Wordpool File";
         String path = null;
-        if (Environment.getInstance().shouldUseAWTFileChoosers()) {
+        if (new Environment().shouldUseAWTFileChoosers()) {
             FileDialog fd = new FileDialog(MyFrame.getInstance(), title);
             fd.setDirectory(maybeLastPath);
             fd.setFilenameFilter(

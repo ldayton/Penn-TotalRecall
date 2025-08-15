@@ -105,7 +105,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                     }
                 }
                 if (myLib.playbackInProgress() == false) {
-                    Environment.getInstance().applyAudioWorkarounds(); // Fix Issue 9
+                    new Environment().applyAudioWorkarounds(); // Fix Issue 9
                     break;
                 }
                 try {

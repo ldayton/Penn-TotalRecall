@@ -36,6 +36,7 @@ import util.GUIUtils;
 public class PreferencesFrame extends JFrame implements WindowListener {
 
     private static PreferencesFrame instance;
+    private final Environment environment;
 
     private JPanel prefPanel;
     private final JScrollPane prefScrollPane;
@@ -52,12 +53,13 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * <p>See documentation in {@link preferences.AbstractPreferenceDisplay} for program-wide
      * policies on user preferences, as well as information on adding new preference choosers.
      */
-    private PreferencesFrame() {
+    private PreferencesFrame(Environment environment) {
+        this.environment = environment;
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
 
-        setTitle(Environment.getInstance().getPreferencesString());
+        setTitle(environment.getPreferencesString());
 
         // the content pane will have two main areas, one for preference choosers
         // (AbstractPreferenceDisplays), and one for the save/restore defaults buttons
@@ -151,7 +153,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         "No",
                         UserPrefs.defaultWarnFileSwitch);
         prefPanel.add(warnSwitchPref);
-        if (Environment.getInstance().getPlatform() != Platform.MACOS) {
+        if (environment.getPlatform() != Platform.MACOS) {
             BooleanPreference useEmacs =
                     new BooleanPreference(
                             "Use Emacs Keybindings",
@@ -297,7 +299,15 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      */
     public static PreferencesFrame getInstance() {
         if (instance == null) {
-            instance = new PreferencesFrame();
+            throw new IllegalStateException(
+                    "PreferencesFrame not initialized. Call createInstance(Environment) first.");
+        }
+        return instance;
+    }
+
+    public static PreferencesFrame createInstance(Environment environment) {
+        if (instance == null) {
+            instance = new PreferencesFrame(environment);
         }
         return instance;
     }

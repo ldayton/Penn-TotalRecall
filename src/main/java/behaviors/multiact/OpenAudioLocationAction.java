@@ -40,10 +40,9 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         String maybeLastPath =
-                UserPrefs.prefs.get(
-                        UserPrefs.openLocationPath, Environment.getInstance().getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openLocationPath, new Environment().getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = Environment.getInstance().getUserHomeDir();
+            maybeLastPath = new Environment().getUserHomeDir();
         }
 
         String path = null;

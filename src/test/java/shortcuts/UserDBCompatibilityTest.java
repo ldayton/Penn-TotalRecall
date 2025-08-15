@@ -2,11 +2,14 @@ package shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import env.Environment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** Tests to ensure existing user preferences stored in UserDB continue to work. */
 class UserDBCompatibilityTest {
+
+    private final Environment env = new Environment();
 
     @Test
     @DisplayName("Existing internal formats from user preferences should parse correctly")
@@ -15,31 +18,31 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // Mac-style shortcuts (meta = Command)
-                    Shortcut macCommand = Shortcut.fromInternalForm("meta shift D");
+                    Shortcut macCommand = Shortcut.fromInternalForm("meta shift D", env);
                     assertNotNull(macCommand);
 
-                    Shortcut macControl = Shortcut.fromInternalForm("ctrl S");
+                    Shortcut macControl = Shortcut.fromInternalForm("ctrl S", env);
                     assertNotNull(macControl);
 
                     // PC-style shortcuts (ctrl = Control)
-                    Shortcut pcControl = Shortcut.fromInternalForm("ctrl shift D");
+                    Shortcut pcControl = Shortcut.fromInternalForm("ctrl shift D", env);
                     assertNotNull(pcControl);
 
-                    Shortcut pcAlt = Shortcut.fromInternalForm("alt LEFT");
+                    Shortcut pcAlt = Shortcut.fromInternalForm("alt LEFT", env);
                     assertNotNull(pcAlt);
 
                     // Common modifier combinations
-                    Shortcut shiftOnly = Shortcut.fromInternalForm("shift RIGHT");
+                    Shortcut shiftOnly = Shortcut.fromInternalForm("shift RIGHT", env);
                     assertNotNull(shiftOnly);
 
-                    Shortcut noModifier = Shortcut.fromInternalForm("F1");
+                    Shortcut noModifier = Shortcut.fromInternalForm("F1", env);
                     assertNotNull(noModifier);
 
                     // Special keys
-                    Shortcut delete = Shortcut.fromInternalForm("meta DELETE");
+                    Shortcut delete = Shortcut.fromInternalForm("meta DELETE", env);
                     assertNotNull(delete);
 
-                    Shortcut enter = Shortcut.fromInternalForm("meta shift ENTER");
+                    Shortcut enter = Shortcut.fromInternalForm("meta shift ENTER", env);
                     assertNotNull(enter);
                 });
     }
@@ -61,13 +64,13 @@ class UserDBCompatibilityTest {
 
         for (String internalForm : testInternalForms) {
             // Simulate UserDB.retrieve() → store() → retrieve() cycle
-            Shortcut original = Shortcut.fromInternalForm(internalForm);
+            Shortcut original = Shortcut.fromInternalForm(internalForm, env);
 
             // Simulate what UserDB.store() saves
             String storedForm = original.getInternalForm();
 
             // Simulate what UserDB.retrieve() loads
-            Shortcut restored = Shortcut.fromInternalForm(storedForm);
+            Shortcut restored = Shortcut.fromInternalForm(storedForm, env);
 
             assertEquals(
                     original, restored, "Round-trip failed for internal form: " + internalForm);
@@ -81,8 +84,9 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // These represent the same logical shortcut on different platforms
-                    Shortcut macStyle = Shortcut.fromInternalForm("meta S"); // Command+S on Mac
-                    Shortcut pcStyle = Shortcut.fromInternalForm("ctrl S"); // Ctrl+S on PC
+                    Shortcut macStyle =
+                            Shortcut.fromInternalForm("meta S", env); // Command+S on Mac
+                    Shortcut pcStyle = Shortcut.fromInternalForm("ctrl S", env); // Ctrl+S on PC
 
                     assertNotNull(macStyle);
                     assertNotNull(pcStyle);
@@ -101,15 +105,15 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // Various combinations that could be stored
-                    Shortcut multiModifier = Shortcut.fromInternalForm("ctrl alt shift F");
+                    Shortcut multiModifier = Shortcut.fromInternalForm("ctrl alt shift F", env);
                     assertNotNull(multiModifier);
 
                     // Arrow keys with modifiers
-                    Shortcut arrows = Shortcut.fromInternalForm("meta UP");
+                    Shortcut arrows = Shortcut.fromInternalForm("meta UP", env);
                     assertNotNull(arrows);
 
                     // Function keys with modifiers
-                    Shortcut funcKey = Shortcut.fromInternalForm("shift F12");
+                    Shortcut funcKey = Shortcut.fromInternalForm("shift F12", env);
                     assertNotNull(funcKey);
                 });
     }

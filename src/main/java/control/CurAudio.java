@@ -99,8 +99,7 @@ public class CurAudio {
             MyFrame.getInstance()
                     .setTitle(GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
 
-            chunkSize =
-                    Environment.getInstance().getChunkSizeInSeconds() * (long) master.frameRate();
+            chunkSize = new Environment().getChunkSizeInSeconds() * (long) master.frameRate();
             totalNumOfChunks =
                     (int) Math.ceil((double) master.durationInFrames() / (double) chunkSize);
             lastFrameArray = new long[totalNumOfChunks];

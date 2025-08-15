@@ -26,10 +26,6 @@ public class Shortcut {
     }
 
     // Factory methods for convenience
-    public static Shortcut forCurrentPlatform(KeyStroke stroke) {
-        Objects.requireNonNull(stroke);
-        return new Shortcut(stroke, Environment.getInstance());
-    }
 
     public static Shortcut forPlatform(KeyStroke stroke, Environment env) {
         Objects.requireNonNull(stroke);
@@ -115,13 +111,14 @@ public class Shortcut {
         };
     }
 
-    public static Shortcut fromInternalForm(String internalForm) {
+    public static Shortcut fromInternalForm(String internalForm, Environment environment) {
         Objects.requireNonNull(internalForm);
+        Objects.requireNonNull(environment);
         KeyStroke stroke = KeyStroke.getKeyStroke(internalForm);
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
-        return new Shortcut(stroke, Environment.getInstance());
+        return new Shortcut(stroke, environment);
     }
 
     public static Shortcut fromExternalForm(
@@ -143,24 +140,19 @@ public class Shortcut {
         return new Shortcut(stroke, env);
     }
 
-    public static Shortcut fromExternalForm(
-            List<String> maskKeyExternalForms, List<String> nonMaskKeyExternalForms) {
-        Objects.requireNonNull(maskKeyExternalForms);
-        Objects.requireNonNull(nonMaskKeyExternalForms);
-        return fromExternalForm(
-                maskKeyExternalForms, nonMaskKeyExternalForms, Environment.getInstance());
-    }
-
     /**
      * Creates a Shortcut from XML keynames specifically for actions.xml parsing. This method uses
      * XML-specific conversion separate from display formatting.
      */
     public static Shortcut fromXmlForm(
-            List<String> maskKeyXmlNames, List<String> nonMaskKeyXmlNames) {
+            List<String> maskKeyXmlNames,
+            List<String> nonMaskKeyXmlNames,
+            Environment environment) {
         Objects.requireNonNull(maskKeyXmlNames);
         Objects.requireNonNull(nonMaskKeyXmlNames);
+        Objects.requireNonNull(environment);
 
-        Environment env = Environment.getInstance();
+        Environment env = environment;
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyXmlNames.stream().map(env::xmlKeynameToInternalForm),

@@ -75,7 +75,7 @@ public final class MacOSIntegration {
         if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
             desktop.setAboutHandler(
                     e -> {
-                        GiveMessage.infoMessage(Environment.getInstance().getAboutMessage());
+                        GiveMessage.infoMessage(new Environment().getAboutMessage());
                     });
         }
 

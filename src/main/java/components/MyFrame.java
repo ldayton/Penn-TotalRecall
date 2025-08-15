@@ -3,7 +3,6 @@ package components;
 import behaviors.singleact.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
-import control.Main;
 import env.Environment;
 import info.GUIConstants;
 import java.awt.KeyEventPostProcessor;
@@ -27,12 +26,14 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
 
     private static MyFrame instance;
+    private final Environment environment;
 
-    private MyFrame() {
+    private MyFrame(Environment environment) {
+        this.environment = environment;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(MyGlassPane.getInstance());
         MyGlassPane.getInstance().setVisible(true);
-        setJMenuBar(MyMenu.getInstance());
+        setJMenuBar(MyMenu.createInstance(environment));
 
         // force handling by  WindowListener below
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -61,9 +62,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         // Set application icon (platform-specific sizing)
         setIconImage(
                 Toolkit.getDefaultToolkit()
-                        .getImage(
-                                MyFrame.class.getResource(
-                                        Environment.getInstance().getAppIconPath())));
+                        .getImage(MyFrame.class.getResource(environment.getAppIconPath())));
 
         // this is default, but double checking because focusability is needed for
         // MyFocusTraversalPolicy to be used
@@ -82,7 +81,15 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
      */
     public static MyFrame getInstance() {
         if (instance == null) {
-            instance = new MyFrame();
+            throw new IllegalStateException(
+                    "MyFrame not initialized. Call createInstance(Environment) first.");
+        }
+        return instance;
+    }
+
+    public static MyFrame createInstance(Environment environment) {
+        if (instance == null) {
+            instance = new MyFrame(environment);
         }
         return instance;
     }
@@ -105,11 +112,6 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
      */
     @SuppressWarnings("all")
     public boolean postProcessKeyEvent(KeyEvent e) {
-        if (Main.DEBUG_FOCUS) {
-            if (e.getKeyLocation() == KeyEvent.KEY_LOCATION_UNKNOWN) {
-                logger.debug("Focus owner: " + getFocusOwner());
-            }
-        }
         // best attempt to restrict us to key_typed so we don't have duplicate events for
         // key_pressed and key_released
         // unfortunately, there might be press/release events with undefined/unkown codes that this

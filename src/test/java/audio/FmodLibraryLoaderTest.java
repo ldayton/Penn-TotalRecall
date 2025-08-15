@@ -13,10 +13,12 @@ import org.junit.jupiter.api.Test;
 /** Tests for FMOD library loading configuration and cross-platform support. */
 class FmodLibraryLoaderTest {
 
+    private final Environment env = new Environment();
+    private final AppConfig config = new AppConfig();
+
     @Test
     @DisplayName("Environment provides correct FMOD library filenames for each platform")
     void testFmodLibraryFilenames() {
-        Environment env = Environment.getInstance();
         assertNotNull(env, "Environment instance should not be null");
 
         // Test that we get the correct filenames for each combination
@@ -37,7 +39,6 @@ class FmodLibraryLoaderTest {
     @Test
     @DisplayName("AppConfig provides FMOD loading mode from environment configuration")
     void testFmodLoadingModeFromEnvironment() {
-        AppConfig config = AppConfig.getInstance();
 
         // In development environment, should be UNPACKAGED
         // In CI environment, should also be UNPACKAGED (both run from source)
@@ -49,22 +50,14 @@ class FmodLibraryLoaderTest {
     @Test
     @DisplayName("FmodLibraryLoader constructor works with dependency injection")
     void testFmodLibraryLoaderConstructor() {
-        AppConfig config = AppConfig.getInstance();
-        Environment env = Environment.getInstance();
-
         // Should not throw
         FmodLibraryLoader loader = new FmodLibraryLoader(config, env);
         assertNotNull(loader);
-
-        // Default constructor should also work
-        FmodLibraryLoader defaultLoader = new FmodLibraryLoader();
-        assertNotNull(defaultLoader);
     }
 
     @Test
     @DisplayName("Environment provides valid library paths for current platform")
     void testFmodLibraryPaths() {
-        Environment env = Environment.getInstance();
 
         String standardPath = env.getFmodLibraryDevelopmentPath(FmodLibraryType.STANDARD);
         String loggingPath = env.getFmodLibraryDevelopmentPath(FmodLibraryType.LOGGING);

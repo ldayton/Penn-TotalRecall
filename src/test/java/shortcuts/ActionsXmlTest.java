@@ -2,6 +2,7 @@ package shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import env.Environment;
 import java.net.URL;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 /** Tests for actions.xml parsing and validation. */
 class ActionsXmlTest {
+
+    private final Environment env = new Environment();
 
     @Test
     @DisplayName("actions.xml should parse without errors using cross-platform menu modifier")
@@ -20,7 +23,7 @@ class ActionsXmlTest {
         // This should parse successfully with cross-platform "menu" modifier
         assertDoesNotThrow(
                 () -> {
-                    XActionParser parser = new XActionParser(actionsXmlUrl);
+                    XActionParser parser = new XActionParser(actionsXmlUrl, env);
                     List<XAction> actions = parser.getXactions();
                     assertNotNull(actions);
                     assertFalse(

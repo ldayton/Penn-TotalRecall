@@ -17,11 +17,11 @@ jobs:
     - name: Accept Xcode license
       run: sudo xcodebuild -license accept
       
-    - name: Set up Java 23
+    - name: Set up Java 24 EA
       uses: actions/setup-java@v4
       with:
         distribution: 'oracle'
-        java-version: '23'
+        java-version: '24-ea'
         
     - name: Cache Gradle downloads only
       uses: actions/cache@v4

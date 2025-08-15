@@ -86,25 +86,25 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
-                                KeyEvent.VK_RIGHT, Environment.getInstance().getMenuKey(), false),
+                                KeyEvent.VK_RIGHT, new Environment().getMenuKey(), false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
-                                KeyEvent.VK_LEFT, Environment.getInstance().getMenuKey(), false),
+                                KeyEvent.VK_LEFT, new Environment().getMenuKey(), false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_RIGHT,
-                                Environment.getInstance().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
+                                new Environment().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_LEFT,
-                                Environment.getInstance().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
+                                new Environment().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)

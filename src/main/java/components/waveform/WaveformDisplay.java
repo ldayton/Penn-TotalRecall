@@ -189,7 +189,7 @@ public class WaveformDisplay extends JComponent {
                 if (Math.abs(refreshFrame - CurAudio.getMaster().durationInFrames())
                         > CurAudio.getMaster()
                                 .secondsToFrames(
-                                        Environment.getInstance()
+                                        new Environment()
                                                 .getInterpolationToleratedErrorZoneInSec())) {
                     logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
                 }
@@ -323,7 +323,7 @@ public class WaveformDisplay extends JComponent {
             maxFramesError =
                     CurAudio.getMaster().secondsToFrames(1)
                             / GUIConstants.zoomlessPixelsPerSecond
-                            * Environment.getInstance().getMaxInterpolatedPixels();
+                            * new Environment().getMaxInterpolatedPixels();
             bufferedFrame = -1;
             bufferedWidth = -1;
             bufferedHeight = -1;
@@ -351,11 +351,11 @@ public class WaveformDisplay extends JComponent {
                     if (Math.abs(refreshFrame - lastFrame)
                             > CurAudio.getMaster()
                                     .secondsToFrames(
-                                            Environment.getInstance()
+                                            new Environment()
                                                     .getInterpolationToleratedErrorZoneInSec())) {
                         logger.warn(
                                 "interpolation error greater than "
-                                        + Environment.getInstance().getMaxInterpolatedPixels()
+                                        + new Environment().getMaxInterpolatedPixels()
                                         + " pixels: "
                                         + Math.abs(refreshFrame - realRefreshFrame)
                                         + " (frames)");

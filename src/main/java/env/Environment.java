@@ -30,9 +30,6 @@ import org.slf4j.LoggerFactory;
 public class Environment {
     private static final Logger logger = LoggerFactory.getLogger(Environment.class);
 
-    // Singleton instance
-    private static volatile Environment instance;
-
     // Core environment state
     private final Platform platform;
     private final Properties config;
@@ -46,7 +43,7 @@ public class Environment {
     // Hardcoded constants that were previously configurable
     private static final double INTERPOLATION_TOLERANCE_SECONDS = 0.25;
 
-    private Environment() {
+    public Environment() {
         this.platform = Platform.detect();
         this.userHomeDir = System.getProperty("user.home");
         this.config = loadConfiguration();
@@ -57,20 +54,16 @@ public class Environment {
         this.chunkSizeInSeconds = computeChunkSize();
     }
 
-    /**
-     * Gets the singleton Environment instance.
-     *
-     * @return the environment instance
-     */
-    public static Environment getInstance() {
-        if (instance == null) {
-            synchronized (Environment.class) {
-                if (instance == null) {
-                    instance = new Environment();
-                }
-            }
-        }
-        return instance;
+    /** Constructor for testing - allows platform injection, minimal configuration */
+    public Environment(Platform platform) {
+        this.platform = platform;
+        this.userHomeDir = System.getProperty("user.home");
+        this.config = new Properties(); // Use empty config for testing
+
+        // Compute and cache frequently used values with defaults
+        this.aboutMessage = "Penn TotalRecall Test";
+        this.menuKey = computeMenuKey();
+        this.chunkSizeInSeconds = 2; // Default chunk size
     }
 
     // =============================================================================
