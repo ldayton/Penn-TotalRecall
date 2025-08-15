@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'edu.upenn.psych.memory'
-version = '1.0.0'
+version = '2025.08.15'
 
 // Project configuration
 ext {
@@ -47,9 +47,14 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.+'
     implementation 'ch.qos.logback:logback-classic:1.5.+'
     
+    compileOnly 'org.projectlombok:lombok:1.18.+'
+    annotationProcessor 'org.projectlombok:lombok:1.18.+'
+    
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.+'
     testImplementation 'org.mockito:mockito-core:5.14.+'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.14.+'
+    testCompileOnly 'org.projectlombok:lombok:1.18.+'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.+'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.+'
     
 }
@@ -68,7 +73,8 @@ jar {
             'Class-Path': '.',
             'Built-By': System.getProperty('user.name'),
             'Implementation-Vendor': orgName,
-            'Implementation-Title': programProperName
+            'Implementation-Title': programProperName,
+            'Implementation-Version': version
         )
     }
     

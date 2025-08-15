@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: macos-15
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Accept Xcode license
+      run: sudo xcodebuild -license accept
+      
+    - name: Set up Java 24 EA
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '24-ea'
+        
+    - name: Cache Gradle downloads only
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches/modules-2
+          ~/.gradle/wrapper
+        key: gradle-downloads-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          gradle-downloads-${{ runner.os }}-
+          
+    - name: Make Gradle wrapper executable
+      run: chmod +x ./gradlew
+      
+    - name: Build macOS DMG
+      run: ./gradlew packageMacDmg
+      
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/packaging/mac/*.dmg
+        generate_release_notes: true
+        draft: false

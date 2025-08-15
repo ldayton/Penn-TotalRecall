@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.swing.KeyStroke;
+import lombok.NonNull;
 
 public class Shortcut {
     private static final Set<String> ACTION_WORDS = Set.of("typed", "pressed", "released");
@@ -19,17 +20,15 @@ public class Shortcut {
 
     private static final String INTERNAL_FORM_DELIMITER = " ";
 
-    public Shortcut(KeyStroke stroke, Environment env) {
-        this.stroke = Objects.requireNonNull(stroke);
-        this.env = Objects.requireNonNull(env);
+    public Shortcut(@NonNull KeyStroke stroke, @NonNull Environment env) {
+        this.stroke = stroke;
+        this.env = env;
         this.internalForm = ModernKeyUtils.getInternalForm(stroke);
     }
 
     // Factory methods for convenience
 
-    public static Shortcut forPlatform(KeyStroke stroke, Environment env) {
-        Objects.requireNonNull(stroke);
-        Objects.requireNonNull(env);
+    public static Shortcut forPlatform(@NonNull KeyStroke stroke, @NonNull Environment env) {
         return new Shortcut(stroke, env);
     }
 
@@ -59,8 +58,7 @@ public class Shortcut {
                 .collect(joining(env.getKeySeparator()));
     }
 
-    private boolean isSymbol(String key) {
-        Objects.requireNonNull(key);
+    private boolean isSymbol(@NonNull String key) {
         // Check if this is a Unicode symbol (Mac keys) or already-formatted PC key
         return (key.length() == 1
                         && (key.equals("⌘")
@@ -96,8 +94,7 @@ public class Shortcut {
                         || key.equals("Meta"));
     }
 
-    private String capitalizeKey(String key) {
-        Objects.requireNonNull(key);
+    private String capitalizeKey(@NonNull String key) {
         return switch (key) {
             case "" -> key;
             case "SPACE" -> "Space";
@@ -111,9 +108,8 @@ public class Shortcut {
         };
     }
 
-    public static Shortcut fromInternalForm(String internalForm, Environment environment) {
-        Objects.requireNonNull(internalForm);
-        Objects.requireNonNull(environment);
+    public static Shortcut fromInternalForm(
+            @NonNull String internalForm, @NonNull Environment environment) {
         KeyStroke stroke = KeyStroke.getKeyStroke(internalForm);
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
@@ -122,12 +118,9 @@ public class Shortcut {
     }
 
     public static Shortcut fromExternalForm(
-            List<String> maskKeyExternalForms,
-            List<String> nonMaskKeyExternalForms,
-            Environment env) {
-        Objects.requireNonNull(maskKeyExternalForms);
-        Objects.requireNonNull(nonMaskKeyExternalForms);
-        Objects.requireNonNull(env);
+            @NonNull List<String> maskKeyExternalForms,
+            @NonNull List<String> nonMaskKeyExternalForms,
+            @NonNull Environment env) {
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyExternalForms.stream().map(env::externalToInternalForm),
@@ -145,12 +138,9 @@ public class Shortcut {
      * XML-specific conversion separate from display formatting.
      */
     public static Shortcut fromXmlForm(
-            List<String> maskKeyXmlNames,
-            List<String> nonMaskKeyXmlNames,
-            Environment environment) {
-        Objects.requireNonNull(maskKeyXmlNames);
-        Objects.requireNonNull(nonMaskKeyXmlNames);
-        Objects.requireNonNull(environment);
+            @NonNull List<String> maskKeyXmlNames,
+            @NonNull List<String> nonMaskKeyXmlNames,
+            @NonNull Environment environment) {
 
         Environment env = environment;
         String internalShortcutForm =

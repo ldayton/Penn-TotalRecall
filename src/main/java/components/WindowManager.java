@@ -4,8 +4,8 @@ import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
 import info.UserPrefs;
 import java.awt.Rectangle;
-import java.util.Objects;
 import javax.swing.JFrame;
+import lombok.NonNull;
 
 /**
  * Manages window state persistence and restoration.
@@ -33,8 +33,8 @@ public class WindowManager {
      *
      * @param prefs the PreferencesProvider for storing and retrieving window state
      */
-    public WindowManager(PreferencesProvider prefs) {
-        this.prefs = Objects.requireNonNull(prefs);
+    public WindowManager(@NonNull PreferencesProvider prefs) {
+        this.prefs = prefs;
     }
 
     /**
@@ -61,15 +61,12 @@ public class WindowManager {
      * @param frame the application frame to restore
      * @param splitPane the split pane whose divider location should be restored
      */
-    public void restoreWindowLayout(JFrame frame, MySplitPane splitPane) {
-        Objects.requireNonNull(frame);
-        Objects.requireNonNull(splitPane);
+    public void restoreWindowLayout(@NonNull JFrame frame, @NonNull MySplitPane splitPane) {
         restoreFramePosition(frame);
         restoreDividerLocation(splitPane);
     }
 
-    private void restoreFramePosition(JFrame frame) {
-        Objects.requireNonNull(frame);
+    private void restoreFramePosition(@NonNull JFrame frame) {
         frame.setBounds(
                 prefs.getInt(UserPrefs.windowXLocation, 0),
                 prefs.getInt(UserPrefs.windowYLocation, 0),
@@ -79,8 +76,7 @@ public class WindowManager {
         // Just let the saved bounds determine the size
     }
 
-    private void restoreDividerLocation(MySplitPane splitPane) {
-        Objects.requireNonNull(splitPane);
+    private void restoreDividerLocation(@NonNull MySplitPane splitPane) {
         int windowHeight = prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight);
         splitPane.setDividerLocation(prefs.getInt(UserPrefs.dividerLocation, windowHeight / 2));
     }
@@ -94,16 +90,13 @@ public class WindowManager {
      * @param frame the application frame to save state from
      * @param splitPane the split pane whose divider location should be saved
      */
-    public void saveWindowLayout(JFrame frame, MySplitPane splitPane) {
-        Objects.requireNonNull(frame);
-        Objects.requireNonNull(splitPane);
+    public void saveWindowLayout(@NonNull JFrame frame, @NonNull MySplitPane splitPane) {
         saveFrameState(frame);
         saveDividerLocation(splitPane);
         prefs.flush();
     }
 
-    private void saveFrameState(JFrame frame) {
-        Objects.requireNonNull(frame);
+    private void saveFrameState(@NonNull JFrame frame) {
         // On macOS, maximize doesn't set extended state properly
         // Just save the current bounds always
         Rectangle bounds = frame.getBounds();
@@ -116,8 +109,7 @@ public class WindowManager {
         prefs.putBoolean(UserPrefs.windowMaximized, false);
     }
 
-    private void saveDividerLocation(MySplitPane splitPane) {
-        Objects.requireNonNull(splitPane);
+    private void saveDividerLocation(@NonNull MySplitPane splitPane) {
         prefs.putInt(UserPrefs.dividerLocation, splitPane.getDividerLocation());
     }
 }

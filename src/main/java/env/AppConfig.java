@@ -34,6 +34,8 @@ public class AppConfig {
     private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
     private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
     private static final String AUDIO_HARDWARE_AVAILABLE_KEY = "audio.hardware.available";
+    private static final String RELEASES_API_URL_KEY = "releases.api.url";
+    private static final String RELEASES_PAGE_URL_KEY = "releases.page.url";
 
     private final Properties properties;
 
@@ -119,6 +121,24 @@ public class AppConfig {
     @Deprecated
     public String getFmodLibraryPathMacOS() {
         return getFmodLibraryPath(Platform.MACOS);
+    }
+
+    /**
+     * Gets the GitHub Releases API URL for update checking.
+     *
+     * @return the releases API URL
+     */
+    public String getReleasesApiUrl() {
+        return getPropertyWithSystemOverride(RELEASES_API_URL_KEY);
+    }
+
+    /**
+     * Gets the GitHub Releases page URL for user downloads.
+     *
+     * @return the releases page URL
+     */
+    public String getReleasesPageUrl() {
+        return getPropertyWithSystemOverride(RELEASES_PAGE_URL_KEY);
     }
 
     /**

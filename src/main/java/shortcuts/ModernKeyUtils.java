@@ -1,7 +1,7 @@
 package shortcuts;
 
-import java.util.Objects;
 import javax.swing.KeyStroke;
+import lombok.NonNull;
 
 /**
  * Zen utility for converting KeyStroke to internal form.
@@ -21,8 +21,7 @@ public final class ModernKeyUtils {
      * @param key the KeyStroke to convert, never null
      * @return internal form string with trailing space, never null
      */
-    public static String getInternalForm(KeyStroke key) {
-        Objects.requireNonNull(key);
+    public static String getInternalForm(@NonNull KeyStroke key) {
         String representation = key.toString();
         return isRoundTripCompatible(key, representation)
                 ? representation + " "
@@ -36,9 +35,8 @@ public final class ModernKeyUtils {
      * @param representation the string representation
      * @return true if round-trip parsing preserves the KeyStroke
      */
-    private static boolean isRoundTripCompatible(KeyStroke original, String representation) {
-        Objects.requireNonNull(original);
-        Objects.requireNonNull(representation);
+    private static boolean isRoundTripCompatible(
+            @NonNull KeyStroke original, @NonNull String representation) {
         KeyStroke parsed = KeyStroke.getKeyStroke(representation);
         return original.equals(parsed);
     }

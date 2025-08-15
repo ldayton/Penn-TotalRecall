@@ -5,11 +5,13 @@ import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
+import env.AppConfig;
 import env.Environment;
 import info.Constants;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.UpdateChecker;
 
 /** Entry point of the entire program. */
 public class Main {
@@ -46,6 +48,9 @@ public class Main {
                         MyMenu.updateActions();
                         windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());
                         mainFrame.setVisible(true);
+
+                        // Check for updates after UI is ready (async, non-blocking)
+                        new UpdateChecker(new AppConfig()).checkForUpdateOnStartup();
                     });
         }
     }
