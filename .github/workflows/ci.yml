@@ -57,7 +57,7 @@ jobs:
       if: always()
       with:
         name: test-results
-        path: build/test-results/test/
+        path: tmp/test-results/test/
         retention-days: 30
         
     - name: Upload test reports
@@ -65,7 +65,7 @@ jobs:
       if: always()
       with:
         name: test-reports
-        path: build/reports/tests/test/
+        path: tmp/reports/tests/test/
         retention-days: 30
         
     - name: Upload macOS DMG
