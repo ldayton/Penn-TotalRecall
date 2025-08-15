@@ -4,10 +4,10 @@ version: 2.1
 executors:
   macos-executor:
     macos:
-      xcode: "16.0"
-      resource_class: macos.m4.pro.medium
+      xcode: "15.4"
+      resource_class: macos.m1.large.gen1
     environment:
-      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.workers.max=6 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.workers.max=8 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
       CI: "true"
 
 # Define jobs
