@@ -1,5 +1,7 @@
 package di;
 
+import audio.FmodCore;
+import audio.FmodLibraryLoader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.WindowManager;
@@ -24,6 +26,10 @@ public class AppModule extends AbstractModule {
         // Singleton bindings for core services
         bind(AppConfig.class).in(Singleton.class);
         bind(Environment.class).in(Singleton.class);
+
+        // Audio system bindings
+        bind(FmodLibraryLoader.class).in(Singleton.class);
+        bind(FmodCore.class).in(Singleton.class);
 
         // Provider bindings
         bind(PreferencesProvider.class).to(DefaultPreferencesProvider.class).in(Singleton.class);

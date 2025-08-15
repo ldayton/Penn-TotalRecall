@@ -25,7 +25,12 @@ class FmodCoreTest {
 
     @BeforeAll
     static void setup() throws Exception {
-        lib = FmodCore.instance;
+        // Initialize DI for tests - create dependencies manually for now
+        env.AppConfig appConfig = new env.AppConfig();
+        env.Environment environment = new env.Environment();
+        audio.FmodLibraryLoader loader = new audio.FmodLibraryLoader(appConfig, environment);
+        lib = new FmodCore(appConfig, loader);
+
         // Use the known sample file with verified properties
         testFile = new File("packaging/samples/sample.wav");
         assertTrue(testFile.exists(), "Test audio file not found: " + testFile.getAbsolutePath());

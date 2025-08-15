@@ -4,6 +4,9 @@ import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
  * specifically designed for precise frame-based audio playback with real-time position tracking.
  * All audio operations are thread-safe and positions are reported in PCM sample frames.
  */
+@Singleton
 public final class FmodCore {
 
     private static final Logger logger = LoggerFactory.getLogger(FmodCore.class);
@@ -43,16 +47,8 @@ public final class FmodCore {
         static final int INCONSISTENT_STATE = -4;
     }
 
-    // Load FMOD library using dedicated loader
-    private static FMODCore loadFMODLibrary() {
-        FmodLibraryLoader loader =
-                new FmodLibraryLoader(new env.AppConfig(), new env.Environment());
-        return loader.loadLibrary(FMODCore.class);
-    }
-
     // FMOD Core JNA interface
     interface FMODCore extends Library {
-        FMODCore INSTANCE = loadFMODLibrary();
 
         // FMOD System functions
         int FMOD_System_Create(PointerByReference system, int headerversion);
@@ -61,13 +57,9 @@ public final class FmodCore {
 
         int FMOD_System_SetOutput(Pointer system, int output);
 
-        int FMOD_System_Close(Pointer system);
-
         int FMOD_System_Release(Pointer system);
 
         int FMOD_System_Update(Pointer system);
-
-        int FMOD_System_GetVersion(Pointer system, IntByReference version);
 
         // Sound creation and management
         int FMOD_System_CreateSound(
@@ -101,29 +93,117 @@ public final class FmodCore {
     }
 
     // FMOD Core instance
-    private static final FMODCore fmod = FMODCore.INSTANCE;
-
-    // FMOD state
-    private static Pointer system = null;
-    private static Pointer currentSound = null;
-    private static Pointer currentChannel = null;
-    private static long startFrame = 0;
-    private static long endFrame = 0;
-    private static boolean initialized = false;
-    private static boolean autoStopped = false;
-    private static int configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
-    private static final Object lock = new Object();
-
-    public static final FmodCore instance = new FmodCore(new env.AppConfig());
+    private final FMODCore fmod;
 
     private final env.AppConfig appConfig;
 
-    private FmodCore(env.AppConfig appConfig) {
+    // FMOD state
+    private Pointer system = null;
+    private Pointer currentSound = null;
+    private Pointer currentChannel = null;
+    private long startFrame = 0;
+    private long endFrame = 0;
+    private boolean initialized = false;
+    private boolean autoStopped = false;
+    private int configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
+    private final Object lock = new Object();
+
+    @Inject
+    public FmodCore(@NonNull env.AppConfig appConfig, @NonNull FmodLibraryLoader libraryLoader) {
         this.appConfig = appConfig;
+        this.fmod = libraryLoader.loadLibrary(FMODCore.class);
+    }
+
+    // Helper methods
+    private boolean playbackInProgressInternal() {
+        if (currentChannel == null || autoStopped) {
+            return false;
+        }
+
+        try {
+            IntByReference isPlaying = new IntByReference();
+            int result = fmod.FMOD_Channel_IsPlaying(currentChannel, isPlaying);
+            if (result != FmodConstants.OK) {
+                return false;
+            }
+
+            boolean playing = isPlaying.getValue() != 0;
+
+            // Check for end-frame stopping (only if still playing)
+            if (playing && endFrame > 0 && endFrame > startFrame) {
+                IntByReference position = new IntByReference();
+                result =
+                        fmod.FMOD_Channel_GetPosition(
+                                currentChannel, position, FmodConstants.TIMEUNIT_PCM);
+                if (result == FmodConstants.OK && position.getValue() >= endFrame) {
+                    checkAndAutoStop();
+                    return false;
+                }
+            }
+
+            return playing;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void cleanup() {
+        if (currentSound != null) {
+            fmod.FMOD_Sound_Release(currentSound);
+            currentSound = null;
+        }
+        currentChannel = null;
+        endFrame = 0;
+        autoStopped = false;
+    }
+
+    private void checkAndAutoStop() {
+        if (!autoStopped) {
+            autoStopped = true;
+            if (currentChannel != null) {
+                fmod.FMOD_Channel_Stop(currentChannel);
+                currentChannel = null;
+            }
+            cleanup();
+        }
+    }
+
+    private long streamPositionInternal() {
+        if (currentChannel == null) {
+            return -1;
+        }
+
+        // Check if already auto-stopped
+        if (autoStopped) {
+            return endFrame > 0 ? endFrame - startFrame : -1;
+        }
+
+        try {
+            IntByReference position = new IntByReference();
+            int result =
+                    fmod.FMOD_Channel_GetPosition(
+                            currentChannel, position, FmodConstants.TIMEUNIT_PCM);
+            if (result != FmodConstants.OK) {
+                return -1;
+            }
+
+            long currentPos = position.getValue();
+
+            // Check if we've reached the end frame and auto-stop
+            if (endFrame > 0 && endFrame > startFrame && currentPos >= endFrame) {
+                checkAndAutoStop();
+                return endFrame - startFrame; // Return relative position at stop
+            }
+
+            // Return position relative to start frame
+            return currentPos - startFrame;
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     // Initialize FMOD system if not already done
-    private static synchronized boolean ensureInitialized() {
+    private synchronized boolean ensureInitialized() {
         if (initialized) {
             return true;
         }
@@ -131,7 +211,7 @@ public final class FmodCore {
         try {
             // Auto-configure output mode based on environment (unless manually configured)
             if (configuredOutputType == OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
-                if (!instance.appConfig.isAudioHardwareAvailable()) {
+                if (!appConfig.isAudioHardwareAvailable()) {
                     configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
                     logger.info(
                             "FMOD configured for NOSOUND_NRT mode (no audio hardware available)");
@@ -235,8 +315,8 @@ public final class FmodCore {
                 }
 
                 // Store frame range for position-based stopping
-                FmodCore.startFrame = startFrame;
-                FmodCore.endFrame = endFrame;
+                this.startFrame = startFrame;
+                this.endFrame = endFrame;
 
                 // Unpause to start playback
                 result = fmod.FMOD_Channel_SetPaused(currentChannel, 0); // 0 = not paused
@@ -311,40 +391,6 @@ public final class FmodCore {
         }
     }
 
-    private long streamPositionInternal() {
-        if (currentChannel == null) {
-            return -1;
-        }
-
-        // Check if already auto-stopped
-        if (autoStopped) {
-            return endFrame > 0 ? endFrame - startFrame : -1;
-        }
-
-        try {
-            IntByReference position = new IntByReference();
-            int result =
-                    fmod.FMOD_Channel_GetPosition(
-                            currentChannel, position, FmodConstants.TIMEUNIT_PCM);
-            if (result != FmodConstants.OK) {
-                return -1;
-            }
-
-            long currentPos = position.getValue();
-
-            // Check if we've reached the end frame and auto-stop
-            if (endFrame > 0 && endFrame > startFrame && currentPos >= endFrame) {
-                checkAndAutoStop();
-                return endFrame - startFrame; // Return relative position at stop
-            }
-
-            // Return position relative to start frame
-            return currentPos - startFrame;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
     /**
      * Determines whether audio playback is currently active.
      *
@@ -364,150 +410,6 @@ public final class FmodCore {
     public boolean playbackInProgress() {
         synchronized (lock) {
             return playbackInProgressInternal();
-        }
-    }
-
-    private boolean playbackInProgressInternal() {
-        if (currentChannel == null || autoStopped) {
-            return false;
-        }
-
-        try {
-            IntByReference isPlaying = new IntByReference();
-            int result = fmod.FMOD_Channel_IsPlaying(currentChannel, isPlaying);
-            if (result != FmodConstants.OK) {
-                return false;
-            }
-
-            boolean playing = isPlaying.getValue() != 0;
-
-            // Check for end-frame stopping (only if still playing)
-            if (playing && endFrame > 0 && endFrame > startFrame) {
-                IntByReference position = new IntByReference();
-                result =
-                        fmod.FMOD_Channel_GetPosition(
-                                currentChannel, position, FmodConstants.TIMEUNIT_PCM);
-                if (result == FmodConstants.OK && position.getValue() >= endFrame) {
-                    checkAndAutoStop();
-                    return false;
-                }
-            }
-
-            return playing;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Retrieves the version number of the loaded FMOD Core library.
-     *
-     * <p>This method calls FMOD_System_GetVersion to query the runtime version of the FMOD library.
-     * The version is returned as a 32-bit integer in hexadecimal format where:
-     *
-     * <ul>
-     *   <li>Upper 16 bits = major version
-     *   <li>Next 8 bits = minor version
-     *   <li>Lower 8 bits = development version
-     * </ul>
-     *
-     * <p>For example, version 2.03.09 would be returned as 0x00020309. Returns -1 if the FMOD
-     * system is not initialized or version cannot be retrieved.
-     *
-     * @return FMOD library version as integer, or -1 if unavailable
-     */
-    public int getLibraryRevisionNumber() {
-        synchronized (lock) {
-            if (!ensureInitialized()) {
-                return -1;
-            }
-
-            try {
-                IntByReference version = new IntByReference();
-                int result = fmod.FMOD_System_GetVersion(system, version);
-                if (result != FmodConstants.OK) {
-                    return -1;
-                }
-                return version.getValue();
-            } catch (Exception e) {
-                return -1;
-            }
-        }
-    }
-
-    /** Returns the name of the native library being used. */
-    public String getLibraryName() {
-        return "FMOD Core (JNA Direct)";
-    }
-
-    /**
-     * Configures the FMOD output type before system initialization.
-     *
-     * <p>This method must be called before any audio operations. It sets the output mode that will
-     * be used when the FMOD system is initialized.
-     *
-     * <p>Common output types:
-     *
-     * <ul>
-     *   <li>AUTODETECT - Automatically detect best available output (default)
-     *   <li>NOSOUND_NRT - No audio output, non-real-time mode for testing
-     * </ul>
-     *
-     * @param outputMode The FMOD output type constant
-     * @throws IllegalStateException if FMOD system is already initialized
-     */
-    public static synchronized void configureOutputMode(String outputMode) {
-        if (initialized) {
-            throw new IllegalStateException(
-                    "Cannot configure output mode after FMOD system is initialized");
-        }
-
-        switch (outputMode.toLowerCase()) {
-            case "nosound":
-                configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
-                logger.info("FMOD configured for NOSOUND_NRT mode (testing)");
-                break;
-            case "autodetect":
-            default:
-                configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
-                logger.info("FMOD configured for AUTODETECT mode (normal)");
-                break;
-        }
-    }
-
-    // Auto-stop helper - must be called within synchronized block
-    private static void checkAndAutoStop() {
-        if (!autoStopped) {
-            autoStopped = true;
-            if (currentChannel != null) {
-                fmod.FMOD_Channel_Stop(currentChannel);
-                currentChannel = null;
-            }
-            cleanup();
-        }
-    }
-
-    // Cleanup helper - must be called within synchronized block
-    private static void cleanup() {
-        if (currentSound != null) {
-            fmod.FMOD_Sound_Release(currentSound);
-            currentSound = null;
-        }
-        currentChannel = null;
-        endFrame = 0;
-        autoStopped = false;
-    }
-
-    // Static cleanup for application shutdown
-    public static void shutdown() {
-        synchronized (lock) {
-            cleanup();
-            if (system != null) {
-                fmod.FMOD_System_Close(system);
-                fmod.FMOD_System_Release(system);
-                system = null;
-            }
-            initialized = false;
         }
     }
 }

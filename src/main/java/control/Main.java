@@ -2,6 +2,7 @@ package control;
 
 import di.GuiceBootstrap;
 import info.Constants;
+import java.util.Arrays;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +18,10 @@ public class Main {
      */
     public static void main(String[] args) {
         logger.debug("Welcome to " + Constants.programName);
-
-        // Check for integration test mode
-        boolean integrationTestMode = false;
-        for (String arg : args) {
-            if ("--integration-test".equals(arg)) {
-                integrationTestMode = true;
-                break;
-            }
-        }
-
+        boolean integrationTestMode = Arrays.asList(args).contains("--integration-test");
         if (integrationTestMode) {
             AudioIntegrationMode.exitWithTestResult(AudioIntegrationMode.runTest());
         } else {
-            // Normal GUI mode with Guice DI
             SwingUtilities.invokeLater(
                     () -> {
                         GuiceBootstrap bootstrap = GuiceBootstrap.create();

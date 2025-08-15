@@ -39,11 +39,13 @@ public class FmodLoadingTestHarness {
             LibraryLoadingMode mode = config.getFmodLoadingMode();
             logger.info("Library loading mode: " + mode);
 
-            // Test FMOD library loading by accessing the static instance
+            // Test FMOD library loading using dependency injection
             // This will trigger the library loading process
-            FmodCore core = FmodCore.instance;
+            env.Environment environment = new env.Environment();
+            audio.FmodLibraryLoader loader = new audio.FmodLibraryLoader(config, environment);
+            FmodCore core = new FmodCore(config, loader);
             boolean loaded = (core != null);
-            logger.info("FMOD Core instance created: " + loaded);
+            logger.info("FMOD Core instance created via DI: " + loaded);
 
             if (loaded) {
                 logger.info("FMOD library path strategy: " + mode);

@@ -8,6 +8,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,11 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
 
     private NativeStatelessPlaybackThread mainThread;
     private NativeStatelessPlaybackThread shortThread;
-    private final FmodCore lib = FmodCore.instance;
+    private final FmodCore lib;
 
-    /** Creates an new player, with status <code>BUSY</code>. */
-    public NativeStatelessPlayer() {
+    /** Creates a new player with injected FmodCore dependency. */
+    public NativeStatelessPlayer(@NonNull FmodCore fmodCore) {
+        this.lib = fmodCore;
         status = PrecisionPlayer.Status.BUSY;
         listeners = new ArrayList<PrecisionListener>();
         //		System.out.println("using: " + lib.getLibraryName() + ", revision " +

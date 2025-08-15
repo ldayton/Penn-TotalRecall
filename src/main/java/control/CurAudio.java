@@ -1,5 +1,6 @@
 package control;
 
+import audio.FmodCore;
 import audio.NativeStatelessPlayer;
 import audio.PrecisionPlayer;
 import components.MyFrame;
@@ -13,6 +14,7 @@ import components.waveform.WaveformBuffer;
 import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
+import di.GuiceBootstrap;
 import env.Environment;
 import info.Constants;
 import info.GUIConstants;
@@ -116,7 +118,14 @@ public class CurAudio {
             // prepare playback
             PrecisionPlayer pp = null;
             try {
-                pp = new NativeStatelessPlayer();
+                // Require DI-managed FmodCore - application must be initialized with Guice
+                FmodCore fmodCore = GuiceBootstrap.getInjectedInstance(FmodCore.class);
+                if (fmodCore == null) {
+                    throw new IllegalStateException(
+                            "FmodCore not available via dependency injection. Application must be"
+                                    + " initialized with Guice before using audio.");
+                }
+                pp = new NativeStatelessPlayer(fmodCore);
             } catch (Throwable e1) {
                 logger.error("Cannot load audio system", e1);
                 GiveMessage.errorMessage(

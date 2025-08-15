@@ -70,7 +70,14 @@ public class AudioIntegrationMode {
 
             // Test 1: FMOD library loading
             logger.info("Testing FMOD library loading...");
-            core = FmodCore.instance;
+            // Initialize Guice for integration tests
+            di.GuiceBootstrap.create();
+            core = di.GuiceBootstrap.getInjectedInstance(FmodCore.class);
+            if (core == null) {
+                logger.error("❌ FmodCore not available via dependency injection");
+                logger.error("Integration tests require application to be initialized with Guice");
+                return false;
+            }
             logger.info("✅ FMOD library loaded successfully");
 
             // Test 2: Audio file loading and playback

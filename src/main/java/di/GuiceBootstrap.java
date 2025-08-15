@@ -18,6 +18,8 @@ import util.UpdateChecker;
  */
 public class GuiceBootstrap {
 
+    private static Injector globalInjector;
+
     private final Environment environment;
     private final WindowManager windowManager;
     private final UpdateChecker updateChecker;
@@ -32,8 +34,21 @@ public class GuiceBootstrap {
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
     public static GuiceBootstrap create() {
-        Injector injector = Guice.createInjector(new AppModule());
-        return injector.getInstance(GuiceBootstrap.class);
+        globalInjector = Guice.createInjector(new AppModule());
+        return globalInjector.getInstance(GuiceBootstrap.class);
+    }
+
+    /**
+     * Gets an injected instance of the specified class from the global injector.
+     *
+     * @param clazz The class to get an instance of
+     * @return The injected instance, or null if no injector is available
+     */
+    public static <T> T getInjectedInstance(Class<T> clazz) {
+        if (globalInjector != null) {
+            return globalInjector.getInstance(clazz);
+        }
+        return null;
     }
 
     /** Initializes and starts the GUI application. */

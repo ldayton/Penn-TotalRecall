@@ -1,0 +1,104 @@
+package integration;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import audio.FmodCore;
+import audio.FmodLibraryLoader;
+import components.WindowManager;
+import di.GuiceBootstrap;
+import env.AppConfig;
+import env.Environment;
+import info.PreferencesProvider;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.UpdateChecker;
+
+/**
+ * Basic smoke tests for Guice dependency injection configuration.
+ *
+ * <p>These tests verify that the Guice injector can be created and that basic dependency resolution
+ * works. This catches simple configuration issues like missing @Inject annotations but does not
+ * test actual application functionality or real integration scenarios.
+ */
+@DisplayName("Guice Configuration Smoke Tests")
+class GuiceBootstrapIntegrationTest {
+    private static final Logger logger =
+            LoggerFactory.getLogger(GuiceBootstrapIntegrationTest.class);
+
+    @Test
+    @DisplayName("guice injector can be created without errors")
+    void guiceInjectorCanBeCreatedWithoutErrors() {
+        logger.info("Testing basic Guice injector creation...");
+
+        // This only tests that Guice can create objects, not that the app actually works
+        GuiceBootstrap bootstrap = null;
+        try {
+            bootstrap = GuiceBootstrap.create();
+            assertNotNull(bootstrap, "Bootstrap should be created successfully");
+            logger.info("✅ GuiceBootstrap.create() succeeded");
+        } catch (Exception e) {
+            fail("Failed to create Guice bootstrap: " + e.getMessage(), e);
+        }
+
+        // Verify that basic dependencies can be instantiated (doesn't test functionality)
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(AppConfig.class),
+                "AppConfig should be instantiable via DI");
+        logger.info("✅ AppConfig can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(Environment.class),
+                "Environment should be instantiable via DI");
+        logger.info("✅ Environment can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(FmodLibraryLoader.class),
+                "FmodLibraryLoader should be instantiable via DI");
+        logger.info("✅ FmodLibraryLoader can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(FmodCore.class),
+                "FmodCore should be instantiable via DI");
+        logger.info("✅ FmodCore can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(WindowManager.class),
+                "WindowManager should be instantiable via DI");
+        logger.info("✅ WindowManager can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(UpdateChecker.class),
+                "UpdateChecker should be instantiable via DI");
+        logger.info("✅ UpdateChecker can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(PreferencesProvider.class),
+                "PreferencesProvider should be instantiable via DI");
+        logger.info("✅ PreferencesProvider can be created");
+
+        logger.info("✅ Basic Guice configuration smoke test passed");
+    }
+
+    @Test
+    @DisplayName("fmod objects can be created without constructor errors")
+    void fmodObjectsCanBeCreatedWithoutConstructorErrors() {
+        logger.info("Testing basic FMOD object creation via DI...");
+
+        // Create bootstrap to initialize global injector
+        GuiceBootstrap.create();
+
+        // Get FmodCore through DI (doesn't test that audio actually works)
+        FmodCore fmodCore = GuiceBootstrap.getInjectedInstance(FmodCore.class);
+        assertNotNull(fmodCore, "FmodCore should be creatable via DI");
+
+        // Verify we can call a basic method without crashing
+        // (This doesn't test audio functionality, just that the object was constructed properly)
+        assertFalse(
+                fmodCore.playbackInProgress(),
+                "Initial state should be not playing (basic method call works)");
+
+        logger.info("✅ FMOD objects can be created via DI");
+    }
+}

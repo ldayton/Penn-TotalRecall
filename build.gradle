@@ -109,7 +109,7 @@ tasks.register('createCustomRuntime') {
         
         providers.exec {
             commandLine('jlink',
-                '--add-modules', 'java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.xml',
+                '--add-modules', 'java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.xml,java.net.http',
                 '--strip-debug',
                 '--no-man-pages',
                 '--no-header-files',
@@ -295,10 +295,15 @@ test {
     }
     
     useJUnitPlatform {
-        // Use the loaded property to control audio test exclusion
+        // Use the loaded properties to control test exclusion
         def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
         if (audioHardwareAvailable == 'false') {
             excludeTags 'audio-hardware'
+        }
+        
+        def windowingSystemAvailable = configProps.getProperty('windowing.system.available')
+        if (windowingSystemAvailable == 'false') {
+            excludeTags 'windowing'
         }
     }
     
