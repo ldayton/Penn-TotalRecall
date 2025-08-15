@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: macos-15
     env:
-      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false -Dorg.gradle.configuration-cache=false"
+      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
     
     steps:
     - name: Checkout code
@@ -48,13 +48,16 @@ jobs:
         
     - name: Build macOS DMG
       run: ./gradlew packageMacDmg
+      
+    - name: Test packaged FMOD loading
+      run: ./gradlew testPackagedFmodLoading
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results
-        path: tmp/test-results/test/
+        path: build/test-results/test/
         retention-days: 30
         
     - name: Upload test reports
@@ -62,12 +65,12 @@ jobs:
       if: always()
       with:
         name: test-reports
-        path: tmp/reports/tests/test/
+        path: build/reports/tests/test/
         retention-days: 30
         
     - name: Upload macOS DMG
       uses: actions/upload-artifact@v4
       with:
         name: macos-dmg
-        path: tmp/mac/*.dmg
+        path: build/packaging/mac/*.dmg
         retention-days: 90

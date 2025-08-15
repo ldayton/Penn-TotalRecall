@@ -18,6 +18,7 @@ ext {
     maintainerName = 'Lily Dayton'
     maintainerEmail = 'lily.dayton.3@gmail.com'
     orgName = 'Computational Memory Lab, UPenn'
+    uniqueIdentifier = 'edu.upenn.psych.memory.penntotalrecall'
     nativeAccessJvmArgs = ['--enable-native-access=ALL-UNNAMED']
 }
 
@@ -81,7 +82,7 @@ jar {
 
 // Clean task
 clean {
-    delete 'classes', 'dist', 'tmp'
+    delete 'classes', 'dist'
 }
 
 // Create minimal Java runtime with jlink
@@ -89,12 +90,14 @@ tasks.register('createCustomRuntime') {
     group = 'packaging'
     description = 'Create minimal Java runtime using jlink'
     
+    def customRuntimeDirProvider = layout.buildDirectory.dir("custom-runtime")
+    
     doLast {
-        def customRuntimeDir = file("${layout.buildDirectory.get().asFile}/custom-runtime")
+        def customRuntimeDir = customRuntimeDirProvider.get().asFile
         
         // Delete existing runtime if it exists
         if (customRuntimeDir.exists()) {
-            delete customRuntimeDir
+            customRuntimeDir.deleteDir()
         }
         
         providers.exec {
@@ -118,20 +121,23 @@ tasks.register('packageMacApp') {
     description = 'Create Mac .app bundle using jpackage'
     dependsOn jar, createCustomRuntime
     
+    def appDirProvider = layout.buildDirectory.dir("packaging/mac")
+    def customRuntimeDirProvider = layout.buildDirectory.dir("custom-runtime")
+    
     doLast {
         def jarFile = jar.archiveFile.get().asFile
-        def appDir = file("tmp/mac")  // Same directory as DMG output
+        def appDir = appDirProvider.get().asFile
         
         // Clean existing app bundle
-        def appBundle = file("${appDir}/${programProperName}.app")
+        def appBundle = new File(appDir, "${programProperName}.app")
         if (appBundle.exists()) {
-            delete appBundle
+            appBundle.deleteDir()
         }
         
         appDir.mkdirs()
         
-        // Copy JAR to input directory
-        def inputDir = file("${layout.buildDirectory.get().asFile}/jpackage-input")
+        // Copy JAR to input directory  
+        def inputDir = layout.buildDirectory.dir("jpackage-input").get().asFile
         inputDir.mkdirs()
         
         copy {
@@ -153,7 +159,7 @@ tasks.register('packageMacApp') {
                 '--icon', 'packaging/macos/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
-                '--runtime-image', file("${layout.buildDirectory.get().asFile}/custom-runtime").absolutePath,
+                '--runtime-image', customRuntimeDirProvider.get().asFile.absolutePath,
                 '--java-options', nativeAccessJvmArgs.join(' '))
         }.result.get()
         
@@ -177,9 +183,11 @@ tasks.register('packageMacDmg') {
     description = 'Create Mac .dmg installer from existing .app bundle'
     dependsOn packageMacApp  // Use the .app created by packageMacApp
     
+    def dmgDirProvider = layout.buildDirectory.dir("packaging/mac")
+    
     doLast {
-        def dmgDir = file("tmp/mac")  // Same directory as .app bundle
-        def appBundle = file("${dmgDir}/${programProperName}.app")
+        def dmgDir = dmgDirProvider.get().asFile
+        def appBundle = new File(dmgDir, "${programProperName}.app")
         
         // Verify .app bundle exists
         if (!appBundle.exists()) {
@@ -300,8 +308,10 @@ tasks.register('testPackagedFmodLoading') {
     description = 'Integration test: Build .app and verify FMOD loading works in packaged environment'
     dependsOn packageMacApp, testClasses
     
+    def appBundleProvider = layout.buildDirectory.dir("packaging/mac/${programProperName}.app")
+    
     doLast {
-        def appBundle = file("tmp/mac/${programProperName}.app")
+        def appBundle = appBundleProvider.get().asFile
         if (!appBundle.exists()) {
             throw new GradleException("App bundle not found: ${appBundle.absolutePath}")
         }

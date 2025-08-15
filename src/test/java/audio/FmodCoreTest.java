@@ -121,6 +121,7 @@ class FmodCoreTest {
     }
 
     @Test
+    @AudioHardware
     @DisplayName("reports position relative to start frame")
     void reportsPositionRelativeToStartFrame() throws InterruptedException {
         // Start playback at 1 second into the file
@@ -256,6 +257,7 @@ class FmodCoreTest {
     }
 
     @Test
+    @AudioHardware
     @DisplayName("precise seek accuracy")
     void preciseSeekAccuracy() throws InterruptedException {
         // Test multiple seek points across the file
