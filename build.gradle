@@ -22,6 +22,7 @@ ext {
     uniqueIdentifier = 'edu.upenn.psych.memory.totalrecall'
     orgName = 'Computational Memory Lab, UPenn'
     homepage = 'http://memory.psych.upenn.edu/TotalRecall'
+    nativeAccessJvmArgs = ['--enable-native-access=ALL-UNNAMED']
 }
 
 java {
@@ -31,7 +32,7 @@ java {
 
 application {
     mainClass = 'control.Main'
-    applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED']
+    applicationDefaultJvmArgs = nativeAccessJvmArgs
 }
 
 repositories {
@@ -158,7 +159,8 @@ task packageMacApp {
                 '--icon', 'packaging/macos/headphones.icns',
                 '--dest', appDir,
                 '--type', 'app-image',
-                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath)
+                '--runtime-image', file("${buildDir}/custom-runtime").absolutePath,
+                '--java-options', nativeAccessJvmArgs.join(' '))
         }.result.get()
         
         // Copy FMOD libraries to the correct location in app bundle
@@ -256,6 +258,9 @@ test {
     def isCI = System.getenv('CI') == 'true' || 
                System.getenv('GITHUB_ACTIONS') == 'true' ||
                System.getenv('BUILDKITE') == 'true'
+    
+    // Enable native access for JNA and FlatLAF
+    jvmArgs = nativeAccessJvmArgs
     
     // Enable detailed test output
     testLogging {
@@ -369,6 +374,7 @@ task runDev(type: JavaExec) {
     description = 'Run application in development mode with unpackaged FMOD loading'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = application.mainClass
+    jvmArgs = nativeAccessJvmArgs
     
     // Load development configuration
     loadEnvironmentConfig(runDev, 'development')
