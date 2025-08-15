@@ -113,46 +113,25 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 ./gradlew dependencyUpdates    # Check for dependency updates
 ```
 
-### CircleCI Build Diagnostics
+### GitHub Actions Build Status
 
-After authenticating with `circleci setup`, check build status using API:
-
-```bash
-# Get recent pipelines for project
-curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline
-
-# Get workflow status for specific pipeline (get pipeline ID from above)
-curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/pipeline/PIPELINE_ID/workflow
-
-# Get job details from failed workflow (get workflow ID from above)
-curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/workflow/WORKFLOW_ID/job
-
-# Get detailed job logs (get job number from above)
-curl -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/job/JOB_NUMBER
-```
-
-### Quick Build Status Check
+Check build status using GitHub CLI or web interface:
 
 ```bash
-# Check latest pipeline status
-curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline | \
-  jq '.items[0] | {number, status: .state, commit: .vcs.commit.subject}'
+# Install GitHub CLI if not available
+brew install gh
 
-# Get current build step status (shows which step is running/failed)
-LATEST_JOB=$(curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v2/project/gh/ldayton/Penn-TotalRecall/pipeline | \
-  jq -r '.items[0].number')
-curl -s -H "Circle-Token: $(cat ~/.circleci/cli.yml | grep token | cut -d' ' -f2)" \
-  https://circleci.com/api/v1.1/project/github/ldayton/Penn-TotalRecall/$LATEST_JOB | \
-  jq -r '.steps[] | select(.name) | (.name + ": " + (.actions[0].status // "unknown"))'
+# Check workflow runs
+gh run list --repo ldayton/Penn-TotalRecall
+
+# View specific run details  
+gh run view <run-id> --repo ldayton/Penn-TotalRecall
+
+# Watch live logs
+gh run watch --repo ldayton/Penn-TotalRecall
 ```
 
-**Note:** CircleCI CLI doesn't have direct workflow commands - use API calls above for build status checking.
+**Web interface:** https://github.com/ldayton/Penn-TotalRecall/actions
 
 ### Packaging
 ```bash
@@ -254,6 +233,16 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 ### Git Commits
 - **No advertising in commit messages** - never include "Generated with Claude Code" or similar promotional text
 - **Clean, descriptive commit messages** focusing on what changed and why
+
+### Audio Testing Strategy
+- **Hosted CI limitations**: No reliable audio device I/O on GitHub Actions/CircleCI/Buildkite hosted runners
+- **Current approach**: `@AudioHardware` annotation skips audio tests entirely on CI (`CI=true`)
+- **Recommended improvement**: Modify FMOD tests to use `NOSOUND_NRT` mode on CI for logic testing without devices
+- **NOSOUND mode benefits**: Tests 80% of audio logic (file loading, seek accuracy, timing, memory management) without device I/O
+- **Implementation**: Detect `CI=true` environment and call `setOutputMode(FMOD_OUTPUTTYPE_NOSOUND_NRT)` in test setup
+- **What NOSOUND mode tests**: Audio processing logic, file parsing, positioning, API correctness, error handling
+- **What it skips**: Device enumeration, sample rate switching, mic input, actual audio output
+- **For real device testing**: Requires dedicated Mac (MacStadium/Scaleway) with self-hosted runner and one-time permission grants
 
 ### Build System
 - **Pure Maven Central** dependencies only
