@@ -7,6 +7,8 @@ import java.util.Locale;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.MyCollection;
 
 /** Custom list model for the <code>WordpoolList</code>. */
@@ -14,6 +16,7 @@ import util.MyCollection;
 // default),
 // will repaint the WordpoolList after ListDataEvents>.
 public class WordpoolListModel implements ListModel<WordpoolWord> {
+    private static final Logger logger = LoggerFactory.getLogger(WordpoolListModel.class);
 
     private final MyCollection<WordpoolWord> collection;
 
@@ -44,8 +47,7 @@ public class WordpoolListModel implements ListModel<WordpoolWord> {
         WordpoolDisplay.clearText();
         for (WordpoolWord w : words) {
             if (w.getNum() < 0) {
-                System.err.println(
-                        "adding wordpool words with negative line numbers is not allowed");
+                logger.warn("adding wordpool words with negative line numbers is not allowed");
                 continue;
             }
             if (!collection.contains(w) && !hiddenWords.contains(w)) {

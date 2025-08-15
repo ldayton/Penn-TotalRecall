@@ -5,8 +5,12 @@ import info.Constants;
 import info.SysInfo;
 import java.io.File;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NativeStatelessPlaybackThread extends Thread {
+    private static final Logger logger =
+            LoggerFactory.getLogger(NativeStatelessPlaybackThread.class);
 
     private final long startFrame;
     private final long endFrame;
@@ -86,7 +90,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                     if (curFrame > Integer.MAX_VALUE) {
                         // apparently this is a result of FMOD code currently not self-stopping,
                         // Issue 11
-                        System.err.println("applying FMOD last-frame-is-huge workaround");
+                        logger.debug("applying FMOD last-frame-is-huge workaround");
                         curFrame = endFrame;
                     } else {
                         stopPlayback();
@@ -105,7 +109,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                         try {
                             Thread.sleep(150);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            logger.debug("Sleep interrupted during Windows workaround", e);
                         }
                     }
                     break;
@@ -114,7 +118,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                     UpdatingAction.getStamps().add(System.currentTimeMillis());
                     Thread.sleep(30);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.debug("Sleep interrupted during playback thread", e);
                 }
             }
             if (finish == false) {
@@ -137,7 +141,7 @@ public class NativeStatelessPlaybackThread extends Thread {
             try {
                 myLib.stopPlayback();
             } catch (Throwable t2) {
-                t2.printStackTrace();
+                logger.error("Error during playback cleanup", t2);
             }
 
             if (listeners != null) {
@@ -146,7 +150,7 @@ public class NativeStatelessPlaybackThread extends Thread {
                         new PrecisionEventLauncher(
                                 PrecisionEvent.EventCode.ERROR, -1, t.getMessage(), listeners);
                 trigger.start();
-                t.printStackTrace();
+                logger.error("Playback thread encountered error", t);
             }
         }
 

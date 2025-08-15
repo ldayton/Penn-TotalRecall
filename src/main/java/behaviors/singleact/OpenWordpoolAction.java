@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
@@ -24,6 +26,7 @@ import util.OSPath;
  * components.wordpool.WordpoolDisplay}.
  */
 public class OpenWordpoolAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(OpenWordpoolAction.class);
 
     public OpenWordpoolAction() {}
 
@@ -110,12 +113,12 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
                     try {
                         WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        logger.error("Failed to parse LST file: " + lstFile.getAbsolutePath(), e);
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error processing wordpool file", e);
             GiveMessage.errorMessage("Cannot process wordpool file!");
         }
     }

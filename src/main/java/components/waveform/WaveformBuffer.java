@@ -18,6 +18,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -30,6 +32,7 @@ import marytts.util.data.audio.AudioDoubleDataSource;
  * stored in the array. All other members of the array will be null, to save memory.
  */
 public class WaveformBuffer extends Buffer {
+    private static final Logger logger = LoggerFactory.getLogger(WaveformBuffer.class);
 
     private final AlphaComposite antiAliasingComposite =
             AlphaComposite.getInstance(AlphaComposite.SRC_OVER, /* larger is darker */ 0.5F);
@@ -95,7 +98,7 @@ public class WaveformBuffer extends Buffer {
                             + " Hz to "
                             + format.format(tmpMaxBand * sampleRate)
                             + " Hz instead.";
-            System.err.println(message);
+            logger.warn(message);
         }
         minBand = tmpMinBand;
         maxBand = tmpMaxBand;
@@ -132,7 +135,7 @@ public class WaveformBuffer extends Buffer {
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.debug("Waveform buffer thread sleep interrupted", e);
             }
         }
 
@@ -263,8 +266,7 @@ public class WaveformBuffer extends Buffer {
             // determine yScale for the current component height
             double yScale = ((height / 2) - 1) / (biggestConsecutivePixelVals);
             if (Double.isInfinite(yScale) || Double.isNaN(yScale)) {
-                System.err.println(
-                        "yScale is infinite in magnitude, or not a number, using 0 instead");
+                logger.warn("yScale is infinite in magnitude, or not a number, using 0 instead");
                 yScale = 0;
             }
 
@@ -333,9 +335,9 @@ public class WaveformBuffer extends Buffer {
                         AudioSystem.getAudioInputStream(
                                 new File(CurAudio.getCurrentAudioFileAbsolutePath()));
             } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
+                logger.error("Unsupported audio file format for waveform generation", e);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("IO error reading audio file for waveform generation", e);
             }
             int preDataSizeInFrames = 0;
             long toSkip =
@@ -352,10 +354,10 @@ public class WaveformBuffer extends Buffer {
             try {
                 skipped = ais.skip(toSkip);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("IO error skipping audio data for waveform chunk", e);
             }
             if (toSkip != skipped) {
-                System.err.println("skipped " + skipped + " instead of " + toSkip);
+                logger.warn("skipped " + skipped + " instead of " + toSkip);
             }
             AudioDoubleDataSource adds = new AudioDoubleDataSource(ais);
 

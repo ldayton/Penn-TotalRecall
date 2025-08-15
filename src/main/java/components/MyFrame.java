@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main window of the program.
@@ -22,6 +24,7 @@ import javax.swing.JFrame;
  * is not obscured) must handle focus-passing, see {@link MyFocusTraversalPolicy} for details.
  */
 public class MyFrame extends JFrame implements KeyEventPostProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
 
     private static MyFrame instance;
 
@@ -113,7 +116,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     public boolean postProcessKeyEvent(KeyEvent e) {
         if (Main.DEBUG_FOCUS) {
             if (e.getKeyLocation() == KeyEvent.KEY_LOCATION_UNKNOWN) {
-                System.out.println(getFocusOwner());
+                logger.debug("Focus owner: " + getFocusOwner());
             }
         }
         // best attempt to restrict us to key_typed so we don't have duplicate events for

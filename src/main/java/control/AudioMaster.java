@@ -9,6 +9,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JavaSound distributes useful information about a file among sever classes in a way that can be
@@ -28,6 +30,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * related to the open audio file.
  */
 public class AudioMaster {
+    private static final Logger logger = LoggerFactory.getLogger(AudioMaster.class);
 
     private static final int BITS_PER_BYTE = 8;
 
@@ -106,18 +109,27 @@ public class AudioMaster {
 
     @SuppressWarnings("unused")
     private void printInfo() {
-        System.out.println();
-        System.out.println("-- AudioMaster --");
-        System.out.println("file name: " + audioFile.getName());
-        System.out.println("encoding: " + encoding);
-        System.out.println("number of channels: " + numChannels);
-        System.out.println("bigEndian: " + isBigEndian);
-        System.out.println("sample size in bits: " + sampleSizeInBits);
-        System.out.println("frames per second: " + framesPerSecond);
-        System.out.println("sample rate: " + sampleRate);
-        System.out.println("num frames: " + numSampleFrames);
-        System.out.println("predicted duration: " + durationInSeconds() + " seconds");
-        System.out.println();
+        logger.info(
+                "\n"
+                        + "-- AudioMaster --\n"
+                        + "file name: {}\n"
+                        + "encoding: {}\n"
+                        + "number of channels: {}\n"
+                        + "bigEndian: {}\n"
+                        + "sample size in bits: {}\n"
+                        + "frames per second: {}\n"
+                        + "sample rate: {}\n"
+                        + "num frames: {}\n"
+                        + "predicted duration: {} seconds\n",
+                audioFile.getName(),
+                encoding,
+                numChannels,
+                isBigEndian,
+                sampleSizeInBits,
+                framesPerSecond,
+                sampleRate,
+                numSampleFrames,
+                durationInSeconds());
     }
 
     public double durationInSeconds() {

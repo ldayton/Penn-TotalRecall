@@ -8,6 +8,8 @@ import info.Constants;
 import info.SysInfo;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
@@ -18,6 +20,7 @@ import util.OSPath;
  * <p>Afterward sends update to all <code>UpdatingActions</code>.
  */
 public class DoneAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(DoneAction.class);
 
     public DoneAction() {}
 
@@ -50,7 +53,7 @@ public class DoneAction extends IdentifiedSingleAction {
                     try {
                         CurAudio.getMaster().getAudioFile().updateDoneStatus();
                     } catch (AudioFilePathException e1) {
-                        e1.printStackTrace();
+                        logger.error("Failed to update audio file done status", e1);
                     }
                     CurAudio.switchFile(null);
                 }

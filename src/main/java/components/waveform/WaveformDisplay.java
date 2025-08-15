@@ -21,6 +21,8 @@ import java.text.DecimalFormat;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 import javax.swing.plaf.ComponentUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -28,6 +30,7 @@ import javax.swing.plaf.ComponentUI;
  * <p>Keep in mind that events other than the repaint timer going off can cause repaints.
  */
 public class WaveformDisplay extends JComponent {
+    private static final Logger logger = LoggerFactory.getLogger(WaveformDisplay.class);
 
     private final DecimalFormat secFormat = new DecimalFormat("0.000s");
 
@@ -182,7 +185,7 @@ public class WaveformDisplay extends JComponent {
         // find progress bar position
         progressBarXPos = frameToComponentX(refreshFrame);
         if (progressBarXPos < 0) {
-            System.err.println("bad val " + progressBarXPos + "/" + (getWidth() - 1));
+            logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
         } else if (progressBarXPos > getWidth() - 1) {
             if (refreshWidth == getWidth()) {
                 if (SysInfo.sys.interpolateFrames == false
@@ -190,7 +193,7 @@ public class WaveformDisplay extends JComponent {
                                 > CurAudio.getMaster()
                                         .secondsToFrames(
                                                 SysInfo.sys.interplationToleratedErrorZoneInSec)) {
-                    System.err.println("bad val " + progressBarXPos + "/" + (getWidth() - 1));
+                    logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
                 }
             }
             progressBarXPos = getWidth() - 1;
@@ -363,7 +366,7 @@ public class WaveformDisplay extends JComponent {
                                                 .secondsToFrames(
                                                         SysInfo.sys
                                                                 .interplationToleratedErrorZoneInSec)) {
-                            System.err.println(
+                            logger.warn(
                                     "interpolation error greater than "
                                             + SysInfo.sys.maxInterpolatedPixels
                                             + " pixels: "

@@ -22,11 +22,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
 /** Static-only class that stores the eseential state of the program. */
 public class CurAudio {
+    private static final Logger logger = LoggerFactory.getLogger(CurAudio.class);
 
     private static AudioMaster master;
     private static MyPrecisionListener precisionListener;
@@ -77,18 +80,18 @@ public class CurAudio {
                 master = new AudioMaster(file);
                 success = true;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                logger.error("Audio file not found: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Audio file not found!");
             } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
+                logger.error("Unsupported audio format: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Unsupported audio format!\n" + e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Error opening audio file: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Error opening audio file!");
             }
             if (!success) {
                 switchFile(null);
-                System.err.println("audio switch not successfull. resetting current audio.");
+                logger.error("audio switch not successful. resetting current audio.");
                 return;
             }
 
@@ -115,7 +118,7 @@ public class CurAudio {
             try {
                 pp = new NativeStatelessPlayer();
             } catch (Throwable e1) {
-                e1.printStackTrace();
+                logger.error("Cannot load audio system", e1);
                 GiveMessage.errorMessage(
                         "Cannot load audio system.\nYou may need to reinstall "
                                 + Constants.programName
@@ -132,19 +135,20 @@ public class CurAudio {
                 pp.open(file.getAbsolutePath());
                 success = true;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                logger.error("PrecisionPlayer: Audio file not found: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Audio file not found!");
             } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
+                logger.error(
+                        "PrecisionPlayer: Unsupported audio format: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Unsupported audio format!\n" + e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(
+                        "PrecisionPlayer: Error opening audio file: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Error opening audio file!");
             }
             if (!success) {
                 switchFile(null);
-                System.err.println(
-                        "PrecisionPlayer.open() not successfull. resetting current audio.");
+                logger.error("PrecisionPlayer.open() not successful. resetting current audio.");
                 return;
             }
 
@@ -164,7 +168,7 @@ public class CurAudio {
                     //					}
                     WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.warn("Failed to parse LST file: " + lstFile.getAbsolutePath(), e);
                 }
             }
 
@@ -217,7 +221,7 @@ public class CurAudio {
                 terminateSuccess = false;
             }
             if (terminateSuccess == false) {
-                System.err.println("could not stop buffer: " + waveformBuffer);
+                logger.error("could not stop buffer: " + waveformBuffer);
             }
         }
 

@@ -7,9 +7,12 @@ import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationTable;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 public class JumpToAnnotationAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(JumpToAnnotationAction.class);
 
     public JumpToAnnotationAction() {}
 
@@ -18,7 +21,7 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
         super.actionPerformed(e);
         Annotation targetAnn = AnnotationTable.popSelectedAnnotation();
         if (targetAnn == null) {
-            System.err.println("selection is invalid, can't jump to Annotation");
+            logger.error("selection is invalid, can't jump to Annotation");
         } else {
             long curFrame = CurAudio.getMaster().millisToFrames(targetAnn.getTime());
             if (curFrame < 0 || curFrame > CurAudio.getMaster().durationInFrames() - 1) {

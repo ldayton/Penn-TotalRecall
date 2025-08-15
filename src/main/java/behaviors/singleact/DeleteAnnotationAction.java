@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
@@ -20,6 +22,7 @@ import util.OSPath;
  * should at this point be empty.
  */
 public class DeleteAnnotationAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(DeleteAnnotationAction.class);
 
     private final int rowIndex;
     private final Annotation annToDelete;
@@ -56,7 +59,7 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
         try {
             success = AnnotationFileParser.removeAnnotation(annToDelete, oFile);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error("Error deleting annotation from file", ex);
             success = false;
         }
         if (success) {

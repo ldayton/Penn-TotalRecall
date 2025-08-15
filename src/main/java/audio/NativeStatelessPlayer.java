@@ -8,8 +8,11 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NativeStatelessPlayer implements PrecisionPlayer {
+    private static final Logger logger = LoggerFactory.getLogger(NativeStatelessPlayer.class);
 
     private PrecisionPlayer.Status status;
 
@@ -55,8 +58,7 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
                 startFrame = 0;
             }
             if (endFrame <= startFrame) {
-                System.err.println(
-                        "endFrame cannot be <= startFrame (" + endFrame + ", " + startFrame + ")");
+                logger.error("endFrame cannot be <= startFrame ({}, {})", endFrame, startFrame);
                 return;
             }
             if (audioFile != null) {
@@ -78,11 +80,11 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
                         shortThread.start();
                     }
                 } else {
-                    System.err.println(
+                    logger.warn(
                             "I won't start another playback thread when one is already running");
                 }
             } else {
-                System.err.println("you must open() a player before calling a play function");
+                logger.error("you must open() a player before calling a play function");
             }
         } catch (Throwable t) {
             notifyEvent(PrecisionEvent.EventCode.ERROR, -1, t.getMessage());
@@ -105,7 +107,7 @@ public class NativeStatelessPlayer implements PrecisionPlayer {
                 return -1;
             }
         } catch (Throwable t) {
-            t.printStackTrace();
+            logger.error("Error during audio playback stop", t);
         }
         return -1;
     }

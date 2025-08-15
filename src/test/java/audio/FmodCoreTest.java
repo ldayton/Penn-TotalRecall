@@ -12,10 +12,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @DisplayName("FmodCore")
 @AudioHardware
 class FmodCoreTest {
+    private static final Logger logger = LoggerFactory.getLogger(FmodCoreTest.class);
     private static FmodCore lib;
     private static File testFile;
     private static int actualSampleRate;
@@ -39,11 +42,10 @@ class FmodCoreTest {
             assertEquals(1, format.getChannels(), "Should be mono");
             assertEquals(16, format.getSampleSizeInBits(), "Should be 16-bit");
 
-            System.out.println("Test file: " + testFile.getName());
-            System.out.println("Sample rate: " + actualSampleRate + " Hz");
-            System.out.println("Total frames: " + totalFrames);
-            System.out.println(
-                    "Duration: " + (totalFrames / (double) actualSampleRate) + " seconds");
+            logger.info("Test file: " + testFile.getName());
+            logger.info("Sample rate: " + actualSampleRate + " Hz");
+            logger.info("Total frames: " + totalFrames);
+            logger.info("Duration: " + (totalFrames / (double) actualSampleRate) + " seconds");
         }
     }
 
@@ -283,9 +285,10 @@ class FmodCoreTest {
             long error = Math.abs(absolutePosition - targetFrame);
             double errorMs = (error * 1000.0) / actualSampleRate;
 
-            System.out.printf(
-                    "Seek to %d: actual %d, error %d frames (%.1fms)%n",
-                    targetFrame, absolutePosition, error, errorMs);
+            logger.info(
+                    String.format(
+                            "Seek to %d: actual %d, error %d frames (%.1fms)",
+                            targetFrame, absolutePosition, error, errorMs));
 
             // Use more generous tolerance - audio systems have inherent latency
             long tolerance = actualSampleRate / 10; // 100ms worth of frames

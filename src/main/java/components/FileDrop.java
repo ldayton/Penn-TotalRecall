@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class makes it easy to drag and drop files from the operating system to a Java program. Any
@@ -46,6 +48,7 @@ import java.io.Reader;
  */
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 public class FileDrop {
+    private static final Logger logger = LoggerFactory.getLogger(FileDrop.class);
     private transient javax.swing.border.Border normalBorder;
     private transient java.awt.dnd.DropTargetListener dropListener;
 
@@ -441,7 +444,7 @@ public class FileDrop {
             dt.addDropTargetListener(dropListener);
         } // end try
         catch (java.util.TooManyListenersException e) {
-            e.printStackTrace();
+            logger.error("TooManyListenersException in FileDrop", e);
             log(
                     out,
                     "FileDrop: Drop will not work due to previous error. Do you have another"

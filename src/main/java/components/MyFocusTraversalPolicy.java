@@ -8,6 +8,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Window;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.LoopIterator;
 
 /**
@@ -34,6 +36,7 @@ import util.LoopIterator;
  * <p>Please keep the spreadsheet in /dev updated with changes to the focus subsystem.
  */
 public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
+    private static final Logger logger = LoggerFactory.getLogger(MyFocusTraversalPolicy.class);
 
     private static final String genericFailureMessage =
             "can't find a focus-appropriate component to give focus to";
@@ -107,9 +110,9 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
             }
         }
         if (componentIndex < 0) {
-            System.err.println(
-                    "can't find  the next focus component because I don't recognize the current"
-                            + " one: "
+            logger.error(
+                    "can't find the next focus component because I don't recognize the current one:"
+                            + " "
                             + aComponent);
         }
         LoopIterator<Component> li =
@@ -123,10 +126,10 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
                     return c;
                 }
             }
-            System.err.println(genericFailureMessage);
+            logger.error(genericFailureMessage);
             return null;
         } else {
-            System.err.println(genericFailureMessage);
+            logger.error(genericFailureMessage);
             return null;
         }
     }

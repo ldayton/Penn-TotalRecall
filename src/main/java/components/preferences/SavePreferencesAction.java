@@ -5,10 +5,13 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /** Tries to save all the graphically displayed preferences. */
 public class SavePreferencesAction extends AbstractAction {
+    private static final Logger logger = LoggerFactory.getLogger(SavePreferencesAction.class);
 
     /**
      * Recurses through all <code>AbstractPreferenceDisplays</code>, calling {@link
@@ -31,7 +34,7 @@ public class SavePreferencesAction extends AbstractAction {
                 closeWindow = false;
                 allPrefs.get(i).graphicallyRevert();
                 errorMessages.add(e1);
-                e1.printStackTrace();
+                logger.error("Error saving preferences", e1);
             }
         }
         if (closeWindow) {

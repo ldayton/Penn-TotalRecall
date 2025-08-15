@@ -10,6 +10,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An <code>AbstractPreferenceDisplay</code> for choosing the range of frequencies to bandpass
@@ -18,6 +20,7 @@ import javax.swing.JTextField;
  * <p>Reasonable inputs (i.e. non-negative integer frequencies with max >= min) are enforced.
  */
 public class BandPassFilterPreference extends AbstractPreferenceDisplay {
+    private static final Logger logger = LoggerFactory.getLogger(BandPassFilterPreference.class);
 
     private static final int DEFAULT_MIN = UserPrefs.defaultMinBandPass;
     private static final int DEFAULT_MAX = UserPrefs.defaultMaxBandPass;
@@ -181,12 +184,12 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
                 if (input == minComp) {
                     minComp.setText(Integer.toString(lastMinVal));
                     if (verify(maxComp) == false) {
-                        System.err.println("input verifier internal assumption failed");
+                        logger.error("input verifier internal assumption failed");
                     }
                 } else {
                     maxComp.setText(Integer.toString(lastMaxVal));
                     if (verify(minComp) == false) {
-                        System.err.println("input verifier internal assumption failed");
+                        logger.error("input verifier internal assumption failed");
                     }
                 }
                 Toolkit.getDefaultToolkit().beep();

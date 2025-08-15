@@ -9,6 +9,8 @@ import info.Constants;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.OSPath;
 
 /**
@@ -16,6 +18,7 @@ import util.OSPath;
  * </code>, adding the appropriate files to the <code>AudioFileDisplay</code>.
  */
 public class FileDropListener implements FileDrop.Listener {
+    private static final Logger logger = LoggerFactory.getLogger(FileDropListener.class);
 
     /**
      * Handles drag and drop of audio files or a wordpool document.
@@ -52,7 +55,10 @@ public class FileDropListener implements FileDrop.Listener {
                                 WordpoolDisplay.distinguishAsLst(
                                         WordpoolFileParser.parse(lstFile, true));
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                logger.error(
+                                        "Error parsing wordpool file during drag and drop: "
+                                                + lstFile.getAbsolutePath(),
+                                        e);
                             }
                         }
                     }

@@ -6,6 +6,8 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /**
@@ -15,6 +17,8 @@ import util.GiveMessage;
  * <p>Afterward sends update to all <code>UpdatingActions</code>.
  */
 public class ToggleAnnotationsAction extends IdentifiedMultiAction {
+    private static final Logger logger = LoggerFactory.getLogger(ToggleAnnotationsAction.class);
+
     /** Defines the toggling direction of a <code>ToggleAnnotationAction</code> instance. */
     public enum Direction {
         FORWARD,
@@ -53,7 +57,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
                 findAnnotation(
                         myDir, CurAudio.getMaster().framesToMillis(CurAudio.getAudioProgress()));
         if (ann == null) {
-            System.err.println(
+            logger.error(
                     "It should not have been possible to call "
                             + getClass().getName()
                             + ". Could not find matching annotation");

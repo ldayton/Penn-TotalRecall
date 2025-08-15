@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Parser for the wordpool files.
@@ -19,6 +21,7 @@ import java.util.regex.Pattern;
  * this parser, not line numbers or any other standard.
  */
 public class WordpoolFileParser {
+    private static final Logger logger = LoggerFactory.getLogger(WordpoolFileParser.class);
 
     /** Private constructor to prevent instantiation. */
     private WordpoolFileParser() {}
@@ -43,7 +46,7 @@ public class WordpoolFileParser {
             // num
             Matcher whiteSpace = Pattern.compile("\\s*").matcher(line);
             if (whiteSpace.matches()) {
-                System.err.println("line #" + lineNum + " not a valid wordpool word: " + line);
+                logger.warn("line #" + lineNum + " not a valid wordpool word: " + line);
             } else {
                 line = line.trim();
                 if (suppressLineNumbers == false) {

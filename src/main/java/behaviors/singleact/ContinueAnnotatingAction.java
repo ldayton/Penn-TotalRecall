@@ -6,11 +6,14 @@ import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
 /** Reopens a file which was already done being annotated. */
 public class ContinueAnnotatingAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(ContinueAnnotatingAction.class);
 
     private AudioFile myAudioFile;
 
@@ -39,7 +42,7 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         if (myAudioFile.isDone() == false) {
-            System.err.println(
+            logger.error(
                     "it should not have been possible to call ContinueAnnotatingAction on an"
                             + " incomplete file");
             return;
@@ -55,13 +58,13 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
                                 + "."
                                 + Constants.completedAnnotationFileExtension);
         if (tmpFile.exists() == true) {
-            System.err.println(
+            logger.error(
                     Constants.temporaryAnnotationFileExtension
-                            + " file already exists.\nThis should not happen.");
+                            + " file already exists. This should not happen.");
             return;
         }
         if (doneFile.exists() == false) {
-            System.err.println("Can't find annotation file, to re-open");
+            logger.error("Can't find annotation file, to re-open");
             return;
         }
         if (doneFile.renameTo(tmpFile)) {
@@ -70,7 +73,10 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
             } catch (AudioFilePathException e1) {
                 // should not be possible to enter this condition after above checking, so we're not
                 // going to specially handle the exception
-                e1.printStackTrace();
+                logger.error(
+                        "Unexpected error updating audio file status after renaming annotation"
+                                + " file",
+                        e1);
             }
             return;
         } else {

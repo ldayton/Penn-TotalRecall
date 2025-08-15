@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An AbstractAction that processes updates in program state.
@@ -23,6 +25,7 @@ import javax.swing.AbstractAction;
  * not it was enabled.
  */
 public abstract class UpdatingAction extends AbstractAction {
+    private static final Logger logger = LoggerFactory.getLogger(UpdatingAction.class);
 
     public UpdatingAction(Enum<?> e) {
         MyMenu.registerAction(this);
@@ -38,7 +41,7 @@ public abstract class UpdatingAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getWhen() == 0) {
-            System.out.println("zero: " + getClass());
+            logger.debug("zero: " + getClass());
         }
         stamps.add(e.getWhen());
     }

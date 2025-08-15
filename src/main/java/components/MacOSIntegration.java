@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /**
@@ -18,6 +20,7 @@ import util.GiveMessage;
  * event handling. Requires Java 9+ and assumes macOS runtime.
  */
 public final class MacOSIntegration {
+    private static final Logger logger = LoggerFactory.getLogger(MacOSIntegration.class);
 
     private static boolean initialized = false;
 
@@ -104,7 +107,7 @@ public final class MacOSIntegration {
                             exitAction.actionPerformed(actionEvent);
                             response.performQuit();
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            logger.error("Error during application quit", ex);
                             response.cancelQuit();
                         }
                     });
@@ -130,7 +133,7 @@ public final class MacOSIntegration {
                     taskbar.setIconImage(dockIcon);
                 }
             } catch (IOException e) {
-                System.err.println("Failed to load dock icon: " + e.getMessage());
+                logger.warn("Failed to load dock icon: " + e.getMessage());
             }
         }
 

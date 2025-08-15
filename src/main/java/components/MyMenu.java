@@ -29,6 +29,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Program menu bar and trigger for updates in program's state that concern program actions.
@@ -48,6 +50,7 @@ import javax.swing.UIManager;
  * <p>See the the behaviors class for more information.
  */
 public class MyMenu extends JMenuBar {
+    private static final Logger logger = LoggerFactory.getLogger(MyMenu.class);
 
     private static PlayPauseAction workaroundAction;
 
@@ -247,7 +250,7 @@ public class MyMenu extends JMenuBar {
      */
     public static void registerAction(UpdatingAction act) {
         if (allActions.add(act) == false) {
-            System.err.println("double registration of: " + act);
+            logger.warn("double registration of: " + act);
         }
     }
 

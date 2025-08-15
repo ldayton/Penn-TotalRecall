@@ -1,6 +1,8 @@
 package integration;
 
 import audio.FmodCore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.AppConfig;
 import util.LibraryLoadingMode;
 
@@ -20,6 +22,7 @@ import util.LibraryLoadingMode;
  * </ul>
  */
 public class FmodLoadingTestHarness {
+    private static final Logger logger = LoggerFactory.getLogger(FmodLoadingTestHarness.class);
 
     /**
      * Main entry point for the FMOD loading integration test.
@@ -28,32 +31,31 @@ public class FmodLoadingTestHarness {
      */
     public static void main(String[] args) {
         try {
-            System.out.println("🧪 FMOD Loading Integration Test");
-            System.out.println("================================");
+            logger.info("🧪 FMOD Loading Integration Test");
+            logger.info("================================");
 
             // Display configuration information
             AppConfig config = AppConfig.getInstance();
             LibraryLoadingMode mode = config.getFmodLoadingMode();
-            System.out.println("Library loading mode: " + mode);
+            logger.info("Library loading mode: " + mode);
 
             // Test FMOD library loading by accessing the static instance
             // This will trigger the library loading process
             FmodCore core = FmodCore.instance;
             boolean loaded = (core != null);
-            System.out.println("FMOD Core instance created: " + loaded);
+            logger.info("FMOD Core instance created: " + loaded);
 
             if (loaded) {
-                System.out.println("FMOD library path strategy: " + mode);
-                System.out.println("✅ FMOD loading test PASSED");
+                logger.info("FMOD library path strategy: " + mode);
+                logger.info("✅ FMOD loading test PASSED");
                 System.exit(0);
             } else {
-                System.err.println("❌ FMOD loading test FAILED: Core instance is null");
+                logger.error("❌ FMOD loading test FAILED: Core instance is null");
                 System.exit(1);
             }
 
         } catch (Exception e) {
-            System.err.println("❌ FMOD loading test FAILED: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("❌ FMOD loading test FAILED: " + e.getMessage(), e);
             System.exit(1);
         }
     }

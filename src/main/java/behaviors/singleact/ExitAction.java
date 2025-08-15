@@ -11,9 +11,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Exits the program in response to user request. */
 public class ExitAction extends IdentifiedSingleAction {
+    private static final Logger logger = LoggerFactory.getLogger(ExitAction.class);
 
     public ExitAction() {}
 
@@ -65,7 +68,7 @@ public class ExitAction extends IdentifiedSingleAction {
                 CurAudio.getPlayer().stop();
             }
         } catch (Throwable e) {
-            e.printStackTrace();
+            logger.warn("Error stopping audio during application exit", e);
         }
 
         Rectangle bounds = MyFrame.getInstance().getBounds();

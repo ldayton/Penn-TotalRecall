@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserDB {
+    private static final Logger logger = LoggerFactory.getLogger(UserDB.class);
+
     @SuppressWarnings("UnusedVariable") // Used in constructor for prefs.node()
     private final String namespace;
 
@@ -50,8 +54,7 @@ public class UserDB {
         } else {
             Shortcut shortcut = Shortcut.fromInternalForm(storedStr);
             if (shortcut == null) {
-                System.err.println(
-                        getClass().getName() + " won't retrieve() unparseable: " + storedStr);
+                logger.warn(getClass().getName() + " won't retrieve() unparseable: " + storedStr);
                 return null;
             }
             return shortcut;

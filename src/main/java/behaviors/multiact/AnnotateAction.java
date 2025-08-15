@@ -18,11 +18,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 import util.OSPath;
 
 /** Commits a user's annotation, updating the annotation file and program window as appropriate. */
 public class AnnotateAction extends IdentifiedMultiAction {
+    private static final Logger logger = LoggerFactory.getLogger(AnnotateAction.class);
 
     public enum Mode {
         INTRUSION,
@@ -101,7 +104,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
             try {
                 oFile.createNewFile();
             } catch (IOException e1) {
-                e1.printStackTrace();
+                logger.error("Could not create annotation file: " + oFile.getAbsolutePath(), e1);
                 GiveMessage.errorMessage(
                         "Could not create "
                                 + Constants.temporaryAnnotationFileExtension
@@ -161,7 +164,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 AnnotationDisplay.addAnnotation(ann);
                 WordpoolDisplay.clearText();
             } catch (IOException e1) {
-                e1.printStackTrace();
+                logger.error("Error committing annotation to file: " + oFile.getAbsolutePath(), e1);
                 GiveMessage.errorMessage("Error committing annotation! Check files for damage.");
             }
         }
@@ -208,7 +211,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 try {
                     AnnotationFileParser.addField(getOutputFile(), obfuscate(toWrite));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Error adding span field to annotation file", e);
                 }
             }
         }

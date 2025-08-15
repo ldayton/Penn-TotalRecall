@@ -18,6 +18,8 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /**
@@ -28,6 +30,7 @@ import util.GiveMessage;
  * internal list, model, or other components directly.
  */
 public class AudioFileDisplay extends JScrollPane {
+    private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
     private static final String title = "Audio Files";
 
@@ -91,7 +94,7 @@ public class AudioFileDisplay extends JScrollPane {
                     try {
                         af = new AudioFile(f.getAbsolutePath());
                     } catch (AudioFilePathException e) {
-                        e.printStackTrace();
+                        logger.error("Error updating audio file done status", e);
                         GiveMessage.errorMessage(e.getMessage());
                         continue;
                     }

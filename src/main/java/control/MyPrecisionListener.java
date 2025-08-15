@@ -4,10 +4,13 @@ import audio.PrecisionEvent;
 import audio.PrecisionListener;
 import components.MyMenu;
 import components.MySplitPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /** Keeps display and actions up to date with audio playback. */
 public class MyPrecisionListener implements PrecisionListener {
+    private static final Logger logger = LoggerFactory.getLogger(MyPrecisionListener.class);
 
     private long greatestProgress;
     private long lastProgress = -1;
@@ -39,12 +42,11 @@ public class MyPrecisionListener implements PrecisionListener {
                 // this may be a "pause" or a StopAction, no way to tell here
                 // handle stops in StopAction
                 if (lastProgress > pe.getFrame()) {
-                    System.err.println(
-                            "last progress "
-                                    + lastProgress
-                                    + " comes after the current pause/stop "
-                                    + pe.getFrame()
-                                    + ". isn't that odd?");
+                    logger.warn(
+                            "last progress {} comes after the current pause/stop {}. isn't that"
+                                    + " odd?",
+                            lastProgress,
+                            pe.getFrame());
                 }
                 MyMenu.updateActions();
                 break;
@@ -52,7 +54,7 @@ public class MyPrecisionListener implements PrecisionListener {
                 offerGreatestProgress(pe.getFrame());
                 CurAudio.setAudioProgressAndUpdateActions(pe.getFrame());
                 if (CurAudio.getAudioProgress() != CurAudio.getMaster().durationInFrames() - 1) {
-                    System.err.println(
+                    logger.warn(
                             "the frame reported by EOM event is not the final frame, violating"
                                     + " PrecisionPlayer spec");
                 }
@@ -63,7 +65,7 @@ public class MyPrecisionListener implements PrecisionListener {
                 GiveMessage.errorMessage(error);
                 break;
             default:
-                System.err.println("unhandled PrecisionEvent");
+                logger.error("unhandled PrecisionEvent: " + pe.getCode());
                 break;
         }
     }

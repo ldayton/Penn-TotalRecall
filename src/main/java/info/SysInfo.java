@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collects system-specific information.
@@ -11,6 +13,7 @@ import java.util.Locale;
  * <p>Values are determined only once, and then stored.
  */
 public class SysInfo {
+    private static final Logger logger = LoggerFactory.getLogger(SysInfo.class);
 
     public static final SysInfo sys = new SysInfo();
 
@@ -73,7 +76,7 @@ public class SysInfo {
             try {
                 curDir = new File(".").getCanonicalPath();
             } catch (IOException e) {
-                System.err.println("Failed to get canonical path: " + e.getMessage());
+                logger.warn("Failed to get canonical path: " + e.getMessage());
             }
             if (curDir == null) {
                 userHomeDir = "";

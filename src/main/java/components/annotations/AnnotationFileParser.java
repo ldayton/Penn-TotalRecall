@@ -15,10 +15,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.OSPath;
 
 /** Handles manipulations of annotation files, e.g. adding and removing annotations. */
 public class AnnotationFileParser {
+    private static final Logger logger = LoggerFactory.getLogger(AnnotationFileParser.class);
 
     private static final Pattern delimiter = Pattern.compile(Constants.annotationFileDelimiter);
 
@@ -61,7 +64,7 @@ public class AnnotationFileParser {
         try {
             br = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Annotation file not found: " + file.getAbsolutePath(), e);
             return null;
         }
         ArrayList<Annotation> anns = new ArrayList<Annotation>();
@@ -81,7 +84,7 @@ public class AnnotationFileParser {
                     } else {
                         Matcher whiteSpace = Pattern.compile("\\s*").matcher(line);
                         if (whiteSpace.matches() == false) {
-                            System.err.println("line #" + lineNum + " unparseable: " + line);
+                            logger.warn("line #" + lineNum + " unparseable: " + line);
                         }
                     }
                 }
@@ -89,7 +92,7 @@ public class AnnotationFileParser {
                 lineNum++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IO error reading annotation file: " + file.getAbsolutePath(), e);
             return anns;
         }
         return anns;
@@ -112,7 +115,7 @@ public class AnnotationFileParser {
             Annotation curLineAnn = parseLine(curLine);
             if (curLineAnn != null && curLineAnn.equals(annToDelete)) {
                 if (foundTarget) {
-                    System.err.println("duplicate match?: " + curLine);
+                    logger.warn("duplicate match?: " + curLine);
                 } else {
                     foundTarget = true;
                 }
@@ -188,7 +191,7 @@ public class AnnotationFileParser {
                     return false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("IO error renaming annotation file", e);
                 return false;
             }
         } else {
@@ -260,14 +263,14 @@ public class AnnotationFileParser {
                 if (propVal.contains(Constants.propertyPairOpenBrace)
                         || propVal.contains(Constants.propertyPairCloseBrace)
                         || propVal.contains(Constants.annotationFileDelimiter)) {
-                    System.err.println(
+                    logger.warn(
                             "cannot store property value: "
                                     + propVal
                                     + " because it contains a reserved character");
                     continue;
                 }
             } else {
-                System.err.println("no such property: " + prop);
+                logger.warn("no such property: " + prop);
                 continue;
             }
             fw.write(Constants.propertyPairOpenBrace);
