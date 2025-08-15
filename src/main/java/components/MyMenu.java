@@ -21,7 +21,6 @@ import behaviors.singleact.StopAction;
 import behaviors.singleact.TipsMessageAction;
 import behaviors.singleact.VisitTutorialSiteAction;
 import env.Environment;
-import env.Platform;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -29,7 +28,6 @@ import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +59,7 @@ public class MyMenu extends JMenuBar {
 
     private static String annotator;
 
-    private static boolean macLF;
+    private static boolean showPreferencesInMenu;
 
     private final Environment environment;
 
@@ -70,12 +68,7 @@ public class MyMenu extends JMenuBar {
     private MyMenu(Environment environment) {
         this.environment = environment;
         allActions = new HashSet<>();
-        macLF =
-                environment.getPlatform() == Platform.MACOS
-                        && UIManager.getLookAndFeel()
-                                .getClass()
-                                .getName()
-                                .equals(UIManager.getSystemLookAndFeelClassName());
+        showPreferencesInMenu = environment.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
         initAnnotationMenu();
@@ -107,7 +100,7 @@ public class MyMenu extends JMenuBar {
         jmFile.add(jmiOpenWordpool);
         JMenuItem jmiShortcuts = new JMenuItem(new EditShortcutsAction());
         jmFile.add(jmiShortcuts);
-        if (macLF == false) {
+        if (showPreferencesInMenu) {
             jmFile.addSeparator();
             JMenuItem jmiPreferences = new JMenuItem(new PreferencesAction());
             jmFile.add(jmiPreferences);
@@ -213,7 +206,7 @@ public class MyMenu extends JMenuBar {
         JMenuItem jmiKeys = new JMenuItem(new TipsMessageAction());
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
-        if (macLF == false) {
+        if (showPreferencesInMenu) {
             jmHelp.addSeparator();
             JMenuItem jmiAbout = new JMenuItem(new AboutAction());
             jmHelp.add(jmiAbout);

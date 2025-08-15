@@ -591,6 +591,26 @@ public class Environment {
     }
 
     // =============================================================================
+    // PLATFORM BEHAVIOR METHODS
+    // =============================================================================
+
+    /**
+     * Whether this platform should show Preferences/About in application menus. On Mac, these are
+     * handled by the system menu bar.
+     */
+    public boolean shouldShowPreferencesInMenu() {
+        return platform != Platform.MACOS;
+    }
+
+    /**
+     * Whether this platform should show Emacs keybinding preferences. Mac has its own keybinding
+     * conventions.
+     */
+    public boolean shouldShowEmacsKeybindingOption() {
+        return platform != Platform.MACOS;
+    }
+
+    // =============================================================================
     // SHORTCUT HELPER METHODS
     // =============================================================================
 

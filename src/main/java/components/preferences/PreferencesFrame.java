@@ -2,7 +2,6 @@ package components.preferences;
 
 import components.MyFrame;
 import env.Environment;
-import env.Platform;
 import info.GUIConstants;
 import info.UserPrefs;
 import java.awt.Component;
@@ -153,7 +152,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         "No",
                         UserPrefs.defaultWarnFileSwitch);
         prefPanel.add(warnSwitchPref);
-        if (environment.getPlatform() != Platform.MACOS) {
+        if (environment.shouldShowEmacsKeybindingOption()) {
             BooleanPreference useEmacs =
                     new BooleanPreference(
                             "Use Emacs Keybindings",

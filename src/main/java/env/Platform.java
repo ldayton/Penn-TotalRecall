@@ -7,6 +7,9 @@ import java.util.Locale;
  *
  * <p>Provides clean platform detection without runtime uncertainty. Linux serves as the safe
  * default for all Unix-like systems.
+ *
+ * <p>Note: This is package-private but made public solely for testing purposes. Production code
+ * should use Environment methods instead of accessing Platform directly.
  */
 public enum Platform {
     MACOS,

@@ -5,7 +5,6 @@ import env.AppConfig;
 import env.Environment;
 import env.FmodLibraryType;
 import env.LibraryLoadingMode;
-import env.Platform;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +32,12 @@ public class FmodLibraryLoader {
         try {
             LibraryLoadingMode mode = config.getFmodLoadingMode();
             FmodLibraryType libraryType = config.getFmodLibraryType();
-            Platform platform = env.getPlatform();
 
             logger.debug(
                     "Loading FMOD library: mode={}, type={}, platform={}",
                     mode,
                     libraryType,
-                    platform);
+                    env.getPlatform());
 
             switch (mode) {
                 case UNPACKAGED:
