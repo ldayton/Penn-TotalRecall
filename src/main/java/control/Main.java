@@ -22,16 +22,31 @@ public class Main {
      */
     public static void main(String[] args) {
         logger.debug("Welcome to " + Constants.programName);
-        SwingUtilities.invokeLater(
-                () -> {
-                    var env = new Environment();
-                    var windowManager = new WindowManager();
-                    env.initializeLookAndFeel();
-                    var mainFrame = MyFrame.createInstance(env);
-                    mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
-                    MyMenu.updateActions();
-                    windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());
-                    mainFrame.setVisible(true);
-                });
+
+        // Check for integration test mode
+        boolean integrationTestMode = false;
+        for (String arg : args) {
+            if ("--integration-test".equals(arg)) {
+                integrationTestMode = true;
+                break;
+            }
+        }
+
+        if (integrationTestMode) {
+            AudioIntegrationMode.exitWithTestResult(AudioIntegrationMode.runTest());
+        } else {
+            // Normal GUI mode
+            SwingUtilities.invokeLater(
+                    () -> {
+                        var env = new Environment();
+                        var windowManager = new WindowManager();
+                        env.initializeLookAndFeel();
+                        var mainFrame = MyFrame.createInstance(env);
+                        mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
+                        MyMenu.updateActions();
+                        windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());
+                        mainFrame.setVisible(true);
+                    });
+        }
     }
 }

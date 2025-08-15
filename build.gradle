@@ -161,6 +161,15 @@ task packageMacApp {
                 '--runtime-image', file("${buildDir}/custom-runtime").absolutePath)
         }.result.get()
         
+        // Copy FMOD libraries to the correct location in app bundle
+        def createdAppBundle = file("${appDir}/${programProperName}.app")
+        def frameworksDir = file("${createdAppBundle}/Contents/Frameworks")
+        frameworksDir.mkdirs()
+        copy {
+            from 'src/main/resources/fmod/macos/'
+            into frameworksDir
+            include '*.dylib'
+        }
         
         println "Mac .app created in ${appDir}"
     }
@@ -313,24 +322,13 @@ task testPackagedFmodLoading {
         println "📦 App bundle: ${appBundle.name}"
         println "🔗 FMOD library: ${fmodLib.name}"
         
-        // Extract test harness and dependencies to temp location
-        def tempDir = file("${buildDir}/integration-test")
-        tempDir.mkdirs()
-        
-        // Copy test classes and dependencies
-        copy {
-            from sourceSets.test.output.classesDirs
-            from sourceSets.main.output.classesDirs
-            from configurations.runtimeClasspath
-            into tempDir
-        }
+        // Execute the real app bundle with integration test mode
+        def appExecutable = file("${appBundle}/Contents/MacOS/${programProperName}")
         
         try {
             def result = providers.exec {
-                workingDir tempDir
-                commandLine 'java', 
-                    '-cp', '.:*',
-                    'integration.FmodLoadingTestHarness'
+                commandLine appExecutable.absolutePath, '--integration-test'
+                timeout = java.time.Duration.ofSeconds(12) // Kill if it takes longer than 12 seconds (slightly more than Java timeout)
                 ignoreExitValue = true
             }.result.get()
             
