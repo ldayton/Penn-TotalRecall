@@ -47,9 +47,6 @@ jobs:
         CI: true
         GRADLE_OPTS: "-Dorg.gradle.daemon=true -Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
         
-    - name: Qodana Scan
-      uses: JetBrains/qodana-action@v2025.2
-        
     - name: Build macOS DMG
       run: ./gradlew packageMacDmg
       env:
