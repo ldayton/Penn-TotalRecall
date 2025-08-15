@@ -20,7 +20,7 @@ jobs:
     - name: Set up Java 24 EA
       uses: actions/setup-java@v4
       with:
-        distribution: 'oracle'
+        distribution: 'temurin'
         java-version: '24-ea'
         
     - name: Cache Gradle downloads only
