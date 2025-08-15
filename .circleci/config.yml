@@ -29,12 +29,15 @@ jobs:
             - gradle-wrapper-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
             - gradle-wrapper-v1-
       
-      # Install Java 23 (CircleCI macOS comes with older Java versions)
+      # Install Oracle Java 23 (CircleCI macOS comes with older Java versions)
       - run:
-          name: Install Java 23
+          name: Install Oracle Java 23
           command: |
-            brew install openjdk@23
-            echo 'export PATH="/opt/homebrew/opt/openjdk@23/bin:$PATH"' >> $BASH_ENV
+            curl -L -o jdk-23_macos-aarch64_bin.tar.gz "https://download.oracle.com/java/23/latest/jdk-23_macos-aarch64_bin.tar.gz"
+            tar -xzf jdk-23_macos-aarch64_bin.tar.gz
+            sudo mv jdk-23.jdk /Library/Java/JavaVirtualMachines/
+            echo 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home' >> $BASH_ENV
+            echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> $BASH_ENV
             source $BASH_ENV
             java -version
       
