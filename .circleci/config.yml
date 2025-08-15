@@ -63,10 +63,10 @@ jobs:
           name: Run tests
           command: ./gradlew test
       
-      # Build distribution packages (only if tests pass)
-      - run:
-          name: Build macOS packages
-          command: ./gradlew packageMacApp packageMacDmg
+      # Skip macOS packaging on CI (jpackage hangs in headless environment)
+      # - run:
+      #     name: Build macOS packages
+      #     command: ./gradlew packageMacApp packageMacDmg
       
       # Store test results
       - store_test_results:
@@ -77,10 +77,10 @@ jobs:
           path: build/reports/tests/test
           destination: test-reports
       
-      # Store DMG as artifact
-      - store_artifacts:
-          path: tmp/mac/Penn TotalRecall-1.0.0.dmg
-          destination: Penn TotalRecall-1.0.0.dmg
+      # Skip DMG artifact (packaging disabled on CI)
+      # - store_artifacts:
+      #     path: tmp/mac/Penn TotalRecall-1.0.0.dmg
+      #     destination: Penn TotalRecall-1.0.0.dmg
       
       # Save Java installation cache
       - save_cache:
