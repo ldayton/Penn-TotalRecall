@@ -1,8 +1,5 @@
 package env;
 
-import env.AudioSystemManager.FmodLibraryType;
-import env.AudioSystemManager.LibraryLoadingMode;
-
 /**
  * Interface for audio system loading and configuration management.
  *
@@ -33,20 +30,6 @@ public interface AudioSystemLoader {
      * @return true if audio hardware is available, false for headless environments
      */
     boolean isAudioHardwareAvailable();
-
-    /**
-     * Gets the FMOD loading mode from configuration.
-     *
-     * @return the configured loading mode
-     */
-    LibraryLoadingMode getFmodLoadingMode();
-
-    /**
-     * Gets the FMOD library type from configuration.
-     *
-     * @return the configured library type
-     */
-    FmodLibraryType getFmodLibraryType();
 
     /**
      * Exception thrown when audio system operations fail.
