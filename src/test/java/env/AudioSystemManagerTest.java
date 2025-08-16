@@ -51,9 +51,12 @@ class AudioSystemManagerTest {
         // Test that AudioSystemManager correctly reads configuration
         boolean available = manager.isAudioHardwareAvailable();
 
-        // Default should be true
-        assertTrue(
+        // Expected value should match what's actually configured in the AppConfig
+        boolean expected = config.getBooleanProperty("audio.hardware.available", true);
+
+        assertEquals(
+                expected,
                 available,
-                "AudioSystemManager should return true for audio hardware availability by default");
+                "AudioSystemManager should return the configured audio hardware availability value");
     }
 }
