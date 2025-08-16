@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: macos-15
     env:
-      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true"
+      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false -Dorg.gradle.configuration-cache=false"
     
     steps:
     - name: Checkout code
@@ -37,9 +37,15 @@ jobs:
           
     - name: Make Gradle wrapper executable
       run: chmod +x ./gradlew
+
+    - name: Clean, just to be careful
+      run: ./gradlew clean
       
-    - name: Compile and check formatting
-      run: ./gradlew compileJava spotlessCheck
+    - name: Check formatting
+      run: ./gradlew spotlessCheck
+
+    - name: Compile Java
+      run: ./gradlew compileJava
       
     - name: Run tests
       run: ./gradlew test
