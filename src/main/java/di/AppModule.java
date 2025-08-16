@@ -7,6 +7,7 @@ import com.google.inject.Provides;
 import components.WindowManager;
 import env.AppConfig;
 import env.Environment;
+import env.KeyboardManager;
 import env.LookAndFeelManager;
 import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
@@ -34,6 +35,7 @@ public class AppModule extends AbstractModule {
 
         // UI system bindings
         bind(LookAndFeelManager.class).in(Singleton.class);
+        bind(KeyboardManager.class).in(Singleton.class);
 
         // Provider bindings
         bind(PreferencesProvider.class).to(DefaultPreferencesProvider.class).in(Singleton.class);

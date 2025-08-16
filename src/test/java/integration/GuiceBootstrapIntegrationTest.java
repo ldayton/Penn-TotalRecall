@@ -8,6 +8,7 @@ import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
 import env.Environment;
+import env.KeyboardManager;
 import env.LookAndFeelManager;
 import info.PreferencesProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -83,6 +84,11 @@ class GuiceBootstrapIntegrationTest {
                 GuiceBootstrap.getInjectedInstance(LookAndFeelManager.class),
                 "LookAndFeelManager should be instantiable via DI");
         logger.info("✅ LookAndFeelManager can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(KeyboardManager.class),
+                "KeyboardManager should be instantiable via DI");
+        logger.info("✅ KeyboardManager can be created");
 
         logger.info("✅ Basic Guice configuration smoke test passed");
     }

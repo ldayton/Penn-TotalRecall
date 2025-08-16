@@ -3,6 +3,7 @@ package shortcuts;
 import static java.util.stream.Collectors.joining;
 
 import env.Environment;
+import env.KeyboardManager;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -17,12 +18,14 @@ public class Shortcut {
     public final KeyStroke stroke;
     private final String internalForm;
     private final Environment env;
+    private final KeyboardManager keyboardManager;
 
     private static final String INTERNAL_FORM_DELIMITER = " ";
 
     public Shortcut(@NonNull KeyStroke stroke, @NonNull Environment env) {
         this.stroke = stroke;
         this.env = env;
+        this.keyboardManager = new KeyboardManager(env);
         this.internalForm = ModernKeyUtils.getInternalForm(stroke);
     }
 
@@ -43,7 +46,7 @@ public class Shortcut {
                         .filter(key -> !ACTION_WORDS.contains(key))
                         .map(
                                 key -> {
-                                    String symbol = env.getKeySymbol(key);
+                                    String symbol = keyboardManager.getKeySymbol(key);
                                     String displayKey = symbol != null ? symbol : key;
                                     return isSymbol(displayKey)
                                             ? displayKey
@@ -51,11 +54,11 @@ public class Shortcut {
                                 })
                         .toList();
 
-        List<String> keyOrder = env.getKeyOrder();
+        List<String> keyOrder = keyboardManager.getKeyOrder();
         return Stream.concat(
                         keyOrder.stream().filter(keys::contains),
                         keys.stream().filter(key -> !keyOrder.contains(key)))
-                .collect(joining(env.getKeySeparator()));
+                .collect(joining(keyboardManager.getKeySeparator()));
     }
 
     private boolean isSymbol(@NonNull String key) {
@@ -121,10 +124,13 @@ public class Shortcut {
             @NonNull List<String> maskKeyExternalForms,
             @NonNull List<String> nonMaskKeyExternalForms,
             @NonNull Environment env) {
+        KeyboardManager keyboardManager = new KeyboardManager(env);
         String internalShortcutForm =
                 Stream.concat(
-                                maskKeyExternalForms.stream().map(env::externalToInternalForm),
-                                nonMaskKeyExternalForms.stream().map(env::externalToInternalForm))
+                                maskKeyExternalForms.stream()
+                                        .map(keyboardManager::externalToInternalForm),
+                                nonMaskKeyExternalForms.stream()
+                                        .map(keyboardManager::externalToInternalForm))
                         .collect(joining(INTERNAL_FORM_DELIMITER));
         KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
         if (stroke == null) {
@@ -142,17 +148,19 @@ public class Shortcut {
             @NonNull List<String> nonMaskKeyXmlNames,
             @NonNull Environment environment) {
 
-        Environment env = environment;
+        KeyboardManager keyboardManager = new KeyboardManager(environment);
         String internalShortcutForm =
                 Stream.concat(
-                                maskKeyXmlNames.stream().map(env::xmlKeynameToInternalForm),
-                                nonMaskKeyXmlNames.stream().map(env::xmlKeynameToInternalForm))
+                                maskKeyXmlNames.stream()
+                                        .map(keyboardManager::xmlKeynameToInternalForm),
+                                nonMaskKeyXmlNames.stream()
+                                        .map(keyboardManager::xmlKeynameToInternalForm))
                         .collect(joining(INTERNAL_FORM_DELIMITER));
         KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
         }
-        return new Shortcut(stroke, env);
+        return new Shortcut(stroke, environment);
     }
 
     @Override

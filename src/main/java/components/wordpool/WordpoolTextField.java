@@ -3,6 +3,7 @@ package components.wordpool;
 import behaviors.multiact.AnnotateAction;
 import components.MyFrame;
 import env.Environment;
+import env.KeyboardManager;
 import info.UserPrefs;
 import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
@@ -35,8 +36,10 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private static WordpoolTextField instance;
 
     private String clipboard = "";
+    private final KeyboardManager keyboardManager;
 
     private WordpoolTextField() {
+        this.keyboardManager = new KeyboardManager(new Environment());
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
@@ -86,25 +89,25 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
-                                KeyEvent.VK_RIGHT, new Environment().getMenuKey(), false),
+                                KeyEvent.VK_RIGHT, keyboardManager.getMenuKey(), false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
-                                KeyEvent.VK_LEFT, new Environment().getMenuKey(), false),
+                                KeyEvent.VK_LEFT, keyboardManager.getMenuKey(), false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_RIGHT,
-                                new Environment().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
+                                keyboardManager.getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
                                 KeyEvent.VK_LEFT,
-                                new Environment().getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
+                                keyboardManager.getMenuKey() + InputEvent.SHIFT_DOWN_MASK,
                                 false),
                         "none");
         getInputMap(JComponent.WHEN_FOCUSED)

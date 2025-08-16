@@ -3,6 +3,7 @@ package shortcuts;
 import static org.junit.jupiter.api.Assertions.*;
 
 import env.Environment;
+import env.KeyboardManager;
 import env.Platform;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -211,13 +212,13 @@ public class ShortcutTest {
         @Test
         @DisplayName("Menu key maps differently on Mac vs PC")
         void menuKeyMapsDifferentlyOnMacVsPC() {
-            Environment mac = macEnv;
-            Environment pc = pcEnv;
+            KeyboardManager macKeyboard = new KeyboardManager(macEnv);
+            KeyboardManager pcKeyboard = new KeyboardManager(pcEnv);
 
-            assertEquals("meta", mac.externalToInternalForm("menu"));
-            assertEquals("ctrl", pc.externalToInternalForm("menu"));
-            assertEquals("meta", mac.externalToInternalForm("command"));
-            assertEquals("meta", pc.externalToInternalForm("command"));
+            assertEquals("meta", macKeyboard.externalToInternalForm("menu"));
+            assertEquals("ctrl", pcKeyboard.externalToInternalForm("menu"));
+            assertEquals("meta", macKeyboard.externalToInternalForm("command"));
+            assertEquals("meta", pcKeyboard.externalToInternalForm("command"));
         }
     }
 
