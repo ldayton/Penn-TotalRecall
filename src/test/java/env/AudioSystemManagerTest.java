@@ -14,14 +14,6 @@ class AudioSystemManagerTest {
     private final AppConfig config = new AppConfig();
 
     @Test
-    @DisplayName("AudioSystemManager constructor works with dependency injection")
-    void testAudioSystemManagerConstructor() {
-        // Should not throw - this replaces the old FmodLibraryLoader constructor test
-        AudioSystemManager manager = new AudioSystemManager(config, platform);
-        assertNotNull(manager);
-    }
-
-    @Test
     @DisplayName("AudioSystemManager provides correct FMOD loading mode from configuration")
     void testFmodLoadingModeFromConfiguration() {
         AudioSystemManager manager = new AudioSystemManager(config, platform);
@@ -63,19 +55,5 @@ class AudioSystemManagerTest {
         assertTrue(
                 available,
                 "AudioSystemManager should return true for audio hardware availability by default");
-    }
-
-    @Test
-    @DisplayName("AudioSystemManager loadAudioLibrary method accepts interface classes")
-    void testLoadAudioLibraryMethodSignature() {
-        AudioSystemManager manager = new AudioSystemManager(config, platform);
-
-        // Test that the method exists and accepts interface classes
-        // We won't actually load a library in tests, just verify the method works
-        assertNotNull(manager, "AudioSystemManager should be constructed successfully");
-
-        // This test ensures the method signature is correct - actual loading is tested in
-        // integration tests
-        // to avoid requiring real FMOD libraries in unit tests
     }
 }
