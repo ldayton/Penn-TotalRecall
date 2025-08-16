@@ -12,20 +12,19 @@ class AudioSystemManagerTest {
 
     private final Environment env = new Environment();
     private final AppConfig config = new AppConfig();
-    private final JnaNativeLibraryLoader nativeLoader = new JnaNativeLibraryLoader();
 
     @Test
     @DisplayName("AudioSystemManager constructor works with dependency injection")
     void testAudioSystemManagerConstructor() {
         // Should not throw - this replaces the old FmodLibraryLoader constructor test
-        AudioSystemManager manager = new AudioSystemManager(config, env, nativeLoader);
+        AudioSystemManager manager = new AudioSystemManager(config, env);
         assertNotNull(manager);
     }
 
     @Test
     @DisplayName("AudioSystemManager provides correct FMOD loading mode from configuration")
     void testFmodLoadingModeFromConfiguration() {
-        AudioSystemManager manager = new AudioSystemManager(config, env, nativeLoader);
+        AudioSystemManager manager = new AudioSystemManager(config, env);
 
         // Test that AudioSystemManager correctly delegates to config
         LibraryLoadingMode mode = manager.getFmodLoadingMode();
@@ -37,7 +36,7 @@ class AudioSystemManagerTest {
     @Test
     @DisplayName("AudioSystemManager provides correct FMOD library type from configuration")
     void testFmodLibraryTypeFromConfiguration() {
-        AudioSystemManager manager = new AudioSystemManager(config, env, nativeLoader);
+        AudioSystemManager manager = new AudioSystemManager(config, env);
 
         // Test that AudioSystemManager correctly delegates to config
         FmodLibraryType type = manager.getFmodLibraryType();
@@ -49,7 +48,7 @@ class AudioSystemManagerTest {
     @Test
     @DisplayName("AudioSystemManager correctly detects audio hardware availability")
     void testAudioHardwareAvailability() {
-        AudioSystemManager manager = new AudioSystemManager(config, env, nativeLoader);
+        AudioSystemManager manager = new AudioSystemManager(config, env);
 
         // Test that AudioSystemManager correctly delegates to config
         boolean available = manager.isAudioHardwareAvailable();
@@ -61,7 +60,7 @@ class AudioSystemManagerTest {
     @Test
     @DisplayName("AudioSystemManager loadAudioLibrary method accepts interface classes")
     void testLoadAudioLibraryMethodSignature() {
-        AudioSystemManager manager = new AudioSystemManager(config, env, nativeLoader);
+        AudioSystemManager manager = new AudioSystemManager(config, env);
 
         // Test that the method exists and accepts interface classes
         // We won't actually load a library in tests, just verify the method works
