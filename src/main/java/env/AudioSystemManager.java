@@ -1,6 +1,7 @@
 package env;
 
 import com.sun.jna.Native;
+import env.AudioSystemLoader.AudioSystemException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * dependency injection pattern as KeyboardManager and LookAndFeelManager.
  */
 @Singleton
-public class AudioSystemManager {
+public class AudioSystemManager implements AudioSystemLoader {
 
     /**
      * Determines how native libraries should be loaded by the application.
@@ -61,6 +62,9 @@ public class AudioSystemManager {
 
     private final AppConfig config;
     private final Environment env;
+    
+    // Thread safety for library loading
+    private final Object loadLock = new Object();
 
     @Inject
     public AudioSystemManager(@NonNull AppConfig config, @NonNull Environment env) {
@@ -73,28 +77,30 @@ public class AudioSystemManager {
      *
      * @param interfaceClass The JNA interface class to load
      * @return The loaded library instance
-     * @throws RuntimeException if library cannot be loaded
+     * @throws AudioSystemException if library cannot be loaded
      */
     public <T> T loadAudioLibrary(Class<T> interfaceClass) {
-        try {
-            LibraryLoadingMode mode = config.getFmodLoadingMode();
-            FmodLibraryType libraryType = config.getFmodLibraryType();
+        synchronized (loadLock) {
+            try {
+                LibraryLoadingMode mode = config.getFmodLoadingMode();
+                FmodLibraryType libraryType = config.getFmodLibraryType();
 
-            logger.debug(
-                    "Loading FMOD library: mode={}, type={}, platform={}",
-                    mode,
-                    libraryType,
-                    env.getPlatform());
+                logger.debug(
+                        "Loading FMOD library: mode={}, type={}, platform={}",
+                        mode,
+                        libraryType,
+                        env.getPlatform());
 
-            switch (mode) {
-                case UNPACKAGED:
-                    return loadUnpackaged(interfaceClass, libraryType);
-                case PACKAGED:
-                default:
-                    return loadPackaged(interfaceClass, libraryType);
+                switch (mode) {
+                    case UNPACKAGED:
+                        return loadUnpackaged(interfaceClass, libraryType);
+                    case PACKAGED:
+                    default:
+                        return loadPackaged(interfaceClass, libraryType);
+                }
+            } catch (Exception e) {
+                throw new AudioSystemException("Failed to load FMOD library", e);
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load FMOD library", e);
         }
     }
 

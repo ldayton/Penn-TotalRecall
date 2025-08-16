@@ -4,7 +4,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import env.AudioSystemManager;
+import env.AudioSystemLoader;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -96,7 +96,7 @@ public final class FmodCore {
     // FMOD Core instance
     private final FMODCore fmod;
 
-    private final AudioSystemManager audioSystemManager;
+    private final AudioSystemLoader audioSystemLoader;
 
     // FMOD state
     private Pointer system = null;
@@ -110,9 +110,9 @@ public final class FmodCore {
     private final Object lock = new Object();
 
     @Inject
-    public FmodCore(@NonNull AudioSystemManager audioSystemManager) {
-        this.audioSystemManager = audioSystemManager;
-        this.fmod = audioSystemManager.loadAudioLibrary(FMODCore.class);
+    public FmodCore(@NonNull AudioSystemLoader audioSystemLoader) {
+        this.audioSystemLoader = audioSystemLoader;
+        this.fmod = audioSystemLoader.loadAudioLibrary(FMODCore.class);
     }
 
     // Helper methods
@@ -212,7 +212,7 @@ public final class FmodCore {
         try {
             // Auto-configure output mode based on environment (unless manually configured)
             if (configuredOutputType == OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
-                if (!audioSystemManager.isAudioHardwareAvailable()) {
+                if (!audioSystemLoader.isAudioHardwareAvailable()) {
                     configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
                     logger.info(
                             "FMOD configured for NOSOUND_NRT mode (no audio hardware available)");

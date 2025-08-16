@@ -5,6 +5,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.WindowManager;
 import env.AppConfig;
+import env.AudioSystemLoader;
 import env.AudioSystemManager;
 import env.Environment;
 import env.KeyboardManager;
@@ -30,7 +31,7 @@ public class AppModule extends AbstractModule {
         bind(Environment.class).in(Singleton.class);
 
         // Manager bindings - each handles specific domain configuration
-        bind(AudioSystemManager.class).in(Singleton.class);
+        bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
 

@@ -6,7 +6,7 @@ import audio.FmodCore;
 import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
-import env.AudioSystemManager;
+import env.AudioSystemLoader;
 import env.Environment;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -56,9 +56,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ Environment can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(AudioSystemManager.class),
-                "AudioSystemManager should be instantiable via DI");
-        logger.info("✅ AudioSystemManager can be created");
+                GuiceBootstrap.getInjectedInstance(AudioSystemLoader.class),
+                "AudioSystemLoader should be instantiable via DI");
+        logger.info("✅ AudioSystemLoader can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(FmodCore.class),
