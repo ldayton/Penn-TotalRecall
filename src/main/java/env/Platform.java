@@ -1,5 +1,6 @@
 package env;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.Locale;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Locale;
  * <p>Note: This is package-private but made public solely for testing purposes. Production code
  * should use Environment methods instead of accessing Platform directly.
  */
+@VisibleForTesting
 public enum Platform {
     MACOS,
     WINDOWS,

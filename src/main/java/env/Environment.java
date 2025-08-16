@@ -1,5 +1,7 @@
 package env;
 
+import env.AudioSystemManager.FmodLibraryType;
+import env.AudioSystemManager.LibraryLoadingMode;
 import info.Constants;
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,6 +56,33 @@ public class Environment {
         // Compute and cache frequently used values with defaults
         this.aboutMessage = "Penn TotalRecall Test";
         this.chunkSizeInSeconds = 2; // Default chunk size
+    }
+
+    /**
+     * Constructor for testing - allows injection of configuration content as strings.
+     *
+     * <p>This constructor enables comprehensive testing of configuration loading mechanics by
+     * injecting configuration content directly rather than loading from files.
+     *
+     * @param platform the platform to simulate
+     * @param defaultsConfig configuration content for defaults (null = skip)
+     * @param applicationConfig configuration content for application.properties (null = skip)
+     * @param platformConfig configuration content for platform-specific config (null = skip)
+     * @param userConfig configuration content for user config (null = skip)
+     */
+    public Environment(
+            Platform platform,
+            String defaultsConfig,
+            String applicationConfig,
+            String platformConfig,
+            String userConfig) {
+        this.platform = platform;
+        this.userHomeDir = System.getProperty("user.home");
+        this.config = loadConfigurationFromStrings(defaultsConfig, applicationConfig, platformConfig, userConfig);
+
+        // Compute and cache frequently used values
+        this.aboutMessage = buildAboutMessage();
+        this.chunkSizeInSeconds = computeChunkSize();
     }
 
     // =============================================================================
@@ -202,13 +231,6 @@ public class Environment {
         return config.getProperty(key);
     }
 
-    /**
-     * @deprecated Use getFmodLibraryPath(Platform.MACOS) instead
-     */
-    @Deprecated
-    public String getFmodLibraryPathMacOS() {
-        return getFmodLibraryPath(Platform.MACOS);
-    }
 
     /** Gets the platform-specific FMOD library filename based on library type. */
     public String getFmodLibraryFilename(FmodLibraryType libraryType) {
@@ -242,6 +264,28 @@ public class Environment {
         return aboutMessage;
     }
 
+    // =============================================================================
+    // UPDATE CHECKING
+    // =============================================================================
+
+    /**
+     * Gets the GitHub Releases API URL for update checking.
+     *
+     * @return the releases API URL
+     */
+    public String getReleasesApiUrl() {
+        return config.getProperty("releases.api.url");
+    }
+
+    /**
+     * Gets the GitHub Releases page URL for user downloads.
+     *
+     * @return the releases page URL
+     */
+    public String getReleasesPageUrl() {
+        return config.getProperty("releases.page.url");
+    }
+
     private String buildAboutMessage() {
         return Constants.programName
                 + " v"
@@ -273,18 +317,82 @@ public class Environment {
         // 1. Load bundled defaults (lowest priority)
         loadResource(config, "/config/defaults.properties");
 
-        // 2. Load platform-specific overrides (medium priority)
+        // 2. Load main application configuration (low-medium priority)
+        loadResource(config, "/application.properties");
+
+        // 3. Load platform-specific overrides (medium priority)
         String platformConfig = "/config/platform/" + platform.name().toLowerCase() + ".properties";
         loadResource(config, platformConfig);
 
-        // 3. Load user configuration file (higher priority)
+        // 4. Load user configuration file (higher priority)
         loadUserConfiguration(config);
 
-        // 4. System properties override everything (highest priority)
+        // 5. System properties override everything (highest priority)
         config.putAll(System.getProperties());
 
         logger.debug("Configuration loaded with {} properties", config.size());
         return config;
+    }
+
+    /**
+     * Load configuration from injected strings for testing.
+     *
+     * <p>This method replicates the same priority order as {@link #loadConfiguration()} but uses
+     * injected configuration content instead of loading from files.
+     *
+     * @param defaultsConfig defaults configuration content (null = skip)
+     * @param applicationConfig application configuration content (null = skip)
+     * @param platformConfig platform-specific configuration content (null = skip)
+     * @param userConfig user configuration content (null = skip)
+     * @return loaded configuration properties
+     */
+    private Properties loadConfigurationFromStrings(
+            String defaultsConfig, String applicationConfig, String platformConfig, String userConfig) {
+        Properties config = new Properties();
+
+        // 1. Load defaults (lowest priority)
+        if (defaultsConfig != null) {
+            loadFromString(config, defaultsConfig, "defaults");
+        }
+
+        // 2. Load application configuration (low-medium priority)
+        if (applicationConfig != null) {
+            loadFromString(config, applicationConfig, "application");
+        }
+
+        // 3. Load platform-specific overrides (medium priority)
+        if (platformConfig != null) {
+            loadFromString(config, platformConfig, "platform");
+        }
+
+        // 4. Load user configuration (higher priority)
+        if (userConfig != null) {
+            loadFromString(config, userConfig, "user");
+        }
+
+        // 5. System properties override everything (highest priority)
+        config.putAll(System.getProperties());
+
+        logger.debug("Configuration loaded from strings with {} properties", config.size());
+        return config;
+    }
+
+    /**
+     * Parse configuration content from a string into Properties.
+     *
+     * @param config the Properties object to load into
+     * @param configContent the configuration content as a string
+     * @param sourceName the name of the configuration source (for logging)
+     */
+    private void loadFromString(Properties config, String configContent, String sourceName) {
+        try {
+            Properties tempProps = new Properties();
+            tempProps.load(new java.io.StringReader(configContent));
+            config.putAll(tempProps);
+            logger.debug("Loaded {} configuration with {} properties", sourceName, tempProps.size());
+        } catch (IOException e) {
+            logger.warn("Failed to parse {} configuration: {}", sourceName, e.getMessage());
+        }
     }
 
     private void loadResource(Properties config, String resourcePath) {
@@ -353,6 +461,11 @@ public class Environment {
         String value = config.getProperty(key);
         if (value == null) return defaultValue;
         return Boolean.parseBoolean(value);
+    }
+
+    @com.google.common.annotations.VisibleForTesting
+    String getStringProperty(String key, String defaultValue) {
+        return config.getProperty(key, defaultValue);
     }
 
     // =============================================================================

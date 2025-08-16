@@ -3,15 +3,15 @@ package audio;
 import static org.junit.jupiter.api.Assertions.*;
 
 import env.AppConfig;
+import env.AudioSystemManager.FmodLibraryType;
+import env.AudioSystemManager.LibraryLoadingMode;
 import env.Environment;
-import env.FmodLibraryType;
-import env.LibraryLoadingMode;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** Tests for FMOD library loading configuration and cross-platform support. */
-class FmodLibraryLoaderTest {
+/** Tests for FMOD configuration and cross-platform support in Environment and AppConfig. */
+class FmodConfigurationTest {
 
     private final Environment env = new Environment();
     private final AppConfig config = new AppConfig();
@@ -47,13 +47,6 @@ class FmodLibraryLoaderTest {
         assertEquals(LibraryLoadingMode.UNPACKAGED, mode);
     }
 
-    @Test
-    @DisplayName("FmodLibraryLoader constructor works with dependency injection")
-    void testFmodLibraryLoaderConstructor() {
-        // Should not throw
-        FmodLibraryLoader loader = new FmodLibraryLoader(config, env);
-        assertNotNull(loader);
-    }
 
     @Test
     @DisplayName("Environment provides valid library paths for current platform")

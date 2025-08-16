@@ -3,10 +3,10 @@ package integration;
 import static org.junit.jupiter.api.Assertions.*;
 
 import audio.FmodCore;
-import audio.FmodLibraryLoader;
 import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
+import env.AudioSystemManager;
 import env.Environment;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -56,9 +56,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ Environment can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(FmodLibraryLoader.class),
-                "FmodLibraryLoader should be instantiable via DI");
-        logger.info("✅ FmodLibraryLoader can be created");
+                GuiceBootstrap.getInjectedInstance(AudioSystemManager.class),
+                "AudioSystemManager should be instantiable via DI");
+        logger.info("✅ AudioSystemManager can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(FmodCore.class),

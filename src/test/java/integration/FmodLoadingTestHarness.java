@@ -2,7 +2,8 @@ package integration;
 
 import audio.FmodCore;
 import env.AppConfig;
-import env.LibraryLoadingMode;
+import env.AudioSystemManager;
+import env.AudioSystemManager.LibraryLoadingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +43,8 @@ public class FmodLoadingTestHarness {
             // Test FMOD library loading using dependency injection
             // This will trigger the library loading process
             env.Environment environment = new env.Environment();
-            audio.FmodLibraryLoader loader = new audio.FmodLibraryLoader(config, environment);
-            FmodCore core = new FmodCore(config, loader);
+            AudioSystemManager audioManager = new AudioSystemManager(config, environment);
+            FmodCore core = new FmodCore(audioManager);
             boolean loaded = (core != null);
             logger.info("FMOD Core instance created via DI: " + loaded);
 

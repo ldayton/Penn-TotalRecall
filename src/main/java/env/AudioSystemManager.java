@@ -1,25 +1,69 @@
-package audio;
+package env;
 
 import com.sun.jna.Native;
-import env.AppConfig;
-import env.Environment;
-import env.FmodLibraryType;
-import env.LibraryLoadingMode;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.io.File;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** Handles loading of the FMOD native library using application configuration. */
-public class FmodLibraryLoader {
-    private static final Logger logger = LoggerFactory.getLogger(FmodLibraryLoader.class);
+/**
+ * Manages audio system configuration and FMOD library loading.
+ *
+ * <p>Handles:
+ *
+ * <ul>
+ *   <li>FMOD library loading (packaged vs unpackaged modes)
+ *   <li>Audio system configuration management
+ *   <li>Platform-specific audio library handling
+ *   <li>Audio hardware availability detection
+ * </ul>
+ *
+ * <p>This class encapsulates all FMOD-related configuration and loading logic, following the same
+ * dependency injection pattern as KeyboardManager and LookAndFeelManager.
+ */
+@Singleton
+public class AudioSystemManager {
+
+    /**
+     * Determines how native libraries should be loaded by the application.
+     *
+     * <ul>
+     *   <li>PACKAGED - Load from the standard system library path (production mode)
+     *   <li>UNPACKAGED - Load from development filesystem paths (development mode)
+     * </ul>
+     */
+    public enum LibraryLoadingMode {
+        /** Load libraries from standard system library path (default for production). */
+        PACKAGED,
+
+        /** Load libraries from development filesystem paths (for development/testing). */
+        UNPACKAGED
+    }
+
+    /**
+     * Determines which variant of the FMOD library should be loaded.
+     *
+     * <ul>
+     *   <li>STANDARD - Standard production library (default)
+     *   <li>LOGGING - Debug/logging library with additional diagnostic output
+     * </ul>
+     */
+    public enum FmodLibraryType {
+        /** Standard production library (default for end users). */
+        STANDARD,
+
+        /** Debug/logging library with diagnostic output (for development/CI). */
+        LOGGING
+    }
+    private static final Logger logger = LoggerFactory.getLogger(AudioSystemManager.class);
+
     private final AppConfig config;
     private final Environment env;
 
-    /** Constructor for dependency injection. */
     @Inject
-    public FmodLibraryLoader(@NonNull AppConfig config, @NonNull Environment env) {
+    public AudioSystemManager(@NonNull AppConfig config, @NonNull Environment env) {
         this.config = config;
         this.env = env;
     }
@@ -31,7 +75,7 @@ public class FmodLibraryLoader {
      * @return The loaded library instance
      * @throws RuntimeException if library cannot be loaded
      */
-    public <T> T loadLibrary(Class<T> interfaceClass) {
+    public <T> T loadAudioLibrary(Class<T> interfaceClass) {
         try {
             LibraryLoadingMode mode = config.getFmodLoadingMode();
             FmodLibraryType libraryType = config.getFmodLibraryType();
@@ -52,6 +96,33 @@ public class FmodLibraryLoader {
         } catch (Exception e) {
             throw new RuntimeException("Failed to load FMOD library", e);
         }
+    }
+
+    /**
+     * Determines whether audio hardware is available for testing.
+     *
+     * @return true if audio hardware is available, false for headless environments
+     */
+    public boolean isAudioHardwareAvailable() {
+        return config.isAudioHardwareAvailable();
+    }
+
+    /**
+     * Gets the FMOD loading mode from configuration.
+     *
+     * @return the configured loading mode
+     */
+    public LibraryLoadingMode getFmodLoadingMode() {
+        return config.getFmodLoadingMode();
+    }
+
+    /**
+     * Gets the FMOD library type from configuration.
+     *
+     * @return the configured library type
+     */
+    public FmodLibraryType getFmodLibraryType() {
+        return config.getFmodLibraryType();
     }
 
     /**

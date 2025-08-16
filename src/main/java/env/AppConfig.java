@@ -1,5 +1,8 @@
 package env;
 
+import com.google.common.annotations.VisibleForTesting;
+import env.AudioSystemManager.FmodLibraryType;
+import env.AudioSystemManager.LibraryLoadingMode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +23,12 @@ import org.slf4j.LoggerFactory;
  * </ol>
  *
  * <p>This class is thread-safe and uses lazy initialization.
+ *
+ * <p>Note: This is package-private in design but made public for dependency injection and testing.
+ * Production code should use manager classes (AudioSystemManager, etc.) instead of accessing
+ * AppConfig directly.
  */
+@VisibleForTesting
 public class AppConfig {
     private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
@@ -112,16 +120,6 @@ public class AppConfig {
                 getPropertyWithSystemOverride(AUDIO_HARDWARE_AVAILABLE_KEY, "true"));
     }
 
-    /**
-     * Gets the FMOD library path for macOS development mode.
-     *
-     * @deprecated Use getFmodLibraryPath(Platform.MACOS) instead
-     * @return the library path, or null if not configured
-     */
-    @Deprecated
-    public String getFmodLibraryPathMacOS() {
-        return getFmodLibraryPath(Platform.MACOS);
-    }
 
     /**
      * Gets the GitHub Releases API URL for update checking.

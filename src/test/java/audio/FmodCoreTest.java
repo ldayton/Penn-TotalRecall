@@ -28,8 +28,8 @@ class FmodCoreTest {
         // Initialize DI for tests - create dependencies manually for now
         env.AppConfig appConfig = new env.AppConfig();
         env.Environment environment = new env.Environment();
-        audio.FmodLibraryLoader loader = new audio.FmodLibraryLoader(appConfig, environment);
-        lib = new FmodCore(appConfig, loader);
+        env.AudioSystemManager audioManager = new env.AudioSystemManager(appConfig, environment);
+        lib = new FmodCore(audioManager);
 
         // Use the known sample file with verified properties
         testFile = new File("packaging/samples/sample.wav");
