@@ -1,6 +1,5 @@
 package env;
 
-import com.sun.jna.Native;
 import env.AudioSystemLoader.AudioSystemException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -62,14 +61,16 @@ public class AudioSystemManager implements AudioSystemLoader {
 
     private final AppConfig config;
     private final Environment env;
+    private final NativeLibraryLoader nativeLoader;
     
     // Thread safety for library loading
     private final Object loadLock = new Object();
 
     @Inject
-    public AudioSystemManager(@NonNull AppConfig config, @NonNull Environment env) {
+    public AudioSystemManager(@NonNull AppConfig config, @NonNull Environment env, @NonNull NativeLibraryLoader nativeLoader) {
         this.config = config;
         this.env = env;
+        this.nativeLoader = nativeLoader;
     }
 
     /**
@@ -145,7 +146,7 @@ public class AudioSystemManager implements AudioSystemLoader {
             File customFile = new File(customPath);
             if (customFile.exists()) {
                 logger.debug("Loading FMOD from custom path: {}", customPath);
-                return Native.loadLibrary(customFile.getAbsolutePath(), interfaceClass);
+                return nativeLoader.loadLibrary(customFile.getAbsolutePath(), interfaceClass);
             } else {
                 logger.warn("Custom FMOD library path not found: {}", customPath);
             }
@@ -169,7 +170,7 @@ public class AudioSystemManager implements AudioSystemLoader {
         }
 
         logger.debug("Loading FMOD from unpackaged path: {}", fullPath);
-        return Native.loadLibrary(libraryFile.getAbsolutePath(), interfaceClass);
+        return nativeLoader.loadLibrary(libraryFile.getAbsolutePath(), interfaceClass);
     }
 
     /**
@@ -185,14 +186,14 @@ public class AudioSystemManager implements AudioSystemLoader {
         String libraryName = getSystemLibraryName(libraryType);
 
         logger.debug("Loading FMOD from system library path: {}", libraryName);
-        return Native.loadLibrary(libraryName, interfaceClass);
+        return nativeLoader.loadLibrary(libraryName, interfaceClass);
     }
 
     /**
      * Gets the system library name for JNA loading (without file extension).
      *
      * @param libraryType The library type (standard or logging)
-     * @return The library name for Native.loadLibrary()
+     * @return The library name for NativeLibraryLoader.loadLibrary()
      */
     private String getSystemLibraryName(FmodLibraryType libraryType) {
         // All platforms use the same naming convention

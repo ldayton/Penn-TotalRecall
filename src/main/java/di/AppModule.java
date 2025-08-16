@@ -8,6 +8,8 @@ import env.AppConfig;
 import env.AudioSystemLoader;
 import env.AudioSystemManager;
 import env.Environment;
+import env.JnaNativeLibraryLoader;
+import env.NativeLibraryLoader;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import info.DefaultPreferencesProvider;
@@ -32,6 +34,7 @@ public class AppModule extends AbstractModule {
 
         // Manager bindings - each handles specific domain configuration
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
+        bind(NativeLibraryLoader.class).to(JnaNativeLibraryLoader.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
 

@@ -28,7 +28,8 @@ class FmodCoreTest {
         // Initialize DI for tests - create dependencies manually for now
         env.AppConfig appConfig = new env.AppConfig();
         env.Environment environment = new env.Environment();
-        env.AudioSystemManager audioManager = new env.AudioSystemManager(appConfig, environment);
+        env.JnaNativeLibraryLoader nativeLoader = new env.JnaNativeLibraryLoader();
+        env.AudioSystemManager audioManager = new env.AudioSystemManager(appConfig, environment, nativeLoader);
         lib = new FmodCore(audioManager);
 
         // Use the known sample file with verified properties
