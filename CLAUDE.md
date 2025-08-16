@@ -11,12 +11,13 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 - **Gradle 9.0.0** - Build system with modern plugins
 - **FMOD Core** - High-performance audio engine via JNA
 - **Swing** - Desktop GUI framework
-- **JUnit 5** - Testing framework
+- **Guice 7.0** - Dependency injection framework
+- **JUnit 5** - Testing framework with Mockito
 
 ### Audio System
 - **Direct FMOD Core JNA binding** - Eliminates C compilation entirely
-- **Thread-safe audio playback** - `LibPennTotalRecall.java` with synchronized access
-- **Precision timing** - Comprehensive timing tests in `FMODTimingTest.java`
+- **Thread-safe audio playback** - `FmodCore.java` with synchronized access
+- **Precision timing** - Comprehensive timing tests in `FmodCoreTest.java`
 - **Waveform rendering** - Uses MaryTTS SignalProc for filtering
 
 ### Build System
@@ -24,6 +25,20 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 - **Self-contained macOS app** - Uses `jpackage` with custom JVM runtime
 - **Dependency management** - All dependencies from Maven Central
 - **Code quality** - ErrorProne static analysis, Spotless formatting
+
+### Configuration System
+- **5-level hierarchy** - System properties > User config > Platform config > Application config > Defaults
+- **Platform-specific paths** - macOS: `~/Library/Application Support`, Linux: `~/.penn-totalrecall`, Windows: `%APPDATA%`
+- **Environment-aware** - Separate configs for development, CI, and production
+- **Type-safe access** - Boolean, integer, double property parsing with defaults
+- **Graceful fallback** - Malformed configs don't break application startup
+
+### Dependency Injection
+- **Guice-based architecture** - Full DI throughout application
+- **Service-oriented design** - Core services in `env/` package
+- **Interface-based testing** - Easy mocking and unit testing
+- **Singleton lifecycle** - Thread-safe service instances
+- **Bootstrap integration** - Clean application startup with `GuiceBootstrap`
 
 ## Recent Modernization (Completed)
 
@@ -51,11 +66,21 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 - Proper About/Preferences/Quit menu integration
 - Taskbar/Dock icon and progress support
 
+### ✅ Architecture Modernization
+- **Eliminated Environment class** - Functionality distributed to focused services
+- **Modern dependency injection** - Full Guice DI architecture throughout
+- **Service-oriented design** - AppConfig, UpdateManager, UserManager, AudioSystemManager, KeyboardManager, LookAndFeelManager
+- **5-level configuration hierarchy** - System properties > User config > Platform config > Application config > Defaults
+- **Comprehensive test suite** - Meaningful behavioral tests for all services
+
 ### ✅ Code Quality Improvements
-- Removed all GPL headers and @author references  
+- Removed all GPL headers and @author references
 - Applied Google Java Format with Spotless
 - Fixed API compatibility issues during library upgrades
 - Added wildcarded dependency versions for automatic updates
+- **Modernized JNA usage** - Eliminated deprecated Native.loadLibrary() calls
+- **Added Lombok** - Reduced boilerplate with @NonNull, @Inject annotations
+- **Comprehensive logging** - SLF4J with Logback for structured logging
 
 ### ✅ Project Structure Modernization  
 - **Eliminated lib/ directory** - No more local JAR files
@@ -68,17 +93,29 @@ Penn TotalRecall is an audio annotation tool for research, developed by the Comp
 ```
 Penn-TotalRecall/
 ├── src/main/java/                    # Standard Gradle Java sources
-│   ├── audio/                        # FMOD JNA bindings & tests
-│   ├── components/                   # Swing UI components  
-│   ├── control/                      # Application controllers
+│   ├── audio/                        # FMOD JNA bindings & audio engine
+│   ├── behaviors/                    # Action pattern implementations
+│   ├── components/                   # Swing UI components
+│   ├── control/                      # Application controllers & main
+│   ├── di/                           # Guice dependency injection config
+│   ├── env/                          # Core services (config, audio, user)
+│   ├── info/                         # Constants & preferences
 │   ├── shortcuts/                    # Integrated shortcut manager
 │   └── util/                         # Utility classes
 ├── src/main/resources/               # Standard Gradle resources
 │   ├── fmod/macos/                   # FMOD native libraries
 │   ├── images/                       # Application icons
-│   └── actions.xml                   # Shortcut definitions
-├── src/test/java/                    # JUnit 5 tests
-├── deploy/                           # Packaging assets
+│   ├── actions.xml                   # Shortcut definitions
+│   ├── application.properties        # Bundled configuration
+│   ├── development.properties        # Development environment config
+│   └── ci.properties                 # CI environment config
+├── src/test/java/                    # JUnit 5 tests with Mockito
+│   ├── audio/                        # Audio system tests
+│   ├── components/                   # UI component tests
+│   ├── env/                          # Service layer tests
+│   ├── integration/                  # Integration tests
+│   └── shortcuts/                    # Shortcut system tests
+├── packaging/                        # Packaging assets
 ├── build.gradle                      # Modern build configuration
 ├── CLAUDE.md                         # This development guide
 └── No lib/ or native/ directories!   # Pure Maven dependencies
@@ -87,20 +124,29 @@ Penn-TotalRecall/
 ## Current Dependencies (Minimal & Modern)
 
 ```gradle
-// Core Runtime (3)
+// Core Runtime (7)
 implementation 'net.java.dev.jna:jna:5.17.+'
-implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.+'  
+implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.+'
 implementation('de.dfki.mary:marytts-signalproc:5.2.+') {
     exclude group: 'gov.nist.math', module: 'Jampack'
     exclude group: 'com.twmacinta', module: 'fast-md5'
 }
+implementation 'com.formdev:flatlaf:3.5.+'
+implementation 'org.slf4j:slf4j-api:2.0.+'
+implementation 'ch.qos.logback:logback-classic:1.5.+'
+implementation 'com.google.inject:guice:7.0.+'
 
-// Testing (2)
+// Compile-time (1)
+compileOnly 'org.projectlombok:lombok:1.18.+'
+annotationProcessor 'org.projectlombok:lombok:1.18.+'
+
+// Testing (4)
 testImplementation 'org.junit.jupiter:junit-jupiter:5.10.+'
+testImplementation 'org.mockito:mockito-core:5.14.+'
+testImplementation 'org.mockito:mockito-junit-jupiter:5.14.+'
 testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.+'
-
-// Development Tools (1)  
-errorprone 'com.google.errorprone:error_prone_core:2.41.+'
+testCompileOnly 'org.projectlombok:lombok:1.18.+'
+testAnnotationProcessor 'org.projectlombok:lombok:1.18.+'
 ```
 
 ## Development Commands
@@ -111,6 +157,8 @@ errorprone 'com.google.errorprone:error_prone_core:2.41.+'
 ./gradlew test                 # Run JUnit 5 tests + FMOD timing tests
 ./gradlew spotlessApply        # Format code with Google Java Format
 ./gradlew dependencyUpdates    # Check for dependency updates
+./gradlew runDev               # Run application in development mode
+./gradlew testPackagedFmodLoading  # Integration test for packaged FMOD loading
 ```
 
 ### GitHub Actions Build Status
@@ -145,6 +193,8 @@ gh run watch --repo ldayton/Penn-TotalRecall
 ### Automated Tests
 - **FMOD timing tests** - Verify audio system precision and consistency
 - **JUnit 5 framework** - Modern testing with comprehensive output
+- **Test annotations** - `@AudioHardware` and `@Windowing` tags for environment-specific test exclusion
+- **Mockito integration** - Comprehensive mocking for service dependencies
 
 ### Manual Testing
 - Audio playback and seeking functionality
@@ -154,30 +204,76 @@ gh run watch --repo ldayton/Penn-TotalRecall
 
 ## Key Files & Packages
 
-### Audio System
-- `audio/LibPennTotalRecall.java` - Direct FMOD Core JNA interface
-- `audio/FMODTimingTest.java` - Comprehensive timing validation
+### Core Services (`env/` package)
+- `env/AppConfig.java` - 5-level configuration hierarchy system
+- `env/AudioSystemManager.java` - FMOD library loading with modern JNA API
+- `env/AudioSystemLoader.java` - Audio loading interface for dependency injection
+- `env/UpdateManager.java` - GitHub Releases API integration for version checking
+- `env/UserManager.java` - User directory and configuration management
+- `env/Platform.java` - Cross-platform detection and path resolution
+- `env/KeyboardManager.java` - System keyboard event handling
+- `env/LookAndFeelManager.java` - UI theme management
+
+### Dependency Injection (`di/` package)
+- `di/GuiceBootstrap.java` - Guice module configuration and application bootstrap
+- `di/AppModule.java` - Guice dependency binding configuration
+
+### Audio System (`audio/` package)
+- `audio/FmodCore.java` - Direct FMOD Core JNA interface
+- `audio/PrecisionPlayer.java` - High-precision audio playback
+- `audio/PrecisionEvent.java` - Timing event system
+- `audio/NativeStatelessPlayer.java` - Stateless audio playback implementation
 - `components/waveform/WaveformBuffer.java` - Uses MaryTTS for signal processing
 
-### UI System  
+### UI System (`components/` package)
 - `components/MacOSIntegration.java` - Modern macOS Desktop API integration
 - `components/MyFrame.java` - Main application window
-- `control/XActionManager.java` - Keyboard shortcut management
-- `shortcuts/` - Integrated shortcut manager (former JAR dependency)
+- `components/MyMenu.java` - Application menu system
+- `components/WindowManager.java` - Window state management
 
-### Resources & Configuration
+### Action System (`behaviors/` package)
+- `behaviors/UpdatingAction.java` - Base action class with update support
+- `behaviors/singleact/` - Single-execution actions (play, pause, etc.)
+- `behaviors/multiact/` - Multi-parameter actions (seek, zoom, etc.)
+
+### Shortcut System (`shortcuts/` package)
+- `shortcuts/ShortcutManager.java` - Keyboard shortcut management
+- `shortcuts/XAction.java` - Action wrapper for shortcuts
+- `shortcuts/ModernKeyUtils.java` - Modern key event utilities
+
+### Application Control (`control/` package)
+- `control/Main.java` - Application entry point with Guice bootstrap
+- `control/XActionManager.java` - Action registration and management
+- `control/AudioMaster.java` - Audio system coordination
+
+### Configuration & Resources
 - `build.gradle` - Modern build configuration with plugins
-- `src/main/resources/actions.xml` - Keyboard shortcut definitions  
+- `src/main/resources/application.properties` - Bundled application configuration
+- `src/main/resources/development.properties` - Development environment settings
+- `src/main/resources/ci.properties` - CI environment settings
+- `src/main/resources/actions.xml` - Keyboard shortcut definitions
 - `src/main/resources/fmod/macos/` - FMOD native libraries
 - `src/main/resources/images/` - Application icons and graphics
-- `deploy/mac/` - DMG presentation assets (background, volume icon, DS_Store layout)
-- `deploy/all/` - Sample files included in distributions
+- `packaging/macos/` - DMG and app bundle assets
+- `packaging/samples/` - Sample files included in distributions
 - `CLAUDE.md` - This development guide
+
+### Test Suite (`src/test/java/`)
+- `env/AppConfigTest.java` - Comprehensive configuration hierarchy testing
+- `env/AudioSystemManagerTest.java` - Audio system service testing
+- `env/UpdateManagerTest.java` - Update checking with HTTP mocking
+- `env/UserManagerTest.java` - User directory and configuration testing
+- `audio/FmodCoreTest.java` - FMOD integration testing
+- `audio/FmodConfigurationTest.java` - FMOD configuration testing
+- `integration/GuiceBootstrapIntegrationTest.java` - Dependency injection testing
 
 ## TODO - Remaining Tasks
 
+### Testing Issues
+- [ ] **UpdateManager GUI dependency** - Fix "MyFrame not initialized" error in tests when UpdateManager tries to show notifications
+
 ### Build System
-- [ ] **Debug version** - FMOD logging lib and higher logging levels  
+- [ ] **Debug version** - FMOD logging lib and higher logging levels
 
 ### Platform Support
 - [ ] **Linux support** - Port from macOS-specific components
@@ -199,6 +295,20 @@ implementation 'group:artifact:major.minor.+'
 - Always test with `FMODTimingTest` for timing regressions
 - Use synchronized access for thread-safe audio operations
 - FMOD libraries are in `src/main/resources/fmod/macos/`
+- **Modern JNA loading** - Use `Native.load()` with `NativeLibrary.addSearchPath()` for absolute paths
+- **No deprecated APIs** - All `Native.loadLibrary()` calls eliminated
+
+### Configuration Development
+- **AppConfig service** - Inject for all configuration access
+- **Environment-specific configs** - Use development.properties, ci.properties for overrides
+- **5-level priority** - System properties always win, then user config, platform, application, defaults
+- **Graceful parsing** - Always provide sensible defaults for type conversion failures
+
+### Dependency Injection Patterns
+- **Constructor injection** - Use `@Inject` on constructors, never field injection
+- **Interface dependencies** - Depend on interfaces (AudioSystemLoader) not implementations
+- **Singleton services** - Mark services with `@Singleton` for shared state
+- **Testing with mocks** - Use Mockito to mock service dependencies in tests
 
 ### Viewing All Compiler Warnings
 Gradle's incremental compilation hides warnings on unchanged files. To see all warnings:
@@ -210,7 +320,7 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 - `packageMacDmg` creates professional DMG using pure jpackage approach
 - Self-contained installer with embedded Java runtime
 - No native system dependencies beyond Java/jpackage
-- Uses `deploy/mac/headphones.icns` for app icon in DMG
+- Uses `packaging/macos/headphones.icns` for app icon in DMG
 
 ### UI Development
 - Follow existing Swing patterns in `components/`
@@ -254,6 +364,11 @@ Gradle's incremental compilation hides warnings on unchanged files. To see all w
 - **Always run tests** after significant changes
 - **FMOD timing is critical** - watch for regressions
 - **ErrorProne warnings** should be addressed
+- **Mockito for service testing** - Mock external dependencies like HTTP clients
+- **Behavioral testing focus** - Test what services do, not how they're implemented
+- **Environment-aware testing** - CI automatically disables audio/windowing via configuration
+- **Test annotations** - Use `@AudioHardware` and `@Windowing` tags for environment-specific exclusions
+- **Configuration-driven** - Tests read `ci.properties` vs `development.properties` for behavior
 
 ### Platform Considerations
 - **macOS primary target** - bundled .app with embedded JVM
@@ -272,12 +387,14 @@ This codebase has been extensively modernized and follows current Java best prac
 - 16-year-old signal processing library
 
 **After modernization:**
-- 6 total dependencies (all from Maven Central)  
-- Pure Java + JNA implementation
+- 10+ total dependencies (all from Maven Central)
+- Pure Java + JNA implementation with Guice DI
 - Modern Java 24 Desktop APIs
 - Modern Gradle with auto-updating dependencies
 - Current libraries with 14+ years of improvements
+- Comprehensive test coverage with Mockito
+- 5-level configuration hierarchy system
 
-**Result:** Clean, maintainable, modern Java 24 codebase with zero legacy dependencies.
+**Result:** Clean, maintainable, modern Java 24 codebase with comprehensive dependency injection and zero legacy dependencies.
 - don't put claude ads in git commits
 - use GitHub Releases API for dial-home version checking
