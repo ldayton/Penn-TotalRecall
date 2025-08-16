@@ -2,7 +2,6 @@ package components.wordpool;
 
 import behaviors.multiact.AnnotateAction;
 import components.MyFrame;
-import env.Environment;
 import env.KeyboardManager;
 import info.UserPrefs;
 import java.awt.AWTKeyStroke;
@@ -39,7 +38,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private final KeyboardManager keyboardManager;
 
     private WordpoolTextField() {
-        this.keyboardManager = new KeyboardManager(new Environment());
+        this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 

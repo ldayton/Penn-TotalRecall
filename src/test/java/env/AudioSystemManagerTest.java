@@ -10,63 +10,72 @@ import org.junit.jupiter.api.Test;
 /** Tests for AudioSystemManager functionality and dependency injection. */
 class AudioSystemManagerTest {
 
-    private final Environment env = new Environment();
-    private final AppConfig config = new AppConfig();
+    private final Platform platform = new Platform();
+    private final AppConfig config = new AppConfig(platform);
 
     @Test
     @DisplayName("AudioSystemManager constructor works with dependency injection")
     void testAudioSystemManagerConstructor() {
         // Should not throw - this replaces the old FmodLibraryLoader constructor test
-        AudioSystemManager manager = new AudioSystemManager(config, env);
+        AudioSystemManager manager = new AudioSystemManager(config, platform);
         assertNotNull(manager);
     }
 
     @Test
     @DisplayName("AudioSystemManager provides correct FMOD loading mode from configuration")
     void testFmodLoadingModeFromConfiguration() {
-        AudioSystemManager manager = new AudioSystemManager(config, env);
+        AudioSystemManager manager = new AudioSystemManager(config, platform);
 
-        // Test that AudioSystemManager correctly delegates to config
+        // Test that AudioSystemManager correctly reads configuration
         LibraryLoadingMode mode = manager.getFmodLoadingMode();
-        LibraryLoadingMode expectedMode = config.getFmodLoadingMode();
-        
-        assertEquals(expectedMode, mode, "AudioSystemManager should return same mode as AppConfig");
+
+        // In test environment, should be UNPACKAGED (running from source)
+        assertEquals(
+                LibraryLoadingMode.UNPACKAGED,
+                mode,
+                "AudioSystemManager should return UNPACKAGED in test environment");
     }
 
     @Test
     @DisplayName("AudioSystemManager provides correct FMOD library type from configuration")
     void testFmodLibraryTypeFromConfiguration() {
-        AudioSystemManager manager = new AudioSystemManager(config, env);
+        AudioSystemManager manager = new AudioSystemManager(config, platform);
 
-        // Test that AudioSystemManager correctly delegates to config
+        // Test that AudioSystemManager correctly reads configuration
         FmodLibraryType type = manager.getFmodLibraryType();
-        FmodLibraryType expectedType = config.getFmodLibraryType();
-        
-        assertEquals(expectedType, type, "AudioSystemManager should return same type as AppConfig");
+
+        // In test environment, should be LOGGING (set via system property)
+        assertEquals(
+                FmodLibraryType.LOGGING,
+                type,
+                "AudioSystemManager should return LOGGING in test environment");
     }
 
     @Test
     @DisplayName("AudioSystemManager correctly detects audio hardware availability")
     void testAudioHardwareAvailability() {
-        AudioSystemManager manager = new AudioSystemManager(config, env);
+        AudioSystemManager manager = new AudioSystemManager(config, platform);
 
-        // Test that AudioSystemManager correctly delegates to config
+        // Test that AudioSystemManager correctly reads configuration
         boolean available = manager.isAudioHardwareAvailable();
-        boolean expectedAvailable = config.isAudioHardwareAvailable();
-        
-        assertEquals(expectedAvailable, available, "AudioSystemManager should return same availability as AppConfig");
+
+        // Default should be true
+        assertTrue(
+                available,
+                "AudioSystemManager should return true for audio hardware availability by default");
     }
 
     @Test
     @DisplayName("AudioSystemManager loadAudioLibrary method accepts interface classes")
     void testLoadAudioLibraryMethodSignature() {
-        AudioSystemManager manager = new AudioSystemManager(config, env);
+        AudioSystemManager manager = new AudioSystemManager(config, platform);
 
         // Test that the method exists and accepts interface classes
         // We won't actually load a library in tests, just verify the method works
         assertNotNull(manager, "AudioSystemManager should be constructed successfully");
-        
-        // This test ensures the method signature is correct - actual loading is tested in integration tests
+
+        // This test ensures the method signature is correct - actual loading is tested in
+        // integration tests
         // to avoid requiring real FMOD libraries in unit tests
     }
 }

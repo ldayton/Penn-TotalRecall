@@ -20,7 +20,6 @@ import behaviors.singleact.ReturnToLastPositionAction;
 import behaviors.singleact.StopAction;
 import behaviors.singleact.TipsMessageAction;
 import behaviors.singleact.VisitTutorialSiteAction;
-import env.Environment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -61,14 +60,14 @@ public class MyMenu extends JMenuBar {
 
     private static boolean showPreferencesInMenu;
 
-    private final Environment environment;
+    private final env.LookAndFeelManager lookAndFeelManager;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private MyMenu(Environment environment) {
-        this.environment = environment;
+    private MyMenu(env.LookAndFeelManager lookAndFeelManager) {
+        this.lookAndFeelManager = lookAndFeelManager;
         allActions = new HashSet<>();
-        showPreferencesInMenu = environment.shouldShowPreferencesInMenu();
+        showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
         initAnnotationMenu();
@@ -80,7 +79,7 @@ public class MyMenu extends JMenuBar {
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
         JMenuItem jmiOpenWordpool = new JMenuItem(new OpenWordpoolAction());
-        if (environment.shouldUseAWTFileChoosers()) {
+        if (lookAndFeelManager.shouldUseAWTFileChoosers()) {
             OpenAudioLocationAction openFileAction =
                     new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
             JMenuItem jmiOpenAudioFile = new JMenuItem(openFileAction);
@@ -259,14 +258,14 @@ public class MyMenu extends JMenuBar {
     public static MyMenu getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyMenu not initialized. Call createInstance(Environment) first.");
+                    "MyMenu not initialized. Call createInstance(LookAndFeelManager) first.");
         }
         return instance;
     }
 
-    public static MyMenu createInstance(Environment environment) {
+    public static MyMenu createInstance(env.LookAndFeelManager lookAndFeelManager) {
         if (instance == null) {
-            instance = new MyMenu(environment);
+            instance = new MyMenu(lookAndFeelManager);
         }
         return instance;
     }

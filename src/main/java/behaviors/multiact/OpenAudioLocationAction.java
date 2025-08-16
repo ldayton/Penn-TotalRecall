@@ -39,10 +39,11 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
+        Environment environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openLocationPath, new Environment().getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openLocationPath, environment.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = new Environment().getUserHomeDir();
+            maybeLastPath = environment.getUserHomeDir();
         }
 
         String path = null;

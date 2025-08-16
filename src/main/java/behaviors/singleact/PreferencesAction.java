@@ -19,7 +19,9 @@ public class PreferencesAction extends IdentifiedSingleAction {
      */
     public void actionPerformed(ActionEvent e) {
         if (prefs == null) {
-            prefs = PreferencesFrame.createInstance(new Environment());
+            prefs =
+                    PreferencesFrame.createInstance(
+                            di.GuiceBootstrap.getInjectedInstance(Environment.class));
             prefs.setVisible(true);
         }
         prefs.setVisible(true);

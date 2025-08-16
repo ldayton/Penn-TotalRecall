@@ -33,15 +33,19 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
     @Override
     public void actionPerformed(ActionEvent arg0) {
         super.actionPerformed(arg0);
+        Environment environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, new Environment().getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, environment.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = new Environment().getUserHomeDir();
+            maybeLastPath = environment.getUserHomeDir();
         }
 
         String title = "Open Wordpool File";
         String path = null;
-        if (new Environment().shouldUseAWTFileChoosers()) {
+        // Get file chooser preference from LookAndFeelManager via DI
+        env.LookAndFeelManager lafManager =
+                di.GuiceBootstrap.getInjectedInstance(env.LookAndFeelManager.class);
+        if (lafManager.shouldUseAWTFileChoosers()) {
             FileDialog fd = new FileDialog(MyFrame.getInstance(), title);
             fd.setDirectory(maybeLastPath);
             fd.setFilenameFilter(

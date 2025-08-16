@@ -242,7 +242,10 @@ class ShortcutTable extends JTable {
                 } else if (!maskKeyCodes.contains(code)) {
                     var enteredShortcut =
                             Shortcut.forPlatform(
-                                    KeyStroke.getKeyStroke(code, modifiers), environment);
+                                    KeyStroke.getKeyStroke(code, modifiers),
+                                    environment,
+                                    di.GuiceBootstrap.getInjectedInstance(
+                                            env.KeyboardManager.class));
                     var rowXAction = shortcutTableModel.xactionForRow(selectedRow);
                     var newXAction = rowXAction.withShortcut(enteredShortcut);
 

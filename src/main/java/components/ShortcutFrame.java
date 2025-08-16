@@ -19,7 +19,8 @@ public class ShortcutFrame extends ShortcutManager {
     }
 
     public static void showShortcutEditor() {
-        var frame = createDefault(new Environment());
+        var environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
+        var frame = createDefault(environment);
         frame.setLocation(util.GUIUtils.chooseLocation(frame));
         frame.setVisible(true);
     }

@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import env.Environment;
+import info.Constants;
 import java.awt.event.ActionEvent;
 import util.GiveMessage;
 
@@ -11,7 +11,33 @@ public class AboutAction extends IdentifiedSingleAction {
 
     /** Performs the action using a dialog. */
     public void actionPerformed(ActionEvent e) {
-        GiveMessage.infoMessage(new Environment().getAboutMessage());
+        GiveMessage.infoMessage(buildAboutMessage());
+    }
+
+    /**
+     * Builds the about message for the application.
+     *
+     * @return the formatted about message
+     */
+    public static String buildAboutMessage() {
+        return Constants.programName
+                + " v"
+                + Constants.programVersion
+                + "\n"
+                + "Maintainer: "
+                + Constants.maintainerEmail
+                + "\n\n"
+                + "Released by:\n"
+                + Constants.orgName
+                + "\n"
+                + Constants.orgAffiliationName
+                + "\n"
+                + Constants.orgHomepage
+                + "\n\n"
+                + "License: "
+                + Constants.license
+                + "\n"
+                + Constants.licenseSite;
     }
 
     /** <code>AboutAction</code> is always enabled. */

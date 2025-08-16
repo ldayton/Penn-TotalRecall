@@ -2,6 +2,7 @@ package shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import env.AppConfig;
 import env.Environment;
 import env.KeyboardManager;
 import env.Platform;
@@ -36,8 +37,14 @@ import org.junit.jupiter.api.Test;
  */
 public class ShortcutTest {
 
-    private final Environment macEnv = new Environment(Platform.MACOS);
-    private final Environment pcEnv = new Environment(Platform.WINDOWS);
+    private final Platform macPlatform = new Platform(Platform.PlatformType.MACOS);
+    private final Platform pcPlatform = new Platform(Platform.PlatformType.WINDOWS);
+    private final Environment macEnv =
+            new Environment(Platform.PlatformType.MACOS, new AppConfig(macPlatform));
+    private final Environment pcEnv =
+            new Environment(Platform.PlatformType.WINDOWS, new AppConfig(pcPlatform));
+    private final KeyboardManager macKeyboard = new KeyboardManager(macPlatform);
+    private final KeyboardManager pcKeyboard = new KeyboardManager(pcPlatform);
 
     @Nested
     @DisplayName("Platform-specific representations")
@@ -48,7 +55,7 @@ public class ShortcutTest {
         void macCommandSShouldShowAsCommandSymbolS() {
             Environment mac = macEnv;
             KeyStroke cmdS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(cmdS, mac);
+            Shortcut shortcut = new Shortcut(cmdS, mac, macKeyboard);
 
             assertEquals("⌘S", shortcut.toString());
         }
@@ -58,7 +65,7 @@ public class ShortcutTest {
         void macControlSShouldShowAsControlSymbolS() {
             Environment mac = macEnv;
             KeyStroke ctrlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(ctrlS, mac);
+            Shortcut shortcut = new Shortcut(ctrlS, mac, macKeyboard);
 
             assertEquals("^S", shortcut.toString());
         }
@@ -70,7 +77,7 @@ public class ShortcutTest {
             KeyStroke shiftCmdA =
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_A, InputEvent.SHIFT_DOWN_MASK | InputEvent.META_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(shiftCmdA, mac);
+            Shortcut shortcut = new Shortcut(shiftCmdA, mac, macKeyboard);
 
             assertEquals("⇧⌘A", shortcut.toString());
         }
@@ -86,7 +93,7 @@ public class ShortcutTest {
                                     | InputEvent.ALT_DOWN_MASK
                                     | InputEvent.SHIFT_DOWN_MASK
                                     | InputEvent.META_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(complexKey, mac);
+            Shortcut shortcut = new Shortcut(complexKey, mac, macKeyboard);
 
             assertEquals("^⌥⇧⌘A", shortcut.toString());
         }
@@ -96,7 +103,7 @@ public class ShortcutTest {
         void pcControlSShouldShowAsCtrlPlusS() {
             Environment pc = pcEnv;
             KeyStroke ctrlS = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(ctrlS, pc);
+            Shortcut shortcut = new Shortcut(ctrlS, pc, pcKeyboard);
 
             assertEquals("Ctrl+S", shortcut.toString());
         }
@@ -106,7 +113,7 @@ public class ShortcutTest {
         void pcPageUpShouldUseProperCapitalization() {
             Environment pc = pcEnv;
             KeyStroke pageUp = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
-            Shortcut shortcut = new Shortcut(pageUp, pc);
+            Shortcut shortcut = new Shortcut(pageUp, pc, pcKeyboard);
 
             // Microsoft uses sentence case, so "Page Up" or standard abbreviation "PgUp"
             // Current broken behavior likely shows "Pgup" due to capitalize(toLowerCase()) bug
@@ -126,7 +133,7 @@ public class ShortcutTest {
                             InputEvent.SHIFT_DOWN_MASK
                                     | InputEvent.CTRL_DOWN_MASK
                                     | InputEvent.ALT_DOWN_MASK);
-            Shortcut shortcut = new Shortcut(complexKey, pc);
+            Shortcut shortcut = new Shortcut(complexKey, pc, pcKeyboard);
 
             // Microsoft style: use + separators, but order can vary
             // Focus on proper separators and format rather than exact order
@@ -152,10 +159,10 @@ public class ShortcutTest {
             KeyStroke f1 = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
             KeyStroke f12 = KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0);
 
-            assertEquals("F1", new Shortcut(f1, mac).toString());
-            assertEquals("F1", new Shortcut(f1, pc).toString());
-            assertEquals("F12", new Shortcut(f12, mac).toString());
-            assertEquals("F12", new Shortcut(f12, pc).toString());
+            assertEquals("F1", new Shortcut(f1, mac, macKeyboard).toString());
+            assertEquals("F1", new Shortcut(f1, pc, pcKeyboard).toString());
+            assertEquals("F12", new Shortcut(f12, mac, macKeyboard).toString());
+            assertEquals("F12", new Shortcut(f12, pc, pcKeyboard).toString());
         }
     }
 
@@ -172,7 +179,7 @@ public class ShortcutTest {
             KeyStroke numpadEnter =
                     KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0); // Assume numpad enter
 
-            assertEquals("Num 1", new Shortcut(numpad1, pc).toString());
+            assertEquals("Num 1", new Shortcut(numpad1, pc, pcKeyboard).toString());
         }
 
         @Test
@@ -183,8 +190,8 @@ public class ShortcutTest {
 
             KeyStroke space = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
 
-            assertEquals("Space", new Shortcut(space, mac).toString());
-            assertEquals("Space", new Shortcut(space, pc).toString());
+            assertEquals("Space", new Shortcut(space, mac, macKeyboard).toString());
+            assertEquals("Space", new Shortcut(space, pc, pcKeyboard).toString());
         }
     }
 
@@ -197,8 +204,8 @@ public class ShortcutTest {
         void platformDetectionWorksCorrectly() {
             KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
-            Shortcut macShortcut = Shortcut.forPlatform(stroke, macEnv);
-            Shortcut pcShortcut = Shortcut.forPlatform(stroke, pcEnv);
+            Shortcut macShortcut = Shortcut.forPlatform(stroke, macEnv, macKeyboard);
+            Shortcut pcShortcut = Shortcut.forPlatform(stroke, pcEnv, pcKeyboard);
 
             // Should produce different representations
             assertNotEquals(macShortcut.toString(), pcShortcut.toString());
@@ -212,8 +219,10 @@ public class ShortcutTest {
         @Test
         @DisplayName("Menu key maps differently on Mac vs PC")
         void menuKeyMapsDifferentlyOnMacVsPC() {
-            KeyboardManager macKeyboard = new KeyboardManager(macEnv);
-            KeyboardManager pcKeyboard = new KeyboardManager(pcEnv);
+            KeyboardManager macKeyboard =
+                    new KeyboardManager(new Platform(Platform.PlatformType.MACOS));
+            KeyboardManager pcKeyboard =
+                    new KeyboardManager(new Platform(Platform.PlatformType.WINDOWS));
 
             assertEquals("meta", macKeyboard.externalToInternalForm("menu"));
             assertEquals("ctrl", pcKeyboard.externalToInternalForm("menu"));
@@ -238,7 +247,8 @@ public class ShortcutTest {
                 // Should throw RuntimeException with specific message
                 RuntimeException exception =
                         assertThrows(
-                                RuntimeException.class, () -> new Shortcut(invalidStroke, mac));
+                                RuntimeException.class,
+                                () -> new Shortcut(invalidStroke, mac, macKeyboard));
                 assertTrue(exception.getMessage().contains("refuse to create a Shortcut"));
             }
         }
@@ -249,7 +259,7 @@ public class ShortcutTest {
             KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
             // Should either throw or handle null platform gracefully
-            assertThrows(NullPointerException.class, () -> new Shortcut(stroke, null));
+            assertThrows(NullPointerException.class, () -> new Shortcut(stroke, null, macKeyboard));
         }
 
         @Test
@@ -279,7 +289,7 @@ public class ShortcutTest {
                                     | InputEvent.SHIFT_DOWN_MASK
                                     | InputEvent.META_DOWN_MASK);
 
-            Shortcut shortcut = new Shortcut(complexStroke, mac);
+            Shortcut shortcut = new Shortcut(complexStroke, mac, macKeyboard);
             String result = shortcut.toString();
 
             // Should be readable and properly ordered
@@ -295,8 +305,8 @@ public class ShortcutTest {
 
             KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 
-            assertEquals("↩", new Shortcut(enter, mac).toString());
-            assertEquals("Enter", new Shortcut(enter, pc).toString());
+            assertEquals("↩", new Shortcut(enter, mac, macKeyboard).toString());
+            assertEquals("Enter", new Shortcut(enter, pc, pcKeyboard).toString());
         }
 
         @Test
@@ -308,7 +318,7 @@ public class ShortcutTest {
             KeyStroke justShift = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
 
             // Should show something reasonable, not crash
-            Shortcut shortcut = new Shortcut(justShift, mac);
+            Shortcut shortcut = new Shortcut(justShift, mac, macKeyboard);
             String result = shortcut.toString();
 
             assertNotNull(result);
@@ -335,7 +345,7 @@ public class ShortcutTest {
             };
 
             for (KeyStroke stroke : testStrokes) {
-                String result = new Shortcut(stroke, mac).toString();
+                String result = new Shortcut(stroke, mac, macKeyboard).toString();
                 assertFalse(
                         result.contains("+"),
                         "Mac shortcut '" + result + "' should not contain + separator");
@@ -351,7 +361,7 @@ public class ShortcutTest {
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK);
 
-            String result = new Shortcut(ctrlAltS, pc).toString();
+            String result = new Shortcut(ctrlAltS, pc, pcKeyboard).toString();
 
             assertTrue(result.contains("+"), "PC shortcuts with modifiers should use + separator");
             // Should be something like "Ctrl+Alt+S"
@@ -367,8 +377,8 @@ public class ShortcutTest {
             KeyStroke macCopy = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.META_DOWN_MASK);
             KeyStroke pcCopy = KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
 
-            String macResult = new Shortcut(macCopy, macEnv).toString();
-            String pcResult = new Shortcut(pcCopy, pcEnv).toString();
+            String macResult = new Shortcut(macCopy, macEnv, macKeyboard).toString();
+            String pcResult = new Shortcut(pcCopy, pcEnv, pcKeyboard).toString();
 
             assertEquals("⌘C", macResult);
             assertEquals("Ctrl+C", pcResult);

@@ -2,7 +2,9 @@ package shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import env.AppConfig;
 import env.Environment;
+import env.Platform;
 import java.net.URL;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +13,9 @@ import org.junit.jupiter.api.Test;
 /** Tests for actions.xml parsing and validation. */
 class ActionsXmlTest {
 
-    private final Environment env = new Environment();
+    private final Platform platform = new Platform();
+    private final AppConfig config = new AppConfig(platform);
+    private final Environment env = new Environment(config, platform);
 
     @Test
     @DisplayName("actions.xml should parse without errors using cross-platform menu modifier")

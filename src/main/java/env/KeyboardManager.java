@@ -6,7 +6,9 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.KeyStroke;
+import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,22 +33,18 @@ import org.slf4j.LoggerFactory;
 public class KeyboardManager {
     private static final Logger logger = LoggerFactory.getLogger(KeyboardManager.class);
 
-    private final Environment environment;
-    private final int menuKey;
-
-    @Inject
-    public KeyboardManager(@NonNull Environment environment) {
-        this.environment = environment;
-        this.menuKey = computeMenuKey();
-    }
+    private final Platform platform;
 
     /**
-     * Gets the platform-specific menu key modifier mask.
-     *
-     * @return the menu key modifier (Command on Mac, Ctrl on Windows/Linux)
+     * -- GETTER -- Gets the platform-specific menu key modifier mask. (Command on Mac, Ctrl on
+     * Windows/Linux)
      */
-    public int getMenuKey() {
-        return menuKey;
+    @Getter private final int menuKey;
+
+    @Inject
+    public KeyboardManager(@NonNull Platform platform) {
+        this.platform = platform;
+        this.menuKey = computeMenuKey();
     }
 
     /**
@@ -56,7 +54,7 @@ public class KeyboardManager {
      * @return the platform-appropriate display symbol
      */
     public String getKeySymbol(String key) {
-        if (environment.getPlatform() == Platform.MACOS) {
+        if (platform.detect() == Platform.PlatformType.MACOS) {
             return getMacKeySymbol(key);
         } else {
             return getPcKeySymbol(key);
@@ -72,7 +70,7 @@ public class KeyboardManager {
     public String externalToInternalForm(String externalKey) {
         // This method converts display names back to internal KeyStroke forms
         // Used when parsing shortcuts from external configuration
-        return switch (environment.getPlatform()) {
+        return switch (platform.detect()) {
             case MACOS -> macExternalToInternal(externalKey);
             case WINDOWS, LINUX -> pcExternalToInternal(externalKey);
         };
@@ -85,7 +83,7 @@ public class KeyboardManager {
      * @return the formatted shortcut string
      */
     public String formatShortcut(KeyStroke stroke) {
-        return switch (environment.getPlatform()) {
+        return switch (platform.detect()) {
             case MACOS -> formatMacShortcut(stroke);
             case WINDOWS, LINUX -> formatPcShortcut(stroke);
         };
@@ -97,7 +95,7 @@ public class KeyboardManager {
      * @return empty string for Mac, "+" for Windows/Linux
      */
     public String getKeySeparator() {
-        return switch (environment.getPlatform()) {
+        return switch (platform.detect()) {
             case MACOS -> "";
             case WINDOWS, LINUX -> "+";
         };
@@ -109,7 +107,7 @@ public class KeyboardManager {
      * @return the ordered list of modifier symbols/names
      */
     public List<String> getKeyOrder() {
-        return switch (environment.getPlatform()) {
+        return switch (platform.detect()) {
             case MACOS -> List.of("^", "⌥", "⇧", "⌘");
             case WINDOWS, LINUX -> List.of("Shift", "Ctrl", "Alt");
         };
@@ -125,7 +123,7 @@ public class KeyboardManager {
     public String xmlKeynameToInternalForm(String xmlKeyname) {
         // Handle cross-platform "menu" modifier: Command on Mac, Ctrl on Windows/Linux
         if ("menu".equals(xmlKeyname)) {
-            return switch (environment.getPlatform()) {
+            return switch (platform.detect()) {
                 case MACOS -> "meta";
                 case WINDOWS, LINUX -> "ctrl";
             };
@@ -149,7 +147,7 @@ public class KeyboardManager {
      * @return false for Mac, true for other platforms
      */
     public boolean shouldShowEmacsKeybindingOption() {
-        return environment.getPlatform() != Platform.MACOS;
+        return platform.detect() != Platform.PlatformType.MACOS;
     }
 
     // =============================================================================
@@ -168,14 +166,13 @@ public class KeyboardManager {
 
         // Add key symbol
         String keySymbol = getMacKeySymbol(stroke.getKeyCode());
-        if (keySymbol != null) {
-            result += keySymbol;
-        } else {
-            result +=
-                    KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
-                            .toString()
-                            .replace("pressed ", "");
-        }
+        result +=
+                Objects.requireNonNullElseGet(
+                        keySymbol,
+                        () ->
+                                KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
+                                        .toString()
+                                        .replace("pressed ", ""));
 
         return result;
     }
@@ -191,14 +188,13 @@ public class KeyboardManager {
 
         // Add key name
         String keyName = getPcKeySymbol(stroke.getKeyCode());
-        if (keyName != null) {
-            result += keyName;
-        } else {
-            result +=
-                    KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
-                            .toString()
-                            .replace("pressed ", "");
-        }
+        result +=
+                Objects.requireNonNullElseGet(
+                        keyName,
+                        () ->
+                                KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
+                                        .toString()
+                                        .replace("pressed ", ""));
 
         return result;
     }
@@ -209,8 +205,8 @@ public class KeyboardManager {
             case KeyEvent.VK_DELETE -> "⌦";
             case KeyEvent.VK_ENTER -> "↩";
             case KeyEvent.VK_ESCAPE -> "⎋";
-            case KeyEvent.VK_HOME -> "\u2196";
-            case KeyEvent.VK_END -> "\u2198";
+            case KeyEvent.VK_HOME -> "↖";
+            case KeyEvent.VK_END -> "↘";
             case KeyEvent.VK_PAGE_UP -> "PgUp";
             case KeyEvent.VK_PAGE_DOWN -> "PgDn";
             case KeyEvent.VK_LEFT -> "←";
@@ -264,8 +260,7 @@ public class KeyboardManager {
         // PC uses text-based key names, no special symbols
         return switch (key.toLowerCase()) {
             case "cmd", "meta" -> "Win";
-            case "option" -> "Alt";
-            case "alt" -> "Alt";
+            case "option", "alt" -> "Alt";
             case "shift" -> "Shift";
             case "ctrl", "control" -> "Ctrl";
             case "tab" -> "Tab";
@@ -284,28 +279,19 @@ public class KeyboardManager {
     private String macExternalToInternal(String externalKey) {
         // Convert Mac display symbols back to internal KeyStroke format
         return switch (externalKey.toLowerCase()) {
-            case "⌘" -> "meta";
-            case "⌥" -> "alt";
-            case "⇧" -> "shift";
-            case "^" -> "ctrl";
-            case "⇥" -> "TAB";
-            case "↩" -> "ENTER";
-            case "⌫" -> "DELETE";
-            case "⎋" -> "ESCAPE";
+            case "⌘", "command", "cmd", "menu" -> "meta"; // Cross-platform "menu" = Command on Mac
+            case "⌥", "option" -> "alt";
+            case "⇧", "shift" -> "shift";
+            case "^", "control", "ctrl" -> "ctrl";
+            case "⇥", "tab" -> "TAB";
+            case "↩", "enter", "return" -> "ENTER";
+            case "⌫", "delete" -> "DELETE";
+            case "⎋", "escape", "esc" -> "ESCAPE";
             case "↑" -> "UP";
             case "↓" -> "DOWN";
             case "←" -> "LEFT";
             case "→" -> "RIGHT";
-            case "menu" -> "meta"; // Cross-platform "menu" = Command on Mac
-            case "command", "cmd" -> "meta";
-            case "option" -> "alt";
-            case "control", "ctrl" -> "ctrl";
-            case "shift" -> "shift";
             case "space" -> "SPACE";
-            case "tab" -> "TAB";
-            case "enter", "return" -> "ENTER";
-            case "delete" -> "DELETE";
-            case "escape", "esc" -> "ESCAPE";
             default -> externalKey.toUpperCase(); // Uppercase key names (A, B, C, etc.)
         };
     }
@@ -314,8 +300,7 @@ public class KeyboardManager {
         // Convert PC display text back to internal KeyStroke format
         return switch (externalKey.toLowerCase()) {
             case "menu" -> "ctrl"; // Cross-platform "menu" = Ctrl on Windows/Linux
-            case "command" -> "meta"; // Command key maps to meta on PC too
-            case "win" -> "meta";
+            case "command", "win" -> "meta"; // Command key maps to meta on PC too
             case "alt" -> "alt";
             case "shift" -> "shift";
             case "ctrl" -> "ctrl";
@@ -337,7 +322,7 @@ public class KeyboardManager {
             // Try to get the platform-specific menu key
             if (java.awt.GraphicsEnvironment.isHeadless()) {
                 // In headless environment, return platform-appropriate default
-                return switch (environment.getPlatform()) {
+                return switch (platform.detect()) {
                     case MACOS -> InputEvent.META_DOWN_MASK;
                     case WINDOWS, LINUX -> InputEvent.CTRL_DOWN_MASK;
                 };
@@ -347,7 +332,7 @@ public class KeyboardManager {
         } catch (Exception e) {
             logger.warn("Failed to get menu shortcut key, using platform default", e);
             // Fall back to platform-appropriate default
-            return switch (environment.getPlatform()) {
+            return switch (platform.detect()) {
                 case MACOS -> InputEvent.META_DOWN_MASK;
                 case WINDOWS, LINUX -> InputEvent.CTRL_DOWN_MASK;
             };

@@ -56,12 +56,15 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      */
     private PreferencesFrame(Environment environment) {
         this.environment = environment;
-        this.keyboardManager = new KeyboardManager(environment);
+        this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
 
-        setTitle(environment.getPreferencesString());
+        // Get preferences string from LookAndFeelManager via DI
+        env.LookAndFeelManager lafManager =
+                di.GuiceBootstrap.getInjectedInstance(env.LookAndFeelManager.class);
+        setTitle(lafManager.getPreferencesString());
 
         // the content pane will have two main areas, one for preference choosers
         // (AbstractPreferenceDisplays), and one for the save/restore defaults buttons

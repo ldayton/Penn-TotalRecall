@@ -60,7 +60,7 @@ public class GuiceBootstrap {
     /** Initializes and starts the GUI application. */
     public void startApplication() {
         lookAndFeelManager.initialize();
-        var mainFrame = MyFrame.createInstance(environment);
+        var mainFrame = MyFrame.createInstance(lookAndFeelManager);
         mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
         MyMenu.updateActions();
         windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());

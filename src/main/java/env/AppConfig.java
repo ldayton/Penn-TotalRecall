@@ -1,32 +1,20 @@
 package env;
 
 import com.google.common.annotations.VisibleForTesting;
-import env.AudioSystemManager.FmodLibraryType;
-import env.AudioSystemManager.LibraryLoadingMode;
+import jakarta.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+import java.util.function.Function;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Application configuration management using Java Properties with hierarchical loading.
- *
- * <p>Configuration is loaded from multiple sources in priority order:
- *
- * <ol>
- *   <li>System properties (highest priority, e.g., -Dfmod.loading.mode=unpackaged)
- *   <li>User configuration file in platform-specific config directory
- *   <li>Bundled default configuration in JAR resources (lowest priority)
- * </ol>
- *
- * <p>This class is thread-safe and uses lazy initialization.
- *
- * <p>Note: This is package-private in design but made public for dependency injection and testing.
- * Production code should use manager classes (AudioSystemManager, etc.) instead of accessing
- * AppConfig directly.
+ * Configuration loading with hierarchical priority: System properties > User config > Bundled
+ * defaults. Thread-safe with lazy initialization. Use manager classes for domain-specific
+ * configuration access.
  */
 @VisibleForTesting
 public class AppConfig {
@@ -34,160 +22,111 @@ public class AppConfig {
 
     private static final String CONFIG_FILE_NAME = "application.properties";
     private static final String BUNDLED_CONFIG_PATH = "/" + CONFIG_FILE_NAME;
-
-    // Configuration keys
-    private static final String FMOD_LOADING_MODE_KEY = "fmod.loading.mode";
-    private static final String FMOD_LIBRARY_TYPE_KEY = "fmod.library.type";
-    private static final String FMOD_LIBRARY_PATH_MACOS_KEY = "fmod.library.path.macos";
-    private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
-    private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
-    private static final String AUDIO_HARDWARE_AVAILABLE_KEY = "audio.hardware.available";
-    private static final String RELEASES_API_URL_KEY = "releases.api.url";
-    private static final String RELEASES_PAGE_URL_KEY = "releases.page.url";
+    private static final String DEFAULTS_CONFIG_PATH = "/config/defaults.properties";
 
     private final Properties properties;
+    private final Platform platform;
 
-    public AppConfig() {
+    @Inject
+    public AppConfig(@NonNull Platform platform) {
+        this.platform = platform;
         this.properties = loadConfiguration();
     }
 
-    /**
-     * Gets the FMOD library loading mode.
-     *
-     * @return the loading mode, defaults to PACKAGED if not configured
-     */
-    public LibraryLoadingMode getFmodLoadingMode() {
-        String mode = getPropertyWithSystemOverride(FMOD_LOADING_MODE_KEY, "packaged");
-        try {
-            return LibraryLoadingMode.valueOf(mode.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            logger.warn(
-                    "Invalid FMOD loading mode '{}', defaulting to PACKAGED. Valid values: {}",
-                    mode,
-                    java.util.Arrays.toString(LibraryLoadingMode.values()));
-            return LibraryLoadingMode.PACKAGED;
-        }
+    /** Default constructor for non-DI usage (tests) */
+    public AppConfig() {
+        this.platform = new Platform();
+        this.properties = loadConfiguration();
     }
 
-    /**
-     * Gets the FMOD library type (standard or logging).
-     *
-     * @return the library type, defaults to STANDARD if not configured
-     */
-    public FmodLibraryType getFmodLibraryType() {
-        String type = getPropertyWithSystemOverride(FMOD_LIBRARY_TYPE_KEY, "standard");
-        try {
-            return FmodLibraryType.valueOf(type.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            logger.warn(
-                    "Invalid FMOD library type '{}', defaulting to STANDARD. Valid values: {}",
-                    type,
-                    java.util.Arrays.toString(FmodLibraryType.values()));
-            return FmodLibraryType.STANDARD;
-        }
-    }
-
-    /**
-     * Gets the custom FMOD library path for the specified platform.
-     *
-     * @param platform the target platform
-     * @return the library path, or null if not configured
-     */
-    public String getFmodLibraryPath(Platform platform) {
-        String key =
-                switch (platform) {
-                    case MACOS -> FMOD_LIBRARY_PATH_MACOS_KEY;
-                    case LINUX -> FMOD_LIBRARY_PATH_LINUX_KEY;
-                    case WINDOWS -> FMOD_LIBRARY_PATH_WINDOWS_KEY;
-                };
-        return getPropertyWithSystemOverride(key);
-    }
-
-    /**
-     * Determines whether audio hardware is available for testing.
-     *
-     * <p>This controls FMOD output mode configuration:
-     *
-     * <ul>
-     *   <li>true (default) - Use AUTODETECT mode for real audio hardware
-     *   <li>false - Use NOSOUND_NRT mode for headless CI testing
-     * </ul>
-     *
-     * @return true if audio hardware is available, false for headless environments
-     */
-    public boolean isAudioHardwareAvailable() {
-        return Boolean.parseBoolean(
-                getPropertyWithSystemOverride(AUDIO_HARDWARE_AVAILABLE_KEY, "true"));
-    }
-
-
-    /**
-     * Gets the GitHub Releases API URL for update checking.
-     *
-     * @return the releases API URL
-     */
-    public String getReleasesApiUrl() {
-        return getPropertyWithSystemOverride(RELEASES_API_URL_KEY);
-    }
-
-    /**
-     * Gets the GitHub Releases page URL for user downloads.
-     *
-     * @return the releases page URL
-     */
-    public String getReleasesPageUrl() {
-        return getPropertyWithSystemOverride(RELEASES_PAGE_URL_KEY);
-    }
-
-    /**
-     * Gets a configuration property with optional default value.
-     *
-     * @param key the property key
-     * @param defaultValue the default value if property is not found
-     * @return the property value or default
-     */
-    public String getProperty(String key, String defaultValue) {
+    /** Gets configuration property with optional default value. */
+    public String getProperty(@NonNull String key, @NonNull String defaultValue) {
         return getPropertyWithSystemOverride(key, defaultValue);
     }
 
-    /**
-     * Gets a configuration property.
-     *
-     * @param key the property key
-     * @return the property value or null if not found
-     */
-    public String getProperty(String key) {
+    /** Gets configuration property. */
+    public String getProperty(@NonNull String key) {
         return getPropertyWithSystemOverride(key);
     }
 
-    /**
-     * Loads configuration from multiple sources in priority order.
-     *
-     * @return merged properties from all sources
-     */
+    /** Gets a boolean property with optional default value. */
+    public boolean getBooleanProperty(@NonNull String key, boolean defaultValue) {
+        var value = getPropertyWithSystemOverride(key);
+        return value != null ? Boolean.parseBoolean(value) : defaultValue;
+    }
+
+    /** Gets an integer property with optional default value. */
+    @SuppressWarnings("unused")
+    public int getIntProperty(@NonNull String key, int defaultValue) {
+        return parseProperty(key, defaultValue, Integer::parseInt, "integer");
+    }
+
+    /** Gets a double property with optional default value. */
+    @SuppressWarnings("unused")
+    public double getDoubleProperty(@NonNull String key, double defaultValue) {
+        return parseProperty(key, defaultValue, Double::parseDouble, "double");
+    }
+
+    /** Gets a property, checking system properties first, then loaded configuration. */
+    private String getPropertyWithSystemOverride(
+            @NonNull String key, @NonNull String defaultValue) {
+        return System.getProperty(key, properties.getProperty(key, defaultValue));
+    }
+
+    /** Gets a property, checking system properties first, then loaded configuration. */
+    private String getPropertyWithSystemOverride(@NonNull String key) {
+        return System.getProperty(key, properties.getProperty(key));
+    }
+
+    private <T> T parseProperty(
+            @NonNull String key,
+            @NonNull T defaultValue,
+            @NonNull Function<String, T> parser,
+            @NonNull String typeName) {
+        var value = getPropertyWithSystemOverride(key);
+        if (value == null) return defaultValue;
+        try {
+            return parser.apply(value);
+        } catch (NumberFormatException e) {
+            logger.warn(
+                    "Invalid {} value for '{}': '{}', using default: {}",
+                    typeName,
+                    key,
+                    value,
+                    defaultValue);
+            return defaultValue;
+        }
+    }
+
+    /** Loads configuration from multiple sources in priority order. */
     private Properties loadConfiguration() {
-        Properties config = new Properties();
-
-        // 1. Load bundled defaults (lowest priority)
-        loadBundledDefaults(config);
-
-        // 2. Load user configuration file (medium priority)
-        loadUserConfiguration(config);
-
-        // 3. System properties override everything (highest priority)
-        // Properties.getProperty() already checks system properties first
-
+        var config = new Properties();
+        loadDefaultsConfiguration(config); // 1. Load base defaults (lowest priority)
+        loadBundledDefaults(config); // 2. Load bundled application config (low-medium priority)
+        loadPlatformConfiguration(config); // 3. Load platform-specific overrides (medium priority)
+        loadUserConfiguration(config); // 4. Load user configuration file (higher priority)
+        // 5. System properties override everything (handled in getPropertyWithSystemOverride)
         logger.debug("Configuration loaded with {} properties", config.size());
         return config;
     }
 
-    /**
-     * Loads default configuration bundled in the JAR.
-     *
-     * @param config properties to populate
-     */
-    private void loadBundledDefaults(Properties config) {
-        try (InputStream is = AppConfig.class.getResourceAsStream(BUNDLED_CONFIG_PATH)) {
+    /** Loads base defaults configuration. */
+    private void loadDefaultsConfiguration(@NonNull Properties config) {
+        try (var is = AppConfig.class.getResourceAsStream(DEFAULTS_CONFIG_PATH)) {
+            if (is != null) {
+                config.load(is);
+                logger.debug("Loaded defaults configuration from {}", DEFAULTS_CONFIG_PATH);
+            } else {
+                logger.debug("Defaults configuration not found: {}", DEFAULTS_CONFIG_PATH);
+            }
+        } catch (IOException e) {
+            logger.warn("Failed to load defaults configuration: {}", e.getMessage());
+        }
+    }
+
+    /** Loads bundled application configuration. */
+    private void loadBundledDefaults(@NonNull Properties config) {
+        try (var is = AppConfig.class.getResourceAsStream(BUNDLED_CONFIG_PATH)) {
             if (is != null) {
                 config.load(is);
                 logger.debug("Loaded bundled configuration from {}", BUNDLED_CONFIG_PATH);
@@ -199,15 +138,28 @@ public class AppConfig {
         }
     }
 
-    /**
-     * Loads user configuration from platform-specific config directory.
-     *
-     * @param config properties to populate (will override existing keys)
-     */
-    private void loadUserConfiguration(Properties config) {
-        File userConfigFile = getUserConfigFile();
+    /** Loads platform-specific configuration overrides. */
+    private void loadPlatformConfiguration(@NonNull Properties config) {
+        var platformType = platform.detect();
+        var platformConfigPath =
+                "/config/platform/" + platformType.name().toLowerCase() + ".properties";
+        try (var is = AppConfig.class.getResourceAsStream(platformConfigPath)) {
+            if (is != null) {
+                config.load(is);
+                logger.debug("Loaded platform configuration from {}", platformConfigPath);
+            } else {
+                logger.debug("Platform configuration not found: {}", platformConfigPath);
+            }
+        } catch (IOException e) {
+            logger.warn("Failed to load platform configuration: {}", e.getMessage());
+        }
+    }
+
+    /** Loads user configuration from platform-specific config directory. */
+    private void loadUserConfiguration(@NonNull Properties config) {
+        var userConfigFile = getUserConfigFile();
         if (userConfigFile.exists() && userConfigFile.canRead()) {
-            try (FileInputStream fis = new FileInputStream(userConfigFile)) {
+            try (var fis = new FileInputStream(userConfigFile)) {
                 config.load(fis);
                 logger.debug("Loaded user configuration from {}", userConfigFile.getAbsolutePath());
             } catch (IOException e) {
@@ -221,58 +173,20 @@ public class AppConfig {
         }
     }
 
-    /**
-     * Gets the platform-specific user configuration file path.
-     *
-     * @return the user config file
-     */
+    /** Gets the platform-specific user configuration file path. */
     private File getUserConfigFile() {
-        String configDir;
-        Platform platform = Platform.detect();
-        if (platform == Platform.MACOS) {
-            configDir =
-                    System.getProperty("user.home")
-                            + "/Library/Application Support/Penn TotalRecall";
-        } else if (platform == Platform.WINDOWS) {
-            configDir = System.getenv("APPDATA") + "\\Penn TotalRecall";
-        } else {
-            // Linux/Unix
-            configDir = System.getProperty("user.home") + "/.penn-totalrecall";
+        var platformType = platform.detect();
+        var userHome = System.getProperty("user.home");
+        var configDir =
+                switch (platformType) {
+                    case MACOS -> userHome + "/Library/Application Support/Penn TotalRecall";
+                    case WINDOWS -> System.getenv("APPDATA") + "\\Penn TotalRecall";
+                    case LINUX -> userHome + "/.penn-totalrecall";
+                };
+        var configDirFile = new File(configDir);
+        if (!configDirFile.exists() && !configDirFile.mkdirs()) {
+            logger.warn("Failed to create config directory: {}", configDir);
         }
-
-        File configDirFile = new File(configDir);
-        if (!configDirFile.exists()) {
-            configDirFile.mkdirs();
-        }
-
         return new File(configDirFile, CONFIG_FILE_NAME);
-    }
-
-    /**
-     * Gets a property, checking system properties first, then loaded configuration.
-     *
-     * @param key the property key
-     * @param defaultValue the default value
-     * @return the property value
-     */
-    private String getPropertyWithSystemOverride(String key, String defaultValue) {
-        // System properties have highest priority
-        String systemValue = System.getProperty(key);
-        if (systemValue != null) {
-            return systemValue;
-        }
-
-        // Fall back to loaded configuration
-        return properties.getProperty(key, defaultValue);
-    }
-
-    /**
-     * Gets a property, checking system properties first, then loaded configuration.
-     *
-     * @param key the property key
-     * @return the property value or null
-     */
-    private String getPropertyWithSystemOverride(String key) {
-        return getPropertyWithSystemOverride(key, null);
     }
 }

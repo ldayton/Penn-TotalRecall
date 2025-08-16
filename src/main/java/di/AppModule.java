@@ -10,6 +10,7 @@ import env.AudioSystemManager;
 import env.Environment;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
+import env.Platform;
 import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
 import jakarta.inject.Singleton;
@@ -26,7 +27,10 @@ public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // Singleton bindings for core services  
+        // Core platform detection - must be first for other services to use
+        bind(Platform.class).in(Singleton.class);
+
+        // Singleton bindings for core services
         bind(AppConfig.class).in(Singleton.class);
         bind(Environment.class).in(Singleton.class);
 
@@ -51,9 +55,7 @@ public class AppModule extends AbstractModule {
     @Provides
     UpdateChecker provideUpdateChecker(Environment environment, HttpClient httpClient) {
         return new UpdateChecker(
-                environment.getReleasesApiUrl(),
-                environment.getReleasesPageUrl(),
-                httpClient);
+                environment.getReleasesApiUrl(), environment.getReleasesPageUrl(), httpClient);
     }
 
     @Provides

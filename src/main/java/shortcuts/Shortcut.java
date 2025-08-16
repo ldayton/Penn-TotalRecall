@@ -22,17 +22,23 @@ public class Shortcut {
 
     private static final String INTERNAL_FORM_DELIMITER = " ";
 
-    public Shortcut(@NonNull KeyStroke stroke, @NonNull Environment env) {
+    public Shortcut(
+            @NonNull KeyStroke stroke,
+            @NonNull Environment env,
+            @NonNull KeyboardManager keyboardManager) {
         this.stroke = stroke;
         this.env = env;
-        this.keyboardManager = new KeyboardManager(env);
+        this.keyboardManager = keyboardManager;
         this.internalForm = ModernKeyUtils.getInternalForm(stroke);
     }
 
     // Factory methods for convenience
 
-    public static Shortcut forPlatform(@NonNull KeyStroke stroke, @NonNull Environment env) {
-        return new Shortcut(stroke, env);
+    public static Shortcut forPlatform(
+            @NonNull KeyStroke stroke,
+            @NonNull Environment env,
+            @NonNull KeyboardManager keyboardManager) {
+        return new Shortcut(stroke, env, keyboardManager);
     }
 
     public String getInternalForm() {
@@ -117,14 +123,17 @@ public class Shortcut {
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
-        return new Shortcut(stroke, environment);
+        KeyboardManager keyboardManager =
+                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+        return new Shortcut(stroke, environment, keyboardManager);
     }
 
     public static Shortcut fromExternalForm(
             @NonNull List<String> maskKeyExternalForms,
             @NonNull List<String> nonMaskKeyExternalForms,
             @NonNull Environment env) {
-        KeyboardManager keyboardManager = new KeyboardManager(env);
+        KeyboardManager keyboardManager =
+                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyExternalForms.stream()
@@ -136,7 +145,7 @@ public class Shortcut {
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
         }
-        return new Shortcut(stroke, env);
+        return new Shortcut(stroke, env, keyboardManager);
     }
 
     /**
@@ -148,7 +157,8 @@ public class Shortcut {
             @NonNull List<String> nonMaskKeyXmlNames,
             @NonNull Environment environment) {
 
-        KeyboardManager keyboardManager = new KeyboardManager(environment);
+        KeyboardManager keyboardManager =
+                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyXmlNames.stream()
@@ -160,7 +170,7 @@ public class Shortcut {
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalShortcutForm);
         }
-        return new Shortcut(stroke, environment);
+        return new Shortcut(stroke, environment, keyboardManager);
     }
 
     @Override

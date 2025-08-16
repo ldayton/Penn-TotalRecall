@@ -1,8 +1,8 @@
 package components;
 
+import behaviors.singleact.AboutAction;
 import behaviors.singleact.ExitAction;
 import behaviors.singleact.PreferencesAction;
-import env.Environment;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
 
 /**
  * Modern macOS integration using Java 21 Desktop and Taskbar APIs.
@@ -75,7 +74,13 @@ public final class MacOSIntegration {
         if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
             desktop.setAboutHandler(
                     e -> {
-                        GiveMessage.infoMessage(new Environment().getAboutMessage());
+                        var aboutAction = new AboutAction();
+                        var actionEvent =
+                                new ActionEvent(
+                                        MyFrame.getInstance(),
+                                        ActionEvent.ACTION_PERFORMED,
+                                        "about");
+                        aboutAction.actionPerformed(actionEvent);
                     });
         }
 

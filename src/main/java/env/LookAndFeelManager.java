@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 public class LookAndFeelManager {
     private static final Logger logger = LoggerFactory.getLogger(LookAndFeelManager.class);
 
-    private final Environment environment;
     private final AppConfig appConfig;
+    private final Platform platform;
 
     @Inject
-    public LookAndFeelManager(@NonNull Environment environment, @NonNull AppConfig appConfig) {
-        this.environment = environment;
+    public LookAndFeelManager(@NonNull AppConfig appConfig, @NonNull Platform platform) {
         this.appConfig = appConfig;
+        this.platform = platform;
     }
 
     /**
@@ -62,7 +62,7 @@ public class LookAndFeelManager {
 
     /** Configures platform-specific system properties for optimal rendering and native behavior. */
     private void configurePlatformProperties() {
-        if (environment.getPlatform() == Platform.MACOS) {
+        if (platform.detect() == Platform.PlatformType.MACOS) {
             // Configure macOS-specific system properties for optimal rendering
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("apple.awt.textantialiasing", "on");
@@ -91,7 +91,7 @@ public class LookAndFeelManager {
 
     /** Configures native OS integration features where available. */
     private void configureNativeIntegration() {
-        if (environment.getPlatform() == Platform.MACOS) {
+        if (platform.detect() == Platform.PlatformType.MACOS) {
             try {
                 MacOSIntegration.integrateWithMacOS();
                 logger.debug("macOS integration configured");
@@ -99,5 +99,54 @@ public class LookAndFeelManager {
                 logger.warn("Failed to configure macOS integration", e);
             }
         }
+    }
+
+    /**
+     * Whether this platform should show Preferences/About in application menus. On Mac, these are
+     * handled by the system menu bar.
+     *
+     * @return true if preferences should be shown in menus, false otherwise
+     */
+    public boolean shouldShowPreferencesInMenu() {
+        return platform.detect() != Platform.PlatformType.MACOS;
+    }
+
+    /**
+     * Whether this platform should use AWT file choosers instead of Swing ones. macOS generally
+     * provides better native file choosers through AWT.
+     *
+     * @return true if AWT file choosers should be used, false for Swing
+     */
+    public boolean shouldUseAWTFileChoosers() {
+        boolean defaultValue = platform.detect() == Platform.PlatformType.MACOS;
+        return appConfig.getBooleanProperty("ui.use_native_file_choosers", defaultValue);
+    }
+
+    /**
+     * Gets the platform-appropriate preferences menu text.
+     *
+     * @return "Preferences" on macOS/Linux, "Options" on Windows
+     */
+    public String getPreferencesString() {
+        String defaultValue =
+                switch (platform.detect()) {
+                    case MACOS -> "Preferences";
+                    case WINDOWS -> "Options";
+                    case LINUX -> "Preferences";
+                };
+        return appConfig.getProperty("ui.preferences_menu_title", defaultValue);
+    }
+
+    /**
+     * Gets the appropriate application icon path for the platform. Modern platforms support larger
+     * icons for better display quality.
+     *
+     * @return path to the platform-appropriate icon resource
+     */
+    public String getAppIconPath() {
+        return switch (platform.detect()) {
+            case WINDOWS -> "/images/headphones48.png"; // Modern Windows taskbar
+            case MACOS, LINUX -> "/images/headphones16.png";
+        };
     }
 }

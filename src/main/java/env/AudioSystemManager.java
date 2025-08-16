@@ -10,19 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Manages audio system configuration and FMOD library loading.
+ * Loads FMOD audio libraries with platform-specific configuration.
  *
- * <p>Handles:
- *
- * <ul>
- *   <li>FMOD library loading (packaged vs unpackaged modes)
- *   <li>Audio system configuration management
- *   <li>Platform-specific audio library handling
- *   <li>Audio hardware availability detection
- * </ul>
- *
- * <p>This class encapsulates all FMOD-related configuration and loading logic, following the same
- * dependency injection pattern as KeyboardManager and LookAndFeelManager.
+ * <p>Handles packaged (production) vs unpackaged (development) library loading, custom library
+ * paths, and audio hardware detection for headless environments.
  */
 @Singleton
 public class AudioSystemManager implements AudioSystemLoader {
@@ -58,18 +49,27 @@ public class AudioSystemManager implements AudioSystemLoader {
         /** Debug/logging library with diagnostic output (for development/CI). */
         LOGGING
     }
+
     private static final Logger logger = LoggerFactory.getLogger(AudioSystemManager.class);
 
+    // Configuration keys for FMOD settings
+    private static final String FMOD_LOADING_MODE_KEY = "fmod.loading.mode";
+    private static final String FMOD_LIBRARY_TYPE_KEY = "fmod.library.type";
+    private static final String FMOD_LIBRARY_PATH_MACOS_KEY = "fmod.library.path.macos";
+    private static final String FMOD_LIBRARY_PATH_LINUX_KEY = "fmod.library.path.linux";
+    private static final String FMOD_LIBRARY_PATH_WINDOWS_KEY = "fmod.library.path.windows";
+    private static final String AUDIO_HARDWARE_AVAILABLE_KEY = "audio.hardware.available";
+
     private final AppConfig config;
-    private final Environment env;
-    
+    private final Platform platform;
+
     // Thread safety for library loading
     private final Object loadLock = new Object();
 
     @Inject
-    public AudioSystemManager(@NonNull AppConfig config, @NonNull Environment env) {
+    public AudioSystemManager(@NonNull AppConfig config, @NonNull Platform platform) {
         this.config = config;
-        this.env = env;
+        this.platform = platform;
     }
 
     /**
@@ -82,14 +82,14 @@ public class AudioSystemManager implements AudioSystemLoader {
     public <T> T loadAudioLibrary(Class<T> interfaceClass) {
         synchronized (loadLock) {
             try {
-                LibraryLoadingMode mode = config.getFmodLoadingMode();
-                FmodLibraryType libraryType = config.getFmodLibraryType();
+                LibraryLoadingMode mode = getFmodLoadingMode();
+                FmodLibraryType libraryType = getFmodLibraryType();
 
                 logger.debug(
                         "Loading FMOD library: mode={}, type={}, platform={}",
                         mode,
                         libraryType,
-                        env.getPlatform());
+                        platform.detect());
 
                 switch (mode) {
                     case UNPACKAGED:
@@ -107,28 +107,101 @@ public class AudioSystemManager implements AudioSystemLoader {
     /**
      * Determines whether audio hardware is available for testing.
      *
+     * <p>This controls FMOD output mode configuration:
+     *
+     * <ul>
+     *   <li>true (default) - Use AUTODETECT mode for real audio hardware
+     *   <li>false - Use NOSOUND_NRT mode for headless CI testing
+     * </ul>
+     *
      * @return true if audio hardware is available, false for headless environments
      */
     public boolean isAudioHardwareAvailable() {
-        return config.isAudioHardwareAvailable();
+        return Boolean.parseBoolean(config.getProperty(AUDIO_HARDWARE_AVAILABLE_KEY, "true"));
     }
 
     /**
-     * Gets the FMOD loading mode from configuration.
+     * Gets the FMOD library loading mode.
      *
-     * @return the configured loading mode
+     * @return the loading mode, defaults to PACKAGED if not configured
      */
     public LibraryLoadingMode getFmodLoadingMode() {
-        return config.getFmodLoadingMode();
+        String mode = config.getProperty(FMOD_LOADING_MODE_KEY, "packaged");
+        try {
+            return LibraryLoadingMode.valueOf(mode.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            logger.warn(
+                    "Invalid FMOD loading mode '{}', defaulting to PACKAGED. Valid values: {}",
+                    mode,
+                    java.util.Arrays.toString(LibraryLoadingMode.values()));
+            return LibraryLoadingMode.PACKAGED;
+        }
     }
 
     /**
-     * Gets the FMOD library type from configuration.
+     * Gets the FMOD library type (standard or logging).
      *
-     * @return the configured library type
+     * @return the library type, defaults to STANDARD if not configured
      */
     public FmodLibraryType getFmodLibraryType() {
-        return config.getFmodLibraryType();
+        String type = config.getProperty(FMOD_LIBRARY_TYPE_KEY, "standard");
+        try {
+            return FmodLibraryType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            logger.warn(
+                    "Invalid FMOD library type '{}', defaulting to STANDARD. Valid values: {}",
+                    type,
+                    java.util.Arrays.toString(FmodLibraryType.values()));
+            return FmodLibraryType.STANDARD;
+        }
+    }
+
+    /**
+     * Gets the custom FMOD library path for the specified platform.
+     *
+     * @param platformType the target platform
+     * @return the library path, or null if not configured
+     */
+    public String getFmodLibraryPath(Platform.PlatformType platformType) {
+        String key =
+                switch (platformType) {
+                    case MACOS -> FMOD_LIBRARY_PATH_MACOS_KEY;
+                    case LINUX -> FMOD_LIBRARY_PATH_LINUX_KEY;
+                    case WINDOWS -> FMOD_LIBRARY_PATH_WINDOWS_KEY;
+                };
+        return config.getProperty(key);
+    }
+
+    /**
+     * Gets the platform-specific FMOD library filename based on library type.
+     *
+     * @param libraryType the library type (standard or logging)
+     * @return the filename for the FMOD library on the current platform
+     */
+    public String getFmodLibraryFilename(FmodLibraryType libraryType) {
+        return switch (platform.detect()) {
+            case MACOS ->
+                    libraryType == FmodLibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
+            case LINUX -> libraryType == FmodLibraryType.LOGGING ? "libfmodL.so" : "libfmod.so";
+            case WINDOWS -> libraryType == FmodLibraryType.LOGGING ? "fmodL.dll" : "fmod.dll";
+        };
+    }
+
+    /**
+     * Gets the full development path to the FMOD library for the current platform and library type.
+     *
+     * @param libraryType the library type (standard or logging)
+     * @return the relative path to the FMOD library in development mode
+     */
+    public String getFmodLibraryDevelopmentPath(FmodLibraryType libraryType) {
+        String platformDir =
+                switch (platform.detect()) {
+                    case MACOS -> "macos";
+                    case LINUX -> "linux";
+                    case WINDOWS -> "windows";
+                };
+        String filename = getFmodLibraryFilename(libraryType);
+        return "src/main/resources/fmod/" + platformDir + "/" + filename;
     }
 
     /**
@@ -140,7 +213,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      */
     private <T> T loadUnpackaged(Class<T> interfaceClass, FmodLibraryType libraryType) {
         // Try custom path from configuration first (supports all platforms)
-        String customPath = config.getFmodLibraryPath(env.getPlatform());
+        String customPath = getFmodLibraryPath(platform.detect());
         if (customPath != null) {
             File customFile = new File(customPath);
             if (customFile.exists()) {
@@ -153,7 +226,7 @@ public class AudioSystemManager implements AudioSystemLoader {
 
         // Fall back to default development path for current platform
         String projectDir = System.getProperty("user.dir");
-        String relativePath = env.getFmodLibraryDevelopmentPath(libraryType);
+        String relativePath = getFmodLibraryDevelopmentPath(libraryType);
         String fullPath = projectDir + "/" + relativePath;
 
         File libraryFile = new File(fullPath);
@@ -162,7 +235,7 @@ public class AudioSystemManager implements AudioSystemLoader {
                     "FMOD library not found at: "
                             + fullPath
                             + " (platform="
-                            + env.getPlatform()
+                            + platform.detect()
                             + ", type="
                             + libraryType
                             + ")");

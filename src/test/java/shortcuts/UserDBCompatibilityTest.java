@@ -2,14 +2,18 @@ package shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import env.AppConfig;
 import env.Environment;
+import env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** Tests to ensure existing user preferences stored in UserDB continue to work. */
 class UserDBCompatibilityTest {
 
-    private final Environment env = new Environment();
+    private final Platform platform = new Platform();
+    private final AppConfig config = new AppConfig(platform);
+    private final Environment env = new Environment(config, platform);
 
     @Test
     @DisplayName("Existing internal formats from user preferences should parse correctly")

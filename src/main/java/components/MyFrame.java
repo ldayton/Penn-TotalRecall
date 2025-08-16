@@ -3,7 +3,6 @@ package components;
 import behaviors.singleact.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
-import env.Environment;
 import info.GUIConstants;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
@@ -26,14 +25,14 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
 
     private static MyFrame instance;
-    private final Environment environment;
+    private final env.LookAndFeelManager lookAndFeelManager;
 
-    private MyFrame(Environment environment) {
-        this.environment = environment;
+    private MyFrame(env.LookAndFeelManager lookAndFeelManager) {
+        this.lookAndFeelManager = lookAndFeelManager;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(MyGlassPane.getInstance());
         MyGlassPane.getInstance().setVisible(true);
-        setJMenuBar(MyMenu.createInstance(environment));
+        setJMenuBar(MyMenu.createInstance(lookAndFeelManager));
 
         // force handling by  WindowListener below
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -62,7 +61,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         // Set application icon (platform-specific sizing)
         setIconImage(
                 Toolkit.getDefaultToolkit()
-                        .getImage(MyFrame.class.getResource(environment.getAppIconPath())));
+                        .getImage(MyFrame.class.getResource(lookAndFeelManager.getAppIconPath())));
 
         // this is default, but double checking because focusability is needed for
         // MyFocusTraversalPolicy to be used
@@ -82,14 +81,14 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     public static MyFrame getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyFrame not initialized. Call createInstance(Environment) first.");
+                    "MyFrame not initialized. Call createInstance(LookAndFeelManager) first.");
         }
         return instance;
     }
 
-    public static MyFrame createInstance(Environment environment) {
+    public static MyFrame createInstance(env.LookAndFeelManager lookAndFeelManager) {
         if (instance == null) {
-            instance = new MyFrame(environment);
+            instance = new MyFrame(lookAndFeelManager);
         }
         return instance;
     }

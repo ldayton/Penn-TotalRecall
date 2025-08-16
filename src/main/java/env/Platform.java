@@ -1,32 +1,53 @@
 package env;
 
-import com.google.common.annotations.VisibleForTesting;
+import jakarta.inject.Singleton;
 import java.util.Locale;
 
 /**
- * Platform detection for cross-platform behavior.
+ * Platform detection service.
  *
- * <p>Provides clean platform detection without runtime uncertainty. Linux serves as the safe
- * default for all Unix-like systems.
- *
- * <p>Note: This is package-private but made public solely for testing purposes. Production code
- * should use Environment methods instead of accessing Platform directly.
+ * <p>Detects the operating system once at startup and provides that information to other components
+ * via dependency injection.
  */
-@VisibleForTesting
-public enum Platform {
-    MACOS,
-    WINDOWS,
-    LINUX;
+@Singleton
+public class Platform {
+
+    /** Supported platform types. */
+    public enum PlatformType {
+        MACOS,
+        WINDOWS,
+        LINUX
+    }
+
+    private final PlatformType detectedPlatform;
+
+    /** Detects the current platform based on the os.name system property. */
+    public Platform() {
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        if (osName.contains("mac")) {
+            this.detectedPlatform = PlatformType.MACOS;
+        } else if (osName.contains("win")) {
+            this.detectedPlatform = PlatformType.WINDOWS;
+        } else {
+            this.detectedPlatform = PlatformType.LINUX;
+        }
+    }
 
     /**
-     * Detects the current platform based on os.name system property.
+     * Constructor for testing - allows injecting a specific platform type.
      *
-     * @return the current platform (never null)
+     * @param platformType the platform type to use
      */
-    public static Platform detect() {
-        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        if (osName.contains("mac")) return MACOS;
-        if (osName.contains("win")) return WINDOWS;
-        return LINUX; // Safe default for Unix-like systems (FreeBSD, OpenBSD, Solaris, AIX, etc.)
+    public Platform(PlatformType platformType) {
+        this.detectedPlatform = platformType;
+    }
+
+    /**
+     * Returns the detected platform type.
+     *
+     * @return the current platform
+     */
+    public PlatformType detect() {
+        return detectedPlatform;
     }
 }

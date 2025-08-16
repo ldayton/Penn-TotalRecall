@@ -1,7 +1,6 @@
 package components.waveform;
 
 import control.CurAudio;
-import env.Environment;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
@@ -24,14 +23,17 @@ import org.slf4j.LoggerFactory;
  * Handler for buffered portions of the waveform image.
  *
  * <p>Represents the waveform image as an array of <code>WaveformChunks</code> each containing a
- * portion of the waveform image. The chunk size is stored in {@link info.Constants#chunkSizeInSec},
- * and the current chunk is reported by {@link control.CurAudio}.
+ * portion of the waveform image. The chunk size is defined as CHUNK_SIZE_SECONDS, and the current
+ * chunk is reported by {@link control.CurAudio}.
  *
  * <p>This class aims to keep the current chunk as well as the next/previous chunks (when available)
  * stored in the array. All other members of the array will be null, to save memory.
  */
 public class WaveformBuffer extends Buffer {
     private static final Logger logger = LoggerFactory.getLogger(WaveformBuffer.class);
+
+    /** Audio chunk size in seconds for waveform buffering. */
+    public static final int CHUNK_SIZE_SECONDS = 10;
 
     private final AlphaComposite antiAliasingComposite =
             AlphaComposite.getInstance(AlphaComposite.SRC_OVER, /* larger is darker */ 0.5F);
@@ -62,8 +64,7 @@ public class WaveformBuffer extends Buffer {
     public WaveformBuffer() {
         finish = false;
         numChunks = CurAudio.lastChunkNum() + 1;
-        chunkWidthInPixels =
-                GUIConstants.zoomlessPixelsPerSecond * new Environment().getChunkSizeInSeconds();
+        chunkWidthInPixels = GUIConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
@@ -329,7 +330,7 @@ public class WaveformBuffer extends Buffer {
             long toSkip =
                     (long)
                             (chunkNum
-                                    * new Environment().getChunkSizeInSeconds()
+                                    * CHUNK_SIZE_SECONDS
                                     * CurAudio.getMaster().frameRate()
                                     * (CurAudio.getMaster().frameSizeInBytes()));
             if (chunkNum > 0) {
@@ -351,9 +352,7 @@ public class WaveformBuffer extends Buffer {
             BandPassFilter filter = new BandPassFilter(minBand, maxBand);
             double[] samples =
                     new double
-                            [(int)
-                                            (CurAudio.getMaster().frameRate()
-                                                    * new Environment().getChunkSizeInSeconds())
+                            [(int) (CurAudio.getMaster().frameRate() * CHUNK_SIZE_SECONDS)
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 

@@ -1,23 +1,17 @@
 package env;
 
 /**
- * Interface for audio system loading and configuration management.
+ * Interface for loading native audio libraries.
  *
- * <p>Defines the contract for loading native audio libraries and managing audio system
- * configuration. This interface enables dependency injection and testing by providing an
- * abstraction over the concrete audio system implementation.
- *
- * <p>Implementations must be thread-safe for use in dependency injection containers.
+ * <p>Exists to enable dependency injection and testing. The concrete implementation handles
+ * platform-specific library loading details and configuration.
  */
 public interface AudioSystemLoader {
 
     /**
-     * Loads the specified audio library using the configured loading mode and library type.
+     * Loads a native audio library using JNA.
      *
-     * <p>This method handles platform-specific loading strategies and configuration-based library
-     * selection. The implementation must be thread-safe.
-     *
-     * @param <T> the library interface type
+     * @param <T> the JNA interface type
      * @param interfaceClass the JNA interface class to load
      * @return the loaded library instance
      * @throws AudioSystemException if the library cannot be loaded
@@ -25,46 +19,16 @@ public interface AudioSystemLoader {
     <T> T loadAudioLibrary(Class<T> interfaceClass);
 
     /**
-     * Determines whether audio hardware is available for testing.
+     * Checks if audio hardware is available.
      *
-     * @return true if audio hardware is available, false for headless environments
+     * @return true if audio hardware is present, false for headless environments
      */
     boolean isAudioHardwareAvailable();
 
-    /**
-     * Exception thrown when audio system operations fail.
-     *
-     * <p>This exception indicates failures in audio system initialization, library loading, or
-     * configuration. It provides context about the specific audio system operation that failed.
-     */
+    /** Thrown when audio library loading fails. */
     class AudioSystemException extends RuntimeException {
-
-        /**
-         * Constructs an AudioSystemException with the specified detail message.
-         *
-         * @param message the detail message
-         */
-        public AudioSystemException(String message) {
-            super(message);
-        }
-
-        /**
-         * Constructs an AudioSystemException with the specified detail message and cause.
-         *
-         * @param message the detail message
-         * @param cause the cause of this exception
-         */
         public AudioSystemException(String message, Throwable cause) {
             super(message, cause);
-        }
-
-        /**
-         * Constructs an AudioSystemException with the specified cause.
-         *
-         * @param cause the cause of this exception
-         */
-        public AudioSystemException(Throwable cause) {
-            super(cause);
         }
     }
 }

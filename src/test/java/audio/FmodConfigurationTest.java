@@ -3,9 +3,9 @@ package audio;
 import static org.junit.jupiter.api.Assertions.*;
 
 import env.AppConfig;
+import env.AudioSystemManager;
 import env.AudioSystemManager.FmodLibraryType;
 import env.AudioSystemManager.LibraryLoadingMode;
-import env.Environment;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,17 +13,18 @@ import org.junit.jupiter.api.Test;
 /** Tests for FMOD configuration and cross-platform support in Environment and AppConfig. */
 class FmodConfigurationTest {
 
-    private final Environment env = new Environment();
-    private final AppConfig config = new AppConfig();
+    private final Platform platform = new Platform();
+    private final AppConfig config = new AppConfig(platform);
+    private final AudioSystemManager audioManager = new AudioSystemManager(config, platform);
 
     @Test
-    @DisplayName("Environment provides correct FMOD library filenames for each platform")
+    @DisplayName("AudioSystemManager provides correct FMOD library filenames for each platform")
     void testFmodLibraryFilenames() {
-        assertNotNull(env, "Environment instance should not be null");
+        assertNotNull(audioManager, "AudioSystemManager instance should not be null");
 
         // Test that we get the correct filenames for each combination
-        String standardMac = env.getFmodLibraryFilename(FmodLibraryType.STANDARD);
-        String loggingMac = env.getFmodLibraryFilename(FmodLibraryType.LOGGING);
+        String standardMac = audioManager.getFmodLibraryFilename(FmodLibraryType.STANDARD);
+        String loggingMac = audioManager.getFmodLibraryFilename(FmodLibraryType.LOGGING);
 
         // Should get platform-appropriate filenames
         // Note: This test runs on whatever platform it's executed on
@@ -37,32 +38,31 @@ class FmodConfigurationTest {
     }
 
     @Test
-    @DisplayName("AppConfig provides FMOD loading mode from environment configuration")
+    @DisplayName("AudioSystemManager provides FMOD loading mode from environment configuration")
     void testFmodLoadingModeFromEnvironment() {
 
         // In development environment, should be UNPACKAGED
         // In CI environment, should also be UNPACKAGED (both run from source)
         // Only production packages use PACKAGED
-        LibraryLoadingMode mode = config.getFmodLoadingMode();
+        LibraryLoadingMode mode = audioManager.getFmodLoadingMode();
         assertEquals(LibraryLoadingMode.UNPACKAGED, mode);
     }
-
 
     @Test
     @DisplayName("Environment provides valid library paths for current platform")
     void testFmodLibraryPaths() {
 
-        String standardPath = env.getFmodLibraryDevelopmentPath(FmodLibraryType.STANDARD);
-        String loggingPath = env.getFmodLibraryDevelopmentPath(FmodLibraryType.LOGGING);
+        String standardPath = audioManager.getFmodLibraryDevelopmentPath(FmodLibraryType.STANDARD);
+        String loggingPath = audioManager.getFmodLibraryDevelopmentPath(FmodLibraryType.LOGGING);
 
         assertNotNull(standardPath);
         assertNotNull(loggingPath);
         assertNotEquals(standardPath, loggingPath);
 
         // Paths should contain platform directory
-        Platform platform = env.getPlatform();
+        Platform.PlatformType platformType = platform.detect();
         String expectedPlatformDir =
-                switch (platform) {
+                switch (platformType) {
                     case MACOS -> "macos";
                     case LINUX -> "linux";
                     case WINDOWS -> "windows";

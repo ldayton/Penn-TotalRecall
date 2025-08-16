@@ -15,7 +15,6 @@ import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import di.GuiceBootstrap;
-import env.Environment;
 import info.Constants;
 import info.GUIConstants;
 import java.io.File;
@@ -101,7 +100,9 @@ public class CurAudio {
             MyFrame.getInstance()
                     .setTitle(GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
 
-            chunkSize = new Environment().getChunkSizeInSeconds() * (long) master.frameRate();
+            chunkSize =
+                    components.waveform.WaveformBuffer.CHUNK_SIZE_SECONDS
+                            * (long) master.frameRate();
             totalNumOfChunks =
                     (int) Math.ceil((double) master.durationInFrames() / (double) chunkSize);
             lastFrameArray = new long[totalNumOfChunks];
