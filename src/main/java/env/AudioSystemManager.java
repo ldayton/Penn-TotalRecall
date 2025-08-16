@@ -160,7 +160,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @return the library path, or null if not configured
      */
     public String getFmodLibraryPath(@NonNull Platform.PlatformType platformType) {
-        String key =
+        var key =
                 switch (platformType) {
                     case MACOS -> FMOD_LIBRARY_PATH_MACOS_KEY;
                     case LINUX -> FMOD_LIBRARY_PATH_LINUX_KEY;
@@ -191,13 +191,13 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @return the relative path to the FMOD library in development mode
      */
     public String getFmodLibraryDevelopmentPath(@NonNull FmodLibraryType libraryType) {
-        String platformDir =
+        var platformDir =
                 switch (platform.detect()) {
                     case MACOS -> "macos";
                     case LINUX -> "linux";
                     case WINDOWS -> "windows";
                 };
-        String filename = getFmodLibraryFilename(libraryType);
+        var filename = getFmodLibraryFilename(libraryType);
         return "src/main/resources/fmod/" + platformDir + "/" + filename;
     }
 
@@ -210,24 +210,34 @@ public class AudioSystemManager implements AudioSystemLoader {
      */
     private <T extends Library> T loadUnpackaged(
             @NonNull Class<T> interfaceClass, @NonNull FmodLibraryType libraryType) {
-        // Try custom path from configuration first (supports all platforms)
-        String customPath = getFmodLibraryPath(platform.detect());
-        if (customPath != null) {
-            File customFile = new File(customPath);
-            if (customFile.exists()) {
-                logger.debug("Loading FMOD from custom path: {}", customPath);
-                return loadLibraryFromAbsolutePath(customFile.getAbsolutePath(), interfaceClass);
-            } else {
-                logger.warn("Custom FMOD library path not found: {}", customPath);
-            }
+        var customResult = tryCustomPath(interfaceClass);
+        if (customResult != null) {
+            return customResult;
         }
+        return loadFromDevelopmentPath(interfaceClass, libraryType);
+    }
 
-        // Fall back to default development path for current platform
-        String projectDir = System.getProperty("user.dir");
-        String relativePath = getFmodLibraryDevelopmentPath(libraryType);
-        String fullPath = projectDir + "/" + relativePath;
+    private <T extends Library> T tryCustomPath(@NonNull Class<T> interfaceClass) {
+        var customPath = getFmodLibraryPath(platform.detect());
+        if (customPath == null) return null;
 
-        File libraryFile = new File(fullPath);
+        var customFile = new File(customPath);
+        if (customFile.exists()) {
+            logger.debug("Loading FMOD from custom path: {}", customPath);
+            return loadLibraryFromAbsolutePath(customFile.getAbsolutePath(), interfaceClass);
+        } else {
+            logger.warn("Custom FMOD library path not found: {}", customPath);
+            return null;
+        }
+    }
+
+    private <T extends Library> T loadFromDevelopmentPath(
+            @NonNull Class<T> interfaceClass, @NonNull FmodLibraryType libraryType) {
+        var projectDir = System.getProperty("user.dir");
+        var relativePath = getFmodLibraryDevelopmentPath(libraryType);
+        var fullPath = projectDir + "/" + relativePath;
+
+        var libraryFile = new File(fullPath);
         if (!libraryFile.exists()) {
             throw new RuntimeException(
                     "FMOD library not found at: "
@@ -269,18 +279,12 @@ public class AudioSystemManager implements AudioSystemLoader {
      */
     private <T extends Library> T loadLibraryFromAbsolutePath(
             @NonNull String absolutePath, @NonNull Class<T> interfaceClass) {
-        File file = new File(absolutePath);
-        String fileName = file.getName();
+        var file = new File(absolutePath);
+        var fileName = file.getName();
 
-        // Extract library name by removing platform-specific prefixes and extensions
-        String libraryName =
-                fileName.replaceAll("^lib", "") // Remove "lib" prefix (Linux/macOS)
-                        .replaceAll("\\.(so|dll|dylib)$", ""); // Remove file extensions
+        var libraryName = fileName.replaceAll("^lib", "").replaceAll("\\.(so|dll|dylib)$", "");
 
-        // Add the directory to JNA's search path for this library
         NativeLibrary.addSearchPath(libraryName, file.getParent());
-
-        // Load using modern JNA API
         return Native.load(libraryName, interfaceClass);
     }
 

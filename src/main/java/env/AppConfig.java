@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.function.Function;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +41,76 @@ public class AppConfig {
         this.properties = loadConfiguration();
     }
 
+    /** Type-safe property access patterns. */
+    public sealed interface PropertyType<T>
+            permits StringProperty, BooleanProperty, IntProperty, DoubleProperty {
+        T parse(String value);
+
+        String typeName();
+    }
+
+    public record StringProperty() implements PropertyType<String> {
+        public String parse(String value) {
+            return value;
+        }
+
+        public String typeName() {
+            return "string";
+        }
+    }
+
+    public record BooleanProperty() implements PropertyType<Boolean> {
+        public Boolean parse(String value) {
+            return Boolean.parseBoolean(value);
+        }
+
+        public String typeName() {
+            return "boolean";
+        }
+    }
+
+    public record IntProperty() implements PropertyType<Integer> {
+        public Integer parse(String value) {
+            return Integer.parseInt(value);
+        }
+
+        public String typeName() {
+            return "integer";
+        }
+    }
+
+    public record DoubleProperty() implements PropertyType<Double> {
+        public Double parse(String value) {
+            return Double.parseDouble(value);
+        }
+
+        public String typeName() {
+            return "double";
+        }
+    }
+
+    /** Type-safe property getter with compile-time type checking. */
+    public <T> T getProperty(
+            @NonNull String key, @NonNull T defaultValue, @NonNull PropertyType<T> type) {
+        var value = getPropertyWithSystemOverride(key);
+        if (value == null) return defaultValue;
+
+        try {
+            return type.parse(value);
+        } catch (Exception e) {
+            logger.warn(
+                    "Invalid {} value for '{}': '{}', using default: {}",
+                    type.typeName(),
+                    key,
+                    value,
+                    defaultValue);
+            return defaultValue;
+        }
+    }
+
     /** Gets configuration property with optional default value. */
     public String getProperty(@NonNull String key, @NonNull String defaultValue) {
-        return getPropertyWithSystemOverride(key, defaultValue);
+        return getProperty(key, defaultValue, new StringProperty());
     }
 
     /** Gets configuration property. */
@@ -54,23 +120,23 @@ public class AppConfig {
 
     /** Gets a boolean property with optional default value. */
     public boolean getBooleanProperty(@NonNull String key, boolean defaultValue) {
-        var value = getPropertyWithSystemOverride(key);
-        return value != null ? Boolean.parseBoolean(value) : defaultValue;
+        return getProperty(key, defaultValue, new BooleanProperty());
     }
 
     /** Gets an integer property with optional default value. */
     @SuppressWarnings("unused")
     public int getIntProperty(@NonNull String key, int defaultValue) {
-        return parseProperty(key, defaultValue, Integer::parseInt, "integer");
+        return getProperty(key, defaultValue, new IntProperty());
     }
 
     /** Gets a double property with optional default value. */
     @SuppressWarnings("unused")
     public double getDoubleProperty(@NonNull String key, double defaultValue) {
-        return parseProperty(key, defaultValue, Double::parseDouble, "double");
+        return getProperty(key, defaultValue, new DoubleProperty());
     }
 
     /** Gets a property, checking system properties first, then loaded configuration. */
+    @SuppressWarnings("unused")
     private String getPropertyWithSystemOverride(
             @NonNull String key, @NonNull String defaultValue) {
         return System.getProperty(key, properties.getProperty(key, defaultValue));
@@ -79,26 +145,6 @@ public class AppConfig {
     /** Gets a property, checking system properties first, then loaded configuration. */
     private String getPropertyWithSystemOverride(@NonNull String key) {
         return System.getProperty(key, properties.getProperty(key));
-    }
-
-    private <T> T parseProperty(
-            @NonNull String key,
-            @NonNull T defaultValue,
-            @NonNull Function<String, T> parser,
-            @NonNull String typeName) {
-        var value = getPropertyWithSystemOverride(key);
-        if (value == null) return defaultValue;
-        try {
-            return parser.apply(value);
-        } catch (NumberFormatException e) {
-            logger.warn(
-                    "Invalid {} value for '{}': '{}', using default: {}",
-                    typeName,
-                    key,
-                    value,
-                    defaultValue);
-            return defaultValue;
-        }
     }
 
     /** Loads configuration from multiple sources in priority order. */

@@ -128,7 +128,7 @@ public class LookAndFeelManager {
      * @return "Preferences" on macOS/Linux, "Options" on Windows
      */
     public String getPreferencesString() {
-        String defaultValue =
+        var defaultValue =
                 switch (platform.detect()) {
                     case MACOS, LINUX -> "Preferences";
                     case WINDOWS -> "Options";

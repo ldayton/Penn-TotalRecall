@@ -9,7 +9,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.SwingUtilities;
 import lombok.NonNull;
@@ -95,34 +94,37 @@ public class UpdateManager {
     }
 
     private String getLatestVersionFromGitHub(@NonNull String releasesApiUrl) throws Exception {
-        HttpRequest request =
+        var request =
                 HttpRequest.newBuilder()
                         .uri(URI.create(releasesApiUrl))
                         .timeout(Duration.ofSeconds(5))
                         .build();
 
-        CompletableFuture<HttpResponse<String>> future =
-                httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        var response =
+                httpClient
+                        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                        .get(5, TimeUnit.SECONDS);
 
-        HttpResponse<String> response = future.get(5, TimeUnit.SECONDS);
+        var tagPattern =
+                Pattern.compile(
+                        """
+                        "tag_name"\\s*:\\s*"v([^"]+)"
+                        """
+                                .strip());
 
-        // Simple JSON parsing - find "tag_name":"v2024.12.1"
-        String tagPattern = "\"tag_name\":\"v([^\"]+)\"";
-        Pattern pattern = Pattern.compile(tagPattern);
-        Matcher matcher = pattern.matcher(response.body());
-
+        var matcher = tagPattern.matcher(response.body());
         return matcher.find() ? matcher.group(1) : getCurrentVersion();
     }
 
     private void showUpdateNotification(
             @NonNull String newVersion, @NonNull String releasesPageUrl) {
-        String message =
-                String.format(
-                        """
-                        A new version (%s) is available.
+        var message =
+                """
+                A new version (%s) is available.
 
-                        Download from: %s""",
-                        newVersion, releasesPageUrl);
+                Download from: %s
+                """
+                        .formatted(newVersion, releasesPageUrl);
 
         GiveMessage.infoMessage(message);
     }
