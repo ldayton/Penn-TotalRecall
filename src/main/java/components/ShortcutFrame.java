@@ -1,26 +1,23 @@
 package components;
 
 import control.XActionManager;
-import env.Environment;
 import java.net.URL;
 import shortcuts.ShortcutManager;
 
 public class ShortcutFrame extends ShortcutManager {
 
-    public ShortcutFrame(URL url, String namespace, Environment environment) {
-        super(url, namespace, XActionManager.listener, environment);
+    public ShortcutFrame(URL url, String namespace) {
+        super(url, namespace, XActionManager.listener);
     }
 
-    public static ShortcutFrame createDefault(Environment environment) {
+    public static ShortcutFrame createDefault() {
         return new ShortcutFrame(
                 ShortcutFrame.class.getResource("/actions.xml"),
-                "/edu/upenn/psych/memory/penntotalrecall",
-                environment);
+                "/edu/upenn/psych/memory/penntotalrecall");
     }
 
     public static void showShortcutEditor() {
-        var environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
-        var frame = createDefault(environment);
+        var frame = createDefault();
         frame.setLocation(util.GUIUtils.chooseLocation(frame));
         frame.setVisible(true);
     }

@@ -1,5 +1,7 @@
 package env;
 
+import lombok.NonNull;
+
 /**
  * Interface for loading native audio libraries.
  *
@@ -16,7 +18,7 @@ public interface AudioSystemLoader {
      * @return the loaded library instance
      * @throws AudioSystemException if the library cannot be loaded
      */
-    <T> T loadAudioLibrary(Class<T> interfaceClass);
+    <T> T loadAudioLibrary(@NonNull Class<T> interfaceClass);
 
     /**
      * Checks if audio hardware is available.
@@ -27,7 +29,7 @@ public interface AudioSystemLoader {
 
     /** Thrown when audio library loading fails. */
     class AudioSystemException extends RuntimeException {
-        public AudioSystemException(String message, Throwable cause) {
+        public AudioSystemException(@NonNull String message, @NonNull Throwable cause) {
             super(message, cause);
         }
     }

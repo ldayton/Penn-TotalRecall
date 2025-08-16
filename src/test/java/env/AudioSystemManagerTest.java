@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class AudioSystemManagerTest {
 
     private final Platform platform = new Platform();
-    private final AppConfig config = new AppConfig(platform);
+    private final AppConfig config = new AppConfig();
 
     @Test
     @DisplayName("AudioSystemManager constructor works with dependency injection")

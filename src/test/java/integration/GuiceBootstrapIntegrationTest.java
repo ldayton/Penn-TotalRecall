@@ -7,15 +7,15 @@ import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
 import env.AudioSystemLoader;
-import env.Environment;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
+import env.UpdateManager;
+import env.UserManager;
 import info.PreferencesProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.UpdateChecker;
 
 /**
  * Basic smoke tests for Guice dependency injection configuration.
@@ -51,9 +51,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ AppConfig can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(Environment.class),
-                "Environment should be instantiable via DI");
-        logger.info("✅ Environment can be created");
+                GuiceBootstrap.getInjectedInstance(UserManager.class),
+                "UserManager should be instantiable via DI");
+        logger.info("✅ UserManager can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(AudioSystemLoader.class),
@@ -71,9 +71,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ WindowManager can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(UpdateChecker.class),
-                "UpdateChecker should be instantiable via DI");
-        logger.info("✅ UpdateChecker can be created");
+                GuiceBootstrap.getInjectedInstance(UpdateManager.class),
+                "UpdateManager should be instantiable via DI");
+        logger.info("✅ UpdateManager can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(PreferencesProvider.class),

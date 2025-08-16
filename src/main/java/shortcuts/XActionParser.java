@@ -6,7 +6,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import env.Environment;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,11 +14,9 @@ import java.util.Set;
 
 public class XActionParser {
     private final URL url;
-    private final Environment environment;
 
-    public XActionParser(URL url, Environment environment) {
+    public XActionParser(URL url) {
         this.url = url;
-        this.environment = environment;
     }
 
     public List<XAction> getXactions() {
@@ -117,7 +114,7 @@ public class XActionParser {
             }
         }
 
-        return Shortcut.fromXmlForm(maskKeyNames, nonMaskKeyNames, environment);
+        return Shortcut.fromXmlForm(maskKeyNames, nonMaskKeyNames);
     }
 
     @JacksonXmlRootElement(localName = "actions")

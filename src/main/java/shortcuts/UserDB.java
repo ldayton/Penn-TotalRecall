@@ -1,6 +1,5 @@
 package shortcuts;
 
-import env.Environment;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,15 +16,10 @@ public class UserDB {
     private final List<XAction> defaultXActions;
     private final XActionListener listener;
     private final Preferences prefs;
-    private final Environment environment;
 
     private static final String NO_SHORTCUT = "#";
 
-    public UserDB(
-            String namespace,
-            List<XAction> defaultXActions,
-            XActionListener listener,
-            Environment environment) {
+    public UserDB(String namespace, List<XAction> defaultXActions, XActionListener listener) {
         if (!namespace.startsWith("/")) {
             throw new IllegalArgumentException("namespace " + namespace + " is not absolute");
         }
@@ -33,7 +27,6 @@ public class UserDB {
         this.namespace = namespace;
         this.defaultXActions = defaultXActions;
         this.listener = listener;
-        this.environment = environment;
         this.prefs = Preferences.userRoot().node(namespace);
     }
 
@@ -59,7 +52,7 @@ public class UserDB {
         if (storedStr == null || NO_SHORTCUT.equals(storedStr)) {
             return null;
         } else {
-            Shortcut shortcut = Shortcut.fromInternalForm(storedStr, environment);
+            Shortcut shortcut = Shortcut.fromInternalForm(storedStr);
             if (shortcut == null) {
                 logger.warn(getClass().getName() + " won't retrieve() unparseable: " + storedStr);
                 return null;

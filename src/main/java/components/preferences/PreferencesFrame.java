@@ -1,7 +1,6 @@
 package components.preferences;
 
 import components.MyFrame;
-import env.Environment;
 import env.KeyboardManager;
 import info.GUIConstants;
 import info.UserPrefs;
@@ -36,7 +35,6 @@ import util.GUIUtils;
 public class PreferencesFrame extends JFrame implements WindowListener {
 
     private static PreferencesFrame instance;
-    private final Environment environment;
     private final KeyboardManager keyboardManager;
 
     private JPanel prefPanel;
@@ -54,8 +52,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * <p>See documentation in {@link preferences.AbstractPreferenceDisplay} for program-wide
      * policies on user preferences, as well as information on adding new preference choosers.
      */
-    private PreferencesFrame(Environment environment) {
-        this.environment = environment;
+    private PreferencesFrame() {
         this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -310,9 +307,9 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         return instance;
     }
 
-    public static PreferencesFrame createInstance(Environment environment) {
+    public static PreferencesFrame createInstance() {
         if (instance == null) {
-            instance = new PreferencesFrame(environment);
+            instance = new PreferencesFrame();
         }
         return instance;
     }

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class FmodConfigurationTest {
 
     private final Platform platform = new Platform();
-    private final AppConfig config = new AppConfig(platform);
+    private final AppConfig config = new AppConfig();
     private final AudioSystemManager audioManager = new AudioSystemManager(config, platform);
 
     @Test

@@ -130,9 +130,8 @@ public class LookAndFeelManager {
     public String getPreferencesString() {
         String defaultValue =
                 switch (platform.detect()) {
-                    case MACOS -> "Preferences";
+                    case MACOS, LINUX -> "Preferences";
                     case WINDOWS -> "Options";
-                    case LINUX -> "Preferences";
                 };
         return appConfig.getProperty("ui.preferences_menu_title", defaultValue);
     }

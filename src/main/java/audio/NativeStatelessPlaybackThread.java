@@ -1,7 +1,6 @@
 package audio;
 
 import behaviors.UpdatingAction;
-import env.Environment;
 import info.Constants;
 import java.io.File;
 import java.util.List;
@@ -105,8 +104,6 @@ public class NativeStatelessPlaybackThread extends Thread {
                     }
                 }
                 if (myLib.playbackInProgress() == false) {
-                    di.GuiceBootstrap.getInjectedInstance(Environment.class)
-                            .applyAudioWorkarounds(); // Fix Issue 9
                     break;
                 }
                 try {

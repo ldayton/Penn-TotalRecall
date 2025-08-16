@@ -26,16 +26,19 @@ public class AppConfig {
 
     private final Properties properties;
     private final Platform platform;
+    private final UserManager userManager;
 
     @Inject
-    public AppConfig(@NonNull Platform platform) {
+    public AppConfig(@NonNull Platform platform, @NonNull UserManager userManager) {
         this.platform = platform;
+        this.userManager = userManager;
         this.properties = loadConfiguration();
     }
 
     /** Default constructor for non-DI usage (tests) */
     public AppConfig() {
         this.platform = new Platform();
+        this.userManager = new UserManager();
         this.properties = loadConfiguration();
     }
 
@@ -176,7 +179,7 @@ public class AppConfig {
     /** Gets the platform-specific user configuration file path. */
     private File getUserConfigFile() {
         var platformType = platform.detect();
-        var userHome = System.getProperty("user.home");
+        var userHome = userManager.getUserHomeDir();
         var configDir =
                 switch (platformType) {
                     case MACOS -> userHome + "/Library/Application Support/Penn TotalRecall";

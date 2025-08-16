@@ -27,7 +27,7 @@ class FmodCoreTest {
     static void setup() throws Exception {
         // Initialize DI for tests - create dependencies manually for now
         env.Platform platform = new env.Platform();
-        env.AppConfig appConfig = new env.AppConfig(platform);
+        env.AppConfig appConfig = new env.AppConfig();
         env.AudioSystemManager audioManager = new env.AudioSystemManager(appConfig, platform);
         lib = new FmodCore(audioManager);
 

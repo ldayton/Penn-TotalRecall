@@ -5,7 +5,6 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
 import control.CurAudio;
-import env.Environment;
 import info.Constants;
 import info.UserPrefs;
 import java.awt.FileDialog;
@@ -33,11 +32,11 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
     @Override
     public void actionPerformed(ActionEvent arg0) {
         super.actionPerformed(arg0);
-        Environment environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
+        var userManager = di.GuiceBootstrap.getInjectedInstance(env.UserManager.class);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, environment.getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, userManager.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = environment.getUserHomeDir();
+            maybeLastPath = userManager.getUserHomeDir();
         }
 
         String title = "Open Wordpool File";

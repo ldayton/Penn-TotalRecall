@@ -1,7 +1,6 @@
 package env;
 
 import com.sun.jna.Native;
-import env.AudioSystemLoader.AudioSystemException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -79,7 +78,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @return The loaded library instance
      * @throws AudioSystemException if library cannot be loaded
      */
-    public <T> T loadAudioLibrary(Class<T> interfaceClass) {
+    public <T> T loadAudioLibrary(@NonNull Class<T> interfaceClass) {
         synchronized (loadLock) {
             try {
                 LibraryLoadingMode mode = getFmodLoadingMode();
@@ -91,13 +90,9 @@ public class AudioSystemManager implements AudioSystemLoader {
                         libraryType,
                         platform.detect());
 
-                switch (mode) {
-                    case UNPACKAGED:
-                        return loadUnpackaged(interfaceClass, libraryType);
-                    case PACKAGED:
-                    default:
-                        return loadPackaged(interfaceClass, libraryType);
-                }
+                return mode == LibraryLoadingMode.UNPACKAGED
+                        ? loadUnpackaged(interfaceClass, libraryType)
+                        : loadPackaged(interfaceClass, libraryType);
             } catch (Exception e) {
                 throw new AudioSystemException("Failed to load FMOD library", e);
             }
@@ -162,7 +157,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param platformType the target platform
      * @return the library path, or null if not configured
      */
-    public String getFmodLibraryPath(Platform.PlatformType platformType) {
+    public String getFmodLibraryPath(@NonNull Platform.PlatformType platformType) {
         String key =
                 switch (platformType) {
                     case MACOS -> FMOD_LIBRARY_PATH_MACOS_KEY;
@@ -178,7 +173,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param libraryType the library type (standard or logging)
      * @return the filename for the FMOD library on the current platform
      */
-    public String getFmodLibraryFilename(FmodLibraryType libraryType) {
+    public String getFmodLibraryFilename(@NonNull FmodLibraryType libraryType) {
         return switch (platform.detect()) {
             case MACOS ->
                     libraryType == FmodLibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
@@ -193,7 +188,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param libraryType the library type (standard or logging)
      * @return the relative path to the FMOD library in development mode
      */
-    public String getFmodLibraryDevelopmentPath(FmodLibraryType libraryType) {
+    public String getFmodLibraryDevelopmentPath(@NonNull FmodLibraryType libraryType) {
         String platformDir =
                 switch (platform.detect()) {
                     case MACOS -> "macos";
@@ -211,7 +206,8 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T> T loadUnpackaged(Class<T> interfaceClass, FmodLibraryType libraryType) {
+    private <T> T loadUnpackaged(
+            @NonNull Class<T> interfaceClass, @NonNull FmodLibraryType libraryType) {
         // Try custom path from configuration first (supports all platforms)
         String customPath = getFmodLibraryPath(platform.detect());
         if (customPath != null) {
@@ -252,7 +248,8 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T> T loadPackaged(Class<T> interfaceClass, FmodLibraryType libraryType) {
+    private <T> T loadPackaged(
+            @NonNull Class<T> interfaceClass, @NonNull FmodLibraryType libraryType) {
         // For packaged mode, we use the system library name without path
         // The exact library depends on the platform and type
         String libraryName = getSystemLibraryName(libraryType);
@@ -267,7 +264,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      * @param libraryType The library type (standard or logging)
      * @return The library name for Native.loadLibrary()
      */
-    private String getSystemLibraryName(FmodLibraryType libraryType) {
+    private String getSystemLibraryName(@NonNull FmodLibraryType libraryType) {
         // All platforms use the same naming convention
         return libraryType == FmodLibraryType.LOGGING ? "fmodL" : "fmod";
     }

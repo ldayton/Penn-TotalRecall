@@ -7,15 +7,15 @@ import components.WindowManager;
 import env.AppConfig;
 import env.AudioSystemLoader;
 import env.AudioSystemManager;
-import env.Environment;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.Platform;
+import env.UpdateManager;
+import env.UserManager;
 import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
-import util.UpdateChecker;
 
 /**
  * Guice module for dependency injection configuration.
@@ -32,12 +32,13 @@ public class AppModule extends AbstractModule {
 
         // Singleton bindings for core services
         bind(AppConfig.class).in(Singleton.class);
-        bind(Environment.class).in(Singleton.class);
 
         // Manager bindings - each handles specific domain configuration
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
+        bind(UpdateManager.class).in(Singleton.class);
+        bind(UserManager.class).in(Singleton.class);
 
         // Audio system bindings
         bind(FmodCore.class).in(Singleton.class);
@@ -50,12 +51,6 @@ public class AppModule extends AbstractModule {
     @Singleton
     HttpClient provideHttpClient() {
         return HttpClient.newHttpClient();
-    }
-
-    @Provides
-    UpdateChecker provideUpdateChecker(Environment environment, HttpClient httpClient) {
-        return new UpdateChecker(
-                environment.getReleasesApiUrl(), environment.getReleasesPageUrl(), httpClient);
     }
 
     @Provides

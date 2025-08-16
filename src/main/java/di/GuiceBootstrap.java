@@ -7,10 +7,9 @@ import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
-import env.Environment;
 import env.LookAndFeelManager;
+import env.UpdateManager;
 import jakarta.inject.Inject;
-import util.UpdateChecker;
 
 /**
  * Guice-based application bootstrap.
@@ -21,20 +20,17 @@ public class GuiceBootstrap {
 
     private static Injector globalInjector;
 
-    private final Environment environment;
     private final WindowManager windowManager;
-    private final UpdateChecker updateChecker;
+    private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
 
     @Inject
     public GuiceBootstrap(
-            Environment environment,
             WindowManager windowManager,
-            UpdateChecker updateChecker,
+            UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager) {
-        this.environment = environment;
         this.windowManager = windowManager;
-        this.updateChecker = updateChecker;
+        this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
     }
 
@@ -67,6 +63,6 @@ public class GuiceBootstrap {
         mainFrame.setVisible(true);
 
         // Check for updates after UI is ready (async, non-blocking)
-        updateChecker.checkForUpdateOnStartup();
+        updateManager.checkForUpdateOnStartup();
     }
 }

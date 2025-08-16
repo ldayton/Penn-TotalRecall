@@ -2,6 +2,7 @@ package env;
 
 import jakarta.inject.Singleton;
 import java.util.Locale;
+import lombok.NonNull;
 
 /**
  * Platform detection service.
@@ -38,7 +39,7 @@ public class Platform {
      *
      * @param platformType the platform type to use
      */
-    public Platform(PlatformType platformType) {
+    public Platform(@NonNull PlatformType platformType) {
         this.detectedPlatform = platformType;
     }
 

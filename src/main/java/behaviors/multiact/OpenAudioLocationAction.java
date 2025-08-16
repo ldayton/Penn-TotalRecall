@@ -2,7 +2,6 @@ package behaviors.multiact;
 
 import components.MyFrame;
 import components.audiofiles.AudioFileDisplay;
-import env.Environment;
 import info.Constants;
 import info.UserPrefs;
 import java.awt.FileDialog;
@@ -39,11 +38,11 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        Environment environment = di.GuiceBootstrap.getInjectedInstance(Environment.class);
+        var userManager = di.GuiceBootstrap.getInjectedInstance(env.UserManager.class);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openLocationPath, environment.getUserHomeDir());
+                UserPrefs.prefs.get(UserPrefs.openLocationPath, userManager.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
-            maybeLastPath = environment.getUserHomeDir();
+            maybeLastPath = userManager.getUserHomeDir();
         }
 
         String path = null;

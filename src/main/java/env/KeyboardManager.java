@@ -4,10 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.List;
-import java.util.Objects;
-import javax.swing.KeyStroke;
 import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -16,18 +13,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Manages keyboard shortcuts and platform-specific key formatting.
  *
- * <p>Handles:
- *
- * <ul>
- *   <li>Keyboard shortcut formatting for display according to platform conventions
- *   <li>Key symbol resolution (Mac symbols vs PC text)
- *   <li>External to internal key form conversion for shortcut parsing
- *   <li>XML keyname translation for actions.xml processing
- *   <li>Menu key determination and platform-specific behavior
- * </ul>
- *
- * <p>This class is injectable and provides platform-appropriate keyboard handling throughout the
- * application.
+ * <p>Handles shortcut display formatting, key symbol resolution, and cross-platform menu key
+ * determination for consistent keyboard behavior across macOS, Windows, and Linux.
  */
 @Singleton
 public class KeyboardManager {
@@ -53,7 +40,7 @@ public class KeyboardManager {
      * @param key the key name
      * @return the platform-appropriate display symbol
      */
-    public String getKeySymbol(String key) {
+    public String getKeySymbol(@NonNull String key) {
         if (platform.detect() == Platform.PlatformType.MACOS) {
             return getMacKeySymbol(key);
         } else {
@@ -67,25 +54,12 @@ public class KeyboardManager {
      * @param externalKey the external key representation
      * @return the internal KeyStroke format
      */
-    public String externalToInternalForm(String externalKey) {
+    public String externalToInternalForm(@NonNull String externalKey) {
         // This method converts display names back to internal KeyStroke forms
         // Used when parsing shortcuts from external configuration
         return switch (platform.detect()) {
             case MACOS -> macExternalToInternal(externalKey);
             case WINDOWS, LINUX -> pcExternalToInternal(externalKey);
-        };
-    }
-
-    /**
-     * Formats a keyboard shortcut for display according to platform conventions.
-     *
-     * @param stroke the KeyStroke to format
-     * @return the formatted shortcut string
-     */
-    public String formatShortcut(KeyStroke stroke) {
-        return switch (platform.detect()) {
-            case MACOS -> formatMacShortcut(stroke);
-            case WINDOWS, LINUX -> formatPcShortcut(stroke);
         };
     }
 
@@ -120,7 +94,7 @@ public class KeyboardManager {
      * @param xmlKeyname the XML key name
      * @return the internal KeyStroke format
      */
-    public String xmlKeynameToInternalForm(String xmlKeyname) {
+    public String xmlKeynameToInternalForm(@NonNull String xmlKeyname) {
         // Handle cross-platform "menu" modifier: Command on Mac, Ctrl on Windows/Linux
         if ("menu".equals(xmlKeyname)) {
             return switch (platform.detect()) {
@@ -148,93 +122,6 @@ public class KeyboardManager {
      */
     public boolean shouldShowEmacsKeybindingOption() {
         return platform.detect() != Platform.PlatformType.MACOS;
-    }
-
-    // =============================================================================
-    // PRIVATE IMPLEMENTATION METHODS
-    // =============================================================================
-
-    private String formatMacShortcut(KeyStroke stroke) {
-        // Implement Mac-specific shortcut formatting with symbols
-        String result = "";
-        int modifiers = stroke.getModifiers();
-
-        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) result += "^";
-        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) result += "⌥";
-        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) result += "⇧";
-        if ((modifiers & InputEvent.META_DOWN_MASK) != 0) result += "⌘";
-
-        // Add key symbol
-        String keySymbol = getMacKeySymbol(stroke.getKeyCode());
-        result +=
-                Objects.requireNonNullElseGet(
-                        keySymbol,
-                        () ->
-                                KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
-                                        .toString()
-                                        .replace("pressed ", ""));
-
-        return result;
-    }
-
-    private String formatPcShortcut(KeyStroke stroke) {
-        // Implement PC-specific shortcut formatting with text
-        String result = "";
-        int modifiers = stroke.getModifiers();
-
-        if ((modifiers & InputEvent.SHIFT_DOWN_MASK) != 0) result += "Shift+";
-        if ((modifiers & InputEvent.CTRL_DOWN_MASK) != 0) result += "Ctrl+";
-        if ((modifiers & InputEvent.ALT_DOWN_MASK) != 0) result += "Alt+";
-
-        // Add key name
-        String keyName = getPcKeySymbol(stroke.getKeyCode());
-        result +=
-                Objects.requireNonNullElseGet(
-                        keyName,
-                        () ->
-                                KeyStroke.getKeyStroke(stroke.getKeyCode(), 0)
-                                        .toString()
-                                        .replace("pressed ", ""));
-
-        return result;
-    }
-
-    private String getMacKeySymbol(int keyCode) {
-        return switch (keyCode) {
-            case KeyEvent.VK_BACK_SPACE -> "⌫";
-            case KeyEvent.VK_DELETE -> "⌦";
-            case KeyEvent.VK_ENTER -> "↩";
-            case KeyEvent.VK_ESCAPE -> "⎋";
-            case KeyEvent.VK_HOME -> "↖";
-            case KeyEvent.VK_END -> "↘";
-            case KeyEvent.VK_PAGE_UP -> "PgUp";
-            case KeyEvent.VK_PAGE_DOWN -> "PgDn";
-            case KeyEvent.VK_LEFT -> "←";
-            case KeyEvent.VK_RIGHT -> "→";
-            case KeyEvent.VK_UP -> "↑";
-            case KeyEvent.VK_DOWN -> "↓";
-            case KeyEvent.VK_TAB -> "Tab";
-            default -> null;
-        };
-    }
-
-    private String getPcKeySymbol(int keyCode) {
-        return switch (keyCode) {
-            case KeyEvent.VK_BACK_SPACE -> "BackSpace";
-            case KeyEvent.VK_DELETE -> "Del";
-            case KeyEvent.VK_ENTER -> "Enter";
-            case KeyEvent.VK_ESCAPE -> "Esc";
-            case KeyEvent.VK_HOME -> "Home";
-            case KeyEvent.VK_END -> "End";
-            case KeyEvent.VK_PAGE_UP -> "PgUp";
-            case KeyEvent.VK_PAGE_DOWN -> "PgDn";
-            case KeyEvent.VK_LEFT -> "Left";
-            case KeyEvent.VK_RIGHT -> "Right";
-            case KeyEvent.VK_UP -> "Up";
-            case KeyEvent.VK_DOWN -> "Down";
-            case KeyEvent.VK_TAB -> "Tab";
-            default -> null;
-        };
     }
 
     private String getMacKeySymbol(String key) {

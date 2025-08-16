@@ -37,7 +37,7 @@ public class FmodLoadingTestHarness {
 
             // Display configuration information
             env.Platform platform = new env.Platform();
-            AppConfig config = new AppConfig(platform);
+            AppConfig config = new AppConfig();
             AudioSystemManager audioManager = new AudioSystemManager(config, platform);
             LibraryLoadingMode mode = audioManager.getFmodLoadingMode();
             logger.info("Library loading mode: " + mode);

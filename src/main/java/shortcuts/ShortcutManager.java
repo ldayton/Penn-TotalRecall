@@ -1,6 +1,6 @@
 package shortcuts;
 
-import env.Environment;
+import env.KeyboardManager;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -43,13 +43,10 @@ public class ShortcutManager extends JFrame {
     private final XActionListener listener;
 
     private final ContentPane contentPane;
-    private final Environment environment;
 
-    public ShortcutManager(
-            URL url, String namespace, XActionListener listener, Environment environment) {
-        this.environment = environment;
-        this.defaultXActions = new XActionParser(url, environment).getXactions();
-        this.userdb = new UserDB(namespace, defaultXActions, listener, environment);
+    public ShortcutManager(URL url, String namespace, XActionListener listener) {
+        this.defaultXActions = new XActionParser(url).getXactions();
+        this.userdb = new UserDB(namespace, defaultXActions, listener);
         this.listener = listener;
 
         userdb.persistDefaults(false);
@@ -99,10 +96,7 @@ public class ShortcutManager extends JFrame {
             public Scroller() {
                 setViewportView(
                         new ShortcutTable(
-                                defaultXActions.toArray(new XAction[0]),
-                                userdb,
-                                listener,
-                                environment));
+                                defaultXActions.toArray(new XAction[0]), userdb, listener));
 
                 setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -169,20 +163,13 @@ class ShortcutTable extends JTable {
     @SuppressWarnings("UnusedVariable") // Listener is passed to UserDB for notifications
     private final XActionListener listener;
 
-    private final Environment environment;
-
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
-    public ShortcutTable(
-            XAction[] defaultXActions,
-            UserDB userdb,
-            XActionListener listener,
-            Environment environment) {
+    public ShortcutTable(XAction[] defaultXActions, UserDB userdb, XActionListener listener) {
         this.defaultXActions = defaultXActions;
         this.userdb = userdb;
         this.listener = listener;
-        this.environment = environment;
         this.shortcutTableModel = new ShortcutTableModel();
 
         setModel(shortcutTableModel);
@@ -243,9 +230,7 @@ class ShortcutTable extends JTable {
                     var enteredShortcut =
                             Shortcut.forPlatform(
                                     KeyStroke.getKeyStroke(code, modifiers),
-                                    environment,
-                                    di.GuiceBootstrap.getInjectedInstance(
-                                            env.KeyboardManager.class));
+                                    di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class));
                     var rowXAction = shortcutTableModel.xactionForRow(selectedRow);
                     var newXAction = rowXAction.withShortcut(enteredShortcut);
 

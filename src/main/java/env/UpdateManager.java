@@ -1,6 +1,7 @@
-package util;
+package env;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,32 +15,64 @@ import javax.swing.SwingUtilities;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.GiveMessage;
 
-/** Simple update checker using GitHub Releases API. */
-public class UpdateChecker {
-    private static final Logger logger = LoggerFactory.getLogger(UpdateChecker.class);
+/**
+ * Manages application update checking using GitHub Releases API.
+ *
+ * <p>Consolidates all update-related functionality including URL configuration and asynchronous
+ * update checking with user notifications.
+ */
+@Singleton
+public class UpdateManager {
+    private static final Logger logger = LoggerFactory.getLogger(UpdateManager.class);
 
-    private final String releasesApiUrl;
-    private final String releasesPageUrl;
+    // Configuration keys for update checking
+    private static final String RELEASES_API_URL_KEY = "releases.api.url";
+    private static final String RELEASES_PAGE_URL_KEY = "releases.page.url";
+
+    private final AppConfig appConfig;
     private final HttpClient httpClient;
 
     @Inject
-    public UpdateChecker(
-            @NonNull String releasesApiUrl,
-            @NonNull String releasesPageUrl,
-            @NonNull HttpClient httpClient) {
-        this.releasesApiUrl = releasesApiUrl;
-        this.releasesPageUrl = releasesPageUrl;
+    public UpdateManager(@NonNull AppConfig appConfig, @NonNull HttpClient httpClient) {
+        this.appConfig = appConfig;
         this.httpClient = httpClient;
+    }
+
+    /**
+     * Gets the GitHub Releases API URL for update checking.
+     *
+     * @return the releases API URL
+     */
+    public String getReleasesApiUrl() {
+        return appConfig.getProperty(RELEASES_API_URL_KEY);
+    }
+
+    /**
+     * Gets the GitHub Releases page URL for user downloads.
+     *
+     * @return the releases page URL
+     */
+    public String getReleasesPageUrl() {
+        return appConfig.getProperty(RELEASES_PAGE_URL_KEY);
     }
 
     /** Check for updates on startup (async, non-blocking). */
     public void checkForUpdateOnStartup() {
+        String releasesApiUrl = getReleasesApiUrl();
+        String releasesPageUrl = getReleasesPageUrl();
+
+        if (releasesApiUrl == null || releasesPageUrl == null) {
+            logger.debug("Update checking disabled - URLs not configured");
+            return;
+        }
+
         CompletableFuture.supplyAsync(
                         () -> {
                             try {
                                 String current = getCurrentVersion();
-                                String latest = getLatestVersionFromGitHub();
+                                String latest = getLatestVersionFromGitHub(releasesApiUrl);
                                 return isNewerVersion(current, latest) ? latest : null;
                             } catch (Exception e) {
                                 logger.warn("Update check failed: {}", e.getMessage());
@@ -50,7 +83,7 @@ public class UpdateChecker {
                         newVersion -> {
                             if (newVersion != null) {
                                 SwingUtilities.invokeLater(
-                                        () -> showUpdateNotification(newVersion));
+                                        () -> showUpdateNotification(newVersion, releasesPageUrl));
                             }
                         });
     }
@@ -61,7 +94,7 @@ public class UpdateChecker {
         return version != null ? version : "0.0.0";
     }
 
-    private String getLatestVersionFromGitHub() throws Exception {
+    private String getLatestVersionFromGitHub(@NonNull String releasesApiUrl) throws Exception {
         HttpRequest request =
                 HttpRequest.newBuilder()
                         .uri(URI.create(releasesApiUrl))
@@ -81,7 +114,8 @@ public class UpdateChecker {
         return matcher.find() ? matcher.group(1) : getCurrentVersion();
     }
 
-    private void showUpdateNotification(String newVersion) {
+    private void showUpdateNotification(
+            @NonNull String newVersion, @NonNull String releasesPageUrl) {
         String message =
                 String.format(
                         """
