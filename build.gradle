@@ -295,6 +295,9 @@ test {
     }
     
     useJUnitPlatform {
+        // Exclude packaging tests from regular test runs (use packageTest target instead)
+        excludeTags 'packaging'
+        
         // Use the loaded properties to control test exclusion
         def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
         if (audioHardwareAvailable == 'false') {
@@ -314,48 +317,63 @@ test {
     }
 }
 
-// Integration test for packaged .app FMOD loading
-tasks.register('testPackagedFmodLoading') {
+// Packaging integration tests - requires built artifacts
+tasks.register('packageTest', Test.class) {
     group = 'verification'
-    description = 'Integration test: Build .app and verify FMOD loading works in packaged environment'
+    description = 'Run packaging integration tests that require built application artifacts'
     dependsOn packageMacApp, testClasses
     
-    def appBundleProvider = layout.buildDirectory.dir("packaging/mac/${programProperName}.app")
+    // Use the same test sources as the regular test task
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
     
-    doLast {
-        def appBundle = appBundleProvider.get().asFile
-        if (!appBundle.exists()) {
-            throw new GradleException("App bundle not found: ${appBundle.absolutePath}")
+    // Disable caching - always run these integration tests
+    outputs.upToDateWhen { false }
+    
+    // Detect CI environment (same logic as test task)
+    def isCI = System.getenv('CI') == 'true' || 
+               System.getenv('GITHUB_ACTIONS') == 'true' ||
+               System.getenv('BUILDKITE') == 'true'
+    
+    // Enable native access for JNA and FlatLAF (same as test task)
+    jvmArgs = nativeAccessJvmArgs
+    
+    // Enable detailed test output (same as test task)
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+    
+    // Load configuration properties (same logic as test task)
+    def configProps = new Properties()
+    
+    // Always load development configuration as baseline
+    def devConfigFile = file("src/main/resources/development.properties")
+    if (devConfigFile.exists()) {
+        devConfigFile.withInputStream { configProps.load(it) }
+    }
+    
+    // In CI environments, override with CI-specific settings
+    if (isCI) {
+        def ciConfigFile = file("src/main/resources/ci.properties")
+        if (ciConfigFile.exists()) {
+            ciConfigFile.withInputStream { configProps.load(it) }
         }
-        
-        // Verify FMOD library exists in .app bundle
-        def fmodLib = file("${appBundle}/Contents/Frameworks/libfmod.dylib")
-        if (!fmodLib.exists()) {
-            throw new GradleException("FMOD library not found in app bundle: ${fmodLib.absolutePath}")
-        }
-        
-        println "🧪 Running FMOD loading integration test in packaged .app..."
-        println "📦 App bundle: ${appBundle.name}"
-        println "🔗 FMOD library: ${fmodLib.name}"
-        
-        // Execute the real app bundle with integration test mode
-        def appExecutable = file("${appBundle}/Contents/MacOS/${programProperName}")
-        
-        try {
-            def result = providers.exec {
-                commandLine appExecutable.absolutePath, '--integration-test'
-                timeout = Duration.ofSeconds(12) // Kill if it takes longer than 12 seconds (slightly more than Java timeout)
-                ignoreExitValue = true
-            }.result.get()
-            
-            if (result.exitValue == 0) {
-                println "✅ Integration test PASSED: FMOD loads correctly in packaged environment"
-            } else {
-                throw new GradleException("❌ Integration test FAILED: Exit code ${result.exitValue}")
-            }
-        } catch (Exception e) {
-            throw new GradleException("❌ Integration test execution failed: ${e.message}", e)
-        }
+    }
+    
+    useJUnitPlatform {
+        // Only run packaging tests
+        includeTags 'packaging'
+    }
+    
+    // Apply configuration properties as system properties (same as test task)
+    configProps.each { key, value ->
+        systemProperty key, value
+    }
+    
+    // Load environment-specific configuration in CI (same as test task)
+    if (isCI) {
+        loadEnvironmentConfig(packageTest, 'ci')
     }
 }
 

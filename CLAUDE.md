@@ -154,11 +154,12 @@ testAnnotationProcessor 'org.projectlombok:lombok:1.18.+'
 ### Building & Testing
 ```bash
 ./gradlew compileJava          # Compile with ErrorProne analysis
-./gradlew test                 # Run JUnit 5 tests + FMOD timing tests
+./gradlew test                 # Run unit tests (excludes packaging tests)
+./gradlew packageTest          # Run packaging integration tests
+./gradlew test packageTest     # Run all tests (unit + integration)
 ./gradlew spotlessApply        # Format code with Google Java Format
 ./gradlew dependencyUpdates    # Check for dependency updates
 ./gradlew runDev               # Run application in development mode
-./gradlew testPackagedFmodLoading  # Integration test for packaged FMOD loading
 ```
 
 ### GitHub Actions Build Status
@@ -190,11 +191,35 @@ gh run watch --repo ldayton/Penn-TotalRecall
 
 ## Testing Strategy
 
-### Automated Tests
-- **FMOD timing tests** - Verify audio system precision and consistency
-- **JUnit 5 framework** - Modern testing with comprehensive output
-- **Test annotations** - `@AudioHardware` and `@Windowing` tags for environment-specific test exclusion
-- **Mockito integration** - Comprehensive mocking for service dependencies
+### Test Categories
+- **Unit Tests** (`./gradlew test`) - Fast tests that don't require built artifacts
+  - Service layer tests with Mockito mocking
+  - Configuration parsing and validation
+  - Audio system logic (without real hardware)
+  - Dependency injection wiring
+- **Packaging Tests** (`./gradlew packageTest`) - Integration tests requiring built .app bundles
+  - End-to-end FMOD loading in packaged environment
+  - Native library resolution and loading
+  - Complete application startup and audio integration
+  - Real process execution and validation
+
+### Test Annotations
+- **`@AudioHardware`** - Tests requiring real audio devices (skipped on CI)
+- **`@Windowing`** - Tests requiring window system (skipped in headless environments) 
+- **`@Packaging`** - Integration tests requiring built artifacts (separate test run)
+
+### Framework Features
+- **JUnit 5** with comprehensive assertion and timeout support
+- **Mockito integration** for service dependency mocking
+- **Environment-aware testing** via configuration properties
+- **Structured CI reporting** with separate unit/integration results
+
+### Development Workflow
+```bash
+./gradlew test          # Quick feedback during development
+./gradlew packageTest   # Full integration validation
+./gradlew test packageTest  # Complete test suite
+```
 
 ### Manual Testing
 - Audio playback and seeking functionality

@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: macos-15
     env:
-      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true -Dorg.gradle.caching=false"
+      GRADLE_OPTS: "-Dorg.gradle.workers.max=5 -Dorg.gradle.parallel=true"
     
     steps:
     - name: Checkout code
@@ -25,15 +25,15 @@ jobs:
         distribution: 'temurin'
         java-version: '24-ea'
         
-    - name: Cache Gradle downloads only
+    - name: Cache Gradle dependencies only
       uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches/modules-2
           ~/.gradle/wrapper
-        key: gradle-downloads-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: gradle-deps-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
-          gradle-downloads-${{ runner.os }}-
+          gradle-deps-${{ runner.os }}-
           
     - name: Make Gradle wrapper executable
       run: chmod +x ./gradlew
@@ -49,15 +49,17 @@ jobs:
     - name: Build macOS DMG
       run: ./gradlew packageMacDmg
       
-    - name: Test packaged FMOD loading
-      run: ./gradlew testPackagedFmodLoading
+    - name: Run packaging integration tests
+      run: ./gradlew packageTest
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results
-        path: build/test-results/test/
+        path: |
+          build/test-results/test/
+          build/test-results/packageTest/
         retention-days: 30
         
     - name: Upload test reports
@@ -65,7 +67,9 @@ jobs:
       if: always()
       with:
         name: test-reports
-        path: build/reports/tests/test/
+        path: |
+          build/reports/tests/test/
+          build/reports/tests/packageTest/
         retention-days: 30
         
     - name: Upload macOS DMG
