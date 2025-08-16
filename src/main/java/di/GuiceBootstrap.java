@@ -8,6 +8,7 @@ import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
 import env.Environment;
+import env.LookAndFeelManager;
 import jakarta.inject.Inject;
 import util.UpdateChecker;
 
@@ -23,13 +24,18 @@ public class GuiceBootstrap {
     private final Environment environment;
     private final WindowManager windowManager;
     private final UpdateChecker updateChecker;
+    private final LookAndFeelManager lookAndFeelManager;
 
     @Inject
     public GuiceBootstrap(
-            Environment environment, WindowManager windowManager, UpdateChecker updateChecker) {
+            Environment environment,
+            WindowManager windowManager,
+            UpdateChecker updateChecker,
+            LookAndFeelManager lookAndFeelManager) {
         this.environment = environment;
         this.windowManager = windowManager;
         this.updateChecker = updateChecker;
+        this.lookAndFeelManager = lookAndFeelManager;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -53,7 +59,7 @@ public class GuiceBootstrap {
 
     /** Initializes and starts the GUI application. */
     public void startApplication() {
-        environment.initializeLookAndFeel();
+        lookAndFeelManager.initialize();
         var mainFrame = MyFrame.createInstance(environment);
         mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
         MyMenu.updateActions();

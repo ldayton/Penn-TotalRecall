@@ -1,6 +1,5 @@
 package env;
 
-import components.MacOSIntegration;
 import info.Constants;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
@@ -14,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,67 +62,6 @@ public class Environment {
         this.aboutMessage = "Penn TotalRecall Test";
         this.menuKey = computeMenuKey();
         this.chunkSizeInSeconds = 2; // Default chunk size
-    }
-
-    // =============================================================================
-    // LOOK AND FEEL INITIALIZATION
-    // =============================================================================
-
-    /**
-     * Initializes the Look and Feel based on platform and user configuration. Call this early in
-     * application startup, before creating any Swing components.
-     */
-    public void initializeLookAndFeel() {
-        configurePlatformProperties();
-
-        String lafClass = getLookAndFeelClassName();
-        try {
-            UIManager.setLookAndFeel(lafClass);
-            logger.debug("Set Look and Feel: {}", lafClass);
-        } catch (Exception e) {
-            logger.warn(
-                    "Failed to set Look and Feel: {}, falling back to system default", lafClass, e);
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception fallbackException) {
-                logger.error("Failed to set fallback Look and Feel", fallbackException);
-            }
-        }
-
-        configureNativeIntegration();
-    }
-
-    private void configurePlatformProperties() {
-        if (platform == Platform.MACOS) {
-            // Configure macOS-specific system properties for optimal rendering
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.textantialiasing", "on");
-            System.setProperty("apple.awt.antialiasing", "on");
-            System.setProperty("apple.awt.rendering", "quality");
-            System.setProperty("apple.awt.application.appearance", "system");
-            System.setProperty("apple.awt.application.name", "Penn TotalRecall");
-        }
-    }
-
-    private String getLookAndFeelClassName() {
-        // Check user configuration first
-        String userLaf = config.getProperty("ui.look_and_feel");
-        if (userLaf != null && !userLaf.trim().isEmpty()) {
-            return userLaf;
-        }
-
-        return config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf");
-    }
-
-    private void configureNativeIntegration() {
-        if (platform == Platform.MACOS) {
-            try {
-                MacOSIntegration.integrateWithMacOS();
-                logger.debug("macOS integration configured");
-            } catch (Exception e) {
-                logger.warn("Failed to configure macOS integration", e);
-            }
-        }
     }
 
     // =============================================================================

@@ -7,6 +7,7 @@ import com.google.inject.Provides;
 import components.WindowManager;
 import env.AppConfig;
 import env.Environment;
+import env.LookAndFeelManager;
 import info.DefaultPreferencesProvider;
 import info.PreferencesProvider;
 import jakarta.inject.Singleton;
@@ -30,6 +31,9 @@ public class AppModule extends AbstractModule {
         // Audio system bindings
         bind(FmodLibraryLoader.class).in(Singleton.class);
         bind(FmodCore.class).in(Singleton.class);
+
+        // UI system bindings
+        bind(LookAndFeelManager.class).in(Singleton.class);
 
         // Provider bindings
         bind(PreferencesProvider.class).to(DefaultPreferencesProvider.class).in(Singleton.class);

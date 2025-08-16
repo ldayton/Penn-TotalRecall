@@ -8,6 +8,7 @@ import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
 import env.Environment;
+import env.LookAndFeelManager;
 import info.PreferencesProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,11 @@ class GuiceBootstrapIntegrationTest {
                 GuiceBootstrap.getInjectedInstance(PreferencesProvider.class),
                 "PreferencesProvider should be instantiable via DI");
         logger.info("✅ PreferencesProvider can be created");
+
+        assertNotNull(
+                GuiceBootstrap.getInjectedInstance(LookAndFeelManager.class),
+                "LookAndFeelManager should be instantiable via DI");
+        logger.info("✅ LookAndFeelManager can be created");
 
         logger.info("✅ Basic Guice configuration smoke test passed");
     }
