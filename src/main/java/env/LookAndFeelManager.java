@@ -1,27 +1,25 @@
 package env;
 
-import components.MacOSIntegration;
+import behaviors.singleact.AboutAction;
+import behaviors.singleact.ExitAction;
+import behaviors.singleact.PreferencesAction;
+import components.MyFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Desktop;
+import java.awt.Taskbar;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Manages Look and Feel initialization and platform-specific UI configuration.
- *
- * <p>Handles:
- *
- * <ul>
- *   <li>Look and Feel selection and initialization
- *   <li>Platform-specific system property configuration
- *   <li>Native OS integration setup
- *   <li>Fallback handling for unsupported Look and Feels
- * </ul>
- *
- * <p>This class is injectable and designed to be called early in application startup, before
- * creating any Swing components.
+ * Configures Look and Feel and platform-specific UI integration. Call initialize() before creating
+ * any Swing components.
  */
 @Singleton
 public class LookAndFeelManager {
@@ -36,86 +34,122 @@ public class LookAndFeelManager {
         this.platform = platform;
     }
 
-    /**
-     * Initializes the Look and Feel based on platform and user configuration. Call this early in
-     * application startup, before creating any Swing components.
-     */
+    /** Configures platform properties, sets Look and Feel, and enables native integration. */
     public void initialize() {
-        configurePlatformProperties();
+        if (platform.detect() == Platform.PlatformType.MACOS) {
+            macBeforeLookAndFeel();
+        }
 
         String lafClass = getLookAndFeelClassName();
         try {
             UIManager.setLookAndFeel(lafClass);
             logger.debug("Set Look and Feel: {}", lafClass);
         } catch (Exception e) {
-            logger.warn(
-                    "Failed to set Look and Feel: {}, falling back to system default", lafClass, e);
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception fallbackException) {
-                logger.error("Failed to set fallback Look and Feel", fallbackException);
-            }
+            logger.error("Failed to set Look and Feel: {}", lafClass, e);
         }
 
-        configureNativeIntegration();
-    }
-
-    /** Configures platform-specific system properties for optimal rendering and native behavior. */
-    private void configurePlatformProperties() {
         if (platform.detect() == Platform.PlatformType.MACOS) {
-            // Configure macOS-specific system properties for optimal rendering
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.textantialiasing", "on");
-            System.setProperty("apple.awt.antialiasing", "on");
-            System.setProperty("apple.awt.rendering", "quality");
-            System.setProperty("apple.awt.application.appearance", "system");
-            System.setProperty("apple.awt.application.name", "Penn TotalRecall");
+            macAfterLookAndFeel();
         }
     }
 
-    /**
-     * Determines the Look and Feel class name based on user configuration and platform defaults.
-     *
-     * @return the fully qualified Look and Feel class name
-     */
+    /** Sets macOS system properties for native rendering and menu bar. */
+    private void macBeforeLookAndFeel() {
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("apple.awt.textantialiasing", "on");
+        System.setProperty("apple.awt.antialiasing", "on");
+        System.setProperty("apple.awt.rendering", "quality");
+        System.setProperty("apple.awt.application.appearance", "system");
+        System.setProperty("apple.awt.application.name", "Penn TotalRecall");
+    }
+
+    /** Returns configured Look and Feel class name, defaulting to FlatLaf. */
     private String getLookAndFeelClassName() {
         // Check user configuration first
         String userLaf = appConfig.getProperty("ui.look_and_feel");
         if (userLaf != null && !userLaf.trim().isEmpty()) {
             return userLaf;
         }
-
-        // Fall back to platform default
         return appConfig.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf");
     }
 
-    /** Configures native OS integration features where available. */
-    private void configureNativeIntegration() {
-        if (platform.detect() == Platform.PlatformType.MACOS) {
+    /** Configures macOS Desktop API handlers and dock integration. */
+    private void macAfterLookAndFeel() {
+        Desktop desktop = Desktop.getDesktop();
+        // About menu handler
+        if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
+            desktop.setAboutHandler(
+                    _ -> {
+                        var aboutAction = new AboutAction();
+                        var actionEvent =
+                                new ActionEvent(
+                                        MyFrame.getInstance(),
+                                        ActionEvent.ACTION_PERFORMED,
+                                        "about");
+                        aboutAction.actionPerformed(actionEvent);
+                    });
+        }
+
+        // Preferences menu handler
+        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES)) {
+            desktop.setPreferencesHandler(
+                    _ -> {
+                        var preferencesAction = new PreferencesAction();
+                        var actionEvent =
+                                new ActionEvent(
+                                        MyFrame.getInstance(),
+                                        ActionEvent.ACTION_PERFORMED,
+                                        "preferences");
+                        preferencesAction.actionPerformed(actionEvent);
+                    });
+        }
+
+        // Quit handler with proper cleanup
+        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+            desktop.setQuitHandler(
+                    (_, response) -> {
+                        try {
+                            var exitAction = new ExitAction();
+                            var actionEvent =
+                                    new ActionEvent(
+                                            MyFrame.getInstance(),
+                                            ActionEvent.ACTION_PERFORMED,
+                                            "quit");
+                            exitAction.actionPerformed(actionEvent);
+                            response.performQuit();
+                        } catch (Exception ex) {
+                            logger.error("Error during application quit", ex);
+                            response.cancelQuit();
+                        }
+                    });
+        }
+
+        Taskbar taskbar = Taskbar.getTaskbar();
+
+        // Set custom dock icon
+        if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
             try {
-                MacOSIntegration.integrateWithMacOS();
-                logger.debug("macOS integration configured");
-            } catch (Exception e) {
-                logger.warn("Failed to configure macOS integration", e);
+                var iconStream =
+                        LookAndFeelManager.class.getResourceAsStream("/images/headphones128.png");
+                if (iconStream != null) {
+                    BufferedImage dockIcon = ImageIO.read(iconStream);
+                    if (dockIcon != null) {
+                        taskbar.setIconImage(dockIcon);
+                    }
+                }
+            } catch (IOException e) {
+                logger.warn("Failed to load dock icon: " + e.getMessage());
             }
         }
     }
 
-    /**
-     * Whether this platform should show Preferences/About in application menus. On Mac, these are
-     * handled by the system menu bar.
-     *
-     * @return true if preferences should be shown in menus, false otherwise
-     */
+    /** Returns false on macOS where system menu bar handles these items. */
     public boolean shouldShowPreferencesInMenu() {
         return platform.detect() != Platform.PlatformType.MACOS;
     }
 
     /**
-     * Whether this platform should use AWT file choosers instead of Swing ones. macOS generally
-     * provides better native file choosers through AWT.
-     *
-     * @return true if AWT file choosers should be used, false for Swing
+     * Returns true on macOS for native file choosers, configurable via ui.use_native_file_choosers.
      */
     public boolean shouldUseAWTFileChoosers() {
         boolean defaultValue = platform.detect() == Platform.PlatformType.MACOS;
@@ -123,25 +157,14 @@ public class LookAndFeelManager {
     }
 
     /**
-     * Gets the platform-appropriate preferences menu text.
-     *
-     * @return "Preferences" on macOS/Linux, "Options" on Windows
+     * Returns platform-appropriate preferences menu text, configurable via
+     * ui.preferences_menu_title.
      */
     public String getPreferencesString() {
-        var defaultValue =
-                switch (platform.detect()) {
-                    case MACOS, LINUX -> "Preferences";
-                    case WINDOWS -> "Options";
-                };
-        return appConfig.getProperty("ui.preferences_menu_title", defaultValue);
+        return appConfig.getProperty("ui.preferences_menu_title", "Options");
     }
 
-    /**
-     * Gets the appropriate application icon path for the platform. Modern platforms support larger
-     * icons for better display quality.
-     *
-     * @return path to the platform-appropriate icon resource
-     */
+    /** Returns platform-specific application icon path. */
     public String getAppIconPath() {
         return switch (platform.detect()) {
             case WINDOWS -> "/images/headphones48.png"; // Modern Windows taskbar

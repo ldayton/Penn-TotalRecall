@@ -308,6 +308,12 @@ test {
         if (windowingSystemAvailable == 'false') {
             excludeTags 'windowing'
         }
+        
+        // Exclude macOS-specific tests on non-Mac platforms
+        def osName = System.getProperty('os.name').toLowerCase()
+        if (!osName.contains('mac')) {
+            excludeTags 'macos'
+        }
     }
     
     // Also apply these properties to the test task for runtime use
