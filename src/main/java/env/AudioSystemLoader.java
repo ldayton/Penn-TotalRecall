@@ -1,5 +1,6 @@
 package env;
 
+import com.sun.jna.Library;
 import lombok.NonNull;
 
 /**
@@ -18,7 +19,7 @@ public interface AudioSystemLoader {
      * @return the loaded library instance
      * @throws AudioSystemException if the library cannot be loaded
      */
-    <T> T loadAudioLibrary(@NonNull Class<T> interfaceClass);
+    <T extends Library> T loadAudioLibrary(@NonNull Class<T> interfaceClass);
 
     /**
      * Checks if audio hardware is available.
