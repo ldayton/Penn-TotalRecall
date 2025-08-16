@@ -57,6 +57,7 @@ class AudioSystemManagerTest {
         assertEquals(
                 expected,
                 available,
-                "AudioSystemManager should return the configured audio hardware availability value");
+                "AudioSystemManager should return the configured audio hardware availability"
+                        + " value");
     }
 }
