@@ -9,7 +9,7 @@ import java.util.prefs.Preferences;
  * <p>Names of preferences are stored here to prevent typos and to make the specific preferences
  * easier to find and document. The actual strings are unimportant.
  */
-public class do UserPrefs {
+public class UserPrefs {
 
     private static final int curSmallShift = -1;
     private static final int curMediumShift = -1;

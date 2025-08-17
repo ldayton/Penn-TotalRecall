@@ -42,7 +42,6 @@ public class AppModule extends AbstractModule {
 
         // Audio system bindings
         bind(FmodCore.class).in(Singleton.class);
-
     }
 
     @Provides

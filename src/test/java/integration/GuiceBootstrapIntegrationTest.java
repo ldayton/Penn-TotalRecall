@@ -74,7 +74,6 @@ class GuiceBootstrapIntegrationTest {
                 "UpdateManager should be instantiable via DI");
         logger.info("✅ UpdateManager can be created");
 
-
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(LookAndFeelManager.class),
                 "LookAndFeelManager should be instantiable via DI");
