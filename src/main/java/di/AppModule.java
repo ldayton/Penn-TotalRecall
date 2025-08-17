@@ -1,5 +1,7 @@
 package di;
 
+import actions.ActionsFileParser;
+import actions.ActionsManager;
 import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -26,32 +28,23 @@ public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // Core platform detection - must be first for other services to use
-        bind(Platform.class).in(Singleton.class);
-
-        // Singleton bindings for core services
+        bind(ActionsFileParser.class);
+        bind(ActionsManager.class).in(Singleton.class);
         bind(AppConfig.class).in(Singleton.class);
-
-        // Manager bindings - each handles specific domain configuration
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
-        bind(LookAndFeelManager.class).in(Singleton.class);
+        bind(FmodCore.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
+        bind(LookAndFeelManager.class).in(Singleton.class);
+        bind(Platform.class).in(Singleton.class);
         bind(PreferencesManager.class).in(Singleton.class);
         bind(UpdateManager.class).in(Singleton.class);
         bind(UserManager.class).in(Singleton.class);
-
-        // Audio system bindings
-        bind(FmodCore.class).in(Singleton.class);
+        bind(WindowManager.class).in(Singleton.class);
     }
 
     @Provides
     @Singleton
     HttpClient provideHttpClient() {
         return HttpClient.newHttpClient();
-    }
-
-    @Provides
-    WindowManager provideWindowManager(PreferencesManager prefs) {
-        return new WindowManager(prefs);
     }
 }
