@@ -13,8 +13,6 @@ import env.Platform;
 import env.PreferencesManager;
 import env.UpdateManager;
 import env.UserManager;
-import info.DefaultPreferencesProvider;
-import info.PreferencesProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 
@@ -45,8 +43,6 @@ public class AppModule extends AbstractModule {
         // Audio system bindings
         bind(FmodCore.class).in(Singleton.class);
 
-        // Provider bindings
-        bind(PreferencesProvider.class).to(DefaultPreferencesProvider.class).in(Singleton.class);
     }
 
     @Provides
@@ -56,7 +52,7 @@ public class AppModule extends AbstractModule {
     }
 
     @Provides
-    WindowManager provideWindowManager(PreferencesProvider prefs) {
+    WindowManager provideWindowManager(PreferencesManager prefs) {
         return new WindowManager(prefs);
     }
 }

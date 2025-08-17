@@ -3,7 +3,7 @@ package components;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import info.PreferencesProvider;
+import env.PreferencesManager;
 import info.UserPrefs;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("WindowManager")
 class WindowManagerTest {
-    @Mock private PreferencesProvider mockPrefs;
+    @Mock private PreferencesManager mockPrefs;
     @Mock private JFrame mockFrame;
     @Mock private MySplitPane mockSplitPane;
 

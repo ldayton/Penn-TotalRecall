@@ -11,7 +11,6 @@ import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.UpdateManager;
 import env.UserManager;
-import info.PreferencesProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -75,10 +74,6 @@ class GuiceBootstrapIntegrationTest {
                 "UpdateManager should be instantiable via DI");
         logger.info("✅ UpdateManager can be created");
 
-        assertNotNull(
-                GuiceBootstrap.getInjectedInstance(PreferencesProvider.class),
-                "PreferencesProvider should be instantiable via DI");
-        logger.info("✅ PreferencesProvider can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(LookAndFeelManager.class),

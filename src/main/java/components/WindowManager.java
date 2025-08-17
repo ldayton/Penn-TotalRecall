@@ -1,7 +1,6 @@
 package components;
 
-import info.DefaultPreferencesProvider;
-import info.PreferencesProvider;
+import env.PreferencesManager;
 import info.UserPrefs;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
@@ -14,28 +13,15 @@ import lombok.NonNull;
  * <p>Saves and restores window position, size, maximized state, and split pane divider location.
  */
 public class WindowManager {
-    private final PreferencesProvider prefs;
+    private final PreferencesManager prefs;
 
     /**
-     * Creates a WindowManager with the default preferences provider.
+     * Creates a WindowManager with injected PreferencesManager.
      *
-     * <p>Uses the system preferences node associated with the UserPrefs class to persist window
-     * state across application sessions.
-     */
-    public WindowManager() {
-        this(new DefaultPreferencesProvider());
-    }
-
-    /**
-     * Creates a WindowManager with a custom PreferencesProvider.
-     *
-     * <p>This constructor is primarily used for testing, allowing injection of mock preferences
-     * providers.
-     *
-     * @param prefs the PreferencesProvider for storing and retrieving window state
+     * @param prefs the PreferencesManager for storing and retrieving window state
      */
     @Inject
-    public WindowManager(@NonNull PreferencesProvider prefs) {
+    public WindowManager(@NonNull PreferencesManager prefs) {
         this.prefs = prefs;
     }
 
