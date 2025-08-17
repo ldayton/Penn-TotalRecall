@@ -10,6 +10,7 @@ import env.AudioSystemManager;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.Platform;
+import env.PreferencesManager;
 import env.UpdateManager;
 import env.UserManager;
 import info.DefaultPreferencesProvider;
@@ -37,6 +38,7 @@ public class AppModule extends AbstractModule {
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
+        bind(PreferencesManager.class).in(Singleton.class);
         bind(UpdateManager.class).in(Singleton.class);
         bind(UserManager.class).in(Singleton.class);
 
