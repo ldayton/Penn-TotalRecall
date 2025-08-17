@@ -1,33 +1,29 @@
 package shortcuts;
 
+import env.PreferencesManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.prefs.Preferences;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserDB {
     private static final Logger logger = LoggerFactory.getLogger(UserDB.class);
 
-    @SuppressWarnings("UnusedVariable") // Used in constructor for prefs.node()
-    private final String namespace;
-
     private final List<XAction> defaultXActions;
     private final XActionListener listener;
-    private final Preferences prefs;
+    private final PreferencesManager preferencesManager;
 
     private static final String NO_SHORTCUT = "#";
 
-    public UserDB(String namespace, List<XAction> defaultXActions, XActionListener listener) {
-        if (!namespace.startsWith("/")) {
-            throw new IllegalArgumentException("namespace " + namespace + " is not absolute");
-        }
-
-        this.namespace = namespace;
+    public UserDB(
+            @NonNull PreferencesManager preferencesManager,
+            @NonNull List<XAction> defaultXActions,
+            @NonNull XActionListener listener) {
+        this.preferencesManager = preferencesManager;
         this.defaultXActions = defaultXActions;
         this.listener = listener;
-        this.prefs = Preferences.userRoot().node(namespace);
     }
 
     public void store(XAction xaction) {
@@ -42,14 +38,14 @@ public class UserDB {
         }
 
         listener.xActionUpdated(xaction, oldShortcut);
-        prefs.put(key, value);
+        preferencesManager.putString(key, value);
     }
 
     public Shortcut retrieve(String id) {
         String key = id;
-        String storedStr = prefs.get(key, null);
+        String storedStr = preferencesManager.getString(key, NO_SHORTCUT);
 
-        if (storedStr == null || NO_SHORTCUT.equals(storedStr)) {
+        if (NO_SHORTCUT.equals(storedStr)) {
             return null;
         } else {
             Shortcut shortcut = Shortcut.fromInternalForm(storedStr);

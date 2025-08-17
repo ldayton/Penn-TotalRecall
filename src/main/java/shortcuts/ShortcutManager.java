@@ -1,6 +1,7 @@
 package shortcuts;
 
 import env.KeyboardManager;
+import env.PreferencesManager;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -44,9 +45,11 @@ public class ShortcutManager extends JFrame {
 
     private final ContentPane contentPane;
 
-    public ShortcutManager(URL url, String namespace, XActionListener listener) {
+    public ShortcutManager(URL url, XActionListener listener) {
         this.defaultXActions = new XActionParser(url).getXactions();
-        this.userdb = new UserDB(namespace, defaultXActions, listener);
+        PreferencesManager preferencesManager =
+                di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
+        this.userdb = new UserDB(preferencesManager, defaultXActions, listener);
         this.listener = listener;
 
         userdb.persistDefaults(false);

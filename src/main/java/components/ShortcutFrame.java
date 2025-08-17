@@ -6,14 +6,12 @@ import shortcuts.ShortcutManager;
 
 public class ShortcutFrame extends ShortcutManager {
 
-    public ShortcutFrame(URL url, String namespace) {
-        super(url, namespace, XActionManager.listener);
+    public ShortcutFrame(URL url) {
+        super(url, XActionManager.listener);
     }
 
     public static ShortcutFrame createDefault() {
-        return new ShortcutFrame(
-                ShortcutFrame.class.getResource("/actions.xml"),
-                "/edu/upenn/psych/memory/penntotalrecall");
+        return new ShortcutFrame(ShortcutFrame.class.getResource("/actions.xml"));
     }
 
     public static void showShortcutEditor() {
