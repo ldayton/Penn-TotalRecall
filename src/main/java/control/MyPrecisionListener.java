@@ -1,7 +1,6 @@
 package control;
 
-import audio.PrecisionEvent;
-import audio.PrecisionListener;
+import audio.AudioEvent;
 import components.MyMenu;
 import components.MySplitPane;
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import util.GiveMessage;
 
 /** Keeps display and actions up to date with audio playback. */
-public class MyPrecisionListener implements PrecisionListener {
+public class MyPrecisionListener implements AudioEvent.Listener {
     private static final Logger logger = LoggerFactory.getLogger(MyPrecisionListener.class);
 
     private long greatestProgress;
@@ -27,8 +26,13 @@ public class MyPrecisionListener implements PrecisionListener {
         CurAudio.setAudioProgressWithoutUpdatingActions(frame);
     }
 
-    public void stateUpdated(PrecisionEvent pe) {
-        PrecisionEvent.EventCode code = pe.getCode();
+    @Override
+    public void onProgress(long frame) {
+        progress(frame);
+    }
+
+    public void onEvent(AudioEvent event) {
+        AudioEvent.Type code = event.type();
         switch (code) {
             case OPENED:
                 // no MyMenu.update() here because there is no corresponding CLOSED event, handled
@@ -41,31 +45,31 @@ public class MyPrecisionListener implements PrecisionListener {
             case STOPPED:
                 // this may be a "pause" or a StopAction, no way to tell here
                 // handle stops in StopAction
-                if (lastProgress > pe.getFrame()) {
+                if (lastProgress > event.frame()) {
                     logger.warn(
                             "last progress {} comes after the current pause/stop {}. isn't that"
                                     + " odd?",
                             lastProgress,
-                            pe.getFrame());
+                            event.frame());
                 }
                 MyMenu.updateActions();
                 break;
             case EOM:
-                offerGreatestProgress(pe.getFrame());
-                CurAudio.setAudioProgressAndUpdateActions(pe.getFrame());
+                offerGreatestProgress(event.frame());
+                CurAudio.setAudioProgressAndUpdateActions(event.frame());
                 if (CurAudio.getAudioProgress() != CurAudio.getMaster().durationInFrames() - 1) {
                     logger.warn(
                             "the frame reported by EOM event is not the final frame, violating"
-                                    + " PrecisionPlayer spec");
+                                    + " AudioPlayer spec");
                 }
                 break;
             case ERROR:
                 CurAudio.setAudioProgressAndUpdateActions(0);
-                String error = "An error ocurred during audio playback.\n" + pe.getErrorMessage();
+                String error = "An error ocurred during audio playback.\n" + event.errorMessage();
                 GiveMessage.errorMessage(error);
                 break;
             default:
-                logger.error("unhandled PrecisionEvent: " + pe.getCode());
+                logger.error("unhandled AudioEvent: " + event.type());
                 break;
         }
     }

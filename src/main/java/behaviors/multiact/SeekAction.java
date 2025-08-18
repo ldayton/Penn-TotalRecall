@@ -1,6 +1,6 @@
 package behaviors.multiact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyFrame;
 import control.CurAudio;
 import info.UserPrefs;
@@ -73,7 +73,7 @@ public class SeekAction extends IdentifiedMultiAction {
         }
 
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
-        CurAudio.getPlayer().queuePlayAt(finalPosition);
+        CurAudio.getPlayer().playAt(finalPosition);
         MyFrame.getInstance().requestFocusInWindow();
     }
 
@@ -84,7 +84,7 @@ public class SeekAction extends IdentifiedMultiAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 boolean canSkipForward = true;

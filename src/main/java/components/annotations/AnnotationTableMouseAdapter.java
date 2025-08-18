@@ -1,6 +1,6 @@
 package components.annotations;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import behaviors.singleact.JumpToAnnotationAction;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -20,7 +20,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
             JumpToAnnotationAction jumpAct = new JumpToAnnotationAction();
-            if ((CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) == false) {
+            if ((CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) == false) {
                 // we are manually generating the event, so we must ourselves check the conditions
                 jumpAct.actionPerformed(
                         new ActionEvent(

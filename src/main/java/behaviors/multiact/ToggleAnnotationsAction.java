@@ -1,6 +1,6 @@
 package behaviors.multiact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -70,7 +70,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
                 return;
             }
             CurAudio.setAudioProgressAndUpdateActions(approxFrame);
-            CurAudio.getPlayer().queuePlayAt(approxFrame);
+            CurAudio.getPlayer().playAt(approxFrame);
         }
         MyFrame.getInstance().requestFocusInWindow();
     }
@@ -83,7 +83,7 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 double curTimeMillis =

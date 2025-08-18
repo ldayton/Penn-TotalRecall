@@ -2,11 +2,11 @@ package integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import audio.AudioSystemLoader;
 import audio.FmodCore;
 import components.WindowManager;
 import di.GuiceBootstrap;
 import env.AppConfig;
-import env.AudioSystemLoader;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.UpdateManager;

@@ -4,7 +4,6 @@ import com.sun.jna.Library;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import env.AudioSystemLoader;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -12,14 +11,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Direct FMOD Core JNA interface for audio playback.
+ * Direct FMOD Core JNA interface for frame-precise audio playback.
  *
- * <p>Replaces the C wrapper library with direct Java calls to FMOD Core API. Maintains the same
- * interface as the original LibPennTotalRecall for compatibility.
+ * <h3>Threading Model</h3>
  *
- * <p>This wrapper provides a simplified Java interface to FMOD Core's audio playback capabilities,
- * specifically designed for precise frame-based audio playback with real-time position tracking.
- * All audio operations are thread-safe and positions are reported in PCM sample frames.
+ * <ul>
+ *   <li>All methods synchronized on internal lock for thread safety
+ *   <li>FMOD handles audio I/O threading internally
+ *   <li>Single active playback per instance
+ *   <li>Automatic end-frame stopping via position polling
+ * </ul>
+ *
+ * <h3>Frame Addressing</h3>
+ *
+ * <ul>
+ *   <li>Zero-based PCM sample indexing
+ *   <li>Position reporting relative to startFrame
+ *   <li>End frame is exclusive (plays up to, not including)
+ *   <li>All positions in sample frames, not time units
+ * </ul>
+ *
+ * <h3>Resource Management</h3>
+ *
+ * <ul>
+ *   <li>FMOD system initialized lazily on first playback
+ *   <li>Sound resources released automatically after playback
+ *   <li>Environment-aware output mode (NOSOUND_NRT for CI/testing)
+ *   <li>Singleton lifecycle managed by Guice DI
+ * </ul>
+ *
+ * <h3>Error Codes</h3>
+ *
+ * <ul>
+ *   <li>0: Success
+ *   <li>-1: Unspecified error
+ *   <li>-2: No audio devices available
+ *   <li>-3: File not found or unusable
+ *   <li>-4: Inconsistent state (already playing)
+ * </ul>
  */
 @Singleton
 public final class FmodCore {

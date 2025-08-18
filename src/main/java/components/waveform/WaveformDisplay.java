@@ -1,6 +1,6 @@
 package components.waveform;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -201,7 +201,7 @@ public class WaveformDisplay extends JComponent {
 
         // accent selected annotation
         boolean foundOverlap = false;
-        if (CurAudio.getPlayer().getStatus() != PrecisionPlayer.Status.PLAYING) {
+        if (CurAudio.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
             for (int i = 0; i < anns.length; i++) {
                 int annX =
                         WaveformDisplay.frameToDisplayXPixel(
@@ -340,7 +340,7 @@ public class WaveformDisplay extends JComponent {
             refreshHeight = getHeight();
             int chunkNum = CurAudio.lookupChunkNum(realRefreshFrame);
             int numAnns = AnnotationDisplay.getNumAnnotations();
-            boolean isPlaying = CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING;
+            boolean isPlaying = CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
 
             long curTime = System.nanoTime();
             if (isPlaying && wasPlaying) {

@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.waveform.MyGlassPane;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -23,8 +23,7 @@ public class ReplayLast200MillisAction extends IdentifiedSingleAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        PrecisionPlayer player = CurAudio.getPlayer();
-        player.setLoudness(CurAudio.getDesiredLoudness());
+        AudioPlayer player = CurAudio.getPlayer();
 
         long curFrame = CurAudio.getAudioProgress();
         long numFrames = CurAudio.getMaster().millisToFrames(duration);
@@ -40,7 +39,7 @@ public class ReplayLast200MillisAction extends IdentifiedSingleAction {
     public void update() {
         if (CurAudio.audioOpen()) {
             setEnabled(true);
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 if (CurAudio.getAudioProgress() <= 0) {

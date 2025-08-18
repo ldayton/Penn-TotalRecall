@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -31,7 +31,7 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
                 return;
             }
             CurAudio.setAudioProgressAndUpdateActions(curFrame);
-            CurAudio.getPlayer().queuePlayAt(curFrame);
+            CurAudio.getPlayer().playAt(curFrame);
         }
         MyFrame.getInstance().requestFocusInWindow();
     }
@@ -39,7 +39,7 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 if (AnnotationDisplay.getNumAnnotations() > 0) {

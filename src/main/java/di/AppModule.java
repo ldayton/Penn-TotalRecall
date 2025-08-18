@@ -2,13 +2,13 @@ package di;
 
 import actions.ActionsFileParser;
 import actions.ActionsManager;
+import audio.AudioSystemLoader;
+import audio.AudioSystemManager;
 import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.WindowManager;
 import env.AppConfig;
-import env.AudioSystemLoader;
-import env.AudioSystemManager;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.Platform;

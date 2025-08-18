@@ -1,8 +1,7 @@
 package control;
 
+import audio.AudioPlayer;
 import audio.FmodCore;
-import audio.NativeStatelessPlayer;
-import audio.PrecisionPlayer;
 import components.MyFrame;
 import components.MyMenu;
 import components.annotations.Annotation;
@@ -36,7 +35,7 @@ public class CurAudio {
     private static MyPrecisionListener precisionListener;
 
     private static File curAudioFile;
-    private static PrecisionPlayer player;
+    private static AudioPlayer player;
     private static long chunkSize;
 
     private static int desiredLoudness = 100;
@@ -117,7 +116,7 @@ public class CurAudio {
             }
 
             // prepare playback
-            PrecisionPlayer pp = null;
+            AudioPlayer pp = null;
             try {
                 // Require DI-managed FmodCore - application must be initialized with Guice
                 FmodCore fmodCore = GuiceBootstrap.getInjectedInstance(FmodCore.class);
@@ -126,7 +125,7 @@ public class CurAudio {
                             "FmodCore not available via dependency injection. Application must be"
                                     + " initialized with Guice before using audio.");
                 }
-                pp = new NativeStatelessPlayer(fmodCore);
+                pp = new AudioPlayer(fmodCore);
             } catch (Throwable e1) {
                 logger.error("Cannot load audio system", e1);
                 GiveMessage.errorMessage(
@@ -137,7 +136,6 @@ public class CurAudio {
             }
             precisionListener = new MyPrecisionListener();
             pp.addListener(precisionListener);
-            pp.setLoudness(getDesiredLoudness());
             setPlayer(pp);
 
             success = false;
@@ -145,20 +143,12 @@ public class CurAudio {
                 pp.open(file.getAbsolutePath());
                 success = true;
             } catch (FileNotFoundException e) {
-                logger.error("PrecisionPlayer: Audio file not found: " + file.getAbsolutePath(), e);
+                logger.error("AudioPlayer: Audio file not found: " + file.getAbsolutePath(), e);
                 GiveMessage.errorMessage("Audio file not found!");
-            } catch (UnsupportedAudioFileException e) {
-                logger.error(
-                        "PrecisionPlayer: Unsupported audio format: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Unsupported audio format!\n" + e.getMessage());
-            } catch (IOException e) {
-                logger.error(
-                        "PrecisionPlayer: Error opening audio file: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Error opening audio file!");
             }
             if (!success) {
                 switchFile(null);
-                logger.error("PrecisionPlayer.open() not successful. resetting current audio.");
+                logger.error("AudioPlayer.open() not successful. resetting current audio.");
                 return;
             }
 
@@ -348,11 +338,11 @@ public class CurAudio {
     }
 
     /**
-     * Returns the current <code>PrecisionPlayer</code> that is used for audio playback.
+     * Returns the current <code>AudioPlayer</code> that is used for audio playback.
      *
      * @throws IllegalStateException If audio is not open
      */
-    public static PrecisionPlayer getPlayer() {
+    public static AudioPlayer getPlayer() {
         if (player == null) {
             throw new IllegalStateException(audioClosedMessage);
         }
@@ -376,7 +366,7 @@ public class CurAudio {
         }
     }
 
-    private static void setPlayer(PrecisionPlayer player) {
+    private static void setPlayer(AudioPlayer player) {
         CurAudio.player = player;
     }
 
@@ -424,9 +414,7 @@ public class CurAudio {
      */
     public static void updateDesiredAudioLoudness(int val) {
         desiredLoudness = val;
-        if (master != null) {
-            player.setLoudness(val);
-        }
+        if (master != null) {}
     }
 
     /**

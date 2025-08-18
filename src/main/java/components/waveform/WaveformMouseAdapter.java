@@ -21,7 +21,7 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
     //	public void mouseClicked(MouseEvent e) {
     //		if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
     //			if(CurAudio.audioOpen()) {
-    //				if(CurAudio.getPlayer().getStatus() !=PrecisionPlayer.Status.PLAYING) {
+    //				if(CurAudio.getPlayer().getStatus() !=AudioPlayer.Status.PLAYING) {
     ////					System.out.println("jump");
     //				}
     //			}

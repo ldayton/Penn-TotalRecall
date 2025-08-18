@@ -1,9 +1,9 @@
 package integration;
 
+import audio.AudioSystemManager;
+import audio.AudioSystemManager.LibraryLoadingMode;
 import audio.FmodCore;
 import env.AppConfig;
-import env.AudioSystemManager;
-import env.AudioSystemManager.LibraryLoadingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class FmodLoadingTestHarness {
             env.Platform platform = new env.Platform();
             AppConfig config = new AppConfig();
             AudioSystemManager audioManager = new AudioSystemManager(config, platform);
-            LibraryLoadingMode mode = audioManager.getFmodLoadingMode();
+            LibraryLoadingMode mode = audioManager.getLoadingMode();
             logger.info("Library loading mode: " + mode);
 
             // Test FMOD library loading using dependency injection

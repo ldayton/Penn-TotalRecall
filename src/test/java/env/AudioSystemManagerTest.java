@@ -2,8 +2,9 @@ package env;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import env.AudioSystemManager.FmodLibraryType;
-import env.AudioSystemManager.LibraryLoadingMode;
+import audio.AudioSystemManager;
+import audio.AudioSystemManager.LibraryLoadingMode;
+import audio.AudioSystemManager.LibraryType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class AudioSystemManagerTest {
         AudioSystemManager manager = new AudioSystemManager(config, platform);
 
         // Test that AudioSystemManager correctly reads configuration
-        LibraryLoadingMode mode = manager.getFmodLoadingMode();
+        LibraryLoadingMode mode = manager.getLoadingMode();
 
         // In test environment, should be UNPACKAGED (running from source)
         assertEquals(
@@ -30,15 +31,15 @@ class AudioSystemManagerTest {
 
     @Test
     @DisplayName("AudioSystemManager provides correct FMOD library type from configuration")
-    void testFmodLibraryTypeFromConfiguration() {
+    void testLibraryTypeFromConfiguration() {
         AudioSystemManager manager = new AudioSystemManager(config, platform);
 
         // Test that AudioSystemManager correctly reads configuration
-        FmodLibraryType type = manager.getFmodLibraryType();
+        LibraryType type = manager.getLibraryType();
 
         // In test environment, should be LOGGING (set via system property)
         assertEquals(
-                FmodLibraryType.LOGGING,
+                LibraryType.LOGGING,
                 type,
                 "AudioSystemManager should return LOGGING in test environment");
     }

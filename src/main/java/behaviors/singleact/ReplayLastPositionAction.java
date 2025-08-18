@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyMenu;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -10,8 +10,8 @@ public class ReplayLastPositionAction extends IdentifiedSingleAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        PrecisionPlayer player = CurAudio.getPlayer();
-        if (player.getStatus() == PrecisionPlayer.Status.PLAYING) {
+        AudioPlayer player = CurAudio.getPlayer();
+        if (player.getStatus() == AudioPlayer.Status.PLAYING) {
             player.stop();
         }
         new ReturnToLastPositionAction()

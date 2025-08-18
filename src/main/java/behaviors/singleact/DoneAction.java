@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import behaviors.multiact.AnnotateAction;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
@@ -67,7 +67,7 @@ public class DoneAction extends IdentifiedSingleAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING == false) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING == false) {
                 setEnabled(true);
             } else {
                 setEnabled(false);

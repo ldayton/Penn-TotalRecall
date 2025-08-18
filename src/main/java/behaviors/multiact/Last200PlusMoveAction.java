@@ -1,6 +1,6 @@
 package behaviors.multiact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import behaviors.singleact.ReplayLast200MillisAction;
 import components.MyMenu;
 import control.CurAudio;
@@ -52,7 +52,7 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
         CurAudio.setAudioProgressWithoutUpdatingActions(
                 finalPosition); // not using setAudioProgressAndUpdateActions() because we don't
         // want to slow down start of playback
-        CurAudio.getPlayer().queuePlayAt(finalPosition);
+        CurAudio.getPlayer().playAt(finalPosition);
 
         replayer.actionPerformed(
                 new ActionEvent(
@@ -68,7 +68,7 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 if (CurAudio.getAudioProgress() <= 0) {

@@ -1,6 +1,6 @@
 package behaviors.multiact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import behaviors.UpdatingAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 import components.MyFrame;
@@ -221,7 +221,7 @@ public class AnnotateAction extends IdentifiedMultiAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 setEnabled(true);

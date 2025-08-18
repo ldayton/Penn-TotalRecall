@@ -1,6 +1,6 @@
 package behaviors.multiact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.waveform.WaveformDisplay;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -49,7 +49,7 @@ public class ZoomAction extends IdentifiedMultiAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(false);
             } else {
                 setEnabled(true);

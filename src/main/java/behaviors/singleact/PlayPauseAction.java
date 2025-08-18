@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyFrame;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -44,14 +44,13 @@ public class PlayPauseAction extends IdentifiedSingleAction {
         if (isDummy) {
             return;
         }
-        PrecisionPlayer player = CurAudio.getPlayer();
-        player.setLoudness(CurAudio.getDesiredLoudness());
-        if (player.getStatus() == PrecisionPlayer.Status.PLAYING) { // PAUSE
+        AudioPlayer player = CurAudio.getPlayer();
+        if (player.getStatus() == AudioPlayer.Status.PLAYING) { // PAUSE
             long frame = player.stop();
             CurAudio.setAudioProgressWithoutUpdatingActions(frame);
             long numFrames = CurAudio.getMaster().millisToFrames(200);
-            player.queueShortInterval(frame - numFrames, frame - 1);
-            player.queuePlayAt(frame);
+            player.playShortInterval(frame - numFrames, frame - 1);
+            player.playAt(frame);
         } else { // PLAY/RESUME
             long pos = CurAudio.getAudioProgress();
             player.playAt(pos);
@@ -74,7 +73,7 @@ public class PlayPauseAction extends IdentifiedSingleAction {
             } else {
                 setEnabled(true);
             }
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 putValue(NAME, pauseText);
             } else {
                 putValue(NAME, playText);

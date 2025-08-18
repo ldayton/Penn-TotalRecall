@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MyMenu;
 import control.CurAudio;
 import java.awt.event.ActionEvent;
@@ -16,8 +16,7 @@ public class StopAction extends IdentifiedSingleAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        boolean currentlyPlaying =
-                CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING;
+        boolean currentlyPlaying = CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
         CurAudio.getPlayer().stop();
         CurAudio.setAudioProgressWithoutUpdatingActions(0);
         if (currentlyPlaying == false) {
@@ -29,7 +28,7 @@ public class StopAction extends IdentifiedSingleAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()) {
-            if (CurAudio.getPlayer().getStatus() == PrecisionPlayer.Status.PLAYING) {
+            if (CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
                 setEnabled(true);
             } else {
                 if (CurAudio.getAudioProgress() <= 0) {

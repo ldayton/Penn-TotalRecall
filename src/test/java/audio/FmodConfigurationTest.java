@@ -2,10 +2,9 @@ package audio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import audio.AudioSystemManager.LibraryLoadingMode;
+import audio.AudioSystemManager.LibraryType;
 import env.AppConfig;
-import env.AudioSystemManager;
-import env.AudioSystemManager.FmodLibraryType;
-import env.AudioSystemManager.LibraryLoadingMode;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,8 @@ class FmodConfigurationTest {
         assertNotNull(audioManager, "AudioSystemManager instance should not be null");
 
         // Test that we get the correct filenames for each combination
-        String standardMac = audioManager.getFmodLibraryFilename(FmodLibraryType.STANDARD);
-        String loggingMac = audioManager.getFmodLibraryFilename(FmodLibraryType.LOGGING);
+        String standardMac = audioManager.getLibraryFilename(LibraryType.STANDARD);
+        String loggingMac = audioManager.getLibraryFilename(LibraryType.LOGGING);
 
         // Should get platform-appropriate filenames
         // Note: This test runs on whatever platform it's executed on
@@ -44,7 +43,7 @@ class FmodConfigurationTest {
         // In development environment, should be UNPACKAGED
         // In CI environment, should also be UNPACKAGED (both run from source)
         // Only production packages use PACKAGED
-        LibraryLoadingMode mode = audioManager.getFmodLoadingMode();
+        LibraryLoadingMode mode = audioManager.getLoadingMode();
         assertEquals(LibraryLoadingMode.UNPACKAGED, mode);
     }
 
@@ -52,8 +51,8 @@ class FmodConfigurationTest {
     @DisplayName("Environment provides valid library paths for current platform")
     void testFmodLibraryPaths() {
 
-        String standardPath = audioManager.getFmodLibraryDevelopmentPath(FmodLibraryType.STANDARD);
-        String loggingPath = audioManager.getFmodLibraryDevelopmentPath(FmodLibraryType.LOGGING);
+        String standardPath = audioManager.getLibraryDevelopmentPath(LibraryType.STANDARD);
+        String loggingPath = audioManager.getLibraryDevelopmentPath(LibraryType.LOGGING);
 
         assertNotNull(standardPath);
         assertNotNull(loggingPath);

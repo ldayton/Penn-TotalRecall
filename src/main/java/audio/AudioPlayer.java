@@ -1,0 +1,457 @@
+package audio;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import lombok.Getter;
+import lombok.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * High-level audio player for scientific annotation with dual playback modes.
+ *
+ * <h3>Threading Model</h3>
+ *
+ * <ul>
+ *   <li>Single PlaybackThread per player instance
+ *   <li>Event notifications in separate threads (non-blocking)
+ *   <li>Progress callbacks in playback thread (30fps target)
+ *   <li>Thread-safe listener management via CopyOnWriteArrayList
+ *   <li>AtomicReference for playback thread lifecycle
+ * </ul>
+ *
+ * <h3>Playback Modes</h3>
+ *
+ * <ul>
+ *   <li>MAIN_PLAYBACK: Full control, status updates, progress callbacks, stoppable
+ *   <li>SHORT_INTERVAL: Fire-and-forget preview, no status change, not user-stoppable
+ *   <li>Main playback blocks short intervals; short intervals respect active main playback
+ *   <li>New main playback interrupts existing short intervals
+ * </ul>
+ *
+ * <h3>Format Support</h3>
+ *
+ * <ul>
+ *   <li>All formats supported by FMOD Core (WAV, AIFF, AU, OGG, MP3, FLAC, etc.)
+ *   <li>Any sample rate (FMOD handles resampling automatically)
+ *   <li>Any channel configuration (mono, stereo, multi-channel)
+ *   <li>Any bit depth (8-bit, 16-bit, 24-bit, 32-bit, float)
+ *   <li>Format validation and error handling done by FMOD Core
+ * </ul>
+ *
+ * <h3>State Management</h3>
+ *
+ * <ul>
+ *   <li>BUSY: Not ready (before open())
+ *   <li>READY: File loaded, ready to play
+ *   <li>PLAYING: Main playback active
+ *   <li>Status transitions: BUSY → READY → PLAYING → READY
+ * </ul>
+ *
+ * <h3>Behavioral Rules</h3>
+ *
+ * <ul>
+ *   <li>playAt() ignored if already PLAYING (no interruption)
+ *   <li>playShortInterval() ignored if PLAYING (main takes precedence)
+ *   <li>Short intervals limited to 1MB (1,048,576 frames)
+ *   <li>stop() is synchronous, returns exact hearing frame
+ *   <li>Frame addressing is zero-based PCM samples
+ * </ul>
+ */
+public class AudioPlayer {
+    private static final Logger logger = LoggerFactory.getLogger(AudioPlayer.class);
+
+    public enum Status {
+        BUSY, // Player not ready for playback
+        READY, // Player ready for playback
+        PLAYING // Main playback in progress
+    }
+
+    private enum PlaybackMode {
+        MAIN_PLAYBACK, // Full playback with listeners and status updates
+        SHORT_INTERVAL // Fire-and-forget preview playback
+    }
+
+    /** Immutable playback parameters passed to PlaybackThread. */
+    private record PlaybackRequest(
+            @NonNull String fileName, long startFrame, long endFrame, @NonNull PlaybackMode mode) {}
+
+    private final FmodCore fmodCore;
+    private final List<AudioEvent.Listener> listeners = new CopyOnWriteArrayList<>();
+    private final Object stateLock = new Object();
+
+    // Player state
+    @Getter private volatile Status status = Status.BUSY;
+    private volatile String currentFileName;
+    private volatile long totalFrames;
+
+    // Playback thread state
+    private final AtomicReference<PlaybackThread> currentThread = new AtomicReference<>();
+
+    // Audio format validation
+    private volatile int sampleRate = 44100; // Default, updated on open()
+
+    public AudioPlayer(@NonNull FmodCore fmodCore) {
+        this.fmodCore = fmodCore;
+    }
+
+    /**
+     * Opens audio file for playback.
+     *
+     * @param fileName Absolute or relative path to audio file
+     * @throws FileNotFoundException if file does not exist
+     * @implNote Thread-safe: synchronized on stateLock
+     * @implNote Status transition: * → READY
+     * @implNote FMOD Core handles format detection and validation
+     */
+    public void open(@NonNull String fileName) throws FileNotFoundException {
+        synchronized (stateLock) {
+            File audioFile = new File(fileName);
+            if (!audioFile.exists()) {
+                throw new FileNotFoundException("Audio file not found: " + fileName);
+            }
+
+            this.currentFileName = audioFile.getAbsolutePath();
+            this.totalFrames = -1; // Unknown until FMOD loads it
+            this.sampleRate = 44100; // Default, FMOD will handle actual rate
+
+            logger.debug("Opened audio file: {}", fileName);
+
+            status = Status.READY;
+            fireEvent(AudioEvent.Type.OPENED, -1, null);
+        }
+    }
+
+    public void playAt(long frame) throws IllegalArgumentException {
+        if (totalFrames > 0) {
+            playAt(frame, totalFrames - 1);
+        } else {
+            // Total frames unknown, use large but safe end frame
+            playAt(frame, Integer.MAX_VALUE);
+        }
+    }
+
+    /**
+     * Starts main playback from startFrame to endFrame.
+     *
+     * @param startFrame Zero-based PCM sample to start playback
+     * @param endFrame Zero-based PCM sample to stop playback (exclusive)
+     * @throws IllegalArgumentException if frame range is invalid
+     * @implNote Ignored if status is BUSY, not opened, or already PLAYING
+     * @implNote Status transition: READY → PLAYING
+     * @implNote Thread-safe: synchronized on stateLock
+     * @implNote Fires PLAYING event, sends progress callbacks
+     */
+    public void playAt(long startFrame, long endFrame) throws IllegalArgumentException {
+        validateFrameRange(startFrame, endFrame);
+
+        synchronized (stateLock) {
+            if (status == Status.BUSY || currentFileName == null) {
+                return; // No effect if not ready
+            }
+
+            if (status == Status.PLAYING) {
+                return; // No effect if already playing
+            }
+
+            startPlayback(currentFileName, startFrame, endFrame, PlaybackMode.MAIN_PLAYBACK);
+        }
+    }
+
+    /**
+     * Starts fire-and-forget preview playback.
+     *
+     * @param startFrame Zero-based PCM sample to start playback
+     * @param endFrame Zero-based PCM sample to stop playback (exclusive)
+     * @throws IllegalArgumentException if frame range invalid or >1MB
+     * @implNote Ignored if status BUSY, not opened, or main playback active
+     * @implNote No status change, no progress callbacks, not user-stoppable
+     * @implNote Limited to 1,048,576 frames to prevent memory issues
+     * @implNote Thread-safe: synchronized on stateLock
+     */
+    public void playShortInterval(long startFrame, long endFrame) throws IllegalArgumentException {
+        validateFrameRange(startFrame, endFrame);
+
+        // Enforce 1MB limit for short intervals to avoid memory issues
+        if (endFrame - startFrame > 1048576) {
+            throw new IllegalArgumentException(
+                    "Short interval too long: "
+                            + (endFrame - startFrame)
+                            + " frames (max 1048576)");
+        }
+
+        synchronized (stateLock) {
+            if (status == Status.BUSY || currentFileName == null) {
+                return; // No effect if not ready
+            }
+
+            if (status == Status.PLAYING) {
+                return; // No effect if main playback active - main playback takes precedence
+            }
+
+            startPlayback(currentFileName, startFrame, endFrame, PlaybackMode.SHORT_INTERVAL);
+        }
+    }
+
+    /**
+     * Stops main playback synchronously and returns hearing frame.
+     *
+     * @return Last heard PCM frame (absolute position), or -1 if not playing
+     * @implNote Synchronous: blocks until playback fully stopped
+     * @implNote Only affects main playback, not short intervals
+     * @implNote Status transition: PLAYING → READY
+     * @implNote Thread-safe: synchronized on stateLock
+     * @implNote Fires STOPPED event with hearing frame
+     */
+    public long stop() {
+        synchronized (stateLock) {
+            if (status != Status.PLAYING) {
+                return -1;
+            }
+
+            PlaybackThread thread = currentThread.get();
+            if (thread == null) {
+                return -1;
+            }
+
+            // Synchronous stop as required by contract
+            long hearingFrame = thread.stopAndWait();
+
+            status = Status.READY;
+            fireEvent(AudioEvent.Type.STOPPED, hearingFrame, null);
+
+            return hearingFrame;
+        }
+    }
+
+    public void addListener(@NonNull AudioEvent.Listener listener) {
+        listeners.add(listener);
+    }
+
+    private void validateFrameRange(long startFrame, long endFrame)
+            throws IllegalArgumentException {
+        if (startFrame < 0) {
+            throw new IllegalArgumentException("Start frame cannot be negative: " + startFrame);
+        }
+        if (endFrame <= startFrame) {
+            throw new IllegalArgumentException(
+                    "End frame must be greater than start frame: "
+                            + endFrame
+                            + " <= "
+                            + startFrame);
+        }
+        // Skip file length validation - FMOD will handle out-of-bounds frames
+    }
+
+    private void startPlayback(
+            @NonNull String fileName, long startFrame, long endFrame, @NonNull PlaybackMode mode) {
+        // Stop any existing playback
+        PlaybackThread oldThread = currentThread.get();
+        if (oldThread != null) {
+            oldThread.requestStop();
+        }
+
+        // Create and start new playback thread
+        PlaybackRequest request = new PlaybackRequest(fileName, startFrame, endFrame, mode);
+        PlaybackThread newThread = new PlaybackThread(request);
+
+        if (currentThread.compareAndSet(oldThread, newThread)) {
+            newThread.start();
+
+            if (mode == PlaybackMode.MAIN_PLAYBACK) {
+                synchronized (stateLock) {
+                    status = Status.PLAYING;
+                }
+                fireEvent(AudioEvent.Type.PLAYING, startFrame, null);
+            }
+        }
+    }
+
+    private void fireEvent(@NonNull AudioEvent.Type type, long frame, String errorMessage) {
+        if (listeners.isEmpty()) {
+            return;
+        }
+
+        AudioEvent event = new AudioEvent(type, frame, errorMessage);
+
+        // Fire events in separate thread to avoid blocking
+        Thread eventThread =
+                new Thread(
+                        () -> {
+                            for (AudioEvent.Listener listener : listeners) {
+                                try {
+                                    listener.onEvent(event);
+                                } catch (Exception e) {
+                                    logger.warn("Error in listener callback", e);
+                                }
+                            }
+                        },
+                        "AudioEvent-" + type);
+
+        eventThread.setDaemon(true); // Prevent hanging JVM shutdown
+        eventThread.start();
+    }
+
+    private void fireProgressUpdate(long frame) {
+        if (listeners.isEmpty()) {
+            return;
+        }
+
+        // Progress updates are in the playback thread for better performance
+        for (AudioEvent.Listener listener : listeners) {
+            try {
+                listener.onProgress(frame);
+            } catch (Exception e) {
+                logger.warn("Error in progress callback", e);
+            }
+        }
+    }
+
+    /**
+     * Single background thread managing FMOD playback lifecycle.
+     *
+     * <h4>Threading Details:</h4>
+     *
+     * <ul>
+     *   <li>Daemon thread, does not prevent JVM shutdown
+     *   <li>10ms polling loop for position updates
+     *   <li>Progress callbacks at ~30fps for main playback
+     *   <li>Automatic cleanup on completion or interruption
+     *   <li>Volatile fields for cross-thread communication
+     * </ul>
+     */
+    private final class PlaybackThread extends Thread {
+        private final PlaybackRequest request;
+        private volatile boolean stopRequested = false;
+        private final AtomicLong lastHearingFrame = new AtomicLong(-1);
+
+        PlaybackThread(@NonNull PlaybackRequest request) {
+            super("FMOD-Playback-" + request.mode);
+            this.request = request;
+            setDaemon(true);
+        }
+
+        @Override
+        public void run() {
+            try {
+                runPlayback();
+            } catch (Exception e) {
+                logger.error("Error in playback thread", e);
+                fireEvent(AudioEvent.Type.ERROR, -1, e.getMessage());
+            } finally {
+                // Update status before cleaning up thread reference
+                if (request.mode == PlaybackMode.MAIN_PLAYBACK) {
+                    synchronized (stateLock) {
+                        if (status == Status.PLAYING) {
+                            status = Status.READY;
+                        }
+                    }
+                }
+
+                // Clean up thread reference last
+                currentThread.compareAndSet(this, null);
+            }
+        }
+
+        private void runPlayback() {
+            // Start FMOD playback
+            int result =
+                    fmodCore.startPlayback(request.fileName, request.startFrame, request.endFrame);
+            if (result != 0) {
+                logger.error("FMOD playback failed with error code: {}", result);
+                fireEvent(AudioEvent.Type.ERROR, -1, "FMOD playback failed: " + result);
+                return;
+            }
+
+            // Progress tracking loop (only for main playback)
+            if (request.mode == PlaybackMode.MAIN_PLAYBACK) {
+                runMainPlaybackLoop();
+            } else {
+                runShortIntervalLoop();
+            }
+        }
+
+        private void runMainPlaybackLoop() {
+            long lastProgressFrame = -1;
+            int currentSampleRate = sampleRate; // Capture sample rate to avoid race condition
+            long progressInterval = currentSampleRate / 30; // ~30fps progress updates
+
+            while (!stopRequested && fmodCore.playbackInProgress()) {
+                long currentFrame = fmodCore.streamPosition();
+                lastHearingFrame.set(request.startFrame + currentFrame);
+
+                // Send progress updates at ~30fps
+                if (currentFrame - lastProgressFrame >= progressInterval
+                        || lastProgressFrame == -1) {
+                    fireProgressUpdate(lastHearingFrame.get());
+                    lastProgressFrame = currentFrame;
+                }
+
+                try {
+                    Thread.sleep(10); // Small sleep to prevent tight loop
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+
+            // Handle end-of-media
+            if (!stopRequested && !fmodCore.playbackInProgress()) {
+                lastHearingFrame.set(request.endFrame);
+                fireEvent(AudioEvent.Type.EOM, lastHearingFrame.get(), null);
+            }
+        }
+
+        private void runShortIntervalLoop() {
+            // Just wait for completion, no progress updates
+            while (!stopRequested && fmodCore.playbackInProgress()) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+
+            long position = fmodCore.streamPosition();
+            if (position >= 0) {
+                lastHearingFrame.set(request.startFrame + position);
+            }
+        }
+
+        /** Requests asynchronous thread termination. */
+        void requestStop() {
+            stopRequested = true;
+            interrupt(); // Wake up from sleep
+        }
+
+        /**
+         * Stops FMOD playback synchronously and waits for thread completion.
+         *
+         * @return Last hearing frame (absolute position)
+         * @implNote Blocks up to 1 second for thread termination
+         */
+        long stopAndWait() {
+            requestStop();
+
+            // Stop FMOD playback immediately
+            long fmodPosition = fmodCore.stopPlayback();
+            if (fmodPosition >= 0) {
+                lastHearingFrame.set(request.startFrame + fmodPosition);
+            }
+
+            // Wait for thread to finish (should be quick since FMOD is already stopped)
+            try {
+                join(1000); // 1 second timeout
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            return lastHearingFrame.get();
+        }
+    }
+}

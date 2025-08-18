@@ -1,6 +1,6 @@
 package behaviors.singleact;
 
-import audio.PrecisionPlayer;
+import audio.AudioPlayer;
 import components.MySplitPane;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -38,7 +38,7 @@ public class DeleteSelectedAnnotationAction extends IdentifiedSingleAction {
     @Override
     public void update() {
         if (CurAudio.audioOpen()
-                && CurAudio.getPlayer().getStatus() != PrecisionPlayer.Status.PLAYING) {
+                && CurAudio.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
             setEnabled(true);
         } else {
             setEnabled(false);
