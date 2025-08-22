@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,11 @@ import org.slf4j.LoggerFactory;
  *
  * <ul>
  *   <li>Single PlaybackThread per player instance
- *   <li>Event notifications in separate threads (non-blocking)
- *   <li>Progress callbacks in playback thread (30fps target)
+ *   <li>Event notifications via thread pool (non-blocking)
+ *   <li>Progress callbacks in playback thread (lightweight, 30fps target)
  *   <li>Thread-safe listener management via CopyOnWriteArrayList
  *   <li>AtomicReference for playback thread lifecycle
+ *   <li>Status updates synchronized on stateLock to prevent race conditions
  * </ul>
  *
  * <h3>Playback Modes</h3>
@@ -65,6 +68,18 @@ import org.slf4j.LoggerFactory;
 public class AudioPlayer {
     private static final Logger logger = LoggerFactory.getLogger(AudioPlayer.class);
 
+    // Performance and timing constants
+    private static final int POLLING_SLEEP_MS = 10;
+    private static final int PROGRESS_UPDATES_PER_SECOND = 30;
+    private static final int SHUTDOWN_TIMEOUT_SECONDS = 5;
+
+    // Memory and size limits
+    private static final long SHORT_INTERVAL_MAX_FRAMES = 1_048_576L; // 1MB limit
+
+    // Thread naming
+    private static final String EVENT_THREAD_NAME = "AudioEvent";
+    private static final String PLAYBACK_THREAD_PREFIX = "FMOD-Playback-";
+
     public enum Status {
         BUSY, // Player not ready for playback
         READY, // Player ready for playback
@@ -85,18 +100,49 @@ public class AudioPlayer {
     private final Object stateLock = new Object();
 
     // Player state
-    @Getter private volatile Status status = Status.BUSY;
+    private volatile Status status = Status.BUSY;
     private volatile String currentFileName;
     private volatile long totalFrames;
 
     // Playback thread state
     private final AtomicReference<PlaybackThread> currentThread = new AtomicReference<>();
 
-    // Audio format validation
-    private volatile int sampleRate = 44100; // Default, updated on open()
+    // Event handling thread pool
+    private final ExecutorService eventExecutor =
+            Executors.newCachedThreadPool(
+                    r -> {
+                        Thread t = new Thread(r, EVENT_THREAD_NAME);
+                        t.setDaemon(true);
+                        return t;
+                    });
+
+    // Audio format validation - sample rate obtained from FMOD when needed
 
     public AudioPlayer(@NonNull FmodCore fmodCore) {
         this.fmodCore = fmodCore;
+    }
+
+    /**
+     * Shuts down the event thread pool and waits for completion. Should be called when the
+     * AudioPlayer is no longer needed.
+     */
+    public void shutdown() {
+        if (eventExecutor != null && !eventExecutor.isShutdown()) {
+            eventExecutor.shutdown();
+            try {
+                // Wait up to 5 seconds for threads to complete
+                if (!eventExecutor.awaitTermination(SHUTDOWN_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                    logger.warn(
+                            "Event executor did not terminate within {} seconds, forcing shutdown",
+                            SHUTDOWN_TIMEOUT_SECONDS);
+                    eventExecutor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                logger.warn("Interrupted while waiting for event executor shutdown", e);
+                eventExecutor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     /**
@@ -117,7 +163,6 @@ public class AudioPlayer {
 
             this.currentFileName = audioFile.getAbsolutePath();
             this.totalFrames = -1; // Unknown until FMOD loads it
-            this.sampleRate = 44100; // Default, FMOD will handle actual rate
 
             logger.debug("Opened audio file: {}", fileName);
 
@@ -131,7 +176,7 @@ public class AudioPlayer {
             playAt(frame, totalFrames - 1);
         } else {
             // Total frames unknown, use large but safe end frame
-            playAt(frame, Integer.MAX_VALUE);
+            playAt(frame, Long.MAX_VALUE);
         }
     }
 
@@ -177,11 +222,13 @@ public class AudioPlayer {
         validateFrameRange(startFrame, endFrame);
 
         // Enforce 1MB limit for short intervals to avoid memory issues
-        if (endFrame - startFrame > 1048576) {
+        if (endFrame - startFrame > SHORT_INTERVAL_MAX_FRAMES) {
             throw new IllegalArgumentException(
                     "Short interval too long: "
                             + (endFrame - startFrame)
-                            + " frames (max 1048576)");
+                            + " frames (max "
+                            + SHORT_INTERVAL_MAX_FRAMES
+                            + ")");
         }
 
         synchronized (stateLock) {
@@ -208,13 +255,13 @@ public class AudioPlayer {
      * @implNote Fires STOPPED event with hearing frame
      */
     public long stop() {
+        PlaybackThread thread = currentThread.get();
+        if (thread == null) {
+            return -1;
+        }
+
         synchronized (stateLock) {
             if (status != Status.PLAYING) {
-                return -1;
-            }
-
-            PlaybackThread thread = currentThread.get();
-            if (thread == null) {
                 return -1;
             }
 
@@ -230,6 +277,15 @@ public class AudioPlayer {
 
     public void addListener(@NonNull AudioEvent.Listener listener) {
         listeners.add(listener);
+    }
+
+    /**
+     * Gets the current playback status.
+     *
+     * @return Current playback status
+     */
+    public Status getStatus() {
+        return status;
     }
 
     private void validateFrameRange(long startFrame, long endFrame)
@@ -255,19 +311,19 @@ public class AudioPlayer {
             oldThread.requestStop();
         }
 
-        // Create and start new playback thread
+        // Create new playback thread
         PlaybackRequest request = new PlaybackRequest(fileName, startFrame, endFrame, mode);
         PlaybackThread newThread = new PlaybackThread(request);
 
         if (currentThread.compareAndSet(oldThread, newThread)) {
-            newThread.start();
-
-            if (mode == PlaybackMode.MAIN_PLAYBACK) {
-                synchronized (stateLock) {
-                    status = Status.PLAYING;
-                }
-                fireEvent(AudioEvent.Type.PLAYING, startFrame, null);
+            // Update status BEFORE starting thread to prevent race condition
+            boolean isMainPlayback = (mode == PlaybackMode.MAIN_PLAYBACK);
+            if (isMainPlayback) {
+                status = Status.PLAYING;
             }
+
+            newThread.start();
+            fireEvent(AudioEvent.Type.PLAYING, startFrame, null);
         }
     }
 
@@ -278,22 +334,17 @@ public class AudioPlayer {
 
         AudioEvent event = new AudioEvent(type, frame, errorMessage);
 
-        // Fire events in separate thread to avoid blocking
-        Thread eventThread =
-                new Thread(
-                        () -> {
-                            for (AudioEvent.Listener listener : listeners) {
-                                try {
-                                    listener.onEvent(event);
-                                } catch (Exception e) {
-                                    logger.warn("Error in listener callback", e);
-                                }
-                            }
-                        },
-                        "AudioEvent-" + type);
-
-        eventThread.setDaemon(true); // Prevent hanging JVM shutdown
-        eventThread.start();
+        // Use thread pool instead of creating new threads for each event
+        eventExecutor.submit(
+                () -> {
+                    for (AudioEvent.Listener listener : listeners) {
+                        try {
+                            listener.onEvent(event);
+                        } catch (Exception e) {
+                            logger.warn("Error in listener callback", e);
+                        }
+                    }
+                });
     }
 
     private void fireProgressUpdate(long frame) {
@@ -301,7 +352,8 @@ public class AudioPlayer {
             return;
         }
 
-        // Progress updates are in the playback thread for better performance
+        // Execute directly in playback thread for better performance
+        // Progress callbacks should be lightweight and non-blocking
         for (AudioEvent.Listener listener : listeners) {
             try {
                 listener.onProgress(frame);
@@ -319,9 +371,10 @@ public class AudioPlayer {
      * <ul>
      *   <li>Daemon thread, does not prevent JVM shutdown
      *   <li>10ms polling loop for position updates
-     *   <li>Progress callbacks at ~30fps for main playback
+     *   <li>Progress callbacks executed directly (~30fps for main playback)
      *   <li>Automatic cleanup on completion or interruption
      *   <li>Volatile fields for cross-thread communication
+     *   <li>Status updates synchronized to prevent race conditions
      * </ul>
      */
     private final class PlaybackThread extends Thread {
@@ -330,7 +383,7 @@ public class AudioPlayer {
         private final AtomicLong lastHearingFrame = new AtomicLong(-1);
 
         PlaybackThread(@NonNull PlaybackRequest request) {
-            super("FMOD-Playback-" + request.mode);
+            super(PLAYBACK_THREAD_PREFIX + request.mode);
             this.request = request;
             setDaemon(true);
         }
@@ -343,7 +396,7 @@ public class AudioPlayer {
                 logger.error("Error in playback thread", e);
                 fireEvent(AudioEvent.Type.ERROR, -1, e.getMessage());
             } finally {
-                // Update status before cleaning up thread reference
+                // Always clean up thread reference and status, regardless of how we exit
                 if (request.mode == PlaybackMode.MAIN_PLAYBACK) {
                     synchronized (stateLock) {
                         if (status == Status.PLAYING) {
@@ -377,8 +430,19 @@ public class AudioPlayer {
 
         private void runMainPlaybackLoop() {
             long lastProgressFrame = -1;
-            int currentSampleRate = sampleRate; // Capture sample rate to avoid race condition
-            long progressInterval = currentSampleRate / 30; // ~30fps progress updates
+
+            // Get actual sample rate from FMOD - fail fast if not available
+            int currentSampleRate;
+            try {
+                currentSampleRate = fmodCore.getSampleRate();
+            } catch (IllegalStateException e) {
+                logger.error("Cannot determine sample rate for progress updates", e);
+                fireEvent(AudioEvent.Type.ERROR, -1, "Cannot determine audio file sample rate");
+                // Don't return - let the finally block handle cleanup
+                return;
+            }
+
+            long progressInterval = currentSampleRate / PROGRESS_UPDATES_PER_SECOND;
 
             while (!stopRequested && fmodCore.playbackInProgress()) {
                 long currentFrame = fmodCore.streamPosition();
@@ -392,7 +456,7 @@ public class AudioPlayer {
                 }
 
                 try {
-                    Thread.sleep(10); // Small sleep to prevent tight loop
+                    Thread.sleep(POLLING_SLEEP_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -410,7 +474,7 @@ public class AudioPlayer {
             // Just wait for completion, no progress updates
             while (!stopRequested && fmodCore.playbackInProgress()) {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(POLLING_SLEEP_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;

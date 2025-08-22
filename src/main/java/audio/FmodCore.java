@@ -16,7 +16,10 @@ import org.slf4j.LoggerFactory;
  * <h3>Threading Model</h3>
  *
  * <ul>
- *   <li>All methods synchronized on internal lock for thread safety
+ *   <li>Fine-grained synchronization with separate locks for different operations
+ *   <li>playbackLock: Playback control operations (startPlayback, stopPlayback)
+ *   <li>stateLock: State query operations (streamPosition, playbackInProgress, getSampleRate)
+ *   <li>initLock: Initialization operations (ensureInitialized)
  *   <li>FMOD handles audio I/O threading internally
  *   <li>Single active playback per instance
  *   <li>Automatic end-frame stopping via position polling
@@ -55,26 +58,62 @@ public final class FmodCore {
 
     private static final Logger logger = LoggerFactory.getLogger(FmodCore.class);
 
+    // FMOD system configuration constants
+    private static final int FMOD_MAX_CHANNELS = 32;
+    private static final int FMOD_INIT_FLAGS = 0x00000000;
+    private static final int FMOD_CREATE_SAMPLE_MODE = 0x00000002;
+
+    // Thread naming
+    private static final String THREAD_NAME_PREFIX = "FMOD-";
+
+    /** FMOD API error codes and constants. */
     private static final class FmodConstants {
         static final int VERSION = 0x00020309;
-        static final int INIT_NORMAL = 0x00000000;
-        static final int CREATE_SAMPLE = 0x00000002;
+        static final int INIT_NORMAL = FMOD_INIT_FLAGS;
+        static final int CREATE_SAMPLE = FMOD_CREATE_SAMPLE_MODE;
         static final int TIMEUNIT_MS = 0x00000001;
         static final int TIMEUNIT_PCM = 0x00000002;
         static final int OK = 0;
     }
 
+    /** FMOD output type configuration. */
     private static final class OutputTypes {
         static final int FMOD_OUTPUTTYPE_AUTODETECT = 0;
         static final int FMOD_OUTPUTTYPE_NOSOUND_NRT = 10; // Non-real-time no sound
     }
 
-    private static final class ErrorCodes {
-        static final int SUCCESS = 0;
-        static final int UNSPECIFIED_ERROR = -1;
-        static final int NO_AUDIO_DEVICES = -2;
-        static final int FILE_NOT_FOUND = -3;
-        static final int INCONSISTENT_STATE = -4;
+    /** Application-specific error codes for better error handling. */
+    public enum ErrorCode {
+        SUCCESS(0, "Operation completed successfully"),
+        UNSPECIFIED_ERROR(-1, "Unspecified error occurred"),
+        NO_AUDIO_DEVICES(-2, "No audio devices available"),
+        FILE_NOT_FOUND(-3, "Audio file not found or unusable"),
+        INCONSISTENT_STATE(-4, "Inconsistent state - already playing");
+
+        private final int code;
+        private final String description;
+
+        ErrorCode(int code, String description) {
+            this.code = code;
+            this.description = description;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public static ErrorCode fromCode(int code) {
+            for (ErrorCode errorCode : values()) {
+                if (errorCode.code == code) {
+                    return errorCode;
+                }
+            }
+            return UNSPECIFIED_ERROR;
+        }
     }
 
     // FMOD Core JNA interface
@@ -102,6 +141,9 @@ public final class FmodCore {
         int FMOD_Sound_Release(Pointer sound);
 
         int FMOD_Sound_GetLength(Pointer sound, IntByReference length, int lengthtype);
+
+        int FMOD_Sound_GetDefaults(
+                Pointer sound, IntByReference frequency, IntByReference priority);
 
         // Channel/Playback functions
         int FMOD_System_PlaySound(
@@ -136,7 +178,11 @@ public final class FmodCore {
     private boolean initialized = false;
     private boolean autoStopped = false;
     private int configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT;
-    private final Object lock = new Object();
+
+    // Separate locks for different concerns to improve concurrency
+    private final Object playbackLock = new Object(); // For playback control operations
+    private final Object stateLock = new Object(); // For state query operations
+    private final Object initLock = new Object(); // For initialization operations
 
     @Inject
     public FmodCore(@NonNull AudioSystemLoader audioSystemLoader) {
@@ -161,11 +207,9 @@ public final class FmodCore {
 
             // Check for end-frame stopping (only if still playing)
             if (playing && endFrame > 0 && endFrame > startFrame) {
-                IntByReference position = new IntByReference();
-                result =
-                        fmod.FMOD_Channel_GetPosition(
-                                currentChannel, position, FmodConstants.TIMEUNIT_PCM);
-                if (result == FmodConstants.OK && position.getValue() >= endFrame) {
+                // Use cached position from streamPositionInternal to avoid duplicate FMOD calls
+                long currentPos = streamPositionInternal();
+                if (currentPos >= 0 && currentPos >= (endFrame - startFrame)) {
                     checkAndAutoStop();
                     return false;
                 }
@@ -179,8 +223,13 @@ public final class FmodCore {
 
     private void cleanup() {
         if (currentSound != null) {
-            fmod.FMOD_Sound_Release(currentSound);
-            currentSound = null;
+            try {
+                fmod.FMOD_Sound_Release(currentSound);
+            } catch (Exception e) {
+                logger.warn("Failed to release FMOD sound resource", e);
+            } finally {
+                currentSound = null;
+            }
         }
         currentChannel = null;
         endFrame = 0;
@@ -191,8 +240,13 @@ public final class FmodCore {
         if (!autoStopped) {
             autoStopped = true;
             if (currentChannel != null) {
-                fmod.FMOD_Channel_Stop(currentChannel);
-                currentChannel = null;
+                try {
+                    fmod.FMOD_Channel_Stop(currentChannel);
+                } catch (Exception e) {
+                    logger.warn("Failed to stop FMOD channel", e);
+                } finally {
+                    currentChannel = null;
+                }
             }
             cleanup();
         }
@@ -233,52 +287,58 @@ public final class FmodCore {
     }
 
     // Initialize FMOD system if not already done
-    private synchronized boolean ensureInitialized() {
-        if (initialized) {
-            return true;
-        }
+    private boolean ensureInitialized() {
+        synchronized (initLock) {
+            if (initialized) {
+                return true;
+            }
 
-        try {
-            // Auto-configure output mode based on environment (unless manually configured)
-            if (configuredOutputType == OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
-                if (!audioSystemLoader.isAudioHardwareAvailable()) {
-                    configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
-                    logger.info(
-                            "FMOD configured for NOSOUND_NRT mode (no audio hardware available)");
-                } else {
-                    logger.info("FMOD configured for AUTODETECT mode (audio hardware available)");
+            try {
+                // Auto-configure output mode based on environment (unless manually configured)
+                if (configuredOutputType == OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
+                    if (!audioSystemLoader.isAudioHardwareAvailable()) {
+                        configuredOutputType = OutputTypes.FMOD_OUTPUTTYPE_NOSOUND_NRT;
+                        logger.info(
+                                "FMOD configured for NOSOUND_NRT mode (no audio hardware"
+                                        + " available)");
+                    } else {
+                        logger.info(
+                                "FMOD configured for AUTODETECT mode (audio hardware available)");
+                    }
                 }
-            }
 
-            PointerByReference systemRef = new PointerByReference();
-            int result = fmod.FMOD_System_Create(systemRef, FmodConstants.VERSION);
-            if (result != FmodConstants.OK) {
-                return false;
-            }
+                PointerByReference systemRef = new PointerByReference();
+                int result = fmod.FMOD_System_Create(systemRef, FmodConstants.VERSION);
+                if (result != FmodConstants.OK) {
+                    return false;
+                }
 
-            system = systemRef.getValue();
+                system = systemRef.getValue();
 
-            // Set output type if configured (must be called before Init)
-            if (configuredOutputType != OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
-                result = fmod.FMOD_System_SetOutput(system, configuredOutputType);
+                // Set output type if configured (must be called before Init)
+                if (configuredOutputType != OutputTypes.FMOD_OUTPUTTYPE_AUTODETECT) {
+                    result = fmod.FMOD_System_SetOutput(system, configuredOutputType);
+                    if (result != FmodConstants.OK) {
+                        fmod.FMOD_System_Release(system);
+                        system = null;
+                        return false;
+                    }
+                }
+
+                result =
+                        fmod.FMOD_System_Init(
+                                system, FMOD_MAX_CHANNELS, FmodConstants.INIT_NORMAL, null);
                 if (result != FmodConstants.OK) {
                     fmod.FMOD_System_Release(system);
                     system = null;
                     return false;
                 }
-            }
 
-            result = fmod.FMOD_System_Init(system, 32, FmodConstants.INIT_NORMAL, null);
-            if (result != FmodConstants.OK) {
-                fmod.FMOD_System_Release(system);
-                system = null;
+                initialized = true;
+                return true;
+            } catch (Exception e) {
                 return false;
             }
-
-            initialized = true;
-            return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
@@ -299,14 +359,15 @@ public final class FmodCore {
      *     unable to find or use file, -4 = inconsistent state (already playing)
      */
     public int startPlayback(String canonicalPath, long startFrame, long endFrame) {
-        synchronized (lock) {
-            if (!ensureInitialized()) {
-                return -2; // no audio devices found
-            }
+        // Initialize first (outside of playbackLock to prevent deadlock)
+        if (!ensureInitialized()) {
+            return ErrorCode.NO_AUDIO_DEVICES.getCode();
+        }
 
+        synchronized (playbackLock) {
             // Check if already playing
             if (playbackInProgressInternal()) {
-                return -4; // inconsistent state
+                return ErrorCode.INCONSISTENT_STATE.getCode();
             }
 
             try {
@@ -319,7 +380,7 @@ public final class FmodCore {
                         fmod.FMOD_System_CreateSound(
                                 system, canonicalPath, FmodConstants.CREATE_SAMPLE, null, soundRef);
                 if (result != FmodConstants.OK) {
-                    return ErrorCodes.FILE_NOT_FOUND;
+                    return ErrorCode.FILE_NOT_FOUND.getCode();
                 }
                 currentSound = soundRef.getValue();
 
@@ -331,7 +392,7 @@ public final class FmodCore {
                 if (result != FmodConstants.OK) {
                     fmod.FMOD_Sound_Release(currentSound);
                     currentSound = null;
-                    return ErrorCodes.UNSPECIFIED_ERROR;
+                    return ErrorCode.UNSPECIFIED_ERROR.getCode();
                 }
                 currentChannel = channelRef.getValue();
 
@@ -341,7 +402,7 @@ public final class FmodCore {
                                 currentChannel, startFrame, FmodConstants.TIMEUNIT_PCM);
                 if (result != FmodConstants.OK) {
                     cleanup();
-                    return ErrorCodes.UNSPECIFIED_ERROR;
+                    return ErrorCode.UNSPECIFIED_ERROR.getCode();
                 }
 
                 // Store frame range for position-based stopping
@@ -352,17 +413,17 @@ public final class FmodCore {
                 result = fmod.FMOD_Channel_SetPaused(currentChannel, 0); // 0 = not paused
                 if (result != FmodConstants.OK) {
                     cleanup();
-                    return ErrorCodes.UNSPECIFIED_ERROR;
+                    return ErrorCode.UNSPECIFIED_ERROR.getCode();
                 }
 
                 // Update FMOD system
                 fmod.FMOD_System_Update(system);
 
-                return ErrorCodes.SUCCESS;
+                return ErrorCode.SUCCESS.getCode();
 
             } catch (Exception e) {
                 cleanup();
-                return ErrorCodes.UNSPECIFIED_ERROR;
+                return ErrorCode.UNSPECIFIED_ERROR.getCode();
             }
         }
     }
@@ -380,7 +441,7 @@ public final class FmodCore {
      * @return Current playback position in frames relative to start frame, or -1 if not playing
      */
     public long stopPlayback() {
-        synchronized (lock) {
+        synchronized (playbackLock) {
             if (!playbackInProgressInternal()) {
                 return -1;
             }
@@ -416,7 +477,7 @@ public final class FmodCore {
      * @return Current playback position in frames relative to start frame, or -1 if not playing
      */
     public long streamPosition() {
-        synchronized (lock) {
+        synchronized (stateLock) {
             return streamPositionInternal();
         }
     }
@@ -438,8 +499,38 @@ public final class FmodCore {
      * @return true if audio is actively playing within the specified range, false otherwise
      */
     public boolean playbackInProgress() {
-        synchronized (lock) {
+        synchronized (stateLock) {
             return playbackInProgressInternal();
+        }
+    }
+
+    /**
+     * Gets the sample rate of the currently loaded audio file.
+     *
+     * @return Sample rate in Hz from the loaded audio file
+     * @throws IllegalStateException if no file is loaded or sample rate cannot be determined
+     */
+    public int getSampleRate() {
+        synchronized (stateLock) {
+            if (currentSound == null) {
+                throw new IllegalStateException("No audio file loaded");
+            }
+
+            try {
+                IntByReference frequency = new IntByReference();
+                IntByReference priority = new IntByReference();
+                int result = fmod.FMOD_Sound_GetDefaults(currentSound, frequency, priority);
+                if (result == FmodConstants.OK) {
+                    int sampleRate = frequency.getValue();
+                    if (sampleRate > 0) {
+                        return sampleRate;
+                    }
+                }
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to query sample rate from FMOD", e);
+            }
+
+            throw new IllegalStateException("FMOD returned invalid sample rate");
         }
     }
 }
