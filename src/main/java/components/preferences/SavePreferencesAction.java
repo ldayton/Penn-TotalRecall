@@ -1,6 +1,7 @@
 package components.preferences;
 
 import di.GuiceBootstrap;
+import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -14,6 +15,13 @@ import util.DialogService;
 public class SavePreferencesAction extends AbstractAction {
     private static final Logger logger = LoggerFactory.getLogger(SavePreferencesAction.class);
 
+    private final PreferencesFrame preferencesFrame;
+
+    @Inject
+    public SavePreferencesAction(PreferencesFrame preferencesFrame) {
+        this.preferencesFrame = preferencesFrame;
+    }
+
     /**
      * Recurses through all <code>AbstractPreferenceDisplays</code>, calling {@link
      * AbstractPreferenceDisplay#save()}.
@@ -24,8 +32,7 @@ public class SavePreferencesAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<AbstractPreferenceDisplay> allPrefs =
-                PreferencesFrame.getInstance().getAbstractPreferences();
+        List<AbstractPreferenceDisplay> allPrefs = preferencesFrame.getAbstractPreferences();
         boolean closeWindow = true;
         List<BadPreferenceException> errorMessages = new ArrayList<>();
         for (int i = 0; i < allPrefs.size(); i++) {
@@ -41,10 +48,8 @@ public class SavePreferencesAction extends AbstractAction {
         if (closeWindow) {
             // safer than directly using setVisible(false), since this double checks the assumption
             // that all preferences are saved
-            PreferencesFrame.getInstance()
-                    .windowClosing(
-                            new WindowEvent(
-                                    PreferencesFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
+            preferencesFrame.windowClosing(
+                    new WindowEvent(preferencesFrame, WindowEvent.WINDOW_CLOSING));
         } else {
             String bigMessage = "The following preferences could not be saved:\n\n";
             for (int i = 0; i < errorMessages.size(); i++) {
@@ -59,8 +64,7 @@ public class SavePreferencesAction extends AbstractAction {
                 throw new IllegalStateException("DialogService not available via DI");
             }
             dialogService.showError(bigMessage);
-            PreferencesFrame.getInstance()
-                    .toFront(); // to make sure PreferenceFrame will be in foreground
+            preferencesFrame.toFront(); // to make sure PreferenceFrame will be in foreground
         }
     }
 }

@@ -110,7 +110,7 @@ public class AnnotateRegularAction extends BaseAction {
                 // delete
                 deleteSelectedAnnotationAction.actionPerformed(
                         new ActionEvent(
-                                WordpoolDisplay.getInstance(),
+                                wordpoolDisplay,
                                 ActionEvent.ACTION_PERFORMED,
                                 null,
                                 System.currentTimeMillis(),
@@ -137,7 +137,7 @@ public class AnnotateRegularAction extends BaseAction {
                 // add a new annotation object, and clear the field
                 AnnotationFileParser.appendAnnotation(ann, oFile);
                 AnnotationDisplay.addAnnotation(ann);
-                WordpoolDisplay.clearText();
+                wordpoolDisplay.clearText();
             } catch (IOException e1) {
                 logger.error("Error committing annotation to file: " + oFile.getAbsolutePath(), e1);
                 eventBus.publish(
@@ -156,7 +156,7 @@ public class AnnotateRegularAction extends BaseAction {
             setEnabled(audioState.getPlayer().getStatus() != audio.AudioPlayer.Status.PLAYING);
         } else {
             setEnabled(false);
-            WordpoolDisplay.clearText();
+            wordpoolDisplay.clearText();
         }
     }
 

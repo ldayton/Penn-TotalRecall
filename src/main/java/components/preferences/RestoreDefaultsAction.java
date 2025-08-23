@@ -1,6 +1,7 @@
 package components.preferences;
 
 import di.GuiceBootstrap;
+import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -10,6 +11,13 @@ import util.DialogService;
 /** Restores all preferences to their factory defaults. */
 public class RestoreDefaultsAction extends AbstractAction {
 
+    private final PreferencesFrame preferencesFrame;
+
+    @Inject
+    public RestoreDefaultsAction(PreferencesFrame preferencesFrame) {
+        this.preferencesFrame = preferencesFrame;
+    }
+
     /**
      * Recurses through all <code>AbstractPreferenceDisplays</code>, and restores them to their
      * defaults. Afterward notifies user of success and hides the <code>PreferencesFrame</code>.
@@ -18,8 +26,7 @@ public class RestoreDefaultsAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<AbstractPreferenceDisplay> allPrefs =
-                PreferencesFrame.getInstance().getAbstractPreferences();
+        List<AbstractPreferenceDisplay> allPrefs = preferencesFrame.getAbstractPreferences();
         for (int i = 0; i < allPrefs.size(); i++) {
             allPrefs.get(i).restoreDefault();
         }
@@ -31,9 +38,7 @@ public class RestoreDefaultsAction extends AbstractAction {
 
         // safer than directly using setVisible(false), since this double checks the assumption that
         // all preferences are saved
-        PreferencesFrame.getInstance()
-                .windowClosing(
-                        new WindowEvent(
-                                PreferencesFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
+        preferencesFrame.windowClosing(
+                new WindowEvent(preferencesFrame, WindowEvent.WINDOW_CLOSING));
     }
 }

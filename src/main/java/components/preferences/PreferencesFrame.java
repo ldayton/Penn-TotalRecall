@@ -42,6 +42,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     private final KeyboardManager keyboardManager;
     private final env.LookAndFeelManager lookAndFeelManager;
     private final WindowService windowService;
+    private final SavePreferencesAction savePreferencesAction;
+    private final RestoreDefaultsAction restoreDefaultsAction;
 
     private JPanel prefPanel;
     private final JScrollPane prefScrollPane;
@@ -62,10 +64,14 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     public PreferencesFrame(
             KeyboardManager keyboardManager,
             env.LookAndFeelManager lookAndFeelManager,
-            WindowService windowService) {
+            WindowService windowService,
+            SavePreferencesAction savePreferencesAction,
+            RestoreDefaultsAction restoreDefaultsAction) {
         this.keyboardManager = keyboardManager;
         this.lookAndFeelManager = lookAndFeelManager;
         this.windowService = windowService;
+        this.savePreferencesAction = savePreferencesAction;
+        this.restoreDefaultsAction = restoreDefaultsAction;
 
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -202,12 +208,12 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         // frame
 
         JButton jbSavePrefs = new JButton("Save Preferences");
-        jbSavePrefs.addActionListener(new SavePreferencesAction());
+        jbSavePrefs.addActionListener(savePreferencesAction);
         buttonPanel.add(jbSavePrefs);
         buttonPanel.add(Box.createHorizontalGlue());
 
         JButton jbRestoreDefaults = new JButton("Restore Defaults");
-        jbRestoreDefaults.addActionListener(new RestoreDefaultsAction());
+        jbRestoreDefaults.addActionListener(restoreDefaultsAction);
         buttonPanel.add(jbRestoreDefaults);
         buttonPanel.add(Box.createHorizontalGlue());
 

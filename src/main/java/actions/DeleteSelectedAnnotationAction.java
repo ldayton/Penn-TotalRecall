@@ -1,7 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.MySplitPane;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformDisplay;
@@ -9,21 +8,26 @@ import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
+import util.EventBus;
 
 @Singleton
 public class DeleteSelectedAnnotationAction extends BaseAction {
 
     private final AudioState audioState;
     private final DeleteAnnotationAction deleteAnnotationAction;
+    private final EventBus eventBus;
 
     @Inject
     public DeleteSelectedAnnotationAction(
-            AudioState audioState, DeleteAnnotationAction deleteAnnotationAction) {
+            AudioState audioState,
+            DeleteAnnotationAction deleteAnnotationAction,
+            EventBus eventBus) {
         super(
                 "Delete Selected Annotation",
                 "Delete the annotation at the current playback position");
         this.audioState = audioState;
         this.deleteAnnotationAction = deleteAnnotationAction;
+        this.eventBus = eventBus;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class DeleteSelectedAnnotationAction extends BaseAction {
                 deleteAnnotationAction.setRowIndex(i);
                 deleteAnnotationAction.actionPerformed(
                         new ActionEvent(
-                                MySplitPane.getInstance(),
+                                eventBus,
                                 ActionEvent.ACTION_PERFORMED,
                                 null,
                                 System.currentTimeMillis(),
