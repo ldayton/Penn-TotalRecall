@@ -20,6 +20,8 @@ import behaviors.singleact.ReturnToLastPositionAction;
 import behaviors.singleact.StopAction;
 import behaviors.singleact.TipsMessageAction;
 import behaviors.singleact.VisitTutorialSiteAction;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
@@ -47,6 +49,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>See the the behaviors class for more information.
  */
+@Singleton
 public class MyMenu extends JMenuBar {
     private static final Logger logger = LoggerFactory.getLogger(MyMenu.class);
 
@@ -64,7 +67,8 @@ public class MyMenu extends JMenuBar {
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private MyMenu(env.LookAndFeelManager lookAndFeelManager) {
+    @Inject
+    public MyMenu(env.LookAndFeelManager lookAndFeelManager) {
         this.lookAndFeelManager = lookAndFeelManager;
         allActions = new HashSet<>();
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
@@ -73,6 +77,9 @@ public class MyMenu extends JMenuBar {
         initAnnotationMenu();
         //		initViewMenu();
         initHelpMenu();
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /** Creates the File menu, only adding exit and preferences options for non-OSX platforms. */
@@ -258,14 +265,8 @@ public class MyMenu extends JMenuBar {
     public static MyMenu getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyMenu not initialized. Call createInstance(LookAndFeelManager) first.");
-        }
-        return instance;
-    }
-
-    public static MyMenu createInstance(env.LookAndFeelManager lookAndFeelManager) {
-        if (instance == null) {
-            instance = new MyMenu(lookAndFeelManager);
+                    "MyMenu not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }

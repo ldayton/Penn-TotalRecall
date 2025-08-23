@@ -8,6 +8,8 @@ import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.MyFrame;
+import components.MyMenu;
+import components.MySplitPane;
 import components.WindowManager;
 import env.AppConfig;
 import env.KeyboardManager;
@@ -42,6 +44,8 @@ public class AppModule extends AbstractModule {
         bind(UserManager.class).in(Singleton.class);
         bind(WindowManager.class).in(Singleton.class);
         bind(MyFrame.class).in(Singleton.class);
+        bind(MyMenu.class).in(Singleton.class);
+        bind(MySplitPane.class).in(Singleton.class);
     }
 
     @Provides

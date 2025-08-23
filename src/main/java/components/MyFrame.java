@@ -30,14 +30,16 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
 
     private static MyFrame instance;
     private final env.LookAndFeelManager lookAndFeelManager;
+    private final MySplitPane mySplitPane;
 
     @Inject
-    public MyFrame(LookAndFeelManager lookAndFeelManager) {
+    public MyFrame(LookAndFeelManager lookAndFeelManager, MySplitPane mySplitPane) {
         this.lookAndFeelManager = lookAndFeelManager;
+        this.mySplitPane = mySplitPane;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(MyGlassPane.getInstance());
         MyGlassPane.getInstance().setVisible(true);
-        setJMenuBar(MyMenu.createInstance(lookAndFeelManager));
+        setJMenuBar(MyMenu.getInstance());
 
         // force handling by  WindowListener below
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -58,7 +60,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
                     }
                 });
 
-        setContentPane(MySplitPane.getInstance());
+        setContentPane(mySplitPane);
 
         // accept drag and drop of directories and files
         new FileDrop(this, new FileDropListener());

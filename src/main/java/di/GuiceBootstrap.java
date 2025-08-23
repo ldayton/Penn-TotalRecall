@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import components.MyFocusTraversalPolicy;
 import components.MyFrame;
+import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
 import env.LookAndFeelManager;
@@ -24,7 +25,9 @@ public class GuiceBootstrap {
     private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
     private final ActionsManager actionsManager;
+    private final MyMenu myMenu;
     private final MyFrame myFrame;
+    private final MySplitPane mySplitPane;
 
     @Inject
     public GuiceBootstrap(
@@ -32,12 +35,16 @@ public class GuiceBootstrap {
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
             ActionsManager actionsManager,
-            MyFrame myFrame) {
+            MyMenu myMenu,
+            MyFrame myFrame,
+            MySplitPane mySplitPane) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
         this.actionsManager = actionsManager;
+        this.myMenu = myMenu;
         this.myFrame = myFrame;
+        this.mySplitPane = mySplitPane;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -64,7 +71,7 @@ public class GuiceBootstrap {
         lookAndFeelManager.initialize();
         actionsManager.initialize(); // Load action configuration before UI creation
         myFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
-        windowManager.restoreWindowLayout(myFrame, MySplitPane.getInstance());
+        windowManager.restoreWindowLayout(myFrame, mySplitPane);
         myFrame.setVisible(true);
 
         // Check for updates after UI is ready (async, non-blocking)

@@ -5,6 +5,8 @@ import behaviors.singleact.DeleteSelectedAnnotationAction;
 import behaviors.singleact.PlayPauseAction;
 import components.waveform.WaveformDisplay;
 import control.XActionManager;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -15,6 +17,7 @@ import javax.swing.KeyStroke;
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MyFrame</code>. Splits
  * the program's interface between the waveform area above, and the control area below.
  */
+@Singleton
 public class MySplitPane extends JSplitPane {
 
     private static MySplitPane instance;
@@ -23,7 +26,8 @@ public class MySplitPane extends JSplitPane {
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
-    private MySplitPane() {
+    @Inject
+    public MySplitPane() {
         super(JSplitPane.VERTICAL_SPLIT, WaveformDisplay.getInstance(), ControlPanel.getInstance());
 
         setOneTouchExpandable(
@@ -68,6 +72,9 @@ public class MySplitPane extends JSplitPane {
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0, false), "none");
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0, false), "none");
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -77,7 +84,9 @@ public class MySplitPane extends JSplitPane {
      */
     public static MySplitPane getInstance() {
         if (instance == null) {
-            instance = new MySplitPane();
+            throw new IllegalStateException(
+                    "MySplitPane not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }
