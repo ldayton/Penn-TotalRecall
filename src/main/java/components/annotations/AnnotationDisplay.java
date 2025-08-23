@@ -3,6 +3,8 @@ package components.annotations;
 import components.MyFrame;
 import info.GUIConstants;
 import info.MyShapes;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
 /** A custom interface component for displaying committed annotations to the user. */
+@Singleton
 public class AnnotationDisplay extends JScrollPane {
 
     private static final String title = "Annotations";
@@ -23,7 +26,8 @@ public class AnnotationDisplay extends JScrollPane {
      * listeners, and various aspects of appearance.
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private AnnotationDisplay() {
+    @Inject
+    public AnnotationDisplay() {
         table = AnnotationTable.getInstance();
         getViewport().setView(table);
         setPreferredSize(GUIConstants.annotationDisplayDimension);
@@ -52,6 +56,9 @@ public class AnnotationDisplay extends JScrollPane {
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "none");
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "none");
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     public static Annotation[] getAnnotationsInOrder() {
@@ -82,7 +89,9 @@ public class AnnotationDisplay extends JScrollPane {
 
     public static AnnotationDisplay getInstance() {
         if (instance == null) {
-            instance = new AnnotationDisplay();
+            throw new IllegalStateException(
+                    "AnnotationDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

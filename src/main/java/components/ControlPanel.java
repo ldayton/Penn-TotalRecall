@@ -25,12 +25,17 @@ public class ControlPanel extends JPanel {
     private static ControlPanel instance;
     private final DoneButton doneButton;
     private final AudioFileDisplay audioFileDisplay;
+    private final AnnotationDisplay annotationDisplay;
 
     /** Creates a new instance, initializing listeners and appearance. */
     @Inject
-    public ControlPanel(DoneButton doneButton, AudioFileDisplay audioFileDisplay) {
+    public ControlPanel(
+            DoneButton doneButton,
+            AudioFileDisplay audioFileDisplay,
+            AnnotationDisplay annotationDisplay) {
         this.doneButton = doneButton;
         this.audioFileDisplay = audioFileDisplay;
+        this.annotationDisplay = annotationDisplay;
         setOpaque(false);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -43,7 +48,7 @@ public class ControlPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(WordpoolDisplay.getInstance());
         add(Box.createRigidArea(new Dimension(30, 0)));
-        add(AnnotationDisplay.getInstance());
+        add(annotationDisplay);
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(doneButton);
         add(Box.createRigidArea(new Dimension(30, 0)));

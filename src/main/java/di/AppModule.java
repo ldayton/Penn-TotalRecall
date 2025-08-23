@@ -13,6 +13,7 @@ import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
+import components.annotations.AnnotationDisplay;
 import components.audiofiles.AudioFileDisplay;
 import components.preferences.PreferencesFrame;
 import components.waveform.MyGlassPane;
@@ -58,6 +59,7 @@ public class AppModule extends AbstractModule {
         bind(PreferencesFrame.class).in(Singleton.class);
         bind(WaveformDisplay.class).in(Singleton.class);
         bind(AudioFileDisplay.class).in(Singleton.class);
+        bind(AnnotationDisplay.class).in(Singleton.class);
     }
 
     @Provides
