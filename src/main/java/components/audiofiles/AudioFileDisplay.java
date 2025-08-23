@@ -1,7 +1,7 @@
 package components.audiofiles;
 
 import components.audiofiles.AudioFile.AudioFilePathException;
-import control.CurAudio;
+import control.AudioState;
 import di.GuiceBootstrap;
 import env.PreferencesManager;
 import info.Constants;
@@ -41,6 +41,7 @@ public class AudioFileDisplay extends JScrollPane {
     private static AudioFileDisplay instance;
     private final AudioFileList audioFileList;
     private final PreferencesManager preferencesManager;
+    private static AudioState audioState;
 
     private static AudioFileList list;
 
@@ -50,9 +51,13 @@ public class AudioFileDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AudioFileDisplay(AudioFileList audioFileList, PreferencesManager preferencesManager) {
+    public AudioFileDisplay(
+            AudioFileList audioFileList,
+            PreferencesManager preferencesManager,
+            AudioState audioState) {
         this.audioFileList = audioFileList;
         this.preferencesManager = preferencesManager;
+        AudioFileDisplay.audioState = audioState;
         list = audioFileList;
         getViewport().setView(list);
 
@@ -156,8 +161,8 @@ public class AudioFileDisplay extends JScrollPane {
         if (file.isDone()) {
             return false;
         }
-        if (CurAudio.audioOpen()) {
-            if (file.getAbsolutePath().equals(CurAudio.getCurrentAudioFileAbsolutePath())) {
+        if (audioState.audioOpen()) {
+            if (file.getAbsolutePath().equals(audioState.getCurrentAudioFileAbsolutePath())) {
                 return true;
             }
             boolean shouldWarn =
@@ -186,7 +191,7 @@ public class AudioFileDisplay extends JScrollPane {
                 }
             }
         }
-        CurAudio.switchFile(file);
+        audioState.switchFile(file);
 
         // UI updates are now handled via events
         return true;

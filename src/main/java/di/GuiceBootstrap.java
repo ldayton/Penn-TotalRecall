@@ -73,10 +73,7 @@ public class GuiceBootstrap {
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
-        // Initialize CurAudio with the injected AudioState instance
-        // This allows for gradual migration from static access to dependency injection
-        var audioState = globalInjector.getInstance(control.AudioState.class);
-        control.CurAudio.initialize(audioState);
+        // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Register all UpdatingAction instances with ActionsManager
         // This must happen after all components are created but before any UI updates

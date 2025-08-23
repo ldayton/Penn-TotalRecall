@@ -1,6 +1,6 @@
 package components.audiofiles;
 
-import control.CurAudio;
+import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -25,19 +25,21 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
     private final AudioFileListMouseAdapter mouseAdapter;
+    private final AudioState audioState;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
      * selection mode, cell renderer, and model.
      */
     @Inject
-    public AudioFileList(AudioFileListMouseAdapter mouseAdapter) {
+    public AudioFileList(AudioFileListMouseAdapter mouseAdapter, AudioState audioState) {
         this.mouseAdapter = mouseAdapter;
+        this.audioState = audioState;
         model = new AudioFileListModel();
         setModel(model);
 
         // set the cell renderer that will display incomplete/complete AudioFiles differently
-        render = new AudioFileListCellRenderer();
+        render = new AudioFileListCellRenderer(audioState);
         setCellRenderer(render);
 
         // at this point only one audio file can be selected a time, changing to multiple selection
@@ -84,8 +86,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                                     if (ff == null) {
                                         return;
                                     }
-                                    if (CurAudio.audioOpen()) {
-                                        if (CurAudio.getCurrentAudioFileAbsolutePath()
+                                    if (audioState.audioOpen()) {
+                                        if (audioState
+                                                .getCurrentAudioFileAbsolutePath()
                                                 .equals(ff.getAbsolutePath())) {
                                             return;
                                         }

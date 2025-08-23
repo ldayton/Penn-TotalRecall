@@ -42,7 +42,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="actions.DoneAction" name="Mark Complete" />
                 </actions>
                 """;
 
@@ -52,7 +52,7 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertEquals("behaviors.singleact.DoneAction", action.className());
+        assertEquals("actions.DoneAction", action.className());
         assertEquals("Mark Complete", action.name());
         assertTrue(action.tooltip().isEmpty());
         assertTrue(action.arg().isEmpty());
@@ -93,9 +93,9 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
-                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" />
-                    <action class="behaviors.singleact.StopAction" name="Go to Start" />
+                    <action class="actions.DoneAction" name="Mark Complete" />
+                    <action class="actions.PlayPauseAction" name="Play/Pause" />
+                    <action class="actions.StopAction" name="Go to Start" />
                 </actions>
                 """;
 
@@ -104,9 +104,9 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(3, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
-        assertEquals("behaviors.singleact.PlayPauseAction", actions.get(1).className());
-        assertEquals("behaviors.singleact.StopAction", actions.get(2).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
+        assertEquals("actions.PlayPauseAction", actions.get(1).className());
+        assertEquals("actions.StopAction", actions.get(2).className());
     }
 
     @Test
@@ -116,11 +116,11 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="actions.DoneAction" name="Mark Complete" />
                     <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             os="Linux,Windows" />
-                    <action class="behaviors.singleact.AboutAction"
+                    <action class="actions.AboutAction"
                             name="About"
                             os="Windows,Linux" />
                 </actions>
@@ -132,7 +132,7 @@ class ActionsFileParserTest {
 
         // Then - only the action without OS restriction should be included
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -182,7 +182,7 @@ class ActionsFileParserTest {
                 <?xml version="1.0"?>
                 <actions>
                     <!-- This is a comment -->
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="actions.DoneAction" name="Mark Complete" />
                     <!-- Another comment -->
                 </actions>
                 """;
@@ -192,7 +192,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -202,7 +202,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             os="UnknownOS,Linux" />
                 </actions>
@@ -261,7 +261,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                    <action class="actions.DoneAction" name="Mark Complete">
                         <shortcut>
                             <mask keyname="menu" />
                             <mask keyname="shift" />
@@ -285,7 +285,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             unknownAttribute="value" />
                 </actions>
@@ -344,7 +344,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" />
+                    <action class="actions.DoneAction" />
                 </actions>
                 """;
 
@@ -363,7 +363,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="" />
+                    <action class="actions.DoneAction" name="" />
                 </actions>
                 """;
 
@@ -382,7 +382,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             os=" Linux , Windows " />
                 </actions>
@@ -394,7 +394,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -404,7 +404,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             os="Mac OS X" />
                 </actions>
@@ -416,7 +416,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -426,7 +426,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete" />
                 </actions>
                 """;
@@ -436,7 +436,7 @@ class ActionsFileParserTest {
 
         // Then - should be included regardless of platform
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("actions.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -446,7 +446,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             tooltip=""
                             enum="" />
@@ -513,7 +513,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="   " />
+                    <action class="actions.DoneAction" name="   " />
                 </actions>
                 """;
 
@@ -533,7 +533,7 @@ class ActionsFileParserTest {
                 <?xml version="1.0"?>
                 <actions>
                     <action class="" name="First Invalid" />
-                    <action class="behaviors.singleact.ValidAction" name="Valid Action" />
+                    <action class="actions.ValidAction" name="Valid Action" />
                     <action name="Second Invalid" />
                 </actions>
                 """;
@@ -553,7 +553,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                    <action class="actions.DoneAction" name="Mark Complete">
                         <shortcut>
                             <mask keyname="menu" />
                             <mask keyname="shift" />
@@ -584,7 +584,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause">
+                    <action class="actions.PlayPauseAction" name="Play/Pause">
                         <shortcut>
                             <key keyname="SPACE" />
                         </shortcut>
@@ -611,8 +611,8 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
-                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" />
+                    <action class="actions.DoneAction" name="Mark Complete">
+                    <action class="actions.PlayPauseAction" name="Play/Pause" />
                 </actions>
                 """;
 
@@ -632,7 +632,7 @@ class ActionsFileParserTest {
                 <?xml version="1.0"?>
                 <actions>
                     <unexpectedElement />
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="actions.DoneAction" name="Mark Complete" />
                 </actions>
                 """;
 
@@ -651,9 +651,9 @@ class ActionsFileParserTest {
                 """
 <?xml version="1.0"?>
 <actions>
-    <action class="behaviors.singleact.DoneAction" name="Mark Complete" os="Mac OS X" />
-    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" os="Windows" />
-    <action class="behaviors.singleact.StopAction" name="Stop" os="Linux" />
+    <action class="actions.DoneAction" name="Mark Complete" os="Mac OS X" />
+    <action class="actions.PlayPauseAction" name="Play/Pause" os="Windows" />
+    <action class="actions.StopAction" name="Stop" os="Linux" />
 </actions>
 """;
 
@@ -661,19 +661,19 @@ class ActionsFileParserTest {
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
         List<ActionConfig> macActions = parseFromString(xml);
         assertEquals(1, macActions.size());
-        assertEquals("behaviors.singleact.DoneAction", macActions.get(0).className());
+        assertEquals("actions.DoneAction", macActions.get(0).className());
 
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
         List<ActionConfig> windowsActions = parseFromString(xml);
         assertEquals(1, windowsActions.size());
-        assertEquals("behaviors.singleact.PlayPauseAction", windowsActions.get(0).className());
+        assertEquals("actions.PlayPauseAction", windowsActions.get(0).className());
 
         // Test Linux
         when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
         List<ActionConfig> linuxActions = parseFromString(xml);
         assertEquals(1, linuxActions.size());
-        assertEquals("behaviors.singleact.StopAction", linuxActions.get(0).className());
+        assertEquals("actions.StopAction", linuxActions.get(0).className());
     }
 
     @Test
@@ -683,7 +683,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction"
+                    <action class="actions.DoneAction"
                             name="Mark Complete"
                             os="Linux,UnknownOS,Windows" />
                 </actions>
@@ -704,7 +704,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                    <action class="actions.DoneAction" name="Mark Complete">
                         <shortcut>
                             <key keyname="D" />
                             <key />

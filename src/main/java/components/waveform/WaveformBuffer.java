@@ -1,6 +1,6 @@
 package components.waveform;
 
-import control.CurAudio;
+import control.AudioState;
 import env.PreferencesManager;
 import info.GUIConstants;
 import info.MyColors;
@@ -59,16 +59,18 @@ public class WaveformBuffer extends Buffer {
 
     private double biggestConsecutivePixelVals;
     private final PreferencesManager preferencesManager;
+    private final AudioState audioState;
 
     /**
-     * Creates a buffer thread using the audio information that <code>CurAudio</code> provides at
+     * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
      * the time the constructor runs.
      */
     @Inject
-    public WaveformBuffer(PreferencesManager preferencesManager) {
+    public WaveformBuffer(PreferencesManager preferencesManager, AudioState audioState) {
         this.preferencesManager = preferencesManager;
+        this.audioState = audioState;
         finish = false;
-        numChunks = CurAudio.lastChunkNum() + 1;
+        numChunks = audioState.lastChunkNum() + 1;
         chunkWidthInPixels = GUIConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
@@ -81,7 +83,7 @@ public class WaveformBuffer extends Buffer {
         double maxPref =
                 preferencesManager.getInt(
                         PreferenceKeys.MAX_BAND_PASS, PreferenceKeys.DEFAULT_MAX_BAND_PASS);
-        double sampleRate = CurAudio.getMaster().frameRate();
+        double sampleRate = audioState.getMaster().frameRate();
 
         double tmpMinBand = minPref / sampleRate;
         double tmpMaxBand = maxPref / sampleRate;
@@ -119,7 +121,7 @@ public class WaveformBuffer extends Buffer {
     @Override
     public void run() {
         while (finish == false) {
-            final int curChunkNum = CurAudio.lookupChunkNum((int) CurAudio.getAudioProgress());
+            final int curChunkNum = audioState.lookupChunkNum((int) audioState.getAudioProgress());
             final int curHeight = WaveformDisplay.height();
 
             if (bufferedChunkNum < 0 || bufferedHeight <= 0) {
@@ -216,7 +218,7 @@ public class WaveformBuffer extends Buffer {
         int firstPriority;
         int secondPriority;
 
-        long lastFrame = CurAudio.lastFrameOfChunk(curChunkNum - 1);
+        long lastFrame = audioState.lastFrameOfChunk(curChunkNum - 1);
         if (lastFrame >= 0 && WaveformDisplay.frameToDisplayXPixel(lastFrame) >= 0) {
             firstPriority = curChunkNum - 1;
             secondPriority = curChunkNum + 1;
@@ -289,9 +291,10 @@ public class WaveformBuffer extends Buffer {
 
             // draw seconds line
             double counter =
-                    CurAudio.getMaster()
+                    audioState
+                            .getMaster()
                             .framesToSec(
-                                    CurAudio.firstFrameOfChunk(
+                                    audioState.firstFrameOfChunk(
                                             myNum)); // this works because buffer size is in whole
             // seconds
             for (int i = 0; i < chunkWidthInPixels; i += GUIConstants.zoomlessPixelsPerSecond) {
@@ -327,7 +330,7 @@ public class WaveformBuffer extends Buffer {
             try {
                 ais =
                         AudioSystem.getAudioInputStream(
-                                new File(CurAudio.getCurrentAudioFileAbsolutePath()));
+                                new File(audioState.getCurrentAudioFileAbsolutePath()));
             } catch (UnsupportedAudioFileException e) {
                 logger.error("Unsupported audio file format for waveform generation", e);
             } catch (IOException e) {
@@ -338,11 +341,11 @@ public class WaveformBuffer extends Buffer {
                     (long)
                             (chunkNum
                                     * CHUNK_SIZE_SECONDS
-                                    * CurAudio.getMaster().frameRate()
-                                    * (CurAudio.getMaster().frameSizeInBytes()));
+                                    * audioState.getMaster().frameRate()
+                                    * (audioState.getMaster().frameSizeInBytes()));
             if (chunkNum > 0) {
-                preDataSizeInFrames = (int) (CurAudio.getMaster().frameRate() * preDataSeconds);
-                toSkip -= (preDataSizeInFrames * (CurAudio.getMaster().frameSizeInBytes()));
+                preDataSizeInFrames = (int) (audioState.getMaster().frameRate() * preDataSeconds);
+                toSkip -= (preDataSizeInFrames * (audioState.getMaster().frameSizeInBytes()));
             }
             long skipped = -1;
             try {
@@ -359,7 +362,7 @@ public class WaveformBuffer extends Buffer {
             BandPassFilter filter = new BandPassFilter(minBand, maxBand);
             double[] samples =
                     new double
-                            [(int) (CurAudio.getMaster().frameRate() * CHUNK_SIZE_SECONDS)
+                            [(int) (audioState.getMaster().frameRate() * CHUNK_SIZE_SECONDS)
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 

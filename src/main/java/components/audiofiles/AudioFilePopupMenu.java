@@ -1,7 +1,7 @@
 package components.audiofiles;
 
 import actions.ContinueAnnotatingAction;
-import control.CurAudio;
+import control.AudioState;
 import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -18,10 +18,13 @@ import javax.swing.JPopupMenu;
 public class AudioFilePopupMenu extends JPopupMenu {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
+    private final AudioState audioState;
 
     @Inject
-    public AudioFilePopupMenu(ContinueAnnotatingAction continueAnnotatingAction) {
+    public AudioFilePopupMenu(
+            ContinueAnnotatingAction continueAnnotatingAction, AudioState audioState) {
         this.continueAnnotatingAction = continueAnnotatingAction;
+        this.audioState = audioState;
     }
 
     /**
@@ -57,8 +60,8 @@ public class AudioFilePopupMenu extends JPopupMenu {
                             }
                         });
         del.setText("Remove from List");
-        if (CurAudio.audioOpen()) {
-            if (CurAudio.getCurrentAudioFileAbsolutePath().equals(file.getAbsolutePath())) {
+        if (audioState.audioOpen()) {
+            if (audioState.getCurrentAudioFileAbsolutePath().equals(file.getAbsolutePath())) {
                 del.setEnabled(false);
             }
         }

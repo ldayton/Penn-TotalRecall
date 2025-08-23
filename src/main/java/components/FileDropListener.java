@@ -4,7 +4,7 @@ import actions.OpenWordpoolAction;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
-import control.CurAudio;
+import control.AudioState;
 import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -24,10 +24,12 @@ public class FileDropListener implements FileDrop.Listener {
     private static final Logger logger = LoggerFactory.getLogger(FileDropListener.class);
 
     private final OpenWordpoolAction openWordpoolAction;
+    private final AudioState audioState;
 
     @Inject
-    public FileDropListener(OpenWordpoolAction openWordpoolAction) {
+    public FileDropListener(OpenWordpoolAction openWordpoolAction, AudioState audioState) {
         this.openWordpoolAction = openWordpoolAction;
+        this.audioState = audioState;
     }
 
     /**
@@ -54,10 +56,12 @@ public class FileDropListener implements FileDrop.Listener {
                 if (files[0].getName().toLowerCase().endsWith(Constants.wordpoolFileExtension)) {
                     openWordpoolAction.switchWordpool(files[0]);
 
-                    if (CurAudio.audioOpen()) {
+                    if (audioState.audioOpen()) {
                         File lstFile =
                                 new File(
-                                        OSPath.basename(CurAudio.getCurrentAudioFileAbsolutePath())
+                                        OSPath.basename(
+                                                        audioState
+                                                                .getCurrentAudioFileAbsolutePath())
                                                 + "."
                                                 + Constants.lstFileExtension);
                         if (lstFile.exists()) {

@@ -4,7 +4,7 @@ import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
-import control.CurAudio;
+import control.AudioState;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
@@ -59,9 +59,11 @@ public class WaveformDisplay extends JComponent {
     private WaveformChunk nextRefreshChunk;
 
     private static WaveformDisplay instance;
+    private static AudioState audioState;
 
     @Inject
-    public WaveformDisplay() {
+    public WaveformDisplay(AudioState audioState) {
+        WaveformDisplay.audioState = audioState;
         setOpaque(true);
         setBackground(MyColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
@@ -75,8 +77,8 @@ public class WaveformDisplay extends JComponent {
                         getParent().requestFocusInWindow();
                     }
                 });
-        addMouseListener(new WaveformMouseAdapter(this));
-        addMouseMotionListener(new WaveformMouseAdapter(this));
+        addMouseListener(new WaveformMouseAdapter(this, audioState));
+        addMouseMotionListener(new WaveformMouseAdapter(this, audioState));
 
         // Set the singleton instance after full initialization
         instance = this;
@@ -143,7 +145,8 @@ public class WaveformDisplay extends JComponent {
         chunkInProgress = false;
 
         // draw buffered waveform image
-        int curChunkXPos = frameToComponentX(CurAudio.firstFrameOfChunk(curRefreshChunk.getNum()));
+        int curChunkXPos =
+                frameToComponentX(audioState.firstFrameOfChunk(curRefreshChunk.getNum()));
         g.drawImage(curRefreshChunk.getImage(), curChunkXPos, 0, null);
 
         if (previousRefreshChunk != null) {
@@ -164,7 +167,7 @@ public class WaveformDisplay extends JComponent {
                     0,
                     null);
         } else {
-            if (curRefreshChunk.getNum() != CurAudio.lastChunkNum()) {
+            if (curRefreshChunk.getNum() != audioState.lastChunkNum()) {
                 chunkInProgress = true;
             }
         }
@@ -173,13 +176,13 @@ public class WaveformDisplay extends JComponent {
         g2d.setRenderingHints(MyShapes.getRenderingHints());
 
         // draw current time
-        g2d.drawString(secFormat.format(CurAudio.getMaster().framesToSec(refreshFrame)), 10, 20);
+        g2d.drawString(secFormat.format(audioState.getMaster().framesToSec(refreshFrame)), 10, 20);
 
         // draw annotations
         Annotation[] anns = AnnotationDisplay.getAnnotationsInOrder();
         for (int i = 0; i < anns.length; i++) {
             double time = anns[i].getTime();
-            int xPos = frameToComponentX(CurAudio.getMaster().millisToFrames(time));
+            int xPos = frameToComponentX(audioState.getMaster().millisToFrames(time));
             if (xPos < 0) {
                 continue;
             }
@@ -199,8 +202,8 @@ public class WaveformDisplay extends JComponent {
             logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
         } else if (progressBarXPos > getWidth() - 1) {
             if (refreshWidth == getWidth()) {
-                if (Math.abs(refreshFrame - CurAudio.getMaster().durationInFrames())
-                        > CurAudio.getMaster().secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
+                if (Math.abs(refreshFrame - audioState.getMaster().durationInFrames())
+                        > audioState.getMaster().secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
                     logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
                 }
             }
@@ -209,11 +212,11 @@ public class WaveformDisplay extends JComponent {
 
         // accent selected annotation
         boolean foundOverlap = false;
-        if (CurAudio.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
+        if (audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
             for (int i = 0; i < anns.length; i++) {
                 int annX =
                         WaveformDisplay.frameToDisplayXPixel(
-                                CurAudio.getMaster().millisToFrames(anns[i].getTime()));
+                                audioState.getMaster().millisToFrames(anns[i].getTime()));
                 if (progressBarXPos == annX) {
                     foundOverlap = true;
                     g2d.setPaintMode();
@@ -271,7 +274,7 @@ public class WaveformDisplay extends JComponent {
                             * (int)
                                     Math.ceil(
                                             GUIConstants.zoomlessPixelsPerSecond
-                                                    * CurAudio.getMaster().durationInSeconds());
+                                                    * audioState.getMaster().durationInSeconds());
             if ((-absoluteLength) <= refreshWidth) {
                 offset = 0;
             } else {
@@ -283,30 +286,30 @@ public class WaveformDisplay extends JComponent {
 
     private int absoluteX(long frame) {
         return (int)
-                (GUIConstants.zoomlessPixelsPerSecond * CurAudio.getMaster().framesToSec(frame));
+                (GUIConstants.zoomlessPixelsPerSecond * audioState.getMaster().framesToSec(frame));
     }
 
     public static int frameToAbsoluteXPixel(long frame) {
-        if (CurAudio.audioOpen()) {
+        if (audioState.audioOpen()) {
             return instance.absoluteX(frame);
         }
         throw new IllegalStateException("audio not open");
     }
 
     public static int frameToDisplayXPixel(long frame) {
-        if (CurAudio.audioOpen()) {
+        if (audioState.audioOpen()) {
             return instance.frameToComponentX(frame);
         }
         throw new IllegalStateException("audio not open");
     }
 
     public static int displayXPixelToFrame(int xPix) {
-        if (CurAudio.audioOpen()) {
+        if (audioState.audioOpen()) {
             return (int)
                     (instance.refreshFrame
                             + (xPix - progressBarXPos)
                                     * ((1. / GUIConstants.zoomlessPixelsPerSecond)
-                                            * CurAudio.getMaster().frameRate()));
+                                            * audioState.getMaster().frameRate()));
         }
         throw new IllegalStateException("audio not open");
     }
@@ -329,9 +332,9 @@ public class WaveformDisplay extends JComponent {
         private long lastTime;
 
         protected RefreshListener() {
-            lastFrame = CurAudio.getMaster().durationInFrames() - 1;
+            lastFrame = audioState.getMaster().durationInFrames() - 1;
             maxFramesError =
-                    CurAudio.getMaster().secondsToFrames(1)
+                    audioState.getMaster().secondsToFrames(1)
                             / GUIConstants.zoomlessPixelsPerSecond
                             * MAX_INTERPOLATED_PIXELS;
             bufferedFrame = -1;
@@ -343,23 +346,24 @@ public class WaveformDisplay extends JComponent {
         }
 
         public final void actionPerformed(ActionEvent evt) {
-            long realRefreshFrame = CurAudio.getAudioProgress();
+            long realRefreshFrame = audioState.getAudioProgress();
             refreshWidth = getWidth();
             refreshHeight = getHeight();
-            int chunkNum = CurAudio.lookupChunkNum(realRefreshFrame);
+            int chunkNum = audioState.lookupChunkNum(realRefreshFrame);
             int numAnns = AnnotationDisplay.getNumAnnotations();
-            boolean isPlaying = CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
+            boolean isPlaying = audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
 
             long curTime = System.nanoTime();
             if (isPlaying && wasPlaying) {
                 long changeMillis = curTime - lastTime;
-                refreshFrame += CurAudio.getMaster().nanosToFrames(changeMillis);
+                refreshFrame += audioState.getMaster().nanosToFrames(changeMillis);
                 if (refreshFrame > lastFrame) {
                     refreshFrame = lastFrame;
                 }
                 if (Math.abs(refreshFrame - realRefreshFrame) > maxFramesError) {
                     if (Math.abs(refreshFrame - lastFrame)
-                            > CurAudio.getMaster()
+                            > audioState
+                                    .getMaster()
                                     .secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
                         logger.warn(
                                 "interpolation error greater than "

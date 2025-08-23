@@ -1,6 +1,6 @@
 package components.waveform;
 
-import control.CurAudio;
+import control.AudioState;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -12,9 +12,11 @@ import javax.swing.SwingUtilities;
 public class WaveformMouseAdapter implements MouseMotionListener, MouseListener {
 
     private final Component source;
+    private final AudioState audioState;
 
-    protected WaveformMouseAdapter(Component source) {
+    protected WaveformMouseAdapter(Component source, AudioState audioState) {
         this.source = source;
+        this.audioState = audioState;
     }
 
     //	@Override
@@ -45,7 +47,7 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
         if (xs == null) {
             return;
         }
-        if (CurAudio.audioOpen()) {
+        if (audioState.audioOpen()) {
             int smallerX = Math.min(xs[0], xs[1]);
             smallerX = Math.max(0, smallerX);
             int largerX = Math.max(xs[0], xs[1]);
@@ -57,7 +59,8 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
                     SwingUtilities.convertPoint(MyGlassPane.getInstance(), smallerX, 0, source);
             Point secondPoint =
                     SwingUtilities.convertPoint(MyGlassPane.getInstance(), largerX, 0, source);
-            CurAudio.getPlayer()
+            audioState
+                    .getPlayer()
                     .playShortInterval(
                             WaveformDisplay.displayXPixelToFrame((int) firstPoint.getX()),
                             WaveformDisplay.displayXPixelToFrame((int) secondPoint.getX()));

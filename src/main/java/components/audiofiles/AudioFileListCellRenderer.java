@@ -1,6 +1,6 @@
 package components.audiofiles;
 
-import control.CurAudio;
+import control.AudioState;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
@@ -20,9 +20,11 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     private final Font strikethrough;
     private final Font bold;
     private final Font plain;
+    private final AudioState audioState;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public AudioFileListCellRenderer() {
+    public AudioFileListCellRenderer(AudioState audioState) {
+        this.audioState = audioState;
         plain = getFont();
         Map attributes = plain.getAttributes();
         attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
@@ -39,10 +41,10 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
             setEnabled(false);
             setFont(strikethrough);
         } else {
-            if (CurAudio.audioOpen()) {
+            if (audioState.audioOpen()) {
                 if (((AudioFile) value)
                         .getAbsolutePath()
-                        .equals(CurAudio.getCurrentAudioFileAbsolutePath())) {
+                        .equals(audioState.getCurrentAudioFileAbsolutePath())) {
                     setFont(bold);
                 } else {
                     setFont(plain);

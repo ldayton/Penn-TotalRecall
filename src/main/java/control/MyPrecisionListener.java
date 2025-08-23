@@ -4,6 +4,7 @@ import audio.AudioEvent;
 import components.MyMenu;
 import components.MySplitPane;
 import di.GuiceBootstrap;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
@@ -14,8 +15,11 @@ public class MyPrecisionListener implements AudioEvent.Listener {
 
     private long greatestProgress;
     private long lastProgress = -1;
+    private final AudioState audioState;
 
-    public MyPrecisionListener() {
+    @Inject
+    public MyPrecisionListener(AudioState audioState) {
+        this.audioState = audioState;
         greatestProgress = -1;
     }
 
@@ -24,7 +28,7 @@ public class MyPrecisionListener implements AudioEvent.Listener {
         if (frame > greatestProgress) {
             greatestProgress = frame;
         }
-        CurAudio.setAudioProgressWithoutUpdatingActions(frame);
+        audioState.setAudioProgressWithoutUpdatingActions(frame);
     }
 
     @Override
@@ -57,15 +61,16 @@ public class MyPrecisionListener implements AudioEvent.Listener {
                 break;
             case EOM:
                 offerGreatestProgress(event.frame());
-                CurAudio.setAudioProgressAndUpdateActions(event.frame());
-                if (CurAudio.getAudioProgress() != CurAudio.getMaster().durationInFrames() - 1) {
+                audioState.setAudioProgressAndUpdateActions(event.frame());
+                if (audioState.getAudioProgress()
+                        != audioState.getMaster().durationInFrames() - 1) {
                     logger.warn(
                             "the frame reported by EOM event is not the final frame, violating"
                                     + " AudioPlayer spec");
                 }
                 break;
             case ERROR:
-                CurAudio.setAudioProgressAndUpdateActions(0);
+                audioState.setAudioProgressAndUpdateActions(0);
                 String error = "An error ocurred during audio playback.\n" + event.errorMessage();
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);

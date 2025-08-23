@@ -45,13 +45,13 @@ class ActionsManagerTest {
         var actionConfigs =
                 List.of(
                         new ActionConfig(
-                                "behaviors.singleact.DoneAction",
+                                "actions.DoneAction",
                                 "Mark Complete",
                                 Optional.of("Mark current item as complete"),
                                 Optional.empty(),
                                 Optional.empty()),
                         new ActionConfig(
-                                "behaviors.singleact.PlayPauseAction",
+                                "actions.PlayPauseAction",
                                 "Play/Pause",
                                 Optional.empty(),
                                 Optional.empty(),
@@ -67,7 +67,7 @@ class ActionsManagerTest {
         assertEquals(2, actionsManager.getAllActionConfigs().size());
 
         // Verify action configs are stored by ID
-        var doneAction = actionsManager.getActionConfig("behaviors.singleact.DoneAction");
+        var doneAction = actionsManager.getActionConfig("actions.DoneAction");
         assertTrue(doneAction.isPresent());
         assertEquals("Mark Complete", doneAction.get().name());
     }

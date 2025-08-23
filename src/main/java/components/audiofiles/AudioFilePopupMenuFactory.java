@@ -12,10 +12,13 @@ import jakarta.inject.Singleton;
 public class AudioFilePopupMenuFactory {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
+    private final control.AudioState audioState;
 
     @Inject
-    public AudioFilePopupMenuFactory(ContinueAnnotatingAction continueAnnotatingAction) {
+    public AudioFilePopupMenuFactory(
+            ContinueAnnotatingAction continueAnnotatingAction, control.AudioState audioState) {
         this.continueAnnotatingAction = continueAnnotatingAction;
+        this.audioState = audioState;
     }
 
     /**
@@ -26,7 +29,7 @@ public class AudioFilePopupMenuFactory {
      * @return A configured AudioFilePopupMenu instance
      */
     public AudioFilePopupMenu createPopupMenu(AudioFile file, int index) {
-        AudioFilePopupMenu popupMenu = new AudioFilePopupMenu(continueAnnotatingAction);
+        AudioFilePopupMenu popupMenu = new AudioFilePopupMenu(continueAnnotatingAction, audioState);
         popupMenu.configureForFile(file, index);
         return popupMenu;
     }

@@ -2,7 +2,7 @@ package components.annotations;
 
 import actions.JumpToAnnotationAction;
 import audio.AudioPlayer;
-import control.CurAudio;
+import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -15,19 +15,22 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
 
     private final JumpToAnnotationAction jumpToAnnotationAction;
     private final AnnotationTablePopupMenuFactory popupMenuFactory;
+    private final AudioState audioState;
 
     @Inject
     public AnnotationTableMouseAdapter(
             JumpToAnnotationAction jumpToAnnotationAction,
-            AnnotationTablePopupMenuFactory popupMenuFactory) {
+            AnnotationTablePopupMenuFactory popupMenuFactory,
+            AudioState audioState) {
         this.jumpToAnnotationAction = jumpToAnnotationAction;
         this.popupMenuFactory = popupMenuFactory;
+        this.audioState = audioState;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-            if ((CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) == false) {
+            if ((audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) == false) {
                 // we are manually generating the event, so we must ourselves check the conditions
                 jumpToAnnotationAction.actionPerformed(
                         new ActionEvent(

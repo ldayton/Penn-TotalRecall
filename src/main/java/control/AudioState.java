@@ -132,7 +132,7 @@ public class AudioState {
                                 + Constants.programName,
                         e1);
             }
-            precisionListener = new MyPrecisionListener();
+            precisionListener = new MyPrecisionListener(this);
             pp.addListener(precisionListener);
             setPlayer(pp);
 
@@ -169,7 +169,7 @@ public class AudioState {
             }
 
             // start new video buffers
-            waveformBuffer = new WaveformBuffer(preferencesManager);
+            waveformBuffer = new WaveformBuffer(preferencesManager, this);
             waveformBuffer.start();
 
             WaveformDisplay.getInstance().startRefreshes();
