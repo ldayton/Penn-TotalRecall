@@ -4,6 +4,8 @@ import components.MyFrame;
 import env.KeyboardManager;
 import info.GUIConstants;
 import info.UserPrefs;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -32,6 +34,7 @@ import util.GUIUtils;
  *
  * <p>See package-level documentation for information on adding new preference choosers.
  */
+@Singleton
 public class PreferencesFrame extends JFrame implements WindowListener {
 
     private static PreferencesFrame instance;
@@ -52,7 +55,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * <p>See documentation in {@link preferences.AbstractPreferenceDisplay} for program-wide
      * policies on user preferences, as well as information on adding new preference choosers.
      */
-    private PreferencesFrame() {
+    @Inject
+    public PreferencesFrame() {
         this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -123,6 +127,9 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                                         new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
                             }
                         });
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /** Add all preference displays to the preferences panel. */
@@ -302,14 +309,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     public static PreferencesFrame getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "PreferencesFrame not initialized. Call createInstance(Environment) first.");
-        }
-        return instance;
-    }
-
-    public static PreferencesFrame createInstance() {
-        if (instance == null) {
-            instance = new PreferencesFrame();
+                    "PreferencesFrame not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

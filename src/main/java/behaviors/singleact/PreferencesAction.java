@@ -18,7 +18,7 @@ public class PreferencesAction extends IdentifiedSingleAction {
      */
     public void actionPerformed(ActionEvent e) {
         if (prefs == null) {
-            prefs = PreferencesFrame.createInstance();
+            prefs = PreferencesFrame.getInstance();
             prefs.setVisible(true);
         }
         prefs.setVisible(true);

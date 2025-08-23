@@ -31,14 +31,19 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private static MyFrame instance;
     private final env.LookAndFeelManager lookAndFeelManager;
     private final MySplitPane mySplitPane;
+    private final MyGlassPane myGlassPane;
 
     @Inject
-    public MyFrame(LookAndFeelManager lookAndFeelManager, MySplitPane mySplitPane) {
+    public MyFrame(
+            LookAndFeelManager lookAndFeelManager,
+            MySplitPane mySplitPane,
+            MyGlassPane myGlassPane) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
+        this.myGlassPane = myGlassPane;
         setTitle(GUIConstants.defaultFrameTitle);
-        setGlassPane(MyGlassPane.getInstance());
-        MyGlassPane.getInstance().setVisible(true);
+        setGlassPane(myGlassPane);
+        myGlassPane.setVisible(true);
         setJMenuBar(MyMenu.getInstance());
 
         // force handling by  WindowListener below

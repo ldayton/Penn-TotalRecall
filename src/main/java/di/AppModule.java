@@ -13,6 +13,8 @@ import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
+import components.preferences.PreferencesFrame;
+import components.waveform.MyGlassPane;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -50,6 +52,8 @@ public class AppModule extends AbstractModule {
         bind(MySplitPane.class).in(Singleton.class);
         bind(ControlPanel.class).in(Singleton.class);
         bind(DoneButton.class).in(Singleton.class);
+        bind(MyGlassPane.class).in(Singleton.class);
+        bind(PreferencesFrame.class).in(Singleton.class);
     }
 
     @Provides

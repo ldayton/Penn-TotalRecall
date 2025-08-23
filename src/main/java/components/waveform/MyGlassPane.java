@@ -3,6 +3,8 @@ package components.waveform;
 import behaviors.singleact.ReplayLast200MillisAction;
 import info.GUIConstants;
 import info.MyColors;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.AlphaComposite;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -16,6 +18,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 /** Application glass pane, used for drawing mouse feedback. */
+@Singleton
 public class MyGlassPane extends JComponent {
 
     private static MyGlassPane instance;
@@ -39,13 +42,17 @@ public class MyGlassPane extends JComponent {
                     (GUIConstants.zoomlessPixelsPerSecond
                             * (ReplayLast200MillisAction.duration / (double) 1000));
 
-    private MyGlassPane() {
+    @Inject
+    public MyGlassPane() {
         composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F);
         flashMode = false;
         highlightMode = false;
         highlightSource = new Point();
         highlightDest = new Point();
         highlightRect = new Rectangle();
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     @Override
@@ -143,7 +150,9 @@ public class MyGlassPane extends JComponent {
 
     public static MyGlassPane getInstance() {
         if (instance == null) {
-            instance = new MyGlassPane();
+            throw new IllegalStateException(
+                    "MyGlassPane not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }
