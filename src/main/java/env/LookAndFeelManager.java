@@ -3,7 +3,6 @@ package env;
 import behaviors.singleact.AboutAction;
 import behaviors.singleact.ExitAction;
 import behaviors.singleact.PreferencesAction;
-import components.MyFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;
@@ -82,10 +81,7 @@ public class LookAndFeelManager {
                     _ -> {
                         var aboutAction = new AboutAction();
                         var actionEvent =
-                                new ActionEvent(
-                                        MyFrame.getInstance(),
-                                        ActionEvent.ACTION_PERFORMED,
-                                        "about");
+                                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "about");
                         aboutAction.actionPerformed(actionEvent);
                     });
         }
@@ -96,10 +92,7 @@ public class LookAndFeelManager {
                     _ -> {
                         var preferencesAction = new PreferencesAction();
                         var actionEvent =
-                                new ActionEvent(
-                                        MyFrame.getInstance(),
-                                        ActionEvent.ACTION_PERFORMED,
-                                        "preferences");
+                                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "preferences");
                         preferencesAction.actionPerformed(actionEvent);
                     });
         }
@@ -111,10 +104,7 @@ public class LookAndFeelManager {
                         try {
                             var exitAction = new ExitAction();
                             var actionEvent =
-                                    new ActionEvent(
-                                            MyFrame.getInstance(),
-                                            ActionEvent.ACTION_PERFORMED,
-                                            "quit");
+                                    new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
                             exitAction.actionPerformed(actionEvent);
                             response.performQuit();
                         } catch (Exception ex) {

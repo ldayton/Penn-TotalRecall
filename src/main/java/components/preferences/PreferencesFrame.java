@@ -265,7 +265,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                             + "Are you sure you want to exit and lose your changes?";
             int response =
                     JOptionPane.showConfirmDialog(
-                            MyFrame.getInstance(),
+                            this,
                             message,
                             GUIConstants.yesNoDialogTitle,
                             JOptionPane.YES_NO_OPTION);

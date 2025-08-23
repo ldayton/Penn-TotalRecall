@@ -1,6 +1,5 @@
 package components.audiofiles;
 
-import components.MyFrame;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
 import di.GuiceBootstrap;
@@ -169,7 +168,7 @@ public class AudioFileDisplay extends JScrollPane {
                 Object[] params = {message, checkbox};
                 int response =
                         JOptionPane.showConfirmDialog(
-                                MyFrame.getInstance(),
+                                null,
                                 params,
                                 GUIConstants.yesNoDialogTitle,
                                 JOptionPane.YES_NO_OPTION);

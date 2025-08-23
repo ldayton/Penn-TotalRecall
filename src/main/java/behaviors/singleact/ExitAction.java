@@ -1,6 +1,5 @@
 package behaviors.singleact;
 
-import components.MyFrame;
 import components.MySplitPane;
 import control.CurAudio;
 import di.GuiceBootstrap;
@@ -49,7 +48,7 @@ public class ExitAction extends IdentifiedSingleAction {
                 Object[] params = {message, checkbox};
                 int response =
                         JOptionPane.showConfirmDialog(
-                                MyFrame.getInstance(),
+                                null,
                                 params,
                                 GUIConstants.yesNoDialogTitle,
                                 JOptionPane.YES_NO_OPTION);
