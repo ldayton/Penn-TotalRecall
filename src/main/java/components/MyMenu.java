@@ -1,11 +1,14 @@
 package components;
 
 import actions.AboutAction;
+import actions.AnnotateIntrusionAction;
+import actions.AnnotateRegularAction;
 import actions.DoneAction;
 import actions.EditShortcutsAction;
 import actions.ExitAction;
 import actions.Last200PlusMoveBackwardAction;
 import actions.Last200PlusMoveForwardAction;
+import actions.OpenWordpoolAction;
 import actions.PlayPauseAction;
 import actions.PreferencesAction;
 import actions.ReplayLast200MillisAction;
@@ -18,7 +21,6 @@ import behaviors.UpdatingAction;
 import behaviors.multiact.OpenAudioLocationAction;
 import behaviors.multiact.ScreenSeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
-import behaviors.singleact.OpenWordpoolAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -79,6 +81,8 @@ public class MyMenu extends JMenuBar {
     private final VisitTutorialSiteAction visitTutorialSiteAction;
     private final Last200PlusMoveForwardAction last200PlusMoveForwardAction;
     private final Last200PlusMoveBackwardAction last200PlusMoveBackwardAction;
+    private final AnnotateRegularAction annotateRegularAction;
+    private final AnnotateIntrusionAction annotateIntrusionAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
@@ -100,7 +104,9 @@ public class MyMenu extends JMenuBar {
             TipsMessageAction tipsMessageAction,
             VisitTutorialSiteAction visitTutorialSiteAction,
             Last200PlusMoveForwardAction last200PlusMoveForwardAction,
-            Last200PlusMoveBackwardAction last200PlusMoveBackwardAction) {
+            Last200PlusMoveBackwardAction last200PlusMoveBackwardAction,
+            AnnotateRegularAction annotateRegularAction,
+            AnnotateIntrusionAction annotateIntrusionAction) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
@@ -118,6 +124,8 @@ public class MyMenu extends JMenuBar {
         this.visitTutorialSiteAction = visitTutorialSiteAction;
         this.last200PlusMoveForwardAction = last200PlusMoveForwardAction;
         this.last200PlusMoveBackwardAction = last200PlusMoveBackwardAction;
+        this.annotateRegularAction = annotateRegularAction;
+        this.annotateIntrusionAction = annotateIntrusionAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -310,6 +318,9 @@ public class MyMenu extends JMenuBar {
             instance.visitTutorialSiteAction.update();
             instance.last200PlusMoveForwardAction.update();
             instance.last200PlusMoveBackwardAction.update();
+            instance.openWordpoolAction.update();
+            instance.annotateRegularAction.update();
+            instance.annotateIntrusionAction.update();
         }
     }
 

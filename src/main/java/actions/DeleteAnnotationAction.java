@@ -1,19 +1,21 @@
-package behaviors.singleact;
+package actions;
 
 import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
-import control.CurAudio;
-import di.GuiceBootstrap;
+import control.AudioState;
+import control.ErrorRequestedEvent;
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
+import util.EventBus;
 import util.OSPath;
 
 /**
@@ -22,19 +24,29 @@ import util.OSPath;
  * <p>If the annotations is the last available, also deletes the temporary annotation file, which
  * should at this point be empty.
  */
-public class DeleteAnnotationAction extends IdentifiedSingleAction {
+@Singleton
+public class DeleteAnnotationAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(DeleteAnnotationAction.class);
 
-    private final int rowIndex;
-    private final Annotation annToDelete;
+    private final AudioState audioState;
+    private final EventBus eventBus;
+    private int rowIndex;
+    private Annotation annToDelete;
+
+    /** Creates an Action for dependency injection. The row index will be set later. */
+    @Inject
+    public DeleteAnnotationAction(AudioState audioState, EventBus eventBus) {
+        super("Delete Annotation", "Delete the selected annotation from the file");
+        this.audioState = audioState;
+        this.eventBus = eventBus;
+    }
 
     /**
-     * Creates an <code>Action</code> that will delete the annotation matching the provided
-     * argument.
+     * Sets the row index for the annotation to delete.
      *
-     * @param rowIndex
+     * @param rowIndex The row index of the annotation to delete
      */
-    public DeleteAnnotationAction(int rowIndex) {
+    public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
         this.annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rowIndex];
         this.putValue(Action.NAME, "Delete Annotation");
@@ -44,14 +56,18 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
      * Performs the action by calling {@link AnnotationFileParser#removeAnnotation(Annotation,
      * File)}.
      *
-     * <p>Warns on failure using dialogs.
+     * <p>Warns on failure using events.
      *
-     * @param e The <code>ActionEvent</code> provided by the trigger
+     * @param e The ActionEvent provided by the trigger
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
-        String curFileName = CurAudio.getCurrentAudioFileAbsolutePath();
+    protected void performAction(ActionEvent e) {
+        if (annToDelete == null) {
+            logger.error("annToDelete is null - setRowIndex must be called before actionPerformed");
+            return;
+        }
+
+        String curFileName = audioState.getCurrentAudioFileAbsolutePath();
         String desiredPath =
                 OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
         File oFile = new File(desiredPath);
@@ -69,23 +85,16 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
             // no annotations left after removal, so delete file too
             if (AnnotationDisplay.getNumAnnotations() == 0) {
                 if (oFile.delete() == false) {
-                    DialogService dialogService =
-                            GuiceBootstrap.getInjectedInstance(DialogService.class);
-                    if (dialogService == null) {
-                        throw new IllegalStateException("DialogService not available via DI");
-                    }
-                    dialogService.showError(
-                            "Deletion of annotation successful, but could not remove temporary"
-                                    + " annotation file.");
+                    eventBus.publish(
+                            new ErrorRequestedEvent(
+                                    "Deletion of annotation successful, but could not remove"
+                                            + " temporary annotation file."));
                 }
             }
         } else {
-            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService == null) {
-                throw new IllegalStateException("DialogService not available via DI");
-            }
-            dialogService.showError(
-                    "Deletion not successful. Files may be damaged. Check file system.");
+            eventBus.publish(
+                    new ErrorRequestedEvent(
+                            "Deletion not successful. Files may be damaged. Check file system."));
         }
 
         MyMenu.updateActions();
@@ -97,7 +106,7 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
      */
     @Override
     public void update() {
-        if (CurAudio.audioOpen() && AnnotationDisplay.getNumAnnotations() > 0) {
+        if (audioState.audioOpen() && AnnotationDisplay.getNumAnnotations() > 0) {
             setEnabled(true);
         } else {
             setEnabled(false);

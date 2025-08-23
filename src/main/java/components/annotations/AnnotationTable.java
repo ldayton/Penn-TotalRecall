@@ -1,6 +1,6 @@
 package components.annotations;
 
-import behaviors.singleact.JumpToAnnotationAction;
+import actions.JumpToAnnotationAction;
 import info.MyColors;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -31,10 +31,17 @@ public class AnnotationTable extends JTable implements FocusListener {
     private static AnnotationTableModel model;
 
     private final AnnotationTableCellRenderer render;
+    private final AnnotationTableMouseAdapter mouseAdapter;
+    private final JumpToAnnotationAction jumpToAnnotationAction;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationTable() {
+    public AnnotationTable(
+            AnnotationTableMouseAdapter mouseAdapter,
+            JumpToAnnotationAction jumpToAnnotationAction) {
+        this.mouseAdapter = mouseAdapter;
+        this.jumpToAnnotationAction = jumpToAnnotationAction;
+
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
         JTableHeader header = getTableHeader();
@@ -43,7 +50,7 @@ public class AnnotationTable extends JTable implements FocusListener {
         header.setBorder(BorderFactory.createLineBorder(MyColors.annotationListHeaderBorderColor));
         setModel(model);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        addMouseListener(new AnnotationTableMouseAdapter(this));
+        addMouseListener(mouseAdapter);
         setDefaultRenderer(
                 Object.class,
                 new DefaultTableCellRenderer() {
@@ -64,7 +71,7 @@ public class AnnotationTable extends JTable implements FocusListener {
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "jump to annotation");
-        getActionMap().put("jump to annotation", new JumpToAnnotationAction());
+        getActionMap().put("jump to annotation", jumpToAnnotationAction);
 
         InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");

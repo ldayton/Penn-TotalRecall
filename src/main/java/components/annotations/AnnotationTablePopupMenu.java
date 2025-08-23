@@ -1,18 +1,31 @@
 package components.annotations;
 
-import behaviors.singleact.DeleteAnnotationAction;
+import actions.DeleteAnnotationAction;
+import jakarta.inject.Inject;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 /** Popup menu launched by right clicking on annotations. */
 public class AnnotationTablePopupMenu extends JPopupMenu {
 
-    protected AnnotationTablePopupMenu(
+    private final DeleteAnnotationAction deleteAnnotationAction;
+
+    @Inject
+    public AnnotationTablePopupMenu(DeleteAnnotationAction deleteAnnotationAction) {
+        this.deleteAnnotationAction = deleteAnnotationAction;
+    }
+
+    public void configureForAnnotation(
             Annotation annToDelete, int rowIndex, AnnotationTable table, String rowRepr) {
-        super();
+        removeAll(); // Clear existing items
+
         JMenuItem fakeTitle = new JMenuItem(rowRepr + "...");
         fakeTitle.setEnabled(false);
-        JMenuItem del = new JMenuItem(new DeleteAnnotationAction(rowIndex));
+
+        // Configure the injected action for this specific row
+        deleteAnnotationAction.setRowIndex(rowIndex);
+        JMenuItem del = new JMenuItem(deleteAnnotationAction);
+
         add(fakeTitle);
         addSeparator();
         add(del);

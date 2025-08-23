@@ -2,7 +2,6 @@ package behaviors.multiact;
 
 import audio.AudioPlayer;
 import behaviors.UpdatingAction;
-import behaviors.singleact.DeleteSelectedAnnotationAction;
 import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -144,14 +143,20 @@ public class AnnotateAction extends IdentifiedMultiAction {
 
                 // check if we are annotating the same position as an existing annotation, if so
                 // delete
-                new DeleteSelectedAnnotationAction()
-                        .actionPerformed(
-                                new ActionEvent(
-                                        WordpoolDisplay.getInstance(),
-                                        ActionEvent.ACTION_PERFORMED,
-                                        null,
-                                        System.currentTimeMillis(),
-                                        0));
+                actions.DeleteSelectedAnnotationAction deleteAction =
+                        GuiceBootstrap.getInjectedInstance(
+                                actions.DeleteSelectedAnnotationAction.class);
+                if (deleteAction == null) {
+                    throw new IllegalStateException(
+                            "DeleteSelectedAnnotationAction not available via DI");
+                }
+                deleteAction.actionPerformed(
+                        new ActionEvent(
+                                WordpoolDisplay.getInstance(),
+                                ActionEvent.ACTION_PERFORMED,
+                                null,
+                                System.currentTimeMillis(),
+                                0));
                 WaveformDisplay.getInstance().repaint();
 
                 // file may no longer exist after deletion

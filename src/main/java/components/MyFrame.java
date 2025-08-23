@@ -43,6 +43,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private final MyMenu myMenu;
     private final ExitAction exitAction;
     private final EventBus eventBus;
+    private final FileDropListener fileDropListener;
 
     @Inject
     public MyFrame(
@@ -51,13 +52,15 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
             MyGlassPane myGlassPane,
             MyMenu myMenu,
             ExitAction exitAction,
-            EventBus eventBus) {
+            EventBus eventBus,
+            FileDropListener fileDropListener) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
         this.myGlassPane = myGlassPane;
         this.myMenu = myMenu;
         this.exitAction = exitAction;
         this.eventBus = eventBus;
+        this.fileDropListener = fileDropListener;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
@@ -84,7 +87,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         setContentPane(mySplitPane);
 
         // accept drag and drop of directories and files
-        new FileDrop(this, new FileDropListener());
+        new FileDrop(this, fileDropListener);
 
         // Set application icon (platform-specific sizing)
         setIconImage(

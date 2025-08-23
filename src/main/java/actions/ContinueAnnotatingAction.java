@@ -1,47 +1,62 @@
-package behaviors.singleact;
+package actions;
 
 import components.audiofiles.AudioFile;
 import components.audiofiles.AudioFile.AudioFilePathException;
-import di.GuiceBootstrap;
+import control.ErrorRequestedEvent;
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
+import util.EventBus;
 import util.OSPath;
 
 /** Reopens a file which was already done being annotated. */
-public class ContinueAnnotatingAction extends IdentifiedSingleAction {
+@Singleton
+public class ContinueAnnotatingAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(ContinueAnnotatingAction.class);
 
+    private final EventBus eventBus;
     private AudioFile myAudioFile;
 
-    /**
-     * Creates the <code>Action</code> action for the provided <code>File</code>.
-     *
-     * @param f The audio file whose corresponding annotation file will be reopened
-     */
-    public ContinueAnnotatingAction(AudioFile f) {
-        if (f == null) {
-            throw new IllegalArgumentException("file cannot be null");
-        }
-        this.putValue(Action.NAME, "Continue Editing");
-        myAudioFile = f;
+    /** Creates the Action for dependency injection. The audio file will be set later. */
+    @Inject
+    public ContinueAnnotatingAction(EventBus eventBus) {
+        super("Continue Editing", "Reopen a completed annotation file for further editing");
+        this.eventBus = eventBus;
     }
 
     /**
-     * Performs the <code>Action</code> by changing a permanent annotation file into a temporary
-     * one.
+     * Sets the audio file for this action.
+     *
+     * @param f The audio file whose corresponding annotation file will be reopened
+     */
+    public void setAudioFile(AudioFile f) {
+        if (f == null) {
+            throw new IllegalArgumentException("file cannot be null");
+        }
+        this.myAudioFile = f;
+        this.putValue(Action.NAME, "Continue Editing");
+    }
+
+    /**
+     * Performs the Action by changing a permanent annotation file into a temporary one.
      *
      * <p>That only involves changing the file extensions.
      *
-     * @param e The <code>ActionEvent</code> provided by the trigger
+     * @param e The ActionEvent provided by the trigger
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+    protected void performAction(ActionEvent e) {
+        if (myAudioFile == null) {
+            logger.error(
+                    "myAudioFile is null - setAudioFile must be called before actionPerformed");
+            return;
+        }
+
         if (myAudioFile.isDone() == false) {
             logger.error(
                     "it should not have been possible to call ContinueAnnotatingAction on an"
@@ -81,16 +96,12 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
             }
             return;
         } else {
-            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService == null) {
-                throw new IllegalStateException("DialogService not available via DI");
-            }
-            dialogService.showError("Could not re-open file for annotation.");
+            eventBus.publish(new ErrorRequestedEvent("Could not re-open file for annotation."));
             return;
         }
     }
 
-    /** A <code>ContinueAnnotationAction</code> is always enabled. */
+    /** A ContinueAnnotationAction is always enabled. */
     @Override
     public void update() {}
 }

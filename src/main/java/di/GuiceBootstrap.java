@@ -219,6 +219,34 @@ public class GuiceBootstrap {
         var last200PlusMoveBackwardAction =
                 globalInjector.getInstance(actions.Last200PlusMoveBackwardAction.class);
         actionsManager.registerAction(last200PlusMoveBackwardAction);
+
+        // Register the newly migrated actions
+        var continueAnnotatingAction =
+                globalInjector.getInstance(actions.ContinueAnnotatingAction.class);
+        actionsManager.registerAction(continueAnnotatingAction);
+
+        var deleteAnnotationAction =
+                globalInjector.getInstance(actions.DeleteAnnotationAction.class);
+        actionsManager.registerAction(deleteAnnotationAction);
+
+        var deleteSelectedAnnotationAction =
+                globalInjector.getInstance(actions.DeleteSelectedAnnotationAction.class);
+        actionsManager.registerAction(deleteSelectedAnnotationAction);
+
+        var jumpToAnnotationAction =
+                globalInjector.getInstance(actions.JumpToAnnotationAction.class);
+        actionsManager.registerAction(jumpToAnnotationAction);
+
+        var openWordpoolAction = globalInjector.getInstance(actions.OpenWordpoolAction.class);
+        actionsManager.registerAction(openWordpoolAction);
+
+        // Register annotation actions
+        var annotateRegularAction = globalInjector.getInstance(actions.AnnotateRegularAction.class);
+        actionsManager.registerAction(annotateRegularAction);
+
+        var annotateIntrusionAction =
+                globalInjector.getInstance(actions.AnnotateIntrusionAction.class);
+        actionsManager.registerAction(annotateIntrusionAction);
     }
 
     /** Initializes and starts the GUI application. */

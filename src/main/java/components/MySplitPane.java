@@ -1,9 +1,9 @@
 package components;
 
 import actions.ActionsManager;
+import actions.AnnotateIntrusionAction;
+import actions.DeleteSelectedAnnotationAction;
 import actions.PlayPauseAction;
-import behaviors.multiact.AnnotateAction;
-import behaviors.singleact.DeleteSelectedAnnotationAction;
 import components.waveform.WaveformDisplay;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -25,6 +25,8 @@ public class MySplitPane extends JSplitPane {
     private final WaveformDisplay waveformDisplay;
     private final ActionsManager actionsManager;
     private final PlayPauseAction playPauseAction;
+    private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
+    private final AnnotateIntrusionAction annotateIntrusionAction;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -35,12 +37,16 @@ public class MySplitPane extends JSplitPane {
             ControlPanel controlPanel,
             WaveformDisplay waveformDisplay,
             ActionsManager actionsManager,
-            PlayPauseAction playPauseAction) {
+            PlayPauseAction playPauseAction,
+            DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
+            AnnotateIntrusionAction annotateIntrusionAction) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
         this.controlPanel = controlPanel;
         this.waveformDisplay = waveformDisplay;
         this.actionsManager = actionsManager;
         this.playPauseAction = playPauseAction;
+        this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
+        this.annotateIntrusionAction = annotateIntrusionAction;
 
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
@@ -58,27 +64,26 @@ public class MySplitPane extends JSplitPane {
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
 
-        DeleteSelectedAnnotationAction deleteAction = new DeleteSelectedAnnotationAction();
         InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String DELETE_ACTION_KEY = "delete action";
-        deleteActionMap.put(actionsManager.lookup(deleteAction, null), DELETE_ACTION_KEY);
-        getActionMap().put(DELETE_ACTION_KEY, deleteAction);
-        actionsManager.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
+        deleteActionMap.put(
+                actionsManager.lookup(deleteSelectedAnnotationAction, null), DELETE_ACTION_KEY);
+        getActionMap().put(DELETE_ACTION_KEY, deleteSelectedAnnotationAction);
+        actionsManager.registerInputMap(
+                deleteSelectedAnnotationAction, null, DELETE_ACTION_KEY, deleteActionMap);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
 
         getActionMap().put("play", playPauseAction);
 
-        AnnotateAction intrusionAction = new AnnotateAction(AnnotateAction.Mode.INTRUSION);
         InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
-        Enum<?> intrusionEnum = AnnotateAction.Mode.INTRUSION;
-        KeyStroke intrusionKey = actionsManager.lookup(intrusionAction, intrusionEnum);
+        KeyStroke intrusionKey = actionsManager.lookup(annotateIntrusionAction, null);
         intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
-        getActionMap().put(ANNOTATE_INTRUSION_KEY, intrusionAction);
+        getActionMap().put(ANNOTATE_INTRUSION_KEY, annotateIntrusionAction);
         actionsManager.registerInputMap(
-                intrusionAction, intrusionEnum, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
+                annotateIntrusionAction, null, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0, false), "none");

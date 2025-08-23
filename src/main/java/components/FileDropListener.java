@@ -1,11 +1,13 @@
 package components;
 
-import behaviors.singleact.OpenWordpoolAction;
+import actions.OpenWordpoolAction;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import control.CurAudio;
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +19,16 @@ import util.OSPath;
  * A <code>FileDrop.Listener</code> that catches directories and folders dropped on <code>MyFrame
  * </code>, adding the appropriate files to the <code>AudioFileDisplay</code>.
  */
+@Singleton
 public class FileDropListener implements FileDrop.Listener {
     private static final Logger logger = LoggerFactory.getLogger(FileDropListener.class);
+
+    private final OpenWordpoolAction openWordpoolAction;
+
+    @Inject
+    public FileDropListener(OpenWordpoolAction openWordpoolAction) {
+        this.openWordpoolAction = openWordpoolAction;
+    }
 
     /**
      * Handles drag and drop of audio files or a wordpool document.
@@ -42,7 +52,7 @@ public class FileDropListener implements FileDrop.Listener {
             boolean wordpoolFound = false;
             if (files.length == 1) { // check for wordpool file
                 if (files[0].getName().toLowerCase().endsWith(Constants.wordpoolFileExtension)) {
-                    OpenWordpoolAction.switchWordpool(files[0]);
+                    openWordpoolAction.switchWordpool(files[0]);
 
                     if (CurAudio.audioOpen()) {
                         File lstFile =

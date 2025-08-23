@@ -23,15 +23,16 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     private static AudioFileList instance;
 
     private final AudioFileListModel model;
-
     private final AudioFileListCellRenderer render;
+    private final AudioFileListMouseAdapter mouseAdapter;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
      * selection mode, cell renderer, and model.
      */
     @Inject
-    public AudioFileList() {
+    public AudioFileList(AudioFileListMouseAdapter mouseAdapter) {
+        this.mouseAdapter = mouseAdapter;
         model = new AudioFileListModel();
         setModel(model);
 
@@ -46,7 +47,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         setLayoutOrientation(JList.VERTICAL);
 
         // this mouse listener handles context menus and double clicks to switch files
-        addMouseListener(new AudioFileListMouseAdapter(this));
+        addMouseListener(mouseAdapter);
         // focus listener makes the containing AudioFileDisplay look focused at the appropriate
         // times
         addFocusListener(this);

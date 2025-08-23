@@ -1,28 +1,35 @@
 package components.annotations;
 
+import actions.JumpToAnnotationAction;
 import audio.AudioPlayer;
-import behaviors.singleact.JumpToAnnotationAction;
 import control.CurAudio;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /** Mouse adapter for the <code>AnnotationTable</code>. */
+@Singleton
 public class AnnotationTableMouseAdapter extends MouseAdapter {
 
-    private final AnnotationTable table;
+    private final JumpToAnnotationAction jumpToAnnotationAction;
+    private final AnnotationTablePopupMenuFactory popupMenuFactory;
 
-    protected AnnotationTableMouseAdapter(AnnotationTable table) {
-        this.table = table;
+    @Inject
+    public AnnotationTableMouseAdapter(
+            JumpToAnnotationAction jumpToAnnotationAction,
+            AnnotationTablePopupMenuFactory popupMenuFactory) {
+        this.jumpToAnnotationAction = jumpToAnnotationAction;
+        this.popupMenuFactory = popupMenuFactory;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-            JumpToAnnotationAction jumpAct = new JumpToAnnotationAction();
             if ((CurAudio.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) == false) {
                 // we are manually generating the event, so we must ourselves check the conditions
-                jumpAct.actionPerformed(
+                jumpToAnnotationAction.actionPerformed(
                         new ActionEvent(
                                 AnnotationTable.getInstance(),
                                 ActionEvent.ACTION_PERFORMED,
@@ -45,6 +52,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
 
     public void evaluatePopup(MouseEvent e) {
         if (e.isPopupTrigger()) {
+            AnnotationTable table = (AnnotationTable) e.getSource();
             int rIndex = table.rowAtPoint(e.getPoint());
             int cIndex = table.columnAtPoint(e.getPoint());
             if (rIndex < 0 || cIndex < 0) {
@@ -58,7 +66,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
             String rowRepr = first + " " + second + " " + third;
             Annotation annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rIndex];
             AnnotationTablePopupMenu pop =
-                    new AnnotationTablePopupMenu(annToDelete, rIndex, table, rowRepr);
+                    popupMenuFactory.createPopupMenu(annToDelete, rIndex, table, rowRepr);
             pop.show(e.getComponent(), e.getX(), e.getY());
         }
     }
