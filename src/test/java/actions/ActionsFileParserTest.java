@@ -1,0 +1,740 @@
+package actions;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import actions.ActionsFileParser.ActionConfig;
+import env.KeyboardManager;
+import env.Platform;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class ActionsFileParserTest {
+
+    @Mock private Platform platform;
+
+    @Mock private KeyboardManager keyboardManager;
+
+    private ActionsFileParser parser;
+
+    @BeforeEach
+    void setUp() {
+        parser = new ActionsFileParser(platform, keyboardManager);
+        // Reset mocks to ensure clean state between tests
+        org.mockito.Mockito.reset(platform, keyboardManager);
+    }
+
+    @Test
+    void shouldParseBasicActionWithoutOptionalFields() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertEquals("behaviors.singleact.DoneAction", action.getClassName());
+        assertEquals("Mark Complete", action.getName());
+        assertTrue(action.getTooltip().isEmpty());
+        assertTrue(action.getEnumValue().isEmpty());
+    }
+
+    @Test
+    void shouldParseActionWithAllFields() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                            name="Add Audio Files..."
+                            tooltip="Select File or Folder"
+                            enum="SelectionMode.FILES_AND_DIRECTORIES"
+                            os="Linux,Windows" />
+                </actions>
+                """;
+
+        // When - mock Linux platform to match OS restriction
+        when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertEquals("behaviors.multiact.OpenAudioLocationAction", action.getClassName());
+        assertEquals("Add Audio Files...", action.getName());
+        assertEquals("Select File or Folder", action.getTooltip().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.getEnumValue().orElse(null));
+    }
+
+    @Test
+    void shouldParseMultipleActions() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" />
+                    <action class="behaviors.singleact.StopAction" name="Go to Start" />
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(3, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.PlayPauseAction", actions.get(1).getClassName());
+        assertEquals("behaviors.singleact.StopAction", actions.get(2).getClassName());
+    }
+
+    @Test
+    void shouldFilterActionsByPlatform() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                            name="Add Audio Files..."
+                            os="Linux,Windows" />
+                    <action class="behaviors.singleact.AboutAction"
+                            name="About"
+                            os="Windows,Linux" />
+                </actions>
+                """;
+
+        // When - macOS platform
+        when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then - only the action without OS restriction should be included
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldIncludeActionsForMatchingPlatform() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                            name="Add Audio Files..."
+                            os="Linux,Windows" />
+                </actions>
+                """;
+
+        // When - Linux platform
+        when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.multiact.OpenAudioLocationAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldHandleEmptyActionsElement() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertTrue(actions.isEmpty());
+    }
+
+    @Test
+    void shouldHandleCommentsInXml() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <!-- This is a comment -->
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                    <!-- Another comment -->
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldThrowExceptionForUnknownOsValues() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            os="UnknownOS,Linux" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast for unknown OS names
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldParseFromClasspath() throws Exception {
+        // Given - set up lenient mocks to handle any key name
+        when(keyboardManager.xmlKeynameToInternalForm(anyString()))
+                .thenAnswer(
+                        invocation -> {
+                            String keyName = invocation.getArgument(0).toString();
+                            // Map common mask names to their internal forms
+                            return switch (keyName) {
+                                case "menu" -> "ctrl";
+                                case "shift" -> "shift";
+                                case "alt" -> "alt";
+                                default -> keyName; // For letter keys, keep as-is (uppercase)
+                            };
+                        });
+
+        // When
+        List<ActionConfig> actions = parser.parseActionsFromClasspath("/actions.xml");
+
+        // Then
+        assertFalse(actions.isEmpty());
+        // Verify we get some expected actions
+        boolean hasDoneAction =
+                actions.stream()
+                        .anyMatch(
+                                action ->
+                                        "behaviors.singleact.DoneAction"
+                                                .equals(action.getClassName()));
+        assertTrue(hasDoneAction);
+    }
+
+    @Test
+    void shouldThrowExceptionForMissingClasspathResource() {
+        // When & Then
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parser.parseActionsFromClasspath("/nonexistent.xml");
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForShortcutWithNoKeys() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                        <shortcut>
+                            <mask keyname="menu" />
+                            <mask keyname="shift" />
+                        </shortcut>
+                    </action>
+                </actions>
+                """;
+
+        // When & Then - should fail fast for shortcut with no keys
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForUnknownXmlAttribute() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            unknownAttribute="value" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast for unknown attributes
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForMissingClassName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action name="Mark Complete" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast, not return empty list
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForEmptyClassName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="" name="Mark Complete" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast, not return empty list
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForMissingName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast, not return empty list
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForEmptyName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast, not return empty list
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldHandleWhitespaceInOsAttribute() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            os=" Linux , Windows " />
+                </actions>
+                """;
+
+        // When - Windows platform
+        when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldHandleSingleOsValue() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            os="Mac OS X" />
+                </actions>
+                """;
+
+        // When - macOS platform
+        when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldHandleNullOsAttribute() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete" />
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then - should be included regardless of platform
+        assertEquals(1, actions.size());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldHandleEmptyOptionalFields() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            tooltip=""
+                            enum="" />
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertTrue(action.getTooltip().isEmpty());
+        assertTrue(action.getEnumValue().isEmpty());
+    }
+
+    @Test
+    void shouldHandleWhitespaceInOptionalFields() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                            name="Add Audio Files..."
+                            tooltip=" Select File or Folder "
+                            enum=" SelectionMode.FILES_AND_DIRECTORIES " />
+                </actions>
+                """;
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertEquals("Select File or Folder", action.getTooltip().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.getEnumValue().orElse(null));
+    }
+
+    @Test
+    void shouldThrowExceptionForWhitespaceOnlyClassName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="   " name="Mark Complete" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast for whitespace-only className
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForWhitespaceOnlyName() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="   " />
+                </actions>
+                """;
+
+        // When & Then - should fail fast for whitespace-only name
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForMultipleInvalidActions() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="" name="First Invalid" />
+                    <action class="behaviors.singleact.ValidAction" name="Valid Action" />
+                    <action name="Second Invalid" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast on first invalid action, not partially process
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldParseValidShortcutWithMultipleMasksAndKeys() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                        <shortcut>
+                            <mask keyname="menu" />
+                            <mask keyname="shift" />
+                            <key keyname="D" />
+                        </shortcut>
+                    </action>
+                </actions>
+                """;
+
+        // Given - mock KeyboardManager
+        when(keyboardManager.xmlKeynameToInternalForm("menu")).thenReturn("ctrl");
+        when(keyboardManager.xmlKeynameToInternalForm("shift")).thenReturn("shift");
+        when(keyboardManager.xmlKeynameToInternalForm("D")).thenReturn("D");
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertTrue(action.getShortcut().isPresent());
+    }
+
+    @Test
+    void shouldParseValidShortcutWithOnlyKeys() throws Exception {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause">
+                        <shortcut>
+                            <key keyname="SPACE" />
+                        </shortcut>
+                    </action>
+                </actions>
+                """;
+
+        // Given - mock KeyboardManager
+        when(keyboardManager.xmlKeynameToInternalForm("SPACE")).thenReturn("SPACE");
+
+        // When
+        List<ActionConfig> actions = parseFromString(xml);
+
+        // Then
+        assertEquals(1, actions.size());
+        ActionConfig action = actions.get(0);
+        assertTrue(action.getShortcut().isPresent());
+    }
+
+    @Test
+    void shouldThrowExceptionForMalformedXml() {
+        // Given
+        String malformedXml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" />
+                </actions>
+                """;
+
+        // When & Then - should fail on malformed XML
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(malformedXml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForXmlWithUnexpectedElements() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <unexpectedElement />
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
+                </actions>
+                """;
+
+        // When & Then - should fail on unknown elements
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldTestAllPlatformTypes() throws Exception {
+        // Given
+        String xml =
+                """
+<?xml version="1.0"?>
+<actions>
+    <action class="behaviors.singleact.DoneAction" name="Mark Complete" os="Mac OS X" />
+    <action class="behaviors.singleact.PlayPauseAction" name="Play/Pause" os="Windows" />
+    <action class="behaviors.singleact.StopAction" name="Stop" os="Linux" />
+</actions>
+""";
+
+        // Test macOS
+        when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
+        List<ActionConfig> macActions = parseFromString(xml);
+        assertEquals(1, macActions.size());
+        assertEquals("behaviors.singleact.DoneAction", macActions.get(0).getClassName());
+
+        // Test Windows
+        when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
+        List<ActionConfig> windowsActions = parseFromString(xml);
+        assertEquals(1, windowsActions.size());
+        assertEquals("behaviors.singleact.PlayPauseAction", windowsActions.get(0).getClassName());
+
+        // Test Linux
+        when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
+        List<ActionConfig> linuxActions = parseFromString(xml);
+        assertEquals(1, linuxActions.size());
+        assertEquals("behaviors.singleact.StopAction", linuxActions.get(0).getClassName());
+    }
+
+    @Test
+    void shouldThrowExceptionForMixedValidAndInvalidPlatforms() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction"
+                            name="Mark Complete"
+                            os="Linux,UnknownOS,Windows" />
+                </actions>
+                """;
+
+        // When & Then - should fail fast on first invalid OS
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    @Test
+    void shouldThrowExceptionForNullKeyElementKeyname() {
+        // Given
+        String xml =
+                """
+                <?xml version="1.0"?>
+                <actions>
+                    <action class="behaviors.singleact.DoneAction" name="Mark Complete">
+                        <shortcut>
+                            <key keyname="D" />
+                            <key />
+                        </shortcut>
+                    </action>
+                </actions>
+                """;
+
+        // When & Then - should fail fast for null keyname
+        assertThrows(
+                ActionsFileParser.ActionParseException.class,
+                () -> {
+                    parseFromString(xml);
+                });
+    }
+
+    // Helper method to parse XML from string
+    private List<ActionConfig> parseFromString(String xml)
+            throws ActionsFileParser.ActionParseException {
+        try {
+            // Create a temporary file for testing
+            Path tempFile = Files.createTempFile("test-actions", ".xml");
+            Files.write(tempFile, xml.getBytes(StandardCharsets.UTF_8));
+            URL fileUrl = tempFile.toUri().toURL();
+            return parser.parseActions(fileUrl);
+        } catch (IOException e) {
+            throw new ActionsFileParser.ActionParseException("Failed to parse test XML", e);
+        }
+    }
+}
