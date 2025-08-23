@@ -16,15 +16,18 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
     private final JumpToAnnotationAction jumpToAnnotationAction;
     private final AnnotationTablePopupMenuFactory popupMenuFactory;
     private final AudioState audioState;
+    private final AnnotationTable annotationTable;
 
     @Inject
     public AnnotationTableMouseAdapter(
             JumpToAnnotationAction jumpToAnnotationAction,
             AnnotationTablePopupMenuFactory popupMenuFactory,
-            AudioState audioState) {
+            AudioState audioState,
+            AnnotationTable annotationTable) {
         this.jumpToAnnotationAction = jumpToAnnotationAction;
         this.popupMenuFactory = popupMenuFactory;
         this.audioState = audioState;
+        this.annotationTable = annotationTable;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
                 // we are manually generating the event, so we must ourselves check the conditions
                 jumpToAnnotationAction.actionPerformed(
                         new ActionEvent(
-                                AnnotationTable.getInstance(),
+                                annotationTable,
                                 ActionEvent.ACTION_PERFORMED,
                                 null,
                                 System.currentTimeMillis(),
