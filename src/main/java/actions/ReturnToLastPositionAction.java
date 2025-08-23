@@ -1,0 +1,49 @@
+package actions;
+
+import audio.AudioPlayer;
+import control.AudioState;
+import control.FocusRequestedEvent;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import java.awt.event.ActionEvent;
+import util.EventBus;
+
+@Singleton
+public class ReturnToLastPositionAction extends BaseAction {
+
+    private final AudioState audioState;
+    private final EventBus eventBus;
+
+    @Inject
+    public ReturnToLastPositionAction(AudioState audioState, EventBus eventBus) {
+        super("Return to Last Position", "Return to the last playback position");
+        this.audioState = audioState;
+        this.eventBus = eventBus;
+    }
+
+    @Override
+    protected void performAction(ActionEvent e) {
+        long pos = audioState.popLastPlayPos();
+        audioState.setAudioProgressAndUpdateActions(pos);
+        audioState.getPlayer().playAt(pos);
+        // Fire focus requested event - UI will handle focus updates
+        eventBus.publish(new FocusRequestedEvent());
+    }
+
+    @Override
+    public void update() {
+        if (audioState.audioOpen()) {
+            if (audioState.hasLastPlayPos()) {
+                if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+                    setEnabled(false);
+                } else {
+                    setEnabled(true);
+                }
+            } else {
+                setEnabled(false);
+            }
+        } else {
+            setEnabled(false);
+        }
+    }
+}

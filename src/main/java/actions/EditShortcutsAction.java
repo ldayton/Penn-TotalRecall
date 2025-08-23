@@ -1,23 +1,28 @@
-package behaviors.singleact;
+package actions;
 
 import components.ShortcutFrame;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 
-public class EditShortcutsAction extends IdentifiedSingleAction {
+@Singleton
+public class EditShortcutsAction extends BaseAction {
 
     private final ShortcutFrame shortcutFrame;
 
     @Inject
     public EditShortcutsAction(ShortcutFrame shortcutFrame) {
+        super("Edit Shortcuts", "Open shortcut editor");
         this.shortcutFrame = shortcutFrame;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    protected void performAction(ActionEvent e) {
         shortcutFrame.showShortcutEditor();
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        // Always enabled
+    }
 }

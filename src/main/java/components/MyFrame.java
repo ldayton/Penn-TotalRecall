@@ -1,8 +1,14 @@
 package components;
 
-import behaviors.singleact.ExitAction;
+import actions.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
+import control.AudioFileSwitchedEvent;
+import control.ErrorRequestedEvent;
+import control.ExitRequestedEvent;
+import control.FocusRequestedEvent;
+import control.InfoRequestedEvent;
+import control.PreferencesRequestedEvent;
 import env.LookAndFeelManager;
 import info.GUIConstants;
 import jakarta.inject.Inject;
@@ -17,6 +23,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.EventBus;
+import util.Subscribe;
 
 /**
  * Main window of the program.
@@ -34,6 +42,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private final MyGlassPane myGlassPane;
     private final MyMenu myMenu;
     private final ExitAction exitAction;
+    private final EventBus eventBus;
 
     @Inject
     public MyFrame(
@@ -41,12 +50,14 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
             MySplitPane mySplitPane,
             MyGlassPane myGlassPane,
             MyMenu myMenu,
-            ExitAction exitAction) {
+            ExitAction exitAction,
+            EventBus eventBus) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
         this.myGlassPane = myGlassPane;
         this.myMenu = myMenu;
         this.exitAction = exitAction;
+        this.eventBus = eventBus;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
@@ -91,6 +102,9 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to audio state events
+        eventBus.subscribe(this);
     }
 
     /**
@@ -144,5 +158,67 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
             }
         }
         return false;
+    }
+
+    /** Handles audio file switched events by updating the window title and focus. */
+    @Subscribe
+    public void handleAudioFileSwitched(AudioFileSwitchedEvent event) {
+        if (event.getFile() == null) {
+            // Reset to default title and request focus
+            setTitle(GUIConstants.defaultFrameTitle);
+            requestFocus();
+        } else {
+            // Set title with file path
+            setTitle(GUIConstants.defaultFrameTitle + " - " + event.getFile().getPath());
+        }
+    }
+
+    /** Handles exit requested events by showing confirmation dialog. */
+    @Subscribe
+    public void handleExitRequested(ExitRequestedEvent event) {
+        // Show confirmation dialog
+        boolean confirmed =
+                javax.swing.JOptionPane.showConfirmDialog(
+                                this,
+                                "Are you sure you want to exit?",
+                                "Confirm Exit",
+                                javax.swing.JOptionPane.YES_NO_OPTION)
+                        == javax.swing.JOptionPane.YES_OPTION;
+
+        if (confirmed) {
+            System.exit(0);
+        }
+    }
+
+    /** Handles preferences requested events by opening the preferences window. */
+    @Subscribe
+    public void handlePreferencesRequested(PreferencesRequestedEvent event) {
+        // Get PreferencesFrame from DI and show it
+        var preferencesFrame =
+                di.GuiceBootstrap.getInjectedInstance(
+                        components.preferences.PreferencesFrame.class);
+        if (preferencesFrame != null) {
+            preferencesFrame.setVisible(true);
+        }
+    }
+
+    /** Handles focus requested events by requesting focus on the main window. */
+    @Subscribe
+    public void handleFocusRequested(FocusRequestedEvent event) {
+        requestFocus();
+    }
+
+    /** Handles error requested events by showing error dialogs. */
+    @Subscribe
+    public void handleErrorRequested(ErrorRequestedEvent event) {
+        javax.swing.JOptionPane.showMessageDialog(
+                this, event.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+
+    /** Handles info requested events by showing info dialogs. */
+    @Subscribe
+    public void handleInfoRequested(InfoRequestedEvent event) {
+        javax.swing.JOptionPane.showMessageDialog(
+                this, event.getMessage(), "About", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 }

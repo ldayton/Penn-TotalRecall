@@ -123,6 +123,16 @@ public class ActionsManager {
     }
 
     /**
+     * Registers a new BaseAction. This method is called during initialization to register all new
+     * actions after they've been created by DI.
+     *
+     * @param action The BaseAction to register
+     */
+    public void registerAction(BaseAction action) {
+        registerAction(action, null);
+    }
+
+    /**
      * Updates an action by ID, applying the current configuration.
      *
      * @param id The action ID

@@ -1,9 +1,9 @@
 package components;
 
 import actions.ActionsManager;
+import actions.PlayPauseAction;
 import behaviors.multiact.AnnotateAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
-import behaviors.singleact.PlayPauseAction;
 import components.waveform.WaveformDisplay;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -24,6 +24,7 @@ public class MySplitPane extends JSplitPane {
     private final ControlPanel controlPanel;
     private final WaveformDisplay waveformDisplay;
     private final ActionsManager actionsManager;
+    private final PlayPauseAction playPauseAction;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -33,11 +34,13 @@ public class MySplitPane extends JSplitPane {
     public MySplitPane(
             ControlPanel controlPanel,
             WaveformDisplay waveformDisplay,
-            ActionsManager actionsManager) {
+            ActionsManager actionsManager,
+            PlayPauseAction playPauseAction) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
         this.controlPanel = controlPanel;
         this.waveformDisplay = waveformDisplay;
         this.actionsManager = actionsManager;
+        this.playPauseAction = playPauseAction;
 
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
@@ -65,7 +68,7 @@ public class MySplitPane extends JSplitPane {
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
 
-        getActionMap().put("play", new PlayPauseAction(false));
+        getActionMap().put("play", playPauseAction);
 
         AnnotateAction intrusionAction = new AnnotateAction(AnnotateAction.Mode.INTRUSION);
         InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);

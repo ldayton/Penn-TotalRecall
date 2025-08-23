@@ -1,7 +1,5 @@
 package env;
 
-import behaviors.singleact.AboutAction;
-import behaviors.singleact.PreferencesAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;
@@ -83,7 +81,9 @@ public class LookAndFeelManager {
         if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
             desktop.setAboutHandler(
                     _ -> {
-                        var aboutAction = new AboutAction();
+                        var aboutAction =
+                                di.GuiceBootstrap.getRequiredInjectedInstance(
+                                        actions.AboutAction.class, "AboutAction");
                         var actionEvent =
                                 new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "about");
                         aboutAction.actionPerformed(actionEvent);
@@ -94,7 +94,9 @@ public class LookAndFeelManager {
         if (desktop.isSupported(Desktop.Action.APP_PREFERENCES)) {
             desktop.setPreferencesHandler(
                     _ -> {
-                        var preferencesAction = new PreferencesAction();
+                        var preferencesAction =
+                                di.GuiceBootstrap.getRequiredInjectedInstance(
+                                        actions.PreferencesAction.class, "PreferencesAction");
                         var actionEvent =
                                 new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "preferences");
                         preferencesAction.actionPerformed(actionEvent);
@@ -109,7 +111,7 @@ public class LookAndFeelManager {
                             // Use the DI-managed ExitAction - fail fast if not available
                             var exitAction =
                                     di.GuiceBootstrap.getRequiredInjectedInstance(
-                                            behaviors.singleact.ExitAction.class, "ExitAction");
+                                            actions.ExitAction.class, "ExitAction");
                             var actionEvent =
                                     new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
                             exitAction.actionPerformed(actionEvent);

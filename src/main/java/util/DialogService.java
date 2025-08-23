@@ -1,6 +1,6 @@
 package util;
 
-import behaviors.singleact.AboutAction;
+import actions.AboutAction;
 import components.MyFrame;
 import info.Constants;
 import info.GUIConstants;

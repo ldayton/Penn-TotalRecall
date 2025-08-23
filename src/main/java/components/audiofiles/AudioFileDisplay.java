@@ -187,6 +187,8 @@ public class AudioFileDisplay extends JScrollPane {
             }
         }
         CurAudio.switchFile(file);
+
+        // UI updates are now handled via events
         return true;
     }
 

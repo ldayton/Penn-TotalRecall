@@ -1,22 +1,28 @@
-package behaviors.singleact;
+package actions;
 
-import di.GuiceBootstrap;
+import control.InfoRequestedEvent;
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.DialogService;
+import util.EventBus;
 
 /** Displays information about the program to the user */
-public class AboutAction extends IdentifiedSingleAction {
+@Singleton
+public class AboutAction extends BaseAction {
 
-    public AboutAction() {}
+    private final EventBus eventBus;
 
-    /** Performs the action using a dialog. */
-    public void actionPerformed(ActionEvent e) {
-        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService == null) {
-            throw new IllegalStateException("DialogService not available via DI");
-        }
-        dialogService.showInfo(buildAboutMessage());
+    @Inject
+    public AboutAction(EventBus eventBus) {
+        super("About", "Display information about the program");
+        this.eventBus = eventBus;
+    }
+
+    @Override
+    protected void performAction(ActionEvent e) {
+        // Fire info requested event - UI will handle showing the info dialog
+        eventBus.publish(new InfoRequestedEvent(buildAboutMessage()));
     }
 
     /**
@@ -45,7 +51,9 @@ public class AboutAction extends IdentifiedSingleAction {
                 + Constants.licenseSite;
     }
 
-    /** <code>AboutAction</code> is always enabled. */
+    /** AboutAction is always enabled. */
     @Override
-    public void update() {}
+    public void update() {
+        // Always enabled
+    }
 }

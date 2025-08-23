@@ -1,24 +1,24 @@
 package components;
 
+import actions.AboutAction;
+import actions.DoneAction;
+import actions.EditShortcutsAction;
+import actions.ExitAction;
+import actions.Last200PlusMoveBackwardAction;
+import actions.Last200PlusMoveForwardAction;
+import actions.PlayPauseAction;
+import actions.PreferencesAction;
+import actions.ReplayLast200MillisAction;
+import actions.ReplayLastPositionAction;
+import actions.ReturnToLastPositionAction;
+import actions.StopAction;
+import actions.TipsMessageAction;
+import actions.VisitTutorialSiteAction;
 import behaviors.UpdatingAction;
-import behaviors.multiact.Last200PlusMoveAction;
 import behaviors.multiact.OpenAudioLocationAction;
 import behaviors.multiact.ScreenSeekAction;
-import behaviors.multiact.SeekAction;
 import behaviors.multiact.ToggleAnnotationsAction;
-import behaviors.multiact.ZoomAction;
-import behaviors.singleact.AboutAction;
-import behaviors.singleact.DoneAction;
-import behaviors.singleact.ExitAction;
 import behaviors.singleact.OpenWordpoolAction;
-import behaviors.singleact.PlayPauseAction;
-import behaviors.singleact.PreferencesAction;
-import behaviors.singleact.ReplayLast200MillisAction;
-import behaviors.singleact.ReplayLastPositionAction;
-import behaviors.singleact.ReturnToLastPositionAction;
-import behaviors.singleact.StopAction;
-import behaviors.singleact.TipsMessageAction;
-import behaviors.singleact.VisitTutorialSiteAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -66,7 +66,19 @@ public class MyMenu extends JMenuBar {
     private final OpenWordpoolAction openWordpoolAction;
     private final ExitAction exitAction;
     private final actions.ActionsManager actionsManager;
-    private final behaviors.singleact.EditShortcutsAction editShortcutsAction;
+    private final EditShortcutsAction editShortcutsAction;
+    private final PreferencesAction preferencesAction;
+    private final PlayPauseAction playPauseAction;
+    private final StopAction stopAction;
+    private final ReplayLast200MillisAction replayLast200MillisAction;
+    private final ReturnToLastPositionAction returnToLastPositionAction;
+    private final ReplayLastPositionAction replayLastPositionAction;
+    private final DoneAction doneAction;
+    private final AboutAction aboutAction;
+    private final TipsMessageAction tipsMessageAction;
+    private final VisitTutorialSiteAction visitTutorialSiteAction;
+    private final Last200PlusMoveForwardAction last200PlusMoveForwardAction;
+    private final Last200PlusMoveBackwardAction last200PlusMoveBackwardAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
@@ -76,12 +88,36 @@ public class MyMenu extends JMenuBar {
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
             actions.ActionsManager actionsManager,
-            behaviors.singleact.EditShortcutsAction editShortcutsAction) {
+            EditShortcutsAction editShortcutsAction,
+            PreferencesAction preferencesAction,
+            PlayPauseAction playPauseAction,
+            StopAction stopAction,
+            ReplayLast200MillisAction replayLast200MillisAction,
+            ReturnToLastPositionAction returnToLastPositionAction,
+            ReplayLastPositionAction replayLastPositionAction,
+            DoneAction doneAction,
+            AboutAction aboutAction,
+            TipsMessageAction tipsMessageAction,
+            VisitTutorialSiteAction visitTutorialSiteAction,
+            Last200PlusMoveForwardAction last200PlusMoveForwardAction,
+            Last200PlusMoveBackwardAction last200PlusMoveBackwardAction) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
         this.actionsManager = actionsManager;
         this.editShortcutsAction = editShortcutsAction;
+        this.preferencesAction = preferencesAction;
+        this.playPauseAction = playPauseAction;
+        this.stopAction = stopAction;
+        this.replayLast200MillisAction = replayLast200MillisAction;
+        this.returnToLastPositionAction = returnToLastPositionAction;
+        this.replayLastPositionAction = replayLastPositionAction;
+        this.doneAction = doneAction;
+        this.aboutAction = aboutAction;
+        this.tipsMessageAction = tipsMessageAction;
+        this.visitTutorialSiteAction = visitTutorialSiteAction;
+        this.last200PlusMoveForwardAction = last200PlusMoveForwardAction;
+        this.last200PlusMoveBackwardAction = last200PlusMoveBackwardAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -119,7 +155,7 @@ public class MyMenu extends JMenuBar {
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {
             jmFile.addSeparator();
-            JMenuItem jmiPreferences = new JMenuItem(new PreferencesAction());
+            JMenuItem jmiPreferences = new JMenuItem(preferencesAction);
             jmFile.add(jmiPreferences);
             jmFile.addSeparator();
             JMenuItem jmiExit = new JMenuItem(exitAction);
@@ -133,8 +169,8 @@ public class MyMenu extends JMenuBar {
         JMenu jmAudio = new JMenu("Controls");
 
         // see PlayPauseAction docs for explanation of this funniness
-        JMenuItem jmiPlayPause = new JMenuItem(new PlayPauseAction(true));
-        workaroundAction = new PlayPauseAction(false);
+        JMenuItem jmiPlayPause = new JMenuItem(playPauseAction);
+        workaroundAction = playPauseAction;
         jmiPlayPause.addActionListener(
                 new ActionListener() {
                     @Override
@@ -143,28 +179,38 @@ public class MyMenu extends JMenuBar {
                     }
                 });
 
-        JMenuItem jmiStop = new JMenuItem(new StopAction());
-        JMenuItem jmiReplay = new JMenuItem(new ReplayLast200MillisAction());
-        JMenuItem jmiLastPos = new JMenuItem(new ReturnToLastPositionAction());
-        JMenuItem jmiReplayLast = new JMenuItem(new ReplayLastPositionAction());
+        JMenuItem jmiStop = new JMenuItem(stopAction);
+        JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
+        JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
+        JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
         JMenu jmSeek = new JMenu("Seek");
-        SeekAction seekSmallForward = new SeekAction(SeekAction.SeekAmount.FORWARD_SMALL);
+        behaviors.multiact.SeekAction seekSmallForward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_SMALL);
         JMenuItem jmiSeekForwardSmall = new JMenuItem(seekSmallForward);
-        SeekAction seekSmallBackward = new SeekAction(SeekAction.SeekAmount.BACKWARD_SMALL);
+        behaviors.multiact.SeekAction seekSmallBackward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_SMALL);
         JMenuItem jmiSeekSmallBackward = new JMenuItem(seekSmallBackward);
-        SeekAction seekMediumForward = new SeekAction(SeekAction.SeekAmount.FORWARD_MEDIUM);
+        behaviors.multiact.SeekAction seekMediumForward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_MEDIUM);
         JMenuItem jmiSeekForwardMedium = new JMenuItem(seekMediumForward);
-        SeekAction seekMediumBackward = new SeekAction(SeekAction.SeekAmount.BACKWARD_MEDIUM);
+        behaviors.multiact.SeekAction seekMediumBackward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_MEDIUM);
         JMenuItem jmiSeekBackwardMedium = new JMenuItem(seekMediumBackward);
-        SeekAction seekLargeForward = new SeekAction(SeekAction.SeekAmount.FORWARD_LARGE);
+        behaviors.multiact.SeekAction seekLargeForward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_LARGE);
         JMenuItem jmiSeekForwardLarge = new JMenuItem(seekLargeForward);
-        SeekAction seekLargeBackward = new SeekAction(SeekAction.SeekAmount.BACKWARD_LARGE);
+        behaviors.multiact.SeekAction seekLargeBackward =
+                new behaviors.multiact.SeekAction(
+                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_LARGE);
         JMenuItem jmiSeekBackwardLarge = new JMenuItem(seekLargeBackward);
-        JMenuItem jmiLast200MoveRight =
-                new JMenuItem(new Last200PlusMoveAction(Last200PlusMoveAction.Direction.FORWARD));
-        JMenuItem jmiLast200MoveLeft =
-                new JMenuItem(new Last200PlusMoveAction(Last200PlusMoveAction.Direction.BACKWARD));
+        JMenuItem jmiLast200MoveRight = new JMenuItem(last200PlusMoveForwardAction);
+        JMenuItem jmiLast200MoveLeft = new JMenuItem(last200PlusMoveBackwardAction);
         JMenuItem jmiScreenForward =
                 new JMenuItem(new ScreenSeekAction(ScreenSeekAction.Dir.FORWARD));
         JMenuItem jmiScreenBackward =
@@ -192,7 +238,7 @@ public class MyMenu extends JMenuBar {
     /** Creates the annotation menu. */
     private void initAnnotationMenu() {
         JMenu jmAnnotation = new JMenu("Annotation");
-        JMenuItem jmiDone = new JMenuItem(new DoneAction());
+        JMenuItem jmiDone = new JMenuItem(doneAction);
         jmAnnotation.add(jmiDone);
         JMenuItem jmiNextAnn =
                 new JMenuItem(
@@ -209,8 +255,14 @@ public class MyMenu extends JMenuBar {
     @SuppressWarnings("unused")
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn = new JMenuItem(new ZoomAction(ZoomAction.Direction.IN));
-        JMenuItem jmiZoomOut = new JMenuItem(new ZoomAction(ZoomAction.Direction.OUT));
+        JMenuItem jmiZoomIn =
+                new JMenuItem(
+                        new behaviors.multiact.ZoomAction(
+                                behaviors.multiact.ZoomAction.Direction.IN));
+        JMenuItem jmiZoomOut =
+                new JMenuItem(
+                        new behaviors.multiact.ZoomAction(
+                                behaviors.multiact.ZoomAction.Direction.OUT));
         jmView.add(jmiZoomIn);
         jmView.add(jmiZoomOut);
         add(jmView);
@@ -219,13 +271,13 @@ public class MyMenu extends JMenuBar {
     /** Creates the help menu, only adding an about menu for non-OSX platforms. */
     private void initHelpMenu() {
         JMenu jmHelp = new JMenu("Help");
-        JMenuItem jmiVisitMemLab = new JMenuItem(new VisitTutorialSiteAction());
-        JMenuItem jmiKeys = new JMenuItem(new TipsMessageAction());
+        JMenuItem jmiVisitMemLab = new JMenuItem(visitTutorialSiteAction);
+        JMenuItem jmiKeys = new JMenuItem(tipsMessageAction);
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
         if (showPreferencesInMenu) {
             jmHelp.addSeparator();
-            JMenuItem jmiAbout = new JMenuItem(new AboutAction());
+            JMenuItem jmiAbout = new JMenuItem(aboutAction);
             jmHelp.add(jmiAbout);
         }
         add(jmHelp);
@@ -241,15 +293,33 @@ public class MyMenu extends JMenuBar {
         for (Object ia : allActions.toArray()) {
             ((UpdatingAction) ia).update();
         }
+
+        // Also update ADI actions that extend BaseAction
+        if (instance != null) {
+            instance.doneAction.update();
+            instance.exitAction.update();
+            instance.playPauseAction.update();
+            instance.stopAction.update();
+            instance.replayLast200MillisAction.update();
+            instance.returnToLastPositionAction.update();
+            instance.replayLastPositionAction.update();
+            instance.aboutAction.update();
+            instance.preferencesAction.update();
+            instance.editShortcutsAction.update();
+            instance.tipsMessageAction.update();
+            instance.visitTutorialSiteAction.update();
+            instance.last200PlusMoveForwardAction.update();
+            instance.last200PlusMoveBackwardAction.update();
+        }
     }
 
     public static void updateSeekActions() {
         for (UpdatingAction ia : allActions) {
-            if (ia instanceof SeekAction seekAction) {
+            if (ia instanceof behaviors.multiact.SeekAction seekAction) {
                 seekAction.updateSeekAmount();
-            } else if (ia instanceof Last200PlusMoveAction moveAction) {
-                moveAction.updateSeekAmount();
             }
+            // Note: Last200PlusMoveForwardAction and Last200PlusMoveBackwardAction are ADI actions
+            // that handle their own updates and don't extend UpdatingAction
         }
     }
 

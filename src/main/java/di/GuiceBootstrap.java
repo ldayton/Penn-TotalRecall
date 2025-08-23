@@ -73,9 +73,18 @@ public class GuiceBootstrap {
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
+        // Initialize CurAudio with the injected AudioState instance
+        // This allows for gradual migration from static access to dependency injection
+        var audioState = globalInjector.getInstance(control.AudioState.class);
+        control.CurAudio.initialize(audioState);
+
         // Register all UpdatingAction instances with ActionsManager
         // This must happen after all components are created but before any UI updates
         MyMenu.registerAllActionsWithManager();
+
+        // Register new actions with ActionsManager
+        // This registers the new ADI-based actions
+        registerNewActions(actionsManager);
 
         return bootstrap;
     }
@@ -151,6 +160,65 @@ public class GuiceBootstrap {
                             + " first.");
         }
         return instance;
+    }
+
+    /**
+     * Registers new ADI-based actions with the ActionsManager. This method registers all the new
+     * actions that use dependency injection.
+     */
+    private static void registerNewActions(ActionsManager actionsManager) {
+        // Register new actions that have been migrated to the actions package
+        // These actions use dependency injection instead of static access
+
+        // Get instances from the injector and register them
+        var playPauseAction = globalInjector.getInstance(actions.PlayPauseAction.class);
+        actionsManager.registerAction(playPauseAction);
+
+        var stopAction = globalInjector.getInstance(actions.StopAction.class);
+        actionsManager.registerAction(stopAction);
+
+        var exitAction = globalInjector.getInstance(actions.ExitAction.class);
+        actionsManager.registerAction(exitAction);
+
+        var aboutAction = globalInjector.getInstance(actions.AboutAction.class);
+        actionsManager.registerAction(aboutAction);
+
+        var preferencesAction = globalInjector.getInstance(actions.PreferencesAction.class);
+        actionsManager.registerAction(preferencesAction);
+
+        var replayLast200MillisAction =
+                globalInjector.getInstance(actions.ReplayLast200MillisAction.class);
+        actionsManager.registerAction(replayLast200MillisAction);
+
+        var returnToLastPositionAction =
+                globalInjector.getInstance(actions.ReturnToLastPositionAction.class);
+        actionsManager.registerAction(returnToLastPositionAction);
+
+        var replayLastPositionAction =
+                globalInjector.getInstance(actions.ReplayLastPositionAction.class);
+        actionsManager.registerAction(replayLastPositionAction);
+
+        var doneAction = globalInjector.getInstance(actions.DoneAction.class);
+        actionsManager.registerAction(doneAction);
+
+        var editShortcutsAction = globalInjector.getInstance(actions.EditShortcutsAction.class);
+        actionsManager.registerAction(editShortcutsAction);
+
+        var visitTutorialSiteAction =
+                globalInjector.getInstance(actions.VisitTutorialSiteAction.class);
+        actionsManager.registerAction(visitTutorialSiteAction);
+
+        var tipsMessageAction = globalInjector.getInstance(actions.TipsMessageAction.class);
+        actionsManager.registerAction(tipsMessageAction);
+
+        // Register Last200PlusMoveAction instances for both directions
+        var last200PlusMoveForwardAction =
+                globalInjector.getInstance(actions.Last200PlusMoveForwardAction.class);
+        actionsManager.registerAction(last200PlusMoveForwardAction);
+
+        var last200PlusMoveBackwardAction =
+                globalInjector.getInstance(actions.Last200PlusMoveBackwardAction.class);
+        actionsManager.registerAction(last200PlusMoveBackwardAction);
     }
 
     /** Initializes and starts the GUI application. */

@@ -2,8 +2,8 @@ package env;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import actions.ExitAction;
 import annotation.MacOS;
-import behaviors.singleact.ExitAction;
 import di.GuiceBootstrap;
 import java.awt.Desktop;
 import java.awt.Taskbar;

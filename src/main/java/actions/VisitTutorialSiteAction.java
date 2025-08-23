@@ -1,20 +1,29 @@
-package behaviors.singleact;
+package actions;
 
-import di.GuiceBootstrap;
+import control.InfoRequestedEvent;
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
+import util.EventBus;
 
 /** Attempts to bring the user to the program's tutorial website. */
-public class VisitTutorialSiteAction extends IdentifiedSingleAction {
+@Singleton
+public class VisitTutorialSiteAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(VisitTutorialSiteAction.class);
 
-    public VisitTutorialSiteAction() {}
+    private final EventBus eventBus;
+
+    @Inject
+    public VisitTutorialSiteAction(EventBus eventBus) {
+        super("Visit Tutorial Site", "Open tutorial website in browser");
+        this.eventBus = eventBus;
+    }
 
     /**
      * Attempts to guide the user's web browser to the program tutorial website.
@@ -22,7 +31,8 @@ public class VisitTutorialSiteAction extends IdentifiedSingleAction {
      * <p>If the user cannot be brought to the program's tutorial site in the web browser, a dialog
      * is launched containing the URL.
      */
-    public void actionPerformed(ActionEvent e) {
+    @Override
+    protected void performAction(ActionEvent e) {
         try {
             // requires Java 6 API
             if (java.awt.Desktop.isDesktopSupported()) {
@@ -40,19 +50,19 @@ public class VisitTutorialSiteAction extends IdentifiedSingleAction {
         }
 
         // in case Java 6 classes not available
-        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService == null) {
-            throw new IllegalStateException("DialogService not available via DI");
-        }
-        dialogService.showInfo(
-                Constants.tutorialSite
-                        + "\n\n"
-                        + Constants.orgName
-                        + "\n"
-                        + Constants.orgAffiliationName);
+        // Fire info requested event - UI will handle showing the info dialog
+        eventBus.publish(
+                new InfoRequestedEvent(
+                        Constants.tutorialSite
+                                + "\n\n"
+                                + Constants.orgName
+                                + "\n"
+                                + Constants.orgAffiliationName));
     }
 
-    /** <code>VisitTutorialSiteAction</code> is always enabled. */
+    /** VisitTutorialSiteAction is always enabled. */
     @Override
-    public void update() {}
+    public void update() {
+        // Always enabled
+    }
 }

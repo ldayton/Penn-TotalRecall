@@ -1,6 +1,6 @@
 package components.waveform;
 
-import behaviors.singleact.ReplayLast200MillisAction;
+import actions.ReplayLast200MillisAction;
 import info.GUIConstants;
 import info.MyColors;
 import jakarta.inject.Inject;

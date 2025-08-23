@@ -1,14 +1,25 @@
-package behaviors.singleact;
+package actions;
 
-import di.GuiceBootstrap;
+import control.InfoRequestedEvent;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.DialogService;
+import util.EventBus;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
  * in {@link components.MyMenu};
  */
-public class TipsMessageAction extends IdentifiedSingleAction {
+@Singleton
+public class TipsMessageAction extends BaseAction {
+
+    private final EventBus eventBus;
+
+    @Inject
+    public TipsMessageAction(EventBus eventBus) {
+        super("Tips", "Show keyboard shortcuts and tips");
+        this.eventBus = eventBus;
+    }
 
     private String makeMessage() {
         StringBuffer out = new StringBuffer();
@@ -53,14 +64,14 @@ public class TipsMessageAction extends IdentifiedSingleAction {
         return out.toString();
     }
 
-    public void actionPerformed(ActionEvent e) {
-        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService == null) {
-            throw new IllegalStateException("DialogService not available via DI");
-        }
-        dialogService.showInfo(makeMessage());
+    @Override
+    protected void performAction(ActionEvent e) {
+        // Fire info requested event - UI will handle showing the info dialog
+        eventBus.publish(new InfoRequestedEvent(makeMessage()));
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        // Always enabled
+    }
 }
