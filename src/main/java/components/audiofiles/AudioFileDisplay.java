@@ -7,6 +7,8 @@ import info.Constants;
 import info.GUIConstants;
 import info.MyShapes;
 import info.UserPrefs;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,8 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import util.GiveMessage;
 
 /**
@@ -77,7 +77,7 @@ public class AudioFileDisplay extends JScrollPane {
                         }
                     }
                 });
-        
+
         // Set the singleton instance after full initialization
         instance = this;
     }
@@ -125,8 +125,8 @@ public class AudioFileDisplay extends JScrollPane {
     public static AudioFileDisplay getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "AudioFileDisplay not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
+                    "AudioFileDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }
