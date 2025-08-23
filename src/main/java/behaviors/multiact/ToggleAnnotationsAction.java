@@ -5,10 +5,11 @@ import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /**
  * Tries to move the audio position to the next/previous {@link components.annotations.Annotation},
@@ -64,9 +65,13 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
         } else {
             long approxFrame = CurAudio.getMaster().millisToFrames(ann.getTime());
             if (approxFrame < 0 || approxFrame > CurAudio.getMaster().durationInFrames() - 1) {
-                GiveMessage.errorMessage(
-                        "The annotation I am toggling to isn't in range.\n"
-                                + "Please check annotation file for errors.");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError(
+                            "The annotation I am toggling to isn't in range.\n"
+                                    + "Please check annotation file for errors.");
+                }
                 return;
             }
             CurAudio.setAudioProgressAndUpdateActions(approxFrame);

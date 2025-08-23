@@ -5,6 +5,7 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /**
@@ -68,14 +69,21 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
             // no annotations left after removal, so delete file too
             if (AnnotationDisplay.getNumAnnotations() == 0) {
                 if (oFile.delete() == false) {
-                    GiveMessage.errorMessage(
-                            "Deletion of annotation successful, but could not remove temporary"
-                                    + " annotation file.");
+                    DialogService dialogService =
+                            GuiceBootstrap.getInjectedInstance(DialogService.class);
+                    if (dialogService != null) {
+                        dialogService.showError(
+                                "Deletion of annotation successful, but could not remove temporary"
+                                        + " annotation file.");
+                    }
                 }
             }
         } else {
-            GiveMessage.errorMessage(
-                    "Deletion not successful. Files may be damaged. Check file system.");
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                dialogService.showError(
+                        "Deletion not successful. Files may be damaged. Check file system.");
+            }
         }
 
         MyMenu.updateActions();

@@ -4,12 +4,13 @@ import audio.AudioPlayer;
 import behaviors.multiact.AnnotateAction;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /**
@@ -39,14 +40,22 @@ public class DoneAction extends IdentifiedSingleAction {
                                     + "."
                                     + Constants.completedAnnotationFileExtension);
             if (oFile.exists()) {
-                GiveMessage.errorMessage(
-                        "Output file already exists. You should not be able to reach this"
-                                + " condition.");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError(
+                            "Output file already exists. You should not be able to reach this"
+                                    + " condition.");
+                }
                 return;
             } else {
                 AnnotateAction.writeSpans();
                 if (!tmpFile.renameTo(oFile)) {
-                    GiveMessage.errorMessage("Operation failed.");
+                    DialogService dialogService =
+                            GuiceBootstrap.getInjectedInstance(DialogService.class);
+                    if (dialogService != null) {
+                        dialogService.showError("Operation failed.");
+                    }
                     return;
                 } else {
                     try {
@@ -58,7 +67,10 @@ public class DoneAction extends IdentifiedSingleAction {
                 }
             }
         } else {
-            GiveMessage.errorMessage("You have not made any annotations yet.");
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                dialogService.showError("You have not made any annotations yet.");
+            }
             return;
         }
     }

@@ -2,13 +2,14 @@ package behaviors.singleact;
 
 import components.audiofiles.AudioFile;
 import components.audiofiles.AudioFile.AudioFilePathException;
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /** Reopens a file which was already done being annotated. */
@@ -80,7 +81,10 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
             }
             return;
         } else {
-            GiveMessage.errorMessage("Could not re-open file for annotation.");
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                dialogService.showError("Could not re-open file for annotation.");
+            }
             return;
         }
     }
