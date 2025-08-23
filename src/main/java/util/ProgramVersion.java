@@ -1,19 +1,42 @@
 package util;
 
 import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.Scanner;
+import lombok.NonNull;
 
 /**
- * Represents a version number of this program. Useful for its <code>equals()</code> and <code>
- * compareTo()</code> methods.
+ * Service for managing program version information.
+ *
+ * <p>Provides version parsing, comparison, and validation functionality. Also implements Comparable
+ * for version comparison operations.
  */
+@Singleton
 public class ProgramVersion implements Comparable<ProgramVersion> {
+
+    private final String programVersion;
+    private final String versionDelimiter;
 
     private int majorNumber;
     private int minorNumber;
 
-    private ProgramVersion(String repr) {
-        Scanner sc = new Scanner(repr).useDelimiter(Constants.programVersionDelimiter);
+    @Inject
+    public ProgramVersion() {
+        this.programVersion = Constants.programVersion;
+        this.versionDelimiter = Constants.programVersionDelimiter;
+        parseVersion(programVersion);
+    }
+
+    /** Constructor for testing - allows injecting specific version configuration. */
+    public ProgramVersion(@NonNull String programVersion, @NonNull String versionDelimiter) {
+        this.programVersion = programVersion;
+        this.versionDelimiter = versionDelimiter;
+        parseVersion(programVersion);
+    }
+
+    private void parseVersion(String repr) {
+        Scanner sc = new Scanner(repr).useDelimiter(versionDelimiter);
         majorNumber = -1;
         minorNumber = -1;
         if (sc.hasNextInt()) {
@@ -63,20 +86,38 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
         return Integer.toString(majorNumber).hashCode() + Integer.toString(minorNumber).hashCode();
     }
 
-    public static ProgramVersion getCurrentVersionNumber() {
-        return new ProgramVersion(Constants.programVersion);
+    /**
+     * Gets the current program version.
+     *
+     * @return The current program version
+     */
+    public ProgramVersion getCurrentVersion() {
+        return new ProgramVersion(programVersion, versionDelimiter);
     }
 
-    public static ProgramVersion getSavedVersionNumber(String repr) {
+    /**
+     * Creates a ProgramVersion from a version string representation.
+     *
+     * @param repr The version string to parse
+     * @return A new ProgramVersion instance
+     * @throws IllegalArgumentException if the version string is invalid
+     */
+    public ProgramVersion parseVersionString(@NonNull String repr) {
         if (validateVersionString(repr)) {
-            return new ProgramVersion(repr);
+            return new ProgramVersion(repr, versionDelimiter);
         } else {
             throw new IllegalArgumentException("not a valid version string");
         }
     }
 
-    private static boolean validateVersionString(String version) {
-        Scanner sc = new Scanner(version).useDelimiter(Constants.programVersionDelimiter);
+    /**
+     * Validates if a version string is in the correct format.
+     *
+     * @param version The version string to validate
+     * @return true if the version string is valid
+     */
+    public boolean validateVersionString(@NonNull String version) {
+        Scanner sc = new Scanner(version).useDelimiter(versionDelimiter);
         if (sc.hasNextInt()) {
             sc.nextInt();
             if (sc.hasNextInt()) {
