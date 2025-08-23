@@ -7,6 +7,7 @@ import components.MyFocusTraversalPolicy;
 import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
+import components.ShortcutFrame;
 import components.WindowManager;
 import env.AppConfig;
 import env.LookAndFeelManager;
@@ -14,6 +15,8 @@ import env.Platform;
 import env.UpdateManager;
 import env.UserManager;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Guice-based application bootstrap.
@@ -23,6 +26,7 @@ import jakarta.inject.Inject;
 public class GuiceBootstrap {
 
     private static Injector globalInjector;
+    private static final Logger logger = LoggerFactory.getLogger(GuiceBootstrap.class);
 
     private final WindowManager windowManager;
     private final UpdateManager updateManager;
@@ -94,12 +98,36 @@ public class GuiceBootstrap {
     /** Initializes and starts the GUI application. */
     public void startApplication() {
         // Look and Feel already initialized before DI creation
+
+        // Initialize XActionManager with actions.xml (this loads action configurations)
+        // This is what ShortcutFrame.createDefault() does in the old system
+        initializeXActionManager();
+
         actionsManager.initialize(); // Load action configuration before UI creation
         myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);
+
+        // Update actions after UI is created (this sets button text and enabled states)
+        // This was missing from the new DI system but present in the old Main class
+        MyMenu.updateActions();
+
         myFrame.setVisible(true);
 
         // Check for updates after UI is ready (async, non-blocking)
         updateManager.checkForUpdateOnStartup();
+    }
+
+    /**
+     * Initializes the XActionManager by loading actions.xml. This is equivalent to what
+     * ShortcutFrame.createDefault() does in the old system.
+     */
+    private void initializeXActionManager() {
+        try {
+            // Load actions.xml and initialize XActionManager
+            // This populates the XActionManager with action configurations
+            ShortcutFrame.createDefault();
+        } catch (Exception e) {
+            logger.error("Failed to initialize XActionManager with actions.xml", e);
+        }
     }
 }
