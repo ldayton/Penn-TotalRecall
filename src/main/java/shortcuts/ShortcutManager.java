@@ -1,6 +1,5 @@
 package shortcuts;
 
-import actions.ActionConfigUserDB;
 import actions.ActionsFileParser.ActionConfig;
 import env.KeyboardManager;
 import env.PreferencesManager;
@@ -39,10 +38,10 @@ import javax.swing.table.TableModel;
 
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;
-    private final ActionConfigUserDB userdb;
+    private final UserDB userdb;
 
     @SuppressWarnings("UnusedVariable") // Used in nested ShortcutTable class
-    private final ActionConfigUserDB.ActionConfigListener listener;
+    private final UserDB.ActionConfigListener listener;
 
     private final ContentPane contentPane;
 
@@ -50,12 +49,11 @@ public class ShortcutManager extends JFrame {
      * Constructor that accepts ActionConfigs from the ActionsManager system. This replaces the old
      * constructor that used XActionParser.
      */
-    public ShortcutManager(
-            List<ActionConfig> actionConfigs, ActionConfigUserDB.ActionConfigListener listener) {
+    public ShortcutManager(List<ActionConfig> actionConfigs, UserDB.ActionConfigListener listener) {
         this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
                 di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
-        this.userdb = new ActionConfigUserDB(preferencesManager, actionConfigs, listener);
+        this.userdb = new UserDB(preferencesManager, actionConfigs, listener);
         this.listener = listener;
 
         userdb.persistDefaults(false);
@@ -161,18 +159,18 @@ public class ShortcutManager extends JFrame {
 
 class ShortcutTable extends JTable {
     private final ActionConfig[] defaultActionConfigs;
-    private final ActionConfigUserDB userdb;
+    private final UserDB userdb;
 
     @SuppressWarnings("UnusedVariable") // Listener is passed to UserDB for notifications
-    private final ActionConfigUserDB.ActionConfigListener listener;
+    private final UserDB.ActionConfigListener listener;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
     public ShortcutTable(
             ActionConfig[] defaultActionConfigs,
-            ActionConfigUserDB userdb,
-            ActionConfigUserDB.ActionConfigListener listener) {
+            UserDB userdb,
+            UserDB.ActionConfigListener listener) {
         this.defaultActionConfigs = defaultActionConfigs;
         this.userdb = userdb;
         this.listener = listener;

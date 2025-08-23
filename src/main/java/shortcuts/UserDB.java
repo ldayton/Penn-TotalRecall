@@ -1,5 +1,6 @@
 package shortcuts;
 
+import actions.ActionsFileParser.ActionConfig;
 import env.PreferencesManager;
 import java.util.HashMap;
 import java.util.List;
@@ -8,49 +9,56 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * UserDB for managing user preferences for ActionConfig objects. This provides user preference
+ * storage and retrieval functionality for the actions system.
+ */
 public class UserDB {
     private static final Logger logger = LoggerFactory.getLogger(UserDB.class);
 
-    private final List<XAction> defaultXActions;
-    private final XActionListener listener;
+    private final List<ActionConfig> defaultActionConfigs;
+    private final ActionConfigListener listener;
     private final PreferencesManager preferencesManager;
 
     private static final String NO_SHORTCUT = "#";
 
+    public interface ActionConfigListener {
+        void actionConfigUpdated(ActionConfig actionConfig, Shortcut oldShortcut);
+    }
+
     public UserDB(
             @NonNull PreferencesManager preferencesManager,
-            @NonNull List<XAction> defaultXActions,
-            @NonNull XActionListener listener) {
+            @NonNull List<ActionConfig> defaultActionConfigs,
+            @NonNull ActionConfigListener listener) {
         this.preferencesManager = preferencesManager;
-        this.defaultXActions = defaultXActions;
+        this.defaultActionConfigs = defaultActionConfigs;
         this.listener = listener;
     }
 
-    public void store(XAction xaction) {
-        String key = xaction.getId();
+    public void store(ActionConfig actionConfig) {
+        String key = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
         Shortcut oldShortcut = retrieveAll().get(key);
 
         String value;
-        if (xaction.shortcut() != null) {
-            value = xaction.shortcut().getInternalForm();
+        if (actionConfig.shortcut().isPresent()) {
+            value = actionConfig.shortcut().get().getInternalForm();
         } else {
             value = NO_SHORTCUT;
         }
 
-        listener.xActionUpdated(xaction, oldShortcut);
+        listener.actionConfigUpdated(actionConfig, oldShortcut);
         preferencesManager.putString(key, value);
     }
 
     public Shortcut retrieve(String id) {
-        String key = id;
-        String storedStr = preferencesManager.getString(key, NO_SHORTCUT);
+        String storedStr = preferencesManager.getString(id, NO_SHORTCUT);
 
         if (NO_SHORTCUT.equals(storedStr)) {
             return null;
         } else {
             Shortcut shortcut = Shortcut.fromInternalForm(storedStr);
             if (shortcut == null) {
-                logger.warn(getClass().getName() + " won't retrieve() unparseable: " + storedStr);
+                logger.warn("{} won't retrieve() unparseable: {}", getClass().getName(), storedStr);
                 return null;
             }
             return shortcut;
@@ -58,19 +66,61 @@ public class UserDB {
     }
 
     public void persistDefaults(boolean overwrite) {
-        for (XAction xact : defaultXActions) {
-            if (overwrite || retrieve(xact.getId()) == null) {
-                store(xact);
+        for (ActionConfig actionConfig : defaultActionConfigs) {
+            String id = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            if (overwrite || retrieve(id) == null) {
+                store(actionConfig);
             }
         }
     }
 
     public Map<String, Shortcut> retrieveAll() {
         Map<String, Shortcut> result = new HashMap<>();
-        for (XAction xAction : defaultXActions) {
-            String id = xAction.getId();
+        for (ActionConfig actionConfig : defaultActionConfigs) {
+            String id = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
             result.put(id, retrieve(id));
         }
         return result;
+    }
+
+    public List<ActionConfig> getDefaultActionConfigs() {
+        return defaultActionConfigs;
+    }
+
+    public ActionConfig findActionConfigById(String id) {
+        for (ActionConfig actionConfig : defaultActionConfigs) {
+            String configId =
+                    makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            if (configId.equals(id)) {
+                return actionConfig;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Creates an ActionConfig with an updated shortcut.
+     *
+     * @param originalConfig The original ActionConfig
+     * @param newShortcut The new shortcut (can be null)
+     * @return A new ActionConfig with the updated shortcut
+     */
+    public ActionConfig withShortcut(ActionConfig originalConfig, Shortcut newShortcut) {
+        return new ActionConfig(
+                originalConfig.className(),
+                originalConfig.name(),
+                originalConfig.tooltip(),
+                originalConfig.enumValue(),
+                newShortcut != null
+                        ? java.util.Optional.of(newShortcut)
+                        : java.util.Optional.empty());
+    }
+
+    /**
+     * Creates an action ID from class name and enum value. This matches the ID generation logic
+     * used in ActionsManager.
+     */
+    private String makeId(String className, String enumValue) {
+        return enumValue != null ? className + "-" + enumValue : className;
     }
 }
