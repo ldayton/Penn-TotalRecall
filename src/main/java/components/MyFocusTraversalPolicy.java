@@ -4,6 +4,8 @@ import components.annotations.AnnotationTable;
 import components.audiofiles.AudioFileList;
 import components.wordpool.WordpoolList;
 import components.wordpool.WordpoolTextField;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -35,23 +37,34 @@ import util.LoopIterator;
  *
  * <p>Please keep the spreadsheet in /dev updated with changes to the focus subsystem.
  */
+@Singleton
 public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
     private static final Logger logger = LoggerFactory.getLogger(MyFocusTraversalPolicy.class);
 
     private static final String genericFailureMessage =
             "can't find a focus-appropriate component to give focus to";
 
+    private final MyFrame myFrame;
+    private final DoneButton doneButton;
+
     // these are components that can take focus, in the order of focus traversal desired
     // must have at least one element to avoid ArrayIndexOutOfBoundsException
-    private static final Component[] focusLoop =
-            new Component[] {
-                MyFrame.getInstance(),
-                AudioFileList.getFocusTraversalReference(),
-                WordpoolTextField.getFocusTraversalReference(),
-                WordpoolList.getFocusTraversalReference(),
-                AnnotationTable.getFocusTraversalReference(),
-                DoneButton.getInstance()
-            };
+    private final Component[] focusLoop;
+
+    @Inject
+    public MyFocusTraversalPolicy(MyFrame myFrame, DoneButton doneButton) {
+        this.myFrame = myFrame;
+        this.doneButton = doneButton;
+        this.focusLoop =
+                new Component[] {
+                    myFrame,
+                    AudioFileList.getFocusTraversalReference(),
+                    WordpoolTextField.getFocusTraversalReference(),
+                    WordpoolList.getFocusTraversalReference(),
+                    AnnotationTable.getFocusTraversalReference(),
+                    doneButton
+                };
+    }
 
     /** Returns the next component in the focus traversal loop. {@inheritDoc} */
     @Override

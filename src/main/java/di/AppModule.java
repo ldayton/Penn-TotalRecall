@@ -9,6 +9,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.ControlPanel;
 import components.DoneButton;
+import components.MyFocusTraversalPolicy;
 import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
@@ -70,6 +71,7 @@ public class AppModule extends AbstractModule {
         bind(WordpoolList.class).in(Singleton.class);
         bind(AnnotationTable.class).in(Singleton.class);
         bind(AudioFileList.class).in(Singleton.class);
+        bind(MyFocusTraversalPolicy.class).in(Singleton.class);
     }
 
     @Provides

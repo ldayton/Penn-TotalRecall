@@ -28,6 +28,7 @@ public class GuiceBootstrap {
     private final MyMenu myMenu;
     private final MyFrame myFrame;
     private final MySplitPane mySplitPane;
+    private final MyFocusTraversalPolicy myFocusTraversalPolicy;
 
     @Inject
     public GuiceBootstrap(
@@ -37,7 +38,8 @@ public class GuiceBootstrap {
             ActionsManager actionsManager,
             MyMenu myMenu,
             MyFrame myFrame,
-            MySplitPane mySplitPane) {
+            MySplitPane mySplitPane,
+            MyFocusTraversalPolicy myFocusTraversalPolicy) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
@@ -45,6 +47,7 @@ public class GuiceBootstrap {
         this.myMenu = myMenu;
         this.myFrame = myFrame;
         this.mySplitPane = mySplitPane;
+        this.myFocusTraversalPolicy = myFocusTraversalPolicy;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -70,7 +73,7 @@ public class GuiceBootstrap {
     public void startApplication() {
         lookAndFeelManager.initialize();
         actionsManager.initialize(); // Load action configuration before UI creation
-        myFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
+        myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);
         myFrame.setVisible(true);
 
