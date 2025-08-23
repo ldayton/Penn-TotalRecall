@@ -12,6 +12,7 @@ import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /** Commits a user's annotation, updating the annotation file and program window as appropriate. */
@@ -105,10 +106,14 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 oFile.createNewFile();
             } catch (IOException e1) {
                 logger.error("Could not create annotation file: " + oFile.getAbsolutePath(), e1);
-                GiveMessage.errorMessage(
-                        "Could not create "
-                                + Constants.temporaryAnnotationFileExtension
-                                + " file.");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError(
+                            "Could not create "
+                                    + Constants.temporaryAnnotationFileExtension
+                                    + " file.");
+                }
             }
         }
         if (oFile.exists()) {
@@ -118,9 +123,16 @@ public class AnnotateAction extends IdentifiedMultiAction {
 
                     String annotatorName = MyMenu.getAnnotator();
                     if (annotatorName == null) {
-                        annotatorName = GiveMessage.inputMessage("Please enter your name:");
-                        if (annotatorName == null || annotatorName.equals("")) {
-                            GiveMessage.errorMessage("Cannot commit annotation without name.");
+                        DialogService dialogService =
+                                GuiceBootstrap.getInjectedInstance(DialogService.class);
+                        if (dialogService != null) {
+                            annotatorName = dialogService.showInput("Please enter your name:");
+                            if (annotatorName == null || annotatorName.equals("")) {
+                                dialogService.showError("Cannot commit annotation without name.");
+                                return;
+                            }
+                        } else {
+                            // Fallback if DI not available
                             return;
                         }
                     }
@@ -146,13 +158,21 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 // file may no longer exist after deletion
                 if (oFile.exists() == false) {
                     if (oFile.createNewFile()) {
-                        String annotatorName = GiveMessage.inputMessage("Please enter your name:");
-                        if (annotatorName == null || annotatorName.equals("")) {
-                            GiveMessage.errorMessage("Cannot commit annotation without name.");
-                            return;
-                        }
-                        if (AnnotationFileParser.headerExists(oFile) == false) {
-                            AnnotationFileParser.prependHeader(oFile, annotatorName);
+                        DialogService dialogService =
+                                GuiceBootstrap.getInjectedInstance(DialogService.class);
+                        if (dialogService != null) {
+                            String annotatorName =
+                                    dialogService.showInput("Please enter your name:");
+                            if (annotatorName == null || annotatorName.equals("")) {
+                                dialogService.showError("Cannot commit annotation without name.");
+                                return;
+                            }
+                            if (AnnotationFileParser.headerExists(oFile) == false) {
+                                AnnotationFileParser.prependHeader(oFile, annotatorName);
+                            }
+                        } else {
+                            // Fallback if DI not available
+                            throw new IOException("Could not re-create file (DI not available).");
                         }
                     } else {
                         throw new IOException("Could not re-create file.");
@@ -165,7 +185,11 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 WordpoolDisplay.clearText();
             } catch (IOException e1) {
                 logger.error("Error committing annotation to file: " + oFile.getAbsolutePath(), e1);
-                GiveMessage.errorMessage("Error committing annotation! Check files for damage.");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError("Error committing annotation! Check files for damage.");
+                }
             }
         }
 
