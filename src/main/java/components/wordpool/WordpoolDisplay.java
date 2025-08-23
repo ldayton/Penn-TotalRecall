@@ -78,31 +78,31 @@ public class WordpoolDisplay extends JPanel {
     /**
      * Public accessor to the <code>WordpoolTextField</code>'s text.
      *
-     * @return WordpoolTextField.getInstance().getText()
+     * @return wordpoolTextField.getText()
      */
-    public static String getFieldText() {
-        return WordpoolTextField.getInstance().getText();
+    public String getFieldText() {
+        return wordpoolTextField.getText();
     }
 
     /** Sets the <code>WordpoolTextField</code>'s text to the empty string. */
-    public static void clearText() {
-        WordpoolTextField.getInstance().setText("");
+    public void clearText() {
+        wordpoolTextField.setText("");
     }
 
-    public static void distinguishAsLst(List<WordpoolWord> lstWords) {
-        WordpoolList.getInstance().getModel().distinguishAsLst(lstWords);
+    public void distinguishAsLst(List<WordpoolWord> lstWords) {
+        wordpoolList.getModel().distinguishAsLst(lstWords);
     }
 
-    public static void undistinguishAllWords() {
-        WordpoolList.getInstance().getModel().undistinguishAllWords();
+    public void undistinguishAllWords() {
+        wordpoolList.getModel().undistinguishAllWords();
     }
 
     /**
      * Removes all <code>WordpoolWords</code> from the component, whether or not they are present
      * graphically or hidden (because of auto-complete filtering).
      */
-    public static void removeAllWords() {
-        WordpoolList.getInstance().getModel().removeAllWords();
+    public void removeAllWords() {
+        wordpoolList.getModel().removeAllWords();
     }
 
     /**
@@ -110,8 +110,9 @@ public class WordpoolDisplay extends JPanel {
      *
      * @param words The list of WordpoolWords to add for display
      */
-    public static void addWordpoolWords(List<WordpoolWord> words) {
-        WordpoolList.getInstance().getModel().addElements(words);
+    public void addWordpoolWords(List<WordpoolWord> words) {
+        clearText();
+        wordpoolList.getModel().addElements(words);
     }
 
     /**
@@ -123,8 +124,8 @@ public class WordpoolDisplay extends JPanel {
      * @return The first alphabetical matching <code>WordpoolWord</code>, or <code>null</code> if
      *     there is no match
      */
-    public static WordpoolWord findMatchingWordpooWord(String str) {
-        return WordpoolList.getInstance().getModel().findMatchingWordpoolWord(str);
+    public WordpoolWord findMatchingWordpooWord(String str) {
+        return wordpoolList.getModel().findMatchingWordpoolWord(str);
     }
 
     /**
@@ -168,7 +169,7 @@ public class WordpoolDisplay extends JPanel {
         return instance;
     }
 
-    public static void setInputEnabled(boolean enabled) {
-        WordpoolTextField.getInstance().setEnabled(enabled);
+    public void setInputEnabled(boolean enabled) {
+        wordpoolTextField.setEnabled(enabled);
     }
 }

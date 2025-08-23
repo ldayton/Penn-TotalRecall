@@ -25,11 +25,16 @@ public class FileDropListener implements FileDrop.Listener {
 
     private final OpenWordpoolAction openWordpoolAction;
     private final AudioState audioState;
+    private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
-    public FileDropListener(OpenWordpoolAction openWordpoolAction, AudioState audioState) {
+    public FileDropListener(
+            OpenWordpoolAction openWordpoolAction,
+            AudioState audioState,
+            WordpoolDisplay wordpoolDisplay) {
         this.openWordpoolAction = openWordpoolAction;
         this.audioState = audioState;
+        this.wordpoolDisplay = wordpoolDisplay;
     }
 
     /**
@@ -66,7 +71,7 @@ public class FileDropListener implements FileDrop.Listener {
                                                 + Constants.lstFileExtension);
                         if (lstFile.exists()) {
                             try {
-                                WordpoolDisplay.distinguishAsLst(
+                                wordpoolDisplay.distinguishAsLst(
                                         WordpoolFileParser.parse(lstFile, true));
                             } catch (IOException e) {
                                 logger.error(

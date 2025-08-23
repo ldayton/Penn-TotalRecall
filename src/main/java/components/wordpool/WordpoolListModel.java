@@ -44,7 +44,7 @@ public class WordpoolListModel implements ListModel<WordpoolWord> {
     }
 
     public void addElements(Iterable<WordpoolWord> words) {
-        WordpoolDisplay.clearText();
+        // Clear text will be handled by caller when needed
         for (WordpoolWord w : words) {
             if (w.getNum() < 0) {
                 logger.warn("adding wordpool words with negative line numbers is not allowed");

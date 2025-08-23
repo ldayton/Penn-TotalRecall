@@ -28,20 +28,23 @@ public class AnnotateAction extends BaseAction {
 
     private final AudioState audioState;
     private final EventBus eventBus;
+    private final WordpoolDisplay wordpoolDisplay;
     private String annotatorName;
 
     @Inject
-    public AnnotateAction(AudioState audioState, EventBus eventBus) {
+    public AnnotateAction(
+            AudioState audioState, EventBus eventBus, WordpoolDisplay wordpoolDisplay) {
         super("Annotate", "Commit annotation");
         this.audioState = audioState;
         this.eventBus = eventBus;
+        this.wordpoolDisplay = wordpoolDisplay;
     }
 
     @Override
     protected void performAction(ActionEvent e) {
         // do nothing if no audio file is open
         if (!audioState.audioOpen()) {
-            WordpoolDisplay.clearText();
+            wordpoolDisplay.clearText();
             return;
         }
 
@@ -52,7 +55,7 @@ public class AnnotateAction extends BaseAction {
         String actionName = (String) getValue(Action.NAME);
 
         // retrieve text associated with annotation
-        String text = WordpoolDisplay.getFieldText();
+        String text = wordpoolDisplay.getFieldText();
         if (text.length() == 0) {
             if (actionName.contains("Intrusion")) {
                 text = Constants.intrusionSoundString;
@@ -63,7 +66,7 @@ public class AnnotateAction extends BaseAction {
         }
 
         // find whether the text matches a wordpool entry
-        WordpoolWord match = WordpoolDisplay.findMatchingWordpooWord(text);
+        WordpoolWord match = wordpoolDisplay.findMatchingWordpooWord(text);
         if (match == null) {
             match = new WordpoolWord(text, -1);
         }
@@ -111,7 +114,7 @@ public class AnnotateAction extends BaseAction {
                 AnnotationFileParser.appendAnnotation(annotation, oFile);
 
                 // Clear the text field
-                WordpoolDisplay.clearText();
+                wordpoolDisplay.clearText();
 
                 // Update the display
                 eventBus.publish(new FocusRequestedEvent());

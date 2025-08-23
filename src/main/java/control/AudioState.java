@@ -59,12 +59,18 @@ public class AudioState {
     private final PreferencesManager preferencesManager;
     private final FmodCore fmodCore;
     private final EventBus eventBus;
+    private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
-    public AudioState(PreferencesManager preferencesManager, FmodCore fmodCore, EventBus eventBus) {
+    public AudioState(
+            PreferencesManager preferencesManager,
+            FmodCore fmodCore,
+            EventBus eventBus,
+            WordpoolDisplay wordpoolDisplay) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
+        this.wordpoolDisplay = wordpoolDisplay;
     }
 
     /**
@@ -149,7 +155,7 @@ public class AudioState {
                                     + Constants.lstFileExtension);
             if (lstFile.exists()) {
                 try {
-                    WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
+                    wordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
                 } catch (IOException e) {
                     logger.warn("Failed to parse LST file: " + lstFile.getAbsolutePath(), e);
                 }
@@ -208,8 +214,8 @@ public class AudioState {
             }
         }
 
-        WordpoolDisplay.clearText();
-        WordpoolDisplay.undistinguishAllWords();
+        wordpoolDisplay.clearText();
+        wordpoolDisplay.undistinguishAllWords();
 
         waveformBuffer = null;
 

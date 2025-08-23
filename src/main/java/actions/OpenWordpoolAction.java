@@ -34,18 +34,21 @@ public class OpenWordpoolAction extends BaseAction {
     private final PreferencesManager preferencesManager;
     private final UserManager userManager;
     private final EventBus eventBus;
+    private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
     public OpenWordpoolAction(
             AudioState audioState,
             PreferencesManager preferencesManager,
             UserManager userManager,
-            EventBus eventBus) {
+            EventBus eventBus,
+            WordpoolDisplay wordpoolDisplay) {
         super("Open Wordpool...", "Load words from a text file into the wordpool");
         this.audioState = audioState;
         this.preferencesManager = preferencesManager;
         this.userManager = userManager;
         this.eventBus = eventBus;
+        this.wordpoolDisplay = wordpoolDisplay;
     }
 
     @Override
@@ -94,8 +97,8 @@ public class OpenWordpoolAction extends BaseAction {
     public void switchWordpool(File file) {
         try {
             List<WordpoolWord> words = WordpoolFileParser.parse(file, false);
-            WordpoolDisplay.removeAllWords();
-            WordpoolDisplay.addWordpoolWords(words);
+            wordpoolDisplay.removeAllWords();
+            wordpoolDisplay.addWordpoolWords(words);
 
             if (audioState.audioOpen()) {
                 File lstFile =
@@ -105,7 +108,7 @@ public class OpenWordpoolAction extends BaseAction {
                                         + Constants.lstFileExtension);
                 if (lstFile.exists()) {
                     try {
-                        WordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
+                        wordpoolDisplay.distinguishAsLst(WordpoolFileParser.parse(lstFile, true));
                     } catch (IOException e) {
                         logger.error("Failed to parse LST file: " + lstFile.getAbsolutePath(), e);
                     }
