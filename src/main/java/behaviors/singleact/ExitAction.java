@@ -1,17 +1,13 @@
 package behaviors.singleact;
 
-import components.MySplitPane;
 import control.CurAudio;
 import di.GuiceBootstrap;
 import info.Constants;
 import info.UserPrefs;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
-import util.WindowService;
 
 /** Exits the program in response to user request. */
 public class ExitAction extends IdentifiedSingleAction {
@@ -62,20 +58,20 @@ public class ExitAction extends IdentifiedSingleAction {
             logger.warn("Error stopping audio during application exit", e);
         }
 
-        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService == null) {
-            throw new IllegalStateException("WindowService not available via DI");
+        // Save window layout using WindowManager (which uses the same preference system as the rest
+        // of the app)
+        try {
+            components.WindowManager windowManager =
+                    GuiceBootstrap.getInjectedInstance(components.WindowManager.class);
+            components.MyFrame myFrame =
+                    GuiceBootstrap.getInjectedInstance(components.MyFrame.class);
+            components.MySplitPane mySplitPane =
+                    GuiceBootstrap.getInjectedInstance(components.MySplitPane.class);
+
+            windowManager.saveWindowLayout(myFrame, mySplitPane);
+        } catch (Exception e) {
+            logger.warn("Failed to save window layout during exit", e);
         }
-        Rectangle bounds = windowService.getBounds();
-        UserPrefs.prefs.putInt(UserPrefs.windowWidth, (int) bounds.getWidth());
-        UserPrefs.prefs.putInt(UserPrefs.windowHeight, (int) bounds.getHeight());
-        UserPrefs.prefs.putInt(UserPrefs.windowXLocation, (int) bounds.getX());
-        UserPrefs.prefs.putInt(UserPrefs.windowYLocation, (int) bounds.getY());
-        UserPrefs.prefs.putInt(
-                UserPrefs.dividerLocation, MySplitPane.getInstance().getDividerLocation());
-        UserPrefs.prefs.putBoolean(
-                UserPrefs.windowMaximized,
-                windowService.getExtendedState() == JFrame.MAXIMIZED_BOTH);
 
         System.exit(0);
     }

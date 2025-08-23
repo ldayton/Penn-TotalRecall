@@ -1,5 +1,6 @@
 package env;
 
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -24,7 +25,8 @@ public class PreferencesManager {
     }
 
     /** Test constructor allowing custom namespace for isolation. */
-    PreferencesManager(@NonNull UserManager userManager, @NonNull String namespace) {
+    @VisibleForTesting
+    public PreferencesManager(@NonNull UserManager userManager, @NonNull String namespace) {
         this.userManager = userManager;
         this.prefs = Preferences.userRoot().node(namespace);
     }
