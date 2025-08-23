@@ -2,6 +2,8 @@ package components.audiofiles;
 
 import components.MyFrame;
 import control.CurAudio;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -16,6 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
+@Singleton
 public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private static AudioFileList instance;
@@ -28,7 +31,8 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
      * selection mode, cell renderer, and model.
      */
-    private AudioFileList() {
+    @Inject
+    public AudioFileList() {
         model = new AudioFileListModel();
         setModel(model);
 
@@ -140,6 +144,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                         }
                     }
                 });
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -220,7 +227,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
      */
     protected static AudioFileList getInstance() {
         if (instance == null) {
-            instance = new AudioFileList();
+            throw new IllegalStateException(
+                    "AudioFileList not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

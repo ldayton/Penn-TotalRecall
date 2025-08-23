@@ -30,6 +30,8 @@ public class WordpoolDisplay extends JPanel {
     private static final String title = "Wordpool";
 
     private static JTextField field;
+    private final WordpoolTextField wordpoolTextField;
+    private final WordpoolList wordpoolList;
 
     private static WordpoolDisplay instance;
 
@@ -41,10 +43,12 @@ public class WordpoolDisplay extends JPanel {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public WordpoolDisplay() {
+    public WordpoolDisplay(WordpoolTextField wordpoolTextField, WordpoolList wordpoolList) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        field = WordpoolTextField.getInstance();
-        pane = new WordpoolScrollPane();
+        this.wordpoolTextField = wordpoolTextField;
+        this.wordpoolList = wordpoolList;
+        field = wordpoolTextField;
+        pane = new WordpoolScrollPane(wordpoolList);
 
         add(field);
         add(pane);

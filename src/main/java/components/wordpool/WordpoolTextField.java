@@ -4,6 +4,8 @@ import behaviors.multiact.AnnotateAction;
 import components.MyFrame;
 import env.KeyboardManager;
 import info.UserPrefs;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
@@ -30,6 +32,7 @@ import javax.swing.text.Keymap;
  * <p>Includes features to aid in annotation speed and accuracy that were added to PyParse over the
  * years.
  */
+@Singleton
 public class WordpoolTextField extends JTextField implements KeyListener, FocusListener {
 
     private static WordpoolTextField instance;
@@ -37,7 +40,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private String clipboard = "";
     private final KeyboardManager keyboardManager;
 
-    private WordpoolTextField() {
+    @Inject
+    public WordpoolTextField() {
         this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
@@ -121,6 +125,9 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                                 MyFrame.getInstance().requestFocusInWindow();
                             }
                         });
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     @Override
@@ -196,7 +203,9 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     protected static WordpoolTextField getInstance() {
         if (instance == null) {
-            instance = new WordpoolTextField();
+            throw new IllegalStateException(
+                    "WordpoolTextField not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

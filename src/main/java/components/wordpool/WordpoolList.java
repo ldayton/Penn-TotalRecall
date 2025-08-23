@@ -1,5 +1,7 @@
 package components.wordpool;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -16,6 +18,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
+@Singleton
 public class WordpoolList extends JList<WordpoolWord>
         implements FocusListener, MouseListener, KeyListener {
 
@@ -26,7 +29,8 @@ public class WordpoolList extends JList<WordpoolWord>
     final WordpoolListCellRenderer render;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private WordpoolList() {
+    @Inject
+    public WordpoolList() {
         model = new WordpoolListModel();
         setModel(model);
 
@@ -96,6 +100,9 @@ public class WordpoolList extends JList<WordpoolWord>
                 .put(
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK, false),
                         "none");
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -179,7 +186,9 @@ public class WordpoolList extends JList<WordpoolWord>
      */
     protected static WordpoolList getInstance() {
         if (instance == null) {
-            instance = new WordpoolList();
+            throw new IllegalStateException(
+                    "WordpoolList not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }

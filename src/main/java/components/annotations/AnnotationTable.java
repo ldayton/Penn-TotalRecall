@@ -2,6 +2,8 @@ package components.annotations;
 
 import behaviors.singleact.JumpToAnnotationAction;
 import info.MyColors;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
 import java.awt.Component;
 import java.awt.KeyboardFocusManager;
@@ -21,6 +23,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
+@Singleton
 public class AnnotationTable extends JTable implements FocusListener {
 
     private static AnnotationTable instance;
@@ -30,7 +33,8 @@ public class AnnotationTable extends JTable implements FocusListener {
     private final AnnotationTableCellRenderer render;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private AnnotationTable() {
+    @Inject
+    public AnnotationTable() {
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
         JTableHeader header = getTableHeader();
@@ -87,6 +91,9 @@ public class AnnotationTable extends JTable implements FocusListener {
                 .put(
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK, false),
                         "none");
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     @Override
@@ -139,7 +146,9 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     protected static AnnotationTable getInstance() {
         if (instance == null) {
-            instance = new AnnotationTable();
+            throw new IllegalStateException(
+                    "AnnotationTable not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

@@ -14,11 +14,15 @@ import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
 import components.annotations.AnnotationDisplay;
+import components.annotations.AnnotationTable;
 import components.audiofiles.AudioFileDisplay;
+import components.audiofiles.AudioFileList;
 import components.preferences.PreferencesFrame;
 import components.waveform.MyGlassPane;
 import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
+import components.wordpool.WordpoolList;
+import components.wordpool.WordpoolTextField;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -62,6 +66,10 @@ public class AppModule extends AbstractModule {
         bind(AudioFileDisplay.class).in(Singleton.class);
         bind(AnnotationDisplay.class).in(Singleton.class);
         bind(WordpoolDisplay.class).in(Singleton.class);
+        bind(WordpoolTextField.class).in(Singleton.class);
+        bind(WordpoolList.class).in(Singleton.class);
+        bind(AnnotationTable.class).in(Singleton.class);
+        bind(AudioFileList.class).in(Singleton.class);
     }
 
     @Provides

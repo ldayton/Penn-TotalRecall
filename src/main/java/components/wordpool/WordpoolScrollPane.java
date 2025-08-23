@@ -11,16 +11,16 @@ import javax.swing.KeyStroke;
  */
 public class WordpoolScrollPane extends JScrollPane {
 
-    private static WordpoolList list;
+    private final WordpoolList list;
 
     /**
      * Creates a new <code>WordpoolScrollPane</code>, initializing the view to <code>WordpoolList
      * </code> and key bindings.
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    protected WordpoolScrollPane() {
+    protected WordpoolScrollPane(WordpoolList list) {
         setOpaque(false);
-        list = WordpoolList.getInstance();
+        this.list = list;
         getViewport().setView(list);
 
         // overrides JScrollPane key bindings for the benefit of SeekAction's key bindings

@@ -38,6 +38,7 @@ public class AudioFileDisplay extends JScrollPane {
     private static final String title = "Audio Files";
 
     private static AudioFileDisplay instance;
+    private final AudioFileList audioFileList;
     private static AudioFileList list;
 
     /**
@@ -46,8 +47,9 @@ public class AudioFileDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AudioFileDisplay() {
-        list = AudioFileList.getInstance();
+    public AudioFileDisplay(AudioFileList audioFileList) {
+        this.audioFileList = audioFileList;
+        list = audioFileList;
         getViewport().setView(list);
 
         setPreferredSize(GUIConstants.soundFileDisplayDimension);

@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 @Singleton
 public class ControlPanel extends JPanel {
 
-    private static ControlPanel instance;
     private final DoneButton doneButton;
     private final AudioFileDisplay audioFileDisplay;
     private final AnnotationDisplay annotationDisplay;
@@ -69,9 +68,6 @@ public class ControlPanel extends JPanel {
                 });
 
         setBorder(BorderFactory.createEmptyBorder(10, 3, 3, 3));
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     @Override
@@ -79,19 +75,5 @@ public class ControlPanel extends JPanel {
         super.paintComponent(g);
         g.setColor(MyColors.unfocusedColor);
         g.drawLine(0, 0, getWidth() - 1, 0);
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * @return The singleton <code>ControlPanel</code>
-     */
-    public static ControlPanel getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "ControlPanel not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
-        }
-        return instance;
     }
 }

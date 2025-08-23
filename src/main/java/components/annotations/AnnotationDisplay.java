@@ -20,6 +20,7 @@ public class AnnotationDisplay extends JScrollPane {
 
     private static AnnotationDisplay instance;
     private static AnnotationTable table;
+    private final AnnotationTable annotationTable;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -27,8 +28,9 @@ public class AnnotationDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationDisplay() {
-        table = AnnotationTable.getInstance();
+    public AnnotationDisplay(AnnotationTable annotationTable) {
+        this.annotationTable = annotationTable;
+        table = annotationTable;
         getViewport().setView(table);
         setPreferredSize(GUIConstants.annotationDisplayDimension);
         setMaximumSize(GUIConstants.annotationDisplayDimension);
