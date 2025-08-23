@@ -70,7 +70,10 @@ public class CurAudio {
         reset();
 
         if (file == null) {
-            MyFrame.getInstance().setTitle(GUIConstants.defaultFrameTitle);
+            WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+            if (windowService != null) {
+                windowService.setTitle(GUIConstants.defaultFrameTitle);
+            }
         } else {
             curAudioFile = file;
 
