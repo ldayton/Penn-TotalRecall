@@ -5,6 +5,7 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import info.UserPrefs;
 import java.awt.FileDialog;
@@ -17,7 +18,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /**
@@ -122,7 +123,10 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
             }
         } catch (IOException e) {
             logger.error("Error processing wordpool file", e);
-            GiveMessage.errorMessage("Cannot process wordpool file!");
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                dialogService.showError("Cannot process wordpool file!");
+            }
         }
     }
 }

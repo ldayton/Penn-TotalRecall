@@ -1,5 +1,6 @@
 package components.preferences;
 
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /** Tries to save all the graphically displayed preferences. */
 public class SavePreferencesAction extends AbstractAction {
@@ -53,7 +54,10 @@ public class SavePreferencesAction extends AbstractAction {
                     bigMessage += "\n";
                 }
             }
-            GiveMessage.errorMessage(bigMessage);
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                dialogService.showError(bigMessage);
+            }
             PreferencesFrame.getInstance()
                     .toFront(); // to make sure PreferenceFrame will be in foreground
         }

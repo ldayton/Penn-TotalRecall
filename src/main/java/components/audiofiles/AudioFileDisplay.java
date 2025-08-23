@@ -3,6 +3,7 @@ package components.audiofiles;
 import components.MyFrame;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import info.GUIConstants;
 import info.MyShapes;
@@ -22,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -105,7 +106,11 @@ public class AudioFileDisplay extends JScrollPane {
                         af = new AudioFile(f.getAbsolutePath());
                     } catch (AudioFilePathException e) {
                         logger.error("Error updating audio file done status", e);
-                        GiveMessage.errorMessage(e.getMessage());
+                        DialogService dialogService =
+                                GuiceBootstrap.getInjectedInstance(DialogService.class);
+                        if (dialogService != null) {
+                            dialogService.showError(e.getMessage());
+                        }
                         continue;
                     }
                     supportedFiles.add(af);
