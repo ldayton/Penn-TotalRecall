@@ -57,7 +57,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
                         new ExitAction()
                                 .actionPerformed(
                                         new ActionEvent(
-                                                MyFrame.getInstance(),
+                                                this,
                                                 ActionEvent.ACTION_PERFORMED,
                                                 null,
                                                 System.currentTimeMillis(),

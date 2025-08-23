@@ -39,6 +39,7 @@ public class AudioFileDisplay extends JScrollPane {
 
     private static AudioFileDisplay instance;
     private final AudioFileList audioFileList;
+
     private static AudioFileList list;
 
     /**
@@ -75,7 +76,7 @@ public class AudioFileDisplay extends JScrollPane {
                         if (list.isFocusable()) {
                             list.requestFocusInWindow();
                         } else {
-                            MyFrame.getInstance().requestFocusInWindow();
+                            getParent().requestFocusInWindow();
                         }
                     }
                 });

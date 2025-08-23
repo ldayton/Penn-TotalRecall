@@ -63,7 +63,7 @@ public class ControlPanel extends JPanel {
                 new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        MyFrame.getInstance().requestFocusInWindow();
+                        getParent().requestFocusInWindow();
                     }
                 });
 

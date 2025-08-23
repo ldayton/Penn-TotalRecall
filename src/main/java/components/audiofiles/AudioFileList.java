@@ -1,6 +1,5 @@
 package components.audiofiles;
 
-import components.MyFrame;
 import control.CurAudio;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -140,7 +139,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                         if (isFocusable()) {
                             // automatically takes focus in this case
                         } else {
-                            MyFrame.getInstance().requestFocusInWindow();
+                            getParent().requestFocusInWindow();
                         }
                     }
                 });

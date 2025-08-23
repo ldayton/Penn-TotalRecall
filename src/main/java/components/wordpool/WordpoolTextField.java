@@ -1,7 +1,6 @@
 package components.wordpool;
 
 import behaviors.multiact.AnnotateAction;
-import components.MyFrame;
 import env.KeyboardManager;
 import info.UserPrefs;
 import jakarta.inject.Inject;
@@ -122,7 +121,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 setText("");
-                                MyFrame.getInstance().requestFocusInWindow();
+                                getParent().requestFocusInWindow();
                             }
                         });
 
@@ -171,7 +170,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
             // changes to textfield too
             if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 if (getText().length() <= 1) {
-                    MyFrame.getInstance().requestFocusInWindow();
+                    getParent().requestFocusInWindow();
                 }
             }
         }

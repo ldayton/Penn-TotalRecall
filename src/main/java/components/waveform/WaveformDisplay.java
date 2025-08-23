@@ -1,7 +1,6 @@
 package components.waveform;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
@@ -73,7 +72,7 @@ public class WaveformDisplay extends JComponent {
                 new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        MyFrame.getInstance().requestFocusInWindow();
+                        getParent().requestFocusInWindow();
                     }
                 });
         addMouseListener(new WaveformMouseAdapter(this));

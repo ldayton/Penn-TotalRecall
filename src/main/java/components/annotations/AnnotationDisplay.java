@@ -1,6 +1,5 @@
 package components.annotations;
 
-import components.MyFrame;
 import info.GUIConstants;
 import info.MyShapes;
 import jakarta.inject.Inject;
@@ -48,7 +47,7 @@ public class AnnotationDisplay extends JScrollPane {
                         if (table.isFocusable()) {
                             table.requestFocusInWindow();
                         } else {
-                            MyFrame.getInstance().requestFocusInWindow();
+                            getParent().requestFocusInWindow();
                         }
                     }
                 });
