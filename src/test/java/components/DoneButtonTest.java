@@ -77,11 +77,11 @@ class DoneButtonTest {
     }
 
     @Test
-    @DisplayName("XActionManager should be initialized with actions.xml before updateActions")
-    void xActionManagerShouldBeInitializedWithActionsXml() {
-        // The XActionManager should be initialized with actions.xml
-        // This is what ShortcutFrame.createDefault() does in the old system
-        ShortcutFrame.createDefault();
+    @DisplayName("ActionsManager should be initialized with actions.xml before updateActions")
+    void actionsManagerShouldBeInitializedWithActionsXml() {
+        // The ActionsManager should be initialized with actions.xml
+        // Get the injected ShortcutFrame to trigger initialization
+        var shortcutFrame = GuiceBootstrap.getInjectedInstance(components.ShortcutFrame.class);
 
         // Now call updateActions
         MyMenu.updateActions();
@@ -91,12 +91,12 @@ class DoneButtonTest {
         assertEquals(
                 "Mark Complete",
                 buttonText,
-                "DoneButton should have text 'Mark Complete' after XActionManager initialization");
+                "DoneButton should have text 'Mark Complete' after ActionsManager initialization");
 
         boolean isEnabled = doneButton.isEnabled();
         assertFalse(
                 isEnabled,
-                "DoneButton should be disabled when no audio file is open after XActionManager"
+                "DoneButton should be disabled when no audio file is open after ActionsManager"
                         + " initialization");
     }
 }

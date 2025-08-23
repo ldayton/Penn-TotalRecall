@@ -1,6 +1,6 @@
 package components;
 
-import actions.ActionsManagerBridge;
+import actions.ActionsManager;
 import behaviors.multiact.AnnotateAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 import behaviors.singleact.PlayPauseAction;
@@ -23,16 +23,21 @@ public class MySplitPane extends JSplitPane {
     private static MySplitPane instance;
     private final ControlPanel controlPanel;
     private final WaveformDisplay waveformDisplay;
+    private final ActionsManager actionsManager;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
     @Inject
-    public MySplitPane(ControlPanel controlPanel, WaveformDisplay waveformDisplay) {
+    public MySplitPane(
+            ControlPanel controlPanel,
+            WaveformDisplay waveformDisplay,
+            ActionsManager actionsManager) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
         this.controlPanel = controlPanel;
         this.waveformDisplay = waveformDisplay;
+        this.actionsManager = actionsManager;
 
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
@@ -53,10 +58,9 @@ public class MySplitPane extends JSplitPane {
         DeleteSelectedAnnotationAction deleteAction = new DeleteSelectedAnnotationAction();
         InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String DELETE_ACTION_KEY = "delete action";
-        deleteActionMap.put(ActionsManagerBridge.lookup(deleteAction, null), DELETE_ACTION_KEY);
+        deleteActionMap.put(actionsManager.lookup(deleteAction, null), DELETE_ACTION_KEY);
         getActionMap().put(DELETE_ACTION_KEY, deleteAction);
-        ActionsManagerBridge.registerInputMap(
-                deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
+        actionsManager.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
@@ -67,10 +71,10 @@ public class MySplitPane extends JSplitPane {
         InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
         Enum<?> intrusionEnum = AnnotateAction.Mode.INTRUSION;
-        KeyStroke intrusionKey = ActionsManagerBridge.lookup(intrusionAction, intrusionEnum);
+        KeyStroke intrusionKey = actionsManager.lookup(intrusionAction, intrusionEnum);
         intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
         getActionMap().put(ANNOTATE_INTRUSION_KEY, intrusionAction);
-        ActionsManagerBridge.registerInputMap(
+        actionsManager.registerInputMap(
                 intrusionAction, intrusionEnum, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)

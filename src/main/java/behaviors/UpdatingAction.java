@@ -31,7 +31,7 @@ public abstract class UpdatingAction extends AbstractAction {
     public UpdatingAction(Enum<?> e) {
         this.actionEnum = e;
         MyMenu.registerAction(this);
-        // Note: Action registration with ActionsManagerBridge will happen during initialization
+        // Note: Action registration with ActionsManager will happen during initialization
         // to avoid circular dependency issues during DI construction
     }
 

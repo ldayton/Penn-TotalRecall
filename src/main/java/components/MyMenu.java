@@ -9,7 +9,6 @@ import behaviors.multiact.ToggleAnnotationsAction;
 import behaviors.multiact.ZoomAction;
 import behaviors.singleact.AboutAction;
 import behaviors.singleact.DoneAction;
-import behaviors.singleact.EditShortcutsAction;
 import behaviors.singleact.ExitAction;
 import behaviors.singleact.OpenWordpoolAction;
 import behaviors.singleact.PlayPauseAction;
@@ -66,6 +65,8 @@ public class MyMenu extends JMenuBar {
     private final env.LookAndFeelManager lookAndFeelManager;
     private final OpenWordpoolAction openWordpoolAction;
     private final ExitAction exitAction;
+    private final actions.ActionsManager actionsManager;
+    private final behaviors.singleact.EditShortcutsAction editShortcutsAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
@@ -73,10 +74,14 @@ public class MyMenu extends JMenuBar {
     public MyMenu(
             env.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
-            ExitAction exitAction) {
+            ExitAction exitAction,
+            actions.ActionsManager actionsManager,
+            behaviors.singleact.EditShortcutsAction editShortcutsAction) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
+        this.actionsManager = actionsManager;
+        this.editShortcutsAction = editShortcutsAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -110,7 +115,7 @@ public class MyMenu extends JMenuBar {
             jmFile.add(jmiOpenAudio);
         }
         jmFile.add(jmiOpenWordpool);
-        JMenuItem jmiShortcuts = new JMenuItem(new EditShortcutsAction());
+        JMenuItem jmiShortcuts = new JMenuItem(editShortcutsAction);
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {
             jmFile.addSeparator();
@@ -264,12 +269,15 @@ public class MyMenu extends JMenuBar {
     }
 
     /**
-     * Registers all UpdatingAction instances with the ActionsManagerBridge. This method is called
-     * during initialization after all actions have been created.
+     * Registers all UpdatingAction instances with the ActionsManager. This method is called during
+     * initialization after all actions have been created.
      */
-    public static void registerAllActionsWithBridge() {
+    public static void registerAllActionsWithManager() {
+        if (instance == null) {
+            throw new IllegalStateException("MyMenu not initialized via DI");
+        }
         for (UpdatingAction action : allActions) {
-            actions.ActionsManagerBridge.registerUpdatingAction(action);
+            instance.actionsManager.registerUpdatingAction(action);
         }
     }
 

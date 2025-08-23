@@ -1,7 +1,6 @@
 package di;
 
 import actions.ActionsManager;
-import actions.ActionsManagerBridge;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import components.MyFocusTraversalPolicy;
@@ -66,21 +65,17 @@ public class GuiceBootstrap {
 
         globalInjector = Guice.createInjector(new AppModule());
 
-        // Initialize ActionsManagerBridge immediately after injector creation
-        // This must happen before any UpdatingAction classes are instantiated
-        var actionsManager = globalInjector.getInstance(ActionsManager.class);
-        ActionsManagerBridge.initialize(actionsManager);
-
-        // Initialize action configurations immediately after ActionsManagerBridge setup
+        // Initialize action configurations immediately after injector creation
         // This ensures action names and properties are available when components are created
+        var actionsManager = globalInjector.getInstance(ActionsManager.class);
         actionsManager.initialize();
 
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
-        // Register all UpdatingAction instances with ActionsManagerBridge
+        // Register all UpdatingAction instances with ActionsManager
         // This must happen after all components are created but before any UI updates
-        MyMenu.registerAllActionsWithBridge();
+        MyMenu.registerAllActionsWithManager();
 
         return bootstrap;
     }
@@ -123,13 +118,15 @@ public class GuiceBootstrap {
      * Gets an injected instance of the specified class from the global injector.
      *
      * @param clazz The class to get an instance of
-     * @return The injected instance, or null if no injector is available
+     * @return The injected instance
+     * @throws IllegalStateException if no injector is available
      */
     public static <T> T getInjectedInstance(Class<T> clazz) {
         if (globalInjector != null) {
             return globalInjector.getInstance(clazz);
         }
-        return null;
+        throw new IllegalStateException(
+                "DI injector not available. Ensure GuiceBootstrap.create() was called first.");
     }
 
     /**
