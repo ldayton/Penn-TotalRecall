@@ -3,6 +3,7 @@ package components;
 import actions.AboutAction;
 import actions.AnnotateIntrusionAction;
 import actions.AnnotateRegularAction;
+import actions.BaseAction;
 import actions.DoneAction;
 import actions.EditShortcutsAction;
 import actions.ExitAction;
@@ -16,10 +17,6 @@ import actions.ReturnToLastPositionAction;
 import actions.StopAction;
 import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
-import behaviors.UpdatingAction;
-import behaviors.multiact.OpenAudioLocationAction;
-import behaviors.multiact.ScreenSeekAction;
-import behaviors.multiact.ToggleAnnotationsAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -55,7 +52,7 @@ public class MyMenu extends JMenuBar {
 
     private static PlayPauseAction workaroundAction;
 
-    private static Set<UpdatingAction> allActions = new HashSet<>();
+    private static Set<BaseAction> allActions = new HashSet<>();
 
     private static MyMenu instance;
 
@@ -81,6 +78,12 @@ public class MyMenu extends JMenuBar {
     private final Last200PlusMoveAction last200PlusMoveAction;
     private final AnnotateRegularAction annotateRegularAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
+    private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
+    private final actions.ZoomAction zoomAction;
+    private final actions.OpenAudioFileAction openAudioFileAction;
+    private final actions.OpenAudioFolderAction openAudioFolderAction;
+    private final actions.SeekAction seekAction;
+    private final actions.ScreenSeekAction screenSeekAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
@@ -103,7 +106,13 @@ public class MyMenu extends JMenuBar {
             VisitTutorialSiteAction visitTutorialSiteAction,
             Last200PlusMoveAction last200PlusMoveAction,
             AnnotateRegularAction annotateRegularAction,
-            AnnotateIntrusionAction annotateIntrusionAction) {
+            AnnotateIntrusionAction annotateIntrusionAction,
+            actions.ToggleAnnotationsAction toggleAnnotationsAction,
+            actions.ZoomAction zoomAction,
+            actions.OpenAudioFileAction openAudioFileAction,
+            actions.OpenAudioFolderAction openAudioFolderAction,
+            actions.SeekAction seekAction,
+            actions.ScreenSeekAction screenSeekAction) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
@@ -122,11 +131,17 @@ public class MyMenu extends JMenuBar {
         this.last200PlusMoveAction = last200PlusMoveAction;
         this.annotateRegularAction = annotateRegularAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
+        this.toggleAnnotationsAction = toggleAnnotationsAction;
+        this.zoomAction = zoomAction;
+        this.openAudioFileAction = openAudioFileAction;
+        this.openAudioFolderAction = openAudioFolderAction;
+        this.seekAction = seekAction;
+        this.screenSeekAction = screenSeekAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
         initAnnotationMenu();
-        //		initViewMenu();
+        initViewMenu();
         initHelpMenu();
 
         // Set the singleton instance after full initialization
@@ -137,24 +152,18 @@ public class MyMenu extends JMenuBar {
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
         JMenuItem jmiOpenWordpool = new JMenuItem(openWordpoolAction);
+        jmFile.add(jmiOpenWordpool);
+
+        // Add open audio file/folder menu items using separate ADI actions
         if (lookAndFeelManager.shouldUseAWTFileChoosers()) {
-            OpenAudioLocationAction openFileAction =
-                    new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
-            JMenuItem jmiOpenAudioFile = new JMenuItem(openFileAction);
-            OpenAudioLocationAction openFolderAction =
-                    new OpenAudioLocationAction(
-                            OpenAudioLocationAction.SelectionMode.DIRECTORIES_ONLY);
-            JMenuItem jmiOpenAudioFolder = new JMenuItem(openFolderAction);
+            JMenuItem jmiOpenAudioFile = new JMenuItem(openAudioFileAction);
+            JMenuItem jmiOpenAudioFolder = new JMenuItem(openAudioFolderAction);
             jmFile.add(jmiOpenAudioFile);
             jmFile.add(jmiOpenAudioFolder);
         } else {
-            JMenuItem jmiOpenAudio =
-                    new JMenuItem(
-                            new OpenAudioLocationAction(
-                                    OpenAudioLocationAction.SelectionMode.FILES_AND_DIRECTORIES));
+            JMenuItem jmiOpenAudio = new JMenuItem(openAudioFileAction);
             jmFile.add(jmiOpenAudio);
         }
-        jmFile.add(jmiOpenWordpool);
         JMenuItem jmiShortcuts = new JMenuItem(editShortcutsAction);
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {
@@ -189,36 +198,30 @@ public class MyMenu extends JMenuBar {
         JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
         JMenu jmSeek = new JMenu("Seek");
-        behaviors.multiact.SeekAction seekSmallForward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_SMALL);
-        JMenuItem jmiSeekForwardSmall = new JMenuItem(seekSmallForward);
-        behaviors.multiact.SeekAction seekSmallBackward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_SMALL);
-        JMenuItem jmiSeekSmallBackward = new JMenuItem(seekSmallBackward);
-        behaviors.multiact.SeekAction seekMediumForward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_MEDIUM);
-        JMenuItem jmiSeekForwardMedium = new JMenuItem(seekMediumForward);
-        behaviors.multiact.SeekAction seekMediumBackward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_MEDIUM);
-        JMenuItem jmiSeekBackwardMedium = new JMenuItem(seekMediumBackward);
-        behaviors.multiact.SeekAction seekLargeForward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.FORWARD_LARGE);
-        JMenuItem jmiSeekForwardLarge = new JMenuItem(seekLargeForward);
-        behaviors.multiact.SeekAction seekLargeBackward =
-                new behaviors.multiact.SeekAction(
-                        behaviors.multiact.SeekAction.SeekAmount.BACKWARD_LARGE);
-        JMenuItem jmiSeekBackwardLarge = new JMenuItem(seekLargeBackward);
+
+        // Add seek actions using the unified ADI action
+        JMenuItem jmiSeekForwardSmall = new JMenuItem(seekAction);
+        jmiSeekForwardSmall.setText("Forward Small");
+        JMenuItem jmiSeekSmallBackward = new JMenuItem(seekAction);
+        jmiSeekSmallBackward.setText("Backward Small");
+        JMenuItem jmiSeekForwardMedium = new JMenuItem(seekAction);
+        jmiSeekForwardMedium.setText("Forward Medium");
+        JMenuItem jmiSeekBackwardMedium = new JMenuItem(seekAction);
+        jmiSeekBackwardMedium.setText("Backward Medium");
+        JMenuItem jmiSeekForwardLarge = new JMenuItem(seekAction);
+        jmiSeekForwardLarge.setText("Forward Large");
+        JMenuItem jmiSeekBackwardLarge = new JMenuItem(seekAction);
+        jmiSeekBackwardLarge.setText("Backward Large");
+
         JMenuItem jmiLast200MoveRight = new JMenuItem(last200PlusMoveAction);
         JMenuItem jmiLast200MoveLeft = new JMenuItem(last200PlusMoveAction);
-        JMenuItem jmiScreenForward =
-                new JMenuItem(new ScreenSeekAction(ScreenSeekAction.Dir.FORWARD));
-        JMenuItem jmiScreenBackward =
-                new JMenuItem(new ScreenSeekAction(ScreenSeekAction.Dir.BACKWARD));
+
+        // Add screen seek actions using the unified ADI action
+        JMenuItem jmiScreenForward = new JMenuItem(screenSeekAction);
+        jmiScreenForward.setText("Screen Forward");
+        JMenuItem jmiScreenBackward = new JMenuItem(screenSeekAction);
+        jmiScreenBackward.setText("Screen Backward");
+
         jmSeek.add(jmiSeekForwardSmall);
         jmSeek.add(jmiSeekSmallBackward);
         jmSeek.add(jmiSeekForwardMedium);
@@ -244,13 +247,11 @@ public class MyMenu extends JMenuBar {
         JMenu jmAnnotation = new JMenu("Annotation");
         JMenuItem jmiDone = new JMenuItem(doneAction);
         jmAnnotation.add(jmiDone);
-        JMenuItem jmiNextAnn =
-                new JMenuItem(
-                        new ToggleAnnotationsAction(ToggleAnnotationsAction.Direction.FORWARD));
+        JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
+        jmiNextAnn.setText("Next Annotation");
         jmAnnotation.add(jmiNextAnn);
-        JMenuItem jmiPrevAnn =
-                new JMenuItem(
-                        new ToggleAnnotationsAction(ToggleAnnotationsAction.Direction.BACKWARD));
+        JMenuItem jmiPrevAnn = new JMenuItem(toggleAnnotationsAction);
+        jmiPrevAnn.setText("Previous Annotation");
         jmAnnotation.add(jmiPrevAnn);
         add(jmAnnotation);
     }
@@ -259,14 +260,10 @@ public class MyMenu extends JMenuBar {
     @SuppressWarnings("unused")
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn =
-                new JMenuItem(
-                        new behaviors.multiact.ZoomAction(
-                                behaviors.multiact.ZoomAction.Direction.IN));
-        JMenuItem jmiZoomOut =
-                new JMenuItem(
-                        new behaviors.multiact.ZoomAction(
-                                behaviors.multiact.ZoomAction.Direction.OUT));
+        JMenuItem jmiZoomIn = new JMenuItem(zoomAction);
+        jmiZoomIn.setText("Zoom In");
+        JMenuItem jmiZoomOut = new JMenuItem(zoomAction);
+        jmiZoomOut.setText("Zoom Out");
         jmView.add(jmiZoomIn);
         jmView.add(jmiZoomOut);
         add(jmView);
@@ -294,8 +291,8 @@ public class MyMenu extends JMenuBar {
      * actions. Simple calls {@link UpdatingAction#update()} on every registered action.
      */
     public static void updateActions() {
-        for (Object ia : allActions.toArray()) {
-            ((UpdatingAction) ia).update();
+        for (BaseAction ia : allActions) {
+            ia.update();
         }
 
         // Also update ADI actions that extend BaseAction
@@ -316,16 +313,21 @@ public class MyMenu extends JMenuBar {
             instance.openWordpoolAction.update();
             instance.annotateRegularAction.update();
             instance.annotateIntrusionAction.update();
+            instance.toggleAnnotationsAction.update();
+            instance.zoomAction.update();
+            instance.openAudioFileAction.update();
+            instance.openAudioFolderAction.update();
+            instance.seekAction.update();
+            instance.screenSeekAction.update();
         }
     }
 
     public static void updateSeekActions() {
-        for (UpdatingAction ia : allActions) {
-            if (ia instanceof behaviors.multiact.SeekAction seekAction) {
-                seekAction.updateSeekAmount();
-            }
-            // Note: Last200PlusMoveForwardAction and Last200PlusMoveBackwardAction are ADI actions
-            // that handle their own updates and don't extend UpdatingAction
+        // All seek actions are now managed by the ActionsManager and don't need special handling
+        // The new ADI actions automatically get their state updated through the ActionsManager
+        if (instance != null) {
+            // Update any seek-related ADI actions if needed
+            instance.last200PlusMoveAction.update();
         }
     }
 
@@ -338,7 +340,7 @@ public class MyMenu extends JMenuBar {
      *
      * @param act The <code>UpdatingAction</code> that wishes to recieve updates calls
      */
-    public static void registerAction(UpdatingAction act) {
+    public static void registerAction(BaseAction act) {
         if (allActions.add(act) == false) {
             logger.warn("double registration of: " + act);
         }
@@ -352,9 +354,8 @@ public class MyMenu extends JMenuBar {
         if (instance == null) {
             throw new IllegalStateException("MyMenu not initialized via DI");
         }
-        for (UpdatingAction action : allActions) {
-            instance.actionsManager.registerUpdatingAction(action);
-        }
+        // All ADI actions are already registered with the ActionsManager during DI initialization
+        // No need to register them again here
     }
 
     /**

@@ -14,8 +14,8 @@ import javax.swing.filechooser.FileFilter;
 import util.EventBus;
 
 /**
- * Presents a file chooser to the user and then adds the selected audio files to the {@link
- * components.audiofiles.AudioFileDisplay}.
+ * Presents a file chooser to the user for selecting audio files only and then adds the selected
+ * files to the {@link components.audiofiles.AudioFileDisplay}.
  */
 @Singleton
 public class OpenAudioFileAction extends BaseAction {
@@ -27,7 +27,7 @@ public class OpenAudioFileAction extends BaseAction {
     @Inject
     public OpenAudioFileAction(
             AudioState audioState, EventBus eventBus, PreferencesManager preferencesManager) {
-        super("Open Audio File", "Open audio files");
+        super("Open Audio File", "Select audio files");
         this.audioState = audioState;
         this.eventBus = eventBus;
         this.preferencesManager = preferencesManager;
@@ -49,6 +49,8 @@ public class OpenAudioFileAction extends BaseAction {
 
         JFileChooser fileChooser = new JFileChooser(maybeLastPath);
         fileChooser.setDialogTitle("Open Audio File");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
         fileChooser.setFileFilter(
                 new FileFilter() {
                     @Override

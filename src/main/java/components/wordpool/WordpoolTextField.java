@@ -1,6 +1,5 @@
 package components.wordpool;
 
-import behaviors.multiact.AnnotateAction;
 import env.KeyboardManager;
 import env.PreferencesManager;
 import info.PreferenceKeys;
@@ -51,7 +50,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "annotate regular");
-        getActionMap().put("annotate regular", new AnnotateAction(AnnotateAction.Mode.REGULAR));
+        // TODO: Replace with proper ADI action injection
+        // getActionMap().put("annotate regular", new AnnotateAction(AnnotateAction.Mode.REGULAR));
 
         Set<AWTKeyStroke> keys = new HashSet<AWTKeyStroke>();
         keys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK, false));

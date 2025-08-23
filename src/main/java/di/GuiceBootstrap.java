@@ -242,7 +242,6 @@ public class GuiceBootstrap {
         // Register remaining migrated actions
         var openAudioFileAction = globalInjector.getInstance(actions.OpenAudioFileAction.class);
         actionsManager.registerAction(openAudioFileAction);
-
         var openAudioFolderAction = globalInjector.getInstance(actions.OpenAudioFolderAction.class);
         actionsManager.registerAction(openAudioFolderAction);
 

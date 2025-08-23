@@ -12,8 +12,8 @@ import javax.swing.JFileChooser;
 import util.EventBus;
 
 /**
- * Presents a directory chooser to the user and then adds the selected audio files to the {@link
- * components.audiofiles.AudioFileDisplay}.
+ * Presents a directory chooser to the user for selecting audio folders and then adds the selected
+ * files to the {@link components.audiofiles.AudioFileDisplay}.
  */
 @Singleton
 public class OpenAudioFolderAction extends BaseAction {
@@ -25,7 +25,7 @@ public class OpenAudioFolderAction extends BaseAction {
     @Inject
     public OpenAudioFolderAction(
             AudioState audioState, EventBus eventBus, PreferencesManager preferencesManager) {
-        super("Open Audio Folder", "Open audio folder");
+        super("Open Audio Folder", "Select audio folder");
         this.audioState = audioState;
         this.eventBus = eventBus;
         this.preferencesManager = preferencesManager;
@@ -46,21 +46,20 @@ public class OpenAudioFolderAction extends BaseAction {
         }
 
         System.setProperty("apple.awt.fileDialogForDirectories", "true");
-
         JFileChooser fileChooser = new JFileChooser(maybeLastPath);
         fileChooser.setDialogTitle("Open Audio Folder");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = fileChooser.getSelectedFile();
-            String path = selectedFolder.getAbsolutePath();
+            File selectedFile = fileChooser.getSelectedFile();
+            String path = selectedFile.getAbsolutePath();
 
             preferencesManager.putString(
                     PreferenceKeys.OPEN_LOCATION_PATH, new File(path).getParentFile().getPath());
 
-            if (selectedFolder.isDirectory()) {
-                AudioFileDisplay.addFilesIfSupported(selectedFolder.listFiles());
+            if (selectedFile.isDirectory()) {
+                AudioFileDisplay.addFilesIfSupported(selectedFile.listFiles());
             }
         }
 

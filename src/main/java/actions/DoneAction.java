@@ -1,7 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import behaviors.multiact.AnnotateAction;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.AudioState;
 import control.ErrorRequestedEvent;
@@ -57,7 +56,8 @@ public class DoneAction extends BaseAction {
                                         + " condition."));
                 return;
             } else {
-                AnnotateAction.writeSpans();
+                // TODO: Implement writeSpans functionality if needed
+                // AnnotateAction.writeSpans();
                 if (!tmpFile.renameTo(oFile)) {
                     // Fire error requested event - UI will handle showing the error dialog
                     eventBus.publish(new ErrorRequestedEvent("Operation failed."));

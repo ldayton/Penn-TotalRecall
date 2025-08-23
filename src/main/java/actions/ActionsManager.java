@@ -112,15 +112,16 @@ public class ActionsManager {
         update(id, null);
     }
 
-    /**
-     * Registers an UpdatingAction using its stored enum value. This method is called during
-     * initialization to register all actions after they've been created by DI.
-     *
-     * @param action The UpdatingAction to register
-     */
-    public void registerUpdatingAction(behaviors.UpdatingAction action) {
-        registerAction(action, action.getActionEnum());
-    }
+    // TODO: Remove this method - old behaviors system no longer exists
+    // /**
+    //  * Registers an UpdatingAction using its stored enum value. This method is called during
+    //  * initialization to register all actions after they've been created by DI.
+    //  *
+    //  * @param action The UpdatingAction to register
+    //  */
+    // public void registerUpdatingAction(behaviors.UpdatingAction action) {
+    //     registerAction(action, action.getActionEnum());
+    // }
 
     /**
      * Registers a new BaseAction. This method is called during initialization to register all new
@@ -150,6 +151,10 @@ public class ActionsManager {
                 action.putValue(Action.NAME, config.name());
                 action.putValue(Action.SHORT_DESCRIPTION, config.tooltip().orElse(null));
                 action.putValue(Action.ACCELERATOR_KEY, stroke);
+                // Set the argument value for actions that use it
+                if (config.arg().isPresent()) {
+                    action.putValue("arg", config.arg().get());
+                }
             }
 
             // Update input maps

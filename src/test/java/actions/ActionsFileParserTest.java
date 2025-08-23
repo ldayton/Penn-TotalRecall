@@ -65,10 +65,10 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                    <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             tooltip="Select File or Folder"
-                            enum="SelectionMode.FILES_AND_DIRECTORIES"
+                            arg="SelectionMode.FILES_AND_DIRECTORIES"
                             os="Linux,Windows" />
                 </actions>
                 """;
@@ -80,7 +80,7 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertEquals("behaviors.multiact.OpenAudioLocationAction", action.className());
+        assertEquals("actions.OpenAudioLocationAction", action.className());
         assertEquals("Add Audio Files...", action.name());
         assertEquals("Select File or Folder", action.tooltip().orElse(null));
         assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.arg().orElse(null));
@@ -117,7 +117,7 @@ class ActionsFileParserTest {
                 <?xml version="1.0"?>
                 <actions>
                     <action class="behaviors.singleact.DoneAction" name="Mark Complete" />
-                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                    <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             os="Linux,Windows" />
                     <action class="behaviors.singleact.AboutAction"
@@ -142,7 +142,7 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                    <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             os="Linux,Windows" />
                 </actions>
@@ -154,7 +154,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.multiact.OpenAudioLocationAction", actions.get(0).className());
+        assertEquals("actions.OpenAudioLocationAction", actions.get(0).className());
     }
 
     @Test
@@ -240,10 +240,7 @@ class ActionsFileParserTest {
         // Verify we get some expected actions
         boolean hasDoneAction =
                 actions.stream()
-                        .anyMatch(
-                                action ->
-                                        "behaviors.singleact.DoneAction"
-                                                .equals(action.className()));
+                        .anyMatch(action -> "actions.DoneAction".equals(action.className()));
         assertTrue(hasDoneAction);
     }
 
@@ -473,10 +470,10 @@ class ActionsFileParserTest {
                 """
                 <?xml version="1.0"?>
                 <actions>
-                    <action class="behaviors.multiact.OpenAudioLocationAction"
+                    <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             tooltip=" Select File or Folder "
-                            enum=" SelectionMode.FILES_AND_DIRECTORIES " />
+                            arg=" SelectionMode.FILES_AND_DIRECTORIES " />
                 </actions>
                 """;
 
