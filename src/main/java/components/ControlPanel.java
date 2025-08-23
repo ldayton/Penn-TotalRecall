@@ -4,6 +4,8 @@ import components.annotations.AnnotationDisplay;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 import info.MyColors;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -17,12 +19,16 @@ import javax.swing.JPanel;
  * Custom <code>JPanel</code> that is used as the bottom half of <code>MySplitPane</code>,
  * containing control components such as wordpool display, file list, etc.
  */
+@Singleton
 public class ControlPanel extends JPanel {
 
     private static ControlPanel instance;
+    private final DoneButton doneButton;
 
     /** Creates a new instance, initializing listeners and appearance. */
-    private ControlPanel() {
+    @Inject
+    public ControlPanel(DoneButton doneButton) {
+        this.doneButton = doneButton;
         setOpaque(false);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -37,7 +43,7 @@ public class ControlPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(AnnotationDisplay.getInstance());
         add(Box.createRigidArea(new Dimension(30, 0)));
-        add(DoneButton.getInstance());
+        add(doneButton);
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(Box.createHorizontalGlue());
 
@@ -53,6 +59,9 @@ public class ControlPanel extends JPanel {
                 });
 
         setBorder(BorderFactory.createEmptyBorder(10, 3, 3, 3));
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     @Override
@@ -69,7 +78,9 @@ public class ControlPanel extends JPanel {
      */
     public static ControlPanel getInstance() {
         if (instance == null) {
-            instance = new ControlPanel();
+            throw new IllegalStateException(
+                    "ControlPanel not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }

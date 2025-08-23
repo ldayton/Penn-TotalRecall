@@ -21,14 +21,16 @@ import javax.swing.KeyStroke;
 public class MySplitPane extends JSplitPane {
 
     private static MySplitPane instance;
+    private final ControlPanel controlPanel;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
     @Inject
-    public MySplitPane() {
-        super(JSplitPane.VERTICAL_SPLIT, WaveformDisplay.getInstance(), ControlPanel.getInstance());
+    public MySplitPane(ControlPanel controlPanel) {
+        super(JSplitPane.VERTICAL_SPLIT, WaveformDisplay.getInstance(), controlPanel);
+        this.controlPanel = controlPanel;
 
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
