@@ -58,9 +58,10 @@ public class PlayPauseAction extends IdentifiedSingleAction {
             CurAudio.pushPlayPos(pos);
         }
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
     }
 
     /**

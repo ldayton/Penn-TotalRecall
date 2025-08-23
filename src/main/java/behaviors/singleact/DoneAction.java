@@ -42,20 +42,22 @@ public class DoneAction extends IdentifiedSingleAction {
             if (oFile.exists()) {
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError(
-                            "Output file already exists. You should not be able to reach this"
-                                    + " condition.");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError(
+                        "Output file already exists. You should not be able to reach this"
+                                + " condition.");
                 return;
             } else {
                 AnnotateAction.writeSpans();
                 if (!tmpFile.renameTo(oFile)) {
                     DialogService dialogService =
                             GuiceBootstrap.getInjectedInstance(DialogService.class);
-                    if (dialogService != null) {
-                        dialogService.showError("Operation failed.");
+                    if (dialogService == null) {
+                        throw new IllegalStateException("DialogService not available via DI");
                     }
+                    dialogService.showError("Operation failed.");
                     return;
                 } else {
                     try {
@@ -68,9 +70,10 @@ public class DoneAction extends IdentifiedSingleAction {
             }
         } else {
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                dialogService.showError("You have not made any annotations yet.");
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
             }
+            dialogService.showError("You have not made any annotations yet.");
             return;
         }
     }

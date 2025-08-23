@@ -71,19 +71,21 @@ public class DeleteAnnotationAction extends IdentifiedSingleAction {
                 if (oFile.delete() == false) {
                     DialogService dialogService =
                             GuiceBootstrap.getInjectedInstance(DialogService.class);
-                    if (dialogService != null) {
-                        dialogService.showError(
-                                "Deletion of annotation successful, but could not remove temporary"
-                                        + " annotation file.");
+                    if (dialogService == null) {
+                        throw new IllegalStateException("DialogService not available via DI");
                     }
+                    dialogService.showError(
+                            "Deletion of annotation successful, but could not remove temporary"
+                                    + " annotation file.");
                 }
             }
         } else {
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                dialogService.showError(
-                        "Deletion not successful. Files may be damaged. Check file system.");
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
             }
+            dialogService.showError(
+                    "Deletion not successful. Files may be damaged. Check file system.");
         }
 
         MyMenu.updateActions();

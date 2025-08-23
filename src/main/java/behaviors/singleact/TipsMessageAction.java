@@ -55,9 +55,10 @@ public class TipsMessageAction extends IdentifiedSingleAction {
 
     public void actionPerformed(ActionEvent e) {
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService != null) {
-            dialogService.showInfo(makeMessage());
+        if (dialogService == null) {
+            throw new IllegalStateException("DialogService not available via DI");
         }
+        dialogService.showInfo(makeMessage());
     }
 
     @Override

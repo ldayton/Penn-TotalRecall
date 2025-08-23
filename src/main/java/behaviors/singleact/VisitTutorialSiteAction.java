@@ -41,14 +41,15 @@ public class VisitTutorialSiteAction extends IdentifiedSingleAction {
 
         // in case Java 6 classes not available
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService != null) {
-            dialogService.showInfo(
-                    Constants.tutorialSite
-                            + "\n\n"
-                            + Constants.orgName
-                            + "\n"
-                            + Constants.orgAffiliationName);
+        if (dialogService == null) {
+            throw new IllegalStateException("DialogService not available via DI");
         }
+        dialogService.showInfo(
+                Constants.tutorialSite
+                        + "\n\n"
+                        + Constants.orgName
+                        + "\n"
+                        + Constants.orgAffiliationName);
     }
 
     /** <code>VisitTutorialSiteAction</code> is always enabled. */

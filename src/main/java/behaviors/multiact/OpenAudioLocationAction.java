@@ -57,97 +57,68 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
                 title = "Open Audio File";
             }
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                File selectedFile =
-                        dialogService.showFileOpenDialog(
-                                title,
-                                maybeLastPath,
-                                new FilenameFilter() {
-                                    public boolean accept(File dir, String name) {
-                                        if (mode == SelectionMode.DIRECTORIES_ONLY) {
-                                            return name == null;
-                                        } else {
-                                            for (String ext : Constants.audioFormatsLowerCase) {
-                                                if (name.toLowerCase().endsWith(ext)) {
-                                                    return true;
-                                                }
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
+            }
+            File selectedFile =
+                    dialogService.showFileOpenDialog(
+                            title,
+                            maybeLastPath,
+                            new FilenameFilter() {
+                                public boolean accept(File dir, String name) {
+                                    if (mode == SelectionMode.DIRECTORIES_ONLY) {
+                                        return name == null;
+                                    } else {
+                                        for (String ext : Constants.audioFormatsLowerCase) {
+                                            if (name.toLowerCase().endsWith(ext)) {
+                                                return true;
                                             }
-                                            return false;
                                         }
+                                        return false;
                                     }
-                                });
-                if (selectedFile != null) {
-                    path = selectedFile.getAbsolutePath();
-                }
+                                }
+                            });
+            if (selectedFile != null) {
+                path = selectedFile.getAbsolutePath();
             }
             System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
         } else {
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                FileFilter fileFilter =
-                        new FileFilter() {
-                            @Override
-                            public boolean accept(File f) {
-                                if (f.isDirectory()) {
-                                    return true;
-                                } else {
-                                    for (String ext : Constants.audioFormatsLowerCase) {
-                                        if (f.getName().toLowerCase().endsWith(ext)) {
-                                            return true;
-                                        }
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
+            }
+            FileFilter fileFilter =
+                    new FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            if (f.isDirectory()) {
+                                return true;
+                            } else {
+                                for (String ext : Constants.audioFormatsLowerCase) {
+                                    if (f.getName().toLowerCase().endsWith(ext)) {
+                                        return true;
                                     }
-                                    return false;
                                 }
+                                return false;
                             }
+                        }
 
-                            @Override
-                            public String getDescription() {
-                                return "Supported Audio Formats";
-                            }
-                        };
+                        @Override
+                        public String getDescription() {
+                            return "Supported Audio Formats";
+                        }
+                    };
 
-                File selectedFile =
-                        dialogService.showFileChooser(
-                                "Open Audio File or Folder",
-                                maybeLastPath,
-                                JFileChooser.FILES_AND_DIRECTORIES,
-                                fileFilter);
+            File selectedFile =
+                    dialogService.showFileChooser(
+                            "Open Audio File or Folder",
+                            maybeLastPath,
+                            JFileChooser.FILES_AND_DIRECTORIES,
+                            fileFilter);
 
-                if (selectedFile != null) {
-                    path = selectedFile.getPath();
-                }
-            } else {
-                // Fallback for when DI is not available
-                JFileChooser jfc = new JFileChooser(maybeLastPath);
-                jfc.setDialogTitle("Open Audio File or Folder");
-                jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                jfc.setFileFilter(
-                        new FileFilter() {
-                            @Override
-                            public boolean accept(File f) {
-                                if (f.isDirectory()) {
-                                    return true;
-                                } else {
-                                    for (String ext : Constants.audioFormatsLowerCase) {
-                                        if (f.getName().toLowerCase().endsWith(ext)) {
-                                            return true;
-                                        }
-                                    }
-                                    return false;
-                                }
-                            }
-
-                            @Override
-                            public String getDescription() {
-                                return "Supported Audio Formats";
-                            }
-                        });
-
-                int result = jfc.showOpenDialog(null);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    path = jfc.getSelectedFile().getPath();
-                }
+            if (selectedFile != null) {
+                path = selectedFile.getPath();
             }
         }
         if (path != null) {

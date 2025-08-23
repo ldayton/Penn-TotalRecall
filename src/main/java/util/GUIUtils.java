@@ -16,31 +16,30 @@ public class GUIUtils {
      */
     public static Point chooseLocation(JFrame frame) {
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            final Point p = windowService.getLocationOnScreen();
-            final int mfX = (int) p.getX();
-            final int mfY = (int) p.getY();
-            final int mfWidth = windowService.getWidth();
-            final int mfHeight = windowService.getHeight();
-            final int prefWidth = (int) frame.getSize().getWidth();
-            final int prefHeight = (int) frame.getSize().getHeight();
-
-            int prefX = 0;
-            int prefY = 0;
-
-            if (mfWidth < prefWidth) {
-                prefX = mfX;
-            } else {
-                prefX = mfX + (mfWidth - prefWidth) / 2;
-            }
-            if (mfHeight < prefHeight) {
-                prefY = mfY;
-            } else {
-                prefY = mfY + (mfHeight - prefHeight) / 2;
-            }
-            return new Point(prefX, prefY);
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
-        // Fallback if DI not available
-        return new Point(0, 0);
+        final Point p = windowService.getLocationOnScreen();
+        final int mfX = (int) p.getX();
+        final int mfY = (int) p.getY();
+        final int mfWidth = windowService.getWidth();
+        final int mfHeight = windowService.getHeight();
+        final int prefWidth = (int) frame.getSize().getWidth();
+        final int prefHeight = (int) frame.getSize().getHeight();
+
+        int prefX = 0;
+        int prefY = 0;
+
+        if (mfWidth < prefWidth) {
+            prefX = mfX;
+        } else {
+            prefX = mfX + (mfWidth - prefWidth) / 2;
+        }
+        if (mfHeight < prefHeight) {
+            prefY = mfY;
+        } else {
+            prefY = mfY + (mfHeight - prefHeight) / 2;
+        }
+        return new Point(prefX, prefY);
     }
 }

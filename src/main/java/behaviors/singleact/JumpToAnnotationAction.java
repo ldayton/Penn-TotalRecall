@@ -28,20 +28,22 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
             if (curFrame < 0 || curFrame > CurAudio.getMaster().durationInFrames() - 1) {
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError(
-                            "The annotation I am jumpting to isn't in range.\n"
-                                    + "Please check annotation file for errors.");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError(
+                        "The annotation I am jumpting to isn't in range.\n"
+                                + "Please check annotation file for errors.");
                 return;
             }
             CurAudio.setAudioProgressAndUpdateActions(curFrame);
             CurAudio.getPlayer().playAt(curFrame);
         }
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
     }
 
     @Override

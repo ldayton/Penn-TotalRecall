@@ -107,9 +107,10 @@ public class AudioFileDisplay extends JScrollPane {
                         logger.error("Error updating audio file done status", e);
                         DialogService dialogService =
                                 GuiceBootstrap.getInjectedInstance(DialogService.class);
-                        if (dialogService != null) {
-                            dialogService.showError(e.getMessage());
+                        if (dialogService == null) {
+                            throw new IllegalStateException("DialogService not available via DI");
                         }
+                        dialogService.showError(e.getMessage());
                         continue;
                     }
                     supportedFiles.add(af);

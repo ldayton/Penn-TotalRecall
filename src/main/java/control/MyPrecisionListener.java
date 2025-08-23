@@ -69,9 +69,10 @@ public class MyPrecisionListener implements AudioEvent.Listener {
                 String error = "An error ocurred during audio playback.\n" + event.errorMessage();
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError(error);
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError(error);
                 break;
             default:
                 logger.error("unhandled AudioEvent: " + event.type());

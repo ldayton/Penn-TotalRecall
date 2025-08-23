@@ -13,9 +13,10 @@ public class AboutAction extends IdentifiedSingleAction {
     /** Performs the action using a dialog. */
     public void actionPerformed(ActionEvent e) {
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService != null) {
-            dialogService.showInfo(buildAboutMessage());
+        if (dialogService == null) {
+            throw new IllegalStateException("DialogService not available via DI");
         }
+        dialogService.showInfo(buildAboutMessage());
     }
 
     /**

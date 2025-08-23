@@ -52,9 +52,10 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
         CurAudio.getPlayer().playAt(finalPosition);
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
     }
 
     @Override

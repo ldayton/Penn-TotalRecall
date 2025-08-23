@@ -4,13 +4,10 @@ import components.MySplitPane;
 import control.CurAudio;
 import di.GuiceBootstrap;
 import info.Constants;
-import info.GUIConstants;
 import info.UserPrefs;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
@@ -33,32 +30,16 @@ public class ExitAction extends IdentifiedSingleAction {
             String message = "Are you sure you want to exit " + Constants.programName + "?";
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
 
-            if (dialogService != null) {
-                DialogService.ConfirmationResult result =
-                        dialogService.showConfirmWithDontShowAgain(message);
-                if (result.isDontShowAgain()) {
-                    UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
-                }
-                if (result.isConfirmed()) {
-                    doExit();
-                }
-            } else {
-                // Fallback for when DI is not available
-                JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
-                Object[] params = {message, checkbox};
-                int response =
-                        JOptionPane.showConfirmDialog(
-                                null,
-                                params,
-                                GUIConstants.yesNoDialogTitle,
-                                JOptionPane.YES_NO_OPTION);
-                boolean dontShow = checkbox.isSelected();
-                if (dontShow && response != JOptionPane.CLOSED_OPTION) {
-                    UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
-                }
-                if (response == JOptionPane.YES_OPTION) {
-                    doExit();
-                }
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
+            }
+            DialogService.ConfirmationResult result =
+                    dialogService.showConfirmWithDontShowAgain(message);
+            if (result.isDontShowAgain()) {
+                UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
+            }
+            if (result.isConfirmed()) {
+                doExit();
             }
         } else {
             doExit();
@@ -82,18 +63,19 @@ public class ExitAction extends IdentifiedSingleAction {
         }
 
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            Rectangle bounds = windowService.getBounds();
-            UserPrefs.prefs.putInt(UserPrefs.windowWidth, (int) bounds.getWidth());
-            UserPrefs.prefs.putInt(UserPrefs.windowHeight, (int) bounds.getHeight());
-            UserPrefs.prefs.putInt(UserPrefs.windowXLocation, (int) bounds.getX());
-            UserPrefs.prefs.putInt(UserPrefs.windowYLocation, (int) bounds.getY());
-            UserPrefs.prefs.putInt(
-                    UserPrefs.dividerLocation, MySplitPane.getInstance().getDividerLocation());
-            UserPrefs.prefs.putBoolean(
-                    UserPrefs.windowMaximized,
-                    windowService.getExtendedState() == JFrame.MAXIMIZED_BOTH);
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        Rectangle bounds = windowService.getBounds();
+        UserPrefs.prefs.putInt(UserPrefs.windowWidth, (int) bounds.getWidth());
+        UserPrefs.prefs.putInt(UserPrefs.windowHeight, (int) bounds.getHeight());
+        UserPrefs.prefs.putInt(UserPrefs.windowXLocation, (int) bounds.getX());
+        UserPrefs.prefs.putInt(UserPrefs.windowYLocation, (int) bounds.getY());
+        UserPrefs.prefs.putInt(
+                UserPrefs.dividerLocation, MySplitPane.getInstance().getDividerLocation());
+        UserPrefs.prefs.putBoolean(
+                UserPrefs.windowMaximized,
+                windowService.getExtendedState() == JFrame.MAXIMIZED_BOTH);
 
         System.exit(0);
     }

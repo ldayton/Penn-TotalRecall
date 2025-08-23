@@ -1,5 +1,6 @@
 package components.annotations;
 
+import di.GuiceBootstrap;
 import info.GUIConstants;
 import info.MyShapes;
 import jakarta.inject.Inject;
@@ -63,14 +64,22 @@ public class AnnotationDisplay extends JScrollPane {
     }
 
     public static Annotation[] getAnnotationsInOrder() {
-        return table.getModel().toArray();
+        var instance = GuiceBootstrap.getInjectedInstance(AnnotationDisplay.class);
+        if (instance == null) {
+            throw new IllegalStateException("AnnotationDisplay not available via DI");
+        }
+        return instance.annotationTable.getModel().toArray();
     }
 
     public static void addAnnotation(Annotation ann) {
         if (ann == null) {
             throw new IllegalArgumentException("annotation/s cannot be null");
         }
-        table.getModel().addElement(ann);
+        var instance = GuiceBootstrap.getInjectedInstance(AnnotationDisplay.class);
+        if (instance == null) {
+            throw new IllegalStateException("AnnotationDisplay not available via DI");
+        }
+        instance.annotationTable.getModel().addElement(ann);
     }
 
     public static void addAnnotations(Iterable<Annotation> anns) {

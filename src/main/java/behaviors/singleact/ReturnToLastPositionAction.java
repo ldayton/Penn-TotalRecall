@@ -15,9 +15,10 @@ public class ReturnToLastPositionAction extends IdentifiedSingleAction {
         CurAudio.setAudioProgressAndUpdateActions(pos);
         CurAudio.getPlayer().playAt(pos);
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
     }
 
     @Override

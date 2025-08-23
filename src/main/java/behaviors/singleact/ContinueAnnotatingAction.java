@@ -82,9 +82,10 @@ public class ContinueAnnotatingAction extends IdentifiedSingleAction {
             return;
         } else {
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                dialogService.showError("Could not re-open file for annotation.");
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
             }
+            dialogService.showError("Could not re-open file for annotation.");
             return;
         }
     }

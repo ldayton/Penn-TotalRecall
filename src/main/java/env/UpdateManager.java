@@ -128,9 +128,10 @@ public class UpdateManager {
                         .formatted(newVersion, releasesPageUrl);
 
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService != null) {
-            dialogService.showInfo(message);
+        if (dialogService == null) {
+            throw new IllegalStateException("DialogService not available via DI");
         }
+        dialogService.showInfo(message);
     }
 
     boolean isNewerVersion(@NonNull String current, @NonNull String latest) {

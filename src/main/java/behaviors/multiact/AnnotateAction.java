@@ -108,12 +108,13 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 logger.error("Could not create annotation file: " + oFile.getAbsolutePath(), e1);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError(
-                            "Could not create "
-                                    + Constants.temporaryAnnotationFileExtension
-                                    + " file.");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError(
+                        "Could not create "
+                                + Constants.temporaryAnnotationFileExtension
+                                + " file.");
             }
         }
         if (oFile.exists()) {
@@ -125,14 +126,12 @@ public class AnnotateAction extends IdentifiedMultiAction {
                     if (annotatorName == null) {
                         DialogService dialogService =
                                 GuiceBootstrap.getInjectedInstance(DialogService.class);
-                        if (dialogService != null) {
-                            annotatorName = dialogService.showInput("Please enter your name:");
-                            if (annotatorName == null || annotatorName.equals("")) {
-                                dialogService.showError("Cannot commit annotation without name.");
-                                return;
-                            }
-                        } else {
-                            // Fallback if DI not available
+                        if (dialogService == null) {
+                            throw new IllegalStateException("DialogService not available via DI");
+                        }
+                        annotatorName = dialogService.showInput("Please enter your name:");
+                        if (annotatorName == null || annotatorName.equals("")) {
+                            dialogService.showError("Cannot commit annotation without name.");
                             return;
                         }
                     }
@@ -160,19 +159,16 @@ public class AnnotateAction extends IdentifiedMultiAction {
                     if (oFile.createNewFile()) {
                         DialogService dialogService =
                                 GuiceBootstrap.getInjectedInstance(DialogService.class);
-                        if (dialogService != null) {
-                            String annotatorName =
-                                    dialogService.showInput("Please enter your name:");
-                            if (annotatorName == null || annotatorName.equals("")) {
-                                dialogService.showError("Cannot commit annotation without name.");
-                                return;
-                            }
-                            if (AnnotationFileParser.headerExists(oFile) == false) {
-                                AnnotationFileParser.prependHeader(oFile, annotatorName);
-                            }
-                        } else {
-                            // Fallback if DI not available
-                            throw new IOException("Could not re-create file (DI not available).");
+                        if (dialogService == null) {
+                            throw new IllegalStateException("DialogService not available via DI");
+                        }
+                        String annotatorName = dialogService.showInput("Please enter your name:");
+                        if (annotatorName == null || annotatorName.equals("")) {
+                            dialogService.showError("Cannot commit annotation without name.");
+                            return;
+                        }
+                        if (AnnotationFileParser.headerExists(oFile) == false) {
+                            AnnotationFileParser.prependHeader(oFile, annotatorName);
                         }
                     } else {
                         throw new IOException("Could not re-create file.");
@@ -187,17 +183,19 @@ public class AnnotateAction extends IdentifiedMultiAction {
                 logger.error("Error committing annotation to file: " + oFile.getAbsolutePath(), e1);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError("Error committing annotation! Check files for damage.");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError("Error committing annotation! Check files for damage.");
             }
         }
 
         // return focus to the frame after annotation, for the sake of action key bindings
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
         MyMenu.updateActions();
     }
 

@@ -45,51 +45,53 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
                 di.GuiceBootstrap.getInjectedInstance(env.LookAndFeelManager.class);
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
         if (lafManager.shouldUseAWTFileChoosers()) {
-            if (dialogService != null) {
-                File selectedFile =
-                        dialogService.showFileOpenDialog(
-                                title,
-                                maybeLastPath,
-                                new FilenameFilter() {
-                                    public boolean accept(File dir, String name) {
-                                        return name.toLowerCase()
-                                                .endsWith(Constants.wordpoolFileExtension);
-                                    }
-                                });
-                if (selectedFile != null) {
-                    path = selectedFile.getAbsolutePath();
-                }
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
+            }
+            File selectedFile =
+                    dialogService.showFileOpenDialog(
+                            title,
+                            maybeLastPath,
+                            new FilenameFilter() {
+                                public boolean accept(File dir, String name) {
+                                    return name.toLowerCase()
+                                            .endsWith(Constants.wordpoolFileExtension);
+                                }
+                            });
+            if (selectedFile != null) {
+                path = selectedFile.getAbsolutePath();
             }
         } else {
-            if (dialogService != null) {
-                File selectedFile =
-                        dialogService.showFileChooser(
-                                title,
-                                maybeLastPath,
-                                JFileChooser.FILES_ONLY,
-                                new FileFilter() {
-                                    @Override
-                                    public boolean accept(File f) {
-                                        if (f.isDirectory()) {
-                                            return true;
-                                        }
-                                        if (f.getName()
-                                                .toLowerCase()
-                                                .endsWith(Constants.wordpoolFileExtension)) {
-                                            return true;
-                                        } else {
-                                            return false;
-                                        }
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
+            }
+            File selectedFile =
+                    dialogService.showFileChooser(
+                            title,
+                            maybeLastPath,
+                            JFileChooser.FILES_ONLY,
+                            new FileFilter() {
+                                @Override
+                                public boolean accept(File f) {
+                                    if (f.isDirectory()) {
+                                        return true;
                                     }
+                                    if (f.getName()
+                                            .toLowerCase()
+                                            .endsWith(Constants.wordpoolFileExtension)) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
 
-                                    @Override
-                                    public String getDescription() {
-                                        return "Text (.txt) Files";
-                                    }
-                                });
-                if (selectedFile != null) {
-                    path = selectedFile.getPath();
-                }
+                                @Override
+                                public String getDescription() {
+                                    return "Text (.txt) Files";
+                                }
+                            });
+            if (selectedFile != null) {
+                path = selectedFile.getPath();
             }
         }
 
@@ -130,9 +132,10 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
         } catch (IOException e) {
             logger.error("Error processing wordpool file", e);
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                dialogService.showError("Cannot process wordpool file!");
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
             }
+            dialogService.showError("Cannot process wordpool file!");
         }
     }
 }

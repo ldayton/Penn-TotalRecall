@@ -55,9 +55,10 @@ public class SavePreferencesAction extends AbstractAction {
                 }
             }
             DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-            if (dialogService != null) {
-                dialogService.showError(bigMessage);
+            if (dialogService == null) {
+                throw new IllegalStateException("DialogService not available via DI");
             }
+            dialogService.showError(bigMessage);
             PreferencesFrame.getInstance()
                     .toFront(); // to make sure PreferenceFrame will be in foreground
         }

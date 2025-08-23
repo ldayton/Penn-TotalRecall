@@ -112,10 +112,10 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         (int) prefScrollPane.getPreferredSize().getWidth(),
                         buttonPanelPrefferedSize);
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        int frameHeight = 600; // Default fallback
-        if (windowService != null) {
-            frameHeight = (int) ((2.0 / 3.0) * windowService.getSize().getHeight());
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        int frameHeight = (int) ((2.0 / 3.0) * windowService.getSize().getHeight());
         setSize(frameWidth + 40, frameHeight);
 
         // let escape button be used to request preferences window closed

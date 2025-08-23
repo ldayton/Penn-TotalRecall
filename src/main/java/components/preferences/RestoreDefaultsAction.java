@@ -24,9 +24,10 @@ public class RestoreDefaultsAction extends AbstractAction {
             allPrefs.get(i).restoreDefault();
         }
         DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-        if (dialogService != null) {
-            dialogService.showInfo("All preferences successfully restored to defaults.");
+        if (dialogService == null) {
+            throw new IllegalStateException("DialogService not available via DI");
         }
+        dialogService.showInfo("All preferences successfully restored to defaults.");
 
         // safer than directly using setVisible(false), since this double checks the assumption that
         // all preferences are saved

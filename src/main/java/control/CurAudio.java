@@ -70,9 +70,10 @@ public class CurAudio {
 
         if (file == null) {
             WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-            if (windowService != null) {
-                windowService.setTitle(GUIConstants.defaultFrameTitle);
+            if (windowService == null) {
+                throw new IllegalStateException("WindowService not available via DI");
             }
+            windowService.setTitle(GUIConstants.defaultFrameTitle);
         } else {
             curAudioFile = file;
 
@@ -86,23 +87,26 @@ public class CurAudio {
                 logger.error("Audio file not found: " + file.getAbsolutePath(), e);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError("Audio file not found!");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError("Audio file not found!");
             } catch (UnsupportedAudioFileException e) {
                 logger.error("Unsupported audio format: " + file.getAbsolutePath(), e);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError("Unsupported audio format!\n" + e.getMessage());
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError("Unsupported audio format!\n" + e.getMessage());
             } catch (IOException e) {
                 logger.error("Error opening audio file: " + file.getAbsolutePath(), e);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError("Error opening audio file!");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError("Error opening audio file!");
             }
             if (!success) {
                 switchFile(null);
@@ -112,10 +116,10 @@ public class CurAudio {
 
             // change frame title to display current file info
             WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-            if (windowService != null) {
-                windowService.setTitle(
-                        GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
+            if (windowService == null) {
+                throw new IllegalStateException("WindowService not available via DI");
             }
+            windowService.setTitle(GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
 
             chunkSize =
                     components.waveform.WaveformBuffer.CHUNK_SIZE_SECONDS
@@ -148,12 +152,13 @@ public class CurAudio {
                 logger.error("Cannot load audio system", e1);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError(
-                            "Cannot load audio system.\nYou may need to reinstall "
-                                    + Constants.programName
-                                    + ".");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError(
+                        "Cannot load audio system.\nYou may need to reinstall "
+                                + Constants.programName
+                                + ".");
                 reset();
             }
             precisionListener = new MyPrecisionListener();
@@ -168,9 +173,10 @@ public class CurAudio {
                 logger.error("AudioPlayer: Audio file not found: " + file.getAbsolutePath(), e);
                 DialogService dialogService =
                         GuiceBootstrap.getInjectedInstance(DialogService.class);
-                if (dialogService != null) {
-                    dialogService.showError("Audio file not found!");
+                if (dialogService == null) {
+                    throw new IllegalStateException("DialogService not available via DI");
                 }
+                dialogService.showError("Audio file not found!");
             }
             if (!success) {
                 switchFile(null);
@@ -272,9 +278,10 @@ public class CurAudio {
         AudioFileDisplay.getInstance().repaint();
         AnnotationDisplay.getInstance().repaint();
         WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
-        if (windowService != null) {
-            windowService.requestFocus();
+        if (windowService == null) {
+            throw new IllegalStateException("WindowService not available via DI");
         }
+        windowService.requestFocus();
     }
 
     public static long popLastPlayPos() {
