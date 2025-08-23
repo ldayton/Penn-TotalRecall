@@ -45,8 +45,15 @@ public class ShortcutManager extends JFrame {
 
     private final ContentPane contentPane;
 
-    public ShortcutManager(URL url, XActionListener listener) {
-        this.defaultXActions = new XActionParser(url).getXactions();
+
+    
+    /**
+     * Constructor that accepts ActionConfigs from the ActionsManager system.
+     * This replaces the old constructor that used XActionParser.
+     */
+    public ShortcutManager(List<actions.ActionsFileParser.ActionConfig> actionConfigs, XActionListener listener) {
+        // Convert ActionConfigs to XActions for backward compatibility
+        this.defaultXActions = actions.ActionConfigToXActionBridge.convertToXActions(actionConfigs);
         PreferencesManager preferencesManager =
                 di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
         this.userdb = new UserDB(preferencesManager, defaultXActions, listener);

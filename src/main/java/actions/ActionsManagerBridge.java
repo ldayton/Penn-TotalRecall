@@ -10,6 +10,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shortcuts.Shortcut;
+import java.util.List;
 
 /**
  * Bridge class that provides the same static interface as the old XActionManager
@@ -136,6 +137,15 @@ public class ActionsManagerBridge {
      */
     public ActionsManager getActionsManager() {
         return actionsManager;
+    }
+    
+    /**
+     * Gets all action configurations for use by shortcut management.
+     * 
+     * @return List of all action configurations
+     */
+    public static List<actions.ActionsFileParser.ActionConfig> getAllActionConfigs() {
+        return getInstance().actionsManager.getAllActionConfigs();
     }
     
     /**
