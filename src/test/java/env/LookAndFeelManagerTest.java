@@ -18,7 +18,7 @@ class LookAndFeelManagerTest {
         ExitAction exitAction = mock(ExitAction.class);
         when(config.getProperty("ui.look_and_feel")).thenReturn("com.example.CustomLaf");
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
 
         // Use reflection to access private method
         String lafClass = invokeLookAndFeelClassName(manager);
@@ -36,7 +36,7 @@ class LookAndFeelManagerTest {
         when(config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf"))
                 .thenReturn("com.formdev.flatlaf.FlatLightLaf");
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
 
         String lafClass = invokeLookAndFeelClassName(manager);
 
@@ -51,7 +51,7 @@ class LookAndFeelManagerTest {
         ExitAction exitAction = mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
 
         assertFalse(manager.shouldShowPreferencesInMenu());
     }
@@ -64,7 +64,7 @@ class LookAndFeelManagerTest {
         ExitAction exitAction = mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
 
         assertTrue(manager.shouldShowPreferencesInMenu());
     }
@@ -78,17 +78,17 @@ class LookAndFeelManagerTest {
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
         ExitAction exitAction = mock(ExitAction.class);
-        LookAndFeelManager windowsManager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager windowsManager = new LookAndFeelManager(config, platform);
         assertEquals("/images/headphones48.png", windowsManager.getAppIconPath());
 
         // Test macOS
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
-        LookAndFeelManager macManager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager macManager = new LookAndFeelManager(config, platform);
         assertEquals("/images/headphones16.png", macManager.getAppIconPath());
 
         // Test Linux
         when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
-        LookAndFeelManager linuxManager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager linuxManager = new LookAndFeelManager(config, platform);
         assertEquals("/images/headphones16.png", linuxManager.getAppIconPath());
     }
 

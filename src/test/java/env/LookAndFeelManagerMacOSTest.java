@@ -36,7 +36,7 @@ class LookAndFeelManagerMacOSTest {
 
         config = new AppConfig();
         platform = new Platform();
-        manager = new LookAndFeelManager(config, platform, exitAction);
+        manager = new LookAndFeelManager(config, platform);
     }
 
     @Test
@@ -124,7 +124,7 @@ class LookAndFeelManagerMacOSTest {
         System.clearProperty("apple.laf.useScreenMenuBar");
 
         // Create and initialize the Look and Feel manager
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
         manager.initialize();
 
         // Verify the system property is set correctly

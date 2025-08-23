@@ -4,7 +4,7 @@ import behaviors.multiact.AnnotateAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 import behaviors.singleact.PlayPauseAction;
 import components.waveform.WaveformDisplay;
-import control.XActionManager;
+import actions.ActionsManagerBridge;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -53,9 +53,9 @@ public class MySplitPane extends JSplitPane {
         DeleteSelectedAnnotationAction deleteAction = new DeleteSelectedAnnotationAction();
         InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String DELETE_ACTION_KEY = "delete action";
-        deleteActionMap.put(XActionManager.lookup(deleteAction, null), DELETE_ACTION_KEY);
+        deleteActionMap.put(ActionsManagerBridge.lookup(deleteAction, null), DELETE_ACTION_KEY);
         getActionMap().put(DELETE_ACTION_KEY, deleteAction);
-        XActionManager.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
+        ActionsManagerBridge.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
@@ -66,10 +66,10 @@ public class MySplitPane extends JSplitPane {
         InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
         Enum<?> intrusionEnum = AnnotateAction.Mode.INTRUSION;
-        KeyStroke intrusionKey = XActionManager.lookup(intrusionAction, intrusionEnum);
+        KeyStroke intrusionKey = ActionsManagerBridge.lookup(intrusionAction, intrusionEnum);
         intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
         getActionMap().put(ANNOTATE_INTRUSION_KEY, intrusionAction);
-        XActionManager.registerInputMap(
+        ActionsManagerBridge.registerInputMap(
                 intrusionAction, intrusionEnum, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)

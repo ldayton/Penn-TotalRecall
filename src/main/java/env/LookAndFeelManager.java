@@ -1,7 +1,6 @@
 package env;
 
 import behaviors.singleact.AboutAction;
-import behaviors.singleact.ExitAction;
 import behaviors.singleact.PreferencesAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -26,16 +25,13 @@ public class LookAndFeelManager {
 
     private final AppConfig appConfig;
     private final Platform platform;
-    private final ExitAction exitAction;
 
     @Inject
     public LookAndFeelManager(
             @NonNull AppConfig appConfig,
-            @NonNull Platform platform,
-            @NonNull ExitAction exitAction) {
+            @NonNull Platform platform) {
         this.appConfig = appConfig;
         this.platform = platform;
-        this.exitAction = exitAction;
     }
 
     /** Configures platform properties, sets Look and Feel, and enables native integration. */
@@ -45,11 +41,15 @@ public class LookAndFeelManager {
         }
 
         String lafClass = getLookAndFeelClassName();
+        logger.info("Attempting to set Look and Feel: {}", lafClass);
         try {
             UIManager.setLookAndFeel(lafClass);
-            logger.debug("Set Look and Feel: {}", lafClass);
+            logger.info("Successfully set Look and Feel: {}", lafClass);
+            logger.info("Current Look and Feel: {}", UIManager.getLookAndFeel().getClass().getName());
         } catch (Exception e) {
             logger.error("Failed to set Look and Feel: {}", lafClass, e);
+            // No fallback - fail fast if FlatLaf cannot be set
+            throw new RuntimeException("Failed to set Look and Feel: " + lafClass, e);
         }
 
         if (platform.detect() == Platform.PlatformType.MACOS) {
@@ -107,8 +107,10 @@ public class LookAndFeelManager {
             desktop.setQuitHandler(
                     (_, response) -> {
                         try {
-                            var actionEvent =
-                                    new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
+                            // Use the DI-managed ExitAction - fail fast if not available
+                            var exitAction = di.GuiceBootstrap.getRequiredInjectedInstance(
+                                    behaviors.singleact.ExitAction.class, "ExitAction");
+                            var actionEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
                             exitAction.actionPerformed(actionEvent);
                             response.performQuit();
                         } catch (Exception ex) {

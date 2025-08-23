@@ -1,13 +1,13 @@
 package components;
 
-import control.XActionManager;
+import actions.ActionsManagerBridge;
 import java.net.URL;
 import shortcuts.ShortcutManager;
 
 public class ShortcutFrame extends ShortcutManager {
 
     public ShortcutFrame(URL url) {
-        super(url, XActionManager.listener);
+        super(url, ActionsManagerBridge.listener);
     }
 
     public static ShortcutFrame createDefault() {

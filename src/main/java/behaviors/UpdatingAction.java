@@ -1,7 +1,7 @@
 package behaviors;
 
 import components.MyMenu;
-import control.XActionManager;
+import actions.ActionsManagerBridge;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +26,21 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class UpdatingAction extends AbstractAction {
     private static final Logger logger = LoggerFactory.getLogger(UpdatingAction.class);
+    
+    private final Enum<?> actionEnum;
 
     public UpdatingAction(Enum<?> e) {
+        this.actionEnum = e;
         MyMenu.registerAction(this);
-        XActionManager.registerAction(this, e);
+        // Note: Action registration with ActionsManagerBridge will happen during initialization
+        // to avoid circular dependency issues during DI construction
+    }
+    
+    /**
+     * Returns the enum associated with this action, used for registration.
+     */
+    public Enum<?> getActionEnum() {
+        return actionEnum;
     }
 
     private static final List<Long> stamps = new ArrayList<>();

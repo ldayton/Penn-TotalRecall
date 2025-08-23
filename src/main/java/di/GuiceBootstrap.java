@@ -1,6 +1,7 @@
 package di;
 
 import actions.ActionsManager;
+import actions.ActionsManagerBridge;
 import behaviors.singleact.ExitAction;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -18,6 +19,7 @@ import env.UserManager;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.swing.UIManager;
 
 /**
  * Guice-based application bootstrap.
@@ -63,38 +65,63 @@ public class GuiceBootstrap {
         // Initialize Look and Feel BEFORE creating any Swing components
         // This is critical for Mac menu bar to work properly
         initializeLookAndFeelBeforeDI();
+        
+        // Set FlatLaf BEFORE creating any Swing components via DI
+        setFlatLafBeforeDI();
 
         globalInjector = Guice.createInjector(new AppModule());
-        return globalInjector.getInstance(GuiceBootstrap.class);
+        
+        // Initialize ActionsManagerBridge immediately after injector creation
+        // This must happen before any UpdatingAction classes are instantiated
+        var actionsManager = globalInjector.getInstance(ActionsManager.class);
+        ActionsManagerBridge.initialize(actionsManager);
+        
+        // Initialize action configurations immediately after ActionsManagerBridge setup
+        // This ensures action names and properties are available when components are created
+        actionsManager.initialize();
+        
+        // Get the bootstrap instance (this triggers creation of all DI-managed components)
+        var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
+        
+        // Register all UpdatingAction instances with ActionsManagerBridge
+        // This must happen after all components are created but before any UI updates
+        MyMenu.registerAllActionsWithBridge();
+        
+        return bootstrap;
     }
 
     /**
      * Initializes Look and Feel before dependency injection to ensure platform-specific properties
      * (like Mac menu bar) are set before any Swing components are created.
      *
-     * <p>During bootstrap, we create minimal instances of required components without full DI
-     * injection. The ExitAction is created with a null PreferencesManager which is handled
-     * gracefully in its actionPerformed method by providing default values and conditionally
-     * calling preference methods.
+     * <p>During bootstrap, we only set up the essential system properties needed for Mac menu bar.
+     * The full LookAndFeelManager with proper DI will be created later.
      */
     private static void initializeLookAndFeelBeforeDI() {
-        // Create minimal instances needed for Look and Feel initialization
-        Platform platform = new Platform();
-        UserManager userManager = new UserManager();
-        AppConfig appConfig = new AppConfig(platform, userManager);
-
-        // Create a minimal ExitAction for LookAndFeelManager (before DI is available)
-        // This is only used for Mac menu bar setup, not for actual exit functionality
-        // The null PreferencesManager is handled gracefully in ExitAction.actionPerformed()
-        // by providing default values and conditionally calling preference methods
-        ExitAction exitAction =
-                new ExitAction(null); // null PreferencesManager - will be replaced by DI later
-
-        LookAndFeelManager lookAndFeelManager =
-                new LookAndFeelManager(appConfig, platform, exitAction);
-
-        // Initialize Look and Feel (this sets Mac menu bar properties)
-        lookAndFeelManager.initialize();
+        // Set essential Mac menu bar properties before any Swing components are created
+        // This is the minimal setup needed for Mac menu bar to work properly
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("apple.awt.textantialiasing", "on");
+            System.setProperty("apple.awt.antialiasing", "on");
+            System.setProperty("apple.awt.rendering", "quality");
+            System.setProperty("apple.awt.application.appearance", "system");
+            System.setProperty("apple.awt.application.name", "Penn TotalRecall");
+        }
+    }
+    
+    /**
+     * Sets FlatLaf before any Swing components are created via DI.
+     * This ensures all components use FlatLaf from the start.
+     */
+    private static void setFlatLafBeforeDI() {
+        try {
+            UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+            logger.info("Set FlatLaf before DI initialization");
+        } catch (Exception e) {
+            logger.error("Failed to set FlatLaf before DI: {}", e.getMessage());
+            throw new RuntimeException("Failed to set FlatLaf before DI initialization", e);
+        }
     }
 
     /**
@@ -136,13 +163,10 @@ public class GuiceBootstrap {
 
     /** Initializes and starts the GUI application. */
     public void startApplication() {
-        // Look and Feel already initialized before DI creation
+        // Initialize Look and Feel with proper DI (includes macOS handlers)
+        lookAndFeelManager.initialize();
 
-        // Initialize XActionManager with actions.xml (this loads action configurations)
-        // This is what ShortcutFrame.createDefault() does in the old system
-        initializeXActionManager();
-
-        actionsManager.initialize(); // Load action configuration before UI creation
+        // ActionsManager already initialized during bootstrap
         myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);
 
@@ -154,19 +178,5 @@ public class GuiceBootstrap {
 
         // Check for updates after UI is ready (async, non-blocking)
         updateManager.checkForUpdateOnStartup();
-    }
-
-    /**
-     * Initializes the XActionManager by loading actions.xml. This is equivalent to what
-     * ShortcutFrame.createDefault() does in the old system.
-     */
-    private void initializeXActionManager() {
-        try {
-            // Load actions.xml and initialize XActionManager
-            // This populates the XActionManager with action configurations
-            ShortcutFrame.createDefault();
-        } catch (Exception e) {
-            logger.error("Failed to initialize XActionManager with actions.xml", e);
-        }
     }
 }
