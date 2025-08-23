@@ -18,6 +18,7 @@ import components.audiofiles.AudioFileDisplay;
 import components.preferences.PreferencesFrame;
 import components.waveform.MyGlassPane;
 import components.waveform.WaveformDisplay;
+import components.wordpool.WordpoolDisplay;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -60,6 +61,7 @@ public class AppModule extends AbstractModule {
         bind(WaveformDisplay.class).in(Singleton.class);
         bind(AudioFileDisplay.class).in(Singleton.class);
         bind(AnnotationDisplay.class).in(Singleton.class);
+        bind(WordpoolDisplay.class).in(Singleton.class);
     }
 
     @Provides

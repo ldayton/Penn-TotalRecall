@@ -2,6 +2,8 @@ package components.wordpool;
 
 import info.GUIConstants;
 import info.MyShapes;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -22,6 +24,7 @@ import javax.swing.JTextField;
  * methods provided in this class. Code outside the package cannot and should not try to access the
  * internal list, model, or other components directly.
  */
+@Singleton
 public class WordpoolDisplay extends JPanel {
 
     private static final String title = "Wordpool";
@@ -37,7 +40,8 @@ public class WordpoolDisplay extends JPanel {
      * various aspects of appearance.
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private WordpoolDisplay() {
+    @Inject
+    public WordpoolDisplay() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         field = WordpoolTextField.getInstance();
         pane = new WordpoolScrollPane();
@@ -62,6 +66,9 @@ public class WordpoolDisplay extends JPanel {
                         field.requestFocusInWindow();
                     }
                 });
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -150,7 +157,9 @@ public class WordpoolDisplay extends JPanel {
      */
     public static WordpoolDisplay getInstance() {
         if (instance == null) {
-            instance = new WordpoolDisplay();
+            throw new IllegalStateException(
+                    "WordpoolDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }
