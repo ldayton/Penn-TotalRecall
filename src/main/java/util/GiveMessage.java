@@ -2,6 +2,7 @@ package util;
 
 import behaviors.singleact.AboutAction;
 import components.MyFrame;
+import di.GuiceBootstrap;
 import info.Constants;
 import info.GUIConstants;
 import javax.swing.ImageIcon;
@@ -16,12 +17,18 @@ public class GiveMessage {
      * @param message The error message to display
      */
     public static void errorMessage(String message) {
-        JOptionPane.showMessageDialog(
-                MyFrame.getInstance(),
-                message,
-                GUIConstants.errorDialogTitle,
-                JOptionPane.ERROR_MESSAGE,
-                new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")));
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showError(message);
+        } else {
+            // Fallback for when DI is not available
+            JOptionPane.showMessageDialog(
+                    MyFrame.getInstance(),
+                    message,
+                    GUIConstants.errorDialogTitle,
+                    JOptionPane.ERROR_MESSAGE,
+                    new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")));
+        }
     }
 
     /**
@@ -30,28 +37,41 @@ public class GiveMessage {
      * @param message The info message to display
      */
     public static void infoMessage(String message) {
-        JOptionPane.showMessageDialog(
-                MyFrame.getInstance(),
-                message,
-                Constants.programName,
-                JOptionPane.OK_OPTION,
-                new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")));
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo(message);
+        } else {
+            // Fallback for when DI is not available
+            JOptionPane.showMessageDialog(
+                    MyFrame.getInstance(),
+                    message,
+                    Constants.programName,
+                    JOptionPane.OK_OPTION,
+                    new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")));
+        }
     }
 
     public static String inputMessage(String message) {
-        Object input =
-                JOptionPane.showInputDialog(
-                        MyFrame.getInstance(),
-                        message,
-                        Constants.programName,
-                        JOptionPane.OK_CANCEL_OPTION,
-                        new ImageIcon(AboutAction.class.getResource("/images/headphones48.png")),
-                        null,
-                        "");
-        if (input instanceof String string) {
-            return string;
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            return dialogService.showInput(message);
         } else {
-            return null;
+            // Fallback for when DI is not available
+            Object input =
+                    JOptionPane.showInputDialog(
+                            MyFrame.getInstance(),
+                            message,
+                            Constants.programName,
+                            JOptionPane.OK_CANCEL_OPTION,
+                            new ImageIcon(
+                                    AboutAction.class.getResource("/images/headphones48.png")),
+                            null,
+                            "");
+            if (input instanceof String string) {
+                return string;
+            } else {
+                return null;
+            }
         }
     }
 }

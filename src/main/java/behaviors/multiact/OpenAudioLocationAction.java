@@ -2,6 +2,7 @@ package behaviors.multiact;
 
 import components.MyFrame;
 import components.audiofiles.AudioFileDisplay;
+import di.GuiceBootstrap;
 import info.Constants;
 import info.UserPrefs;
 import java.awt.FileDialog;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import util.DialogService;
 
 /**
  * Presents a file chooser to the user and then adds the selected files to the {@link
@@ -84,34 +86,71 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
             System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
         } else {
-            JFileChooser jfc = new JFileChooser(maybeLastPath);
-            jfc.setDialogTitle("Open Audio File or Folder");
-            jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-            jfc.setFileFilter(
-                    new FileFilter() {
-                        @Override
-                        public boolean accept(File f) {
-                            if (f.isDirectory()) {
-                                return true;
-                            } else {
-                                for (String ext : Constants.audioFormatsLowerCase) {
-                                    if (f.getName().toLowerCase().endsWith(ext)) {
-                                        return true;
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                FileFilter fileFilter =
+                        new FileFilter() {
+                            @Override
+                            public boolean accept(File f) {
+                                if (f.isDirectory()) {
+                                    return true;
+                                } else {
+                                    for (String ext : Constants.audioFormatsLowerCase) {
+                                        if (f.getName().toLowerCase().endsWith(ext)) {
+                                            return true;
+                                        }
                                     }
+                                    return false;
                                 }
-                                return false;
                             }
-                        }
 
-                        @Override
-                        public String getDescription() {
-                            return "Supported Audio Formats";
-                        }
-                    });
+                            @Override
+                            public String getDescription() {
+                                return "Supported Audio Formats";
+                            }
+                        };
 
-            int result = jfc.showOpenDialog(MyFrame.getInstance());
-            if (result == JFileChooser.APPROVE_OPTION) {
-                path = jfc.getSelectedFile().getPath();
+                File selectedFile =
+                        dialogService.showFileChooser(
+                                "Open Audio File or Folder",
+                                maybeLastPath,
+                                JFileChooser.FILES_AND_DIRECTORIES,
+                                fileFilter);
+
+                if (selectedFile != null) {
+                    path = selectedFile.getPath();
+                }
+            } else {
+                // Fallback for when DI is not available
+                JFileChooser jfc = new JFileChooser(maybeLastPath);
+                jfc.setDialogTitle("Open Audio File or Folder");
+                jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                jfc.setFileFilter(
+                        new FileFilter() {
+                            @Override
+                            public boolean accept(File f) {
+                                if (f.isDirectory()) {
+                                    return true;
+                                } else {
+                                    for (String ext : Constants.audioFormatsLowerCase) {
+                                        if (f.getName().toLowerCase().endsWith(ext)) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
+                                }
+                            }
+
+                            @Override
+                            public String getDescription() {
+                                return "Supported Audio Formats";
+                            }
+                        });
+
+                int result = jfc.showOpenDialog(MyFrame.getInstance());
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    path = jfc.getSelectedFile().getPath();
+                }
             }
         }
         if (path != null) {

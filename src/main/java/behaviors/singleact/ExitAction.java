@@ -3,6 +3,7 @@ package behaviors.singleact;
 import components.MyFrame;
 import components.MySplitPane;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.Constants;
 import info.GUIConstants;
 import info.UserPrefs;
@@ -13,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.DialogService;
 
 /** Exits the program in response to user request. */
 public class ExitAction extends IdentifiedSingleAction {
@@ -28,27 +30,35 @@ public class ExitAction extends IdentifiedSingleAction {
         boolean shouldWarn =
                 UserPrefs.prefs.getBoolean(UserPrefs.warnExit, UserPrefs.defaultWarnExit);
         if (shouldWarn) {
-            JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
             String message = "Are you sure you want to exit " + Constants.programName + "?";
-            Object[] params = {message, checkbox};
-            int response =
-                    JOptionPane.showConfirmDialog(
-                            MyFrame.getInstance(),
-                            params,
-                            GUIConstants.yesNoDialogTitle,
-                            JOptionPane.YES_NO_OPTION);
-            boolean dontShow = checkbox.isSelected();
-            if (dontShow && response != JOptionPane.CLOSED_OPTION) {
-                UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
-            }
-            switch (response) {
-                case JOptionPane.YES_OPTION:
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+
+            if (dialogService != null) {
+                DialogService.ConfirmationResult result =
+                        dialogService.showConfirmWithDontShowAgain(message);
+                if (result.isDontShowAgain()) {
+                    UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
+                }
+                if (result.isConfirmed()) {
                     doExit();
-                    break;
-                case JOptionPane.NO_OPTION:
-                    break;
-                case JOptionPane.CLOSED_OPTION:
-                    break;
+                }
+            } else {
+                // Fallback for when DI is not available
+                JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
+                Object[] params = {message, checkbox};
+                int response =
+                        JOptionPane.showConfirmDialog(
+                                MyFrame.getInstance(),
+                                params,
+                                GUIConstants.yesNoDialogTitle,
+                                JOptionPane.YES_NO_OPTION);
+                boolean dontShow = checkbox.isSelected();
+                if (dontShow && response != JOptionPane.CLOSED_OPTION) {
+                    UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
+                }
+                if (response == JOptionPane.YES_OPTION) {
+                    doExit();
+                }
             }
         } else {
             doExit();

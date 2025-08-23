@@ -33,6 +33,7 @@ import env.UpdateManager;
 import env.UserManager;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
+import util.DialogService;
 import util.ProgramVersion;
 
 /**
@@ -76,6 +77,7 @@ public class AppModule extends AbstractModule {
 
         // Utility services
         bind(ProgramVersion.class).in(Singleton.class);
+        bind(DialogService.class).in(Singleton.class);
     }
 
     @Provides
