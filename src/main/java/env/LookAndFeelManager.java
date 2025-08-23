@@ -27,9 +27,7 @@ public class LookAndFeelManager {
     private final Platform platform;
 
     @Inject
-    public LookAndFeelManager(
-            @NonNull AppConfig appConfig,
-            @NonNull Platform platform) {
+    public LookAndFeelManager(@NonNull AppConfig appConfig, @NonNull Platform platform) {
         this.appConfig = appConfig;
         this.platform = platform;
     }
@@ -45,7 +43,8 @@ public class LookAndFeelManager {
         try {
             UIManager.setLookAndFeel(lafClass);
             logger.info("Successfully set Look and Feel: {}", lafClass);
-            logger.info("Current Look and Feel: {}", UIManager.getLookAndFeel().getClass().getName());
+            logger.info(
+                    "Current Look and Feel: {}", UIManager.getLookAndFeel().getClass().getName());
         } catch (Exception e) {
             logger.error("Failed to set Look and Feel: {}", lafClass, e);
             // No fallback - fail fast if FlatLaf cannot be set
@@ -108,9 +107,11 @@ public class LookAndFeelManager {
                     (_, response) -> {
                         try {
                             // Use the DI-managed ExitAction - fail fast if not available
-                            var exitAction = di.GuiceBootstrap.getRequiredInjectedInstance(
-                                    behaviors.singleact.ExitAction.class, "ExitAction");
-                            var actionEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
+                            var exitAction =
+                                    di.GuiceBootstrap.getRequiredInjectedInstance(
+                                            behaviors.singleact.ExitAction.class, "ExitAction");
+                            var actionEvent =
+                                    new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
                             exitAction.actionPerformed(actionEvent);
                             response.performQuit();
                         } catch (Exception ex) {

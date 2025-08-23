@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import shortcuts.Shortcut;
 
 /**
- * UserDB implementation that works with ActionConfig instead of XAction.
- * This provides the same functionality as the old UserDB but for the new actions system.
+ * UserDB implementation that works with ActionConfig instead of XAction. This provides the same
+ * functionality as the old UserDB but for the new actions system.
  */
 public class ActionConfigUserDB {
     private static final Logger logger = LoggerFactory.getLogger(ActionConfigUserDB.class);
@@ -90,7 +90,8 @@ public class ActionConfigUserDB {
 
     public ActionConfig findActionConfigById(String id) {
         for (ActionConfig actionConfig : defaultActionConfigs) {
-            String configId = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            String configId =
+                    makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
             if (configId.equals(id)) {
                 return actionConfig;
             }
@@ -100,7 +101,7 @@ public class ActionConfigUserDB {
 
     /**
      * Creates an ActionConfig with an updated shortcut.
-     * 
+     *
      * @param originalConfig The original ActionConfig
      * @param newShortcut The new shortcut (can be null)
      * @return A new ActionConfig with the updated shortcut
@@ -111,13 +112,14 @@ public class ActionConfigUserDB {
                 originalConfig.name(),
                 originalConfig.tooltip(),
                 originalConfig.enumValue(),
-                newShortcut != null ? java.util.Optional.of(newShortcut) : java.util.Optional.empty()
-        );
+                newShortcut != null
+                        ? java.util.Optional.of(newShortcut)
+                        : java.util.Optional.empty());
     }
 
     /**
-     * Creates an action ID from class name and enum value.
-     * This matches the ID generation logic used in ActionsManager.
+     * Creates an action ID from class name and enum value. This matches the ID generation logic
+     * used in ActionsManager.
      */
     private String makeId(String className, String enumValue) {
         return enumValue != null ? className + "-" + enumValue : className;

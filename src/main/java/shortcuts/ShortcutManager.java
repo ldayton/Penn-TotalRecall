@@ -11,7 +11,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,13 +44,12 @@ public class ShortcutManager extends JFrame {
 
     private final ContentPane contentPane;
 
-
-    
     /**
-     * Constructor that accepts ActionConfigs from the ActionsManager system.
-     * This replaces the old constructor that used XActionParser.
+     * Constructor that accepts ActionConfigs from the ActionsManager system. This replaces the old
+     * constructor that used XActionParser.
      */
-    public ShortcutManager(List<actions.ActionsFileParser.ActionConfig> actionConfigs, XActionListener listener) {
+    public ShortcutManager(
+            List<actions.ActionsFileParser.ActionConfig> actionConfigs, XActionListener listener) {
         // Convert ActionConfigs to XActions for backward compatibility
         this.defaultXActions = actions.ActionConfigToXActionBridge.convertToXActions(actionConfigs);
         PreferencesManager preferencesManager =

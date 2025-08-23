@@ -262,10 +262,10 @@ public class MyMenu extends JMenuBar {
             logger.warn("double registration of: " + act);
         }
     }
-    
+
     /**
-     * Registers all UpdatingAction instances with the ActionsManagerBridge.
-     * This method is called during initialization after all actions have been created.
+     * Registers all UpdatingAction instances with the ActionsManagerBridge. This method is called
+     * during initialization after all actions have been created.
      */
     public static void registerAllActionsWithBridge() {
         for (UpdatingAction action : allActions) {

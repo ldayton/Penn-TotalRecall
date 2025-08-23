@@ -1,12 +1,11 @@
 package actions;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.*;
 
 import actions.ActionsFileParser.ActionConfig;
-import behaviors.UpdatingAction;
 import env.KeyboardManager;
 import env.Platform;
 import java.awt.event.ActionEvent;
@@ -43,14 +42,21 @@ class ActionsManagerTest {
     @DisplayName("ActionsManager should initialize and load action configurations")
     void shouldInitializeAndLoadActionConfigurations() throws Exception {
         // Given
-        var actionConfigs = List.of(
-            new ActionConfig("behaviors.singleact.DoneAction", "Mark Complete", 
-                           Optional.of("Mark current item as complete"), 
-                           Optional.empty(), Optional.empty()),
-            new ActionConfig("behaviors.singleact.PlayPauseAction", "Play/Pause", 
-                           Optional.empty(), Optional.empty(), Optional.empty())
-        );
-        
+        var actionConfigs =
+                List.of(
+                        new ActionConfig(
+                                "behaviors.singleact.DoneAction",
+                                "Mark Complete",
+                                Optional.of("Mark current item as complete"),
+                                Optional.empty(),
+                                Optional.empty()),
+                        new ActionConfig(
+                                "behaviors.singleact.PlayPauseAction",
+                                "Play/Pause",
+                                Optional.empty(),
+                                Optional.empty(),
+                                Optional.empty()));
+
         doReturn(actionConfigs).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
 
         // When
@@ -59,7 +65,7 @@ class ActionsManagerTest {
         // Then
         verify(actionsFileParser).parseActionsFromClasspath("/actions.xml");
         assertEquals(2, actionsManager.getAllActionConfigs().size());
-        
+
         // Verify action configs are stored by ID
         var doneAction = actionsManager.getActionConfig("behaviors.singleact.DoneAction");
         assertTrue(doneAction.isPresent());
@@ -71,7 +77,8 @@ class ActionsManagerTest {
     void shouldHandleInitializationErrors() throws Exception {
         // Given
         doThrow(new ActionsFileParser.ActionParseException("Test error"))
-            .when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
+                .when(actionsFileParser)
+                .parseActionsFromClasspath("/actions.xml");
 
         // When & Then
         assertThrows(RuntimeException.class, () -> actionsManager.initialize());
@@ -81,14 +88,17 @@ class ActionsManagerTest {
     @DisplayName("ActionsManager should register and update actions")
     void shouldRegisterAndUpdateActions() throws Exception {
         // Given
-        var actionConfigs = List.of(
-            new ActionConfig("actions.ActionsManagerTest$TestableUpdatingAction", "Mark Complete", 
-                           Optional.of("Mark current item as complete"), 
-                           Optional.empty(), Optional.empty())
-        );
-        
+        var actionConfigs =
+                List.of(
+                        new ActionConfig(
+                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "Mark Complete",
+                                Optional.of("Mark current item as complete"),
+                                Optional.empty(),
+                                Optional.empty()));
+
         doReturn(actionConfigs).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
-        
+
         actionsManager.initialize();
 
         // When
@@ -96,7 +106,8 @@ class ActionsManagerTest {
 
         // Then
         assertEquals("Mark Complete", testAction.getValue(Action.NAME));
-        assertEquals("Mark current item as complete", testAction.getValue(Action.SHORT_DESCRIPTION));
+        assertEquals(
+                "Mark current item as complete", testAction.getValue(Action.SHORT_DESCRIPTION));
         assertNull(testAction.getValue(Action.ACCELERATOR_KEY));
     }
 
@@ -107,14 +118,18 @@ class ActionsManagerTest {
         var keyStroke = KeyStroke.getKeyStroke("ctrl S");
         var keyboardManager = mock(KeyboardManager.class);
         var shortcut = new Shortcut(keyStroke, keyboardManager);
-        
-        var actionConfigs = List.of(
-            new ActionConfig("actions.ActionsManagerTest$TestableUpdatingAction", "Save", 
-                           Optional.empty(), Optional.empty(), Optional.of(shortcut))
-        );
-        
+
+        var actionConfigs =
+                List.of(
+                        new ActionConfig(
+                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "Save",
+                                Optional.empty(),
+                                Optional.empty(),
+                                Optional.of(shortcut)));
+
         doReturn(actionConfigs).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
-        
+
         actionsManager.initialize();
 
         // When
@@ -128,15 +143,19 @@ class ActionsManagerTest {
     @Test
     @DisplayName("ActionsManager should handle actions with enum values")
     void shouldHandleActionsWithEnumValues() throws Exception {
-        // Given - Action config should use the class name + enum value combination that will be looked up
-        var actionConfigs = List.of(
-            new ActionConfig("actions.ActionsManagerTest$TestableUpdatingAction", "Add Audio Files...", 
-                           Optional.of("Select File or Folder"), 
-                           Optional.of("TEST_VALUE"), Optional.empty())
-        );
-        
+        // Given - Action config should use the class name + enum value combination that will be
+        // looked up
+        var actionConfigs =
+                List.of(
+                        new ActionConfig(
+                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "Add Audio Files...",
+                                Optional.of("Select File or Folder"),
+                                Optional.of("TEST_VALUE"),
+                                Optional.empty()));
+
         doReturn(actionConfigs).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
-        
+
         actionsManager.initialize();
 
         // When - Register with enum value that matches the action config
@@ -154,14 +173,18 @@ class ActionsManagerTest {
         var keyStroke = KeyStroke.getKeyStroke("ctrl S");
         var keyboardManager = mock(KeyboardManager.class);
         var shortcut = new Shortcut(keyStroke, keyboardManager);
-        
-        var actionConfigs = List.of(
-            new ActionConfig("actions.ActionsManagerTest$TestableUpdatingAction", "Save", 
-                           Optional.empty(), Optional.empty(), Optional.of(shortcut))
-        );
-        
+
+        var actionConfigs =
+                List.of(
+                        new ActionConfig(
+                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "Save",
+                                Optional.empty(),
+                                Optional.empty(),
+                                Optional.of(shortcut)));
+
         doReturn(actionConfigs).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
-        
+
         actionsManager.initialize();
 
         // When
@@ -176,7 +199,7 @@ class ActionsManagerTest {
     void shouldReturnNullForNonExistentActions() throws Exception {
         // Given
         doReturn(List.of()).when(actionsFileParser).parseActionsFromClasspath("/actions.xml");
-        
+
         actionsManager.initialize();
 
         // When

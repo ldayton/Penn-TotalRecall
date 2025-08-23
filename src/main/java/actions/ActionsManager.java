@@ -3,7 +3,6 @@ package actions;
 import actions.ActionsFileParser.ActionConfig;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,11 +19,11 @@ import org.slf4j.LoggerFactory;
 import shortcuts.Shortcut;
 
 /**
- * Manages action configuration loading from actions.xml and provides the same interface
- * as the old XActionManager but using the new ActionsFileParser.
- * 
- * <p>This class bridges the new parser with the existing behavior system, allowing
- * for a gradual migration from the old XActionManager to this new system.
+ * Manages action configuration loading from actions.xml and provides the same interface as the old
+ * XActionManager but using the new ActionsFileParser.
+ *
+ * <p>This class bridges the new parser with the existing behavior system, allowing for a gradual
+ * migration from the old XActionManager to this new system.
  */
 @Singleton
 public class ActionsManager {
@@ -48,13 +47,13 @@ public class ActionsManager {
         try {
             // Load actions.xml from classpath (same as old system)
             var actionConfigs = actionsFileParser.parseActionsFromClasspath("/actions.xml");
-            
+
             // Store action configs by ID for lookup
             for (var config : actionConfigs) {
                 var id = makeId(config.className(), config.enumValue().orElse(null));
                 this.actionConfigs.put(id, config);
             }
-            
+
             logger.info("Loaded {} action configurations from actions.xml", actionConfigs.size());
         } catch (ActionsFileParser.ActionParseException e) {
             logger.error("Failed to initialize ActionsManager", e);
@@ -64,7 +63,7 @@ public class ActionsManager {
 
     /**
      * Looks up a KeyStroke for an action with an enum value.
-     * 
+     *
      * @param action The action to look up
      * @param e The enum value (can be null)
      * @return The KeyStroke for the action, or null if not found
@@ -76,7 +75,7 @@ public class ActionsManager {
 
     /**
      * Looks up a KeyStroke by action ID.
-     * 
+     *
      * @param id The action ID
      * @return The KeyStroke for the action, or null if not found
      */
@@ -90,7 +89,7 @@ public class ActionsManager {
 
     /**
      * Registers an input map for an action.
-     * 
+     *
      * @param action The action to register
      * @param e The enum value (can be null)
      * @param mapKey The key for the input map
@@ -98,13 +97,12 @@ public class ActionsManager {
      */
     public void registerInputMap(Action action, Enum<?> e, String mapKey, InputMap map) {
         var id = makeId(action.getClass().getName(), e != null ? e.name() : null);
-        inputMapMap.computeIfAbsent(id, k -> new ArrayList<>())
-                  .add(new InputMapPair(mapKey, map));
+        inputMapMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new InputMapPair(mapKey, map));
     }
 
     /**
      * Registers an action for updates.
-     * 
+     *
      * @param action The action to register
      * @param e The enum value (can be null)
      */
@@ -113,12 +111,11 @@ public class ActionsManager {
         listenersMap.computeIfAbsent(id, k -> new HashSet<>()).add(action);
         update(id, null);
     }
-    
+
     /**
-     * Registers an UpdatingAction using its stored enum value.
-     * This method is called during initialization to register all actions
-     * after they've been created by DI.
-     * 
+     * Registers an UpdatingAction using its stored enum value. This method is called during
+     * initialization to register all actions after they've been created by DI.
+     *
      * @param action The UpdatingAction to register
      */
     public void registerUpdatingAction(behaviors.UpdatingAction action) {
@@ -127,24 +124,24 @@ public class ActionsManager {
 
     /**
      * Updates an action by ID, applying the current configuration.
-     * 
+     *
      * @param id The action ID
      * @param oldShortcut The old shortcut (for cleanup)
      */
     public void update(String id, Shortcut oldShortcut) {
         var actions = listenersMap.get(id);
         var config = actionConfigs.get(id);
-        
+
         if (config != null && actions != null) {
             var stroke = config.shortcut().map(s -> s.stroke).orElse(null);
-            
+
             // Update all registered actions
             for (var action : actions) {
                 action.putValue(Action.NAME, config.name());
                 action.putValue(Action.SHORT_DESCRIPTION, config.tooltip().orElse(null));
                 action.putValue(Action.ACCELERATOR_KEY, stroke);
             }
-            
+
             // Update input maps
             var inputMapPairs = inputMapMap.get(id);
             if (inputMapPairs != null) {
@@ -152,7 +149,7 @@ public class ActionsManager {
                     var inputMap = pair.inputMap();
                     var oldStroke = oldShortcut != null ? oldShortcut.stroke : null;
                     var inputMapKey = pair.mapKey();
-                    
+
                     if (oldStroke != null) {
                         inputMap.remove(oldStroke);
                     }
@@ -166,7 +163,7 @@ public class ActionsManager {
 
     /**
      * Gets an action configuration by ID.
-     * 
+     *
      * @param id The action ID
      * @return The action configuration, or empty if not found
      */
@@ -176,7 +173,7 @@ public class ActionsManager {
 
     /**
      * Gets all action configurations.
-     * 
+     *
      * @return List of all action configurations
      */
     public List<ActionConfig> getAllActionConfigs() {
@@ -185,7 +182,7 @@ public class ActionsManager {
 
     /**
      * Creates an action ID from class name and enum value.
-     * 
+     *
      * @param className The class name
      * @param enumValue The enum value (can be null)
      * @return The action ID
@@ -194,8 +191,6 @@ public class ActionsManager {
         return enumValue != null ? className + "-" + enumValue : className;
     }
 
-    /**
-     * Pair class for input map registration.
-     */
+    /** Pair class for input map registration. */
     private record InputMapPair(String mapKey, InputMap inputMap) {}
 }

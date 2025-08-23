@@ -1,10 +1,10 @@
 package components;
 
+import actions.ActionsManagerBridge;
 import behaviors.multiact.AnnotateAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
 import behaviors.singleact.PlayPauseAction;
 import components.waveform.WaveformDisplay;
-import actions.ActionsManagerBridge;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -55,7 +55,8 @@ public class MySplitPane extends JSplitPane {
         String DELETE_ACTION_KEY = "delete action";
         deleteActionMap.put(ActionsManagerBridge.lookup(deleteAction, null), DELETE_ACTION_KEY);
         getActionMap().put(DELETE_ACTION_KEY, deleteAction);
-        ActionsManagerBridge.registerInputMap(deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
+        ActionsManagerBridge.registerInputMap(
+                deleteAction, null, DELETE_ACTION_KEY, deleteActionMap);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");

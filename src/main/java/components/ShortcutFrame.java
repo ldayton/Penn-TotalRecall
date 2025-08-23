@@ -4,12 +4,14 @@ import actions.ActionsManagerBridge;
 import shortcuts.ShortcutManager;
 
 /**
- * ShortcutFrame that uses the new ActionsManager system instead of the old XActionParser.
- * This provides the same functionality but works with ActionConfig objects from the new system.
+ * ShortcutFrame that uses the new ActionsManager system instead of the old XActionParser. This
+ * provides the same functionality but works with ActionConfig objects from the new system.
  */
 public class ShortcutFrame extends ShortcutManager {
 
-    private ShortcutFrame(java.util.List<actions.ActionsFileParser.ActionConfig> actionConfigs, shortcuts.XActionListener listener) {
+    private ShortcutFrame(
+            java.util.List<actions.ActionsFileParser.ActionConfig> actionConfigs,
+            shortcuts.XActionListener listener) {
         super(actionConfigs, listener);
     }
 

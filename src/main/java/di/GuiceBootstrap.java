@@ -2,24 +2,19 @@ package di;
 
 import actions.ActionsManager;
 import actions.ActionsManagerBridge;
-import behaviors.singleact.ExitAction;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import components.MyFocusTraversalPolicy;
 import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
-import components.ShortcutFrame;
 import components.WindowManager;
-import env.AppConfig;
 import env.LookAndFeelManager;
-import env.Platform;
 import env.UpdateManager;
-import env.UserManager;
 import jakarta.inject.Inject;
+import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.swing.UIManager;
 
 /**
  * Guice-based application bootstrap.
@@ -65,28 +60,28 @@ public class GuiceBootstrap {
         // Initialize Look and Feel BEFORE creating any Swing components
         // This is critical for Mac menu bar to work properly
         initializeLookAndFeelBeforeDI();
-        
+
         // Set FlatLaf BEFORE creating any Swing components via DI
         setFlatLafBeforeDI();
 
         globalInjector = Guice.createInjector(new AppModule());
-        
+
         // Initialize ActionsManagerBridge immediately after injector creation
         // This must happen before any UpdatingAction classes are instantiated
         var actionsManager = globalInjector.getInstance(ActionsManager.class);
         ActionsManagerBridge.initialize(actionsManager);
-        
+
         // Initialize action configurations immediately after ActionsManagerBridge setup
         // This ensures action names and properties are available when components are created
         actionsManager.initialize();
-        
+
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
-        
+
         // Register all UpdatingAction instances with ActionsManagerBridge
         // This must happen after all components are created but before any UI updates
         MyMenu.registerAllActionsWithBridge();
-        
+
         return bootstrap;
     }
 
@@ -109,10 +104,10 @@ public class GuiceBootstrap {
             System.setProperty("apple.awt.application.name", "Penn TotalRecall");
         }
     }
-    
+
     /**
-     * Sets FlatLaf before any Swing components are created via DI.
-     * This ensures all components use FlatLaf from the start.
+     * Sets FlatLaf before any Swing components are created via DI. This ensures all components use
+     * FlatLaf from the start.
      */
     private static void setFlatLafBeforeDI() {
         try {
