@@ -52,10 +52,10 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertEquals("behaviors.singleact.DoneAction", action.getClassName());
-        assertEquals("Mark Complete", action.getName());
-        assertTrue(action.getTooltip().isEmpty());
-        assertTrue(action.getEnumValue().isEmpty());
+        assertEquals("behaviors.singleact.DoneAction", action.className());
+        assertEquals("Mark Complete", action.name());
+        assertTrue(action.tooltip().isEmpty());
+        assertTrue(action.enumValue().isEmpty());
     }
 
     @Test
@@ -80,10 +80,10 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertEquals("behaviors.multiact.OpenAudioLocationAction", action.getClassName());
-        assertEquals("Add Audio Files...", action.getName());
-        assertEquals("Select File or Folder", action.getTooltip().orElse(null));
-        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.getEnumValue().orElse(null));
+        assertEquals("behaviors.multiact.OpenAudioLocationAction", action.className());
+        assertEquals("Add Audio Files...", action.name());
+        assertEquals("Select File or Folder", action.tooltip().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.enumValue().orElse(null));
     }
 
     @Test
@@ -104,9 +104,9 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(3, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
-        assertEquals("behaviors.singleact.PlayPauseAction", actions.get(1).getClassName());
-        assertEquals("behaviors.singleact.StopAction", actions.get(2).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
+        assertEquals("behaviors.singleact.PlayPauseAction", actions.get(1).className());
+        assertEquals("behaviors.singleact.StopAction", actions.get(2).className());
     }
 
     @Test
@@ -132,7 +132,7 @@ class ActionsFileParserTest {
 
         // Then - only the action without OS restriction should be included
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -154,7 +154,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.multiact.OpenAudioLocationAction", actions.get(0).getClassName());
+        assertEquals("behaviors.multiact.OpenAudioLocationAction", actions.get(0).className());
     }
 
     @Test
@@ -192,7 +192,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -243,7 +243,7 @@ class ActionsFileParserTest {
                         .anyMatch(
                                 action ->
                                         "behaviors.singleact.DoneAction"
-                                                .equals(action.getClassName()));
+                                                .equals(action.className()));
         assertTrue(hasDoneAction);
     }
 
@@ -397,7 +397,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -419,7 +419,7 @@ class ActionsFileParserTest {
 
         // Then
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -439,7 +439,7 @@ class ActionsFileParserTest {
 
         // Then - should be included regardless of platform
         assertEquals(1, actions.size());
-        assertEquals("behaviors.singleact.DoneAction", actions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", actions.get(0).className());
     }
 
     @Test
@@ -462,8 +462,8 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertTrue(action.getTooltip().isEmpty());
-        assertTrue(action.getEnumValue().isEmpty());
+        assertTrue(action.tooltip().isEmpty());
+        assertTrue(action.enumValue().isEmpty());
     }
 
     @Test
@@ -486,8 +486,8 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertEquals("Select File or Folder", action.getTooltip().orElse(null));
-        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.getEnumValue().orElse(null));
+        assertEquals("Select File or Folder", action.tooltip().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.enumValue().orElse(null));
     }
 
     @Test
@@ -577,7 +577,7 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertTrue(action.getShortcut().isPresent());
+        assertTrue(action.shortcut().isPresent());
     }
 
     @Test
@@ -604,7 +604,7 @@ class ActionsFileParserTest {
         // Then
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
-        assertTrue(action.getShortcut().isPresent());
+        assertTrue(action.shortcut().isPresent());
     }
 
     @Test
@@ -664,19 +664,19 @@ class ActionsFileParserTest {
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
         List<ActionConfig> macActions = parseFromString(xml);
         assertEquals(1, macActions.size());
-        assertEquals("behaviors.singleact.DoneAction", macActions.get(0).getClassName());
+        assertEquals("behaviors.singleact.DoneAction", macActions.get(0).className());
 
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
         List<ActionConfig> windowsActions = parseFromString(xml);
         assertEquals(1, windowsActions.size());
-        assertEquals("behaviors.singleact.PlayPauseAction", windowsActions.get(0).getClassName());
+        assertEquals("behaviors.singleact.PlayPauseAction", windowsActions.get(0).className());
 
         // Test Linux
         when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
         List<ActionConfig> linuxActions = parseFromString(xml);
         assertEquals(1, linuxActions.size());
-        assertEquals("behaviors.singleact.StopAction", linuxActions.get(0).getClassName());
+        assertEquals("behaviors.singleact.StopAction", linuxActions.get(0).className());
     }
 
     @Test

@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.swing.KeyStroke;
-import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ import shortcuts.Shortcut;
  * The @JsonProperty annotations are required alongside @JacksonXmlProperty annotations to properly
  * map XML elements and attributes to Java fields.
  */
-public class ActionsFileParser {
+public final class ActionsFileParser {
     private static final Logger logger = LoggerFactory.getLogger(ActionsFileParser.class);
 
     private final XmlMapper xmlMapper;
@@ -52,7 +51,7 @@ public class ActionsFileParser {
         logger.debug("Parsing actions from: {}", url);
 
         try (InputStream inputStream = url.openStream()) {
-            ActionsDocument document = xmlMapper.readValue(inputStream, ActionsDocument.class);
+            var document = xmlMapper.readValue(inputStream, ActionsDocument.class);
             return document.toActionConfigs(platform, keyboardManager);
         } catch (IOException e) {
             throw new ActionParseException("Failed to parse actions.xml from " + url, e);
@@ -62,7 +61,7 @@ public class ActionsFileParser {
     /** Parses actions.xml from the classpath. */
     public List<ActionConfig> parseActionsFromClasspath(@NonNull String resourcePath)
             throws ActionParseException {
-        URL resource = getClass().getResource(resourcePath);
+        var resource = getClass().getResource(resourcePath);
         if (resource == null) {
             throw new ActionParseException("Resource not found: " + resourcePath);
         }
@@ -70,8 +69,8 @@ public class ActionsFileParser {
     }
 
     /** Creates a properly configured XmlMapper following Jackson best practices. */
-    private XmlMapper createConfiguredMapper() {
-        XmlMapper mapper = new XmlMapper();
+    private static XmlMapper createConfiguredMapper() {
+        var mapper = new XmlMapper();
 
         // Configure for strict parsing - fail fast on any issues
         mapper.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_COMMENTS, true);
@@ -104,9 +103,9 @@ public class ActionsFileParser {
 
         public List<ActionConfig> toActionConfigs(
                 Platform platform, KeyboardManager keyboardManager) throws ActionParseException {
-            List<ActionConfig> result = new ArrayList<>();
-            for (ActionElement element : actions) {
-                Optional<ActionConfig> config = element.toActionConfig(platform, keyboardManager);
+            var result = new ArrayList<ActionConfig>();
+            for (var element : actions) {
+                var config = element.toActionConfig(platform, keyboardManager);
                 if (config.isPresent()) {
                     result.add(config.get());
                 }
@@ -165,7 +164,7 @@ public class ActionsFileParser {
                 Platform platform, KeyboardManager keyboardManager) throws ActionParseException {
             try {
                 // Check OS compatibility first
-                Set<Platform.PlatformType> compatiblePlatforms = parseCompatiblePlatforms(os);
+                var compatiblePlatforms = parseCompatiblePlatforms(os);
                 if (!compatiblePlatforms.isEmpty()
                         && !compatiblePlatforms.contains(platform.detect())) {
                     logger.debug("Skipping action {} - not compatible with current OS", className);
@@ -173,7 +172,7 @@ public class ActionsFileParser {
                 }
 
                 // Parse shortcut if present
-                Optional<Shortcut> parsedShortcut = parseShortcut(keyboardManager);
+                var parsedShortcut = parseShortcut(keyboardManager);
 
                 // ActionConfig constructor will validate required fields - let exceptions bubble up
                 return Optional.of(
@@ -190,26 +189,29 @@ public class ActionsFileParser {
                 return Optional.empty();
             }
 
-            List<String> maskKeyNames = new ArrayList<>();
-            List<String> nonMaskKeyNames = new ArrayList<>();
+            var maskKeyNames =
+                    shortcut.masks().stream()
+                            .map(KeyElement::keyname)
+                            .peek(
+                                    keyname -> {
+                                        if (keyname == null) {
+                                            throw new IllegalArgumentException(
+                                                    "Shortcut mask keyname cannot be null");
+                                        }
+                                    })
+                            .toList();
 
-            if (shortcut.masks != null) {
-                for (KeyElement mask : shortcut.masks) {
-                    if (mask.keyname == null) {
-                        throw new IllegalArgumentException("Shortcut mask keyname cannot be null");
-                    }
-                    maskKeyNames.add(mask.keyname);
-                }
-            }
-
-            if (shortcut.keys != null) {
-                for (KeyElement key : shortcut.keys) {
-                    if (key.keyname == null) {
-                        throw new IllegalArgumentException("Shortcut key keyname cannot be null");
-                    }
-                    nonMaskKeyNames.add(key.keyname);
-                }
-            }
+            var nonMaskKeyNames =
+                    shortcut.keys().stream()
+                            .map(KeyElement::keyname)
+                            .peek(
+                                    keyname -> {
+                                        if (keyname == null) {
+                                            throw new IllegalArgumentException(
+                                                    "Shortcut key keyname cannot be null");
+                                        }
+                                    })
+                            .toList();
 
             // Fail fast if shortcut has no keys
             if (nonMaskKeyNames.isEmpty()) {
@@ -228,7 +230,7 @@ public class ActionsFileParser {
                 List<String> maskKeyNames,
                 List<String> nonMaskKeyNames,
                 KeyboardManager keyboardManager) {
-            String internalShortcutForm =
+            var internalShortcutForm =
                     Stream.concat(
                                     maskKeyNames.stream()
                                             .map(keyboardManager::xmlKeynameToInternalForm),
@@ -236,7 +238,7 @@ public class ActionsFileParser {
                                             .map(keyboardManager::xmlKeynameToInternalForm))
                             .collect(joining(" "));
 
-            KeyStroke stroke = KeyStroke.getKeyStroke(internalShortcutForm);
+            var stroke = KeyStroke.getKeyStroke(internalShortcutForm);
             if (stroke == null) {
                 throw new IllegalArgumentException(
                         "Cannot parse keystroke: " + internalShortcutForm);
@@ -249,17 +251,21 @@ public class ActionsFileParser {
                 return Set.of(); // Empty set means compatible with all platforms
             }
 
-            Set<Platform.PlatformType> platforms = EnumSet.noneOf(Platform.PlatformType.class);
-            String[] osNames = osSpec.split(",");
+            var platforms = EnumSet.noneOf(Platform.PlatformType.class);
+            var osNames = osSpec.split(",");
 
-            for (String osName : osNames) {
-                String trimmed = osName.trim();
-                switch (trimmed) {
-                    case "Mac OS X" -> platforms.add(Platform.PlatformType.MACOS);
-                    case "Windows" -> platforms.add(Platform.PlatformType.WINDOWS);
-                    case "Linux" -> platforms.add(Platform.PlatformType.LINUX);
-                    default -> throw new IllegalArgumentException("Unknown OS name: " + trimmed);
-                }
+            for (var osName : osNames) {
+                var trimmed = osName.trim();
+                var platformType =
+                        switch (trimmed) {
+                            case "Mac OS X" -> Platform.PlatformType.MACOS;
+                            case "Windows" -> Platform.PlatformType.WINDOWS;
+                            case "Linux" -> Platform.PlatformType.LINUX;
+                            default ->
+                                    throw new IllegalArgumentException(
+                                            "Unknown OS name: " + trimmed);
+                        };
+                platforms.add(platformType);
             }
 
             return platforms;
@@ -287,18 +293,26 @@ public class ActionsFileParser {
             this.keys = keys != null ? new ArrayList<>(keys) : new ArrayList<>();
 
             // Validate that all key elements have non-null keynames
-            for (KeyElement mask : this.masks) {
-                if (mask.keyname == null) {
+            for (var mask : this.masks) {
+                if (mask.keyname() == null) {
                     throw new IllegalArgumentException(
                             "ShortcutElement mask keyname cannot be null");
                 }
             }
-            for (KeyElement key : this.keys) {
-                if (key.keyname == null) {
+            for (var key : this.keys) {
+                if (key.keyname() == null) {
                     throw new IllegalArgumentException(
                             "ShortcutElement key keyname cannot be null");
                 }
             }
+        }
+
+        public List<KeyElement> masks() {
+            return masks;
+        }
+
+        public List<KeyElement> keys() {
+            return keys;
         }
     }
 
@@ -318,19 +332,22 @@ public class ActionsFileParser {
             }
             this.keyname = keyname;
         }
+
+        public String keyname() {
+            return keyname;
+        }
     }
 
     /**
      * Immutable configuration for a single action. Guarantees className and name are never null or
      * empty.
      */
-    @Getter
-    public static final class ActionConfig {
-        private final String className;
-        private final String name;
-        private final Optional<String> tooltip;
-        private final Optional<String> enumValue;
-        private final Optional<Shortcut> shortcut;
+    public record ActionConfig(
+            String className,
+            String name,
+            Optional<String> tooltip,
+            Optional<String> enumValue,
+            Optional<Shortcut> shortcut) {
 
         public ActionConfig(
                 String className,
@@ -338,12 +355,12 @@ public class ActionsFileParser {
                 String tooltip,
                 String enumValue,
                 Optional<Shortcut> shortcut) {
-            this.className = requireValidString(className, "className");
-            this.name = requireValidString(name, "name");
-            this.tooltip = Optional.ofNullable(tooltip).map(String::trim).filter(s -> !s.isEmpty());
-            this.enumValue =
-                    Optional.ofNullable(enumValue).map(String::trim).filter(s -> !s.isEmpty());
-            this.shortcut = shortcut;
+            this(
+                    requireValidString(className, "className"),
+                    requireValidString(name, "name"),
+                    Optional.ofNullable(tooltip).map(String::trim).filter(s -> !s.isEmpty()),
+                    Optional.ofNullable(enumValue).map(String::trim).filter(s -> !s.isEmpty()),
+                    shortcut);
         }
 
         private static String requireValidString(String value, String fieldName) {
@@ -354,28 +371,10 @@ public class ActionsFileParser {
                 default -> value;
             };
         }
-
-        @Override
-        public String toString() {
-            return "ActionConfig{"
-                    + "className='"
-                    + className
-                    + '\''
-                    + ", name='"
-                    + name
-                    + '\''
-                    + ", tooltip="
-                    + tooltip
-                    + ", enumValue="
-                    + enumValue
-                    + ", shortcut="
-                    + shortcut
-                    + '}';
-        }
     }
 
     /** Exception thrown when action parsing fails. */
-    public static class ActionParseException extends Exception {
+    public static final class ActionParseException extends Exception {
         public ActionParseException(String message) {
             super(message);
         }
