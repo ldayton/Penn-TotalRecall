@@ -3,9 +3,10 @@ package control;
 import audio.AudioEvent;
 import components.MyMenu;
 import components.MySplitPane;
+import di.GuiceBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /** Keeps display and actions up to date with audio playback. */
 public class MyPrecisionListener implements AudioEvent.Listener {
@@ -66,7 +67,11 @@ public class MyPrecisionListener implements AudioEvent.Listener {
             case ERROR:
                 CurAudio.setAudioProgressAndUpdateActions(0);
                 String error = "An error ocurred during audio playback.\n" + event.errorMessage();
-                GiveMessage.errorMessage(error);
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError(error);
+                }
                 break;
             default:
                 logger.error("unhandled AudioEvent: " + event.type());

@@ -24,7 +24,7 @@ import java.util.Stack;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 import util.OSPath;
 
 /** Static-only class that stores the eseential state of the program. */
@@ -81,13 +81,25 @@ public class CurAudio {
                 success = true;
             } catch (FileNotFoundException e) {
                 logger.error("Audio file not found: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Audio file not found!");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError("Audio file not found!");
+                }
             } catch (UnsupportedAudioFileException e) {
                 logger.error("Unsupported audio format: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Unsupported audio format!\n" + e.getMessage());
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError("Unsupported audio format!\n" + e.getMessage());
+                }
             } catch (IOException e) {
                 logger.error("Error opening audio file: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Error opening audio file!");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError("Error opening audio file!");
+                }
             }
             if (!success) {
                 switchFile(null);
@@ -128,10 +140,14 @@ public class CurAudio {
                 pp = new AudioPlayer(fmodCore);
             } catch (Throwable e1) {
                 logger.error("Cannot load audio system", e1);
-                GiveMessage.errorMessage(
-                        "Cannot load audio system.\nYou may need to reinstall "
-                                + Constants.programName
-                                + ".");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError(
+                            "Cannot load audio system.\nYou may need to reinstall "
+                                    + Constants.programName
+                                    + ".");
+                }
                 reset();
             }
             precisionListener = new MyPrecisionListener();
@@ -144,7 +160,11 @@ public class CurAudio {
                 success = true;
             } catch (FileNotFoundException e) {
                 logger.error("AudioPlayer: Audio file not found: " + file.getAbsolutePath(), e);
-                GiveMessage.errorMessage("Audio file not found!");
+                DialogService dialogService =
+                        GuiceBootstrap.getInjectedInstance(DialogService.class);
+                if (dialogService != null) {
+                    dialogService.showError("Audio file not found!");
+                }
             }
             if (!success) {
                 switchFile(null);
