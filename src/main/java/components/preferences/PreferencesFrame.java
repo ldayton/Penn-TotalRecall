@@ -1,6 +1,7 @@
 package components.preferences;
 
 import components.MyFrame;
+import di.GuiceBootstrap;
 import env.KeyboardManager;
 import info.GUIConstants;
 import info.UserPrefs;
@@ -28,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 import util.GUIUtils;
+import util.WindowService;
 
 /**
  * A <code>JFrame</code> that will contain preferences choosers in a scrollable vertical column.
@@ -109,7 +111,11 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                 Math.max(
                         (int) prefScrollPane.getPreferredSize().getWidth(),
                         buttonPanelPrefferedSize);
-        int frameHeight = (int) ((2.0 / 3.0) * MyFrame.getInstance().getSize().getHeight());
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        int frameHeight = 600; // Default fallback
+        if (windowService != null) {
+            frameHeight = (int) ((2.0 / 3.0) * windowService.getSize().getHeight());
+        }
         setSize(frameWidth + 40, frameHeight);
 
         // let escape button be used to request preferences window closed

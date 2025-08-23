@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
 import util.OSPath;
+import util.WindowService;
 
 /** Static-only class that stores the eseential state of the program. */
 public class CurAudio {
@@ -108,8 +109,11 @@ public class CurAudio {
             }
 
             // change frame title to display current file info
-            MyFrame.getInstance()
-                    .setTitle(GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
+            WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+            if (windowService != null) {
+                windowService.setTitle(
+                        GUIConstants.defaultFrameTitle + " - " + curAudioFile.getPath());
+            }
 
             chunkSize =
                     components.waveform.WaveformBuffer.CHUNK_SIZE_SECONDS
@@ -265,7 +269,10 @@ public class CurAudio {
 
         AudioFileDisplay.getInstance().repaint();
         AnnotationDisplay.getInstance().repaint();
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     public static long popLastPlayPos() {

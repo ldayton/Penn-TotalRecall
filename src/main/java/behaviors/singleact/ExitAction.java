@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
+import util.WindowService;
 
 /** Exits the program in response to user request. */
 public class ExitAction extends IdentifiedSingleAction {
@@ -81,16 +82,19 @@ public class ExitAction extends IdentifiedSingleAction {
             logger.warn("Error stopping audio during application exit", e);
         }
 
-        Rectangle bounds = MyFrame.getInstance().getBounds();
-        UserPrefs.prefs.putInt(UserPrefs.windowWidth, (int) bounds.getWidth());
-        UserPrefs.prefs.putInt(UserPrefs.windowHeight, (int) bounds.getHeight());
-        UserPrefs.prefs.putInt(UserPrefs.windowXLocation, (int) bounds.getX());
-        UserPrefs.prefs.putInt(UserPrefs.windowYLocation, (int) bounds.getY());
-        UserPrefs.prefs.putInt(
-                UserPrefs.dividerLocation, MySplitPane.getInstance().getDividerLocation());
-        UserPrefs.prefs.putBoolean(
-                UserPrefs.windowMaximized,
-                MyFrame.getInstance().getExtendedState() == JFrame.MAXIMIZED_BOTH);
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            Rectangle bounds = windowService.getBounds();
+            UserPrefs.prefs.putInt(UserPrefs.windowWidth, (int) bounds.getWidth());
+            UserPrefs.prefs.putInt(UserPrefs.windowHeight, (int) bounds.getHeight());
+            UserPrefs.prefs.putInt(UserPrefs.windowXLocation, (int) bounds.getX());
+            UserPrefs.prefs.putInt(UserPrefs.windowYLocation, (int) bounds.getY());
+            UserPrefs.prefs.putInt(
+                    UserPrefs.dividerLocation, MySplitPane.getInstance().getDividerLocation());
+            UserPrefs.prefs.putBoolean(
+                    UserPrefs.windowMaximized,
+                    windowService.getExtendedState() == JFrame.MAXIMIZED_BOTH);
+        }
 
         System.exit(0);
     }

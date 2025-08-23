@@ -1,6 +1,6 @@
 package util;
 
-import components.MyFrame;
+import di.GuiceBootstrap;
 import java.awt.Point;
 import javax.swing.JFrame;
 
@@ -15,27 +15,32 @@ public class GUIUtils {
      *     PreferencesFrame</code>
      */
     public static Point chooseLocation(JFrame frame) {
-        final Point p = MyFrame.getInstance().getLocationOnScreen();
-        final int mfX = (int) p.getX();
-        final int mfY = (int) p.getY();
-        final int mfWidth = MyFrame.getInstance().getWidth();
-        final int mfHeight = MyFrame.getInstance().getHeight();
-        final int prefWidth = (int) frame.getSize().getWidth();
-        final int prefHeight = (int) frame.getSize().getHeight();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            final Point p = windowService.getLocationOnScreen();
+            final int mfX = (int) p.getX();
+            final int mfY = (int) p.getY();
+            final int mfWidth = windowService.getWidth();
+            final int mfHeight = windowService.getHeight();
+            final int prefWidth = (int) frame.getSize().getWidth();
+            final int prefHeight = (int) frame.getSize().getHeight();
 
-        int prefX = 0;
-        int prefY = 0;
+            int prefX = 0;
+            int prefY = 0;
 
-        if (mfWidth < prefWidth) {
-            prefX = mfX;
-        } else {
-            prefX = mfX + (mfWidth - prefWidth) / 2;
+            if (mfWidth < prefWidth) {
+                prefX = mfX;
+            } else {
+                prefX = mfX + (mfWidth - prefWidth) / 2;
+            }
+            if (mfHeight < prefHeight) {
+                prefY = mfY;
+            } else {
+                prefY = mfY + (mfHeight - prefHeight) / 2;
+            }
+            return new Point(prefX, prefY);
         }
-        if (mfHeight < prefHeight) {
-            prefY = mfY;
-        } else {
-            prefY = mfY + (mfHeight - prefHeight) / 2;
-        }
-        return new Point(prefX, prefY);
+        // Fallback if DI not available
+        return new Point(0, 0);
     }
 }
