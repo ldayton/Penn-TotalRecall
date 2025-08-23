@@ -25,9 +25,9 @@ import javax.swing.border.TitledBorder;
  * Preferences</code> object, or {@link #isChanged()} will not behave correctly. Inheritors should
  * not consume VK_ESCAPE presses, as this keystroke is used by the <code>PreferencesFrame</code>.
  *
- * <p>All preferences in this program should exclusively use <code>Preferences</code> object in
- * {@link info.UserPrefs#prefs}, a user-specific preferences object. System-wise preferences objects
- * are not used as they require administrator access for persistence in some platforms.
+ * <p>All preferences in this program should exclusively use <code>PreferencesManager</code> object,
+ * a user-specific preferences object. System-wise preferences objects are not used as they require
+ * administrator access for persistence in some platforms.
  *
  * @see PreferencesFrame
  */

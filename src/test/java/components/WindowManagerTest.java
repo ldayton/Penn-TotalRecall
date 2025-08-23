@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import env.PreferencesManager;
-import info.UserPrefs;
+import info.PreferenceKeys;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,13 +38,13 @@ class WindowManagerTest {
         windowManager.saveWindowLayout(mockFrame, mockSplitPane);
 
         // Window closed and reopened - appears in same spot
-        when(mockPrefs.getInt(UserPrefs.windowXLocation, 0)).thenReturn(100);
-        when(mockPrefs.getInt(UserPrefs.windowYLocation, 0)).thenReturn(50);
-        when(mockPrefs.getInt(UserPrefs.windowWidth, UserPrefs.defaultWindowWidth))
+        when(mockPrefs.getInt(PreferenceKeys.WINDOW_X, 0)).thenReturn(100);
+        when(mockPrefs.getInt(PreferenceKeys.WINDOW_Y, 0)).thenReturn(50);
+        when(mockPrefs.getInt(PreferenceKeys.WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_WIDTH))
                 .thenReturn(1024);
-        when(mockPrefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight))
+        when(mockPrefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT))
                 .thenReturn(768);
-        when(mockPrefs.getInt(UserPrefs.dividerLocation, 384)).thenReturn(400);
+        when(mockPrefs.getInt(PreferenceKeys.DIVIDER_LOCATION, 384)).thenReturn(400);
 
         windowManager.restoreWindowLayout(mockFrame, mockSplitPane);
 
@@ -62,8 +62,12 @@ class WindowManagerTest {
         windowManager.restoreWindowLayout(mockFrame, mockSplitPane);
 
         verify(mockFrame)
-                .setBounds(0, 0, UserPrefs.defaultWindowWidth, UserPrefs.defaultWindowHeight);
-        verify(mockSplitPane).setDividerLocation(UserPrefs.defaultWindowHeight / 2);
+                .setBounds(
+                        0,
+                        0,
+                        PreferenceKeys.DEFAULT_WINDOW_WIDTH,
+                        PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
+        verify(mockSplitPane).setDividerLocation(PreferenceKeys.DEFAULT_WINDOW_HEIGHT / 2);
     }
 
     @Test

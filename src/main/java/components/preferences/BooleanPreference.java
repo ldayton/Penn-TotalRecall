@@ -34,12 +34,12 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
      *
      * @param prefTitle The title of the preference, will be displayed graphically for the user
      * @param prefKey The key for the <code>java.util.prefs.Preferences object</code>, should be
-     *     stored in <code>info.UserPrefs</code>
+     *     stored in <code>info.PreferenceKeys</code>
      * @param truePrefName The name of the option corresponding to <code>true</code>, will be
      *     displayed graphically for the user
      * @param falsePrefName The name of the option corresponding to <code>false</code>, will be
      *     displayed graphically for the user
-     * @param defValue The default value, should be stored in <code>info.UserPrefs</code>
+     * @param defValue The default value, should be stored in <code>info.PreferenceKeys</code>
      */
     protected BooleanPreference(
             String prefTitle,
