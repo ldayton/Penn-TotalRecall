@@ -33,6 +33,7 @@ import env.UpdateManager;
 import env.UserManager;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
+import util.ProgramVersion;
 
 /**
  * Guice module for dependency injection configuration.
@@ -72,6 +73,9 @@ public class AppModule extends AbstractModule {
         bind(AnnotationTable.class).in(Singleton.class);
         bind(AudioFileList.class).in(Singleton.class);
         bind(MyFocusTraversalPolicy.class).in(Singleton.class);
+
+        // Utility services
+        bind(ProgramVersion.class).in(Singleton.class);
     }
 
     @Provides
