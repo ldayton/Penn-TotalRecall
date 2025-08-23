@@ -1,4 +1,4 @@
-package shortcuts;
+package components.shortcuts;
 
 import static java.util.stream.Collectors.joining;
 

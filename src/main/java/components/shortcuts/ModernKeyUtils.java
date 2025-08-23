@@ -1,4 +1,4 @@
-package shortcuts;
+package components.shortcuts;
 
 import javax.swing.KeyStroke;
 import lombok.NonNull;

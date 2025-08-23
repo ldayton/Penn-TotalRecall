@@ -1,6 +1,7 @@
 package actions;
 
 import actions.ActionsFileParser.ActionConfig;
+import components.shortcuts.Shortcut;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import javax.swing.KeyStroke;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shortcuts.Shortcut;
 
 /**
  * Manages action configuration loading from actions.xml and provides the same interface as the old

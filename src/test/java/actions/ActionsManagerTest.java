@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
 import actions.ActionsFileParser.ActionConfig;
+import components.shortcuts.Shortcut;
 import env.KeyboardManager;
 import env.Platform;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import shortcuts.Shortcut;
 
 @ExtendWith(MockitoExtension.class)
 class ActionsManagerTest {

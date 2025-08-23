@@ -1,9 +1,9 @@
 package components;
 
 import actions.ActionsManager;
+import components.shortcuts.ShortcutManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import shortcuts.ShortcutManager;
 
 /**
  * ShortcutFrame that uses the new ActionsManager system instead of the old XActionParser. This
@@ -20,13 +20,13 @@ public class ShortcutFrame extends ShortcutManager {
         this.actionsManager = actionsManager;
     }
 
-    private static shortcuts.ShortcutPreferences.ActionConfigListener createActionConfigListener(
-            ActionsManager actionsManager) {
-        return new shortcuts.ShortcutPreferences.ActionConfigListener() {
+    private static components.shortcuts.ShortcutPreferences.ActionConfigListener
+            createActionConfigListener(ActionsManager actionsManager) {
+        return new components.shortcuts.ShortcutPreferences.ActionConfigListener() {
             @Override
             public void actionConfigUpdated(
                     actions.ActionsFileParser.ActionConfig actionConfig,
-                    shortcuts.Shortcut oldShortcut) {
+                    components.shortcuts.Shortcut oldShortcut) {
                 // Update via ActionsManager using the action config
                 String id =
                         actionConfig.className()
