@@ -1,6 +1,5 @@
 package env;
 
-import di.GuiceBootstrap;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.net.URI;
@@ -33,11 +32,16 @@ public class UpdateManager {
 
     private final AppConfig appConfig;
     private final HttpClient httpClient;
+    private final DialogService dialogService;
 
     @Inject
-    public UpdateManager(@NonNull AppConfig appConfig, @NonNull HttpClient httpClient) {
+    public UpdateManager(
+            @NonNull AppConfig appConfig,
+            @NonNull HttpClient httpClient,
+            @NonNull DialogService dialogService) {
         this.appConfig = appConfig;
         this.httpClient = httpClient;
+        this.dialogService = dialogService;
     }
 
     /**
@@ -127,7 +131,6 @@ public class UpdateManager {
                 """
                         .formatted(newVersion, releasesPageUrl);
 
-        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
         if (dialogService == null) {
             throw new IllegalStateException("DialogService not available via DI");
         }

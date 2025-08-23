@@ -1,7 +1,6 @@
 package components.preferences;
 
 import components.MyFrame;
-import di.GuiceBootstrap;
 import env.KeyboardManager;
 import info.GUIConstants;
 import info.UserPrefs;
@@ -41,6 +40,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
 
     private static PreferencesFrame instance;
     private final KeyboardManager keyboardManager;
+    private final env.LookAndFeelManager lookAndFeelManager;
+    private final WindowService windowService;
 
     private JPanel prefPanel;
     private final JScrollPane prefScrollPane;
@@ -58,16 +59,20 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      * policies on user preferences, as well as information on adding new preference choosers.
      */
     @Inject
-    public PreferencesFrame() {
-        this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+    public PreferencesFrame(
+            KeyboardManager keyboardManager,
+            env.LookAndFeelManager lookAndFeelManager,
+            WindowService windowService) {
+        this.keyboardManager = keyboardManager;
+        this.lookAndFeelManager = lookAndFeelManager;
+        this.windowService = windowService;
+
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
 
-        // Get preferences string from LookAndFeelManager via DI
-        env.LookAndFeelManager lafManager =
-                di.GuiceBootstrap.getInjectedInstance(env.LookAndFeelManager.class);
-        setTitle(lafManager.getPreferencesString());
+        // Get preferences string from LookAndFeelManager
+        setTitle(lookAndFeelManager.getPreferencesString());
 
         // the content pane will have two main areas, one for preference choosers
         // (AbstractPreferenceDisplays), and one for the save/restore defaults buttons
@@ -111,7 +116,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                 Math.max(
                         (int) prefScrollPane.getPreferredSize().getWidth(),
                         buttonPanelPrefferedSize);
-        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
         if (windowService == null) {
             throw new IllegalStateException("WindowService not available via DI");
         }

@@ -1,6 +1,7 @@
 package env;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.net.http.HttpClient;
@@ -9,15 +10,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.DialogService;
 
-@DisplayName("UpdateManager")
+/** Tests for UpdateManager functionality. */
 class UpdateManagerTest {
 
     @Test
-    @DisplayName("Update notification decision logic")
-    void updateNotificationLogic() throws Exception {
+    @DisplayName("Update checking with valid configuration")
+    void updateCheckingWithValidConfig() {
         AppConfig mockConfig = mock(AppConfig.class);
         HttpClient mockClient = mock(HttpClient.class);
+        DialogService mockDialogService = mock(DialogService.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.example.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://example.com");
@@ -29,7 +32,7 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(invocation -> CompletableFuture.completedFuture(newerResponse));
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient);
+        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
 
         // Mock current version to be older
         UpdateManager spyManager = spy(manager);
@@ -46,7 +49,9 @@ class UpdateManagerTest {
     @DisplayName("JSON parsing with various GitHub API responses")
     void jsonParsingEdgeCases() throws Exception {
         AppConfig mockConfig = mock(AppConfig.class);
-        UpdateManager manager = new UpdateManager(mockConfig, mock(HttpClient.class));
+        DialogService mockDialogService = mock(DialogService.class);
+        UpdateManager manager =
+                new UpdateManager(mockConfig, mock(HttpClient.class), mockDialogService);
 
         // Test version comparison logic directly
         // Valid formats
@@ -69,7 +74,9 @@ class UpdateManagerTest {
     @DisplayName("getCurrentVersion with different manifest scenarios")
     void getCurrentVersionScenarios() {
         AppConfig mockConfig = mock(AppConfig.class);
-        UpdateManager manager = new UpdateManager(mockConfig, mock(HttpClient.class));
+        DialogService mockDialogService = mock(DialogService.class);
+        UpdateManager manager =
+                new UpdateManager(mockConfig, mock(HttpClient.class), mockDialogService);
 
         // When called, getCurrentVersion should return either manifest version or "0.0.0"
         String version = manager.getCurrentVersion();
@@ -84,6 +91,7 @@ class UpdateManagerTest {
     void httpErrorScenarios() throws Exception {
         AppConfig mockConfig = mock(AppConfig.class);
         HttpClient mockClient = mock(HttpClient.class);
+        DialogService mockDialogService = mock(DialogService.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.example.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://example.com");
@@ -99,7 +107,7 @@ class UpdateManagerTest {
                             return timeoutFuture;
                         });
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient);
+        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
         assertDoesNotThrow(() -> manager.checkForUpdateOnStartup());
 
         // Test HTTP 404 error
@@ -110,7 +118,7 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(invocation -> CompletableFuture.completedFuture(notFoundResponse));
 
-        UpdateManager manager404 = new UpdateManager(mockConfig, mockClient);
+        UpdateManager manager404 = new UpdateManager(mockConfig, mockClient, mockDialogService);
         assertDoesNotThrow(() -> manager404.checkForUpdateOnStartup());
 
         // Test empty response body
@@ -120,7 +128,7 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(invocation -> CompletableFuture.completedFuture(emptyResponse));
 
-        UpdateManager managerEmpty = new UpdateManager(mockConfig, mockClient);
+        UpdateManager managerEmpty = new UpdateManager(mockConfig, mockClient, mockDialogService);
         assertDoesNotThrow(() -> managerEmpty.checkForUpdateOnStartup());
 
         Thread.sleep(100); // Allow async operations to complete
@@ -131,11 +139,12 @@ class UpdateManagerTest {
     void configurationIntegration() {
         AppConfig mockConfig = mock(AppConfig.class);
         HttpClient mockClient = mock(HttpClient.class);
+        DialogService mockDialogService = mock(DialogService.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.test.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://test.com");
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient);
+        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
 
         assertEquals("https://api.test.com", manager.getReleasesApiUrl());
         assertEquals("https://test.com", manager.getReleasesPageUrl());

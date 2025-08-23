@@ -55,7 +55,7 @@ public class MyMenu extends JMenuBar {
 
     private static PlayPauseAction workaroundAction;
 
-    private static Set<UpdatingAction> allActions;
+    private static Set<UpdatingAction> allActions = new HashSet<>();
 
     private static MyMenu instance;
 
@@ -70,7 +70,6 @@ public class MyMenu extends JMenuBar {
     @Inject
     public MyMenu(env.LookAndFeelManager lookAndFeelManager) {
         this.lookAndFeelManager = lookAndFeelManager;
-        allActions = new HashSet<>();
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();

@@ -40,8 +40,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private final KeyboardManager keyboardManager;
 
     @Inject
-    public WordpoolTextField() {
-        this.keyboardManager = di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+    public WordpoolTextField(KeyboardManager keyboardManager) {
+        this.keyboardManager = keyboardManager;
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 

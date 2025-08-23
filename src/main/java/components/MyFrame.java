@@ -32,19 +32,22 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private final env.LookAndFeelManager lookAndFeelManager;
     private final MySplitPane mySplitPane;
     private final MyGlassPane myGlassPane;
+    private final MyMenu myMenu;
 
     @Inject
     public MyFrame(
             LookAndFeelManager lookAndFeelManager,
             MySplitPane mySplitPane,
-            MyGlassPane myGlassPane) {
+            MyGlassPane myGlassPane,
+            MyMenu myMenu) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
         this.myGlassPane = myGlassPane;
+        this.myMenu = myMenu;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
-        setJMenuBar(MyMenu.getInstance());
+        setJMenuBar(myMenu);
 
         // force handling by  WindowListener below
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
