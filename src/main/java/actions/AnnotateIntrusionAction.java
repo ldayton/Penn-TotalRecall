@@ -8,7 +8,6 @@ import components.wordpool.WordpoolWord;
 import control.AudioState;
 import control.ErrorRequestedEvent;
 import control.FocusRequestedEvent;
-import control.InfoRequestedEvent;
 import control.UIUpdateRequestedEvent;
 import info.Constants;
 import jakarta.inject.Inject;
@@ -93,11 +92,7 @@ public class AnnotateIntrusionAction extends BaseAction {
                 // check for header
                 if (!AnnotationFileParser.headerExists(oFile)) {
                     if (annotatorName == null) {
-                        eventBus.publish(new InfoRequestedEvent("Please enter your name:"));
-                        // Note: In a full event-driven implementation, we'd need to handle this
-                        // asynchronously
-                        // For now, we'll use a simple approach
-                        annotatorName = "Default"; // TODO: Handle name input via events
+                        annotatorName = "Default"; // Use default name for now
                     }
                     AnnotationFileParser.prependHeader(oFile, annotatorName);
                 }
@@ -121,8 +116,7 @@ public class AnnotateIntrusionAction extends BaseAction {
                 if (!oFile.exists()) {
                     if (oFile.createNewFile()) {
                         if (annotatorName == null) {
-                            eventBus.publish(new InfoRequestedEvent("Please enter your name:"));
-                            annotatorName = "Default"; // TODO: Handle name input via events
+                            annotatorName = "Default"; // Use default name for now
                         }
                         if (!AnnotationFileParser.headerExists(oFile)) {
                             AnnotationFileParser.prependHeader(oFile, annotatorName);

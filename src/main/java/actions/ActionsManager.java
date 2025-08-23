@@ -112,17 +112,6 @@ public class ActionsManager {
         update(id, null);
     }
 
-    // TODO: Remove this method - old behaviors system no longer exists
-    // /**
-    //  * Registers an UpdatingAction using its stored enum value. This method is called during
-    //  * initialization to register all actions after they've been created by DI.
-    //  *
-    //  * @param action The UpdatingAction to register
-    //  */
-    // public void registerUpdatingAction(behaviors.UpdatingAction action) {
-    //     registerAction(action, action.getActionEnum());
-    // }
-
     /**
      * Registers a new BaseAction. This method is called during initialization to register all new
      * actions after they've been created by DI.

@@ -56,8 +56,6 @@ public class DoneAction extends BaseAction {
                                         + " condition."));
                 return;
             } else {
-                // TODO: Implement writeSpans functionality if needed
-                // AnnotateAction.writeSpans();
                 if (!tmpFile.renameTo(oFile)) {
                     // Fire error requested event - UI will handle showing the error dialog
                     eventBus.publish(new ErrorRequestedEvent("Operation failed."));

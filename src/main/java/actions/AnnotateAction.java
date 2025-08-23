@@ -5,10 +5,11 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationFileParser;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
+import control.AnnotatorNameProvidedEvent;
+import control.AnnotatorNameRequestedEvent;
 import control.AudioState;
 import control.ErrorRequestedEvent;
 import control.FocusRequestedEvent;
-import control.InfoRequestedEvent;
 import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.EventBus;
 import util.OSPath;
+import util.Subscribe;
 
 /** Commits an annotation with the specified mode. */
 @Singleton
@@ -30,6 +32,8 @@ public class AnnotateAction extends BaseAction {
     private final EventBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private String annotatorName;
+    private String pendingAnnotationText;
+    private File pendingAnnotationFile;
 
     @Inject
     public AnnotateAction(
@@ -38,6 +42,7 @@ public class AnnotateAction extends BaseAction {
         this.audioState = audioState;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
+        eventBus.subscribe(this);
     }
 
     @Override
@@ -93,11 +98,11 @@ public class AnnotateAction extends BaseAction {
                 // check for header
                 if (!AnnotationFileParser.headerExists(oFile)) {
                     if (annotatorName == null) {
-                        eventBus.publish(new InfoRequestedEvent("Please enter your name:"));
-                        // Note: In a full event-driven implementation, we'd need to handle this
-                        // asynchronously
-                        // For now, we'll use a simple approach
-                        annotatorName = "Default"; // TODO: Handle name input via events
+                        // Store pending annotation data and request name
+                        pendingAnnotationText = text;
+                        pendingAnnotationFile = oFile;
+                        eventBus.publish(new AnnotatorNameRequestedEvent("AnnotateAction"));
+                        return;
                     }
                     AnnotationFileParser.prependHeader(oFile, annotatorName);
                 }
@@ -149,6 +154,45 @@ public class AnnotateAction extends BaseAction {
             setEnabled(false);
         } else {
             setEnabled(true);
+        }
+    }
+
+    @Subscribe
+    public void handleAnnotatorNameProvided(AnnotatorNameProvidedEvent event) {
+        if ("AnnotateAction".equals(event.getCallbackActionId()) && pendingAnnotationText != null) {
+            annotatorName = event.getAnnotatorName();
+
+            try {
+                AnnotationFileParser.prependHeader(pendingAnnotationFile, annotatorName);
+
+                // Create annotation
+                double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+                WordpoolWord match = wordpoolDisplay.findMatchingWordpooWord(pendingAnnotationText);
+                if (match == null) {
+                    match = new WordpoolWord(pendingAnnotationText, -1);
+                }
+
+                Annotation annotation = new Annotation(time, match.getNum(), match.getText());
+                AnnotationFileParser.appendAnnotation(annotation, pendingAnnotationFile);
+
+                // Clear the text field
+                wordpoolDisplay.clearText();
+
+                // Update the display
+                eventBus.publish(
+                        new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+
+                // Clear pending data
+                pendingAnnotationText = null;
+                pendingAnnotationFile = null;
+
+            } catch (IOException e) {
+                logger.error(
+                        "Could not write to annotation file: "
+                                + pendingAnnotationFile.getAbsolutePath(),
+                        e);
+                eventBus.publish(new ErrorRequestedEvent("Could not write to annotation file."));
+            }
         }
     }
 }

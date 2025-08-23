@@ -143,20 +143,6 @@ public class AudioFileDisplay extends JScrollPane {
     }
 
     /**
-     * Singleton accessor.
-     *
-     * @return The singleton <code>AudioFileDisplay</code>
-     */
-    public static AudioFileDisplay getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "AudioFileDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
-    }
-
-    /**
      * Switches to the provided <code>File</code>, but only after asking the user for confirmation
      * if the current user's preferences demand such a warning.
      *
