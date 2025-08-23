@@ -1,12 +1,14 @@
 package components.audiofiles;
 
 import actions.ContinueAnnotatingAction;
+import control.AudioFileListEvent;
 import control.AudioState;
 import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import util.EventBus;
 
 /**
  * <code>JPopupMenu</code> that presents user with actions for manipulating the <code>AudioFileList
@@ -19,12 +21,16 @@ public class AudioFilePopupMenu extends JPopupMenu {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
     private final AudioState audioState;
+    private final EventBus eventBus;
 
     @Inject
     public AudioFilePopupMenu(
-            ContinueAnnotatingAction continueAnnotatingAction, AudioState audioState) {
+            ContinueAnnotatingAction continueAnnotatingAction,
+            AudioState audioState,
+            EventBus eventBus) {
         this.continueAnnotatingAction = continueAnnotatingAction;
         this.audioState = audioState;
+        this.eventBus = eventBus;
     }
 
     /**
@@ -56,7 +62,10 @@ public class AudioFilePopupMenu extends JPopupMenu {
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                AudioFileList.getInstance().getModel().removeElementAt(index);
+                                eventBus.publish(
+                                        new AudioFileListEvent(
+                                                AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX,
+                                                index));
                             }
                         });
         del.setText("Remove from List");

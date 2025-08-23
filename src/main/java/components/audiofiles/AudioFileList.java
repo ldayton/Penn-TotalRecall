@@ -1,5 +1,6 @@
 package components.audiofiles;
 
+import control.AudioFileListEvent;
 import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -15,6 +16,8 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import util.EventBus;
+import util.Subscribe;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
 @Singleton
@@ -26,15 +29,18 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     private final AudioFileListCellRenderer render;
     private final AudioFileListMouseAdapter mouseAdapter;
     private final AudioState audioState;
+    private final EventBus eventBus;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
      * selection mode, cell renderer, and model.
      */
     @Inject
-    public AudioFileList(AudioFileListMouseAdapter mouseAdapter, AudioState audioState) {
+    public AudioFileList(
+            AudioFileListMouseAdapter mouseAdapter, AudioState audioState, EventBus eventBus) {
         this.mouseAdapter = mouseAdapter;
         this.audioState = audioState;
+        this.eventBus = eventBus;
         model = new AudioFileListModel();
         setModel(model);
 
@@ -148,6 +154,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                     }
                 });
 
+        // Subscribe to events
+        eventBus.subscribe(this);
+
         // Set the singleton instance after full initialization
         instance = this;
     }
@@ -235,5 +244,24 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                             + " called first.");
         }
         return instance;
+    }
+
+    /** Handles AudioFileListEvent to remove files from the list. */
+    @Subscribe
+    public void handleAudioFileListEvent(AudioFileListEvent event) {
+        if (event.getType() == AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX) {
+            // Check if the index is valid
+            if (event.getIndex() >= 0 && event.getIndex() < model.getSize()) {
+                // Don't remove if it's the currently playing file
+                AudioFile fileToRemove = model.getElementAt(event.getIndex());
+                if (audioState.audioOpen()
+                        && audioState
+                                .getCurrentAudioFileAbsolutePath()
+                                .equals(fileToRemove.getAbsolutePath())) {
+                    return; // Don't remove currently playing file
+                }
+                model.removeElementAt(event.getIndex());
+            }
+        }
     }
 }
