@@ -9,7 +9,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.MyCollection;
+import util.IndexedUniqueList;
 
 /** Custom list model for the <code>WordpoolList</code>. */
 // This class assumes that the ListDataListener (often javax.swing.plaf.basic.BasicListUI$Handler by
@@ -18,14 +18,14 @@ import util.MyCollection;
 public class WordpoolListModel implements ListModel<WordpoolWord> {
     private static final Logger logger = LoggerFactory.getLogger(WordpoolListModel.class);
 
-    private final MyCollection<WordpoolWord> collection;
+    private final IndexedUniqueList<WordpoolWord> collection;
 
     private final HashSet<ListDataListener> listeners;
     private final HashSet<WordpoolWord> hiddenWords;
 
     public WordpoolListModel() {
         super();
-        collection = new MyCollection<WordpoolWord>();
+        collection = new IndexedUniqueList<WordpoolWord>();
         hiddenWords = new HashSet<WordpoolWord>();
         listeners = new HashSet<ListDataListener>();
     }
@@ -120,7 +120,7 @@ public class WordpoolListModel implements ListModel<WordpoolWord> {
                 hiddenWords.add(w);
             }
         }
-        collection.linearRemove(toRemove);
+        collection.removeAll(toRemove);
 
         ListDataEvent e =
                 new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size());

@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import util.MyCollection;
+import util.IndexedUniqueList;
 
 /**
  * A very simple <code>ListModel</code> that guarantees elements remain sorted and without
@@ -23,13 +23,13 @@ import util.MyCollection;
 // will repaint the AudioFileList after ListDataEvents>.
 public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener {
 
-    private final MyCollection<AudioFile> collection;
+    private final IndexedUniqueList<AudioFile> collection;
     private final HashSet<ListDataListener> listeners;
 
     /** Creates a new <code>AudioFileListModel</code>. */
     protected AudioFileListModel() {
         listeners = new HashSet<ListDataListener>();
-        collection = new MyCollection<AudioFile>();
+        collection = new IndexedUniqueList<AudioFile>();
     }
 
     /** {@inheritDoc} */
@@ -54,7 +54,7 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
         if (index < 0 || index >= collection.size()) {
             throw new IllegalArgumentException("index not in file set: " + index);
         }
-        collection.linearRemoveAt(index).removeAllChangeListeners();
+        collection.remove(index).removeAllChangeListeners();
         ListDataEvent e = new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index);
         for (ListDataListener ldl : listeners) {
             ldl.contentsChanged(e);
