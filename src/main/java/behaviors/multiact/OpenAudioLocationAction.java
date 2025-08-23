@@ -1,11 +1,9 @@
 package behaviors.multiact;
 
-import components.MyFrame;
 import components.audiofiles.AudioFileDisplay;
 import di.GuiceBootstrap;
 import info.Constants;
 import info.UserPrefs;
-import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -58,30 +56,29 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
             } else {
                 title = "Open Audio File";
             }
-            FileDialog fd = new FileDialog(MyFrame.getInstance(), title, FileDialog.LOAD);
-            fd.setFilenameFilter(
-                    new FilenameFilter() {
-                        public boolean accept(File dir, String name) {
-                            if (mode == SelectionMode.DIRECTORIES_ONLY) {
-                                return name == null;
-                            } else {
-                                for (String ext : Constants.audioFormatsLowerCase) {
-                                    if (name.toLowerCase().endsWith(ext)) {
-                                        return true;
+            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            if (dialogService != null) {
+                File selectedFile =
+                        dialogService.showFileOpenDialog(
+                                title,
+                                maybeLastPath,
+                                new FilenameFilter() {
+                                    public boolean accept(File dir, String name) {
+                                        if (mode == SelectionMode.DIRECTORIES_ONLY) {
+                                            return name == null;
+                                        } else {
+                                            for (String ext : Constants.audioFormatsLowerCase) {
+                                                if (name.toLowerCase().endsWith(ext)) {
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
                                     }
-                                }
-                                return false;
-                            }
-                        }
-                    });
-            fd.setDirectory(maybeLastPath);
-            fd.setMode(FileDialog.LOAD);
-            fd.setVisible(true);
-
-            String dir = fd.getDirectory();
-            String file = fd.getFile();
-            if (dir != null && file != null) {
-                path = fd.getDirectory() + fd.getFile();
+                                });
+                if (selectedFile != null) {
+                    path = selectedFile.getAbsolutePath();
+                }
             }
             System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
@@ -147,7 +144,7 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
                             }
                         });
 
-                int result = jfc.showOpenDialog(MyFrame.getInstance());
+                int result = jfc.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     path = jfc.getSelectedFile().getPath();
                 }

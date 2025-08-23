@@ -2,7 +2,6 @@ package control;
 
 import audio.AudioPlayer;
 import audio.FmodCore;
-import components.MyFrame;
 import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
