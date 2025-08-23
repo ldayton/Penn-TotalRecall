@@ -1,5 +1,6 @@
 package env;
 
+import di.GuiceBootstrap;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.net.URI;
@@ -14,7 +15,7 @@ import javax.swing.SwingUtilities;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /**
  * Manages application update checking using GitHub Releases API.
@@ -126,7 +127,10 @@ public class UpdateManager {
                 """
                         .formatted(newVersion, releasesPageUrl);
 
-        GiveMessage.infoMessage(message);
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo(message);
+        }
     }
 
     boolean isNewerVersion(@NonNull String current, @NonNull String latest) {

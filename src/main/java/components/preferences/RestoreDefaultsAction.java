@@ -1,10 +1,11 @@
 package components.preferences;
 
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
-import util.GiveMessage;
+import util.DialogService;
 
 /** Restores all preferences to their factory defaults. */
 public class RestoreDefaultsAction extends AbstractAction {
@@ -22,7 +23,10 @@ public class RestoreDefaultsAction extends AbstractAction {
         for (int i = 0; i < allPrefs.size(); i++) {
             allPrefs.get(i).restoreDefault();
         }
-        GiveMessage.infoMessage("All preferences successfully restored to defaults.");
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo("All preferences successfully restored to defaults.");
+        }
 
         // safer than directly using setVisible(false), since this double checks the assumption that
         // all preferences are saved

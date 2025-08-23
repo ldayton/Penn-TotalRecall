@@ -1,8 +1,9 @@
 package behaviors.singleact;
 
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
-import util.GiveMessage;
+import util.DialogService;
 
 /** Displays information about the program to the user */
 public class AboutAction extends IdentifiedSingleAction {
@@ -11,7 +12,10 @@ public class AboutAction extends IdentifiedSingleAction {
 
     /** Performs the action using a dialog. */
     public void actionPerformed(ActionEvent e) {
-        GiveMessage.infoMessage(buildAboutMessage());
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo(buildAboutMessage());
+        }
     }
 
     /**

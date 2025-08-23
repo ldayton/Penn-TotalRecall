@@ -1,7 +1,8 @@
 package behaviors.singleact;
 
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
-import util.GiveMessage;
+import util.DialogService;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
@@ -53,7 +54,10 @@ public class TipsMessageAction extends IdentifiedSingleAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        GiveMessage.infoMessage(makeMessage());
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo(makeMessage());
+        }
     }
 
     @Override

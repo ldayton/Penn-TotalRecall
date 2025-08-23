@@ -1,5 +1,6 @@
 package behaviors.singleact;
 
+import di.GuiceBootstrap;
 import info.Constants;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GiveMessage;
+import util.DialogService;
 
 /** Attempts to bring the user to the program's tutorial website. */
 public class VisitTutorialSiteAction extends IdentifiedSingleAction {
@@ -39,12 +40,15 @@ public class VisitTutorialSiteAction extends IdentifiedSingleAction {
         }
 
         // in case Java 6 classes not available
-        GiveMessage.infoMessage(
-                Constants.tutorialSite
-                        + "\n\n"
-                        + Constants.orgName
-                        + "\n"
-                        + Constants.orgAffiliationName);
+        DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+        if (dialogService != null) {
+            dialogService.showInfo(
+                    Constants.tutorialSite
+                            + "\n\n"
+                            + Constants.orgName
+                            + "\n"
+                            + Constants.orgAffiliationName);
+        }
     }
 
     /** <code>VisitTutorialSiteAction</code> is always enabled. */
