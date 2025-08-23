@@ -8,8 +8,11 @@ import components.MyFrame;
 import components.MyMenu;
 import components.MySplitPane;
 import components.WindowManager;
+import env.AppConfig;
 import env.LookAndFeelManager;
+import env.Platform;
 import env.UpdateManager;
+import env.UserManager;
 import jakarta.inject.Inject;
 
 /**
@@ -52,8 +55,27 @@ public class GuiceBootstrap {
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
     public static GuiceBootstrap create() {
+        // Initialize Look and Feel BEFORE creating any Swing components
+        // This is critical for Mac menu bar to work properly
+        initializeLookAndFeelBeforeDI();
+
         globalInjector = Guice.createInjector(new AppModule());
         return globalInjector.getInstance(GuiceBootstrap.class);
+    }
+
+    /**
+     * Initializes Look and Feel before dependency injection to ensure platform-specific properties
+     * (like Mac menu bar) are set before any Swing components are created.
+     */
+    private static void initializeLookAndFeelBeforeDI() {
+        // Create minimal instances needed for Look and Feel initialization
+        Platform platform = new Platform();
+        UserManager userManager = new UserManager();
+        AppConfig appConfig = new AppConfig(platform, userManager);
+        LookAndFeelManager lookAndFeelManager = new LookAndFeelManager(appConfig, platform);
+
+        // Initialize Look and Feel (this sets Mac menu bar properties)
+        lookAndFeelManager.initialize();
     }
 
     /**
@@ -71,7 +93,7 @@ public class GuiceBootstrap {
 
     /** Initializes and starts the GUI application. */
     public void startApplication() {
-        lookAndFeelManager.initialize();
+        // Look and Feel already initialized before DI creation
         actionsManager.initialize(); // Load action configuration before UI creation
         myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);

@@ -3,6 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotation.MacOS;
+import di.GuiceBootstrap;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.lang.reflect.Field;
@@ -109,6 +110,44 @@ class LookAndFeelManagerMacOSTest {
     @DisplayName("Preferences menu items are hidden on macOS")
     void preferencesMenuItemsHidden() {
         assertFalse(manager.shouldShowPreferencesInMenu());
+    }
+
+    @Test
+    @DisplayName("Mac menu bar system property is set before Swing components are created")
+    void macMenuBarSystemPropertySetBeforeSwingComponents() {
+        // Clear any existing system properties that might interfere
+        System.clearProperty("apple.laf.useScreenMenuBar");
+
+        // Create and initialize the Look and Feel manager
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        manager.initialize();
+
+        // Verify the system property is set correctly
+        String useScreenMenuBar = System.getProperty("apple.laf.useScreenMenuBar");
+        assertEquals(
+                "true",
+                useScreenMenuBar,
+                "apple.laf.useScreenMenuBar should be set to 'true' for Mac menu bar integration");
+    }
+
+    @Test
+    @DisplayName("Mac menu bar system property is set before Guice DI creates Swing components")
+    void macMenuBarSystemPropertySetBeforeGuiceDI() {
+        // Clear any existing system properties that might interfere
+        System.clearProperty("apple.laf.useScreenMenuBar");
+
+        // Simulate the Guice bootstrap process
+        // This should fail because currently the system property is set AFTER Swing components are
+        // created
+        GuiceBootstrap bootstrap = GuiceBootstrap.create();
+
+        // Verify the system property is set correctly BEFORE any Swing components are created
+        String useScreenMenuBar = System.getProperty("apple.laf.useScreenMenuBar");
+        assertEquals(
+                "true",
+                useScreenMenuBar,
+                "apple.laf.useScreenMenuBar should be set to 'true' before Guice creates Swing"
+                        + " components");
     }
 
     private void assumeDesktopSupported() {
