@@ -1,6 +1,7 @@
 package components.wordpool;
 
 import control.FocusRequestedEvent;
+import control.FocusTraversalReferenceEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import util.EventBus;
+import util.Subscribe;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
 @Singleton
@@ -109,6 +111,12 @@ public class WordpoolList extends JList<WordpoolWord>
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to focus traversal reference events
+        eventBus.subscribe(this);
+
+        // Publish our focus traversal reference
+        eventBus.publish(new FocusTraversalReferenceEvent(this, "WordpoolList"));
     }
 
     /**
@@ -120,21 +128,6 @@ public class WordpoolList extends JList<WordpoolWord>
     @Override
     public WordpoolListModel getModel() {
         return model;
-    }
-
-    /**
-     * Gets a reference to this object for use by a custom <code>FocusTraversalPolicy</code>.
-     *
-     * <p>Unfortunately this requires a break from the encapsulation strategy of <code>
-     * WordpoolDisplay</code> containing all the <code>public</code> access. Please do NOT abuse
-     * this method to access the <code>WordpoolDisplay</code> for purposes other than those
-     * intended. Add new public features to <code>WordpoolDisplay</code> which can then use
-     * {@linkplain #getInstance()} as needed.
-     *
-     * @return {@link #getInstance()}
-     */
-    public static WordpoolList getFocusTraversalReference() {
-        return getInstance();
     }
 
     /**
@@ -246,4 +239,12 @@ public class WordpoolList extends JList<WordpoolWord>
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    @Subscribe
+    public void handleFocusTraversalReference(FocusTraversalReferenceEvent event) {
+        if ("REQUEST_ALL".equals(event.getComponentType())) {
+            // Publish our focus traversal reference when requested
+            eventBus.publish(new FocusTraversalReferenceEvent(this, "WordpoolList"));
+        }
+    }
 }

@@ -2,6 +2,7 @@ package components.audiofiles;
 
 import control.AudioFileListEvent;
 import control.AudioState;
+import control.FocusTraversalReferenceEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -159,6 +160,12 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to focus traversal reference events
+        eventBus.subscribe(this);
+
+        // Publish our focus traversal reference
+        eventBus.publish(new FocusTraversalReferenceEvent(this, "AudioFileList"));
     }
 
     /**
@@ -212,21 +219,6 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         if (e.isTemporary() == false) {
             clearSelection();
         }
-    }
-
-    /**
-     * Gets a reference to this object for use by a custom <code>FocusTraversalPolicy</code>.
-     *
-     * <p>Unfortunately this requires a break from the encapsulation strategy of <code>
-     * AudioFileDisplay</code> containing all the <code>public</code> access. Please do NOT abuse
-     * this method to access the <code>AudioFileList</code> for purposes other than those intended.
-     * Add new public features to <code>AudioFileDisplay</code> which can then use {@linkplain
-     * #getInstance()} as needed.
-     *
-     * @return {@link #getInstance()}
-     */
-    public static AudioFileList getFocusTraversalReference() {
-        return getInstance();
     }
 
     /**
