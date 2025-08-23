@@ -10,11 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * UserDB for managing user preferences for ActionConfig objects. This provides user preference
- * storage and retrieval functionality for the actions system.
+ * ShortcutPreferences for managing user preferences for ActionConfig objects. This provides user
+ * preference storage and retrieval functionality for the actions system.
  */
-public class UserDB {
-    private static final Logger logger = LoggerFactory.getLogger(UserDB.class);
+public class ShortcutPreferences {
+    private static final Logger logger = LoggerFactory.getLogger(ShortcutPreferences.class);
 
     private final List<ActionConfig> defaultActionConfigs;
     private final ActionConfigListener listener;
@@ -26,7 +26,7 @@ public class UserDB {
         void actionConfigUpdated(ActionConfig actionConfig, Shortcut oldShortcut);
     }
 
-    public UserDB(
+    public ShortcutPreferences(
             @NonNull PreferencesManager preferencesManager,
             @NonNull List<ActionConfig> defaultActionConfigs,
             @NonNull ActionConfigListener listener) {

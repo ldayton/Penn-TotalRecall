@@ -20,9 +20,9 @@ public class ShortcutFrame extends ShortcutManager {
         this.actionsManager = actionsManager;
     }
 
-    private static shortcuts.UserDB.ActionConfigListener createActionConfigListener(
+    private static shortcuts.ShortcutPreferences.ActionConfigListener createActionConfigListener(
             ActionsManager actionsManager) {
-        return new shortcuts.UserDB.ActionConfigListener() {
+        return new shortcuts.ShortcutPreferences.ActionConfigListener() {
             @Override
             public void actionConfigUpdated(
                     actions.ActionsFileParser.ActionConfig actionConfig,

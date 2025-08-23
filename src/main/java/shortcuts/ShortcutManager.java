@@ -38,10 +38,10 @@ import javax.swing.table.TableModel;
 
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;
-    private final UserDB userdb;
+    private final ShortcutPreferences shortcutPreferences;
 
     @SuppressWarnings("UnusedVariable") // Used in nested ShortcutTable class
-    private final UserDB.ActionConfigListener listener;
+    private final ShortcutPreferences.ActionConfigListener listener;
 
     private final ContentPane contentPane;
 
@@ -49,14 +49,16 @@ public class ShortcutManager extends JFrame {
      * Constructor that accepts ActionConfigs from the ActionsManager system. This replaces the old
      * constructor that used XActionParser.
      */
-    public ShortcutManager(List<ActionConfig> actionConfigs, UserDB.ActionConfigListener listener) {
+    public ShortcutManager(
+            List<ActionConfig> actionConfigs, ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
                 di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
-        this.userdb = new UserDB(preferencesManager, actionConfigs, listener);
+        this.shortcutPreferences =
+                new ShortcutPreferences(preferencesManager, actionConfigs, listener);
         this.listener = listener;
 
-        userdb.persistDefaults(false);
+        shortcutPreferences.persistDefaults(false);
 
         this.contentPane = new ContentPane();
         setSize(new Dimension(800, contentPane.getPreferredSize().height));
@@ -65,13 +67,14 @@ public class ShortcutManager extends JFrame {
         setTitle("Keyboard Shortcuts Manager");
         setContentPane(contentPane);
 
-        Map<String, Shortcut> curShortMap = userdb.retrieveAll();
+        Map<String, Shortcut> curShortMap = shortcutPreferences.retrieveAll();
         for (String id : curShortMap.keySet()) {
-            ActionConfig defaultActionConfig = userdb.findActionConfigById(id);
+            ActionConfig defaultActionConfig = shortcutPreferences.findActionConfigById(id);
             if (defaultActionConfig != null) {
                 Shortcut shortOpt = curShortMap.get(id);
                 ActionConfig newActionConfig =
-                        userdb.withShortcut(defaultActionConfig, userdb.retrieve(id));
+                        shortcutPreferences.withShortcut(
+                                defaultActionConfig, shortcutPreferences.retrieve(id));
                 listener.actionConfigUpdated(newActionConfig, shortOpt);
             }
         }
@@ -96,7 +99,7 @@ public class ShortcutManager extends JFrame {
                 setViewportView(
                         new ShortcutTable(
                                 defaultActionConfigs.toArray(new ActionConfig[0]),
-                                userdb,
+                                shortcutPreferences,
                                 listener));
 
                 setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -135,7 +138,7 @@ public class ShortcutManager extends JFrame {
                                                         ShortcutManager.this,
                                                         "Restore all shortcuts to defaults?");
                                         if (res == JOptionPane.YES_OPTION) {
-                                            userdb.persistDefaults(true);
+                                            shortcutPreferences.persistDefaults(true);
                                             ContentPane.this.repaint();
                                         }
                                     }
@@ -159,20 +162,21 @@ public class ShortcutManager extends JFrame {
 
 class ShortcutTable extends JTable {
     private final ActionConfig[] defaultActionConfigs;
-    private final UserDB userdb;
+    private final ShortcutPreferences shortcutPreferences;
 
-    @SuppressWarnings("UnusedVariable") // Listener is passed to UserDB for notifications
-    private final UserDB.ActionConfigListener listener;
+    @SuppressWarnings(
+            "UnusedVariable") // Listener is passed to ShortcutPreferences for notifications
+    private final ShortcutPreferences.ActionConfigListener listener;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
     public ShortcutTable(
             ActionConfig[] defaultActionConfigs,
-            UserDB userdb,
-            UserDB.ActionConfigListener listener) {
+            ShortcutPreferences shortcutPreferences,
+            ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = defaultActionConfigs;
-        this.userdb = userdb;
+        this.shortcutPreferences = shortcutPreferences;
         this.listener = listener;
         this.shortcutTableModel = new ShortcutTableModel();
 
@@ -229,7 +233,8 @@ class ShortcutTable extends JTable {
                         && modifiers == 0) {
                     ActionConfig rowActionConfig =
                             shortcutTableModel.actionConfigForRow(selectedRow);
-                    ActionConfig newActionConfig = userdb.withShortcut(rowActionConfig, null);
+                    ActionConfig newActionConfig =
+                            shortcutPreferences.withShortcut(rowActionConfig, null);
                     doSwap(newActionConfig);
                 } else if (!maskKeyCodes.contains(code)) {
                     var enteredShortcut =
@@ -237,7 +242,8 @@ class ShortcutTable extends JTable {
                                     KeyStroke.getKeyStroke(code, modifiers),
                                     di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class));
                     var rowActionConfig = shortcutTableModel.actionConfigForRow(selectedRow);
-                    var newActionConfig = userdb.withShortcut(rowActionConfig, enteredShortcut);
+                    var newActionConfig =
+                            shortcutPreferences.withShortcut(rowActionConfig, enteredShortcut);
 
                     if (modifiers == InputEvent.SHIFT_DOWN_MASK || modifiers == 0) {
                         if (standaloneKeyCodes.contains(code)) {
@@ -255,7 +261,7 @@ class ShortcutTable extends JTable {
 
             // Check for duplicate shortcuts
             if (shortcut != null) {
-                Map<String, Shortcut> allShortcuts = userdb.retrieveAll();
+                Map<String, Shortcut> allShortcuts = shortcutPreferences.retrieveAll();
                 for (Shortcut existingShortcut : allShortcuts.values()) {
                     if (shortcut.equals(existingShortcut)) {
                         String msg = shortcut + " is already taken.";
@@ -266,7 +272,7 @@ class ShortcutTable extends JTable {
                 }
             }
 
-            userdb.store(toSwapIn);
+            shortcutPreferences.store(toSwapIn);
             repaint();
         }
     }
@@ -319,7 +325,7 @@ class ShortcutTable extends JTable {
                             + (defActionConfig.enumValue().orElse(null) != null
                                     ? "-" + defActionConfig.enumValue().orElse(null)
                                     : "");
-            Map<String, Shortcut> map = userdb.retrieveAll();
+            Map<String, Shortcut> map = shortcutPreferences.retrieveAll();
             Shortcut currentShortcut = map.get(key);
 
             return switch (columnIndex) {
