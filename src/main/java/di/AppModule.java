@@ -8,6 +8,7 @@ import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.ControlPanel;
+import components.audiofiles.AudioFileDisplay;
 import components.DoneButton;
 import components.MyFrame;
 import components.MyMenu;
@@ -15,6 +16,7 @@ import components.MySplitPane;
 import components.WindowManager;
 import components.preferences.PreferencesFrame;
 import components.waveform.MyGlassPane;
+import components.waveform.WaveformDisplay;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -54,6 +56,8 @@ public class AppModule extends AbstractModule {
         bind(DoneButton.class).in(Singleton.class);
         bind(MyGlassPane.class).in(Singleton.class);
         bind(PreferencesFrame.class).in(Singleton.class);
+        bind(WaveformDisplay.class).in(Singleton.class);
+        bind(AudioFileDisplay.class).in(Singleton.class);
     }
 
     @Provides

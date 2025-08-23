@@ -9,6 +9,8 @@ import control.CurAudio;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -28,6 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Keep in mind that events other than the repaint timer going off can cause repaints.
  */
+@Singleton
 public class WaveformDisplay extends JComponent {
     private static final Logger logger = LoggerFactory.getLogger(WaveformDisplay.class);
 
@@ -58,7 +61,8 @@ public class WaveformDisplay extends JComponent {
 
     private static WaveformDisplay instance;
 
-    private WaveformDisplay() {
+    @Inject
+    public WaveformDisplay() {
         setOpaque(true);
         setBackground(MyColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
@@ -74,11 +78,16 @@ public class WaveformDisplay extends JComponent {
                 });
         addMouseListener(new WaveformMouseAdapter(this));
         addMouseMotionListener(new WaveformMouseAdapter(this));
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     public static WaveformDisplay getInstance() {
         if (instance == null) {
-            instance = new WaveformDisplay();
+            throw new IllegalStateException(
+                    "WaveformDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

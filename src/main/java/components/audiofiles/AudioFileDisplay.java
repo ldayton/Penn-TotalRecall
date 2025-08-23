@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import util.GiveMessage;
 
 /**
@@ -29,6 +31,7 @@ import util.GiveMessage;
  * methods provided in this class. Code outside the package cannot and should not try to access the
  * internal list, model, or other components directly.
  */
+@Singleton
 public class AudioFileDisplay extends JScrollPane {
     private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
@@ -42,7 +45,8 @@ public class AudioFileDisplay extends JScrollPane {
      * listeners, and various aspects of appearance.
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
-    private AudioFileDisplay() {
+    @Inject
+    public AudioFileDisplay() {
         list = AudioFileList.getInstance();
         getViewport().setView(list);
 
@@ -73,6 +77,9 @@ public class AudioFileDisplay extends JScrollPane {
                         }
                     }
                 });
+        
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -117,7 +124,9 @@ public class AudioFileDisplay extends JScrollPane {
      */
     public static AudioFileDisplay getInstance() {
         if (instance == null) {
-            instance = new AudioFileDisplay();
+            throw new IllegalStateException(
+                    "AudioFileDisplay not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }
