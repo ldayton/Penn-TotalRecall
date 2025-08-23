@@ -1,5 +1,7 @@
 package shortcuts;
 
+import actions.ActionConfigUserDB;
+import actions.ActionsFileParser.ActionConfig;
 import env.KeyboardManager;
 import env.PreferencesManager;
 import java.awt.Color;
@@ -36,11 +38,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 public class ShortcutManager extends JFrame {
-    private final List<XAction> defaultXActions;
-    private final UserDB userdb;
+    private final List<ActionConfig> defaultActionConfigs;
+    private final ActionConfigUserDB userdb;
 
     @SuppressWarnings("UnusedVariable") // Used in nested ShortcutTable class
-    private final XActionListener listener;
+    private final ActionConfigUserDB.ActionConfigListener listener;
 
     private final ContentPane contentPane;
 
@@ -49,12 +51,11 @@ public class ShortcutManager extends JFrame {
      * constructor that used XActionParser.
      */
     public ShortcutManager(
-            List<actions.ActionsFileParser.ActionConfig> actionConfigs, XActionListener listener) {
-        // Convert ActionConfigs to XActions for backward compatibility
-        this.defaultXActions = actions.ActionConfigToXActionBridge.convertToXActions(actionConfigs);
+            List<ActionConfig> actionConfigs, ActionConfigUserDB.ActionConfigListener listener) {
+        this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
                 di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
-        this.userdb = new UserDB(preferencesManager, defaultXActions, listener);
+        this.userdb = new ActionConfigUserDB(preferencesManager, actionConfigs, listener);
         this.listener = listener;
 
         userdb.persistDefaults(false);
@@ -68,22 +69,14 @@ public class ShortcutManager extends JFrame {
 
         Map<String, Shortcut> curShortMap = userdb.retrieveAll();
         for (String id : curShortMap.keySet()) {
-            XAction defaultXAction = findXActionById(id);
-            if (defaultXAction != null) {
+            ActionConfig defaultActionConfig = userdb.findActionConfigById(id);
+            if (defaultActionConfig != null) {
                 Shortcut shortOpt = curShortMap.get(id);
-                XAction newXAction = defaultXAction.withShortcut(userdb.retrieve(id));
-                listener.xActionUpdated(newXAction, shortOpt);
+                ActionConfig newActionConfig =
+                        userdb.withShortcut(defaultActionConfig, userdb.retrieve(id));
+                listener.actionConfigUpdated(newActionConfig, shortOpt);
             }
         }
-    }
-
-    private XAction findXActionById(String id) {
-        for (XAction xAction : defaultXActions) {
-            if (xAction.getId().equals(id)) {
-                return xAction;
-            }
-        }
-        return null;
     }
 
     private class ContentPane extends JPanel {
@@ -104,7 +97,9 @@ public class ShortcutManager extends JFrame {
             public Scroller() {
                 setViewportView(
                         new ShortcutTable(
-                                defaultXActions.toArray(new XAction[0]), userdb, listener));
+                                defaultActionConfigs.toArray(new ActionConfig[0]),
+                                userdb,
+                                listener));
 
                 setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -165,17 +160,20 @@ public class ShortcutManager extends JFrame {
 }
 
 class ShortcutTable extends JTable {
-    private final XAction[] defaultXActions;
-    private final UserDB userdb;
+    private final ActionConfig[] defaultActionConfigs;
+    private final ActionConfigUserDB userdb;
 
     @SuppressWarnings("UnusedVariable") // Listener is passed to UserDB for notifications
-    private final XActionListener listener;
+    private final ActionConfigUserDB.ActionConfigListener listener;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
-    public ShortcutTable(XAction[] defaultXActions, UserDB userdb, XActionListener listener) {
-        this.defaultXActions = defaultXActions;
+    public ShortcutTable(
+            ActionConfig[] defaultActionConfigs,
+            ActionConfigUserDB userdb,
+            ActionConfigUserDB.ActionConfigListener listener) {
+        this.defaultActionConfigs = defaultActionConfigs;
         this.userdb = userdb;
         this.listener = listener;
         this.shortcutTableModel = new ShortcutTableModel();
@@ -231,30 +229,31 @@ class ShortcutTable extends JTable {
             if (selectedRow >= 0) {
                 if ((code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_DELETE)
                         && modifiers == 0) {
-                    XAction rowXAction = shortcutTableModel.xactionForRow(selectedRow);
-                    XAction newXAction = rowXAction.withShortcut(null);
-                    doSwap(newXAction);
+                    ActionConfig rowActionConfig =
+                            shortcutTableModel.actionConfigForRow(selectedRow);
+                    ActionConfig newActionConfig = userdb.withShortcut(rowActionConfig, null);
+                    doSwap(newActionConfig);
                 } else if (!maskKeyCodes.contains(code)) {
                     var enteredShortcut =
                             Shortcut.forPlatform(
                                     KeyStroke.getKeyStroke(code, modifiers),
                                     di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class));
-                    var rowXAction = shortcutTableModel.xactionForRow(selectedRow);
-                    var newXAction = rowXAction.withShortcut(enteredShortcut);
+                    var rowActionConfig = shortcutTableModel.actionConfigForRow(selectedRow);
+                    var newActionConfig = userdb.withShortcut(rowActionConfig, enteredShortcut);
 
                     if (modifiers == InputEvent.SHIFT_DOWN_MASK || modifiers == 0) {
                         if (standaloneKeyCodes.contains(code)) {
-                            doSwap(newXAction);
+                            doSwap(newActionConfig);
                         }
                     } else {
-                        doSwap(newXAction);
+                        doSwap(newActionConfig);
                     }
                 }
             }
         }
 
-        private void doSwap(XAction toSwapIn) {
-            Shortcut shortcut = toSwapIn.shortcut();
+        private void doSwap(ActionConfig toSwapIn) {
+            Shortcut shortcut = toSwapIn.shortcut().orElse(null);
 
             // Check for duplicate shortcuts
             if (shortcut != null) {
@@ -278,13 +277,13 @@ class ShortcutTable extends JTable {
         private final List<String> headers = List.of("Action", "Shortcut", "Default");
         private final String noShortcutRepr = "";
 
-        public XAction xactionForRow(int row) {
-            return defaultXActions[row];
+        public ActionConfig actionConfigForRow(int row) {
+            return defaultActionConfigs[row];
         }
 
         @Override
         public int getRowCount() {
-            return defaultXActions.length;
+            return defaultActionConfigs.length;
         }
 
         @Override
@@ -309,24 +308,28 @@ class ShortcutTable extends JTable {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            if (rowIndex >= defaultXActions.length
+            if (rowIndex >= defaultActionConfigs.length
                     || columnIndex >= headers.size()
                     || rowIndex < 0
                     || columnIndex < 0) {
                 return null;
             }
 
-            XAction defXAction = defaultXActions[rowIndex];
-            String key = defXAction.getId();
+            ActionConfig defActionConfig = defaultActionConfigs[rowIndex];
+            String key =
+                    defActionConfig.className()
+                            + (defActionConfig.enumValue().orElse(null) != null
+                                    ? "-" + defActionConfig.enumValue().orElse(null)
+                                    : "");
             Map<String, Shortcut> map = userdb.retrieveAll();
             Shortcut currentShortcut = map.get(key);
 
             return switch (columnIndex) {
-                case 0 -> defXAction.name();
+                case 0 -> defActionConfig.name();
                 case 1 -> currentShortcut != null ? currentShortcut.toString() : noShortcutRepr;
                 case 2 ->
-                        defXAction.shortcut() != null
-                                ? defXAction.shortcut().toString()
+                        defActionConfig.shortcut().isPresent()
+                                ? defActionConfig.shortcut().get().toString()
                                 : noShortcutRepr;
                 default -> null;
             };

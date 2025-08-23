@@ -16,18 +16,23 @@ public class ShortcutFrame extends ShortcutManager {
 
     @Inject
     public ShortcutFrame(ActionsManager actionsManager) {
-        super(actionsManager.getAllActionConfigs(), createXActionListener(actionsManager));
+        super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
         this.actionsManager = actionsManager;
     }
 
-    private static shortcuts.XActionListener createXActionListener(ActionsManager actionsManager) {
-        return new shortcuts.XActionListener() {
+    private static actions.ActionConfigUserDB.ActionConfigListener createActionConfigListener(
+            ActionsManager actionsManager) {
+        return new actions.ActionConfigUserDB.ActionConfigListener() {
             @Override
-            public void xActionUpdated(shortcuts.XAction xact, shortcuts.Shortcut oldShortcut) {
-                // Convert XAction to ActionConfig and update via ActionsManager
-                String id = xact.getId();
-                // Note: This is a simplified conversion - in a full migration,
-                // we'd want to convert XAction to ActionConfig properly
+            public void actionConfigUpdated(
+                    actions.ActionsFileParser.ActionConfig actionConfig,
+                    shortcuts.Shortcut oldShortcut) {
+                // Update via ActionsManager using the action config
+                String id =
+                        actionConfig.className()
+                                + (actionConfig.enumValue().orElse(null) != null
+                                        ? "-" + actionConfig.enumValue().orElse(null)
+                                        : "");
                 actionsManager.update(id, oldShortcut);
             }
         };
