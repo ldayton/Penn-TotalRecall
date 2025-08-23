@@ -15,7 +15,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
 <actions>
 
   <!-- Actions with keyboard shortcuts -->
-  <action class="behaviors.singleact.DoneAction"
+  <action class="actions.DoneAction"
           name="Mark Complete"
           tooltip="Mark Annotation File Complete">
     <shortcut>
@@ -25,8 +25,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.OpenAudioLocationAction"
-          enum="SelectionMode.FILES_AND_DIRECTORIES"
+  <action class="actions.OpenAudioFileAction"
           name="Add Audio Files..."
           tooltip="Select File or Folder"
           os="Linux,Windows"
@@ -37,8 +36,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.OpenAudioLocationAction"
-          enum="SelectionMode.FILES_ONLY"
+  <action class="actions.OpenAudioFileAction"
           name="Open Audio File..."
           os="Mac OS X"
           >
@@ -48,8 +46,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.OpenAudioLocationAction"
-          enum="SelectionMode.DIRECTORIES_ONLY"
+  <action class="actions.OpenAudioFolderAction"
           name="Open Audio Folder..."
           os="Mac OS X"
           >
@@ -60,7 +57,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.singleact.OpenWordpoolAction"
+  <action class="actions.OpenWordpoolAction"
           name="Select Wordpool..."
           tooltip="Select Text File Containing Words in Audio File"
           >
@@ -71,28 +68,28 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.singleact.PlayPauseAction"
+  <action class="actions.PlayPauseAction"
           name="Play/Pause">
     <shortcut>
       <mask keyname="menu" />
       <key keyname="P" />
     </shortcut>
   </action>
-  <action class="behaviors.singleact.ReplayLast200MillisAction"
+  <action class="actions.ReplayLast200MillisAction"
           name="Replay Last 200 ms">
     <shortcut>
       <mask keyname="menu" />
       <key keyname="Z" />
     </shortcut>
   </action>
-  <action class="behaviors.singleact.StopAction"
+  <action class="actions.StopAction"
           name="Go to Start">
     <shortcut>
       <mask keyname="menu" />
       <key keyname="S" />
     </shortcut>
   </action>
-  <action class="behaviors.singleact.ReturnToLastPositionAction"
+  <action class="actions.ReturnToLastPositionAction"
           name="Undo Play"
           tooltip="Return to the position prior to hitting play">
     <shortcut>
@@ -100,7 +97,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
       <key keyname="L" />
     </shortcut>
   </action>
-  <action class="behaviors.singleact.ReplayLastPositionAction"
+  <action class="actions.ReplayLastPositionAction"
           name="Replay">
     <shortcut>
       <mask keyname="menu" />
@@ -108,43 +105,43 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.FORWARD_SMALL"
+  <action class="actions.SeekAction"
           name="Forward Small Amount">
+    <arg>forward-small</arg>
     <shortcut>
       <key keyname="RIGHT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.BACKWARD_SMALL"
+  <action class="actions.SeekAction"
           name="Backward Small Amount">
+    <arg>backward-small</arg>
     <shortcut>
       <key keyname="LEFT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.FORWARD_MEDIUM"
+  <action class="actions.SeekAction"
           name="Forward Medium Amount">
+    <arg>forward-medium</arg>
     <shortcut>
       <mask keyname="menu" />
       <key keyname="RIGHT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.BACKWARD_MEDIUM"
+  <action class="actions.SeekAction"
           name="Backward Medium Amount">
+    <arg>backward-medium</arg>
     <shortcut>
       <mask keyname="menu" />
       <key keyname="LEFT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.FORWARD_LARGE"
+  <action class="actions.SeekAction"
           name="Forward Large Amount">
+    <arg>forward-large</arg>
     <shortcut>
       <mask keyname="menu" />
       <mask keyname="shift" />
@@ -152,7 +149,7 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.singleact.ExitAction"
+  <action class="actions.ExitAction"
           name="Exit"
           os="Windows,Linux"
           >
@@ -162,9 +159,9 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.SeekAction"
-          enum="SeekAmount.BACKWARD_LARGE"
+  <action class="actions.SeekAction"
           name="Backward Large Amount">
+    <arg>backward-large</arg>
     <shortcut>
       <mask keyname="menu" />
       <mask keyname="shift" />
@@ -172,43 +169,43 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.ToggleAnnotationsAction"
-          enum="Direction.FORWARD"
+  <action class="actions.ToggleAnnotationsAction"
           name="Toggle Next Annotation">
+    <arg>forward</arg>
     <shortcut>
       <mask keyname="shift" />
       <key keyname="RIGHT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.ToggleAnnotationsAction"
-          enum="Direction.BACKWARD"
+  <action class="actions.ToggleAnnotationsAction"
           name="Toggle Previous Annotation">
+    <arg>backward</arg>
     <shortcut>
       <mask keyname="shift" />
       <key keyname="LEFT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.Last200PlusMoveAction"
-          enum="Direction.BACKWARD"
+  <action class="actions.Last200PlusMoveAction"
           name="Backward Small Amount then Replay Last 200 ms">
+    <arg>backward</arg>
     <shortcut>
       <mask keyname="alt" />
       <key keyname="LEFT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.Last200PlusMoveAction"
-          enum="Direction.FORWARD"
+  <action class="actions.Last200PlusMoveAction"
           name="Forward Small Amount then Replay Last 200 ms">
+    <arg>forward</arg>
     <shortcut>
       <key keyname="alt" />
       <key keyname="RIGHT" />
     </shortcut>
   </action>
 
-  <action class="behaviors.singleact.DeleteSelectedAnnotationAction"
+  <action class="actions.DeleteSelectedAnnotationAction"
           name="Delete Selected Annotation on Waveform">
     <shortcut>
       <mask keyname="menu" />
@@ -216,10 +213,10 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
-  <action class="behaviors.multiact.AnnotateAction"
+  <action class="actions.AnnotateAction"
           name="Commit Annotation as Intrusion"
-          enum="Mode.INTRUSION"
           >
+    <arg>intrusion</arg>
     <shortcut>
       <mask keyname="menu" />
       <mask keyname="shift" />
@@ -228,21 +225,21 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
   </action>
 
   <!-- Actions without keyboard shortcuts -->
-  <action class="behaviors.singleact.PreferencesAction"
+  <action class="actions.PreferencesAction"
           name="Preferences..." />
 
-  <action class="behaviors.singleact.AboutAction"
+  <action class="actions.AboutAction"
           name="About"
           os="Windows,Linux"
           />
 
-  <action class="behaviors.singleact.CheckUpdatesAction"
+  <action class="actions.CheckUpdatesAction"
           name="Check For Updates" />
 
-  <action class="behaviors.singleact.VisitTutorialSiteAction"
+  <action class="actions.VisitTutorialSiteAction"
           name="Program Homapage" />
 
-  <action class="behaviors.singleact.EditShortcutsAction"
+  <action class="actions.EditShortcutsAction"
           name="Edit Keyboard Shortcuts..." />
 
   <action class="behaviors.singleact.TipsMessageAction"

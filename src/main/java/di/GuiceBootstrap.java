@@ -211,14 +211,9 @@ public class GuiceBootstrap {
         var tipsMessageAction = globalInjector.getInstance(actions.TipsMessageAction.class);
         actionsManager.registerAction(tipsMessageAction);
 
-        // Register Last200PlusMoveAction instances for both directions
-        var last200PlusMoveForwardAction =
-                globalInjector.getInstance(actions.Last200PlusMoveForwardAction.class);
-        actionsManager.registerAction(last200PlusMoveForwardAction);
-
-        var last200PlusMoveBackwardAction =
-                globalInjector.getInstance(actions.Last200PlusMoveBackwardAction.class);
-        actionsManager.registerAction(last200PlusMoveBackwardAction);
+        // Register CheckUpdatesAction
+        var checkUpdatesAction = globalInjector.getInstance(actions.CheckUpdatesAction.class);
+        actionsManager.registerAction(checkUpdatesAction);
 
         // Register the newly migrated actions
         var continueAnnotatingAction =
@@ -241,12 +236,31 @@ public class GuiceBootstrap {
         actionsManager.registerAction(openWordpoolAction);
 
         // Register annotation actions
-        var annotateRegularAction = globalInjector.getInstance(actions.AnnotateRegularAction.class);
-        actionsManager.registerAction(annotateRegularAction);
+        var annotateAction = globalInjector.getInstance(actions.AnnotateAction.class);
+        actionsManager.registerAction(annotateAction);
 
-        var annotateIntrusionAction =
-                globalInjector.getInstance(actions.AnnotateIntrusionAction.class);
-        actionsManager.registerAction(annotateIntrusionAction);
+        // Register remaining migrated actions
+        var openAudioFileAction = globalInjector.getInstance(actions.OpenAudioFileAction.class);
+        actionsManager.registerAction(openAudioFileAction);
+
+        var openAudioFolderAction = globalInjector.getInstance(actions.OpenAudioFolderAction.class);
+        actionsManager.registerAction(openAudioFolderAction);
+
+        var seekAction = globalInjector.getInstance(actions.SeekAction.class);
+        actionsManager.registerAction(seekAction);
+
+        var screenSeekAction = globalInjector.getInstance(actions.ScreenSeekAction.class);
+        actionsManager.registerAction(screenSeekAction);
+
+        var toggleAnnotationsAction =
+                globalInjector.getInstance(actions.ToggleAnnotationsAction.class);
+        actionsManager.registerAction(toggleAnnotationsAction);
+
+        var last200PlusMoveAction = globalInjector.getInstance(actions.Last200PlusMoveAction.class);
+        actionsManager.registerAction(last200PlusMoveAction);
+
+        var zoomAction = globalInjector.getInstance(actions.ZoomAction.class);
+        actionsManager.registerAction(zoomAction);
     }
 
     /** Initializes and starts the GUI application. */

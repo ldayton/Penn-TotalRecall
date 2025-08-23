@@ -50,7 +50,7 @@ public class ActionsManager {
 
             // Store action configs by ID for lookup
             for (var config : actionConfigs) {
-                var id = makeId(config.className(), config.enumValue().orElse(null));
+                var id = makeId(config.className(), config.arg().orElse(null));
                 this.actionConfigs.put(id, config);
             }
 
@@ -191,14 +191,14 @@ public class ActionsManager {
     }
 
     /**
-     * Creates an action ID from class name and enum value.
+     * Creates an action ID from class name and argument.
      *
      * @param className The class name
-     * @param enumValue The enum value (can be null)
+     * @param arg The argument (can be null)
      * @return The action ID
      */
-    private static String makeId(String className, String enumValue) {
-        return enumValue != null ? className + "-" + enumValue : className;
+    private static String makeId(String className, String arg) {
+        return arg != null ? className + "-" + arg : className;
     }
 
     /** Pair class for input map registration. */

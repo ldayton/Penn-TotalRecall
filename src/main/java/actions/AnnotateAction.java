@@ -1,0 +1,150 @@
+package actions;
+
+import audio.AudioPlayer;
+import components.annotations.Annotation;
+import components.annotations.AnnotationFileParser;
+import components.wordpool.WordpoolDisplay;
+import components.wordpool.WordpoolWord;
+import control.AudioState;
+import control.ErrorRequestedEvent;
+import control.FocusRequestedEvent;
+import control.InfoRequestedEvent;
+import info.Constants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.EventBus;
+import util.OSPath;
+
+/** Commits an annotation with the specified mode. */
+@Singleton
+public class AnnotateAction extends BaseAction {
+    private static final Logger logger = LoggerFactory.getLogger(AnnotateAction.class);
+
+    private final AudioState audioState;
+    private final EventBus eventBus;
+    private String annotatorName;
+
+    @Inject
+    public AnnotateAction(AudioState audioState, EventBus eventBus) {
+        super("Annotate", "Commit annotation");
+        this.audioState = audioState;
+        this.eventBus = eventBus;
+    }
+
+    @Override
+    protected void performAction(ActionEvent e) {
+        // do nothing if no audio file is open
+        if (!audioState.audioOpen()) {
+            WordpoolDisplay.clearText();
+            return;
+        }
+
+        // retrieve time associated with annotation
+        double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+
+        // Get mode from action name
+        String actionName = (String) getValue(Action.NAME);
+
+        // retrieve text associated with annotation
+        String text = WordpoolDisplay.getFieldText();
+        if (text.length() == 0) {
+            if (actionName.contains("Intrusion")) {
+                text = Constants.intrusionSoundString;
+            } else {
+                eventBus.publish(new ErrorRequestedEvent("No text entered for annotation."));
+                return;
+            }
+        }
+
+        // find whether the text matches a wordpool entry
+        WordpoolWord match = WordpoolDisplay.findMatchingWordpooWord(text);
+        if (match == null) {
+            match = new WordpoolWord(text, -1);
+        }
+
+        // append the new annotation to the end of the temporary annotation file
+        File oFile = getOutputFile();
+
+        if (!oFile.exists()) {
+            try {
+                oFile.createNewFile();
+            } catch (IOException e1) {
+                logger.error("Could not create annotation file: " + oFile.getAbsolutePath(), e1);
+                eventBus.publish(
+                        new ErrorRequestedEvent(
+                                "Could not create "
+                                        + Constants.temporaryAnnotationFileExtension
+                                        + " file."));
+                return;
+            }
+        }
+
+        if (oFile.exists()) {
+            try {
+                // check for header
+                if (!AnnotationFileParser.headerExists(oFile)) {
+                    if (annotatorName == null) {
+                        eventBus.publish(new InfoRequestedEvent("Please enter your name:"));
+                        // Note: In a full event-driven implementation, we'd need to handle this
+                        // asynchronously
+                        // For now, we'll use a simple approach
+                        annotatorName = "Default"; // TODO: Handle name input via events
+                    }
+                    AnnotationFileParser.prependHeader(oFile, annotatorName);
+                }
+
+                // Create annotation based on mode
+                Annotation annotation;
+                if (actionName.contains("Intrusion")) {
+                    annotation = new Annotation(time, match.getNum(), match.getText());
+                } else {
+                    annotation = new Annotation(time, match.getNum(), match.getText());
+                }
+
+                // Write the annotation
+                AnnotationFileParser.appendAnnotation(annotation, oFile);
+
+                // Clear the text field
+                WordpoolDisplay.clearText();
+
+                // Update the display
+                eventBus.publish(new FocusRequestedEvent());
+
+            } catch (IOException e1) {
+                logger.error("Could not write to annotation file: " + oFile.getAbsolutePath(), e1);
+                eventBus.publish(
+                        new ErrorRequestedEvent(
+                                "Could not write to "
+                                        + Constants.temporaryAnnotationFileExtension
+                                        + " file."));
+            }
+        }
+    }
+
+    private File getOutputFile() {
+        String curFileName = audioState.getCurrentAudioFileAbsolutePath();
+        return new File(
+                OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
+    }
+
+    @Override
+    public void update() {
+        if (!audioState.audioOpen()) {
+            setEnabled(false);
+            return;
+        }
+
+        // Only enable if not playing
+        if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            setEnabled(false);
+        } else {
+            setEnabled(true);
+        }
+    }
+}

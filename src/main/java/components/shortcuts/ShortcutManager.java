@@ -322,8 +322,8 @@ class ShortcutTable extends JTable {
             ActionConfig defActionConfig = defaultActionConfigs[rowIndex];
             String key =
                     defActionConfig.className()
-                            + (defActionConfig.enumValue().orElse(null) != null
-                                    ? "-" + defActionConfig.enumValue().orElse(null)
+                            + (defActionConfig.arg().orElse(null) != null
+                                    ? "-" + defActionConfig.arg().orElse(null)
                                     : "");
             Map<String, Shortcut> map = shortcutPreferences.retrieveAll();
             Shortcut currentShortcut = map.get(key);

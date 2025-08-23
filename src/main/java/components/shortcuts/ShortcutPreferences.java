@@ -36,7 +36,7 @@ public class ShortcutPreferences {
     }
 
     public void store(ActionConfig actionConfig) {
-        String key = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+        String key = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
         Shortcut oldShortcut = retrieveAll().get(key);
 
         String value;
@@ -67,7 +67,7 @@ public class ShortcutPreferences {
 
     public void persistDefaults(boolean overwrite) {
         for (ActionConfig actionConfig : defaultActionConfigs) {
-            String id = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            String id = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             if (overwrite || retrieve(id) == null) {
                 store(actionConfig);
             }
@@ -77,7 +77,7 @@ public class ShortcutPreferences {
     public Map<String, Shortcut> retrieveAll() {
         Map<String, Shortcut> result = new HashMap<>();
         for (ActionConfig actionConfig : defaultActionConfigs) {
-            String id = makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            String id = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             result.put(id, retrieve(id));
         }
         return result;
@@ -89,8 +89,7 @@ public class ShortcutPreferences {
 
     public ActionConfig findActionConfigById(String id) {
         for (ActionConfig actionConfig : defaultActionConfigs) {
-            String configId =
-                    makeId(actionConfig.className(), actionConfig.enumValue().orElse(null));
+            String configId = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             if (configId.equals(id)) {
                 return actionConfig;
             }
@@ -109,18 +108,18 @@ public class ShortcutPreferences {
         return new ActionConfig(
                 originalConfig.className(),
                 originalConfig.name(),
-                originalConfig.tooltip(),
-                originalConfig.enumValue(),
+                originalConfig.tooltip().orElse(null),
+                originalConfig.arg().orElse(null),
                 newShortcut != null
                         ? java.util.Optional.of(newShortcut)
                         : java.util.Optional.empty());
     }
 
     /**
-     * Creates an action ID from class name and enum value. This matches the ID generation logic
-     * used in ActionsManager.
+     * Creates an action ID from class name and argument. This matches the ID generation logic used
+     * in ActionsManager.
      */
-    private String makeId(String className, String enumValue) {
-        return enumValue != null ? className + "-" + enumValue : className;
+    private String makeId(String className, String arg) {
+        return arg != null ? className + "-" + arg : className;
     }
 }

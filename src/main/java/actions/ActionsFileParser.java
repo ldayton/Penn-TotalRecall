@@ -134,6 +134,9 @@ public final class ActionsFileParser {
         @JsonProperty("shortcut")
         private final ShortcutElement shortcut;
 
+        @JsonProperty("arg")
+        private final String arg;
+
         // Jackson requires default constructor
         private ActionElement() {
             this.className = null;
@@ -142,6 +145,7 @@ public final class ActionsFileParser {
             this.enumValue = null;
             this.os = null;
             this.shortcut = null;
+            this.arg = null;
         }
 
         public ActionElement(
@@ -150,13 +154,15 @@ public final class ActionsFileParser {
                 String tooltip,
                 String enumValue,
                 String os,
-                ShortcutElement shortcut) {
+                ShortcutElement shortcut,
+                String arg) {
             this.className = className;
             this.name = name;
             this.tooltip = tooltip;
             this.enumValue = enumValue;
             this.os = os;
             this.shortcut = shortcut;
+            this.arg = arg;
         }
 
         /** Converts this element to an ActionConfig, applying OS filtering. */
@@ -175,8 +181,7 @@ public final class ActionsFileParser {
                 var parsedShortcut = parseShortcut(keyboardManager);
 
                 // ActionConfig constructor will validate required fields - let exceptions bubble up
-                return Optional.of(
-                        new ActionConfig(className, name, tooltip, enumValue, parsedShortcut));
+                return Optional.of(new ActionConfig(className, name, tooltip, arg, parsedShortcut));
             } catch (IllegalArgumentException e) {
                 // Fail fast - don't skip invalid actions
                 throw new ActionParseException(
@@ -346,20 +351,20 @@ public final class ActionsFileParser {
             String className,
             String name,
             Optional<String> tooltip,
-            Optional<String> enumValue,
+            Optional<String> arg,
             Optional<Shortcut> shortcut) {
 
         public ActionConfig(
                 String className,
                 String name,
                 String tooltip,
-                String enumValue,
+                String arg,
                 Optional<Shortcut> shortcut) {
             this(
                     requireValidString(className, "className"),
                     requireValidString(name, "name"),
                     Optional.ofNullable(tooltip).map(String::trim).filter(s -> !s.isEmpty()),
-                    Optional.ofNullable(enumValue).map(String::trim).filter(s -> !s.isEmpty()),
+                    Optional.ofNullable(arg).map(String::trim).filter(s -> !s.isEmpty()),
                     shortcut);
         }
 

@@ -30,8 +30,8 @@ public class ShortcutFrame extends ShortcutManager {
                 // Update via ActionsManager using the action config
                 String id =
                         actionConfig.className()
-                                + (actionConfig.enumValue().orElse(null) != null
-                                        ? "-" + actionConfig.enumValue().orElse(null)
+                                + (actionConfig.arg().orElse(null) != null
+                                        ? "-" + actionConfig.arg().orElse(null)
                                         : "");
                 actionsManager.update(id, oldShortcut);
             }

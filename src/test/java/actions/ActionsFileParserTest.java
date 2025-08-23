@@ -55,7 +55,7 @@ class ActionsFileParserTest {
         assertEquals("behaviors.singleact.DoneAction", action.className());
         assertEquals("Mark Complete", action.name());
         assertTrue(action.tooltip().isEmpty());
-        assertTrue(action.enumValue().isEmpty());
+        assertTrue(action.arg().isEmpty());
     }
 
     @Test
@@ -83,7 +83,7 @@ class ActionsFileParserTest {
         assertEquals("behaviors.multiact.OpenAudioLocationAction", action.className());
         assertEquals("Add Audio Files...", action.name());
         assertEquals("Select File or Folder", action.tooltip().orElse(null));
-        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.enumValue().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.arg().orElse(null));
     }
 
     @Test
@@ -463,7 +463,7 @@ class ActionsFileParserTest {
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
         assertTrue(action.tooltip().isEmpty());
-        assertTrue(action.enumValue().isEmpty());
+        assertTrue(action.arg().isEmpty());
     }
 
     @Test
@@ -487,7 +487,7 @@ class ActionsFileParserTest {
         assertEquals(1, actions.size());
         ActionConfig action = actions.get(0);
         assertEquals("Select File or Folder", action.tooltip().orElse(null));
-        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.enumValue().orElse(null));
+        assertEquals("SelectionMode.FILES_AND_DIRECTORIES", action.arg().orElse(null));
     }
 
     @Test
