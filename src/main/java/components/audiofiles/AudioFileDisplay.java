@@ -2,6 +2,7 @@ package components.audiofiles;
 
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.AudioState;
+import control.UIUpdateRequestedEvent;
 import di.GuiceBootstrap;
 import env.PreferencesManager;
 import info.Constants;
@@ -24,6 +25,8 @@ import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
+import util.EventBus;
+import util.Subscribe;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -42,6 +45,7 @@ public class AudioFileDisplay extends JScrollPane {
     private final AudioFileList audioFileList;
     private final PreferencesManager preferencesManager;
     private static AudioState audioState;
+    private final EventBus eventBus;
 
     private static AudioFileList list;
 
@@ -54,10 +58,12 @@ public class AudioFileDisplay extends JScrollPane {
     public AudioFileDisplay(
             AudioFileList audioFileList,
             PreferencesManager preferencesManager,
-            AudioState audioState) {
+            AudioState audioState,
+            EventBus eventBus) {
         this.audioFileList = audioFileList;
         this.preferencesManager = preferencesManager;
         AudioFileDisplay.audioState = audioState;
+        this.eventBus = eventBus;
         list = audioFileList;
         getViewport().setView(list);
 
@@ -91,6 +97,9 @@ public class AudioFileDisplay extends JScrollPane {
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to UI update events
+        eventBus.subscribe(this);
     }
 
     /**
@@ -212,5 +221,12 @@ public class AudioFileDisplay extends JScrollPane {
             }
         }
         return false;
+    }
+
+    @Subscribe
+    public void handleUIUpdateRequestedEvent(UIUpdateRequestedEvent event) {
+        if (event.getComponent() == UIUpdateRequestedEvent.Component.AUDIO_FILE_DISPLAY) {
+            repaint();
+        }
     }
 }

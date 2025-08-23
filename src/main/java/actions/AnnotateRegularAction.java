@@ -32,24 +32,27 @@ public class AnnotateRegularAction extends BaseAction {
     private final AudioState audioState;
     private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
     private final EventBus eventBus;
+    private final WordpoolDisplay wordpoolDisplay;
     private String annotatorName;
 
     @Inject
     public AnnotateRegularAction(
             AudioState audioState,
             DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
-            EventBus eventBus) {
+            EventBus eventBus,
+            WordpoolDisplay wordpoolDisplay) {
         super("Annotate Regular", "Commit a regular annotation");
         this.audioState = audioState;
         this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
         this.eventBus = eventBus;
+        this.wordpoolDisplay = wordpoolDisplay;
     }
 
     @Override
     protected void performAction(ActionEvent e) {
         // do nothing if no audio file is open
         if (!audioState.audioOpen()) {
-            WordpoolDisplay.clearText();
+            wordpoolDisplay.clearText();
             return;
         }
 
@@ -57,14 +60,14 @@ public class AnnotateRegularAction extends BaseAction {
         double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
 
         // retrieve text associated with annotation
-        String text = WordpoolDisplay.getFieldText();
+        String text = wordpoolDisplay.getFieldText();
         if (text.length() == 0) {
             return; // Regular annotations require text
         }
 
         // find whether the text matches a wordpool entry, so we can find the wordpool number of the
         // annotation text
-        WordpoolWord match = WordpoolDisplay.findMatchingWordpooWord(text);
+        WordpoolWord match = wordpoolDisplay.findMatchingWordpooWord(text);
         if (match == null) {
             // words not from the wordpool must be marked as intrusions for regular mode
             return;

@@ -2,12 +2,12 @@ package control;
 
 import audio.AudioEvent;
 import components.MyMenu;
-import components.MySplitPane;
 import di.GuiceBootstrap;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
+import util.EventBus;
 
 /** Keeps display and actions up to date with audio playback. */
 public class MyPrecisionListener implements AudioEvent.Listener {
@@ -16,10 +16,12 @@ public class MyPrecisionListener implements AudioEvent.Listener {
     private long greatestProgress;
     private long lastProgress = -1;
     private final AudioState audioState;
+    private final EventBus eventBus;
 
     @Inject
-    public MyPrecisionListener(AudioState audioState) {
+    public MyPrecisionListener(AudioState audioState, EventBus eventBus) {
         this.audioState = audioState;
+        this.eventBus = eventBus;
         greatestProgress = -1;
     }
 
@@ -42,7 +44,9 @@ public class MyPrecisionListener implements AudioEvent.Listener {
             case OPENED:
                 // no MyMenu.update() here because there is no corresponding CLOSED event, handled
                 // in CurAudio.switch()
-                MySplitPane.getInstance().setContinuousLayout(false);
+                eventBus.publish(
+                        new LayoutUpdateRequestedEvent(
+                                LayoutUpdateRequestedEvent.Type.DISABLE_CONTINUOUS));
                 break;
             case PLAYING:
                 MyMenu.updateActions();

@@ -7,7 +7,6 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
 import components.audiofiles.AudioFile;
-import components.audiofiles.AudioFileDisplay;
 import components.waveform.WaveformBuffer;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
@@ -131,7 +130,7 @@ public class AudioState {
                                 + Constants.programName,
                         e1);
             }
-            precisionListener = new MyPrecisionListener(this);
+            precisionListener = new MyPrecisionListener(this, eventBus);
             pp.addListener(precisionListener);
             setPlayer(pp);
 
@@ -227,8 +226,10 @@ public class AudioState {
 
         playHistory.clear();
 
-        AudioFileDisplay.getInstance().repaint();
-        AnnotationDisplay.getInstance().repaint();
+        eventBus.publish(
+                new UIUpdateRequestedEvent(UIUpdateRequestedEvent.Component.AUDIO_FILE_DISPLAY));
+        eventBus.publish(
+                new UIUpdateRequestedEvent(UIUpdateRequestedEvent.Component.ANNOTATION_DISPLAY));
         // Reset complete - UI components will handle focus updates
     }
 

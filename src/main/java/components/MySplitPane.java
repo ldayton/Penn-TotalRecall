@@ -5,6 +5,7 @@ import actions.AnnotateIntrusionAction;
 import actions.DeleteSelectedAnnotationAction;
 import actions.PlayPauseAction;
 import components.waveform.WaveformDisplay;
+import control.LayoutUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,8 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import util.EventBus;
+import util.Subscribe;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MyFrame</code>. Splits
@@ -27,6 +30,7 @@ public class MySplitPane extends JSplitPane {
     private final PlayPauseAction playPauseAction;
     private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
+    private final EventBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -39,7 +43,8 @@ public class MySplitPane extends JSplitPane {
             ActionsManager actionsManager,
             PlayPauseAction playPauseAction,
             DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
-            AnnotateIntrusionAction annotateIntrusionAction) {
+            AnnotateIntrusionAction annotateIntrusionAction,
+            EventBus eventBus) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
         this.controlPanel = controlPanel;
         this.waveformDisplay = waveformDisplay;
@@ -47,6 +52,7 @@ public class MySplitPane extends JSplitPane {
         this.playPauseAction = playPauseAction;
         this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
+        this.eventBus = eventBus;
 
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
@@ -92,6 +98,9 @@ public class MySplitPane extends JSplitPane {
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to layout update events
+        eventBus.subscribe(this);
     }
 
     /**
@@ -106,5 +115,17 @@ public class MySplitPane extends JSplitPane {
                             + " first.");
         }
         return instance;
+    }
+
+    @Subscribe
+    public void handleLayoutUpdateRequestedEvent(LayoutUpdateRequestedEvent event) {
+        switch (event.getType()) {
+            case ENABLE_CONTINUOUS:
+                setContinuousLayout(true);
+                break;
+            case DISABLE_CONTINUOUS:
+                setContinuousLayout(false);
+                break;
+        }
     }
 }

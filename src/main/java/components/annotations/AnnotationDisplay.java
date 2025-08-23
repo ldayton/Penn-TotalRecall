@@ -1,5 +1,6 @@
 package components.annotations;
 
+import control.UIUpdateRequestedEvent;
 import di.GuiceBootstrap;
 import info.GUIConstants;
 import info.MyShapes;
@@ -11,6 +12,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import util.EventBus;
+import util.Subscribe;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
@@ -21,6 +24,7 @@ public class AnnotationDisplay extends JScrollPane {
     private static AnnotationDisplay instance;
     private static AnnotationTable table;
     private final AnnotationTable annotationTable;
+    private final EventBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -28,8 +32,9 @@ public class AnnotationDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationDisplay(AnnotationTable annotationTable) {
+    public AnnotationDisplay(AnnotationTable annotationTable, EventBus eventBus) {
         this.annotationTable = annotationTable;
+        this.eventBus = eventBus;
         table = annotationTable;
         getViewport().setView(table);
         setPreferredSize(GUIConstants.annotationDisplayDimension);
@@ -61,6 +66,9 @@ public class AnnotationDisplay extends JScrollPane {
 
         // Set the singleton instance after full initialization
         instance = this;
+
+        // Subscribe to UI update events
+        eventBus.subscribe(this);
     }
 
     public static Annotation[] getAnnotationsInOrder() {
@@ -108,5 +116,12 @@ public class AnnotationDisplay extends JScrollPane {
 
     public static int getNumAnnotations() {
         return table.getModel().size();
+    }
+
+    @Subscribe
+    public void handleUIUpdateRequestedEvent(UIUpdateRequestedEvent event) {
+        if (event.getComponent() == UIUpdateRequestedEvent.Component.ANNOTATION_DISPLAY) {
+            repaint();
+        }
     }
 }
