@@ -1,9 +1,10 @@
 package behaviors.singleact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
+import util.WindowService;
 
 /**
  * Plays or "pauses" audio.
@@ -56,7 +57,10 @@ public class PlayPauseAction extends IdentifiedSingleAction {
             player.playAt(pos);
             CurAudio.pushPlayPos(pos);
         }
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     /**

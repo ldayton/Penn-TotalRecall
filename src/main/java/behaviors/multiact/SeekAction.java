@@ -1,11 +1,12 @@
 package behaviors.multiact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.UserPrefs;
 import java.awt.event.ActionEvent;
 import java.util.Map;
+import util.WindowService;
 
 /**
  * Sets the audio position forward/backward one of several pre-defined amounts, in response to user
@@ -74,7 +75,10 @@ public class SeekAction extends IdentifiedMultiAction {
 
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
         CurAudio.getPlayer().playAt(finalPosition);
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     /**

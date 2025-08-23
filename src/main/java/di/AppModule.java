@@ -35,6 +35,7 @@ import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 import util.DialogService;
 import util.ProgramVersion;
+import util.WindowService;
 
 /**
  * Guice module for dependency injection configuration.
@@ -78,6 +79,7 @@ public class AppModule extends AbstractModule {
         // Utility services
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
+        bind(WindowService.class).in(Singleton.class);
     }
 
     @Provides

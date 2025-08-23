@@ -1,7 +1,6 @@
 package behaviors.singleact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationTable;
@@ -11,6 +10,7 @@ import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
+import util.WindowService;
 
 public class JumpToAnnotationAction extends IdentifiedSingleAction {
     private static final Logger logger = LoggerFactory.getLogger(JumpToAnnotationAction.class);
@@ -38,7 +38,10 @@ public class JumpToAnnotationAction extends IdentifiedSingleAction {
             CurAudio.setAudioProgressAndUpdateActions(curFrame);
             CurAudio.getPlayer().playAt(curFrame);
         }
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     @Override

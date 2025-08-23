@@ -1,11 +1,12 @@
 package behaviors.multiact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import components.waveform.WaveformDisplay;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import info.GUIConstants;
 import java.awt.event.ActionEvent;
+import util.WindowService;
 
 public class ScreenSeekAction extends IdentifiedMultiAction {
 
@@ -50,7 +51,10 @@ public class ScreenSeekAction extends IdentifiedMultiAction {
 
         CurAudio.setAudioProgressAndUpdateActions(finalPosition);
         CurAudio.getPlayer().playAt(finalPosition);
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package behaviors.multiact;
 import audio.AudioPlayer;
 import behaviors.UpdatingAction;
 import behaviors.singleact.DeleteSelectedAnnotationAction;
-import components.MyFrame;
 import components.MyMenu;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -23,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
 import util.OSPath;
+import util.WindowService;
 
 /** Commits a user's annotation, updating the annotation file and program window as appropriate. */
 public class AnnotateAction extends IdentifiedMultiAction {
@@ -194,7 +194,10 @@ public class AnnotateAction extends IdentifiedMultiAction {
         }
 
         // return focus to the frame after annotation, for the sake of action key bindings
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
         MyMenu.updateActions();
     }
 

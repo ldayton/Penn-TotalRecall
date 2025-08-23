@@ -1,7 +1,6 @@
 package behaviors.multiact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import control.CurAudio;
@@ -10,6 +9,7 @@ import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
+import util.WindowService;
 
 /**
  * Tries to move the audio position to the next/previous {@link components.annotations.Annotation},
@@ -77,7 +77,10 @@ public class ToggleAnnotationsAction extends IdentifiedMultiAction {
             CurAudio.setAudioProgressAndUpdateActions(approxFrame);
             CurAudio.getPlayer().playAt(approxFrame);
         }
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     /**

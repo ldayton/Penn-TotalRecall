@@ -1,9 +1,10 @@
 package behaviors.singleact;
 
 import audio.AudioPlayer;
-import components.MyFrame;
 import control.CurAudio;
+import di.GuiceBootstrap;
 import java.awt.event.ActionEvent;
+import util.WindowService;
 
 public class ReturnToLastPositionAction extends IdentifiedSingleAction {
 
@@ -13,7 +14,10 @@ public class ReturnToLastPositionAction extends IdentifiedSingleAction {
         long pos = CurAudio.popLastPlayPos();
         CurAudio.setAudioProgressAndUpdateActions(pos);
         CurAudio.getPlayer().playAt(pos);
-        MyFrame.getInstance().requestFocusInWindow();
+        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        if (windowService != null) {
+            windowService.requestFocus();
+        }
     }
 
     @Override
