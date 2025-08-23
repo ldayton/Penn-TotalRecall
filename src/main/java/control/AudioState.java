@@ -9,7 +9,6 @@ import components.annotations.AnnotationFileParser;
 import components.audiofiles.AudioFile;
 import components.audiofiles.AudioFileDisplay;
 import components.waveform.WaveformBuffer;
-import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import env.PreferencesManager;
@@ -172,7 +171,7 @@ public class AudioState {
             waveformBuffer = new WaveformBuffer(preferencesManager, this);
             waveformBuffer.start();
 
-            WaveformDisplay.getInstance().startRefreshes();
+            eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));
         }
 
         MyMenu.updateActions();
@@ -186,7 +185,7 @@ public class AudioState {
         AnnotationDisplay.removeAllAnnotations();
 
         // stop waveform display
-        WaveformDisplay.getInstance().stopRefreshes();
+        eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.STOP));
 
         // stop audio playback
         if (player != null) {

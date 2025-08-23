@@ -3,13 +3,13 @@ package actions;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
-import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
 import control.AudioState;
 import control.ErrorRequestedEvent;
 import control.FocusRequestedEvent;
 import control.InfoRequestedEvent;
+import control.UIUpdateRequestedEvent;
 import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -112,7 +112,9 @@ public class AnnotateRegularAction extends BaseAction {
                                 null,
                                 System.currentTimeMillis(),
                                 0));
-                WaveformDisplay.getInstance().repaint();
+                eventBus.publish(
+                        new UIUpdateRequestedEvent(
+                                UIUpdateRequestedEvent.Component.WAVEFORM_DISPLAY));
 
                 // file may no longer exist after deletion
                 if (!oFile.exists()) {

@@ -1,10 +1,8 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.waveform.WaveformDisplay;
 import control.AudioState;
-import control.FocusRequestedEvent;
-import info.GUIConstants;
+import control.ScreenSeekRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -28,32 +26,11 @@ public class ScreenSeekAction extends BaseAction {
 
     @Override
     protected void performAction(ActionEvent e) {
-        int shift =
-                (int)
-                        (((double) WaveformDisplay.getInstance().getWidth()
-                                        / (double) GUIConstants.zoomlessPixelsPerSecond)
-                                * 1000);
-        shift -= shift / 5;
-        if (!forward) {
-            shift *= -1;
-        }
-
-        long curFrame = audioState.getAudioProgress();
-        long frameShift = audioState.getMaster().millisToFrames(shift);
-        long naivePosition = curFrame + frameShift;
-        long frameLength = audioState.getMaster().durationInFrames();
-
-        long finalPosition = naivePosition;
-
-        if (naivePosition < 0) {
-            finalPosition = 0;
-        } else if (naivePosition >= frameLength) {
-            finalPosition = frameLength - 1;
-        }
-
-        audioState.setAudioProgressAndUpdateActions(finalPosition);
-        audioState.getPlayer().playAt(finalPosition);
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(
+                new ScreenSeekRequestedEvent(
+                        forward
+                                ? ScreenSeekRequestedEvent.Direction.FORWARD
+                                : ScreenSeekRequestedEvent.Direction.BACKWARD));
     }
 
     @Override

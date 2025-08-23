@@ -5,6 +5,10 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
 import control.AudioState;
+import control.FocusRequestedEvent;
+import control.ScreenSeekRequestedEvent;
+import control.UIUpdateRequestedEvent;
+import control.WaveformRefreshEvent;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
@@ -23,6 +27,8 @@ import javax.swing.Timer;
 import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.EventBus;
+import util.Subscribe;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -60,9 +66,10 @@ public class WaveformDisplay extends JComponent {
 
     private static WaveformDisplay instance;
     private static AudioState audioState;
+    private final EventBus eventBus;
 
     @Inject
-    public WaveformDisplay(AudioState audioState) {
+    public WaveformDisplay(AudioState audioState, EventBus eventBus) {
         WaveformDisplay.audioState = audioState;
         setOpaque(true);
         setBackground(MyColors.waveformBackground);
@@ -79,6 +86,11 @@ public class WaveformDisplay extends JComponent {
                 });
         addMouseListener(new WaveformMouseAdapter(this, audioState));
         addMouseMotionListener(new WaveformMouseAdapter(this, audioState));
+
+        this.eventBus = eventBus;
+
+        // Subscribe to waveform refresh events
+        eventBus.subscribe(this);
 
         // Set the singleton instance after full initialization
         instance = this;
@@ -121,6 +133,54 @@ public class WaveformDisplay extends JComponent {
             nextRefreshChunk = null;
             repaint();
         }
+    }
+
+    @Subscribe
+    public void handleWaveformRefreshEvent(WaveformRefreshEvent event) {
+        switch (event.getType()) {
+            case START:
+                startRefreshes();
+                break;
+            case STOP:
+                stopRefreshes();
+                break;
+        }
+    }
+
+    @Subscribe
+    public void handleUIUpdateRequestedEvent(UIUpdateRequestedEvent event) {
+        if (event.getComponent() == UIUpdateRequestedEvent.Component.WAVEFORM_DISPLAY) {
+            repaint();
+        }
+    }
+
+    @Subscribe
+    public void handleScreenSeekRequestedEvent(ScreenSeekRequestedEvent event) {
+        int shift =
+                (int)
+                        (((double) getWidth() / (double) GUIConstants.zoomlessPixelsPerSecond)
+                                * 1000);
+        shift -= shift / 5;
+        if (event.getDirection() == ScreenSeekRequestedEvent.Direction.BACKWARD) {
+            shift *= -1;
+        }
+
+        long curFrame = audioState.getAudioProgress();
+        long frameShift = audioState.getMaster().millisToFrames(shift);
+        long naivePosition = curFrame + frameShift;
+        long frameLength = audioState.getMaster().durationInFrames();
+
+        long finalPosition = naivePosition;
+
+        if (naivePosition < 0) {
+            finalPosition = 0;
+        } else if (naivePosition >= frameLength) {
+            finalPosition = frameLength - 1;
+        }
+
+        audioState.setAudioProgressAndUpdateActions(finalPosition);
+        audioState.getPlayer().playAt(finalPosition);
+        eventBus.publish(new FocusRequestedEvent());
     }
 
     @Override
