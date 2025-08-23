@@ -45,7 +45,7 @@ public class JumpToAnnotationAction extends BaseAction {
             audioState.setAudioProgressAndUpdateActions(curFrame);
             audioState.getPlayer().playAt(curFrame);
         }
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     @Override

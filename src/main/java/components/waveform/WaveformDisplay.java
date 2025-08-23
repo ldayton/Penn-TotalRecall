@@ -180,7 +180,7 @@ public class WaveformDisplay extends JComponent {
 
         audioState.setAudioProgressAndUpdateActions(finalPosition);
         audioState.getPlayer().playAt(finalPosition);
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     @Override

@@ -117,7 +117,8 @@ public class AnnotateAction extends BaseAction {
                 wordpoolDisplay.clearText();
 
                 // Update the display
-                eventBus.publish(new FocusRequestedEvent());
+                eventBus.publish(
+                        new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
 
             } catch (IOException e1) {
                 logger.error("Could not write to annotation file: " + oFile.getAbsolutePath(), e1);

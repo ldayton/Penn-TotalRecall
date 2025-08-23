@@ -27,7 +27,7 @@ public class ReturnToLastPositionAction extends BaseAction {
         audioState.setAudioProgressAndUpdateActions(pos);
         audioState.getPlayer().playAt(pos);
         // Fire focus requested event - UI will handle focus updates
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     @Override

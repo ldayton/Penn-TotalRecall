@@ -1,5 +1,6 @@
 package components.wordpool;
 
+import control.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import util.EventBus;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
 @Singleton
@@ -27,10 +29,12 @@ public class WordpoolList extends JList<WordpoolWord>
     private static WordpoolList instance;
 
     final WordpoolListCellRenderer render;
+    private final EventBus eventBus;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public WordpoolList() {
+    public WordpoolList(EventBus eventBus) {
+        this.eventBus = eventBus;
         model = new WordpoolListModel();
         setModel(model);
 
@@ -55,7 +59,9 @@ public class WordpoolList extends JList<WordpoolWord>
                         if (isFocusable()) {
                             // automatically takes focus in this case
                         } else {
-                            WordpoolTextField.getInstance().requestFocusInWindow();
+                            eventBus.publish(
+                                    new FocusRequestedEvent(
+                                            FocusRequestedEvent.Component.WORDPOOL_TEXT_FIELD));
                         }
                     }
                 });
@@ -229,7 +235,8 @@ public class WordpoolList extends JList<WordpoolWord>
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (getSelectedIndex() == 0) {
-                WordpoolTextField.getInstance().requestFocusInWindow();
+                eventBus.publish(
+                        new FocusRequestedEvent(FocusRequestedEvent.Component.WORDPOOL_TEXT_FIELD));
             }
         }
     }

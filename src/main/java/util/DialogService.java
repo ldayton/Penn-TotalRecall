@@ -18,8 +18,7 @@ import lombok.NonNull;
 /**
  * Service for managing all dialog operations in the application.
  *
- * <p>Centralizes dialog creation and eliminates direct MyFrame.getInstance() calls for better
- * dependency injection and testability.
+ * <p>Centralizes dialog creation for better dependency injection and testability.
  */
 @Singleton
 public class DialogService {

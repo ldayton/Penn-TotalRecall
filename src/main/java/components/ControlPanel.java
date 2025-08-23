@@ -43,8 +43,6 @@ public class ControlPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         add(Box.createHorizontalGlue());
-        //		add(Box.createRigidArea(new Dimension(30, 0)));
-        //		add(VolumeSliderDisplay.getInstance());
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(audioFileDisplay);
         add(Box.createRigidArea(new Dimension(30, 0)));

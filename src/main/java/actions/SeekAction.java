@@ -56,7 +56,7 @@ public class SeekAction extends BaseAction {
 
         audioState.setAudioProgressAndUpdateActions(finalPosition);
         audioState.getPlayer().playAt(finalPosition);
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     private String getActionId() {

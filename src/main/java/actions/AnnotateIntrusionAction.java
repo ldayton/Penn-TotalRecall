@@ -145,7 +145,7 @@ public class AnnotateIntrusionAction extends BaseAction {
         }
 
         // return focus to the frame after annotation, for the sake of action key bindings
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     @Override

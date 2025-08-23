@@ -60,7 +60,7 @@ public class ToggleAnnotationsAction extends BaseAction {
             audioState.setAudioProgressAndUpdateActions(approxFrame);
             audioState.getPlayer().playAt(approxFrame);
         }
-        eventBus.publish(new FocusRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
     /**

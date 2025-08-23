@@ -9,8 +9,7 @@ import lombok.NonNull;
 /**
  * Service for managing window operations in the application.
  *
- * <p>Centralizes window management and eliminates direct MyFrame.getInstance() calls for better
- * dependency injection and testability.
+ * <p>Centralizes window management for better dependency injection and testability.
  */
 @Singleton
 public class WindowService {

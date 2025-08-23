@@ -1,5 +1,6 @@
 package components.wordpool;
 
+import control.FocusRequestedEvent;
 import env.KeyboardManager;
 import env.PreferencesManager;
 import info.PreferenceKeys;
@@ -24,6 +25,8 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
+import util.EventBus;
+import util.Subscribe;
 
 /**
  * Custom <code>JTextField</code> for entering annotations.
@@ -40,15 +43,18 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private final KeyboardManager keyboardManager;
     private final PreferencesManager preferencesManager;
     private final WordpoolList wordpoolList;
+    private final EventBus eventBus;
 
     @Inject
     public WordpoolTextField(
             KeyboardManager keyboardManager,
             PreferencesManager preferencesManager,
-            WordpoolList wordpoolList) {
+            WordpoolList wordpoolList,
+            EventBus eventBus) {
         this.keyboardManager = keyboardManager;
         this.preferencesManager = preferencesManager;
         this.wordpoolList = wordpoolList;
+        this.eventBus = eventBus;
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
@@ -88,6 +94,9 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
             JTextComponent.loadKeymap(k, newBindings, getActions());
         }
         addFocusListener(this);
+
+        // Subscribe to focus events
+        eventBus.subscribe(this);
         getInputMap(JComponent.WHEN_FOCUSED)
                 .put(
                         KeyStroke.getKeyStroke(
@@ -231,4 +240,11 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     @Override
     public void focusLost(FocusEvent e) {}
+
+    @Subscribe
+    public void handleFocusRequestedEvent(FocusRequestedEvent event) {
+        if (event.getComponent() == FocusRequestedEvent.Component.WORDPOOL_TEXT_FIELD) {
+            requestFocusInWindow();
+        }
+    }
 }

@@ -1,14 +1,23 @@
 package control;
 
-/** Event fired when focus is requested on the main window. */
+/**
+ * Event for requesting focus changes between UI components. This eliminates direct UI control from
+ * event handlers.
+ */
 public class FocusRequestedEvent {
-    private final long timestamp;
-
-    public FocusRequestedEvent() {
-        this.timestamp = System.currentTimeMillis();
+    public enum Component {
+        WORDPOOL_TEXT_FIELD,
+        WORDPOOL_LIST,
+        MAIN_WINDOW
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    private final Component component;
+
+    public FocusRequestedEvent(Component component) {
+        this.component = component;
+    }
+
+    public Component getComponent() {
+        return component;
     }
 }
