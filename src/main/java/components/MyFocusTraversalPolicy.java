@@ -12,7 +12,6 @@ import java.awt.FocusTraversalPolicy;
 import java.awt.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.LoopIterator;
 
 /**
  * A custom <code>FocusTraversalPolicy</code> for this program, including documentation on general
@@ -104,8 +103,8 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
 
     /**
      * Handles the job of finding the next/previous component in the loop by using a {@link
-     * util.LoopIterator}. Makes sure that the next component in the focus traversal cycle is
-     * actually eligible for focus (i.e., enabled, visible, focusable).
+     * util.FocusTraversalHelper}. Makes sure that the next component in the focus traversal cycle
+     * is actually eligible for focus (i.e., enabled, visible, focusable).
      *
      * @param aComponent The base component whose successor/predecessor is to be found
      * @param forward <code>true</code> iff the direction of traversal is forward
@@ -128,22 +127,48 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
                             + " "
                             + aComponent);
         }
-        LoopIterator<Component> li =
-                new LoopIterator<Component>(focusLoop, componentIndex, forward);
-        if (li.hasNext()) {
-            li.next();
-            while (li.hasNext()) {
-                Component c = li.next();
-                // these are the three conditions for a component to be eligible for focus
-                if (c.isEnabled() && c.isVisible() && c.isFocusable()) {
-                    return c;
-                }
-            }
-            logger.error(genericFailureMessage);
-            return null;
-        } else {
-            logger.error(genericFailureMessage);
+        return findNextEligible(
+                focusLoop,
+                componentIndex,
+                forward,
+                c -> c.isEnabled() && c.isVisible() && c.isFocusable());
+    }
+
+    /**
+     * Finds the next eligible element in a circular array traversal.
+     *
+     * @param array The array to search through
+     * @param currentIndex The current position (will be skipped)
+     * @param forward Whether to search forward (true) or backward (false)
+     * @param isEligible Predicate to test if an element is eligible
+     * @return The first eligible element found, or null if none found
+     */
+    private static <T> T findNextEligible(
+            T[] array,
+            int currentIndex,
+            boolean forward,
+            java.util.function.Predicate<T> isEligible) {
+        if (array == null || array.length == 0) {
             return null;
         }
+
+        // Calculate starting index (skip current element)
+        int startIndex =
+                forward
+                        ? (currentIndex + 1) % array.length
+                        : (currentIndex - 1 + array.length) % array.length;
+
+        // Search through all elements except the current one
+        for (int i = 0; i < array.length - 1; i++) {
+            int index =
+                    forward
+                            ? (startIndex + i) % array.length
+                            : (startIndex - i + array.length) % array.length;
+
+            if (isEligible.test(array[index])) {
+                return array[index];
+            }
+        }
+        return null;
     }
 }
