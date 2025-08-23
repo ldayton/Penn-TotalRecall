@@ -23,7 +23,7 @@ class DoneButtonTest {
         // This is necessary for the action system to work properly
         bootstrap.startApplication();
 
-        doneButton = bootstrap.getInjectedInstance(DoneButton.class);
+        doneButton = GuiceBootstrap.getInjectedInstance(DoneButton.class);
     }
 
     @Test

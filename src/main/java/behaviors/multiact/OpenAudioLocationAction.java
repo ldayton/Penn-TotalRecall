@@ -2,8 +2,9 @@ package behaviors.multiact;
 
 import components.audiofiles.AudioFileDisplay;
 import di.GuiceBootstrap;
+import env.PreferencesManager;
 import info.Constants;
-import info.UserPrefs;
+import info.PreferenceKeys;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -38,9 +39,14 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
-        var userManager = di.GuiceBootstrap.getInjectedInstance(env.UserManager.class);
+        var userManager =
+                GuiceBootstrap.getRequiredInjectedInstance(env.UserManager.class, "UserManager");
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openLocationPath, userManager.getUserHomeDir());
+                preferencesManager.getString(
+                        PreferenceKeys.OPEN_LOCATION_PATH, userManager.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
             maybeLastPath = userManager.getUserHomeDir();
         }
@@ -122,8 +128,8 @@ public class OpenAudioLocationAction extends IdentifiedMultiAction {
             }
         }
         if (path != null) {
-            UserPrefs.prefs.put(
-                    UserPrefs.openLocationPath, new File(path).getParentFile().getPath());
+            preferencesManager.putString(
+                    PreferenceKeys.OPEN_LOCATION_PATH, new File(path).getParentFile().getPath());
             File chosenFile = new File(path);
             if (chosenFile.isFile()) {
                 AudioFileDisplay.addFilesIfSupported(new File[] {chosenFile});

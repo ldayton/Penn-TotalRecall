@@ -2,8 +2,10 @@ package behaviors.singleact;
 
 import control.CurAudio;
 import di.GuiceBootstrap;
+import env.PreferencesManager;
 import info.Constants;
-import info.UserPrefs;
+import info.PreferenceKeys;
+import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,26 +15,33 @@ import util.DialogService;
 public class ExitAction extends IdentifiedSingleAction {
     private static final Logger logger = LoggerFactory.getLogger(ExitAction.class);
 
-    public ExitAction() {}
+    private final PreferencesManager preferencesManager;
+
+    @Inject
+    public ExitAction(PreferencesManager preferencesManager) {
+        this.preferencesManager = preferencesManager;
+    }
 
     /**
      * Performs exit, possibly querying user for confirmation if the inter-session preferences
      * request such warning.
      */
     public void actionPerformed(ActionEvent e) {
+        // Handle case where preferencesManager might be null (during bootstrap)
         boolean shouldWarn =
-                UserPrefs.prefs.getBoolean(UserPrefs.warnExit, UserPrefs.defaultWarnExit);
+                preferencesManager != null
+                        ? preferencesManager.getBoolean(
+                                PreferenceKeys.WARN_ON_EXIT, PreferenceKeys.DEFAULT_WARN_ON_EXIT)
+                        : PreferenceKeys.DEFAULT_WARN_ON_EXIT;
         if (shouldWarn) {
             String message = "Are you sure you want to exit " + Constants.programName + "?";
-            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
-
-            if (dialogService == null) {
-                throw new IllegalStateException("DialogService not available via DI");
-            }
+            DialogService dialogService =
+                    GuiceBootstrap.getRequiredInjectedInstance(
+                            DialogService.class, "DialogService");
             DialogService.ConfirmationResult result =
                     dialogService.showConfirmWithDontShowAgain(message);
-            if (result.isDontShowAgain()) {
-                UserPrefs.prefs.putBoolean(UserPrefs.warnExit, false);
+            if (result.isDontShowAgain() && preferencesManager != null) {
+                preferencesManager.putBoolean(PreferenceKeys.WARN_ON_EXIT, false);
             }
             if (result.isConfirmed()) {
                 doExit();
@@ -62,11 +71,13 @@ public class ExitAction extends IdentifiedSingleAction {
         // of the app)
         try {
             components.WindowManager windowManager =
-                    GuiceBootstrap.getInjectedInstance(components.WindowManager.class);
+                    GuiceBootstrap.getRequiredInjectedInstance(
+                            components.WindowManager.class, "WindowManager");
             components.MyFrame myFrame =
-                    GuiceBootstrap.getInjectedInstance(components.MyFrame.class);
+                    GuiceBootstrap.getRequiredInjectedInstance(components.MyFrame.class, "MyFrame");
             components.MySplitPane mySplitPane =
-                    GuiceBootstrap.getInjectedInstance(components.MySplitPane.class);
+                    GuiceBootstrap.getRequiredInjectedInstance(
+                            components.MySplitPane.class, "MySplitPane");
 
             windowManager.saveWindowLayout(myFrame, mySplitPane);
         } catch (Exception e) {

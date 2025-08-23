@@ -3,7 +3,7 @@ package components.preferences;
 import components.MyFrame;
 import env.KeyboardManager;
 import info.GUIConstants;
-import info.UserPrefs;
+import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
@@ -162,24 +162,28 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         prefPanel.add(bandPref);
         BooleanPreference warnExitPref =
                 new BooleanPreference(
-                        "Warn on Exit", UserPrefs.warnExit, "Yes", "No", UserPrefs.defaultWarnExit);
+                        "Warn on Exit",
+                        PreferenceKeys.WARN_ON_EXIT,
+                        "Yes",
+                        "No",
+                        PreferenceKeys.DEFAULT_WARN_ON_EXIT);
         prefPanel.add(warnExitPref);
         BooleanPreference warnSwitchPref =
                 new BooleanPreference(
                         "Warn on File Switch",
-                        UserPrefs.warnFileSwitch,
+                        PreferenceKeys.WARN_FILE_SWITCH,
                         "Yes",
                         "No",
-                        UserPrefs.defaultWarnFileSwitch);
+                        PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
         prefPanel.add(warnSwitchPref);
         if (keyboardManager.shouldShowEmacsKeybindingOption()) {
             BooleanPreference useEmacs =
                     new BooleanPreference(
                             "Use Emacs Keybindings",
-                            UserPrefs.useEmacs,
+                            PreferenceKeys.USE_EMACS,
                             "Yes",
                             "No",
-                            UserPrefs.defaultUseEmacs);
+                            PreferenceKeys.DEFAULT_USE_EMACS);
             prefPanel.add(useEmacs);
         }
 

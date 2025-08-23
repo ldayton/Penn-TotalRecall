@@ -1,7 +1,9 @@
 package components.preferences;
 
 import components.MyMenu;
-import info.UserPrefs;
+import di.GuiceBootstrap;
+import env.PreferencesManager;
+import info.PreferenceKeys;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import javax.swing.JSpinner;
@@ -35,9 +37,9 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
         this.size = size;
         defValue =
                 switch (size) {
-                    case SMALL_SHIFT -> UserPrefs.defaultSmallShift;
-                    case MEDIUM_SHIFT -> UserPrefs.defaultMediumShift;
-                    case LARGE_SHIFT -> UserPrefs.defaultLargeShift;
+                    case SMALL_SHIFT -> PreferenceKeys.DEFAULT_SMALL_SHIFT;
+                    case MEDIUM_SHIFT -> PreferenceKeys.DEFAULT_MEDIUM_SHIFT;
+                    case LARGE_SHIFT -> PreferenceKeys.DEFAULT_LARGE_SHIFT;
                 };
         spinner = new JSpinner();
         SpinnerNumberModel model = new SpinnerNumberModel();
@@ -52,10 +54,19 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private int getCurrentVal() {
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
         return switch (size) {
-            case SMALL_SHIFT -> UserPrefs.getSmallShift();
-            case MEDIUM_SHIFT -> UserPrefs.getMediumShift();
-            case LARGE_SHIFT -> UserPrefs.getLargeShift();
+            case SMALL_SHIFT ->
+                    preferencesManager.getInt(
+                            PreferenceKeys.SMALL_SHIFT, PreferenceKeys.DEFAULT_SMALL_SHIFT);
+            case MEDIUM_SHIFT ->
+                    preferencesManager.getInt(
+                            PreferenceKeys.MEDIUM_SHIFT, PreferenceKeys.DEFAULT_MEDIUM_SHIFT);
+            case LARGE_SHIFT ->
+                    preferencesManager.getInt(
+                            PreferenceKeys.LARGE_SHIFT, PreferenceKeys.DEFAULT_LARGE_SHIFT);
         };
     }
 
@@ -97,10 +108,13 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private void saveVal(int nVal) {
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
         switch (size) {
-            case SMALL_SHIFT -> UserPrefs.setSmallShift(nVal);
-            case MEDIUM_SHIFT -> UserPrefs.setMediumShift(nVal);
-            case LARGE_SHIFT -> UserPrefs.setLargeShift(nVal);
+            case SMALL_SHIFT -> preferencesManager.putInt(PreferenceKeys.SMALL_SHIFT, nVal);
+            case MEDIUM_SHIFT -> preferencesManager.putInt(PreferenceKeys.MEDIUM_SHIFT, nVal);
+            case LARGE_SHIFT -> preferencesManager.putInt(PreferenceKeys.LARGE_SHIFT, nVal);
         }
     }
 }

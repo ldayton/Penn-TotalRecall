@@ -1,10 +1,12 @@
 package components.waveform;
 
 import control.CurAudio;
+import env.PreferencesManager;
 import info.GUIConstants;
 import info.MyColors;
 import info.MyShapes;
-import info.UserPrefs;
+import info.PreferenceKeys;
+import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -56,12 +58,15 @@ public class WaveformBuffer extends Buffer {
     private int bufferedHeight;
 
     private double biggestConsecutivePixelVals;
+    private final PreferencesManager preferencesManager;
 
     /**
      * Creates a buffer thread using the audio information that <code>CurAudio</code> provides at
      * the time the constructor runs.
      */
-    public WaveformBuffer() {
+    @Inject
+    public WaveformBuffer(PreferencesManager preferencesManager) {
+        this.preferencesManager = preferencesManager;
         finish = false;
         numChunks = CurAudio.lastChunkNum() + 1;
         chunkWidthInPixels = GUIConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
@@ -71,9 +76,11 @@ public class WaveformBuffer extends Buffer {
 
         // bandpass filter ranges
         double minPref =
-                UserPrefs.prefs.getInt(UserPrefs.minBandPass, UserPrefs.defaultMinBandPass);
+                preferencesManager.getInt(
+                        PreferenceKeys.MIN_BAND_PASS, PreferenceKeys.DEFAULT_MIN_BAND_PASS);
         double maxPref =
-                UserPrefs.prefs.getInt(UserPrefs.maxBandPass, UserPrefs.defaultMaxBandPass);
+                preferencesManager.getInt(
+                        PreferenceKeys.MAX_BAND_PASS, PreferenceKeys.DEFAULT_MAX_BAND_PASS);
         double sampleRate = CurAudio.getMaster().frameRate();
 
         double tmpMinBand = minPref / sampleRate;

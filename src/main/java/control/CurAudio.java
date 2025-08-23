@@ -13,6 +13,7 @@ import components.waveform.WaveformDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import di.GuiceBootstrap;
+import env.PreferencesManager;
 import info.Constants;
 import info.GUIConstants;
 import java.io.File;
@@ -216,7 +217,10 @@ public class CurAudio {
             }
 
             // start new video buffers
-            waveformBuffer = new WaveformBuffer();
+            PreferencesManager preferencesManager =
+                    GuiceBootstrap.getRequiredInjectedInstance(
+                            PreferencesManager.class, "PreferencesManager");
+            waveformBuffer = new WaveformBuffer(preferencesManager);
             waveformBuffer.start();
 
             WaveformDisplay.getInstance().startRefreshes();

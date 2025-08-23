@@ -2,7 +2,8 @@ package components.wordpool;
 
 import behaviors.multiact.AnnotateAction;
 import env.KeyboardManager;
-import info.UserPrefs;
+import env.PreferencesManager;
+import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -38,10 +39,13 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     private String clipboard = "";
     private final KeyboardManager keyboardManager;
+    private final PreferencesManager preferencesManager;
 
     @Inject
-    public WordpoolTextField(KeyboardManager keyboardManager) {
+    public WordpoolTextField(
+            KeyboardManager keyboardManager, PreferencesManager preferencesManager) {
         this.keyboardManager = keyboardManager;
+        this.preferencesManager = preferencesManager;
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
@@ -56,7 +60,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         addKeyListener(this);
 
         // emacs key bindings
-        if (UserPrefs.prefs.getBoolean(UserPrefs.useEmacs, UserPrefs.defaultUseEmacs)) {
+        if (preferencesManager.getBoolean(
+                PreferenceKeys.USE_EMACS, PreferenceKeys.DEFAULT_USE_EMACS)) {
             JTextComponent.KeyBinding[] newBindings = {
                 new JTextComponent.KeyBinding(
                         KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK, false),

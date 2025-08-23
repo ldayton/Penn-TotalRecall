@@ -5,8 +5,10 @@ import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
 import control.CurAudio;
 import di.GuiceBootstrap;
+import env.PreferencesManager;
 import info.Constants;
-import info.UserPrefs;
+import info.PreferenceKeys;
+import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -26,14 +28,20 @@ import util.OSPath;
 public class OpenWordpoolAction extends IdentifiedSingleAction {
     private static final Logger logger = LoggerFactory.getLogger(OpenWordpoolAction.class);
 
-    public OpenWordpoolAction() {}
+    private final PreferencesManager preferencesManager;
+
+    @Inject
+    public OpenWordpoolAction(PreferencesManager preferencesManager) {
+        this.preferencesManager = preferencesManager;
+    }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
         super.actionPerformed(arg0);
         var userManager = di.GuiceBootstrap.getInjectedInstance(env.UserManager.class);
         String maybeLastPath =
-                UserPrefs.prefs.get(UserPrefs.openWordpoolPath, userManager.getUserHomeDir());
+                preferencesManager.getString(
+                        PreferenceKeys.OPEN_WORDPOOL_PATH, userManager.getUserHomeDir());
         if (new File(maybeLastPath).exists() == false) {
             maybeLastPath = userManager.getUserHomeDir();
         }
@@ -98,8 +106,9 @@ public class OpenWordpoolAction extends IdentifiedSingleAction {
         if (path != null) {
             File chosenFile = new File(path);
             if (chosenFile.isFile()) {
-                UserPrefs.prefs.put(
-                        UserPrefs.openWordpoolPath, new File(path).getParentFile().getPath());
+                preferencesManager.putString(
+                        PreferenceKeys.OPEN_WORDPOOL_PATH,
+                        new File(path).getParentFile().getPath());
                 switchWordpool(chosenFile);
             }
         }

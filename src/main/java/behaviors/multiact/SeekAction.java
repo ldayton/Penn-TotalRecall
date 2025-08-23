@@ -3,7 +3,8 @@ package behaviors.multiact;
 import audio.AudioPlayer;
 import control.CurAudio;
 import di.GuiceBootstrap;
-import info.UserPrefs;
+import env.PreferencesManager;
+import info.PreferenceKeys;
 import java.awt.event.ActionEvent;
 import java.util.Map;
 import util.WindowService;
@@ -157,24 +158,46 @@ public class SeekAction extends IdentifiedMultiAction {
     }
 
     public void updateSeekAmount() {
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+
         switch (amount) {
             case FORWARD_SMALL:
-                shift = UserPrefs.getSmallShift();
+                shift =
+                        preferencesManager.getInt(
+                                PreferenceKeys.SMALL_SHIFT, PreferenceKeys.DEFAULT_SMALL_SHIFT);
                 break;
             case BACKWARD_SMALL:
-                shift = UserPrefs.getSmallShift() * -1;
+                shift =
+                        preferencesManager.getInt(
+                                        PreferenceKeys.SMALL_SHIFT,
+                                        PreferenceKeys.DEFAULT_SMALL_SHIFT)
+                                * -1;
                 break;
             case FORWARD_MEDIUM:
-                shift = UserPrefs.getMediumShift();
+                shift =
+                        preferencesManager.getInt(
+                                PreferenceKeys.MEDIUM_SHIFT, PreferenceKeys.DEFAULT_MEDIUM_SHIFT);
                 break;
             case BACKWARD_MEDIUM:
-                shift = UserPrefs.getMediumShift() * -1;
+                shift =
+                        preferencesManager.getInt(
+                                        PreferenceKeys.MEDIUM_SHIFT,
+                                        PreferenceKeys.DEFAULT_MEDIUM_SHIFT)
+                                * -1;
                 break;
             case FORWARD_LARGE:
-                shift = UserPrefs.getLargeShift();
+                shift =
+                        preferencesManager.getInt(
+                                PreferenceKeys.LARGE_SHIFT, PreferenceKeys.DEFAULT_LARGE_SHIFT);
                 break;
             case BACKWARD_LARGE:
-                shift = UserPrefs.getLargeShift() * -1;
+                shift =
+                        preferencesManager.getInt(
+                                        PreferenceKeys.LARGE_SHIFT,
+                                        PreferenceKeys.DEFAULT_LARGE_SHIFT)
+                                * -1;
                 break;
         }
     }

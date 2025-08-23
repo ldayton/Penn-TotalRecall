@@ -64,12 +64,19 @@ public class MyMenu extends JMenuBar {
     private static boolean showPreferencesInMenu;
 
     private final env.LookAndFeelManager lookAndFeelManager;
+    private final OpenWordpoolAction openWordpoolAction;
+    private final ExitAction exitAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public MyMenu(env.LookAndFeelManager lookAndFeelManager) {
+    public MyMenu(
+            env.LookAndFeelManager lookAndFeelManager,
+            OpenWordpoolAction openWordpoolAction,
+            ExitAction exitAction) {
         this.lookAndFeelManager = lookAndFeelManager;
+        this.openWordpoolAction = openWordpoolAction;
+        this.exitAction = exitAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -84,7 +91,7 @@ public class MyMenu extends JMenuBar {
     /** Creates the File menu, only adding exit and preferences options for non-OSX platforms. */
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
-        JMenuItem jmiOpenWordpool = new JMenuItem(new OpenWordpoolAction());
+        JMenuItem jmiOpenWordpool = new JMenuItem(openWordpoolAction);
         if (lookAndFeelManager.shouldUseAWTFileChoosers()) {
             OpenAudioLocationAction openFileAction =
                     new OpenAudioLocationAction(OpenAudioLocationAction.SelectionMode.FILES_ONLY);
@@ -110,7 +117,7 @@ public class MyMenu extends JMenuBar {
             JMenuItem jmiPreferences = new JMenuItem(new PreferencesAction());
             jmFile.add(jmiPreferences);
             jmFile.addSeparator();
-            JMenuItem jmiExit = new JMenuItem(new ExitAction());
+            JMenuItem jmiExit = new JMenuItem(exitAction);
             jmFile.add(jmiExit);
         }
         add(jmFile);

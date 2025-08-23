@@ -1,6 +1,7 @@
 package components.preferences;
 
-import info.UserPrefs;
+import di.GuiceBootstrap;
+import env.PreferencesManager;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -56,12 +57,15 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
         group.add(falseButton);
         group.add(trueButton);
 
-        if (UserPrefs.prefs.getBoolean(prefKey, defValue) == false) {
-            UserPrefs.prefs.putBoolean(prefKey, false);
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        if (preferencesManager.getBoolean(prefKey, defValue) == false) {
+            preferencesManager.putBoolean(prefKey, false);
             falseButton.setSelected(true);
             lastPref = false;
         } else {
-            UserPrefs.prefs.putBoolean(prefKey, true);
+            preferencesManager.putBoolean(prefKey, true);
             trueButton.setSelected(true);
             lastPref = true;
         }
@@ -75,12 +79,15 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     /** {@inheritDoc} */
     @Override
     protected boolean save() {
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
         if (trueButton.isSelected()) {
             lastPref = true;
-            UserPrefs.prefs.putBoolean(prefKey, true);
+            preferencesManager.putBoolean(prefKey, true);
         } else {
             lastPref = false;
-            UserPrefs.prefs.putBoolean(prefKey, false);
+            preferencesManager.putBoolean(prefKey, false);
         }
         return true;
     }
@@ -116,7 +123,10 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     /** {@inheritDoc} */
     @Override
     protected void restoreDefault() {
-        UserPrefs.prefs.putBoolean(prefKey, defValue);
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        preferencesManager.putBoolean(prefKey, defValue);
         if (defValue == true) {
             trueButton.setSelected(true);
             lastPref = true;

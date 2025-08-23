@@ -3,6 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import behaviors.singleact.ExitAction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +15,10 @@ class LookAndFeelManagerTest {
     void userConfigOverridesDefault() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
+        ExitAction exitAction = mock(ExitAction.class);
         when(config.getProperty("ui.look_and_feel")).thenReturn("com.example.CustomLaf");
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
 
         // Use reflection to access private method
         String lafClass = invokeLookAndFeelClassName(manager);
@@ -29,11 +31,12 @@ class LookAndFeelManagerTest {
     void emptyConfigFallsBackToDefault() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
+        ExitAction exitAction = mock(ExitAction.class);
         when(config.getProperty("ui.look_and_feel")).thenReturn("");
         when(config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf"))
                 .thenReturn("com.formdev.flatlaf.FlatLightLaf");
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
 
         String lafClass = invokeLookAndFeelClassName(manager);
 
@@ -45,9 +48,10 @@ class LookAndFeelManagerTest {
     void macOSHidesPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
+        ExitAction exitAction = mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
 
         assertFalse(manager.shouldShowPreferencesInMenu());
     }
@@ -57,9 +61,10 @@ class LookAndFeelManagerTest {
     void nonMacOSShowsPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
+        ExitAction exitAction = mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
 
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
 
         assertTrue(manager.shouldShowPreferencesInMenu());
     }
@@ -72,17 +77,18 @@ class LookAndFeelManagerTest {
 
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
-        LookAndFeelManager windowsManager = new LookAndFeelManager(config, platform);
+        ExitAction exitAction = mock(ExitAction.class);
+        LookAndFeelManager windowsManager = new LookAndFeelManager(config, platform, exitAction);
         assertEquals("/images/headphones48.png", windowsManager.getAppIconPath());
 
         // Test macOS
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
-        LookAndFeelManager macManager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager macManager = new LookAndFeelManager(config, platform, exitAction);
         assertEquals("/images/headphones16.png", macManager.getAppIconPath());
 
         // Test Linux
         when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
-        LookAndFeelManager linuxManager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager linuxManager = new LookAndFeelManager(config, platform, exitAction);
         assertEquals("/images/headphones16.png", linuxManager.getAppIconPath());
     }
 

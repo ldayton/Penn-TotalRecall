@@ -1,6 +1,8 @@
 package components.preferences;
 
-import info.UserPrefs;
+import di.GuiceBootstrap;
+import env.PreferencesManager;
+import info.PreferenceKeys;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -22,8 +24,8 @@ import org.slf4j.LoggerFactory;
 public class BandPassFilterPreference extends AbstractPreferenceDisplay {
     private static final Logger logger = LoggerFactory.getLogger(BandPassFilterPreference.class);
 
-    private static final int DEFAULT_MIN = UserPrefs.defaultMinBandPass;
-    private static final int DEFAULT_MAX = UserPrefs.defaultMaxBandPass;
+    private static final int DEFAULT_MIN = PreferenceKeys.DEFAULT_MIN_BAND_PASS;
+    private static final int DEFAULT_MAX = PreferenceKeys.DEFAULT_MAX_BAND_PASS;
 
     private int lastMinVal;
     private int lastMaxVal;
@@ -49,8 +51,11 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
         minPanel.setLayout(new BoxLayout(minPanel, BoxLayout.X_AXIS));
         minPanel.add(new JLabel("Min (Hz):"));
 
-        int storedMin = UserPrefs.prefs.getInt(UserPrefs.minBandPass, DEFAULT_MIN);
-        UserPrefs.prefs.putInt(UserPrefs.minBandPass, storedMin);
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        int storedMin = preferencesManager.getInt(PreferenceKeys.MIN_BAND_PASS, DEFAULT_MIN);
+        preferencesManager.putInt(PreferenceKeys.MIN_BAND_PASS, storedMin);
         lastMinVal = storedMin;
         minField = new JTextField(Integer.toString(storedMin));
 
@@ -60,8 +65,8 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
         maxPanel.setLayout(new BoxLayout(maxPanel, BoxLayout.X_AXIS));
         maxPanel.add(new JLabel("Max (Hz):"));
 
-        int storedMax = UserPrefs.prefs.getInt(UserPrefs.maxBandPass, DEFAULT_MAX);
-        UserPrefs.prefs.putInt(UserPrefs.maxBandPass, storedMax);
+        int storedMax = preferencesManager.getInt(PreferenceKeys.MAX_BAND_PASS, DEFAULT_MAX);
+        preferencesManager.putInt(PreferenceKeys.MAX_BAND_PASS, storedMax);
         lastMaxVal = storedMax;
         maxField = new JTextField(Integer.toString(storedMax));
 
@@ -99,12 +104,15 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
             throw new BadPreferenceException(
                     prefTitle, "Minimum value must be less than maximum value.");
         } else {
+            var preferencesManager =
+                    GuiceBootstrap.getRequiredInjectedInstance(
+                            PreferencesManager.class, "PreferencesManager");
             lastMinVal = minVal;
             minField.setText(Integer.toString(minVal));
-            UserPrefs.prefs.putInt(UserPrefs.minBandPass, minVal);
+            preferencesManager.putInt(PreferenceKeys.MIN_BAND_PASS, minVal);
             lastMaxVal = maxVal;
             maxField.setText(Integer.toString(maxVal));
-            UserPrefs.prefs.putInt(UserPrefs.maxBandPass, maxVal);
+            preferencesManager.putInt(PreferenceKeys.MAX_BAND_PASS, maxVal);
             return true;
         }
     }
@@ -135,10 +143,13 @@ public class BandPassFilterPreference extends AbstractPreferenceDisplay {
     /** {@inheritDoc} */
     @Override
     protected void restoreDefault() {
-        UserPrefs.prefs.putInt(UserPrefs.minBandPass, DEFAULT_MIN);
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        preferencesManager.putInt(PreferenceKeys.MIN_BAND_PASS, DEFAULT_MIN);
         minField.setText(Integer.toString(DEFAULT_MIN));
         lastMinVal = DEFAULT_MIN;
-        UserPrefs.prefs.putInt(UserPrefs.maxBandPass, DEFAULT_MAX);
+        preferencesManager.putInt(PreferenceKeys.MAX_BAND_PASS, DEFAULT_MAX);
         maxField.setText(Integer.toString(DEFAULT_MAX));
         lastMaxVal = DEFAULT_MAX;
     }

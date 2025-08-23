@@ -26,11 +26,16 @@ public class LookAndFeelManager {
 
     private final AppConfig appConfig;
     private final Platform platform;
+    private final ExitAction exitAction;
 
     @Inject
-    public LookAndFeelManager(@NonNull AppConfig appConfig, @NonNull Platform platform) {
+    public LookAndFeelManager(
+            @NonNull AppConfig appConfig,
+            @NonNull Platform platform,
+            @NonNull ExitAction exitAction) {
         this.appConfig = appConfig;
         this.platform = platform;
+        this.exitAction = exitAction;
     }
 
     /** Configures platform properties, sets Look and Feel, and enables native integration. */
@@ -102,7 +107,6 @@ public class LookAndFeelManager {
             desktop.setQuitHandler(
                     (_, response) -> {
                         try {
-                            var exitAction = new ExitAction();
                             var actionEvent =
                                     new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
                             exitAction.actionPerformed(actionEvent);

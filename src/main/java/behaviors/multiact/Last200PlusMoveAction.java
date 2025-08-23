@@ -4,7 +4,9 @@ import audio.AudioPlayer;
 import behaviors.singleact.ReplayLast200MillisAction;
 import components.MyMenu;
 import control.CurAudio;
-import info.UserPrefs;
+import di.GuiceBootstrap;
+import env.PreferencesManager;
+import info.PreferenceKeys;
 import java.awt.event.ActionEvent;
 
 /**
@@ -27,7 +29,12 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
         super(dir);
         this.dir = dir;
         replayer = new ReplayLast200MillisAction();
-        shift = UserPrefs.getSmallShift();
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        shift =
+                preferencesManager.getInt(
+                        PreferenceKeys.SMALL_SHIFT, PreferenceKeys.DEFAULT_SMALL_SHIFT);
         if (dir == Direction.BACKWARD) {
             shift *= -1;
         }
@@ -94,7 +101,12 @@ public class Last200PlusMoveAction extends IdentifiedMultiAction {
     }
 
     public void updateSeekAmount() {
-        shift = UserPrefs.getSmallShift();
+        var preferencesManager =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        PreferencesManager.class, "PreferencesManager");
+        shift =
+                preferencesManager.getInt(
+                        PreferenceKeys.SMALL_SHIFT, PreferenceKeys.DEFAULT_SMALL_SHIFT);
         if (dir == Direction.BACKWARD) {
             shift *= -1;
         }

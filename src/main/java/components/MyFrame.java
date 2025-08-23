@@ -29,21 +29,24 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
 
     private static MyFrame instance;
-    private final env.LookAndFeelManager lookAndFeelManager;
+    private final LookAndFeelManager lookAndFeelManager;
     private final MySplitPane mySplitPane;
     private final MyGlassPane myGlassPane;
     private final MyMenu myMenu;
+    private final ExitAction exitAction;
 
     @Inject
     public MyFrame(
             LookAndFeelManager lookAndFeelManager,
             MySplitPane mySplitPane,
             MyGlassPane myGlassPane,
-            MyMenu myMenu) {
+            MyMenu myMenu,
+            ExitAction exitAction) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
         this.myGlassPane = myGlassPane;
         this.myMenu = myMenu;
+        this.exitAction = exitAction;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
@@ -57,14 +60,13 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
                 new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                        new ExitAction()
-                                .actionPerformed(
-                                        new ActionEvent(
-                                                this,
-                                                ActionEvent.ACTION_PERFORMED,
-                                                null,
-                                                System.currentTimeMillis(),
-                                                0));
+                        exitAction.actionPerformed(
+                                new ActionEvent(
+                                        this,
+                                        ActionEvent.ACTION_PERFORMED,
+                                        null,
+                                        System.currentTimeMillis(),
+                                        0));
                     }
                 });
 

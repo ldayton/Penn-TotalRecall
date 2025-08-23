@@ -3,10 +3,11 @@ package components.audiofiles;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.CurAudio;
 import di.GuiceBootstrap;
+import env.PreferencesManager;
 import info.Constants;
 import info.GUIConstants;
 import info.MyShapes;
-import info.UserPrefs;
+import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -39,6 +40,7 @@ public class AudioFileDisplay extends JScrollPane {
 
     private static AudioFileDisplay instance;
     private final AudioFileList audioFileList;
+    private final PreferencesManager preferencesManager;
 
     private static AudioFileList list;
 
@@ -48,8 +50,9 @@ public class AudioFileDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AudioFileDisplay(AudioFileList audioFileList) {
+    public AudioFileDisplay(AudioFileList audioFileList, PreferencesManager preferencesManager) {
         this.audioFileList = audioFileList;
+        this.preferencesManager = preferencesManager;
         list = audioFileList;
         getViewport().setView(list);
 
@@ -158,8 +161,9 @@ public class AudioFileDisplay extends JScrollPane {
                 return true;
             }
             boolean shouldWarn =
-                    UserPrefs.prefs.getBoolean(
-                            UserPrefs.warnFileSwitch, UserPrefs.defaultWarnFileSwitch);
+                    instance.preferencesManager.getBoolean(
+                            PreferenceKeys.WARN_FILE_SWITCH,
+                            PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
                 JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
                 String message =
@@ -175,7 +179,7 @@ public class AudioFileDisplay extends JScrollPane {
                                 JOptionPane.YES_NO_OPTION);
                 boolean dontShow = checkbox.isSelected();
                 if (dontShow && response != JOptionPane.CLOSED_OPTION) {
-                    UserPrefs.prefs.putBoolean(UserPrefs.warnFileSwitch, false);
+                    instance.preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
                 }
                 if (response != JOptionPane.YES_OPTION) {
                     return false;

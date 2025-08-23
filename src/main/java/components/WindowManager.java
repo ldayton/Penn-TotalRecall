@@ -1,7 +1,7 @@
 package components;
 
 import env.PreferencesManager;
-import info.UserPrefs;
+import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
@@ -56,17 +56,19 @@ public class WindowManager {
 
     private void restoreFramePosition(@NonNull JFrame frame) {
         frame.setBounds(
-                prefs.getInt(UserPrefs.windowXLocation, 0),
-                prefs.getInt(UserPrefs.windowYLocation, 0),
-                prefs.getInt(UserPrefs.windowWidth, UserPrefs.defaultWindowWidth),
-                prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight));
+                prefs.getInt(PreferenceKeys.WINDOW_X, 0),
+                prefs.getInt(PreferenceKeys.WINDOW_Y, 0),
+                prefs.getInt(PreferenceKeys.WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_WIDTH),
+                prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT));
         // Don't try to maximize on macOS - it doesn't work properly
         // Just let the saved bounds determine the size
     }
 
     private void restoreDividerLocation(@NonNull MySplitPane splitPane) {
-        int windowHeight = prefs.getInt(UserPrefs.windowHeight, UserPrefs.defaultWindowHeight);
-        splitPane.setDividerLocation(prefs.getInt(UserPrefs.dividerLocation, windowHeight / 2));
+        int windowHeight =
+                prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
+        splitPane.setDividerLocation(
+                prefs.getInt(PreferenceKeys.DIVIDER_LOCATION, windowHeight / 2));
     }
 
     /**
@@ -88,16 +90,16 @@ public class WindowManager {
         // On macOS, maximize doesn't set extended state properly
         // Just save the current bounds always
         Rectangle bounds = frame.getBounds();
-        prefs.putInt(UserPrefs.windowXLocation, bounds.x);
-        prefs.putInt(UserPrefs.windowYLocation, bounds.y);
-        prefs.putInt(UserPrefs.windowWidth, bounds.width);
-        prefs.putInt(UserPrefs.windowHeight, bounds.height);
+        prefs.putInt(PreferenceKeys.WINDOW_X, bounds.x);
+        prefs.putInt(PreferenceKeys.WINDOW_Y, bounds.y);
+        prefs.putInt(PreferenceKeys.WINDOW_WIDTH, bounds.width);
+        prefs.putInt(PreferenceKeys.WINDOW_HEIGHT, bounds.height);
 
         // Don't bother with maximize state on macOS
-        prefs.putBoolean(UserPrefs.windowMaximized, false);
+        prefs.putBoolean(PreferenceKeys.WINDOW_MAXIMIZED, false);
     }
 
     private void saveDividerLocation(@NonNull MySplitPane splitPane) {
-        prefs.putInt(UserPrefs.dividerLocation, splitPane.getDividerLocation());
+        prefs.putInt(PreferenceKeys.DIVIDER_LOCATION, splitPane.getDividerLocation());
     }
 }

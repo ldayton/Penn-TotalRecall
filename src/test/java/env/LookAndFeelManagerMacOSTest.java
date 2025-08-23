@@ -3,6 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotation.MacOS;
+import behaviors.singleact.ExitAction;
 import di.GuiceBootstrap;
 import java.awt.Desktop;
 import java.awt.Taskbar;
@@ -11,6 +12,8 @@ import javax.swing.UIManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /** Tests for LookAndFeelManager macOS integration functionality. */
 @MacOS
@@ -19,9 +22,11 @@ class LookAndFeelManagerMacOSTest {
     private AppConfig config;
     private Platform platform;
     private LookAndFeelManager manager;
+    @Mock private ExitAction exitAction;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         // Reset UIManager to system default for test isolation
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -31,7 +36,7 @@ class LookAndFeelManagerMacOSTest {
 
         config = new AppConfig();
         platform = new Platform();
-        manager = new LookAndFeelManager(config, platform);
+        manager = new LookAndFeelManager(config, platform, exitAction);
     }
 
     @Test
@@ -119,7 +124,7 @@ class LookAndFeelManagerMacOSTest {
         System.clearProperty("apple.laf.useScreenMenuBar");
 
         // Create and initialize the Look and Feel manager
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager = new LookAndFeelManager(config, platform, exitAction);
         manager.initialize();
 
         // Verify the system property is set correctly

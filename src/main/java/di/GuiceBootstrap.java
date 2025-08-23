@@ -1,6 +1,7 @@
 package di;
 
 import actions.ActionsManager;
+import behaviors.singleact.ExitAction;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import components.MyFocusTraversalPolicy;
@@ -70,13 +71,27 @@ public class GuiceBootstrap {
     /**
      * Initializes Look and Feel before dependency injection to ensure platform-specific properties
      * (like Mac menu bar) are set before any Swing components are created.
+     *
+     * <p>During bootstrap, we create minimal instances of required components without full DI
+     * injection. The ExitAction is created with a null PreferencesManager which is handled
+     * gracefully in its actionPerformed method by providing default values and conditionally
+     * calling preference methods.
      */
     private static void initializeLookAndFeelBeforeDI() {
         // Create minimal instances needed for Look and Feel initialization
         Platform platform = new Platform();
         UserManager userManager = new UserManager();
         AppConfig appConfig = new AppConfig(platform, userManager);
-        LookAndFeelManager lookAndFeelManager = new LookAndFeelManager(appConfig, platform);
+
+        // Create a minimal ExitAction for LookAndFeelManager (before DI is available)
+        // This is only used for Mac menu bar setup, not for actual exit functionality
+        // The null PreferencesManager is handled gracefully in ExitAction.actionPerformed()
+        // by providing default values and conditionally calling preference methods
+        ExitAction exitAction =
+                new ExitAction(null); // null PreferencesManager - will be replaced by DI later
+
+        LookAndFeelManager lookAndFeelManager =
+                new LookAndFeelManager(appConfig, platform, exitAction);
 
         // Initialize Look and Feel (this sets Mac menu bar properties)
         lookAndFeelManager.initialize();
@@ -93,6 +108,30 @@ public class GuiceBootstrap {
             return globalInjector.getInstance(clazz);
         }
         return null;
+    }
+
+    /**
+     * Gets an injected instance of the specified class from the global injector, throwing an
+     * IllegalStateException if the instance is not available.
+     *
+     * <p>This is a convenience method for components that require DI-managed instances and should
+     * fail fast if they're not available.
+     *
+     * @param clazz The class to get an instance of
+     * @param componentName A descriptive name for the component being requested (for error
+     *     messages)
+     * @return The injected instance
+     * @throws IllegalStateException if the instance is not available
+     */
+    public static <T> T getRequiredInjectedInstance(Class<T> clazz, String componentName) {
+        T instance = getInjectedInstance(clazz);
+        if (instance == null) {
+            throw new IllegalStateException(
+                    componentName
+                            + " not available via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
+        }
+        return instance;
     }
 
     /** Initializes and starts the GUI application. */
