@@ -265,8 +265,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
      */
     @Override
     public void windowClosing(WindowEvent e) {
-        List<AbstractPreferenceDisplay> allPrefs =
-                PreferencesFrame.getInstance().getAbstractPreferences();
+        List<AbstractPreferenceDisplay> allPrefs = this.getAbstractPreferences();
         boolean somethingChanged = false;
         for (AbstractPreferenceDisplay pref : allPrefs) {
             if (pref.isChanged() == true) {

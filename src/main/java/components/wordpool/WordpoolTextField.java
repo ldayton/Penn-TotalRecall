@@ -39,12 +39,16 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private String clipboard = "";
     private final KeyboardManager keyboardManager;
     private final PreferencesManager preferencesManager;
+    private final WordpoolList wordpoolList;
 
     @Inject
     public WordpoolTextField(
-            KeyboardManager keyboardManager, PreferencesManager preferencesManager) {
+            KeyboardManager keyboardManager,
+            PreferencesManager preferencesManager,
+            WordpoolList wordpoolList) {
         this.keyboardManager = keyboardManager;
         this.preferencesManager = preferencesManager;
+        this.wordpoolList = wordpoolList;
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
@@ -136,7 +140,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     @Override
     protected Document createDefaultModel() {
-        WordpoolDocument doc = new WordpoolDocument();
+        WordpoolDocument doc = new WordpoolDocument(this, wordpoolList);
         doc.initialize();
         return doc;
     }
@@ -165,8 +169,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                 e.consume();
             }
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                if (WordpoolList.getInstance().getModel().getSize() > 0) {
-                    WordpoolList.getInstance().requestFocusInWindow();
+                if (wordpoolList.getModel().getSize() > 0) {
+                    wordpoolList.requestFocusInWindow();
                 }
             }
             // this assumes backspace will actually remove the previous element, but we'll make that

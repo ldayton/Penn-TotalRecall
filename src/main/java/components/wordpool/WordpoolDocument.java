@@ -12,7 +12,12 @@ import javax.swing.text.PlainDocument;
  */
 public class WordpoolDocument extends PlainDocument implements DocumentListener {
 
-    protected WordpoolDocument() {
+    private final WordpoolTextField wordpoolTextField;
+    private final WordpoolList wordpoolList;
+
+    protected WordpoolDocument(WordpoolTextField wordpoolTextField, WordpoolList wordpoolList) {
+        this.wordpoolTextField = wordpoolTextField;
+        this.wordpoolList = wordpoolList;
         // Document listener added after construction to avoid this-escape warning
     }
 
@@ -52,8 +57,8 @@ public class WordpoolDocument extends PlainDocument implements DocumentListener 
      */
     @Override
     public void insertUpdate(DocumentEvent e) {
-        String nWord = WordpoolTextField.getInstance().getText();
-        WordpoolList.getInstance().getModel().hideWordsStartingWith(nWord);
+        String nWord = wordpoolTextField.getText();
+        wordpoolList.getModel().hideWordsStartingWith(nWord);
     }
 
     /**
@@ -65,8 +70,6 @@ public class WordpoolDocument extends PlainDocument implements DocumentListener 
      */
     @Override
     public void removeUpdate(DocumentEvent e) {
-        WordpoolList.getInstance()
-                .getModel()
-                .restoreWordsStartingWith(WordpoolTextField.getInstance().getText());
+        wordpoolList.getModel().restoreWordsStartingWith(wordpoolTextField.getText());
     }
 }
