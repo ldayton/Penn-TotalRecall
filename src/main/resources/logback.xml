@@ -13,5 +13,5 @@
     <!-- Set specific loggers if needed -->
     <logger name="control.Start" level="${LOG_LEVEL:-INFO}" />
     <logger name="audio" level="${LOG_LEVEL:-INFO}" />
-    <logger name="components" level="${LOG_LEVEL:-INFO}" />
+    <logger name="components" level="${LOG_LEVEL:-DEBUG}" />
 </configuration>

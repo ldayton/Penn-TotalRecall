@@ -7,6 +7,7 @@ import audio.AudioSystemManager;
 import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import components.MyFrame;
 import components.WindowManager;
 import env.AppConfig;
 import env.KeyboardManager;
@@ -40,6 +41,7 @@ public class AppModule extends AbstractModule {
         bind(UpdateManager.class).in(Singleton.class);
         bind(UserManager.class).in(Singleton.class);
         bind(WindowManager.class).in(Singleton.class);
+        bind(MyFrame.class).in(Singleton.class);
     }
 
     @Provides

@@ -3,7 +3,10 @@ package components;
 import behaviors.singleact.ExitAction;
 import components.waveform.MyGlassPane;
 import components.wordpool.WordpoolDisplay;
+import env.LookAndFeelManager;
 import info.GUIConstants;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -21,13 +24,15 @@ import org.slf4j.LoggerFactory;
  * <p>Every component in the frame (at any level of nesting) that can be clicked by the user (i.e.,
  * is not obscured) must handle focus-passing, see {@link MyFocusTraversalPolicy} for details.
  */
+@Singleton
 public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
 
     private static MyFrame instance;
     private final env.LookAndFeelManager lookAndFeelManager;
 
-    private MyFrame(env.LookAndFeelManager lookAndFeelManager) {
+    @Inject
+    public MyFrame(LookAndFeelManager lookAndFeelManager) {
         this.lookAndFeelManager = lookAndFeelManager;
         setTitle(GUIConstants.defaultFrameTitle);
         setGlassPane(MyGlassPane.getInstance());
@@ -71,6 +76,9 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(this);
 
         //		getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+
+        // Set the singleton instance after full initialization
+        instance = this;
     }
 
     /**
@@ -81,14 +89,8 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     public static MyFrame getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyFrame not initialized. Call createInstance(LookAndFeelManager) first.");
-        }
-        return instance;
-    }
-
-    public static MyFrame createInstance(env.LookAndFeelManager lookAndFeelManager) {
-        if (instance == null) {
-            instance = new MyFrame(lookAndFeelManager);
+                    "MyFrame not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                            + " first.");
         }
         return instance;
     }

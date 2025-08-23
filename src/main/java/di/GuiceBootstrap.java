@@ -24,17 +24,20 @@ public class GuiceBootstrap {
     private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
     private final ActionsManager actionsManager;
+    private final MyFrame myFrame;
 
     @Inject
     public GuiceBootstrap(
             WindowManager windowManager,
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
-            ActionsManager actionsManager) {
+            ActionsManager actionsManager,
+            MyFrame myFrame) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
         this.actionsManager = actionsManager;
+        this.myFrame = myFrame;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -60,10 +63,9 @@ public class GuiceBootstrap {
     public void startApplication() {
         lookAndFeelManager.initialize();
         actionsManager.initialize(); // Load action configuration before UI creation
-        var mainFrame = MyFrame.createInstance(lookAndFeelManager);
-        mainFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
-        windowManager.restoreWindowLayout(mainFrame, MySplitPane.getInstance());
-        mainFrame.setVisible(true);
+        myFrame.setFocusTraversalPolicy(new MyFocusTraversalPolicy());
+        windowManager.restoreWindowLayout(myFrame, MySplitPane.getInstance());
+        myFrame.setVisible(true);
 
         // Check for updates after UI is ready (async, non-blocking)
         updateManager.checkForUpdateOnStartup();
