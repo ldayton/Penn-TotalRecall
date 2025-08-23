@@ -1,7 +1,6 @@
 package components.annotations;
 
 import actions.JumpToAnnotationAction;
-import control.FocusTraversalReferenceEvent;
 import info.MyColors;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -22,8 +21,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import util.EventBus;
-import util.Subscribe;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton
@@ -36,17 +33,14 @@ public class AnnotationTable extends JTable implements FocusListener {
     private final AnnotationTableCellRenderer render;
     private final AnnotationTableMouseAdapter mouseAdapter;
     private final JumpToAnnotationAction jumpToAnnotationAction;
-    private final EventBus eventBus;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AnnotationTable(
             AnnotationTableMouseAdapter mouseAdapter,
-            JumpToAnnotationAction jumpToAnnotationAction,
-            EventBus eventBus) {
+            JumpToAnnotationAction jumpToAnnotationAction) {
         this.mouseAdapter = mouseAdapter;
         this.jumpToAnnotationAction = jumpToAnnotationAction;
-        this.eventBus = eventBus;
 
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
@@ -107,12 +101,6 @@ public class AnnotationTable extends JTable implements FocusListener {
 
         // Set the singleton instance after full initialization
         instance = this;
-
-        // Subscribe to focus traversal reference events
-        eventBus.subscribe(this);
-
-        // Publish our focus traversal reference
-        eventBus.publish(new FocusTraversalReferenceEvent(this, "AnnotationTable"));
     }
 
     @Override
@@ -172,20 +160,16 @@ public class AnnotationTable extends JTable implements FocusListener {
         return instance;
     }
 
+    public static AnnotationTable getFocusTraversalReference() {
+        return getInstance();
+    }
+
     public static Annotation popSelectedAnnotation() {
         int[] rows = instance.getSelectedRows();
         if (rows.length == 1) {
             return model.getAnnotationAt(rows[0]);
         } else {
             return null;
-        }
-    }
-
-    @Subscribe
-    public void handleFocusTraversalReference(FocusTraversalReferenceEvent event) {
-        if ("REQUEST_ALL".equals(event.getComponentType())) {
-            // Publish our focus traversal reference when requested
-            eventBus.publish(new FocusTraversalReferenceEvent(this, "AnnotationTable"));
         }
     }
 }

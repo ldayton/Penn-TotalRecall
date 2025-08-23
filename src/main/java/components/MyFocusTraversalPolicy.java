@@ -1,18 +1,17 @@
 package components;
 
-import control.FocusTraversalReferenceEvent;
+import components.annotations.AnnotationTable;
+import components.audiofiles.AudioFileList;
+import components.wordpool.WordpoolList;
+import components.wordpool.WordpoolTextField;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Window;
-import java.util.HashMap;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
-import util.Subscribe;
 
 /**
  * A custom <code>FocusTraversalPolicy</code> for this program, including documentation on general
@@ -46,27 +45,24 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
 
     private final MyFrame myFrame;
     private final DoneButton doneButton;
-    private final EventBus eventBus;
 
     // these are components that can take focus, in the order of focus traversal desired
     // must have at least one element to avoid ArrayIndexOutOfBoundsException
-    private Component[] focusLoop;
-    private final Map<String, Component> focusComponents = new HashMap<>();
+    private final Component[] focusLoop;
 
     @Inject
-    public MyFocusTraversalPolicy(MyFrame myFrame, DoneButton doneButton, EventBus eventBus) {
+    public MyFocusTraversalPolicy(MyFrame myFrame, DoneButton doneButton) {
         this.myFrame = myFrame;
         this.doneButton = doneButton;
-        this.eventBus = eventBus;
-
-        // Initialize with basic components, others will be added via events
-        this.focusLoop = new Component[] {myFrame, doneButton};
-
-        // Subscribe to focus traversal reference events
-        eventBus.subscribe(this);
-
-        // Request focus traversal references from components
-        eventBus.publish(new FocusTraversalReferenceEvent(null, "REQUEST_ALL"));
+        this.focusLoop =
+                new Component[] {
+                    myFrame,
+                    AudioFileList.getFocusTraversalReference(),
+                    WordpoolTextField.getFocusTraversalReference(),
+                    WordpoolList.getFocusTraversalReference(),
+                    AnnotationTable.getFocusTraversalReference(),
+                    doneButton
+                };
     }
 
     /** Returns the next component in the focus traversal loop. {@inheritDoc} */
@@ -174,45 +170,5 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
             }
         }
         return null;
-    }
-
-    @Subscribe
-    public void handleFocusTraversalReference(FocusTraversalReferenceEvent event) {
-        if ("REQUEST_ALL".equals(event.getComponentType())) {
-            // This is a request for all components to publish their references
-            // Components will respond by publishing their own events
-            return;
-        }
-
-        // Store the component reference
-        focusComponents.put(event.getComponentType(), event.getComponent());
-
-        // Rebuild the focus loop with all available components
-        rebuildFocusLoop();
-    }
-
-    private void rebuildFocusLoop() {
-        // Define the desired order of focus traversal
-        String[] componentOrder = {
-            "MyFrame",
-            "AudioFileList",
-            "WordpoolTextField",
-            "WordpoolList",
-            "AnnotationTable",
-            "DoneButton"
-        };
-
-        // Build the focus loop in the desired order
-        java.util.List<Component> orderedComponents = new java.util.ArrayList<>();
-
-        for (String componentType : componentOrder) {
-            Component component = focusComponents.get(componentType);
-            if (component != null) {
-                orderedComponents.add(component);
-            }
-        }
-
-        // Convert to array
-        focusLoop = orderedComponents.toArray(new Component[0]);
     }
 }

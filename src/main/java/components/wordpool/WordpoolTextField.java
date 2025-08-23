@@ -1,7 +1,6 @@
 package components.wordpool;
 
 import control.FocusRequestedEvent;
-import control.FocusTraversalReferenceEvent;
 import env.KeyboardManager;
 import env.PreferencesManager;
 import info.PreferenceKeys;
@@ -147,9 +146,6 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
         // Set the singleton instance after full initialization
         instance = this;
-
-        // Publish our focus traversal reference
-        eventBus.publish(new FocusTraversalReferenceEvent(this, "WordpoolTextField"));
     }
 
     @Override
@@ -232,6 +228,10 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
         return instance;
     }
 
+    public static WordpoolTextField getFocusTraversalReference() {
+        return getInstance();
+    }
+
     @Override
     public void focusGained(FocusEvent e) {
         setSelectionStart(0);
@@ -246,14 +246,6 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     public void handleFocusRequestedEvent(FocusRequestedEvent event) {
         if (event.getComponent() == FocusRequestedEvent.Component.WORDPOOL_TEXT_FIELD) {
             requestFocusInWindow();
-        }
-    }
-
-    @Subscribe
-    public void handleFocusTraversalReference(FocusTraversalReferenceEvent event) {
-        if ("REQUEST_ALL".equals(event.getComponentType())) {
-            // Publish our focus traversal reference when requested
-            eventBus.publish(new FocusTraversalReferenceEvent(this, "WordpoolTextField"));
         }
     }
 }
