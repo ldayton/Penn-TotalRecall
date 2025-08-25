@@ -11,7 +11,7 @@ import java.io.File;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /** Reopens a file which was already done being annotated. */
@@ -19,12 +19,12 @@ import util.OSPath;
 public class ContinueAnnotatingAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(ContinueAnnotatingAction.class);
 
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private AudioFile myAudioFile;
 
     /** Creates the Action for dependency injection. The audio file will be set later. */
     @Inject
-    public ContinueAnnotatingAction(EventBus eventBus) {
+    public ContinueAnnotatingAction(EventDispatchBus eventBus) {
         super("Continue Editing", "Reopen a completed annotation file for further editing");
         this.eventBus = eventBus;
     }

@@ -27,7 +27,7 @@ import javax.swing.Timer;
 import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
@@ -66,10 +66,10 @@ public class WaveformDisplay extends JComponent {
 
     private static WaveformDisplay instance;
     private static AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public WaveformDisplay(AudioState audioState, EventBus eventBus) {
+    public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
         WaveformDisplay.audioState = audioState;
         setOpaque(true);
         setBackground(MyColors.waveformBackground);

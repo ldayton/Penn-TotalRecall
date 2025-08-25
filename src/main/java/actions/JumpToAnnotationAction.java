@@ -12,17 +12,17 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 
 @Singleton
 public class JumpToAnnotationAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(JumpToAnnotationAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public JumpToAnnotationAction(AudioState audioState, EventBus eventBus) {
+    public JumpToAnnotationAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Jump to Annotation", "Jump to the selected annotation in the table");
         this.audioState = audioState;
         this.eventBus = eventBus;

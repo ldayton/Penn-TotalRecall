@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /** A custom interface component for displaying committed annotations to the user. */
@@ -24,7 +24,7 @@ public class AnnotationDisplay extends JScrollPane {
     private static AnnotationDisplay instance;
     private static AnnotationTable table;
     private final AnnotationTable annotationTable;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -32,7 +32,7 @@ public class AnnotationDisplay extends JScrollPane {
      */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationDisplay(AnnotationTable annotationTable, EventBus eventBus) {
+    public AnnotationDisplay(AnnotationTable annotationTable, EventDispatchBus eventBus) {
         this.annotationTable = annotationTable;
         this.eventBus = eventBus;
         table = annotationTable;

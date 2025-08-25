@@ -15,7 +15,7 @@ import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /**
@@ -29,13 +29,13 @@ public class DeleteAnnotationAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(DeleteAnnotationAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private int rowIndex;
     private Annotation annToDelete;
 
     /** Creates an Action for dependency injection. The row index will be set later. */
     @Inject
-    public DeleteAnnotationAction(AudioState audioState, EventBus eventBus) {
+    public DeleteAnnotationAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Delete Annotation", "Delete the selected annotation from the file");
         this.audioState = audioState;
         this.eventBus = eventBus;

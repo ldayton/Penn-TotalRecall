@@ -6,16 +6,16 @@ import control.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 @Singleton
 public class ReturnToLastPositionAction extends BaseAction {
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public ReturnToLastPositionAction(AudioState audioState, EventBus eventBus) {
+    public ReturnToLastPositionAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Return to Last Position", "Return to the last playback position");
         this.audioState = audioState;
         this.eventBus = eventBus;

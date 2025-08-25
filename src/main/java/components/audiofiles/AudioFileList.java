@@ -16,7 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
@@ -29,7 +29,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     private final AudioFileListCellRenderer render;
     private final AudioFileListMouseAdapter mouseAdapter;
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
@@ -37,7 +37,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
      */
     @Inject
     public AudioFileList(
-            AudioFileListMouseAdapter mouseAdapter, AudioState audioState, EventBus eventBus) {
+            AudioFileListMouseAdapter mouseAdapter,
+            AudioState audioState,
+            EventDispatchBus eventBus) {
         this.mouseAdapter = mouseAdapter;
         this.audioState = audioState;
         this.eventBus = eventBus;

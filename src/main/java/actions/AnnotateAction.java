@@ -19,7 +19,7 @@ import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 import util.Subscribe;
 
@@ -29,7 +29,7 @@ public class AnnotateAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(AnnotateAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private String annotatorName;
     private String pendingAnnotationText;
@@ -37,7 +37,7 @@ public class AnnotateAction extends BaseAction {
 
     @Inject
     public AnnotateAction(
-            AudioState audioState, EventBus eventBus, WordpoolDisplay wordpoolDisplay) {
+            AudioState audioState, EventDispatchBus eventBus, WordpoolDisplay wordpoolDisplay) {
         super("Annotate", "Commit annotation");
         this.audioState = audioState;
         this.eventBus = eventBus;

@@ -13,7 +13,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
@@ -30,7 +30,7 @@ public class MySplitPane extends JSplitPane {
     private final PlayPauseAction playPauseAction;
     private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -44,7 +44,7 @@ public class MySplitPane extends JSplitPane {
             PlayPauseAction playPauseAction,
             DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
             AnnotateIntrusionAction annotateIntrusionAction,
-            EventBus eventBus) {
+            EventDispatchBus eventBus) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
         this.controlPanel = controlPanel;
         this.waveformDisplay = waveformDisplay;

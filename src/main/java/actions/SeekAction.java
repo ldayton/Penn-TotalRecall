@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Sets the audio position forward/backward by a pre-defined amount, in response to user request.
@@ -18,12 +18,14 @@ import util.EventBus;
 public class SeekAction extends BaseAction {
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final PreferencesManager preferencesManager;
 
     @Inject
     public SeekAction(
-            AudioState audioState, EventBus eventBus, PreferencesManager preferencesManager) {
+            AudioState audioState,
+            EventDispatchBus eventBus,
+            PreferencesManager preferencesManager) {
         super("Seek", "Seek audio position");
         this.audioState = audioState;
         this.eventBus = eventBus;

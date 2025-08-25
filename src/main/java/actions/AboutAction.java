@@ -5,16 +5,16 @@ import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Displays information about the program to the user */
 @Singleton
 public class AboutAction extends BaseAction {
 
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public AboutAction(EventBus eventBus) {
+    public AboutAction(EventDispatchBus eventBus) {
         super("About", "Display information about the program");
         this.eventBus = eventBus;
     }

@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Tries to move the audio position to the next/previous {@link components.annotations.Annotation},
@@ -23,10 +23,10 @@ public class ToggleAnnotationsAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(ToggleAnnotationsAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public ToggleAnnotationsAction(AudioState audioState, EventBus eventBus) {
+    public ToggleAnnotationsAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Toggle Annotations", "Move to next/previous annotation");
         this.audioState = audioState;
         this.eventBus = eventBus;

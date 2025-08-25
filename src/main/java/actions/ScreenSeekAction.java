@@ -6,18 +6,18 @@ import control.ScreenSeekRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Seeks the audio position by one screen width forward or backward. */
 @Singleton
 public class ScreenSeekAction extends BaseAction {
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final boolean forward;
 
     @Inject
-    public ScreenSeekAction(AudioState audioState, EventBus eventBus) {
+    public ScreenSeekAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Screen Seek", "Seek by screen width");
         this.audioState = audioState;
         this.eventBus = eventBus;

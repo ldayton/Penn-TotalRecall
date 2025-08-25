@@ -4,15 +4,15 @@ import control.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Checks for program updates. */
 @Singleton
 public class CheckUpdatesAction extends BaseAction {
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public CheckUpdatesAction(EventBus eventBus) {
+    public CheckUpdatesAction(EventDispatchBus eventBus) {
         super("Check For Updates", "Check for program updates");
         this.eventBus = eventBus;
     }

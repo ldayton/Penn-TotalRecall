@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /**
@@ -25,10 +25,10 @@ public class DoneAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(DoneAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public DoneAction(AudioState audioState, EventBus eventBus) {
+    public DoneAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Mark Complete", "Mark current annotation file complete");
         this.audioState = audioState;
         this.eventBus = eventBus;

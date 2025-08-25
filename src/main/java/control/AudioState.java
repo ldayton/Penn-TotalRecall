@@ -22,7 +22,7 @@ import java.util.Stack;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /**
@@ -58,14 +58,14 @@ public class AudioState {
 
     private final PreferencesManager preferencesManager;
     private final FmodCore fmodCore;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
     public AudioState(
             PreferencesManager preferencesManager,
             FmodCore fmodCore,
-            EventBus eventBus,
+            EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;

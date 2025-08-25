@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * <code>JPopupMenu</code> that presents user with actions for manipulating the <code>AudioFileList
@@ -21,13 +21,13 @@ public class AudioFilePopupMenu extends JPopupMenu {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
     public AudioFilePopupMenu(
             ContinueAnnotatingAction continueAnnotatingAction,
             AudioState audioState,
-            EventBus eventBus) {
+            EventDispatchBus eventBus) {
         this.continueAnnotatingAction = continueAnnotatingAction;
         this.audioState = audioState;
         this.eventBus = eventBus;

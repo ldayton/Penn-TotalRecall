@@ -239,6 +239,12 @@ gh run watch --repo ldayton/Penn-TotalRecall
 - `env/KeyboardManager.java` - System keyboard event handling
 - `env/LookAndFeelManager.java` - UI theme management
 
+### Event System (`util/` package)
+- `util/EventDispatchBus.java` - Thread-safe event bus with EDT-only subscriber execution
+- `util/Subscribe.java` - Annotation for marking event handler methods
+
+**Threading Model**: Events can be published from any thread, but all subscribers execute on the Event Dispatch Thread (EDT) for Swing thread safety. If published from EDT, subscribers execute immediately; if published from other threads, subscribers are queued to EDT. This eliminates the need for manual `SwingUtilities.invokeLater()` calls in event handlers and prevents Swing threading violations.
+
 ### Dependency Injection (`di/` package)
 - `di/GuiceBootstrap.java` - Guice module configuration and application bootstrap
 - `di/AppModule.java` - Guice dependency binding configuration

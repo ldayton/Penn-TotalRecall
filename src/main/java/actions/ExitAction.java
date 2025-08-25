@@ -7,7 +7,7 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Exits the application with proper cleanup. */
 @Singleton
@@ -15,10 +15,10 @@ public class ExitAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(ExitAction.class);
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public ExitAction(AudioState audioState, EventBus eventBus) {
+    public ExitAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Exit", "Exit the application");
         this.audioState = audioState;
         this.eventBus = eventBus;

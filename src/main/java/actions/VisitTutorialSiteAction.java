@@ -10,17 +10,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Attempts to bring the user to the program's tutorial website. */
 @Singleton
 public class VisitTutorialSiteAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(VisitTutorialSiteAction.class);
 
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public VisitTutorialSiteAction(EventBus eventBus) {
+    public VisitTutorialSiteAction(EventDispatchBus eventBus) {
         super("Visit Tutorial Site", "Open tutorial website in browser");
         this.eventBus = eventBus;
     }

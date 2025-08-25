@@ -4,7 +4,7 @@ import control.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
@@ -13,10 +13,10 @@ import util.EventBus;
 @Singleton
 public class TipsMessageAction extends BaseAction {
 
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public TipsMessageAction(EventBus eventBus) {
+    public TipsMessageAction(EventDispatchBus eventBus) {
         super("Tips", "Show keyboard shortcuts and tips");
         this.eventBus = eventBus;
     }

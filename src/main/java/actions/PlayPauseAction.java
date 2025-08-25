@@ -6,7 +6,7 @@ import control.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Plays or "pauses" audio.
@@ -21,10 +21,10 @@ public class PlayPauseAction extends BaseAction {
     private static final String PAUSE_TEXT = "Pause";
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public PlayPauseAction(AudioState audioState, EventBus eventBus) {
+    public PlayPauseAction(AudioState audioState, EventDispatchBus eventBus) {
         super(PLAY_TEXT, "Play or pause audio playback");
         this.audioState = audioState;
         this.eventBus = eventBus;

@@ -9,7 +9,7 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Presents a directory chooser to the user for selecting audio folders and then adds the selected
@@ -19,12 +19,14 @@ import util.EventBus;
 public class OpenAudioFolderAction extends BaseAction {
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final PreferencesManager preferencesManager;
 
     @Inject
     public OpenAudioFolderAction(
-            AudioState audioState, EventBus eventBus, PreferencesManager preferencesManager) {
+            AudioState audioState,
+            EventDispatchBus eventBus,
+            PreferencesManager preferencesManager) {
         super("Open Audio Folder", "Select audio folder");
         this.audioState = audioState;
         this.eventBus = eventBus;

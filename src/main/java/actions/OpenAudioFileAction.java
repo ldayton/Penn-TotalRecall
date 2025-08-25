@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /**
  * Presents a file chooser to the user for selecting audio files only and then adds the selected
@@ -21,12 +21,14 @@ import util.EventBus;
 public class OpenAudioFileAction extends BaseAction {
 
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final PreferencesManager preferencesManager;
 
     @Inject
     public OpenAudioFileAction(
-            AudioState audioState, EventBus eventBus, PreferencesManager preferencesManager) {
+            AudioState audioState,
+            EventDispatchBus eventBus,
+            PreferencesManager preferencesManager) {
         super("Open Audio File", "Select audio files");
         this.audioState = audioState;
         this.eventBus = eventBus;

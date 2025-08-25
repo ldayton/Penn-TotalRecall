@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /**
@@ -29,7 +29,7 @@ public class AnnotateIntrusionAction extends BaseAction {
 
     private final AudioState audioState;
     private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private String annotatorName;
 
@@ -37,7 +37,7 @@ public class AnnotateIntrusionAction extends BaseAction {
     public AnnotateIntrusionAction(
             AudioState audioState,
             DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
-            EventBus eventBus,
+            EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay) {
         super("Annotate Intrusion", "Commit an intrusion annotation");
         this.audioState = audioState;

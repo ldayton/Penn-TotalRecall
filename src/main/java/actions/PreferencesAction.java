@@ -4,16 +4,16 @@ import control.PreferencesRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Launches the preferences window. */
 @Singleton
 public class PreferencesAction extends BaseAction {
 
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public PreferencesAction(EventBus eventBus) {
+    public PreferencesAction(EventDispatchBus eventBus) {
         super("Preferences", "Open preferences window");
         this.eventBus = eventBus;
     }

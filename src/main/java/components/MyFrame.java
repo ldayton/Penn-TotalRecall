@@ -23,7 +23,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
@@ -42,7 +42,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     private final MyGlassPane myGlassPane;
     private final MyMenu myMenu;
     private final ExitAction exitAction;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final FileDropListener fileDropListener;
 
     @Inject
@@ -52,7 +52,7 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
             MyGlassPane myGlassPane,
             MyMenu myMenu,
             ExitAction exitAction,
-            EventBus eventBus,
+            EventDispatchBus eventBus,
             FileDropListener fileDropListener) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;

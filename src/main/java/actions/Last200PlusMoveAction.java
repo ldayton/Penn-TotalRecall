@@ -6,16 +6,16 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
 @Singleton
 public class Last200PlusMoveAction extends BaseAction {
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public Last200PlusMoveAction(AudioState audioState, EventBus eventBus) {
+    public Last200PlusMoveAction(AudioState audioState, EventDispatchBus eventBus) {
         super("Last200PlusMove", "Move and replay last 200ms");
         this.audioState = audioState;
         this.eventBus = eventBus;

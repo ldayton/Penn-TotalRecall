@@ -7,7 +7,7 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** Keeps display and actions up to date with audio playback. */
 public class MyPrecisionListener implements AudioEvent.Listener {
@@ -16,10 +16,10 @@ public class MyPrecisionListener implements AudioEvent.Listener {
     private long greatestProgress;
     private long lastProgress = -1;
     private final AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
-    public MyPrecisionListener(AudioState audioState, EventBus eventBus) {
+    public MyPrecisionListener(AudioState audioState, EventDispatchBus eventBus) {
         this.audioState = audioState;
         this.eventBus = eventBus;
         greatestProgress = -1;

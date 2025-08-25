@@ -25,7 +25,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
@@ -43,14 +43,14 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private final KeyboardManager keyboardManager;
     private final PreferencesManager preferencesManager;
     private final WordpoolList wordpoolList;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
     public WordpoolTextField(
             KeyboardManager keyboardManager,
             PreferencesManager preferencesManager,
             WordpoolList wordpoolList,
-            EventBus eventBus) {
+            EventDispatchBus eventBus) {
         this.keyboardManager = keyboardManager;
         this.preferencesManager = preferencesManager;
         this.wordpoolList = wordpoolList;

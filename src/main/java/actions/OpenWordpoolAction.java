@@ -19,7 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.OSPath;
 
 /**
@@ -33,7 +33,7 @@ public class OpenWordpoolAction extends BaseAction {
     private final AudioState audioState;
     private final PreferencesManager preferencesManager;
     private final UserManager userManager;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
@@ -41,7 +41,7 @@ public class OpenWordpoolAction extends BaseAction {
             AudioState audioState,
             PreferencesManager preferencesManager,
             UserManager userManager,
-            EventBus eventBus,
+            EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay) {
         super("Open Wordpool...", "Load words from a text file into the wordpool");
         this.audioState = audioState;

@@ -8,20 +8,20 @@ import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventBus;
+import util.EventDispatchBus;
 
 @Singleton
 public class DeleteSelectedAnnotationAction extends BaseAction {
 
     private final AudioState audioState;
     private final DeleteAnnotationAction deleteAnnotationAction;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @Inject
     public DeleteSelectedAnnotationAction(
             AudioState audioState,
             DeleteAnnotationAction deleteAnnotationAction,
-            EventBus eventBus) {
+            EventDispatchBus eventBus) {
         super(
                 "Delete Selected Annotation",
                 "Delete the annotation at the current playback position");

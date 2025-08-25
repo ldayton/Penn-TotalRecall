@@ -17,7 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import util.EventBus;
+import util.EventDispatchBus;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
 @Singleton
@@ -29,11 +29,11 @@ public class WordpoolList extends JList<WordpoolWord>
     private static WordpoolList instance;
 
     final WordpoolListCellRenderer render;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public WordpoolList(EventBus eventBus) {
+    public WordpoolList(EventDispatchBus eventBus) {
         this.eventBus = eventBus;
         model = new WordpoolListModel();
         setModel(model);

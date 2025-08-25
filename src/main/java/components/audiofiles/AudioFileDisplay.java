@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.DialogService;
-import util.EventBus;
+import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
@@ -45,7 +45,7 @@ public class AudioFileDisplay extends JScrollPane {
     private final AudioFileList audioFileList;
     private final PreferencesManager preferencesManager;
     private static AudioState audioState;
-    private final EventBus eventBus;
+    private final EventDispatchBus eventBus;
 
     private static AudioFileList list;
 
@@ -59,7 +59,7 @@ public class AudioFileDisplay extends JScrollPane {
             AudioFileList audioFileList,
             PreferencesManager preferencesManager,
             AudioState audioState,
-            EventBus eventBus) {
+            EventDispatchBus eventBus) {
         this.audioFileList = audioFileList;
         this.preferencesManager = preferencesManager;
         AudioFileDisplay.audioState = audioState;
