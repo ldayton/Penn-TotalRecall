@@ -1,6 +1,7 @@
 package control;
 
 import audio.AudioPlayer;
+import audio.AudioProgressHandler;
 import audio.FmodCore;
 import components.MyMenu;
 import components.annotations.Annotation;
@@ -30,11 +31,11 @@ import util.OSPath;
  * CurAudio class with proper dependency injection.
  */
 @Singleton
-public class AudioState {
+public class AudioState implements AudioProgressHandler {
     private static final Logger logger = LoggerFactory.getLogger(AudioState.class);
 
     private AudioMaster master;
-    private MyPrecisionListener precisionListener;
+    private AudioPlaybackCoordinator playbackCoordinator;
 
     private File curAudioFile;
     private AudioPlayer player;
@@ -136,8 +137,8 @@ public class AudioState {
                                 + Constants.programName,
                         e1);
             }
-            precisionListener = new MyPrecisionListener(this, eventBus);
-            pp.addListener(precisionListener);
+            playbackCoordinator = new AudioPlaybackCoordinator(this, eventBus);
+            pp.addListener(playbackCoordinator);
             setPlayer(pp);
 
             try {
@@ -221,7 +222,7 @@ public class AudioState {
 
         player = null;
         master = null;
-        precisionListener = null;
+        playbackCoordinator = null;
 
         curAudioFile = null;
         lastFrameArray = null;
@@ -324,8 +325,8 @@ public class AudioState {
         }
     }
 
-    public MyPrecisionListener getListener() {
-        return precisionListener;
+    public AudioPlaybackCoordinator getListener() {
+        return playbackCoordinator;
     }
 
     /**
@@ -387,6 +388,16 @@ public class AudioState {
         }
     }
 
+    /**
+     * Gets the current frame position without checking if audio is open. This is used internally
+     * for progress tracking.
+     *
+     * @return The current frame position, or -1 if not set
+     */
+    public long getFramePosition() {
+        return framePosition;
+    }
+
     public void setAudioProgressAndUpdateActions(long frame) {
         if (audioOpen()) {
             framePosition = frame;
@@ -415,5 +426,10 @@ public class AudioState {
      */
     public int getDesiredLoudness() {
         return desiredLoudness;
+    }
+
+    @Override
+    public void updateProgress(long frame) {
+        setAudioProgressWithoutUpdatingActions(frame);
     }
 }

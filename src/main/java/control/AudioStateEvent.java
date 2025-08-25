@@ -1,22 +1,30 @@
 package control;
 
-import components.audiofiles.AudioFile;
+import audio.AudioEvent;
 
-/** Base event class for audio state changes. */
-public abstract class AudioStateEvent {
-    private final AudioFile file;
-    private final long timestamp;
+/**
+ * Event wrapper for audio state changes that can be safely published to EventDispatchBus.
+ *
+ * <p>This event wraps AudioEvent instances and ensures they are processed on the Event Dispatch
+ * Thread (EDT) for Swing thread safety.
+ */
+public record AudioStateEvent(AudioEvent audioEvent) {
 
-    protected AudioStateEvent(AudioFile file) {
-        this.file = file;
-        this.timestamp = System.currentTimeMillis();
+    /**
+     * Creates a new AudioStateEvent wrapping the given AudioEvent.
+     *
+     * @param audioEvent The audio event to wrap
+     */
+    public AudioStateEvent(AudioEvent audioEvent) {
+        this.audioEvent = audioEvent;
     }
 
-    public AudioFile getFile() {
-        return file;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
+    /**
+     * Gets the wrapped AudioEvent.
+     *
+     * @return The wrapped audio event
+     */
+    public AudioEvent getAudioEvent() {
+        return audioEvent;
     }
 }
