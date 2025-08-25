@@ -1,9 +1,7 @@
 package components.annotations;
 
-import control.UIUpdateRequestedEvent;
 import di.GuiceBootstrap;
-import info.GUIConstants;
-import info.MyShapes;
+import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -13,7 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import util.EventDispatchBus;
+import util.GUIConstants;
 import util.Subscribe;
+import util.UiShapes;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
@@ -40,7 +40,7 @@ public class AnnotationDisplay extends JScrollPane {
         setPreferredSize(GUIConstants.annotationDisplayDimension);
         setMaximumSize(GUIConstants.annotationDisplayDimension);
 
-        setBorder(MyShapes.createMyUnfocusedTitledBorder(title));
+        setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
 
         // since AnnotationDisplay is a clickable area, we must write focus handling code for the
         // event it is clicked on

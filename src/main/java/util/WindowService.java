@@ -1,6 +1,6 @@
 package util;
 
-import components.MyFrame;
+import components.MainFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Rectangle;
@@ -13,10 +13,10 @@ import lombok.NonNull;
  */
 @Singleton
 public class WindowService {
-    private final MyFrame mainFrame;
+    private final MainFrame mainFrame;
 
     @Inject
-    public WindowService(@NonNull MyFrame mainFrame) {
+    public WindowService(@NonNull MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
 

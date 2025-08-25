@@ -1,4 +1,4 @@
-package info;
+package util;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,7 +13,7 @@ import javax.swing.border.TitledBorder;
  *
  * <p>Objects are created on the first call of their getter.
  */
-public class MyShapes {
+public class UiShapes {
 
     private static BasicStroke progressBarStroke;
 
@@ -51,7 +51,7 @@ public class MyShapes {
      * @return The constructed <code>Border</code>
      */
     public static TitledBorder createMyUnfocusedTitledBorder(String title) {
-        return createMyTitledBorder(title, MyColors.unfocusedColor);
+        return createMyTitledBorder(title, UiColors.unfocusedColor);
     }
 
     /**
@@ -91,5 +91,5 @@ public class MyShapes {
     }
 
     /** Private constructor to prevent instantiation. */
-    private MyShapes() {}
+    private UiShapes() {}
 }

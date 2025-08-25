@@ -3,15 +3,15 @@ package actions;
 import components.audiofiles.AudioFileDisplay;
 import control.AudioState;
 import env.PreferencesManager;
-import info.Constants;
-import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import util.Constants;
 import util.EventDispatchBus;
+import util.PreferenceKeys;
 
 /**
  * Presents a file chooser to the user for selecting audio files only and then adds the selected

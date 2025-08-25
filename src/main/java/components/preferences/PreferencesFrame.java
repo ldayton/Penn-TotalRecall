@@ -1,9 +1,7 @@
 package components.preferences;
 
-import components.MyFrame;
+import components.MainFrame;
 import env.KeyboardManager;
-import info.GUIConstants;
-import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
@@ -27,7 +25,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+import util.GUIConstants;
 import util.GUIUtils;
+import util.PreferenceKeys;
 import util.WindowService;
 
 /**
@@ -113,7 +113,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         // among others)
         setIconImage(
                 Toolkit.getDefaultToolkit()
-                        .getImage(MyFrame.class.getResource("/images/headphones16.png")));
+                        .getImage(MainFrame.class.getResource("/images/headphones16.png")));
 
         // the frame's width should be big enough for the button panel and big enough for even the
         // largest AbstractPreferenceDisplay
@@ -227,8 +227,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     }
 
     /**
-     * Every time the frame is set to visible, it should appear in the middle of MyFrame, the app's
-     * main window.
+     * Every time the frame is set to visible, it should appear in the middle of MainFrame, the
+     * app's main window.
      */
     @Override
     public void setVisible(boolean visible) {

@@ -1,7 +1,7 @@
 package actions;
 
 import control.AudioState;
-import control.ErrorRequestedEvent;
+import events.ErrorRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

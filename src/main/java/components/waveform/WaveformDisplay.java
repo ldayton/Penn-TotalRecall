@@ -5,13 +5,10 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
 import control.AudioState;
-import control.FocusRequestedEvent;
-import control.ScreenSeekRequestedEvent;
-import control.UIUpdateRequestedEvent;
-import control.WaveformRefreshEvent;
-import info.GUIConstants;
-import info.MyColors;
-import info.MyShapes;
+import events.FocusRequestedEvent;
+import events.ScreenSeekRequestedEvent;
+import events.UIUpdateRequestedEvent;
+import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Graphics;
@@ -28,7 +25,10 @@ import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.EventDispatchBus;
+import util.GUIConstants;
 import util.Subscribe;
+import util.UiColors;
+import util.UiShapes;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -72,7 +72,7 @@ public class WaveformDisplay extends JComponent {
     public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
         WaveformDisplay.audioState = audioState;
         setOpaque(true);
-        setBackground(MyColors.waveformBackground);
+        setBackground(UiColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
         // background color without subclassing to a JPanel
         pixelsPerSecond = GUIConstants.zoomlessPixelsPerSecond;
@@ -194,11 +194,11 @@ public class WaveformDisplay extends JComponent {
 
         if (refreshTimer == null || curRefreshChunk == null || refreshTimer.isRunning() == false) {
             // draw reference line
-            g.setColor(MyColors.waveformReferenceLineColor);
+            g.setColor(UiColors.waveformReferenceLineColor);
             g.drawLine(0, getHeight() / 2, getWidth() - 1, getHeight() / 2);
 
             // draw bottom border
-            g.setColor(MyColors.unfocusedColor);
+            g.setColor(UiColors.unfocusedColor);
             g.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
             return;
         }
@@ -233,7 +233,7 @@ public class WaveformDisplay extends JComponent {
         }
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHints(MyShapes.getRenderingHints());
+        g2d.setRenderingHints(UiShapes.getRenderingHints());
 
         // draw current time
         g2d.drawString(secFormat.format(audioState.getMaster().framesToSec(refreshFrame)), 10, 20);
@@ -250,9 +250,9 @@ public class WaveformDisplay extends JComponent {
                 break;
             }
             String text = anns[i].getText();
-            g2d.setColor(MyColors.annotationLineColor);
+            g2d.setColor(UiColors.annotationLineColor);
             g2d.drawLine(xPos, 0, xPos, getHeight() - 1);
-            g2d.setColor(MyColors.annotationTextColor);
+            g2d.setColor(UiColors.annotationTextColor);
             g2d.drawString(text, xPos + 5, 40);
         }
 
@@ -280,7 +280,7 @@ public class WaveformDisplay extends JComponent {
                 if (progressBarXPos == annX) {
                     foundOverlap = true;
                     g2d.setPaintMode();
-                    g2d.setColor(MyColors.annotationAccentColor);
+                    g2d.setColor(UiColors.annotationAccentColor);
                     g2d.drawLine(progressBarXPos, 0, progressBarXPos, refreshHeight - 1);
                     int[] xCoordinates = {
                         progressBarXPos - 20,
@@ -306,10 +306,10 @@ public class WaveformDisplay extends JComponent {
         // draw progress bar
         if (foundOverlap == false) {
             Stroke originalStroke = g2d.getStroke();
-            g2d.setStroke(MyShapes.getProgressBarStroke());
-            g2d.setXORMode(MyColors.waveformBackground);
+            g2d.setStroke(UiShapes.getProgressBarStroke());
+            g2d.setXORMode(UiColors.waveformBackground);
 
-            g2d.setColor(MyColors.progressBarColor);
+            g2d.setColor(UiColors.progressBarColor);
             g2d.drawLine(progressBarXPos, 0, progressBarXPos, getHeight() - 1);
 
             g2d.setPaintMode();
@@ -317,7 +317,7 @@ public class WaveformDisplay extends JComponent {
         }
 
         // draw bottom border
-        g2d.setColor(MyColors.unfocusedColor);
+        g2d.setColor(UiColors.unfocusedColor);
         g2d.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
     }
 

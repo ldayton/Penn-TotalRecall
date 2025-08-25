@@ -1,16 +1,15 @@
 package components;
 
 import actions.ExitAction;
-import components.waveform.MyGlassPane;
+import components.waveform.SelectionOverlay;
 import components.wordpool.WordpoolDisplay;
-import control.AudioFileSwitchedEvent;
-import control.ErrorRequestedEvent;
-import control.ExitRequestedEvent;
-import control.FocusRequestedEvent;
-import control.InfoRequestedEvent;
-import control.PreferencesRequestedEvent;
 import env.LookAndFeelManager;
-import info.GUIConstants;
+import events.AudioFileSwitchedEvent;
+import events.ErrorRequestedEvent;
+import events.ExitRequestedEvent;
+import events.FocusRequestedEvent;
+import events.InfoRequestedEvent;
+import events.PreferencesRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
@@ -24,33 +23,34 @@ import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.EventDispatchBus;
+import util.GUIConstants;
 import util.Subscribe;
 
 /**
  * Main window of the program.
  *
  * <p>Every component in the frame (at any level of nesting) that can be clicked by the user (i.e.,
- * is not obscured) must handle focus-passing, see {@link MyFocusTraversalPolicy} for details.
+ * is not obscured) must handle focus-passing, see {@link AppFocusTraversalPolicy} for details.
  */
 @Singleton
-public class MyFrame extends JFrame implements KeyEventPostProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(MyFrame.class);
+public class MainFrame extends JFrame implements KeyEventPostProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
-    private static MyFrame instance;
+    private static MainFrame instance;
     private final LookAndFeelManager lookAndFeelManager;
-    private final MySplitPane mySplitPane;
-    private final MyGlassPane myGlassPane;
-    private final MyMenu myMenu;
+    private final ContentSplitPane mySplitPane;
+    private final SelectionOverlay myGlassPane;
+    private final AppMenuBar myMenu;
     private final ExitAction exitAction;
     private final EventDispatchBus eventBus;
     private final FileDropListener fileDropListener;
 
     @Inject
-    public MyFrame(
+    public MainFrame(
             LookAndFeelManager lookAndFeelManager,
-            MySplitPane mySplitPane,
-            MyGlassPane myGlassPane,
-            MyMenu myMenu,
+            ContentSplitPane mySplitPane,
+            SelectionOverlay myGlassPane,
+            AppMenuBar myMenu,
             ExitAction exitAction,
             EventDispatchBus eventBus,
             FileDropListener fileDropListener) {
@@ -92,10 +92,11 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
         // Set application icon (platform-specific sizing)
         setIconImage(
                 Toolkit.getDefaultToolkit()
-                        .getImage(MyFrame.class.getResource(lookAndFeelManager.getAppIconPath())));
+                        .getImage(
+                                MainFrame.class.getResource(lookAndFeelManager.getAppIconPath())));
 
         // this is default, but double checking because focusability is needed for
-        // MyFocusTraversalPolicy to be used
+        // AppFocusTraversalPolicy to be used
         setFocusable(true);
 
         // used to pass focus to text field when someone types outside of the field
@@ -113,12 +114,12 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
     /**
      * Singleton accessor.
      *
-     * @return The singleton <code>MyFrame</code>
+     * @return The singleton <code>MainFrame</code>
      */
-    public static MyFrame getInstance() {
+    public static MainFrame getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyFrame not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                    "MainFrame not initialized via DI. Ensure GuiceBootstrap.create() was called"
                             + " first.");
         }
         return instance;
@@ -128,9 +129,9 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
      * This hears absolutely everything while the JVM has focus (includes preferences frame)
      *
      * <p>Currently this class is used to pass focus to the {@link wordpool.WordpoolTextField} when
-     * the user starts typing while <code>MyFrame</code> is selected. Also used for focus debugging.
-     * If {@link Start#DEBUG_FOCUS} is <code>true</code> the focus owner will be printed every time
-     * a key is pressed.
+     * the user starts typing while <code>MainFrame</code> is selected. Also used for focus
+     * debugging. If {@link Start#DEBUG_FOCUS} is <code>true</code> the focus owner will be printed
+     * every time a key is pressed.
      *
      * <p>Please note that arrow keys do NOT generate key typed events, so they are never consumed
      * Also note key typed events always have the location KeyEvent.KEY_LOCATION_UNKNOWN Because
@@ -151,7 +152,8 @@ public class MyFrame extends JFrame implements KeyEventPostProcessor {
             if (e.getModifiersEx() == 0) {
                 if (Character.isLetter(e.getKeyChar()) || Character.isDigit(e.getKeyChar())) {
                     if (getFocusOwner()
-                            != null) { // this is how we guarantee MyFrame is "focused" and not the
+                            != null) { // this is how we guarantee MainFrame is "focused" and not
+                        // the
                         // PreferencesFrame. not 100% cross-platform since Solaris
                         // separates the focus notion from window
                         // selection/prominence

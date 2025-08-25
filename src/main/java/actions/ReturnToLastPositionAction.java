@@ -2,7 +2,7 @@ package actions;
 
 import audio.AudioPlayer;
 import control.AudioState;
-import control.FocusRequestedEvent;
+import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

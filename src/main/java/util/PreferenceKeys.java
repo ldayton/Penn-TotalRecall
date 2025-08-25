@@ -1,4 +1,4 @@
-package info;
+package util;
 
 /**
  * Constants for preference keys used throughout the application.

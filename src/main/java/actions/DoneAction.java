@@ -3,14 +3,14 @@ package actions;
 import audio.AudioPlayer;
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.AudioState;
-import control.ErrorRequestedEvent;
-import info.Constants;
+import events.ErrorRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.EventDispatchBus;
 import util.OSPath;
 

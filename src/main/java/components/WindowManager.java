@@ -1,11 +1,11 @@
 package components;
 
 import env.PreferencesManager;
-import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import lombok.NonNull;
+import util.PreferenceKeys;
 
 /**
  * Manages window state persistence and restoration.
@@ -49,7 +49,7 @@ public class WindowManager {
      * @param frame the application frame to restore
      * @param splitPane the split pane whose divider location should be restored
      */
-    public void restoreWindowLayout(@NonNull JFrame frame, @NonNull MySplitPane splitPane) {
+    public void restoreWindowLayout(@NonNull JFrame frame, @NonNull ContentSplitPane splitPane) {
         restoreFramePosition(frame);
         restoreDividerLocation(splitPane);
     }
@@ -64,7 +64,7 @@ public class WindowManager {
         // Just let the saved bounds determine the size
     }
 
-    private void restoreDividerLocation(@NonNull MySplitPane splitPane) {
+    private void restoreDividerLocation(@NonNull ContentSplitPane splitPane) {
         int windowHeight =
                 prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
         splitPane.setDividerLocation(
@@ -80,7 +80,7 @@ public class WindowManager {
      * @param frame the application frame to save state from
      * @param splitPane the split pane whose divider location should be saved
      */
-    public void saveWindowLayout(@NonNull JFrame frame, @NonNull MySplitPane splitPane) {
+    public void saveWindowLayout(@NonNull JFrame frame, @NonNull ContentSplitPane splitPane) {
         saveFrameState(frame);
         saveDividerLocation(splitPane);
         prefs.flush();
@@ -99,7 +99,7 @@ public class WindowManager {
         prefs.putBoolean(PreferenceKeys.WINDOW_MAXIMIZED, false);
     }
 
-    private void saveDividerLocation(@NonNull MySplitPane splitPane) {
+    private void saveDividerLocation(@NonNull ContentSplitPane splitPane) {
         prefs.putInt(PreferenceKeys.DIVIDER_LOCATION, splitPane.getDividerLocation());
     }
 }

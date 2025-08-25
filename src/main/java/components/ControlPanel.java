@@ -3,7 +3,6 @@ package components;
 import components.annotations.AnnotationDisplay;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
-import info.MyColors;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -14,9 +13,10 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import util.UiColors;
 
 /**
- * Custom <code>JPanel</code> that is used as the bottom half of <code>MySplitPane</code>,
+ * Custom <code>JPanel</code> that is used as the bottom half of <code>ContentSplitPane</code>,
  * containing control components such as wordpool display, file list, etc.
  */
 @Singleton
@@ -71,7 +71,7 @@ public class ControlPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(MyColors.unfocusedColor);
+        g.setColor(UiColors.unfocusedColor);
         g.drawLine(0, 0, getWidth() - 1, 0);
     }
 }

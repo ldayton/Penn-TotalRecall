@@ -1,8 +1,6 @@
 package components.waveform;
 
 import actions.ReplayLast200MillisAction;
-import info.GUIConstants;
-import info.MyColors;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AlphaComposite;
@@ -16,12 +14,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import util.GUIConstants;
+import util.UiColors;
 
 /** Application glass pane, used for drawing mouse feedback. */
 @Singleton
-public class MyGlassPane extends JComponent {
+public class SelectionOverlay extends JComponent {
 
-    private static MyGlassPane instance;
+    private static SelectionOverlay instance;
 
     private final AlphaComposite composite;
 
@@ -43,7 +43,7 @@ public class MyGlassPane extends JComponent {
                             * (ReplayLast200MillisAction.duration / (double) 1000));
 
     @Inject
-    public MyGlassPane() {
+    public SelectionOverlay() {
         composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F);
         flashMode = false;
         highlightMode = false;
@@ -60,7 +60,7 @@ public class MyGlassPane extends JComponent {
         if (highlightMode) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setComposite(composite);
-            g2d.setColor(MyColors.mouseHighlightColor);
+            g2d.setColor(UiColors.mouseHighlightColor);
             g2d.fillRect(
                     (int) highlightRect.getX(),
                     (int) highlightRect.getY(),
@@ -69,7 +69,7 @@ public class MyGlassPane extends JComponent {
         } else if (flashMode) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setComposite(composite);
-            g2d.setColor(MyColors.replay200MillisFlashColor);
+            g2d.setColor(UiColors.replay200MillisFlashColor);
             int yPos =
                     (int)
                             SwingUtilities.convertPoint(WaveformDisplay.getInstance(), -1, 0, this)
@@ -148,11 +148,11 @@ public class MyGlassPane extends JComponent {
         }
     }
 
-    public static MyGlassPane getInstance() {
+    public static SelectionOverlay getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyGlassPane not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
+                    "SelectionOverlay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

@@ -1,6 +1,6 @@
 package components.wordpool;
 
-import control.FocusRequestedEvent;
+import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

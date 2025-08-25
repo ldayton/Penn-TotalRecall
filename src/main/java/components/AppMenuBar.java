@@ -37,24 +37,24 @@ import org.slf4j.LoggerFactory;
  * JMenuItem</code> here. However, there are those cases where an Action should only be initiated in
  * another way (e.g., hitting enter in a text field), for which a menu item is inappropriate.
  *
- * <p>MyMenu keeps track of all {@link UpdatingAction} instances registered with it. Any time a
+ * <p>AppMenuBar keeps track of all {@link UpdatingAction} instances registered with it. Any time a
  * change occurs in program state that might cause certain actions to enable/disable themselves, or
- * otherwise change themselves, <code>MyMenu</code> will call their update method. This is why all
- * program actions should inherit <code>UpdatingAction</code> (via <code>IdentifiedSingleAction
+ * otherwise change themselves, <code>AppMenuBar</code> will call their update method. This is why
+ * all program actions should inherit <code>UpdatingAction</code> (via <code>IdentifiedSingleAction
  * </code> or <code>IdentifiedMutliAction</code>), as the abstract class takes care of registration
  * automatically for you.
  *
  * <p>See the the behaviors class for more information.
  */
 @Singleton
-public class MyMenu extends JMenuBar {
-    private static final Logger logger = LoggerFactory.getLogger(MyMenu.class);
+public class AppMenuBar extends JMenuBar {
+    private static final Logger logger = LoggerFactory.getLogger(AppMenuBar.class);
 
     private static PlayPauseAction workaroundAction;
 
     private static Set<BaseAction> allActions = new HashSet<>();
 
-    private static MyMenu instance;
+    private static AppMenuBar instance;
 
     private static String annotator;
 
@@ -88,7 +88,7 @@ public class MyMenu extends JMenuBar {
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public MyMenu(
+    public AppMenuBar(
             env.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
@@ -352,7 +352,7 @@ public class MyMenu extends JMenuBar {
      */
     public static void registerAllActionsWithManager() {
         if (instance == null) {
-            throw new IllegalStateException("MyMenu not initialized via DI");
+            throw new IllegalStateException("AppMenuBar not initialized via DI");
         }
         // All ADI actions are already registered with the ActionsManager during DI initialization
         // No need to register them again here
@@ -361,19 +361,19 @@ public class MyMenu extends JMenuBar {
     /**
      * Singleton accessor.
      *
-     * @return The singleton <code>MyMenu</code>
+     * @return The singleton <code>AppMenuBar</code>
      */
-    public static MyMenu getInstance() {
+    public static AppMenuBar getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MyMenu not initialized via DI. Ensure GuiceBootstrap.create() was called"
+                    "AppMenuBar not initialized via DI. Ensure GuiceBootstrap.create() was called"
                             + " first.");
         }
         return instance;
     }
 
     public static void setAnnotator(String annotator) {
-        MyMenu.annotator = annotator;
+        AppMenuBar.annotator = annotator;
     }
 
     public static String getAnnotator() {

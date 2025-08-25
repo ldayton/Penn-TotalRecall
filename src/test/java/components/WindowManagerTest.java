@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import env.PreferencesManager;
-import info.PreferenceKeys;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import util.PreferenceKeys;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("WindowManager")
 class WindowManagerTest {
     @Mock private PreferencesManager mockPrefs;
     @Mock private JFrame mockFrame;
-    @Mock private MySplitPane mockSplitPane;
+    @Mock private ContentSplitPane mockSplitPane;
 
     private WindowManager windowManager;
 

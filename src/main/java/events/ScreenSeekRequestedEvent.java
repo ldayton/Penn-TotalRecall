@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for requesting a screen seek operation. This eliminates direct UI access from business

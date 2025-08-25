@@ -1,6 +1,4 @@
-package control;
-
-import audio.AudioEvent;
+package events;
 
 /**
  * Event wrapper for audio state changes that can be safely published to EventDispatchBus.

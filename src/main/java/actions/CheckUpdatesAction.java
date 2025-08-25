@@ -1,6 +1,6 @@
 package actions;
 
-import control.InfoRequestedEvent;
+import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

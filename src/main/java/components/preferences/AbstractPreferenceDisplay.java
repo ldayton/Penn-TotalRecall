@@ -1,12 +1,12 @@
 package components.preferences;
 
-import info.MyColors;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
+import util.UiColors;
 
 /**
  * A <code>JPanel</code> that will display a preference chooser of some kind to the user.
@@ -48,7 +48,7 @@ public abstract class AbstractPreferenceDisplay extends JPanel {
 
         // middle visible titled border
 
-        Border blackline = BorderFactory.createLineBorder(MyColors.unfocusedColor);
+        Border blackline = BorderFactory.createLineBorder(UiColors.unfocusedColor);
         TitledBorder middleBorder = BorderFactory.createTitledBorder(blackline, prefName + ":");
         middleBorder.setTitleJustification(TitledBorder.LEADING);
 

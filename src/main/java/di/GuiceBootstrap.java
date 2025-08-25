@@ -3,10 +3,10 @@ package di;
 import actions.ActionsManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import components.MyFocusTraversalPolicy;
-import components.MyFrame;
-import components.MyMenu;
-import components.MySplitPane;
+import components.AppFocusTraversalPolicy;
+import components.AppMenuBar;
+import components.ContentSplitPane;
+import components.MainFrame;
 import components.WindowManager;
 import env.LookAndFeelManager;
 import env.UpdateManager;
@@ -29,10 +29,10 @@ public class GuiceBootstrap {
     private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
     private final ActionsManager actionsManager;
-    private final MyMenu myMenu;
-    private final MyFrame myFrame;
-    private final MySplitPane mySplitPane;
-    private final MyFocusTraversalPolicy myFocusTraversalPolicy;
+    private final AppMenuBar myMenu;
+    private final MainFrame myFrame;
+    private final ContentSplitPane mySplitPane;
+    private final AppFocusTraversalPolicy myFocusTraversalPolicy;
 
     @Inject
     public GuiceBootstrap(
@@ -40,10 +40,10 @@ public class GuiceBootstrap {
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
             ActionsManager actionsManager,
-            MyMenu myMenu,
-            MyFrame myFrame,
-            MySplitPane mySplitPane,
-            MyFocusTraversalPolicy myFocusTraversalPolicy) {
+            AppMenuBar myMenu,
+            MainFrame myFrame,
+            ContentSplitPane mySplitPane,
+            AppFocusTraversalPolicy myFocusTraversalPolicy) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
@@ -77,7 +77,7 @@ public class GuiceBootstrap {
 
         // Register all UpdatingAction instances with ActionsManager
         // This must happen after all components are created but before any UI updates
-        MyMenu.registerAllActionsWithManager();
+        AppMenuBar.registerAllActionsWithManager();
 
         // Register new actions with ActionsManager
         // This registers the new ADI-based actions
@@ -270,7 +270,7 @@ public class GuiceBootstrap {
 
         // Update actions after UI is created (this sets button text and enabled states)
         // This was missing from the new DI system but present in the old Main class
-        MyMenu.updateActions();
+        AppMenuBar.updateActions();
 
         myFrame.setVisible(true);
 

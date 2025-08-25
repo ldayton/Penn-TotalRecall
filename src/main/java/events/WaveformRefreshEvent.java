@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for controlling waveform display refresh behavior. This eliminates direct UI control from

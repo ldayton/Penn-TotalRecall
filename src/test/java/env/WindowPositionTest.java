@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import annotation.MacOS;
 import com.google.inject.Guice;
-import components.MyFrame;
-import components.MySplitPane;
+import components.ContentSplitPane;
+import components.MainFrame;
 import components.WindowManager;
 import di.AppModule;
 import java.awt.Rectangle;
@@ -21,8 +21,8 @@ import org.junit.jupiter.api.Test;
 class WindowPositionTest {
 
     private WindowManager windowManager;
-    private MyFrame myFrame;
-    private MySplitPane mySplitPane;
+    private MainFrame myFrame;
+    private ContentSplitPane mySplitPane;
     private Preferences appPrefs;
 
     @BeforeEach
@@ -34,8 +34,8 @@ class WindowPositionTest {
         // Create components using Guice
         var injector = Guice.createInjector(new AppModule());
         windowManager = injector.getInstance(WindowManager.class);
-        myFrame = injector.getInstance(MyFrame.class);
-        mySplitPane = injector.getInstance(MySplitPane.class);
+        myFrame = injector.getInstance(MainFrame.class);
+        mySplitPane = injector.getInstance(ContentSplitPane.class);
     }
 
     @AfterEach
@@ -88,8 +88,8 @@ class WindowPositionTest {
 
         // Simulate application restart by creating new components
         var newInjector = Guice.createInjector(new AppModule());
-        MyFrame newFrame = newInjector.getInstance(MyFrame.class);
-        MySplitPane newSplitPane = newInjector.getInstance(MySplitPane.class);
+        MainFrame newFrame = newInjector.getInstance(MainFrame.class);
+        ContentSplitPane newSplitPane = newInjector.getInstance(ContentSplitPane.class);
         WindowManager newWindowManager = newInjector.getInstance(WindowManager.class);
 
         // Restore window layout on the new frame

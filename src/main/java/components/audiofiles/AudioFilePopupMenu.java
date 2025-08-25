@@ -1,8 +1,8 @@
 package components.audiofiles;
 
 import actions.ContinueAnnotatingAction;
-import control.AudioFileListEvent;
 import control.AudioState;
+import events.AudioFileListEvent;
 import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;

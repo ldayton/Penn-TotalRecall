@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /** Event for requesting layout updates. This eliminates direct UI control from business logic. */
 public class LayoutUpdateRequestedEvent {

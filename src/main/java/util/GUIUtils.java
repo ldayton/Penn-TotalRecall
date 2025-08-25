@@ -8,7 +8,7 @@ public class GUIUtils {
 
     /**
      * Does the dirty work of figuring out where a <code>JFrame</code> should appear on the screen.
-     * Tries to find a location that would make the <code>JFrame</code> centered in <code>MyFrame
+     * Tries to find a location that would make the <code>JFrame</code> centered in <code>MainFrame
      * </code>, the app's main window.
      *
      * @return The recommended <code>Point</code> for the top left hand point of the <code>

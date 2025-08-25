@@ -1,13 +1,13 @@
 package components.preferences;
 
-import components.MyMenu;
+import components.AppMenuBar;
 import di.GuiceBootstrap;
 import env.PreferencesManager;
-import info.PreferenceKeys;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import util.PreferenceKeys;
 
 /**
  * Preference for the sizes of forward/backward jumps of <code>SeekActions</code> and <code>
@@ -97,13 +97,13 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     protected void restoreDefault() {
         spinner.setValue(defValue);
         saveVal(defValue);
-        MyMenu.updateSeekActions();
+        AppMenuBar.updateSeekActions();
     }
 
     @Override
     protected boolean save() {
         saveVal((Integer) spinner.getValue());
-        MyMenu.updateSeekActions();
+        AppMenuBar.updateSeekActions();
         return true;
     }
 

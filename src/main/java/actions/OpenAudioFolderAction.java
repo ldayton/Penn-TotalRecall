@@ -3,13 +3,13 @@ package actions;
 import components.audiofiles.AudioFileDisplay;
 import control.AudioState;
 import env.PreferencesManager;
-import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import util.EventDispatchBus;
+import util.PreferenceKeys;
 
 /**
  * Presents a directory chooser to the user for selecting audio folders and then adds the selected

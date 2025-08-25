@@ -1,4 +1,4 @@
-package audio;
+package events;
 
 /**
  * Audio playback event system for state change notifications.

@@ -1,10 +1,10 @@
 package components.audiofiles;
 
-import info.Constants;
 import java.io.File;
 import java.util.HashSet;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import util.Constants;
 import util.OSPath;
 
 /**

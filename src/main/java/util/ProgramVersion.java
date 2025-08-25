@@ -1,6 +1,5 @@
 package util;
 
-import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Scanner;

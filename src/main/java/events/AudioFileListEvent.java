@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for AudioFileList operations. This eliminates direct AudioFileList control from popup menus

@@ -1,6 +1,6 @@
 package actions;
 
-import control.InfoRequestedEvent;
+import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -8,7 +8,7 @@ import util.EventDispatchBus;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
- * in {@link components.MyMenu};
+ * in {@link components.AppMenuBar};
  */
 @Singleton
 public class TipsMessageAction extends BaseAction {

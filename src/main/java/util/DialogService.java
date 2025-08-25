@@ -1,9 +1,7 @@
 package util;
 
 import actions.AboutAction;
-import components.MyFrame;
-import info.Constants;
-import info.GUIConstants;
+import components.MainFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.FileDialog;
@@ -23,11 +21,11 @@ import lombok.NonNull;
 @Singleton
 public class DialogService {
 
-    private final MyFrame mainFrame;
+    private final MainFrame mainFrame;
     private final ImageIcon appIcon;
 
     @Inject
-    public DialogService(@NonNull MyFrame mainFrame) {
+    public DialogService(@NonNull MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.appIcon = new ImageIcon(AboutAction.class.getResource("/images/headphones48.png"));
     }

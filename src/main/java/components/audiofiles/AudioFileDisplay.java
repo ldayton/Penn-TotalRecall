@@ -2,13 +2,9 @@ package components.audiofiles;
 
 import components.audiofiles.AudioFile.AudioFilePathException;
 import control.AudioState;
-import control.UIUpdateRequestedEvent;
 import di.GuiceBootstrap;
 import env.PreferencesManager;
-import info.Constants;
-import info.GUIConstants;
-import info.MyShapes;
-import info.PreferenceKeys;
+import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -24,9 +20,13 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.DialogService;
 import util.EventDispatchBus;
+import util.GUIConstants;
+import util.PreferenceKeys;
 import util.Subscribe;
+import util.UiShapes;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -70,7 +70,7 @@ public class AudioFileDisplay extends JScrollPane {
         setPreferredSize(GUIConstants.soundFileDisplayDimension);
         setMaximumSize(GUIConstants.soundFileDisplayDimension);
 
-        setBorder(MyShapes.createMyUnfocusedTitledBorder(title));
+        setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
 
         // overrides JScrollPane key bindings for the benefit of SeekAction's key bindings
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)

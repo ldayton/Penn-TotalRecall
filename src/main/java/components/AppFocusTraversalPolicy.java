@@ -21,14 +21,15 @@ import org.slf4j.LoggerFactory;
  * only the keyboard. One exception is the adding of audio files. For that you need to drag files
  * onto the program with a mouse, or use the mouse on the file chooser.
  *
- * <p>Any component in <code>MyFrame</code> that can be clicked by the user MUST handle focus
+ * <p>Any component in <code>MainFrame</code> that can be clicked by the user MUST handle focus
  * passing. The simplest way to do this is to add an anonymous mouse listener to a clickable
  * component that calls {@link javax.swing.JComponent#requestFocusInWindow()} on whatever component
- * it wants to pass focus to. Focus should always be in one of (1) <code>MyFrame</code>, (2) <code>
+ * it wants to pass focus to. Focus should always be in one of (1) <code>MainFrame</code>, (2)
+ * <code>
  * VolumeSliderDisplay.VolumeSlider</code>, (3) <code>AudioFileList</code>, (4) <code>
  * WordpoolTextField</code>, (5) <code>WordpoolList</code>, (6) <code>AnnotationTable</code>. Other
  * <code>JComponents</code> should choose the above components to pass focus to when clicked on. For
- * example, the <code>ControlPanel</code> gives focus to <code>MyFrame</code>, and the mute button
+ * example, the <code>ControlPanel</code> gives focus to <code>MainFrame</code>, and the mute button
  * gives focus to the volume slider.
  *
  * <p>Focusable components are traversed in the order given above, looping back from the last
@@ -37,13 +38,13 @@ import org.slf4j.LoggerFactory;
  * <p>Please keep the spreadsheet in /dev updated with changes to the focus subsystem.
  */
 @Singleton
-public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
-    private static final Logger logger = LoggerFactory.getLogger(MyFocusTraversalPolicy.class);
+public class AppFocusTraversalPolicy extends FocusTraversalPolicy {
+    private static final Logger logger = LoggerFactory.getLogger(AppFocusTraversalPolicy.class);
 
     private static final String genericFailureMessage =
             "can't find a focus-appropriate component to give focus to";
 
-    private final MyFrame myFrame;
+    private final MainFrame myFrame;
     private final DoneButton doneButton;
 
     // these are components that can take focus, in the order of focus traversal desired
@@ -51,7 +52,7 @@ public class MyFocusTraversalPolicy extends FocusTraversalPolicy {
     private final Component[] focusLoop;
 
     @Inject
-    public MyFocusTraversalPolicy(MyFrame myFrame, DoneButton doneButton) {
+    public AppFocusTraversalPolicy(MainFrame myFrame, DoneButton doneButton) {
         this.myFrame = myFrame;
         this.doneButton = doneButton;
         this.focusLoop =

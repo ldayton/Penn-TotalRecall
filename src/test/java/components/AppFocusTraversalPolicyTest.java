@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("MyFocusTraversalPolicy")
-class MyFocusTraversalPolicyTest {
+@DisplayName("AppFocusTraversalPolicy")
+class AppFocusTraversalPolicyTest {
 
     private Component[] testComponents;
 
@@ -34,7 +34,7 @@ class MyFocusTraversalPolicyTest {
             java.util.function.Predicate<T> isEligible) {
         try {
             Method method =
-                    MyFocusTraversalPolicy.class.getDeclaredMethod(
+                    AppFocusTraversalPolicy.class.getDeclaredMethod(
                             "findNextEligible",
                             Object[].class,
                             int.class,

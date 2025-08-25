@@ -31,19 +31,19 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
     //	}
 
     public void mousePressed(MouseEvent e) {
-        MyGlassPane.getInstance().setHighlightSource(e.getPoint(), source);
-        MyGlassPane.getInstance().setHighlightDest(e.getPoint(), source);
-        MyGlassPane.getInstance().setHighlightMode(true);
-        MyGlassPane.getInstance().repaint();
+        SelectionOverlay.getInstance().setHighlightSource(e.getPoint(), source);
+        SelectionOverlay.getInstance().setHighlightDest(e.getPoint(), source);
+        SelectionOverlay.getInstance().setHighlightMode(true);
+        SelectionOverlay.getInstance().repaint();
     }
 
     public void mouseReleased(MouseEvent e) {
         int[] xs = null;
-        if (MyGlassPane.getInstance().isHighlightMode()) {
-            xs = MyGlassPane.getInstance().getHighlightBounds();
+        if (SelectionOverlay.getInstance().isHighlightMode()) {
+            xs = SelectionOverlay.getInstance().getHighlightBounds();
         }
-        MyGlassPane.getInstance().setHighlightMode(false);
-        MyGlassPane.getInstance().repaint();
+        SelectionOverlay.getInstance().setHighlightMode(false);
+        SelectionOverlay.getInstance().repaint();
         if (xs == null) {
             return;
         }
@@ -56,9 +56,10 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
                 return;
             }
             Point firstPoint =
-                    SwingUtilities.convertPoint(MyGlassPane.getInstance(), smallerX, 0, source);
+                    SwingUtilities.convertPoint(
+                            SelectionOverlay.getInstance(), smallerX, 0, source);
             Point secondPoint =
-                    SwingUtilities.convertPoint(MyGlassPane.getInstance(), largerX, 0, source);
+                    SwingUtilities.convertPoint(SelectionOverlay.getInstance(), largerX, 0, source);
             audioState
                     .getPlayer()
                     .playShortInterval(
@@ -68,8 +69,8 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
     }
 
     public void mouseDragged(MouseEvent e) {
-        MyGlassPane.getInstance().setHighlightDest(e.getPoint(), source);
-        MyGlassPane.getInstance().repaint();
+        SelectionOverlay.getInstance().setHighlightDest(e.getPoint(), source);
+        SelectionOverlay.getInstance().repaint();
     }
 
     public void mouseMoved(MouseEvent e) {}

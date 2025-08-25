@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for when annotator name is provided. This allows annotation actions to continue with the

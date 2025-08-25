@@ -60,7 +60,7 @@ class DoneButtonTest {
     @DisplayName("DoneButton should be properly configured after calling updateActions")
     void doneButtonShouldBeProperlyConfiguredAfterUpdateActions() {
         // Call updateActions to trigger the action system
-        MyMenu.updateActions();
+        AppMenuBar.updateActions();
 
         // Now the button should have proper text and be disabled
         String buttonText = doneButton.getText();
@@ -84,7 +84,7 @@ class DoneButtonTest {
         var shortcutFrame = GuiceBootstrap.getInjectedInstance(components.ShortcutFrame.class);
 
         // Now call updateActions
-        MyMenu.updateActions();
+        AppMenuBar.updateActions();
 
         // The button should now be properly configured
         String buttonText = doneButton.getText();

@@ -1,4 +1,4 @@
-package control;
+package events;
 
 import components.preferences.AbstractPreferenceDisplay;
 import java.util.List;

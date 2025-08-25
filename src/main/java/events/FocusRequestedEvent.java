@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for requesting focus changes between UI components. This eliminates direct UI control from

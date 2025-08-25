@@ -1,7 +1,8 @@
 package control;
 
-import audio.AudioEvent;
 import audio.AudioProgressHandler;
+import events.AudioEvent;
+import events.AudioStateEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

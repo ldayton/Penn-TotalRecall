@@ -1,11 +1,11 @@
-package control;
+package events;
 
-/** Event fired when an info dialog should be shown. */
-public class InfoRequestedEvent {
+/** Event fired when an error dialog should be shown. */
+public class ErrorRequestedEvent {
     private final String message;
     private final long timestamp;
 
-    public InfoRequestedEvent(String message) {
+    public ErrorRequestedEvent(String message) {
         this.message = message;
         this.timestamp = System.currentTimeMillis();
     }

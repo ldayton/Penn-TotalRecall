@@ -1,4 +1,4 @@
-package control;
+package events;
 
 /**
  * Event for requesting annotator name input. This eliminates direct UI control from annotation

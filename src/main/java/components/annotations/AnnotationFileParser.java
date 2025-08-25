@@ -1,6 +1,5 @@
 package components.annotations;
 
-import info.Constants;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.OSPath;
 
 /** Handles manipulations of annotation files, e.g. adding and removing annotations. */

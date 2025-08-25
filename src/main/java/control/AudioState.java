@@ -3,7 +3,7 @@ package control;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
-import components.MyMenu;
+import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
@@ -12,7 +12,9 @@ import components.waveform.WaveformBuffer;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import env.PreferencesManager;
-import info.Constants;
+import events.AudioFileSwitchedEvent;
+import events.UIUpdateRequestedEvent;
+import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -23,6 +25,7 @@ import java.util.Stack;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.EventDispatchBus;
 import util.OSPath;
 
@@ -180,7 +183,7 @@ public class AudioState implements AudioProgressHandler {
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));
         }
 
-        MyMenu.updateActions();
+        AppMenuBar.updateActions();
     }
 
     /**
@@ -401,7 +404,7 @@ public class AudioState implements AudioProgressHandler {
     public void setAudioProgressAndUpdateActions(long frame) {
         if (audioOpen()) {
             framePosition = frame;
-            MyMenu.updateActions();
+            AppMenuBar.updateActions();
         } else {
             throw new IllegalStateException(audioClosedMessage);
         }

@@ -1,7 +1,7 @@
 package components.audiofiles;
 
-import control.AudioFileListEvent;
 import control.AudioState;
+import events.AudioFileListEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

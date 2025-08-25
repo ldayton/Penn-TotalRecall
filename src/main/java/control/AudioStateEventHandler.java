@@ -1,8 +1,10 @@
 package control;
 
-import audio.AudioEvent;
-import components.MyMenu;
+import components.AppMenuBar;
 import di.GuiceBootstrap;
+import events.AudioEvent;
+import events.AudioStateEvent;
+import events.LayoutUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -53,7 +55,7 @@ public class AudioStateEventHandler {
                 break;
 
             case PLAYING:
-                MyMenu.updateActions();
+                AppMenuBar.updateActions();
                 break;
 
             case STOPPED:
@@ -67,7 +69,7 @@ public class AudioStateEventHandler {
                             currentProgress,
                             audioEvent.frame());
                 }
-                MyMenu.updateActions();
+                AppMenuBar.updateActions();
                 break;
 
             case EOM:

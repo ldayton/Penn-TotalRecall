@@ -2,10 +2,6 @@ package components.waveform;
 
 import control.AudioState;
 import env.PreferencesManager;
-import info.GUIConstants;
-import info.MyColors;
-import info.MyShapes;
-import info.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
@@ -20,6 +16,10 @@ import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.GUIConstants;
+import util.PreferenceKeys;
+import util.UiColors;
+import util.UiShapes;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -283,10 +283,10 @@ public class WaveformBuffer extends Buffer {
             image = WaveformDisplay.getInstance().createImage(chunkWidthInPixels, height);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
 
-            g2d.setRenderingHints(MyShapes.getRenderingHints());
-            g2d.setColor(MyColors.waveformBackground);
+            g2d.setRenderingHints(UiShapes.getRenderingHints());
+            g2d.setColor(UiColors.waveformBackground);
             g2d.fillRect(0, 0, chunkWidthInPixels, height); // fill in background color
-            g2d.setColor(MyColors.waveformReferenceLineColor);
+            g2d.setColor(UiColors.waveformReferenceLineColor);
             g2d.drawLine(0, height / 2, chunkWidthInPixels, height / 2); // draw reference line
 
             // draw seconds line
@@ -298,15 +298,15 @@ public class WaveformBuffer extends Buffer {
                                             myNum)); // this works because buffer size is in whole
             // seconds
             for (int i = 0; i < chunkWidthInPixels; i += GUIConstants.zoomlessPixelsPerSecond) {
-                g2d.setColor(MyColors.waveformScaleLineColor);
+                g2d.setColor(UiColors.waveformScaleLineColor);
                 g2d.drawLine(i, 0, i, height - 1);
-                g2d.setColor(MyColors.waveformScaleTextColor);
+                g2d.setColor(UiColors.waveformScaleTextColor);
                 g2d.drawString(secFormat.format(counter), i + 5, height - 5);
                 counter++;
             }
 
             // actually draw the waveform (~5ms)
-            g2d.setColor(MyColors.firstChannelWaveformColor);
+            g2d.setColor(UiColors.firstChannelWaveformColor);
             int topY;
             int bottomY;
             final int refLinePos = height / 2;

@@ -1,10 +1,10 @@
-package control;
+package events;
 
-/** Event fired when the user requests to open preferences. */
-public class PreferencesRequestedEvent {
+/** Event fired when the user requests to exit the application. */
+public class ExitRequestedEvent {
     private final long timestamp;
 
-    public PreferencesRequestedEvent() {
+    public ExitRequestedEvent() {
         this.timestamp = System.currentTimeMillis();
     }
 

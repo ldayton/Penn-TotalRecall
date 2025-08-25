@@ -4,11 +4,9 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
 import control.AudioState;
-import control.ErrorRequestedEvent;
 import env.PreferencesManager;
 import env.UserManager;
-import info.Constants;
-import info.PreferenceKeys;
+import events.ErrorRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -19,8 +17,10 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.EventDispatchBus;
 import util.OSPath;
+import util.PreferenceKeys;
 
 /**
  * Presents a file chooser to the user and then adds words from the selected file to the {@link

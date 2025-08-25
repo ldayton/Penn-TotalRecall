@@ -1,7 +1,6 @@
 package components.annotations;
 
 import actions.JumpToAnnotationAction;
-import info.MyColors;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -21,6 +20,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import util.UiColors;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton
@@ -47,7 +47,7 @@ public class AnnotationTable extends JTable implements FocusListener {
         JTableHeader header = getTableHeader();
         header.setReorderingAllowed(false);
         header.setResizingAllowed(true);
-        header.setBorder(BorderFactory.createLineBorder(MyColors.annotationListHeaderBorderColor));
+        header.setBorder(BorderFactory.createLineBorder(UiColors.annotationListHeaderBorderColor));
         setModel(model);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addMouseListener(mouseAdapter);

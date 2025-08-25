@@ -1,9 +1,8 @@
 package components.wordpool;
 
-import control.FocusRequestedEvent;
 import env.KeyboardManager;
 import env.PreferencesManager;
-import info.PreferenceKeys;
+import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -26,6 +25,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
 import util.EventDispatchBus;
+import util.PreferenceKeys;
 import util.Subscribe;
 
 /**

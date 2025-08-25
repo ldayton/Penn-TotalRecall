@@ -5,7 +5,7 @@ import actions.AnnotateIntrusionAction;
 import actions.DeleteSelectedAnnotationAction;
 import actions.PlayPauseAction;
 import components.waveform.WaveformDisplay;
-import control.LayoutUpdateRequestedEvent;
+import events.LayoutUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -17,13 +17,13 @@ import util.EventDispatchBus;
 import util.Subscribe;
 
 /**
- * A custom <code>JSplitPane</code> that serves as the content pane to <code>MyFrame</code>. Splits
- * the program's interface between the waveform area above, and the control area below.
+ * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.
+ * Splits the program's interface between the waveform area above, and the control area below.
  */
 @Singleton
-public class MySplitPane extends JSplitPane {
+public class ContentSplitPane extends JSplitPane {
 
-    private static MySplitPane instance;
+    private static ContentSplitPane instance;
     private final ControlPanel controlPanel;
     private final WaveformDisplay waveformDisplay;
     private final ActionsManager actionsManager;
@@ -37,7 +37,7 @@ public class MySplitPane extends JSplitPane {
      * listeners, and various aspects of appearance.
      */
     @Inject
-    public MySplitPane(
+    public ContentSplitPane(
             ControlPanel controlPanel,
             WaveformDisplay waveformDisplay,
             ActionsManager actionsManager,
@@ -62,7 +62,8 @@ public class MySplitPane extends JSplitPane {
         // to expense of generated repaints
         setResizeWeight(0.5);
 
-        // overrides MySplitPane key bindings for the benefit of SeekAction's key bindings and to
+        // overrides ContentSplitPane key bindings for the benefit of SeekAction's key bindings and
+        // to
         // prevent accidental movement of the divider
         InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "none");
@@ -106,13 +107,13 @@ public class MySplitPane extends JSplitPane {
     /**
      * Singleton accessor.
      *
-     * @return The singleton <code>MySplitPane</code>
+     * @return The singleton <code>ContentSplitPane</code>
      */
-    public static MySplitPane getInstance() {
+    public static ContentSplitPane getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "MySplitPane not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
+                    "ContentSplitPane not initialized via DI. Ensure GuiceBootstrap.create() was"
+                            + " called first.");
         }
         return instance;
     }

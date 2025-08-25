@@ -5,7 +5,6 @@ import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import control.AudioState;
-import info.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.dnd.DropTargetDropEvent;
@@ -13,10 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Constants;
 import util.OSPath;
 
 /**
- * A <code>FileDrop.Listener</code> that catches directories and folders dropped on <code>MyFrame
+ * A <code>FileDrop.Listener</code> that catches directories and folders dropped on <code>MainFrame
  * </code>, adding the appropriate files to the <code>AudioFileDisplay</code>.
  */
 @Singleton

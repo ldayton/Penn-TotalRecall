@@ -1,9 +1,9 @@
-package info;
+package util;
 
 import java.awt.Color;
 
 /** Central location for colors in the GUI. */
-public class MyColors {
+public class UiColors {
 
     // focus colors
 
@@ -84,5 +84,5 @@ public class MyColors {
     // available in WindowsLAF: UIManager.getDefaults().getColor("textHighlight");
 
     /** Private constructor to prevent instantiation. */
-    private MyColors() {}
+    private UiColors() {}
 }

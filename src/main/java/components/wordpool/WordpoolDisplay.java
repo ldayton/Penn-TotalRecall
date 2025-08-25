@@ -1,7 +1,5 @@
 package components.wordpool;
 
-import info.GUIConstants;
-import info.MyShapes;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
@@ -10,6 +8,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import util.GUIConstants;
+import util.UiShapes;
 
 /**
  * A custom interface component for displaying wordpool and lst words to the user and a text field
@@ -56,7 +56,7 @@ public class WordpoolDisplay extends JPanel {
         setPreferredSize(GUIConstants.wordpoolDisplayDimension);
         setMaximumSize(GUIConstants.wordpoolDisplayDimension);
 
-        setBorder(MyShapes.createMyUnfocusedTitledBorder(title));
+        setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
 
         // since WordpoolDisplay is a clickable area, we must write focus handling code for the
         // event it is clicked on
