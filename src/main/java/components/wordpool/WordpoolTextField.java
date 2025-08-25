@@ -1,8 +1,10 @@
 package components.wordpool;
 
 import env.KeyboardManager;
-import env.PreferencesManager;
+import env.PreferenceKeys;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -24,9 +26,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import util.EventDispatchBus;
-import util.PreferenceKeys;
-import util.Subscribe;
+import state.PreferencesManager;
 
 /**
  * Custom <code>JTextField</code> for entering annotations.

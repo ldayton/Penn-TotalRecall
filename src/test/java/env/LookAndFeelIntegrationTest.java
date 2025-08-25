@@ -3,7 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotation.Windowing;
-import di.GuiceBootstrap;
+import app.di.GuiceBootstrap;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;

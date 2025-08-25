@@ -1,10 +1,11 @@
-package env;
+package audio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.AudioSystemManager;
 import audio.AudioSystemManager.LibraryLoadingMode;
 import audio.AudioSystemManager.LibraryType;
+import env.AppConfig;
+import env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

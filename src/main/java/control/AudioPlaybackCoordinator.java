@@ -3,11 +3,11 @@ package control;
 import audio.AudioProgressHandler;
 import events.AudioEvent;
 import events.AudioStateEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventDispatchBus;
 
 /**
  * Coordinates audio playback events with a hybrid approach for optimal performance and thread

@@ -20,7 +20,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import util.UiColors;
+import ui.UiColors;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton

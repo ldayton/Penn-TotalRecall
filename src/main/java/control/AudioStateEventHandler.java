@@ -1,17 +1,18 @@
 package control;
 
+import app.di.GuiceBootstrap;
 import components.AppMenuBar;
-import di.GuiceBootstrap;
 import events.AudioEvent;
 import events.AudioStateEvent;
+import events.EventDispatchBus;
 import events.LayoutUpdateRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
-import util.EventDispatchBus;
-import util.Subscribe;
+import state.AudioState;
+import ui.DialogService;
 
 /**
  * Handles audio state events on the Event Dispatch Thread (EDT).

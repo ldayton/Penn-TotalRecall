@@ -4,8 +4,9 @@ import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
-import control.AudioState;
+import env.Constants;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -14,9 +15,8 @@ import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
+import state.AudioState;
+import util.OsPath;
 
 /**
  * Deletes an annotation that has already been committed to a temporary annotation file.
@@ -69,7 +69,7 @@ public class DeleteAnnotationAction extends BaseAction {
 
         String curFileName = audioState.getCurrentAudioFileAbsolutePath();
         String desiredPath =
-                OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
+                OsPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension;
         File oFile = new File(desiredPath);
 
         boolean success = false;

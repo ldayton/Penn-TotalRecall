@@ -2,7 +2,9 @@ package actions;
 
 import components.audiofiles.AudioFile;
 import components.audiofiles.AudioFile.AudioFilePathException;
+import env.Constants;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -10,9 +12,7 @@ import java.io.File;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
+import util.OsPath;
 
 /** Reopens a file which was already done being annotated. */
 @Singleton
@@ -65,12 +65,12 @@ public class ContinueAnnotatingAction extends BaseAction {
         }
         File tmpFile =
                 new File(
-                        OSPath.basename(myAudioFile.getAbsolutePath())
+                        OsPath.basename(myAudioFile.getAbsolutePath())
                                 + "."
                                 + Constants.temporaryAnnotationFileExtension);
         File doneFile =
                 new File(
-                        OSPath.basename(myAudioFile.getAbsolutePath())
+                        OsPath.basename(myAudioFile.getAbsolutePath())
                                 + "."
                                 + Constants.completedAnnotationFileExtension);
         if (tmpFile.exists() == true) {

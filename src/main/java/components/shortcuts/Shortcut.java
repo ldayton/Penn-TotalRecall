@@ -115,7 +115,7 @@ public class Shortcut {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
         KeyboardManager keyboardManager =
-                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+                app.di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         return new Shortcut(stroke, keyboardManager);
     }
 
@@ -123,7 +123,7 @@ public class Shortcut {
             @NonNull List<String> maskKeyExternalForms,
             @NonNull List<String> nonMaskKeyExternalForms) {
         KeyboardManager keyboardManager =
-                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+                app.di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyExternalForms.stream()
@@ -146,7 +146,7 @@ public class Shortcut {
             @NonNull List<String> maskKeyXmlNames, @NonNull List<String> nonMaskKeyXmlNames) {
 
         KeyboardManager keyboardManager =
-                di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
+                app.di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class);
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyXmlNames.stream()

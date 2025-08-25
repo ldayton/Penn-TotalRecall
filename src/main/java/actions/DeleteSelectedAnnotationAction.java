@@ -4,11 +4,11 @@ import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformDisplay;
-import control.AudioState;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventDispatchBus;
+import state.AudioState;
 
 @Singleton
 public class DeleteSelectedAnnotationAction extends BaseAction {

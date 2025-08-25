@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
+import ui.DialogService;
 
 /**
  * Manages application update checking using GitHub Releases API.

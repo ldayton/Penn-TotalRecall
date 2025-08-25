@@ -25,10 +25,10 @@ public class AppConfig {
 
     private final Properties properties;
     private final Platform platform;
-    private final UserManager userManager;
+    private final UserHomeProvider userManager;
 
     @Inject
-    public AppConfig(@NonNull Platform platform, @NonNull UserManager userManager) {
+    public AppConfig(@NonNull Platform platform, @NonNull UserHomeProvider userManager) {
         this.platform = platform;
         this.userManager = userManager;
         this.properties = loadConfiguration();
@@ -37,7 +37,7 @@ public class AppConfig {
     /** Default constructor for non-DI usage (tests) */
     public AppConfig() {
         this.platform = new Platform();
-        this.userManager = new UserManager();
+        this.userManager = new UserHomeProvider();
         this.properties = loadConfiguration();
     }
 

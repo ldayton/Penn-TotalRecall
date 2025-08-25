@@ -1,7 +1,8 @@
 package components.audiofiles;
 
-import control.AudioState;
 import events.AudioFileListEvent;
+import events.EventDispatchBus;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -16,8 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import util.EventDispatchBus;
-import util.Subscribe;
+import state.AudioState;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
 @Singleton

@@ -1,27 +1,27 @@
 package components;
 
-import env.PreferencesManager;
+import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import lombok.NonNull;
-import util.PreferenceKeys;
+import state.PreferencesManager;
 
 /**
  * Manages window state persistence and restoration.
  *
  * <p>Saves and restores window position, size, maximized state, and split pane divider location.
  */
-public class WindowManager {
+public class WindowLayoutPersistence {
     private final PreferencesManager prefs;
 
     /**
-     * Creates a WindowManager with injected PreferencesManager.
+     * Creates a WindowLayoutPersistence with injected PreferencesManager.
      *
      * @param prefs the PreferencesManager for storing and retrieving window state
      */
     @Inject
-    public WindowManager(@NonNull PreferencesManager prefs) {
+    public WindowLayoutPersistence(@NonNull PreferencesManager prefs) {
         this.prefs = prefs;
     }
 

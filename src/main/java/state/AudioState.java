@@ -1,4 +1,4 @@
-package control;
+package state;
 
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
@@ -11,8 +11,11 @@ import components.audiofiles.AudioFile;
 import components.waveform.WaveformBuffer;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
-import env.PreferencesManager;
+import control.AudioCalculator;
+import control.AudioPlaybackCoordinator;
+import env.Constants;
 import events.AudioFileSwitchedEvent;
+import events.EventDispatchBus;
 import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
@@ -25,9 +28,7 @@ import java.util.Stack;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
+import util.OsPath;
 
 /**
  * Injectable service that manages the essential state of the program. This replaces the static
@@ -154,7 +155,7 @@ public class AudioState implements AudioProgressHandler {
             // add words from lst file to display
             File lstFile =
                     new File(
-                            OSPath.basename(file.getAbsolutePath())
+                            OsPath.basename(file.getAbsolutePath())
                                     + "."
                                     + Constants.lstFileExtension);
             if (lstFile.exists()) {
@@ -168,7 +169,7 @@ public class AudioState implements AudioProgressHandler {
             // fill up annotation table with existing annotations
             File tmpFile =
                     new File(
-                            OSPath.basename(file.getAbsolutePath())
+                            OsPath.basename(file.getAbsolutePath())
                                     + "."
                                     + Constants.temporaryAnnotationFileExtension);
             if (tmpFile.exists()) {

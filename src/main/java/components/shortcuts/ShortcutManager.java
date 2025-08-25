@@ -2,7 +2,6 @@ package components.shortcuts;
 
 import actions.ActionsFileParser.ActionConfig;
 import env.KeyboardManager;
-import env.PreferencesManager;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -35,6 +34,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
+import state.PreferencesManager;
 
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;
@@ -53,7 +53,7 @@ public class ShortcutManager extends JFrame {
             List<ActionConfig> actionConfigs, ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
-                di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
+                app.di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
         this.shortcutPreferences =
                 new ShortcutPreferences(preferencesManager, actionConfigs, listener);
         this.listener = listener;
@@ -240,7 +240,8 @@ class ShortcutTable extends JTable {
                     var enteredShortcut =
                             Shortcut.forPlatform(
                                     KeyStroke.getKeyStroke(code, modifiers),
-                                    di.GuiceBootstrap.getInjectedInstance(KeyboardManager.class));
+                                    app.di.GuiceBootstrap.getInjectedInstance(
+                                            KeyboardManager.class));
                     var rowActionConfig = shortcutTableModel.actionConfigForRow(selectedRow);
                     var newActionConfig =
                             shortcutPreferences.withShortcut(rowActionConfig, enteredShortcut);

@@ -1,12 +1,12 @@
 package components.waveform;
 
-import control.AudioState;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.SwingUtilities;
+import state.AudioState;
 
 /** Mouse adapter for the waveform display, for use when {@link info.Constants#mouseMode}. */
 public class WaveformMouseAdapter implements MouseMotionListener, MouseListener {

@@ -1,6 +1,7 @@
-package env;
+package state;
 
 import com.google.common.annotations.VisibleForTesting;
+import env.UserHomeProvider;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -17,16 +18,16 @@ public class PreferencesManager {
     private static final String APP_PREFERENCES_NODE = "/edu/upenn/psych/memory/penntotalrecall";
 
     private final Preferences prefs;
-    private final UserManager userManager;
+    private final UserHomeProvider userManager;
 
     @Inject
-    public PreferencesManager(@NonNull UserManager userManager) {
+    public PreferencesManager(@NonNull UserHomeProvider userManager) {
         this(userManager, APP_PREFERENCES_NODE);
     }
 
     /** Test constructor allowing custom namespace for isolation. */
     @VisibleForTesting
-    public PreferencesManager(@NonNull UserManager userManager, @NonNull String namespace) {
+    public PreferencesManager(@NonNull UserHomeProvider userManager, @NonNull String namespace) {
         this.userManager = userManager;
         this.prefs = Preferences.userRoot().node(namespace);
     }

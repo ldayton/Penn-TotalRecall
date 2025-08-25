@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
-import util.UiColors;
+import ui.UiColors;
 
 /**
  * A <code>JPanel</code> that will display a preference chooser of some kind to the user.

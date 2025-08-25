@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import env.AppConfig;
 import env.Platform;
-import env.UserManager;
+import env.UserHomeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class UserDBCompatibilityTest {
 
     private final Platform platform = new Platform();
-    private final UserManager userManager = new UserManager();
+    private final UserHomeProvider userManager = new UserHomeProvider();
     private final AppConfig config = new AppConfig(platform, userManager);
 
     @Test

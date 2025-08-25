@@ -5,8 +5,9 @@ import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
-import control.AudioState;
+import env.Constants;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
@@ -16,9 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
+import state.AudioState;
+import util.OsPath;
 
 /**
  * Commits an intrusion annotation, updating the annotation file and program window as appropriate.
@@ -159,6 +159,6 @@ public class AnnotateIntrusionAction extends BaseAction {
     private File getOutputFile() {
         String curFileName = audioState.getCurrentAudioFileAbsolutePath();
         return new File(
-                OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
+                OsPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
     }
 }

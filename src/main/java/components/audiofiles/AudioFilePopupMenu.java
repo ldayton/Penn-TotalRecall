@@ -1,14 +1,14 @@
 package components.audiofiles;
 
 import actions.ContinueAnnotatingAction;
-import control.AudioState;
 import events.AudioFileListEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /**
  * <code>JPopupMenu</code> that presents user with actions for manipulating the <code>AudioFileList

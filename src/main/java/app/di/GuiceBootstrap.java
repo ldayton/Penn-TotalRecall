@@ -1,4 +1,4 @@
-package di;
+package app.di;
 
 import actions.ActionsManager;
 import com.google.inject.Guice;
@@ -7,7 +7,7 @@ import components.AppFocusTraversalPolicy;
 import components.AppMenuBar;
 import components.ContentSplitPane;
 import components.MainFrame;
-import components.WindowManager;
+import components.WindowLayoutPersistence;
 import env.LookAndFeelManager;
 import env.UpdateManager;
 import jakarta.inject.Inject;
@@ -25,7 +25,7 @@ public class GuiceBootstrap {
     private static Injector globalInjector;
     private static final Logger logger = LoggerFactory.getLogger(GuiceBootstrap.class);
 
-    private final WindowManager windowManager;
+    private final WindowLayoutPersistence windowManager;
     private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
     private final ActionsManager actionsManager;
@@ -36,7 +36,7 @@ public class GuiceBootstrap {
 
     @Inject
     public GuiceBootstrap(
-            WindowManager windowManager,
+            WindowLayoutPersistence windowManager,
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
             ActionsManager actionsManager,

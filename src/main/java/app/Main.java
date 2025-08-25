@@ -1,11 +1,12 @@
-package control;
+package app;
 
-import di.GuiceBootstrap;
+import app.di.GuiceBootstrap;
+import control.AudioIntegrationMode;
+import env.Constants;
 import java.util.Arrays;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
 
 /** Entry point of the entire program. */
 public class Main {

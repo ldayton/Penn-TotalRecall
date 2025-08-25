@@ -1,4 +1,4 @@
-package util;
+package ui;
 
 import components.MainFrame;
 import jakarta.inject.Inject;
@@ -12,11 +12,11 @@ import lombok.NonNull;
  * <p>Centralizes window management for better dependency injection and testability.
  */
 @Singleton
-public class WindowService {
+public class MainWindowAccess {
     private final MainFrame mainFrame;
 
     @Inject
-    public WindowService(@NonNull MainFrame mainFrame) {
+    public MainWindowAccess(@NonNull MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
 

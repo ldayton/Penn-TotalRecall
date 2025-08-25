@@ -6,10 +6,12 @@ import components.wordpool.WordpoolDisplay;
 import env.LookAndFeelManager;
 import events.AudioFileSwitchedEvent;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import events.ExitRequestedEvent;
 import events.FocusRequestedEvent;
 import events.InfoRequestedEvent;
 import events.PreferencesRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
@@ -22,9 +24,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventDispatchBus;
-import util.GUIConstants;
-import util.Subscribe;
+import ui.UiConstants;
 
 /**
  * Main window of the program.
@@ -61,7 +61,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         this.exitAction = exitAction;
         this.eventBus = eventBus;
         this.fileDropListener = fileDropListener;
-        setTitle(GUIConstants.defaultFrameTitle);
+        setTitle(UiConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
         setJMenuBar(myMenu);
@@ -170,11 +170,11 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     public void handleAudioFileSwitched(AudioFileSwitchedEvent event) {
         if (event.getFile() == null) {
             // Reset to default title and request focus
-            setTitle(GUIConstants.defaultFrameTitle);
+            setTitle(UiConstants.defaultFrameTitle);
             requestFocus();
         } else {
             // Set title with file path
-            setTitle(GUIConstants.defaultFrameTitle + " - " + event.getFile().getPath());
+            setTitle(UiConstants.defaultFrameTitle + " - " + event.getFile().getPath());
         }
     }
 
@@ -200,7 +200,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     public void handlePreferencesRequested(PreferencesRequestedEvent event) {
         // Get PreferencesFrame from DI and show it
         var preferencesFrame =
-                di.GuiceBootstrap.getInjectedInstance(
+                app.di.GuiceBootstrap.getInjectedInstance(
                         components.preferences.PreferencesFrame.class);
         if (preferencesFrame != null) {
             preferencesFrame.setVisible(true);

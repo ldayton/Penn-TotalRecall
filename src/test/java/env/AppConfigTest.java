@@ -72,7 +72,7 @@ class AppConfigTest {
             System.setProperty("test.priority.key", "system_value");
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // System property should win
@@ -88,7 +88,7 @@ class AppConfigTest {
             writePropertiesFile(userConfigFile, "releases.api.url=user_override_url");
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // User config should override bundled config
@@ -105,7 +105,7 @@ class AppConfigTest {
                     userConfigFile, "user.only.key=user_value\nshared.key=user_override");
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // Should get user-specific property
@@ -134,7 +134,7 @@ class AppConfigTest {
             System.setProperty("test.double.key", "not_a_double");
 
             Platform platform = new Platform();
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // Should handle invalid values gracefully and return defaults
@@ -162,8 +162,8 @@ class AppConfigTest {
             writePropertiesFile(macConfigFile, "platform.test=macos_works");
 
             Platform macPlatform = new Platform(Platform.PlatformType.MACOS);
-            UserManager macUserManager = new UserManager();
-            AppConfig macConfig = new AppConfig(macPlatform, macUserManager);
+            UserHomeProvider macUserHomeProvider = new UserHomeProvider();
+            AppConfig macConfig = new AppConfig(macPlatform, macUserHomeProvider);
 
             assertEquals("macos_works", macConfig.getProperty("platform.test"));
 
@@ -174,8 +174,8 @@ class AppConfigTest {
             writePropertiesFile(linuxConfigFile, "platform.test=linux_works");
 
             Platform linuxPlatform = new Platform(Platform.PlatformType.LINUX);
-            UserManager linuxUserManager = new UserManager();
-            AppConfig linuxConfig = new AppConfig(linuxPlatform, linuxUserManager);
+            UserHomeProvider linuxUserHomeProvider = new UserHomeProvider();
+            AppConfig linuxConfig = new AppConfig(linuxPlatform, linuxUserHomeProvider);
 
             assertEquals("linux_works", linuxConfig.getProperty("platform.test"));
         }
@@ -192,7 +192,7 @@ class AppConfigTest {
             System.setProperty("user.home", tempDir.toString());
 
             Platform platform = new Platform();
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
 
             // Should not throw exception
             assertDoesNotThrow(() -> new AppConfig(platform, userManager));
@@ -221,7 +221,7 @@ class AppConfigTest {
             }
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
 
             // Should not throw exception
             assertDoesNotThrow(() -> new AppConfig(platform, userManager));
@@ -257,7 +257,7 @@ class AppConfigTest {
             }
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
 
             // Should not crash on invalid content
             assertDoesNotThrow(() -> new AppConfig(platform, userManager));
@@ -291,7 +291,7 @@ class AppConfigTest {
             }
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
 
             // Should not crash even with completely corrupt content
             assertDoesNotThrow(() -> new AppConfig(platform, userManager));
@@ -314,7 +314,7 @@ class AppConfigTest {
             System.setProperty("user.home", tempHome);
 
             Platform platform = new Platform(Platform.PlatformType.LINUX);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
 
             // Config directory should not exist initially
             File expectedDir = new File(tempHome, ".penn-totalrecall");
@@ -345,7 +345,7 @@ class AppConfigTest {
                     "test.priority.key=user_value\n" + "user.only.key=user_only_value");
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // User config should override bundled application.properties
@@ -389,7 +389,7 @@ class AppConfigTest {
                             "shared.key=user_override"); // User override
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // User should override bundled
@@ -414,7 +414,7 @@ class AppConfigTest {
             System.setProperty("releases.api.url", "system_override");
 
             Platform platform = new Platform(Platform.PlatformType.MACOS);
-            UserManager userManager = new UserManager();
+            UserHomeProvider userManager = new UserHomeProvider();
             AppConfig config = new AppConfig(platform, userManager);
 
             // System property should win over user config and bundled config

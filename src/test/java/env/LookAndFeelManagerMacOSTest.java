@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import actions.ExitAction;
 import annotation.MacOS;
-import di.GuiceBootstrap;
+import app.di.GuiceBootstrap;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.lang.reflect.Field;

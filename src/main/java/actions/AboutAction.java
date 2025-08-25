@@ -1,11 +1,11 @@
 package actions;
 
+import env.Constants;
+import events.EventDispatchBus;
 import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.Constants;
-import util.EventDispatchBus;
 
 /** Displays information about the program to the user */
 @Singleton

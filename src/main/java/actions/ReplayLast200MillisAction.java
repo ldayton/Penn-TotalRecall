@@ -2,10 +2,10 @@ package actions;
 
 import audio.AudioPlayer;
 import components.waveform.SelectionOverlay;
-import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
+import state.AudioState;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been

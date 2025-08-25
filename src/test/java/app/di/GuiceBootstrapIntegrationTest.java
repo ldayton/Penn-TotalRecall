@@ -2,15 +2,15 @@ package integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.di.GuiceBootstrap;
 import audio.AudioSystemLoader;
 import audio.FmodCore;
-import components.WindowManager;
-import di.GuiceBootstrap;
+import components.WindowLayoutPersistence;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.UpdateManager;
-import env.UserManager;
+import env.UserHomeProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -50,9 +50,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ AppConfig can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(UserManager.class),
-                "UserManager should be instantiable via DI");
-        logger.info("✅ UserManager can be created");
+                GuiceBootstrap.getInjectedInstance(UserHomeProvider.class),
+                "UserHomeProvider should be instantiable via DI");
+        logger.info("✅ UserHomeProvider can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(AudioSystemLoader.class),
@@ -65,9 +65,9 @@ class GuiceBootstrapIntegrationTest {
         logger.info("✅ FmodCore can be created");
 
         assertNotNull(
-                GuiceBootstrap.getInjectedInstance(WindowManager.class),
-                "WindowManager should be instantiable via DI");
-        logger.info("✅ WindowManager can be created");
+                GuiceBootstrap.getInjectedInstance(WindowLayoutPersistence.class),
+                "WindowLayoutPersistence should be instantiable via DI");
+        logger.info("✅ WindowLayoutPersistence can be created");
 
         assertNotNull(
                 GuiceBootstrap.getInjectedInstance(UpdateManager.class),

@@ -4,9 +4,10 @@ import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.waveform.WaveformBuffer.WaveformChunk;
-import control.AudioState;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.ScreenSeekRequestedEvent;
+import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
@@ -24,11 +25,10 @@ import javax.swing.Timer;
 import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventDispatchBus;
-import util.GUIConstants;
-import util.Subscribe;
-import util.UiColors;
-import util.UiShapes;
+import state.AudioState;
+import ui.UiColors;
+import ui.UiConstants;
+import ui.UiShapes;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -75,7 +75,7 @@ public class WaveformDisplay extends JComponent {
         setBackground(UiColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
         // background color without subclassing to a JPanel
-        pixelsPerSecond = GUIConstants.zoomlessPixelsPerSecond;
+        pixelsPerSecond = UiConstants.zoomlessPixelsPerSecond;
         refreshFrame = -1;
         addMouseListener(
                 new MouseAdapter() {
@@ -111,10 +111,10 @@ public class WaveformDisplay extends JComponent {
 
     public static void zoomX(boolean in) {
         if (in) {
-            instance.pixelsPerSecond += GUIConstants.xZoomAmount;
+            instance.pixelsPerSecond += UiConstants.xZoomAmount;
         } else {
-            if (instance.pixelsPerSecond >= GUIConstants.xZoomAmount + 1) {
-                instance.pixelsPerSecond -= GUIConstants.xZoomAmount;
+            if (instance.pixelsPerSecond >= UiConstants.xZoomAmount + 1) {
+                instance.pixelsPerSecond -= UiConstants.xZoomAmount;
             }
         }
     }
@@ -157,9 +157,7 @@ public class WaveformDisplay extends JComponent {
     @Subscribe
     public void handleScreenSeekRequestedEvent(ScreenSeekRequestedEvent event) {
         int shift =
-                (int)
-                        (((double) getWidth() / (double) GUIConstants.zoomlessPixelsPerSecond)
-                                * 1000);
+                (int) (((double) getWidth() / (double) UiConstants.zoomlessPixelsPerSecond) * 1000);
         shift -= shift / 5;
         if (event.getDirection() == ScreenSeekRequestedEvent.Direction.BACKWARD) {
             shift *= -1;
@@ -336,7 +334,7 @@ public class WaveformDisplay extends JComponent {
                     -1
                             * (int)
                                     Math.ceil(
-                                            GUIConstants.zoomlessPixelsPerSecond
+                                            UiConstants.zoomlessPixelsPerSecond
                                                     * audioState
                                                             .getCalculator()
                                                             .durationInSeconds());
@@ -351,7 +349,7 @@ public class WaveformDisplay extends JComponent {
 
     private int absoluteX(long frame) {
         return (int)
-                (GUIConstants.zoomlessPixelsPerSecond
+                (UiConstants.zoomlessPixelsPerSecond
                         * audioState.getCalculator().framesToSec(frame));
     }
 
@@ -374,7 +372,7 @@ public class WaveformDisplay extends JComponent {
             return (int)
                     (instance.refreshFrame
                             + (xPix - progressBarXPos)
-                                    * ((1. / GUIConstants.zoomlessPixelsPerSecond)
+                                    * ((1. / UiConstants.zoomlessPixelsPerSecond)
                                             * audioState.getCalculator().frameRate()));
         }
         throw new IllegalStateException("audio not open");
@@ -401,7 +399,7 @@ public class WaveformDisplay extends JComponent {
             lastFrame = audioState.getCalculator().durationInFrames() - 1;
             maxFramesError =
                     audioState.getCalculator().secondsToFrames(1)
-                            / GUIConstants.zoomlessPixelsPerSecond
+                            / UiConstants.zoomlessPixelsPerSecond
                             * MAX_INTERPOLATED_PIXELS;
             bufferedFrame = -1;
             bufferedWidth = -1;

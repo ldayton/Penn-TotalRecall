@@ -13,7 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import util.UiColors;
+import ui.UiColors;
 
 /**
  * Custom <code>JPanel</code> that is used as the bottom half of <code>ContentSplitPane</code>,

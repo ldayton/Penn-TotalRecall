@@ -1,5 +1,6 @@
 package components.wordpool;
 
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -17,7 +18,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import util.EventDispatchBus;
 
 /** <code>JList</code> that stores available wordpool word for the annotating open audio file. */
 @Singleton

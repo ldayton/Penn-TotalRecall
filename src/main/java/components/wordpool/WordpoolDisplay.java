@@ -8,8 +8,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import util.GUIConstants;
-import util.UiShapes;
+import ui.UiConstants;
+import ui.UiShapes;
 
 /**
  * A custom interface component for displaying wordpool and lst words to the user and a text field
@@ -53,8 +53,8 @@ public class WordpoolDisplay extends JPanel {
         add(field);
         add(pane);
 
-        setPreferredSize(GUIConstants.wordpoolDisplayDimension);
-        setMaximumSize(GUIConstants.wordpoolDisplayDimension);
+        setPreferredSize(UiConstants.wordpoolDisplayDimension);
+        setMaximumSize(UiConstants.wordpoolDisplayDimension);
 
         setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
 

@@ -1,4 +1,4 @@
-package util;
+package events;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

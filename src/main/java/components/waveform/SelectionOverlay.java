@@ -14,8 +14,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import util.GUIConstants;
-import util.UiColors;
+import ui.UiColors;
+import ui.UiConstants;
 
 /** Application glass pane, used for drawing mouse feedback. */
 @Singleton
@@ -39,7 +39,7 @@ public class SelectionOverlay extends JComponent {
 
     private final int flashWidth =
             (int)
-                    (GUIConstants.zoomlessPixelsPerSecond
+                    (UiConstants.zoomlessPixelsPerSecond
                             * (ReplayLast200MillisAction.duration / (double) 1000));
 
     @Inject

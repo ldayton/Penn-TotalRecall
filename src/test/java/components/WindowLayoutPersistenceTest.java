@@ -3,7 +3,7 @@ package components;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import env.PreferencesManager;
+import env.PreferenceKeys;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,20 +12,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import util.PreferenceKeys;
+import state.PreferencesManager;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("WindowManager")
-class WindowManagerTest {
+@DisplayName("WindowLayoutPersistence")
+class WindowLayoutPersistenceTest {
     @Mock private PreferencesManager mockPrefs;
     @Mock private JFrame mockFrame;
     @Mock private ContentSplitPane mockSplitPane;
 
-    private WindowManager windowManager;
+    private WindowLayoutPersistence windowManager;
 
     @BeforeEach
     void setUp() {
-        windowManager = new WindowManager(mockPrefs);
+        windowManager = new WindowLayoutPersistence(mockPrefs);
     }
 
     @Test
@@ -84,7 +84,7 @@ class WindowManagerTest {
     @Test
     @DisplayName("rejects null inputs")
     void rejectsNullInputs() {
-        assertThrows(NullPointerException.class, () -> new WindowManager(null));
+        assertThrows(NullPointerException.class, () -> new WindowLayoutPersistence(null));
         assertThrows(
                 NullPointerException.class,
                 () -> windowManager.restoreWindowLayout(null, mockSplitPane));

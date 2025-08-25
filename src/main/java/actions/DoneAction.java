@@ -2,17 +2,17 @@ package actions;
 
 import audio.AudioPlayer;
 import components.audiofiles.AudioFile.AudioFilePathException;
-import control.AudioState;
+import env.Constants;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
+import state.AudioState;
+import util.OsPath;
 
 /**
  * Marks the current annotation file complete and then switches program state to reflect that no
@@ -39,13 +39,13 @@ public class DoneAction extends BaseAction {
         String curFileName = audioState.getCurrentAudioFileAbsolutePath();
         File tmpFile =
                 new File(
-                        OSPath.basename(curFileName)
+                        OsPath.basename(curFileName)
                                 + "."
                                 + Constants.temporaryAnnotationFileExtension);
         if (tmpFile.exists()) {
             File oFile =
                     new File(
-                            OSPath.basename(tmpFile.getAbsolutePath())
+                            OsPath.basename(tmpFile.getAbsolutePath())
                                     + "."
                                     + Constants.completedAnnotationFileExtension);
             if (oFile.exists()) {

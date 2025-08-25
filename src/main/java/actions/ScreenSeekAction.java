@@ -1,12 +1,12 @@
 package actions;
 
 import audio.AudioPlayer;
-import control.AudioState;
+import events.EventDispatchBus;
 import events.ScreenSeekRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /** Seeks the audio position by one screen width forward or backward. */
 @Singleton

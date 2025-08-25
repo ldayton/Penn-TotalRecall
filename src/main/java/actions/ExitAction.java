@@ -1,13 +1,13 @@
 package actions;
 
-import control.AudioState;
+import events.EventDispatchBus;
 import events.ExitRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /** Exits the application with proper cleanup. */
 @Singleton

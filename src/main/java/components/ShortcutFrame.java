@@ -39,7 +39,7 @@ public class ShortcutFrame extends ShortcutManager {
     }
 
     public void showShortcutEditor() {
-        setLocation(util.GUIUtils.chooseLocation(this));
+        setLocation(ui.DialogCentering.chooseLocation(this));
         setVisible(true);
     }
 }

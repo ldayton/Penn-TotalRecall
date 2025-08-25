@@ -1,5 +1,6 @@
 package components.annotations;
 
+import env.Constants;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,8 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.OSPath;
+import util.OsPath;
 
 /** Handles manipulations of annotation files, e.g. adding and removing annotations. */
 public class AnnotationFileParser {
@@ -101,7 +101,7 @@ public class AnnotationFileParser {
     public static boolean removeAnnotation(Annotation annToDelete, File oFile) throws IOException {
         File nFile =
                 new File(
-                        OSPath.basename(oFile.getAbsolutePath())
+                        OsPath.basename(oFile.getAbsolutePath())
                                 + "."
                                 + Constants.deletionTempFileExtension);
         BufferedReader reader = null;
@@ -164,7 +164,7 @@ public class AnnotationFileParser {
 
         File nFile =
                 new File(
-                        OSPath.basename(oFile.getAbsolutePath())
+                        OsPath.basename(oFile.getAbsolutePath())
                                 + "."
                                 + Constants.deletionTempFileExtension);
         BufferedWriter writer = new BufferedWriter(new FileWriter(nFile));

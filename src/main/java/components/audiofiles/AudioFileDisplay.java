@@ -1,9 +1,11 @@
 package components.audiofiles;
 
+import app.di.GuiceBootstrap;
 import components.audiofiles.AudioFile.AudioFilePathException;
-import control.AudioState;
-import di.GuiceBootstrap;
-import env.PreferencesManager;
+import env.Constants;
+import env.PreferenceKeys;
+import events.EventDispatchBus;
+import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -20,13 +22,11 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.DialogService;
-import util.EventDispatchBus;
-import util.GUIConstants;
-import util.PreferenceKeys;
-import util.Subscribe;
-import util.UiShapes;
+import state.AudioState;
+import state.PreferencesManager;
+import ui.DialogService;
+import ui.UiConstants;
+import ui.UiShapes;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -67,8 +67,8 @@ public class AudioFileDisplay extends JScrollPane {
         list = audioFileList;
         getViewport().setView(list);
 
-        setPreferredSize(GUIConstants.soundFileDisplayDimension);
-        setMaximumSize(GUIConstants.soundFileDisplayDimension);
+        setPreferredSize(UiConstants.soundFileDisplayDimension);
+        setMaximumSize(UiConstants.soundFileDisplayDimension);
 
         setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
 
@@ -165,7 +165,7 @@ public class AudioFileDisplay extends JScrollPane {
                             PreferenceKeys.WARN_FILE_SWITCH,
                             PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
-                JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
+                JCheckBox checkbox = new JCheckBox(UiConstants.dontShowAgainString);
                 String message =
                         "Switch to file "
                                 + file
@@ -175,7 +175,7 @@ public class AudioFileDisplay extends JScrollPane {
                         JOptionPane.showConfirmDialog(
                                 null,
                                 params,
-                                GUIConstants.yesNoDialogTitle,
+                                UiConstants.yesNoDialogTitle,
                                 JOptionPane.YES_NO_OPTION);
                 boolean dontShow = checkbox.isSelected();
                 if (dontShow && response != JOptionPane.CLOSED_OPTION) {

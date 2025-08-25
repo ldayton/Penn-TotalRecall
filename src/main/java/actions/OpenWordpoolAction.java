@@ -3,10 +3,11 @@ package actions;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import components.wordpool.WordpoolWord;
-import control.AudioState;
-import env.PreferencesManager;
-import env.UserManager;
+import env.Constants;
+import env.PreferenceKeys;
+import env.UserHomeProvider;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -17,10 +18,9 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
-import util.PreferenceKeys;
+import state.AudioState;
+import state.PreferencesManager;
+import util.OsPath;
 
 /**
  * Presents a file chooser to the user and then adds words from the selected file to the {@link
@@ -32,7 +32,7 @@ public class OpenWordpoolAction extends BaseAction {
 
     private final AudioState audioState;
     private final PreferencesManager preferencesManager;
-    private final UserManager userManager;
+    private final UserHomeProvider userManager;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
 
@@ -40,7 +40,7 @@ public class OpenWordpoolAction extends BaseAction {
     public OpenWordpoolAction(
             AudioState audioState,
             PreferencesManager preferencesManager,
-            UserManager userManager,
+            UserHomeProvider userManager,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay) {
         super("Open Wordpool...", "Load words from a text file into the wordpool");
@@ -103,7 +103,7 @@ public class OpenWordpoolAction extends BaseAction {
             if (audioState.audioOpen()) {
                 File lstFile =
                         new File(
-                                OSPath.basename(audioState.getCurrentAudioFileAbsolutePath())
+                                OsPath.basename(audioState.getCurrentAudioFileAbsolutePath())
                                         + "."
                                         + Constants.lstFileExtension);
                 if (lstFile.exists()) {

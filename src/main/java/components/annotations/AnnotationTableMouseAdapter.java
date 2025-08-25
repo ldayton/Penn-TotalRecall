@@ -2,12 +2,12 @@ package components.annotations;
 
 import actions.JumpToAnnotationAction;
 import audio.AudioPlayer;
-import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import state.AudioState;
 
 /** Mouse adapter for the <code>AnnotationTable</code>. */
 @Singleton

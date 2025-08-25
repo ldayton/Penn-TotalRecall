@@ -3,8 +3,8 @@ package actions;
 import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
-import control.AudioState;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /**
  * Tries to move the audio position to the next/previous {@link components.annotations.Annotation},

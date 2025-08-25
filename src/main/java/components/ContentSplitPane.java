@@ -5,7 +5,9 @@ import actions.AnnotateIntrusionAction;
 import actions.DeleteSelectedAnnotationAction;
 import actions.PlayPauseAction;
 import components.waveform.WaveformDisplay;
+import events.EventDispatchBus;
 import events.LayoutUpdateRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -13,8 +15,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import util.EventDispatchBus;
-import util.Subscribe;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.

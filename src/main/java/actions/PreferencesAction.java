@@ -1,10 +1,10 @@
 package actions;
 
+import events.EventDispatchBus;
 import events.PreferencesRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventDispatchBus;
 
 /** Launches the preferences window. */
 @Singleton

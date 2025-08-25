@@ -4,7 +4,7 @@ import actions.OpenWordpoolAction;
 import components.audiofiles.AudioFileDisplay;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
-import control.AudioState;
+import env.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.dnd.DropTargetDropEvent;
@@ -12,8 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.OSPath;
+import state.AudioState;
+import util.OsPath;
 
 /**
  * A <code>FileDrop.Listener</code> that catches directories and folders dropped on <code>MainFrame
@@ -64,7 +64,7 @@ public class FileDropListener implements FileDrop.Listener {
                     if (audioState.audioOpen()) {
                         File lstFile =
                                 new File(
-                                        OSPath.basename(
+                                        OsPath.basename(
                                                         audioState
                                                                 .getCurrentAudioFileAbsolutePath())
                                                 + "."

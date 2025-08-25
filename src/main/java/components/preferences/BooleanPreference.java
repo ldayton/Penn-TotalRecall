@@ -1,11 +1,11 @@
 package components.preferences;
 
-import di.GuiceBootstrap;
-import env.PreferencesManager;
+import app.di.GuiceBootstrap;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import state.PreferencesManager;
 
 /**
  * An <code>AbstractPreferenceDisplay</code> for choosing between one of two options.

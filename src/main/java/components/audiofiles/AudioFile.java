@@ -1,11 +1,11 @@
 package components.audiofiles;
 
+import env.Constants;
 import java.io.File;
 import java.util.HashSet;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import util.Constants;
-import util.OSPath;
+import util.OsPath;
 
 /**
  * A <code>File</code> that represents an audio file for the purpose of representation in the <code>
@@ -138,12 +138,12 @@ public class AudioFile extends File {
         boolean tmpFileExists = false;
         File annFile =
                 new File(
-                        OSPath.basename(getAbsolutePath())
+                        OsPath.basename(getAbsolutePath())
                                 + "."
                                 + Constants.completedAnnotationFileExtension);
         File tmpFile =
                 new File(
-                        OSPath.basename(getAbsolutePath())
+                        OsPath.basename(getAbsolutePath())
                                 + "."
                                 + Constants.temporaryAnnotationFileExtension);
         if (annFile.exists()) {

@@ -1,12 +1,12 @@
 package actions;
 
-import control.AudioState;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
 @Singleton

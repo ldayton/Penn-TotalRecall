@@ -1,9 +1,9 @@
 package components.audiofiles;
 
 import actions.ContinueAnnotatingAction;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import util.EventDispatchBus;
 
 /**
  * Factory for creating AudioFilePopupMenu instances. This allows multiple popup menus to be created
@@ -13,13 +13,13 @@ import util.EventDispatchBus;
 public class AudioFilePopupMenuFactory {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
-    private final control.AudioState audioState;
+    private final state.AudioState audioState;
     private final EventDispatchBus eventBus;
 
     @Inject
     public AudioFilePopupMenuFactory(
             ContinueAnnotatingAction continueAnnotatingAction,
-            control.AudioState audioState,
+            state.AudioState audioState,
             EventDispatchBus eventBus) {
         this.continueAnnotatingAction = continueAnnotatingAction;
         this.audioState = audioState;

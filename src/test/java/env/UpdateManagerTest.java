@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import util.DialogService;
+import ui.DialogService;
 
 /** Tests for UpdateManager functionality. */
 class UpdateManagerTest {

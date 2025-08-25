@@ -1,10 +1,10 @@
 package util;
 
 /** Collection of static methods on file system paths, a la Python's os.path */
-public class OSPath {
+public class OsPath {
 
     /** Private constructor to prevent instantiation. */
-    private OSPath() {}
+    private OsPath() {}
 
     /**
      * Finds the basename of a path, defined as the path without its final dots and any follow

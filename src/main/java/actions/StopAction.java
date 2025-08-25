@@ -1,10 +1,10 @@
 package actions;
 
 import audio.AudioPlayer;
-import control.AudioState;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
+import state.AudioState;
 
 /** Stops audio playback and resets position to the beginning. */
 @Singleton

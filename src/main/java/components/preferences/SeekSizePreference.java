@@ -1,13 +1,13 @@
 package components.preferences;
 
+import app.di.GuiceBootstrap;
 import components.AppMenuBar;
-import di.GuiceBootstrap;
-import env.PreferencesManager;
+import env.PreferenceKeys;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import util.PreferenceKeys;
+import state.PreferencesManager;
 
 /**
  * Preference for the sizes of forward/backward jumps of <code>SeekActions</code> and <code>

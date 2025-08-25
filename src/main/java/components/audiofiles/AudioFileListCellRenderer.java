@@ -1,12 +1,12 @@
 package components.audiofiles;
 
-import control.AudioState;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
+import state.AudioState;
 
 /**
  * A <code>DefaultListCellRenderer</code> whose appearance is determined by whether the {@link

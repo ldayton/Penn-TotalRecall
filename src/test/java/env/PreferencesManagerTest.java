@@ -24,11 +24,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.LoggerFactory;
+import state.PreferencesManager;
 
 class PreferencesManagerTest {
 
     private PreferencesManager prefsManager;
-    private UserManager mockUserManager;
+    private UserHomeProvider mockUserHomeProvider;
     private String testNamespace;
     private Preferences testPrefs;
     private ListAppender<ILoggingEvent> logAppender;
@@ -38,8 +39,8 @@ class PreferencesManagerTest {
 
     @BeforeEach
     void setUp() {
-        mockUserManager = mock(UserManager.class);
-        when(mockUserManager.getUserHomeDir()).thenReturn("/home/test");
+        mockUserHomeProvider = mock(UserHomeProvider.class);
+        when(mockUserHomeProvider.getUserHomeDir()).thenReturn("/home/test");
 
         // Set up log capture
         logger = (Logger) LoggerFactory.getLogger(PreferencesManager.class);
@@ -49,7 +50,7 @@ class PreferencesManagerTest {
 
         // Use unique namespace per test to ensure complete isolation
         testNamespace = "/test/penntotalrecall/" + UUID.randomUUID();
-        prefsManager = new PreferencesManager(mockUserManager, testNamespace);
+        prefsManager = new PreferencesManager(mockUserHomeProvider, testNamespace);
 
         // Clear test namespace for clean state
         testPrefs = Preferences.userRoot().node(testNamespace);
@@ -200,10 +201,10 @@ class PreferencesManagerTest {
     }
 
     @Test
-    @DisplayName("getPathWithHomeFallback uses UserManager home directory")
-    void getPathWithHomeFallbackUsesUserManager() {
+    @DisplayName("getPathWithHomeFallback uses UserHomeProvider home directory")
+    void getPathWithHomeFallbackUsesUserHomeProvider() {
         assertEquals("/home/test", prefsManager.getPathWithHomeFallback("missing.path"));
-        verify(mockUserManager).getUserHomeDir();
+        verify(mockUserHomeProvider).getUserHomeDir();
     }
 
     @Test
@@ -295,8 +296,8 @@ class PreferencesManagerTest {
     }
 
     @Test
-    @DisplayName("constructor validates UserManager is not null")
-    void constructorValidatesUserManagerNotNull() {
+    @DisplayName("constructor validates UserHomeProvider is not null")
+    void constructorValidatesUserHomeProviderNotNull() {
         assertThrows(NullPointerException.class, () -> new PreferencesManager(null));
     }
 

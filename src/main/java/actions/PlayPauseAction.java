@@ -1,12 +1,12 @@
 package actions;
 
 import audio.AudioPlayer;
-import control.AudioState;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventDispatchBus;
+import state.AudioState;
 
 /**
  * Plays or "pauses" audio.

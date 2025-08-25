@@ -1,7 +1,7 @@
 package components.preferences;
 
-import di.GuiceBootstrap;
-import env.PreferencesManager;
+import app.di.GuiceBootstrap;
+import env.PreferenceKeys;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.PreferenceKeys;
+import state.PreferencesManager;
 
 /**
  * An <code>AbstractPreferenceDisplay</code> for choosing the range of frequencies to bandpass

@@ -1,6 +1,6 @@
 package components.preferences;
 
-import di.GuiceBootstrap;
+import app.di.GuiceBootstrap;
 import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.DialogService;
+import ui.DialogService;
 
 /** Tries to save all the graphically displayed preferences. */
 public class SavePreferencesAction extends AbstractAction {

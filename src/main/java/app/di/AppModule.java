@@ -1,4 +1,4 @@
-package di;
+package app.di;
 
 import actions.ActionsFileParser;
 import actions.ActionsManager;
@@ -13,7 +13,7 @@ import components.ContentSplitPane;
 import components.ControlPanel;
 import components.DoneButton;
 import components.MainFrame;
-import components.WindowManager;
+import components.WindowLayoutPersistence;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationTable;
 import components.audiofiles.AudioFileDisplay;
@@ -28,14 +28,14 @@ import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.Platform;
-import env.PreferencesManager;
+import env.ProgramVersion;
 import env.UpdateManager;
-import env.UserManager;
+import env.UserHomeProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
-import util.DialogService;
-import util.ProgramVersion;
-import util.WindowService;
+import state.PreferencesManager;
+import ui.DialogService;
+import ui.MainWindowAccess;
 
 /**
  * Guice module for dependency injection configuration.
@@ -57,8 +57,8 @@ public class AppModule extends AbstractModule {
         bind(Platform.class).in(Singleton.class);
         bind(PreferencesManager.class).in(Singleton.class);
         bind(UpdateManager.class).in(Singleton.class);
-        bind(UserManager.class).in(Singleton.class);
-        bind(WindowManager.class).in(Singleton.class);
+        bind(UserHomeProvider.class).in(Singleton.class);
+        bind(WindowLayoutPersistence.class).in(Singleton.class);
         bind(MainFrame.class).in(Singleton.class);
         bind(AppMenuBar.class).in(Singleton.class);
         bind(ContentSplitPane.class).in(Singleton.class);
@@ -79,7 +79,7 @@ public class AppModule extends AbstractModule {
         // Utility services
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
-        bind(WindowService.class).in(Singleton.class);
+        bind(MainWindowAccess.class).in(Singleton.class);
     }
 
     @Provides

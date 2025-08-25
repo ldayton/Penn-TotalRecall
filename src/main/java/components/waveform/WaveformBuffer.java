@@ -1,7 +1,6 @@
 package components.waveform;
 
-import control.AudioState;
-import env.PreferencesManager;
+import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
@@ -16,10 +15,11 @@ import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.GUIConstants;
-import util.PreferenceKeys;
-import util.UiColors;
-import util.UiShapes;
+import state.AudioState;
+import state.PreferencesManager;
+import ui.UiColors;
+import ui.UiConstants;
+import ui.UiShapes;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -71,7 +71,7 @@ public class WaveformBuffer extends Buffer {
         this.audioState = audioState;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
-        chunkWidthInPixels = GUIConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
+        chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
@@ -264,7 +264,7 @@ public class WaveformBuffer extends Buffer {
                 // we exclude the first half second of audio data due to the loud beep that often
                 // starts psychology experiments
                 double consecutiveVals;
-                for (int i = GUIConstants.zoomlessPixelsPerSecond / 2;
+                for (int i = UiConstants.zoomlessPixelsPerSecond / 2;
                         i < valsToDraw.length - 1;
                         i++) {
                     consecutiveVals = Math.min(valsToDraw[i], valsToDraw[i + 1]);
@@ -297,7 +297,7 @@ public class WaveformBuffer extends Buffer {
                                     audioState.firstFrameOfChunk(
                                             myNum)); // this works because buffer size is in whole
             // seconds
-            for (int i = 0; i < chunkWidthInPixels; i += GUIConstants.zoomlessPixelsPerSecond) {
+            for (int i = 0; i < chunkWidthInPixels; i += UiConstants.zoomlessPixelsPerSecond) {
                 g2d.setColor(UiColors.waveformScaleLineColor);
                 g2d.drawLine(i, 0, i, height - 1);
                 g2d.setColor(UiColors.waveformScaleTextColor);

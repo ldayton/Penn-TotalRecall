@@ -1,10 +1,10 @@
-package util;
+package ui;
 
-import di.GuiceBootstrap;
+import app.di.GuiceBootstrap;
 import java.awt.Point;
 import javax.swing.JFrame;
 
-public class GUIUtils {
+public class DialogCentering {
 
     /**
      * Does the dirty work of figuring out where a <code>JFrame</code> should appear on the screen.
@@ -15,9 +15,9 @@ public class GUIUtils {
      *     PreferencesFrame</code>
      */
     public static Point chooseLocation(JFrame frame) {
-        WindowService windowService = GuiceBootstrap.getInjectedInstance(WindowService.class);
+        MainWindowAccess windowService = GuiceBootstrap.getInjectedInstance(MainWindowAccess.class);
         if (windowService == null) {
-            throw new IllegalStateException("WindowService not available via DI");
+            throw new IllegalStateException("MainWindowAccess not available via DI");
         }
         final Point p = windowService.getLocationOnScreen();
         final int mfX = (int) p.getX();

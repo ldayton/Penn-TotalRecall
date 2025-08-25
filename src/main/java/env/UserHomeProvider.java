@@ -10,13 +10,13 @@ import lombok.Getter;
  * <p>Provides access to the user's home directory for file operations and preferences.
  */
 @Singleton
-public class UserManager {
+public class UserHomeProvider {
 
     /** The user's home directory. */
     @Getter private final String userHomeDir;
 
     @Inject
-    public UserManager() {
+    public UserHomeProvider() {
         this.userHomeDir = System.getProperty("user.home");
     }
 }

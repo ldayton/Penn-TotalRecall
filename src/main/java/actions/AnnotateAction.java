@@ -5,11 +5,13 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationFileParser;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
-import control.AudioState;
+import env.Constants;
 import events.AnnotatorNameProvidedEvent;
 import events.AnnotatorNameRequestedEvent;
 import events.ErrorRequestedEvent;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -18,10 +20,8 @@ import java.io.IOException;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
-import util.OSPath;
-import util.Subscribe;
+import state.AudioState;
+import util.OsPath;
 
 /** Commits an annotation with the specified mode. */
 @Singleton
@@ -139,7 +139,7 @@ public class AnnotateAction extends BaseAction {
     private File getOutputFile() {
         String curFileName = audioState.getCurrentAudioFileAbsolutePath();
         return new File(
-                OSPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
+                OsPath.basename(curFileName) + "." + Constants.temporaryAnnotationFileExtension);
     }
 
     @Override

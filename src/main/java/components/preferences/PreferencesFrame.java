@@ -2,6 +2,7 @@ package components.preferences;
 
 import components.MainFrame;
 import env.KeyboardManager;
+import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
@@ -25,10 +26,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
-import util.GUIConstants;
-import util.GUIUtils;
-import util.PreferenceKeys;
-import util.WindowService;
+import ui.DialogCentering;
+import ui.MainWindowAccess;
+import ui.UiConstants;
 
 /**
  * A <code>JFrame</code> that will contain preferences choosers in a scrollable vertical column.
@@ -41,7 +41,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     private static PreferencesFrame instance;
     private final KeyboardManager keyboardManager;
     private final env.LookAndFeelManager lookAndFeelManager;
-    private final WindowService windowService;
+    private final MainWindowAccess windowService;
     private final SavePreferencesAction savePreferencesAction;
     private final RestoreDefaultsAction restoreDefaultsAction;
 
@@ -64,7 +64,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     public PreferencesFrame(
             KeyboardManager keyboardManager,
             env.LookAndFeelManager lookAndFeelManager,
-            WindowService windowService,
+            MainWindowAccess windowService,
             SavePreferencesAction savePreferencesAction,
             RestoreDefaultsAction restoreDefaultsAction) {
         this.keyboardManager = keyboardManager;
@@ -123,7 +123,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         (int) prefScrollPane.getPreferredSize().getWidth(),
                         buttonPanelPrefferedSize);
         if (windowService == null) {
-            throw new IllegalStateException("WindowService not available via DI");
+            throw new IllegalStateException("MainWindowAccess not available via DI");
         }
         int frameHeight = (int) ((2.0 / 3.0) * windowService.getSize().getHeight());
         setSize(frameWidth + 40, frameHeight);
@@ -233,7 +233,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     @Override
     public void setVisible(boolean visible) {
         if (visible == true) {
-            setLocation(GUIUtils.chooseLocation(this));
+            setLocation(DialogCentering.chooseLocation(this));
         }
         super.setVisible(visible);
     }
@@ -278,10 +278,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                             + "Are you sure you want to exit and lose your changes?";
             int response =
                     JOptionPane.showConfirmDialog(
-                            this,
-                            message,
-                            GUIConstants.yesNoDialogTitle,
-                            JOptionPane.YES_NO_OPTION);
+                            this, message, UiConstants.yesNoDialogTitle, JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 for (AbstractPreferenceDisplay pref : allPrefs) {
                     pref.graphicallyRevert();

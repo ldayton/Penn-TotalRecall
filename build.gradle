@@ -28,7 +28,7 @@ java {
 }
 
 application {
-    mainClass = 'control.Main'
+    mainClass = 'app.Main'
     applicationDefaultJvmArgs = nativeAccessJvmArgs
 }
 

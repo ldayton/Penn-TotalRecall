@@ -1,15 +1,15 @@
 package actions;
 
 import audio.AudioPlayer;
-import control.AudioState;
-import env.PreferencesManager;
+import env.PreferenceKeys;
+import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
-import util.EventDispatchBus;
-import util.PreferenceKeys;
+import state.AudioState;
+import state.PreferencesManager;
 
 /**
  * Sets the audio position forward/backward by a pre-defined amount, in response to user request.

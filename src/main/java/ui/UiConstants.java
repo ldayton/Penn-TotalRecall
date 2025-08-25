@@ -1,5 +1,6 @@
-package util;
+package ui;
 
+import env.Constants;
 import java.awt.Dimension;
 
 /**
@@ -7,7 +8,7 @@ import java.awt.Dimension;
  *
  * <p>Constants other than those used by GUI components are stored in Constants.
  */
-public class GUIConstants {
+public class UiConstants {
 
     // component sizes
     // use of MAX_VALUE is for the sake of particular layout manager's resizing behavior
@@ -59,5 +60,5 @@ public class GUIConstants {
             Constants.programName + " v" + Constants.programVersion;
 
     /** Private constructor to prevent instantiation. */
-    private GUIConstants() {}
+    private UiConstants() {}
 }

@@ -1,5 +1,7 @@
 package actions;
 
+import env.Constants;
+import events.EventDispatchBus;
 import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -9,8 +11,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Constants;
-import util.EventDispatchBus;
 
 /** Attempts to bring the user to the program's tutorial website. */
 @Singleton

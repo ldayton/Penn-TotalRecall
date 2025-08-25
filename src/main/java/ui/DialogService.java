@@ -1,7 +1,8 @@
-package util;
+package ui;
 
 import actions.AboutAction;
 import components.MainFrame;
+import env.Constants;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.FileDialog;
@@ -39,7 +40,7 @@ public class DialogService {
         JOptionPane.showMessageDialog(
                 mainFrame,
                 message,
-                GUIConstants.errorDialogTitle,
+                UiConstants.errorDialogTitle,
                 JOptionPane.ERROR_MESSAGE,
                 appIcon);
     }
@@ -93,7 +94,7 @@ public class DialogService {
                 JOptionPane.showConfirmDialog(
                         mainFrame,
                         message,
-                        GUIConstants.yesNoDialogTitle,
+                        UiConstants.yesNoDialogTitle,
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         appIcon);
@@ -108,14 +109,14 @@ public class DialogService {
      * @return ConfirmationResult containing the user's choice and checkbox state
      */
     public ConfirmationResult showConfirmWithDontShowAgain(@NonNull String message) {
-        JCheckBox checkbox = new JCheckBox(GUIConstants.dontShowAgainString);
+        JCheckBox checkbox = new JCheckBox(UiConstants.dontShowAgainString);
         Object[] params = {message, checkbox};
 
         int response =
                 JOptionPane.showConfirmDialog(
                         mainFrame,
                         params,
-                        GUIConstants.yesNoDialogTitle,
+                        UiConstants.yesNoDialogTitle,
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         appIcon);

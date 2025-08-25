@@ -1,10 +1,10 @@
 package actions;
 
+import events.EventDispatchBus;
 import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import util.EventDispatchBus;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
