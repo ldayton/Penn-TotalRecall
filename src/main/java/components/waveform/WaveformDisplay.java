@@ -166,9 +166,9 @@ public class WaveformDisplay extends JComponent {
         }
 
         long curFrame = audioState.getAudioProgress();
-        long frameShift = audioState.getMaster().millisToFrames(shift);
+        long frameShift = audioState.getCalculator().millisToFrames(shift);
         long naivePosition = curFrame + frameShift;
-        long frameLength = audioState.getMaster().durationInFrames();
+        long frameLength = audioState.getCalculator().durationInFrames();
 
         long finalPosition = naivePosition;
 
@@ -236,13 +236,14 @@ public class WaveformDisplay extends JComponent {
         g2d.setRenderingHints(UiShapes.getRenderingHints());
 
         // draw current time
-        g2d.drawString(secFormat.format(audioState.getMaster().framesToSec(refreshFrame)), 10, 20);
+        g2d.drawString(
+                secFormat.format(audioState.getCalculator().framesToSec(refreshFrame)), 10, 20);
 
         // draw annotations
         Annotation[] anns = AnnotationDisplay.getAnnotationsInOrder();
         for (int i = 0; i < anns.length; i++) {
             double time = anns[i].getTime();
-            int xPos = frameToComponentX(audioState.getMaster().millisToFrames(time));
+            int xPos = frameToComponentX(audioState.getCalculator().millisToFrames(time));
             if (xPos < 0) {
                 continue;
             }
@@ -262,8 +263,10 @@ public class WaveformDisplay extends JComponent {
             logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
         } else if (progressBarXPos > getWidth() - 1) {
             if (refreshWidth == getWidth()) {
-                if (Math.abs(refreshFrame - audioState.getMaster().durationInFrames())
-                        > audioState.getMaster().secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
+                if (Math.abs(refreshFrame - audioState.getCalculator().durationInFrames())
+                        > audioState
+                                .getCalculator()
+                                .secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
                     logger.warn("bad val " + progressBarXPos + "/" + (getWidth() - 1));
                 }
             }
@@ -276,7 +279,7 @@ public class WaveformDisplay extends JComponent {
             for (int i = 0; i < anns.length; i++) {
                 int annX =
                         WaveformDisplay.frameToDisplayXPixel(
-                                audioState.getMaster().millisToFrames(anns[i].getTime()));
+                                audioState.getCalculator().millisToFrames(anns[i].getTime()));
                 if (progressBarXPos == annX) {
                     foundOverlap = true;
                     g2d.setPaintMode();
@@ -334,7 +337,9 @@ public class WaveformDisplay extends JComponent {
                             * (int)
                                     Math.ceil(
                                             GUIConstants.zoomlessPixelsPerSecond
-                                                    * audioState.getMaster().durationInSeconds());
+                                                    * audioState
+                                                            .getCalculator()
+                                                            .durationInSeconds());
             if ((-absoluteLength) <= refreshWidth) {
                 offset = 0;
             } else {
@@ -346,7 +351,8 @@ public class WaveformDisplay extends JComponent {
 
     private int absoluteX(long frame) {
         return (int)
-                (GUIConstants.zoomlessPixelsPerSecond * audioState.getMaster().framesToSec(frame));
+                (GUIConstants.zoomlessPixelsPerSecond
+                        * audioState.getCalculator().framesToSec(frame));
     }
 
     public static int frameToAbsoluteXPixel(long frame) {
@@ -369,7 +375,7 @@ public class WaveformDisplay extends JComponent {
                     (instance.refreshFrame
                             + (xPix - progressBarXPos)
                                     * ((1. / GUIConstants.zoomlessPixelsPerSecond)
-                                            * audioState.getMaster().frameRate()));
+                                            * audioState.getCalculator().frameRate()));
         }
         throw new IllegalStateException("audio not open");
     }
@@ -392,9 +398,9 @@ public class WaveformDisplay extends JComponent {
         private long lastTime;
 
         protected RefreshListener() {
-            lastFrame = audioState.getMaster().durationInFrames() - 1;
+            lastFrame = audioState.getCalculator().durationInFrames() - 1;
             maxFramesError =
-                    audioState.getMaster().secondsToFrames(1)
+                    audioState.getCalculator().secondsToFrames(1)
                             / GUIConstants.zoomlessPixelsPerSecond
                             * MAX_INTERPOLATED_PIXELS;
             bufferedFrame = -1;
@@ -416,14 +422,14 @@ public class WaveformDisplay extends JComponent {
             long curTime = System.nanoTime();
             if (isPlaying && wasPlaying) {
                 long changeMillis = curTime - lastTime;
-                refreshFrame += audioState.getMaster().nanosToFrames(changeMillis);
+                refreshFrame += audioState.getCalculator().nanosToFrames(changeMillis);
                 if (refreshFrame > lastFrame) {
                     refreshFrame = lastFrame;
                 }
                 if (Math.abs(refreshFrame - realRefreshFrame) > maxFramesError) {
                     if (Math.abs(refreshFrame - lastFrame)
                             > audioState
-                                    .getMaster()
+                                    .getCalculator()
                                     .secondsToFrames(INTERPOLATION_TOLERANCE_SECONDS)) {
                         logger.warn(
                                 "interpolation error greater than "

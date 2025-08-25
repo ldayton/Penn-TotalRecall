@@ -33,7 +33,7 @@ public class Last200PlusMoveAction extends BaseAction {
         boolean forward = actionName.contains("Forward");
 
         long currentFrame = audioState.getAudioProgress();
-        long shift = audioState.getMaster().millisToFrames(200); // 200ms shift
+        long shift = audioState.getCalculator().millisToFrames(200); // 200ms shift
 
         long newFrame;
         if (forward) {
@@ -45,15 +45,15 @@ public class Last200PlusMoveAction extends BaseAction {
         // Ensure we don't go out of bounds
         if (newFrame < 0) {
             newFrame = 0;
-        } else if (newFrame >= audioState.getMaster().durationInFrames()) {
-            newFrame = audioState.getMaster().durationInFrames() - 1;
+        } else if (newFrame >= audioState.getCalculator().durationInFrames()) {
+            newFrame = audioState.getCalculator().durationInFrames() - 1;
         }
 
         // Set the new position
         audioState.setAudioProgressAndUpdateActions(newFrame);
 
         // Replay the last 200ms from the new position
-        long replayStartFrame = newFrame - audioState.getMaster().millisToFrames(200);
+        long replayStartFrame = newFrame - audioState.getCalculator().millisToFrames(200);
         if (replayStartFrame < 0) {
             replayStartFrame = 0;
         }

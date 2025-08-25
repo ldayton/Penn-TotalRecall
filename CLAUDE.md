@@ -275,7 +275,7 @@ gh run watch --repo ldayton/Penn-TotalRecall
 ### Application Control (`control/` package)
 - `control/Main.java` - Application entry point with Guice bootstrap
 - `control/XActionManager.java` - Action registration and management
-- `control/AudioMaster.java` - Audio system coordination
+- `control/AudioCalculator.java` - Audio system coordination
 
 ### Configuration & Resources
 - `build.gradle` - Modern build configuration with plugins

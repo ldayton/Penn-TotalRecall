@@ -38,7 +38,7 @@ public class ReplayLast200MillisAction extends BaseAction {
         AudioPlayer player = audioState.getPlayer();
 
         long curFrame = audioState.getAudioProgress();
-        long numFrames = audioState.getMaster().millisToFrames(duration);
+        long numFrames = audioState.getCalculator().millisToFrames(duration);
 
         player.playShortInterval(curFrame - numFrames, curFrame - 1);
         glassPane.flashRectangle();

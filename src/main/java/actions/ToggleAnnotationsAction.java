@@ -42,15 +42,16 @@ public class ToggleAnnotationsAction extends BaseAction {
         Annotation ann =
                 findAnnotation(
                         forward,
-                        audioState.getMaster().framesToMillis(audioState.getAudioProgress()));
+                        audioState.getCalculator().framesToMillis(audioState.getAudioProgress()));
         if (ann == null) {
             logger.error(
                     "It should not have been possible to call "
                             + getClass().getName()
                             + ". Could not find matching annotation");
         } else {
-            long approxFrame = audioState.getMaster().millisToFrames(ann.getTime());
-            if (approxFrame < 0 || approxFrame > audioState.getMaster().durationInFrames() - 1) {
+            long approxFrame = audioState.getCalculator().millisToFrames(ann.getTime());
+            if (approxFrame < 0
+                    || approxFrame > audioState.getCalculator().durationInFrames() - 1) {
                 eventBus.publish(
                         new ErrorRequestedEvent(
                                 "The annotation I am toggling to isn't in range.\n"
@@ -79,7 +80,7 @@ public class ToggleAnnotationsAction extends BaseAction {
                 boolean forward = actionName.contains("Next");
 
                 double curTimeMillis =
-                        audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+                        audioState.getCalculator().framesToMillis(audioState.getAudioProgress());
                 if (findAnnotation(forward, curTimeMillis) != null) {
                     setEnabled(true);
                 } else {

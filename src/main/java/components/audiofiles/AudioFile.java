@@ -19,7 +19,7 @@ import util.OSPath;
  * extension.
  *
  * <p>NOTE: This class does NOT represent the actual audio data. For that, see {@link
- * control.AudioMaster}.
+ * control.AudioCalculator}.
  */
 public class AudioFile extends File {
 

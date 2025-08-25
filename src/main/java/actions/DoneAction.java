@@ -62,7 +62,7 @@ public class DoneAction extends BaseAction {
                     return;
                 } else {
                     try {
-                        audioState.getMaster().getAudioFile().updateDoneStatus();
+                        audioState.getCalculator().getAudioFile().updateDoneStatus();
                     } catch (AudioFilePathException e1) {
                         logger.error("Failed to update audio file done status", e1);
                     }

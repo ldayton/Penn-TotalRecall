@@ -55,7 +55,7 @@ public class AnnotateIntrusionAction extends BaseAction {
         }
 
         // retrieve time associated with annotation
-        double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+        double time = audioState.getCalculator().framesToMillis(audioState.getAudioProgress());
 
         // retrieve text associated with annotation, possibly the intrusion string
         String text = wordpoolDisplay.getFieldText();

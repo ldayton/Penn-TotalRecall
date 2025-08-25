@@ -76,7 +76,7 @@ public class AudioStateEventHandler {
                 offerGreatestProgress(audioEvent.frame());
                 audioState.setAudioProgressAndUpdateActions(audioEvent.frame());
                 if (audioState.getAudioProgress()
-                        != audioState.getMaster().durationInFrames() - 1) {
+                        != audioState.getCalculator().durationInFrames() - 1) {
                     logger.warn(
                             "the frame reported by EOM event is not the final frame, violating"
                                     + " AudioPlayer spec");

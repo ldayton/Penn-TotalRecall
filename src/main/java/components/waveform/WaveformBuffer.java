@@ -83,7 +83,7 @@ public class WaveformBuffer extends Buffer {
         double maxPref =
                 preferencesManager.getInt(
                         PreferenceKeys.MAX_BAND_PASS, PreferenceKeys.DEFAULT_MAX_BAND_PASS);
-        double sampleRate = audioState.getMaster().frameRate();
+        double sampleRate = audioState.getCalculator().frameRate();
 
         double tmpMinBand = minPref / sampleRate;
         double tmpMaxBand = maxPref / sampleRate;
@@ -292,7 +292,7 @@ public class WaveformBuffer extends Buffer {
             // draw seconds line
             double counter =
                     audioState
-                            .getMaster()
+                            .getCalculator()
                             .framesToSec(
                                     audioState.firstFrameOfChunk(
                                             myNum)); // this works because buffer size is in whole
@@ -341,11 +341,12 @@ public class WaveformBuffer extends Buffer {
                     (long)
                             (chunkNum
                                     * CHUNK_SIZE_SECONDS
-                                    * audioState.getMaster().frameRate()
-                                    * (audioState.getMaster().frameSizeInBytes()));
+                                    * audioState.getCalculator().frameRate()
+                                    * (audioState.getCalculator().frameSizeInBytes()));
             if (chunkNum > 0) {
-                preDataSizeInFrames = (int) (audioState.getMaster().frameRate() * preDataSeconds);
-                toSkip -= (preDataSizeInFrames * (audioState.getMaster().frameSizeInBytes()));
+                preDataSizeInFrames =
+                        (int) (audioState.getCalculator().frameRate() * preDataSeconds);
+                toSkip -= (preDataSizeInFrames * (audioState.getCalculator().frameSizeInBytes()));
             }
             long skipped = -1;
             try {
@@ -362,7 +363,7 @@ public class WaveformBuffer extends Buffer {
             BandPassFilter filter = new BandPassFilter(minBand, maxBand);
             double[] samples =
                     new double
-                            [(int) (audioState.getMaster().frameRate() * CHUNK_SIZE_SECONDS)
+                            [(int) (audioState.getCalculator().frameRate() * CHUNK_SIZE_SECONDS)
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 

@@ -56,7 +56,7 @@ public class AnnotateRegularAction extends BaseAction {
         }
 
         // retrieve time associated with annotation
-        double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+        double time = audioState.getCalculator().framesToMillis(audioState.getAudioProgress());
 
         // retrieve text associated with annotation
         String text = wordpoolDisplay.getFieldText();

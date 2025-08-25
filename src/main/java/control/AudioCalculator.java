@@ -17,20 +17,20 @@ import org.slf4j.LoggerFactory;
  * annoying if you don't have the API memorized. This class stores and determines everything the
  * program needs to know about an audio file.
  *
- * <p>Audio checking policy: <code>AudioMaster</code> constructor throws exceptions concerning Java
- * Sound's inability to handle a file, as well as exceptions for this program's inability to handle
- * a format. No other checking needs to be conducted after an AudioMaster is successfully created.
- * No other methods should throw compatibility exceptions, but should instead suppress them with
- * try/catch blocks if required by Java.
+ * <p>Audio checking policy: <code>AudioCalculator</code> constructor throws exceptions concerning
+ * Java Sound's inability to handle a file, as well as exceptions for this program's inability to
+ * handle a format. No other checking needs to be conducted after an AudioCalculator is successfully
+ * created. No other methods should throw compatibility exceptions, but should instead suppress them
+ * with try/catch blocks if required by Java.
  *
- * <p>Sample and frame rates are guaranteed the same. AudioMaster constructor rejects audio for
+ * <p>Sample and frame rates are guaranteed the same. AudioCalculator constructor rejects audio for
  * which they are different.
  *
- * <p>The current <code>AudioMaster</code> should be used to perform any and all math conversions
- * related to the open audio file.
+ * <p>The current <code>AudioCalculator</code> should be used to perform any and all math
+ * conversions related to the open audio file.
  */
-public class AudioMaster {
-    private static final Logger logger = LoggerFactory.getLogger(AudioMaster.class);
+public class AudioCalculator {
+    private static final Logger logger = LoggerFactory.getLogger(AudioCalculator.class);
 
     private static final int BITS_PER_BYTE = 8;
 
@@ -62,7 +62,7 @@ public class AudioMaster {
      *     handle the file
      * @throws IOException
      */
-    public AudioMaster(AudioFile audioFile)
+    public AudioCalculator(AudioFile audioFile)
             throws FileNotFoundException, UnsupportedAudioFileException, IOException {
         this.audioFile = audioFile;
 
@@ -111,7 +111,7 @@ public class AudioMaster {
     private void printInfo() {
         logger.info(
                 "\n"
-                        + "-- AudioMaster --\n"
+                        + "-- AudioCalculator --\n"
                         + "file name: {}\n"
                         + "encoding: {}\n"
                         + "number of channels: {}\n"

@@ -54,7 +54,7 @@ public class AnnotateAction extends BaseAction {
         }
 
         // retrieve time associated with annotation
-        double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+        double time = audioState.getCalculator().framesToMillis(audioState.getAudioProgress());
 
         // Get mode from action name
         String actionName = (String) getValue(Action.NAME);
@@ -166,7 +166,8 @@ public class AnnotateAction extends BaseAction {
                 AnnotationFileParser.prependHeader(pendingAnnotationFile, annotatorName);
 
                 // Create annotation
-                double time = audioState.getMaster().framesToMillis(audioState.getAudioProgress());
+                double time =
+                        audioState.getCalculator().framesToMillis(audioState.getAudioProgress());
                 WordpoolWord match = wordpoolDisplay.findMatchingWordpooWord(pendingAnnotationText);
                 if (match == null) {
                     match = new WordpoolWord(pendingAnnotationText, -1);

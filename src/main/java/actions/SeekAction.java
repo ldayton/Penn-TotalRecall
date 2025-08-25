@@ -44,9 +44,9 @@ public class SeekAction extends BaseAction {
         boolean forward = isForwardDirection(actionId);
 
         long curFrame = audioState.getAudioProgress();
-        long frameShift = audioState.getMaster().millisToFrames(shift);
+        long frameShift = audioState.getCalculator().millisToFrames(shift);
         long naivePosition = forward ? curFrame + frameShift : curFrame - frameShift;
-        long frameLength = audioState.getMaster().durationInFrames();
+        long frameLength = audioState.getCalculator().durationInFrames();
 
         long finalPosition = naivePosition;
 

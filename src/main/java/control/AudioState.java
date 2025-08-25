@@ -37,7 +37,7 @@ import util.OSPath;
 public class AudioState implements AudioProgressHandler {
     private static final Logger logger = LoggerFactory.getLogger(AudioState.class);
 
-    private AudioMaster master;
+    private AudioCalculator calculator;
     private AudioPlaybackCoordinator playbackCoordinator;
 
     private File curAudioFile;
@@ -57,8 +57,8 @@ public class AudioState implements AudioProgressHandler {
 
     private final String audioClosedMessage = "Audio Not Open. You must check first";
     private final String badStateString =
-            "ERROR: potential violation of guarantee that either master and player are both null,"
-                    + " or neither is";
+            "ERROR: potential violation of guarantee that either calculator and player are both"
+                    + " null, or neither is";
 
     private final PreferencesManager preferencesManager;
     private final FmodCore fmodCore;
@@ -94,10 +94,10 @@ public class AudioState implements AudioProgressHandler {
         } else {
             curAudioFile = file;
 
-            // create AudioMaster and handle bad formats/files
-            master = null;
+            // create AudioCalculator and handle bad formats/files
+            calculator = null;
             try {
-                master = new AudioMaster(file);
+                calculator = new AudioCalculator(file);
             } catch (FileNotFoundException e) {
                 logger.error("Audio file not found: " + file.getAbsolutePath(), e);
                 throw new RuntimeException("Audio file not found: " + file.getAbsolutePath(), e);
@@ -115,15 +115,15 @@ public class AudioState implements AudioProgressHandler {
 
             chunkSize =
                     components.waveform.WaveformBuffer.CHUNK_SIZE_SECONDS
-                            * (long) master.frameRate();
+                            * (long) calculator.frameRate();
             totalNumOfChunks =
-                    (int) Math.ceil((double) master.durationInFrames() / (double) chunkSize);
+                    (int) Math.ceil((double) calculator.durationInFrames() / (double) chunkSize);
             lastFrameArray = new long[totalNumOfChunks];
             firstFrameArray = new long[totalNumOfChunks];
             for (int i = 0; i < firstFrameArray.length; i++) {
                 firstFrameArray[i] = chunkSize * i;
                 if (i == firstFrameArray.length - 1) {
-                    lastFrameArray[i] = master.durationInFrames() - 1;
+                    lastFrameArray[i] = calculator.durationInFrames() - 1;
                 } else {
                     lastFrameArray[i] = (chunkSize) * (i + 1) - 1;
                 }
@@ -224,7 +224,7 @@ public class AudioState implements AudioProgressHandler {
         waveformBuffer = null;
 
         player = null;
-        master = null;
+        calculator = null;
         playbackCoordinator = null;
 
         curAudioFile = null;
@@ -297,7 +297,7 @@ public class AudioState implements AudioProgressHandler {
      * @return <code>true</code> iff audio is open
      */
     public boolean audioOpen() {
-        if (master != null) {
+        if (calculator != null) {
             if (getPlayer() == null) {
                 throw new IllegalStateException(badStateString);
             } else {
@@ -313,16 +313,16 @@ public class AudioState implements AudioProgressHandler {
     }
 
     /**
-     * Returns the current <code>AudioMaster</code>.
+     * Returns the current <code>AudioCalculator</code>.
      *
      * @throws IllegalStateException If audio is not open
      */
-    public AudioMaster getMaster() {
-        if (master == null) {
+    public AudioCalculator getCalculator() {
+        if (calculator == null) {
             throw new IllegalStateException(audioClosedMessage);
         }
         if (player != null) {
-            return master;
+            return calculator;
         } else {
             throw new IllegalStateException(badStateString);
         }
@@ -341,7 +341,7 @@ public class AudioState implements AudioProgressHandler {
         if (player == null) {
             throw new IllegalStateException(audioClosedMessage);
         }
-        if (master != null) {
+        if (calculator != null) {
             return player;
         } else {
             throw new IllegalStateException(badStateString);
@@ -419,7 +419,7 @@ public class AudioState implements AudioProgressHandler {
      */
     public void updateDesiredAudioLoudness(int val) {
         desiredLoudness = val;
-        if (master != null) {}
+        if (calculator != null) {}
     }
 
     /**

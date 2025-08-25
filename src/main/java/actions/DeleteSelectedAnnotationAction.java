@@ -39,7 +39,7 @@ public class DeleteSelectedAnnotationAction extends BaseAction {
         for (int i = 0; i < anns.length; i++) {
             int annX =
                     WaveformDisplay.frameToAbsoluteXPixel(
-                            audioState.getMaster().millisToFrames(anns[i].getTime()));
+                            audioState.getCalculator().millisToFrames(anns[i].getTime()));
             if (progX == annX) {
                 deleteAnnotationAction.setRowIndex(i);
                 deleteAnnotationAction.actionPerformed(

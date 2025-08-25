@@ -34,8 +34,8 @@ public class JumpToAnnotationAction extends BaseAction {
         if (targetAnn == null) {
             logger.error("selection is invalid, can't jump to Annotation");
         } else {
-            long curFrame = audioState.getMaster().millisToFrames(targetAnn.getTime());
-            if (curFrame < 0 || curFrame > audioState.getMaster().durationInFrames() - 1) {
+            long curFrame = audioState.getCalculator().millisToFrames(targetAnn.getTime());
+            if (curFrame < 0 || curFrame > audioState.getCalculator().durationInFrames() - 1) {
                 eventBus.publish(
                         new ErrorRequestedEvent(
                                 "The annotation I am jumpting to isn't in range.\n"

@@ -40,7 +40,7 @@ public class PlayPauseAction extends BaseAction {
         if (player.getStatus() == AudioPlayer.Status.PLAYING) { // PAUSE
             long frame = player.stop();
             audioState.setAudioProgressWithoutUpdatingActions(frame);
-            long numFrames = audioState.getMaster().millisToFrames(200);
+            long numFrames = audioState.getCalculator().millisToFrames(200);
             player.playShortInterval(frame - numFrames, frame - 1);
             player.playAt(frame);
         } else { // PLAY/RESUME
@@ -56,7 +56,8 @@ public class PlayPauseAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getAudioProgress() == audioState.getMaster().durationInFrames() - 1) {
+            if (audioState.getAudioProgress()
+                    == audioState.getCalculator().durationInFrames() - 1) {
                 setEnabled(false);
             } else {
                 setEnabled(true);
