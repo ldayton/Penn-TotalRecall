@@ -11,18 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * FMOD-based audio format detection and calculation utility that provides comprehensive
- * information about audio files using FMOD's format detection capabilities.
+ * FMOD-based audio format detection and calculation utility that provides comprehensive information
+ * about audio files using FMOD's format detection capabilities.
  *
  * <p>This class stores and determines everything the program needs to know about an audio file,
- * supporting all FMOD-compatible formats including various bit depths, channel configurations,
- * and encodings.
+ * supporting all FMOD-compatible formats including various bit depths, channel configurations, and
+ * encodings.
  *
  * <p>Audio checking policy: <code>AudioCalculator</code> constructor throws exceptions concerning
- * FMOD's inability to handle a file, as well as exceptions for this program's inability to
- * handle a format. No other checking needs to be conducted after an AudioCalculator is successfully
- * created. No other methods should throw compatibility exceptions, but should instead suppress them
- * with try/catch blocks if required by Java.
+ * FMOD's inability to handle a file, as well as exceptions for this program's inability to handle a
+ * format. No other checking needs to be conducted after an AudioCalculator is successfully created.
+ * No other methods should throw compatibility exceptions, but should instead suppress them with
+ * try/catch blocks if required by Java.
  *
  * <p>The current <code>AudioCalculator</code> should be used to perform any and all math
  * conversions related to the open audio file.
@@ -68,10 +68,10 @@ public class AudioCalculator {
         audio.AudioSystemManager audioManager = new audio.AudioSystemManager(appConfig, platform);
         FmodCore fmodCore = new FmodCore(audioManager);
         FmodAudioFormatDetector detector = new FmodAudioFormatDetector(fmodCore);
-        
+
         try {
             FmodCore.AudioFormatInfo formatInfo = detector.detectFormat(audioFile);
-            
+
             // Store format information from FMOD
             numSampleFrames = formatInfo.getFrameLength();
             numChannels = formatInfo.getChannels();
@@ -84,9 +84,10 @@ public class AudioCalculator {
             frameSizeInBits = sampleSizeInBits * numChannels;
 
             logger.debug("Audio format detected: {}", formatInfo);
-            
+
         } catch (IOException e) {
-            logger.error("Failed to detect audio format for file: {}", audioFile.getAbsolutePath(), e);
+            logger.error(
+                    "Failed to detect audio format for file: {}", audioFile.getAbsolutePath(), e);
             throw new IOException("Failed to detect audio format: " + e.getMessage(), e);
         } finally {
             // Clean up FMOD resources

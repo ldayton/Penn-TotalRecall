@@ -21,14 +21,15 @@ import util.OsPath;
  *
  * <p>NOTE: This class does NOT represent the actual audio data. For that, see {@link
  * control.AudioCalculator}.
- * 
+ *
  * <p><strong>Thread Safety:</strong> This class is thread-safe. All state modifications are
- * properly synchronized using atomic operations and thread-safe collections. Multiple threads
- * can safely access and modify AudioFile instances concurrently.
+ * properly synchronized using atomic operations and thread-safe collections. Multiple threads can
+ * safely access and modify AudioFile instances concurrently.
  */
 public class AudioFile extends File {
 
-    private final ConcurrentHashMap<ChangeListener, Boolean> listeners; // thread-safe collection for listeners
+    private final ConcurrentHashMap<ChangeListener, Boolean>
+            listeners; // thread-safe collection for listeners
 
     private final AtomicBoolean done; // atomic boolean for completion status
 
@@ -129,8 +130,9 @@ public class AudioFile extends File {
     }
 
     /**
-     * Sets the <code>done</code> field by finding if a temporary annotation file or a final annotation file is present in the same directory as this <code>File</code>.
-     * Informs listeners if the completion status changes.
+     * Sets the <code>done</code> field by finding if a temporary annotation file or a final
+     * annotation file is present in the same directory as this <code>File</code>. Informs listeners
+     * if the completion status changes.
      *
      * <p>This method is thread-safe and can be called from multiple threads concurrently.
      *
@@ -141,7 +143,7 @@ public class AudioFile extends File {
         boolean updatedStatus = savedStatus;
         boolean annFileExists = false;
         boolean tmpFileExists = false;
-        
+
         File annFile =
                 new File(
                         OsPath.basename(getAbsolutePath())
@@ -152,7 +154,7 @@ public class AudioFile extends File {
                         OsPath.basename(getAbsolutePath())
                                 + "."
                                 + Constants.temporaryAnnotationFileExtension);
-        
+
         if (annFile.exists()) {
             annFileExists = true;
             updatedStatus = true;
@@ -168,7 +170,7 @@ public class AudioFile extends File {
                             + "\n"
                             + tmpFile.getPath());
         }
-        
+
         // Atomic update - only notify listeners if status actually changed
         boolean statusChanged = done.compareAndSet(savedStatus, updatedStatus);
         if (statusChanged) {

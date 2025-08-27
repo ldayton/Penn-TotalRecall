@@ -1,31 +1,28 @@
 package components.audiofiles;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.*;
+
+import components.audiofiles.AudioFile.AudioFilePathException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import components.audiofiles.AudioFile.AudioFilePathException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * Tests to verify that AudioFile is thread-safe.
- */
+/** Tests to verify that AudioFile is thread-safe. */
 @DisplayName("AudioFile Thread Safety")
 class AudioFileThreadSafetyTest {
 
-    @TempDir
-    Path tempDir;
+    @TempDir Path tempDir;
 
     private File testFile;
     private AudioFile audioFile;
@@ -53,21 +50,22 @@ class AudioFileThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    for (int j = 0; j < callsPerThread; j++) {
-                        boolean done = audioFile.isDone();
-                        totalCalls.incrementAndGet();
-                        // Verify the result is consistent
-                        assertFalse(done, "AudioFile should not be done initially");
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+            executor.submit(
+                    () -> {
+                        try {
+                            startLatch.await();
+                            for (int j = 0; j < callsPerThread; j++) {
+                                boolean done = audioFile.isDone();
+                                totalCalls.incrementAndGet();
+                                // Verify the result is consistent
+                                assertFalse(done, "AudioFile should not be done initially");
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        } finally {
+                            endLatch.countDown();
+                        }
+                    });
         }
 
         startLatch.countDown();
@@ -90,32 +88,34 @@ class AudioFileThreadSafetyTest {
 
         for (int i = 0; i < threadCount; i++) {
             final int threadId = i;
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    for (int j = 0; j < operationsPerThread; j++) {
-                        ChangeListener listener = new ChangeListener() {
-                            @Override
-                            public void stateChanged(ChangeEvent e) {
-                                // Do nothing
+            executor.submit(
+                    () -> {
+                        try {
+                            startLatch.await();
+                            for (int j = 0; j < operationsPerThread; j++) {
+                                ChangeListener listener =
+                                        new ChangeListener() {
+                                            @Override
+                                            public void stateChanged(ChangeEvent e) {
+                                                // Do nothing
+                                            }
+                                        };
+
+                                audioFile.addChangeListener(listener);
+                                listenerCount.incrementAndGet();
+
+                                // Simulate some work
+                                Thread.sleep(1);
+
+                                audioFile.removeAllChangeListeners();
+                                listenerCount.set(0);
                             }
-                        };
-                        
-                        audioFile.addChangeListener(listener);
-                        listenerCount.incrementAndGet();
-                        
-                        // Simulate some work
-                        Thread.sleep(1);
-                        
-                        audioFile.removeAllChangeListeners();
-                        listenerCount.set(0);
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        } finally {
+                            endLatch.countDown();
+                        }
+                    });
         }
 
         startLatch.countDown();
@@ -132,13 +132,14 @@ class AudioFileThreadSafetyTest {
         AtomicBoolean listenerCalled = new AtomicBoolean(false);
         CountDownLatch notificationLatch = new CountDownLatch(1);
 
-        ChangeListener listener = new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                listenerCalled.set(true);
-                notificationLatch.countDown();
-            }
-        };
+        ChangeListener listener =
+                new ChangeListener() {
+                    @Override
+                    public void stateChanged(ChangeEvent e) {
+                        listenerCalled.set(true);
+                        notificationLatch.countDown();
+                    }
+                };
 
         audioFile.addChangeListener(listener);
 
@@ -152,7 +153,7 @@ class AudioFileThreadSafetyTest {
 
         // Wait for notification (with timeout)
         boolean notified = notificationLatch.await(1, java.util.concurrent.TimeUnit.SECONDS);
-        
+
         // Note: updateDoneStatus might not actually change the status in this test
         // environment, so we can't guarantee the listener will be called
         // The important thing is that if it is called, it's thread-safe
@@ -170,25 +171,26 @@ class AudioFileThreadSafetyTest {
 
         for (int i = 0; i < threadCount; i++) {
             final int threadId = i;
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    
-                    // Create a unique file for each thread
-                    File uniqueFile = tempDir.resolve("test" + threadId + ".wav").toFile();
-                    uniqueFile.createNewFile();
-                    
-                    AudioFile newAudioFile = new AudioFile(uniqueFile.getAbsolutePath());
-                    assertNotNull(newAudioFile);
-                    successCount.incrementAndGet();
-                    
-                } catch (Exception e) {
-                    // Log but don't fail the test - some exceptions might be expected
-                    System.err.println("Thread " + threadId + " failed: " + e.getMessage());
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+            executor.submit(
+                    () -> {
+                        try {
+                            startLatch.await();
+
+                            // Create a unique file for each thread
+                            File uniqueFile = tempDir.resolve("test" + threadId + ".wav").toFile();
+                            uniqueFile.createNewFile();
+
+                            AudioFile newAudioFile = new AudioFile(uniqueFile.getAbsolutePath());
+                            assertNotNull(newAudioFile);
+                            successCount.incrementAndGet();
+
+                        } catch (Exception e) {
+                            // Log but don't fail the test - some exceptions might be expected
+                            System.err.println("Thread " + threadId + " failed: " + e.getMessage());
+                        } finally {
+                            endLatch.countDown();
+                        }
+                    });
         }
 
         startLatch.countDown();

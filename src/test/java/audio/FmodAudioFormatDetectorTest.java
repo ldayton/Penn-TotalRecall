@@ -1,19 +1,15 @@
 package audio;
 
-import components.audiofiles.AudioFile;
-import components.audiofiles.AudioFile.AudioFilePathException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import static org.junit.jupiter.api.Assertions.*;
 
+import components.audiofiles.AudioFile;
+import components.audiofiles.AudioFile.AudioFilePathException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for FmodAudioFormatDetector functionality.
- */
+/** Tests for FmodAudioFormatDetector functionality. */
 class FmodAudioFormatDetectorTest {
 
     private static FmodAudioFormatDetector detector;
@@ -30,7 +26,9 @@ class FmodAudioFormatDetectorTest {
 
         // Use the known sample file
         testAudioFile = new File("packaging/samples/sample.wav");
-        assertTrue(testAudioFile.exists(), "Test audio file not found: " + testAudioFile.getAbsolutePath());
+        assertTrue(
+                testAudioFile.exists(),
+                "Test audio file not found: " + testAudioFile.getAbsolutePath());
     }
 
     @Test
@@ -49,7 +47,8 @@ class FmodAudioFormatDetectorTest {
 
     @Test
     void testDetectFormatWithFilePath() throws IOException {
-        FmodCore.AudioFormatInfo formatInfo = detector.detectFormat(testAudioFile.getAbsolutePath());
+        FmodCore.AudioFormatInfo formatInfo =
+                detector.detectFormat(testAudioFile.getAbsolutePath());
 
         assertNotNull(formatInfo);
         assertTrue(formatInfo.getSampleRate() > 0);
@@ -117,30 +116,36 @@ class FmodAudioFormatDetectorTest {
 
     @Test
     void testDetectFormatWithNullAudioFile() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            detector.detectFormat((AudioFile) null);
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    detector.detectFormat((AudioFile) null);
+                });
     }
 
     @Test
     void testDetectFormatWithNullFilePath() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            detector.detectFormat((String) null);
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    detector.detectFormat((String) null);
+                });
     }
 
     @Test
     void testDetectFormatWithEmptyFilePath() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            detector.detectFormat("");
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    detector.detectFormat("");
+                });
     }
 
     @Test
     void testAudioFormatInfoToString() throws IOException, AudioFilePathException {
         AudioFile audioFile = new AudioFile(testAudioFile.getAbsolutePath());
         FmodCore.AudioFormatInfo formatInfo = detector.detectFormat(audioFile);
-        
+
         String toString = formatInfo.toString();
         assertNotNull(toString);
         assertTrue(toString.contains("AudioFormatInfo"));

@@ -1,29 +1,26 @@
 package audio;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import components.audiofiles.AudioFile;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * Tests to verify that FmodAudioFormatDetector is thread-safe.
- */
+/** Tests to verify that FmodAudioFormatDetector is thread-safe. */
 @DisplayName("FmodAudioFormatDetector Thread Safety")
 class FmodAudioFormatDetectorThreadSafetyTest {
 
-    @TempDir
-    Path tempDir;
+    @TempDir Path tempDir;
 
     private File testFile;
     private AudioFile audioFile;
@@ -35,10 +32,10 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         // Create a test audio file
         testFile = tempDir.resolve("test.wav").toFile();
         testFile.createNewFile();
-        
+
         // Create AudioFile instance
         audioFile = new AudioFile(testFile.getAbsolutePath());
-        
+
         // Create FmodCore and detector
         env.AppConfig appConfig = new env.AppConfig();
         env.Platform platform = new env.Platform();
@@ -60,32 +57,37 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    for (int j = 0; j < callsPerThread; j++) {
+            executor.submit(
+                    () -> {
                         try {
-                            // Test both AudioFile and String-based methods
-                            FmodCore.AudioFormatInfo formatInfo1 = detector.detectFormat(audioFile);
-                            FmodCore.AudioFormatInfo formatInfo2 = detector.detectFormat(testFile.getAbsolutePath());
-                            
-                            // Verify we got valid results
-                            assertNotNull(formatInfo1);
-                            assertNotNull(formatInfo2);
-                            assertEquals(formatInfo1.getSampleRate(), formatInfo2.getSampleRate());
-                            
-                            successCount.incrementAndGet();
-                        } catch (IOException e) {
-                            // Expected for test files that aren't real audio files
-                            failureCount.incrementAndGet();
+                            startLatch.await();
+                            for (int j = 0; j < callsPerThread; j++) {
+                                try {
+                                    // Test both AudioFile and String-based methods
+                                    FmodCore.AudioFormatInfo formatInfo1 =
+                                            detector.detectFormat(audioFile);
+                                    FmodCore.AudioFormatInfo formatInfo2 =
+                                            detector.detectFormat(testFile.getAbsolutePath());
+
+                                    // Verify we got valid results
+                                    assertNotNull(formatInfo1);
+                                    assertNotNull(formatInfo2);
+                                    assertEquals(
+                                            formatInfo1.getSampleRate(),
+                                            formatInfo2.getSampleRate());
+
+                                    successCount.incrementAndGet();
+                                } catch (IOException e) {
+                                    // Expected for test files that aren't real audio files
+                                    failureCount.incrementAndGet();
+                                }
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        } finally {
+                            endLatch.countDown();
                         }
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+                    });
         }
 
         startLatch.countDown();
@@ -93,8 +95,9 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         executor.shutdown();
 
         // Verify we had some successful calls
-        assertTrue(successCount.get() > 0 || failureCount.get() > 0, 
-                  "Should have some successful or failed calls");
+        assertTrue(
+                successCount.get() > 0 || failureCount.get() > 0,
+                "Should have some successful or failed calls");
     }
 
     @Test
@@ -109,40 +112,42 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    for (int j = 0; j < callsPerThread; j++) {
+            executor.submit(
+                    () -> {
                         try {
-                            // Test various convenience methods
-                            boolean supported = detector.isSupportedFormat(audioFile);
-                            totalCalls.incrementAndGet();
-                            
-                            // These might throw IOException for test files, which is expected
-                            try {
-                                detector.getSampleRate(audioFile);
-                                totalCalls.incrementAndGet();
-                            } catch (IOException e) {
-                                // Expected for test files
+                            startLatch.await();
+                            for (int j = 0; j < callsPerThread; j++) {
+                                try {
+                                    // Test various convenience methods
+                                    boolean supported = detector.isSupportedFormat(audioFile);
+                                    totalCalls.incrementAndGet();
+
+                                    // These might throw IOException for test files, which is
+                                    // expected
+                                    try {
+                                        detector.getSampleRate(audioFile);
+                                        totalCalls.incrementAndGet();
+                                    } catch (IOException e) {
+                                        // Expected for test files
+                                    }
+
+                                    try {
+                                        detector.getChannelCount(audioFile);
+                                        totalCalls.incrementAndGet();
+                                    } catch (IOException e) {
+                                        // Expected for test files
+                                    }
+
+                                } catch (Exception e) {
+                                    // Expected for test files that aren't real audio files
+                                }
                             }
-                            
-                            try {
-                                detector.getChannelCount(audioFile);
-                                totalCalls.incrementAndGet();
-                            } catch (IOException e) {
-                                // Expected for test files
-                            }
-                            
-                        } catch (Exception e) {
-                            // Expected for test files that aren't real audio files
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        } finally {
+                            endLatch.countDown();
                         }
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+                    });
         }
 
         startLatch.countDown();
@@ -164,30 +169,33 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    
-                    // Create detector instances in each thread
-                    env.AppConfig appConfig = new env.AppConfig();
-                    env.Platform platform = new env.Platform();
-                    AudioSystemManager audioManager = new AudioSystemManager(appConfig, platform);
-                    FmodCore threadFmodCore = new FmodCore(audioManager);
-                    FmodAudioFormatDetector threadDetector = new FmodAudioFormatDetector(threadFmodCore);
-                    
-                    assertNotNull(threadDetector);
-                    successCount.incrementAndGet();
-                    
-                    // Clean up
-                    threadFmodCore.shutdown();
-                    
-                } catch (Exception e) {
-                    // Log but don't fail the test
-                    System.err.println("Thread failed: " + e.getMessage());
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+            executor.submit(
+                    () -> {
+                        try {
+                            startLatch.await();
+
+                            // Create detector instances in each thread
+                            env.AppConfig appConfig = new env.AppConfig();
+                            env.Platform platform = new env.Platform();
+                            AudioSystemManager audioManager =
+                                    new AudioSystemManager(appConfig, platform);
+                            FmodCore threadFmodCore = new FmodCore(audioManager);
+                            FmodAudioFormatDetector threadDetector =
+                                    new FmodAudioFormatDetector(threadFmodCore);
+
+                            assertNotNull(threadDetector);
+                            successCount.incrementAndGet();
+
+                            // Clean up
+                            threadFmodCore.shutdown();
+
+                        } catch (Exception e) {
+                            // Log but don't fail the test
+                            System.err.println("Thread failed: " + e.getMessage());
+                        } finally {
+                            endLatch.countDown();
+                        }
+                    });
         }
 
         startLatch.countDown();
@@ -209,30 +217,31 @@ class FmodAudioFormatDetectorThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executor.submit(() -> {
-                try {
-                    startLatch.await();
-                    
-                    // Test that we can safely access the thread-safe AudioFile
-                    // while other threads might be modifying it
-                    boolean isDone = audioFile.isDone();
-                    
-                    // Try to detect format (might fail for test files, which is OK)
-                    try {
-                        detector.detectFormat(audioFile);
-                    } catch (IOException e) {
-                        // Expected for test files
-                    }
-                    
-                    // Verify AudioFile is still accessible
-                    assertNotNull(audioFile.getAbsolutePath());
-                    
-                } catch (Exception e) {
-                    allThreadsCompleted.set(false);
-                } finally {
-                    endLatch.countDown();
-                }
-            });
+            executor.submit(
+                    () -> {
+                        try {
+                            startLatch.await();
+
+                            // Test that we can safely access the thread-safe AudioFile
+                            // while other threads might be modifying it
+                            boolean isDone = audioFile.isDone();
+
+                            // Try to detect format (might fail for test files, which is OK)
+                            try {
+                                detector.detectFormat(audioFile);
+                            } catch (IOException e) {
+                                // Expected for test files
+                            }
+
+                            // Verify AudioFile is still accessible
+                            assertNotNull(audioFile.getAbsolutePath());
+
+                        } catch (Exception e) {
+                            allThreadsCompleted.set(false);
+                        } finally {
+                            endLatch.countDown();
+                        }
+                    });
         }
 
         startLatch.countDown();

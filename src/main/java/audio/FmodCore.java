@@ -2,14 +2,15 @@ package audio;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.io.IOException;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
 
 /**
  * Direct FMOD Core JNA interface for frame-precise audio playback.
@@ -53,10 +54,10 @@ import java.io.IOException;
  *   <li>-3: File not found or unusable
  *   <li>-4: Inconsistent state (already playing)
  * </ul>
- * 
+ *
  * <p><strong>Thread Safety:</strong> This class is thread-safe. All public methods are properly
- * synchronized using fine-grained locks to allow concurrent access while maintaining data consistency.
- * The threading model is documented in detail above.
+ * synchronized using fine-grained locks to allow concurrent access while maintaining data
+ * consistency. The threading model is documented in detail above.
  */
 @Singleton
 public final class FmodCore {
@@ -177,10 +178,14 @@ public final class FmodCore {
         int FMOD_Sound_GetLength(Pointer sound, IntByReference length, int lengthtype);
 
         int FMOD_Sound_GetDefaults(
-                Pointer sound, IntByReference frequency, IntByReference priority);
+                Pointer sound, FloatByReference frequency, IntByReference priority);
 
-        int FMOD_Sound_GetFormat(Pointer sound, IntByReference type, IntByReference format, 
-                                IntByReference channels, IntByReference bits);
+        int FMOD_Sound_GetFormat(
+                Pointer sound,
+                IntByReference type,
+                IntByReference format,
+                IntByReference channels,
+                IntByReference bits);
 
         // Channel/Playback functions
         int FMOD_System_PlaySound(
@@ -485,7 +490,7 @@ public final class FmodCore {
 
             try {
                 long position = streamPositionInternal();
-                cleanup();  // cleanup() handles all resource release
+                cleanup(); // cleanup() handles all resource release
                 return position;
             } catch (Exception e) {
                 cleanup();
@@ -549,13 +554,13 @@ public final class FmodCore {
         }
 
         try {
-            IntByReference frequency = new IntByReference();
+            FloatByReference frequency = new FloatByReference();
             IntByReference priority = new IntByReference();
             int result = fmod.FMOD_Sound_GetDefaults(currentSound, frequency, priority);
             if (result == FmodConstants.OK) {
-                int sampleRate = frequency.getValue();
+                float sampleRate = frequency.getValue();
                 if (sampleRate > 0) {
-                    return sampleRate;
+                    return (int) sampleRate;
                 }
             }
         } catch (Exception e) {
@@ -566,9 +571,9 @@ public final class FmodCore {
     }
 
     /**
-     * Shuts down the FMOD system and releases all resources.
-     * This method should be called when the FmodCore instance is no longer needed.
-     * 
+     * Shuts down the FMOD system and releases all resources. This method should be called when the
+     * FmodCore instance is no longer needed.
+     *
      * <p>This method is thread-safe and properly synchronizes with all ongoing operations.
      */
     public void shutdown() {
@@ -581,12 +586,12 @@ public final class FmodCore {
                         fmod.FMOD_Channel_Stop(currentChannel);
                         currentChannel = null;
                     }
-                    
+
                     if (currentSound != null) {
                         fmod.FMOD_Sound_Release(currentSound);
                         currentSound = null;
                     }
-                    
+
                     // Reset playback state
                     startFrame = 0;
                     endFrame = 0;
@@ -639,13 +644,14 @@ public final class FmodCore {
         try {
             // Create sound for format detection only
             PointerByReference soundRef = new PointerByReference();
-            int result = fmod.FMOD_System_CreateSound(
-                    system, canonicalPath, FmodConstants.CREATE_SAMPLE, null, soundRef);
-            
+            int result =
+                    fmod.FMOD_System_CreateSound(
+                            system, canonicalPath, FmodConstants.CREATE_SAMPLE, null, soundRef);
+
             if (result != FmodConstants.OK) {
                 throw new IOException("Failed to load audio file: " + canonicalPath);
             }
-            
+
             tempSound = soundRef.getValue();
 
             // Get format information
@@ -653,14 +659,14 @@ public final class FmodCore {
             IntByReference format = new IntByReference();
             IntByReference channels = new IntByReference();
             IntByReference bits = new IntByReference();
-            
+
             result = fmod.FMOD_Sound_GetFormat(tempSound, type, format, channels, bits);
             if (result != FmodConstants.OK) {
                 throw new IOException("Failed to get audio format information");
             }
 
             // Get sample rate
-            IntByReference frequency = new IntByReference();
+            FloatByReference frequency = new FloatByReference();
             IntByReference priority = new IntByReference();
             result = fmod.FMOD_Sound_GetDefaults(tempSound, frequency, priority);
             if (result != FmodConstants.OK) {
@@ -679,9 +685,8 @@ public final class FmodCore {
                     format.getValue(),
                     channels.getValue(),
                     bits.getValue(),
-                    frequency.getValue(),
-                    length.getValue()
-            );
+                    (int) frequency.getValue(),
+                    length.getValue());
 
         } finally {
             // Always release the temporary sound resource
@@ -695,9 +700,7 @@ public final class FmodCore {
         }
     }
 
-    /**
-     * Immutable container for audio format information detected by FMOD.
-     */
+    /** Immutable container for audio format information detected by FMOD. */
     public static class AudioFormatInfo {
         private final int soundType;
         private final int format;
@@ -706,8 +709,13 @@ public final class FmodCore {
         private final int sampleRate;
         private final long frameLength;
 
-        public AudioFormatInfo(int soundType, int format, int channels, int bitsPerSample, 
-                             int sampleRate, long frameLength) {
+        public AudioFormatInfo(
+                int soundType,
+                int format,
+                int channels,
+                int bitsPerSample,
+                int sampleRate,
+                long frameLength) {
             this.soundType = soundType;
             this.format = format;
             this.channels = channels;
@@ -716,12 +724,29 @@ public final class FmodCore {
             this.frameLength = frameLength;
         }
 
-        public int getSoundType() { return soundType; }
-        public int getFormat() { return format; }
-        public int getChannels() { return channels; }
-        public int getBitsPerSample() { return bitsPerSample; }
-        public int getSampleRate() { return sampleRate; }
-        public long getFrameLength() { return frameLength; }
+        public int getSoundType() {
+            return soundType;
+        }
+
+        public int getFormat() {
+            return format;
+        }
+
+        public int getChannels() {
+            return channels;
+        }
+
+        public int getBitsPerSample() {
+            return bitsPerSample;
+        }
+
+        public int getSampleRate() {
+            return sampleRate;
+        }
+
+        public long getFrameLength() {
+            return frameLength;
+        }
 
         public double getDurationInSeconds() {
             return (double) frameLength / sampleRate;
@@ -733,20 +758,34 @@ public final class FmodCore {
 
         public String getFormatDescription() {
             switch (soundType) {
-                case FmodFormats.FMOD_SOUND_TYPE_WAV: return "WAV";
-                case FmodFormats.FMOD_SOUND_TYPE_AIFF: return "AIFF";
-                case FmodFormats.FMOD_SOUND_TYPE_FLAC: return "FLAC";
-                case FmodFormats.FMOD_SOUND_TYPE_MPEG: return "MP3";
-                case FmodFormats.FMOD_SOUND_TYPE_OGGVORBIS: return "OGG Vorbis";
-                case FmodFormats.FMOD_SOUND_TYPE_RAW: return "RAW PCM";
-                default: return "Unknown (" + soundType + ")";
+                case FmodFormats.FMOD_SOUND_TYPE_WAV:
+                    return "WAV";
+                case FmodFormats.FMOD_SOUND_TYPE_AIFF:
+                    return "AIFF";
+                case FmodFormats.FMOD_SOUND_TYPE_FLAC:
+                    return "FLAC";
+                case FmodFormats.FMOD_SOUND_TYPE_MPEG:
+                    return "MP3";
+                case FmodFormats.FMOD_SOUND_TYPE_OGGVORBIS:
+                    return "OGG Vorbis";
+                case FmodFormats.FMOD_SOUND_TYPE_RAW:
+                    return "RAW PCM";
+                default:
+                    return "Unknown (" + soundType + ")";
             }
         }
 
         @Override
         public String toString() {
-            return String.format("AudioFormatInfo{type=%s, channels=%d, bits=%d, rate=%d, frames=%d, duration=%.2fs}",
-                    getFormatDescription(), channels, bitsPerSample, sampleRate, frameLength, getDurationInSeconds());
+            return String.format(
+                    "AudioFormatInfo{type=%s, channels=%d, bits=%d, rate=%d, frames=%d,"
+                            + " duration=%.2fs}",
+                    getFormatDescription(),
+                    channels,
+                    bitsPerSample,
+                    sampleRate,
+                    frameLength,
+                    getDurationInSeconds());
         }
     }
 }

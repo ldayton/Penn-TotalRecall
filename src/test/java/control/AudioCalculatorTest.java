@@ -1,17 +1,15 @@
 package control;
 
-import components.audiofiles.AudioFile;
-import components.audiofiles.AudioFile.AudioFilePathException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import components.audiofiles.AudioFile;
+import components.audiofiles.AudioFile.AudioFilePathException;
 import java.io.File;
 import java.io.IOException;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for the refactored AudioCalculator that uses FMOD for format detection.
- */
+/** Tests for the refactored AudioCalculator that uses FMOD for format detection. */
 class AudioCalculatorTest {
 
     private static File testAudioFile;
@@ -20,7 +18,9 @@ class AudioCalculatorTest {
     static void setup() {
         // Use the known sample file
         testAudioFile = new File("packaging/samples/sample.wav");
-        assertTrue(testAudioFile.exists(), "Test audio file not found: " + testAudioFile.getAbsolutePath());
+        assertTrue(
+                testAudioFile.exists(),
+                "Test audio file not found: " + testAudioFile.getAbsolutePath());
     }
 
     @Test
@@ -38,11 +38,67 @@ class AudioCalculatorTest {
     }
 
     @Test
+    void testSampleFileIs44100Hz() throws Exception {
+        AudioFile audioFile = new AudioFile(testAudioFile.getAbsolutePath());
+        AudioCalculator calculator = new AudioCalculator(audioFile);
+
+        double sampleRate = calculator.sampleRate();
+        double frameRate = calculator.frameRate();
+
+        System.out.println("Detected sample rate: " + sampleRate);
+        System.out.println("Detected frame rate: " + frameRate);
+
+        // The sample.wav file is known to be 44.1kHz
+        assertEquals(
+                44100.0, sampleRate, 1.0, "Sample rate should be 44100 Hz, got: " + sampleRate);
+        assertEquals(44100.0, frameRate, 1.0, "Frame rate should be 44100 Hz, got: " + frameRate);
+
+        // Frame rate should equal sample rate for uncompressed audio
+        assertEquals(sampleRate, frameRate, 0.001, "Frame rate should equal sample rate");
+    }
+
+    @Test
+    void testWaveformBufferArraySizeDoesNotOverflow() throws Exception {
+        AudioFile audioFile = new AudioFile(testAudioFile.getAbsolutePath());
+        AudioCalculator calculator = new AudioCalculator(audioFile);
+
+        double frameRate = calculator.frameRate();
+        int chunkSizeSeconds = 10; // Same as WaveformBuffer.CHUNK_SIZE_SECONDS
+        double preDataSeconds = 0.25; // Same as WaveformBuffer preDataSeconds
+
+        System.out.println("Frame rate for array calculation: " + frameRate);
+
+        // This is the exact calculation that WaveformBuffer does in getValsToDraw()
+        long samplesArraySize = (long) (frameRate * chunkSizeSeconds);
+        long preDataSizeInFrames = (long) (frameRate * preDataSeconds);
+        long totalArraySize = samplesArraySize + preDataSizeInFrames;
+
+        System.out.println("WaveformBuffer would allocate array of size: " + totalArraySize);
+
+        // JVM array size limit is typically Integer.MAX_VALUE - 2 to Integer.MAX_VALUE - 8
+        long maxArraySize = Integer.MAX_VALUE - 8;
+
+        assertTrue(totalArraySize > 0, "Array size should be positive: " + totalArraySize);
+        assertTrue(
+                totalArraySize <= maxArraySize,
+                String.format(
+                        "Array size %d exceeds JVM limit %d (frameRate=%.0f)",
+                        totalArraySize, maxArraySize, frameRate));
+
+        // Also verify the array can actually be cast to int without overflow
+        assertTrue(
+                totalArraySize <= Integer.MAX_VALUE,
+                "Array size must fit in int: " + totalArraySize);
+    }
+
+    @Test
     void testAudioCalculatorWithNonExistentFile() throws AudioFilePathException {
         AudioFile nonExistentFile = new AudioFile("/path/to/nonexistent/file.wav");
-        assertThrows(IOException.class, () -> {
-            new AudioCalculator(nonExistentFile);
-        });
+        assertThrows(
+                IOException.class,
+                () -> {
+                    new AudioCalculator(nonExistentFile);
+                });
     }
 
     @Test
