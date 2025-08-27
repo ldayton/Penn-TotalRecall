@@ -1,8 +1,6 @@
 package waveform;
 
 import audio.FmodCore;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import java.io.IOException;
 import marytts.signalproc.filter.BandPassFilter;
 import org.slf4j.Logger;
@@ -14,23 +12,17 @@ import org.slf4j.LoggerFactory;
  * <p>Complete audio-to-display pipeline: file loading, signal processing, and display scaling.
  * Consumers only interact with this class - internal pipeline is handled automatically.
  */
-@Singleton
-public class WaveformProcessor {
+public final class WaveformProcessor {
     private static final Logger logger = LoggerFactory.getLogger(WaveformProcessor.class);
 
     private final FmodCore fmodCore;
-    private final SignalEnhancer signalEnhancer;
+    private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
     private final WaveformScaler waveformScaler;
 
-    @Inject
     public WaveformProcessor(
-            FmodCore fmodCore,
-            SignalEnhancer signalEnhancer,
-            PixelScaler pixelScaler,
-            WaveformScaler waveformScaler) {
+            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler) {
         this.fmodCore = fmodCore;
-        this.signalEnhancer = signalEnhancer;
         this.pixelScaler = pixelScaler;
         this.waveformScaler = waveformScaler;
     }

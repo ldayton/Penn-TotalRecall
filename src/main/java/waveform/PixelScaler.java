@@ -1,6 +1,5 @@
 package waveform;
 
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +9,7 @@ import org.slf4j.LoggerFactory;
  * <p>Converts audio data to pixel resolution and applies visual smoothing for optimal display
  * quality.
  */
-@Singleton
-public class PixelScaler {
+public final class PixelScaler {
     private static final Logger logger = LoggerFactory.getLogger(PixelScaler.class);
 
     /** Converts audio samples to pixel resolution for display. */

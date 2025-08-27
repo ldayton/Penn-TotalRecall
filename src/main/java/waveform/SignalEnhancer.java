@@ -1,6 +1,5 @@
 package waveform;
 
-import jakarta.inject.Singleton;
 import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
@@ -12,8 +11,7 @@ import org.slf4j.LoggerFactory;
  * <p>Handles filtering, envelope detection, and other signal processing tasks without any display
  * or rendering concerns.
  */
-@Singleton
-public class SignalEnhancer {
+final class SignalEnhancer {
     private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
 
     /** Applies bandpass filtering to audio samples using MaryTTS filter implementation. */

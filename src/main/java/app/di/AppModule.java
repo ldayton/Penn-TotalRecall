@@ -37,8 +37,6 @@ import state.PreferencesManager;
 import ui.DialogService;
 import ui.MainWindowAccess;
 import waveform.PixelScaler;
-import waveform.SampleMath;
-import waveform.SignalEnhancer;
 import waveform.WaveformProcessor;
 import waveform.WaveformRenderer;
 import waveform.WaveformScaler;
@@ -86,16 +84,31 @@ public class AppModule extends AbstractModule {
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
+    }
 
-        // Signal processing utilities
-        bind(SampleMath.class).in(Singleton.class);
-        bind(WaveformProcessor.class).in(Singleton.class);
-        bind(SignalEnhancer.class).in(Singleton.class);
-        bind(PixelScaler.class).in(Singleton.class);
+    @Provides
+    @Singleton
+    PixelScaler providePixelScaler() {
+        return new PixelScaler();
+    }
 
-        // Graphics utilities
-        bind(WaveformRenderer.class).in(Singleton.class);
-        bind(WaveformScaler.class).in(Singleton.class);
+    @Provides
+    @Singleton
+    WaveformScaler provideWaveformScaler() {
+        return new WaveformScaler();
+    }
+
+    @Provides
+    @Singleton
+    WaveformRenderer provideWaveformRenderer(WaveformScaler waveformScaler) {
+        return new WaveformRenderer(waveformScaler);
+    }
+
+    @Provides
+    @Singleton
+    WaveformProcessor provideWaveformProcessor(
+            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler) {
+        return new WaveformProcessor(fmodCore, pixelScaler, waveformScaler);
     }
 
     @Provides

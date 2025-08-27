@@ -1,7 +1,5 @@
 package waveform;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -16,13 +14,11 @@ import ui.UiShapes;
  * <p>This class is headless-compatible and handles all visual aspects of waveform display:
  * background, reference lines, time scales, and waveform drawing.
  */
-@Singleton
-public class WaveformRenderer {
+public final class WaveformRenderer {
 
     private final DecimalFormat secFormat = new DecimalFormat("0.00s");
     private final WaveformScaler waveformScaler;
 
-    @Inject
     public WaveformRenderer(WaveformScaler waveformScaler) {
         this.waveformScaler = waveformScaler;
     }

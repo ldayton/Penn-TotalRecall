@@ -1,15 +1,12 @@
 package waveform;
 
-import com.google.inject.Singleton;
-
 /**
  * Basic mathematical operations for audio sample processing.
  *
  * <p>This class provides fundamental calculations needed throughout audio processing, following
  * standard audio engineering formulas and conventions.
  */
-@Singleton
-public class SampleMath {
+final class SampleMath {
 
     /**
      * Converts audio frames to byte count for file I/O operations.

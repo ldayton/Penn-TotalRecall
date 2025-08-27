@@ -6,7 +6,7 @@ package waveform;
  * <p>Contains amplitude values and audio metadata without any display or pixel concepts.
  * Package-private - only used internally within audio.signal package.
  */
-class AudioChunkData {
+final class AudioChunkData {
     public final double[] amplitudeValues;
     public final double sampleRate;
     public final double peakAmplitude;

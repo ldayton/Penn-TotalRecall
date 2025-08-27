@@ -1,6 +1,5 @@
 package waveform;
 
-import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +9,7 @@ import org.slf4j.LoggerFactory;
  * <p>This class handles the mathematical operations needed to scale audio amplitude values for
  * optimal visual display, ensuring good use of available screen space.
  */
-@Singleton
-public class WaveformScaler {
+public final class WaveformScaler {
     private static final Logger logger = LoggerFactory.getLogger(WaveformScaler.class);
 
     /**

@@ -5,7 +5,7 @@ package waveform;
  *
  * <p>Uses normalized frequency values (0.0 to 0.5) as required by digital signal processing.
  */
-public class FrequencyRange {
+final class FrequencyRange {
     public final double minFrequency;
     public final double maxFrequency;
 
