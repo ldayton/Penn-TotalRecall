@@ -105,7 +105,7 @@ public final class WaveformProcessor {
         // Apply frequency filtering if samples exist
         if (samples.length > 0) {
             BandPassFilter filter =
-                    new BandPassFilter(frequencyFilter.minFrequency, frequencyFilter.maxFrequency);
+                    new BandPassFilter(frequencyFilter.minFrequency(), frequencyFilter.maxFrequency());
             samples = filter.apply(samples);
         }
 
