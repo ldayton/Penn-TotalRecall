@@ -4,36 +4,34 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import state.AudioState;
 
-/** Initializes waveform display components after DI resolution to avoid circular dependencies. */
+/** Bootstrap waveform mouse interaction after dependency injection resolution. */
 @Singleton
-public class WaveformMouseSetup {
+public final class WaveformMouseSetup {
 
     private final WaveformDisplay waveformDisplay;
-    private final WaveformCoordinateSystem waveformCoordinateSystem;
+    private final WaveformCoordinateSystem coordinateSystem;
     private final SelectionOverlay selectionOverlay;
     private final AudioState audioState;
 
     @Inject
     public WaveformMouseSetup(
             WaveformDisplay waveformDisplay,
-            WaveformCoordinateSystem waveformCoordinateSystem,
+            WaveformCoordinateSystem coordinateSystem,
             SelectionOverlay selectionOverlay,
             AudioState audioState) {
         this.waveformDisplay = waveformDisplay;
-        this.waveformCoordinateSystem = waveformCoordinateSystem;
+        this.coordinateSystem = coordinateSystem;
         this.selectionOverlay = selectionOverlay;
         this.audioState = audioState;
-
-        // Initialize mouse listeners now that all dependencies are resolved
         initializeMouseListeners();
     }
 
+    /** Attach mouse handlers for selection and playback interaction. */
     private void initializeMouseListeners() {
-        WaveformSelectionHandler mouseAdapter =
+        var handler =
                 new WaveformSelectionHandler(
-                        waveformDisplay, audioState, waveformCoordinateSystem, selectionOverlay);
-
-        waveformDisplay.addMouseListener(mouseAdapter);
-        waveformDisplay.addMouseMotionListener(mouseAdapter);
+                        waveformDisplay, audioState, coordinateSystem, selectionOverlay);
+        waveformDisplay.addMouseListener(handler);
+        waveformDisplay.addMouseMotionListener(handler);
     }
 }

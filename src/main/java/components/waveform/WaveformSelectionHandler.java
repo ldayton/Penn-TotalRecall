@@ -1,84 +1,76 @@
 package components.waveform;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.SwingUtilities;
 import state.AudioState;
 
-/** Mouse adapter for the waveform display, for use when {@link info.Constants#mouseMode}. */
-public class WaveformSelectionHandler implements MouseMotionListener, MouseListener {
+/** Mouse handler for waveform selection and audio playback triggering. */
+public final class WaveformSelectionHandler implements MouseMotionListener, MouseListener {
 
     private final Component source;
     private final AudioState audioState;
-    private final WaveformCoordinateSystem waveformCoordinateSystem;
+    private final WaveformCoordinateSystem coordinateSystem;
     private final SelectionOverlay selectionOverlay;
 
     protected WaveformSelectionHandler(
             Component source,
             AudioState audioState,
-            WaveformCoordinateSystem waveformCoordinateSystem,
+            WaveformCoordinateSystem coordinateSystem,
             SelectionOverlay selectionOverlay) {
         this.source = source;
         this.audioState = audioState;
-        this.waveformCoordinateSystem = waveformCoordinateSystem;
+        this.coordinateSystem = coordinateSystem;
         this.selectionOverlay = selectionOverlay;
     }
 
-    //	@Override
-    //	public void mouseClicked(MouseEvent e) {
-    //		if(e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-    //			if(CurAudio.audioOpen()) {
-    //				if(CurAudio.getPlayer().getStatus() !=AudioPlayer.Status.PLAYING) {
-    ////					System.out.println("jump");
-    //				}
-    //			}
-    //		}
-    //	}
-
+    /** Start selection highlighting. */
     public void mousePressed(MouseEvent e) {
-        selectionOverlay.setHighlightSource(e.getPoint(), source);
-        selectionOverlay.setHighlightDest(e.getPoint(), source);
+        var point = e.getPoint();
+        selectionOverlay.setHighlightSource(point, source);
+        selectionOverlay.setHighlightDest(point, source);
         selectionOverlay.setHighlightMode(true);
         selectionOverlay.repaint();
     }
 
+    /** End selection and play selected audio interval. */
     public void mouseReleased(MouseEvent e) {
-        int[] xs = null;
-        if (selectionOverlay.isHighlightMode()) {
-            xs = selectionOverlay.getHighlightBounds();
-        }
+        var bounds =
+                selectionOverlay.isHighlightMode() ? selectionOverlay.getHighlightBounds() : null;
         selectionOverlay.setHighlightMode(false);
         selectionOverlay.repaint();
-        if (xs == null) {
-            return;
-        }
-        if (audioState.audioOpen()) {
-            int smallerX = Math.min(xs[0], xs[1]);
-            smallerX = Math.max(0, smallerX);
-            int largerX = Math.max(xs[0], xs[1]);
-            largerX = Math.min(largerX, waveformCoordinateSystem.asComponent().getWidth() - 1);
-            if (largerX <= smallerX) {
-                return;
-            }
-            Point firstPoint = SwingUtilities.convertPoint(selectionOverlay, smallerX, 0, source);
-            Point secondPoint = SwingUtilities.convertPoint(selectionOverlay, largerX, 0, source);
-            audioState
-                    .getPlayer()
-                    .playShortInterval(
-                            waveformCoordinateSystem.displayXPixelToFrame((int) firstPoint.getX()),
-                            waveformCoordinateSystem.displayXPixelToFrame(
-                                    (int) secondPoint.getX()));
+
+        if (bounds != null && audioState.audioOpen()) {
+            playSelectedInterval(bounds);
         }
     }
 
+    /** Update selection rectangle during drag. */
     public void mouseDragged(MouseEvent e) {
         selectionOverlay.setHighlightDest(e.getPoint(), source);
         selectionOverlay.repaint();
     }
 
+    /** Play audio interval defined by selection bounds. */
+    private void playSelectedInterval(int[] bounds) {
+        var startX = Math.max(0, Math.min(bounds[0], bounds[1]));
+        var endX =
+                Math.min(
+                        coordinateSystem.asComponent().getWidth() - 1,
+                        Math.max(bounds[0], bounds[1]));
+
+        if (endX > startX) {
+            var startPoint = SwingUtilities.convertPoint(selectionOverlay, startX, 0, source);
+            var endPoint = SwingUtilities.convertPoint(selectionOverlay, endX, 0, source);
+            var startFrame = coordinateSystem.displayXPixelToFrame(startPoint.x);
+            var endFrame = coordinateSystem.displayXPixelToFrame(endPoint.x);
+            audioState.getPlayer().playShortInterval(startFrame, endFrame);
+        }
+    }
+
+    // MouseListener/MouseMotionListener interface methods (unused)
     public void mouseMoved(MouseEvent e) {}
 
     public void mouseClicked(MouseEvent e) {}

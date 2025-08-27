@@ -37,7 +37,7 @@ import waveform.WaveformChunk;
  * <p>Keep in mind that events other than the repaint timer going off can cause repaints.
  */
 @Singleton
-public class WaveformDisplay extends JComponent implements WaveformCoordinateSystem {
+public final class WaveformDisplay extends JComponent implements WaveformCoordinateSystem {
     private static final Logger logger = LoggerFactory.getLogger(WaveformDisplay.class);
 
     /** Maximum pixels to interpolate when rendering waveform gaps. */

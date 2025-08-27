@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 import state.AudioState;
-import waveform.Waveform;
 import waveform.WaveformChunk;
 
 /** LRU cache for waveform chunks with async prefetching. */
 @Singleton
-public class WaveformChunkCache {
+public final class WaveformChunkCache {
     /** Audio chunk size in seconds for waveform buffering. */
     public static final int CHUNK_SIZE_SECONDS = 10;
+
     /** Cache size: current + previous + next chunk. */
     private static final int MAX_CACHE_SIZE = 3;
 
@@ -28,9 +28,7 @@ public class WaveformChunkCache {
     @Inject
     public WaveformChunkCache(AudioState audioState) {
         this.audioState = audioState;
-        this.chunkCache = Caffeine.newBuilder()
-                .maximumSize(MAX_CACHE_SIZE)
-                .build(this::loadChunk);
+        this.chunkCache = Caffeine.newBuilder().maximumSize(MAX_CACHE_SIZE).build(this::loadChunk);
     }
 
     /** Get chunk with async prefetching of adjacent chunks. */
@@ -71,11 +69,14 @@ public class WaveformChunkCache {
     /** Async prefetch adjacent chunks (previous/next) without blocking. */
     private void prefetchAdjacentAsync(int chunkNumber, int height) {
         var maxChunk = audioState.lastChunkNum();
-        var adjacentKeys = Stream.of(
-                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1, height) : null,
-                chunkNumber < maxChunk ? new ChunkKey(chunkNumber + 1, height) : null
-        ).filter(java.util.Objects::nonNull)
-         .toList();
+        var adjacentKeys =
+                Stream.of(
+                                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1, height) : null,
+                                chunkNumber < maxChunk
+                                        ? new ChunkKey(chunkNumber + 1, height)
+                                        : null)
+                        .filter(java.util.Objects::nonNull)
+                        .toList();
 
         if (!adjacentKeys.isEmpty()) {
             CompletableFuture.runAsync(() -> chunkCache.getAll(adjacentKeys));

@@ -3,20 +3,20 @@ package components.waveform;
 import java.awt.Component;
 import java.awt.Rectangle;
 
-/** Interface defining geometric operations needed by overlay components. */
+/** Coordinate conversion between display pixels and audio frames for overlay rendering. */
 public interface WaveformCoordinateSystem {
-    /** Returns the height of the waveform display area. */
+    /** Display area height in pixels. */
     int getHeight();
 
-    /** Returns the visible rectangle of the waveform display. */
+    /** Visible display rectangle for clipping calculations. */
     Rectangle getVisibleRect();
 
-    /** Returns the current progress bar X position. */
+    /** Current playback progress bar X position. */
     int getProgressBarXPos();
 
-    /** Converts display X pixel coordinate to audio frame number. */
+    /** Convert display X pixel to audio frame number. */
     int displayXPixelToFrame(int xPix);
 
-    /** Returns this geometry provider as a Component for coordinate conversion. */
+    /** Access as Component for Swing coordinate conversions. */
     Component asComponent();
 }

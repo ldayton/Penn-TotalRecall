@@ -17,7 +17,7 @@ import ui.UiConstants;
 
 /** Glass pane overlay for mouse selection highlighting and replay flash feedback. */
 @Singleton
-public class SelectionOverlay extends JComponent {
+public final class SelectionOverlay extends JComponent {
 
     private final WaveformCoordinateSystem waveformCoordinateSystem;
     private final AlphaComposite composite;
@@ -35,7 +35,10 @@ public class SelectionOverlay extends JComponent {
     private int flashRectangleWidth;
 
     /** Flash rectangle width in pixels (200ms duration at default zoom). */
-    private final int flashWidth = (int) (UiConstants.zoomlessPixelsPerSecond * (ReplayLast200MillisAction.duration / 1000.0));
+    private final int flashWidth =
+            (int)
+                    (UiConstants.zoomlessPixelsPerSecond
+                            * (ReplayLast200MillisAction.duration / 1000.0));
 
     @Inject
     public SelectionOverlay(WaveformCoordinateSystem waveformCoordinateSystem) {
@@ -68,8 +71,13 @@ public class SelectionOverlay extends JComponent {
     private void paintFlash(Graphics2D g2d) {
         g2d.setComposite(composite);
         g2d.setColor(UiColors.replay200MillisFlashColor);
-        var yPos = SwingUtilities.convertPoint(waveformCoordinateSystem.asComponent(), -1, 0, this).y;
-        g2d.fillRect(flashRectangleXPos, yPos, flashRectangleWidth, waveformCoordinateSystem.getHeight());
+        var yPos =
+                SwingUtilities.convertPoint(waveformCoordinateSystem.asComponent(), -1, 0, this).y;
+        g2d.fillRect(
+                flashRectangleXPos,
+                yPos,
+                flashRectangleWidth,
+                waveformCoordinateSystem.getHeight());
     }
 
     public void setHighlightMode(boolean flag) {
@@ -88,14 +96,22 @@ public class SelectionOverlay extends JComponent {
         updateHighlightRect();
     }
 
-    /** Update highlight rectangle to span between source and dest points, clipped to waveform bounds. */
+    /**
+     * Update highlight rectangle to span between source and dest points, clipped to waveform
+     * bounds.
+     */
     private void updateHighlightRect() {
         var minX = Math.min(highlightSource.x, highlightDest.x);
         var maxX = Math.max(highlightSource.x, highlightDest.x);
-        var yPos = SwingUtilities.convertPoint(waveformCoordinateSystem.asComponent(), 0, 0, this).y;
-        var selectionBounds = new Rectangle(minX, yPos, maxX - minX, waveformCoordinateSystem.getHeight());
-        var waveformBounds = SwingUtilities.convertRectangle(
-                waveformCoordinateSystem.asComponent(), waveformCoordinateSystem.getVisibleRect(), this);
+        var yPos =
+                SwingUtilities.convertPoint(waveformCoordinateSystem.asComponent(), 0, 0, this).y;
+        var selectionBounds =
+                new Rectangle(minX, yPos, maxX - minX, waveformCoordinateSystem.getHeight());
+        var waveformBounds =
+                SwingUtilities.convertRectangle(
+                        waveformCoordinateSystem.asComponent(),
+                        waveformCoordinateSystem.getVisibleRect(),
+                        this);
         highlightRect = selectionBounds.intersection(waveformBounds);
     }
 
@@ -112,19 +128,23 @@ public class SelectionOverlay extends JComponent {
     public void flashRectangle() {
         if (timer == null || !timer.isRunning()) {
             var flashStartX = waveformCoordinateSystem.getProgressBarXPos() - flashWidth;
-            this.flashRectangleXPos = SwingUtilities.convertPoint(
-                    waveformCoordinateSystem.asComponent(), flashStartX, -1, this).x;
+            this.flashRectangleXPos =
+                    SwingUtilities.convertPoint(
+                                    waveformCoordinateSystem.asComponent(), flashStartX, -1, this)
+                            .x;
             this.flashRectangleWidth = flashWidth;
             flashMode = true;
             setVisible(true);
             repaint();
-            timer = new Timer(ReplayLast200MillisAction.duration, _ -> {
-                flashMode = false;
-                repaint();
-            });
+            timer =
+                    new Timer(
+                            ReplayLast200MillisAction.duration,
+                            _ -> {
+                                flashMode = false;
+                                repaint();
+                            });
             timer.setRepeats(false);
             timer.start();
         }
     }
-
 }
