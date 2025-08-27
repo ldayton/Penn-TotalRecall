@@ -1,8 +1,6 @@
 package waveform;
 
-/**
- * Audio chunk with amplitude data and metadata.
- */
+/** Audio chunk with amplitude data and metadata. */
 record AudioChunkData(
         double[] amplitudeValues,
         double sampleRate,
@@ -10,16 +8,12 @@ record AudioChunkData(
         int frameCount,
         int overlapFrames) {
 
-    /**
-     * Chunk duration in seconds.
-     */
+    /** Chunk duration in seconds. */
     double getDurationSeconds() {
         return frameCount / sampleRate;
     }
 
-    /**
-     * Defensive copy of amplitude values.
-     */
+    /** Defensive copy of amplitude values. */
     double[] amplitudeValuesCopy() {
         return amplitudeValues.clone();
     }

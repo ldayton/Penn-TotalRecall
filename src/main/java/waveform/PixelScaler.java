@@ -3,12 +3,7 @@ package waveform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Display pixel scaling and smoothing operations.
- *
- * <p>Converts audio data to pixel resolution and applies visual smoothing for optimal display
- * quality.
- */
+/** Converts audio samples to pixel resolution and applies smoothing. */
 public final class PixelScaler {
     private static final Logger logger = LoggerFactory.getLogger(PixelScaler.class);
 
@@ -31,7 +26,6 @@ public final class PixelScaler {
             return new double[targetPixelWidth];
         }
 
-        // extract some of the samples for representation as pixels
         double[] pixelValues = new double[targetPixelWidth];
         final double sampleIncrement = (double) availableSamples / targetPixelWidth;
 
@@ -51,29 +45,26 @@ public final class PixelScaler {
         return pixelValues;
     }
 
-    /** Applies visual smoothing to pixel data to remove display artifacts. */
+    /** Applies visual smoothing to remove display artifacts. */
     public double[] smoothPixels(double[] pixelValues) {
         if (pixelValues.length < 3) {
-            return pixelValues; // Need at least 3 points for smoothing
+            return pixelValues;
         }
 
-        // make the waveform prettier by smoothing the pixels
-        for (int j = 0; j < 1; j++) {
-            double[] copy = new double[pixelValues.length];
-            System.arraycopy(pixelValues, 0, copy, 0, pixelValues.length);
-            for (int i = 1; i < copy.length - 1; i++) {
-                if (copy[i] > copy[i - 1]) {
-                    if (copy[i] > copy[i + 1]) {
-                        pixelValues[i] = Math.max(copy[i + 1], copy[i - 1]);
-                    }
-                }
+        double[] copy = new double[pixelValues.length];
+        System.arraycopy(pixelValues, 0, copy, 0, pixelValues.length);
+        
+        // Smooth peaks
+        for (int i = 1; i < copy.length - 1; i++) {
+            if (copy[i] > copy[i - 1] && copy[i] > copy[i + 1]) {
+                pixelValues[i] = Math.max(copy[i + 1], copy[i - 1]);
             }
-            for (int i = 1; i < copy.length - 1; i++) {
-                if (copy[i] < copy[i - 1]) {
-                    if (copy[i] < copy[i + 1]) {
-                        pixelValues[i] = Math.min(copy[i + 1], copy[i - 1]);
-                    }
-                }
+        }
+        
+        // Smooth valleys
+        for (int i = 1; i < copy.length - 1; i++) {
+            if (copy[i] < copy[i - 1] && copy[i] < copy[i + 1]) {
+                pixelValues[i] = Math.min(copy[i + 1], copy[i - 1]);
             }
         }
 
@@ -88,7 +79,6 @@ public final class PixelScaler {
         }
 
         double maxConsecutive = 0;
-
         for (int i = skipInitialPixels; i < pixelValues.length - 1; i++) {
             double consecutiveVals = Math.min(pixelValues[i], pixelValues[i + 1]);
             maxConsecutive = Math.max(consecutiveVals, maxConsecutive);
