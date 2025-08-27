@@ -5,7 +5,6 @@ import actions.ActionsManager;
 import audio.AudioSystemLoader;
 import audio.AudioSystemManager;
 import audio.FmodCore;
-import audio.display.WaveformScaler;
 import audio.signal.AudioRenderer;
 import audio.signal.Resampler;
 import audio.signal.SampleMath;
@@ -35,6 +34,8 @@ import env.Platform;
 import env.ProgramVersion;
 import env.UpdateManager;
 import env.UserHomeProvider;
+import graphics.WaveformRenderer;
+import graphics.WaveformScaler;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 import state.PreferencesManager;
@@ -89,6 +90,9 @@ public class AppModule extends AbstractModule {
         bind(AudioRenderer.class).in(Singleton.class);
         bind(Resampler.class).in(Singleton.class);
         bind(SampleMath.class).in(Singleton.class);
+
+        // Graphics utilities
+        bind(WaveformRenderer.class).in(Singleton.class);
         bind(WaveformScaler.class).in(Singleton.class);
     }
 

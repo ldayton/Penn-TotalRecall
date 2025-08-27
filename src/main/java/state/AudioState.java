@@ -3,7 +3,6 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
-import audio.display.WaveformScaler;
 import audio.signal.AudioRenderer;
 import audio.signal.Resampler;
 import components.AppMenuBar;
@@ -21,6 +20,8 @@ import events.AudioFileSwitchedEvent;
 import events.EventDispatchBus;
 import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
+import graphics.WaveformRenderer;
+import graphics.WaveformScaler;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -70,6 +71,7 @@ public class AudioState implements AudioProgressHandler {
     private final AudioRenderer audioRenderer;
     private final Resampler resampler;
     private final WaveformScaler waveformScaler;
+    private final WaveformRenderer waveformRenderer;
 
     @Inject
     public AudioState(
@@ -79,7 +81,8 @@ public class AudioState implements AudioProgressHandler {
             WordpoolDisplay wordpoolDisplay,
             AudioRenderer audioRenderer,
             Resampler resampler,
-            WaveformScaler waveformScaler) {
+            WaveformScaler waveformScaler,
+            WaveformRenderer waveformRenderer) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
@@ -87,6 +90,7 @@ public class AudioState implements AudioProgressHandler {
         this.audioRenderer = audioRenderer;
         this.resampler = resampler;
         this.waveformScaler = waveformScaler;
+        this.waveformRenderer = waveformRenderer;
     }
 
     /**
@@ -193,7 +197,8 @@ public class AudioState implements AudioProgressHandler {
                             audioRenderer,
                             resampler,
                             waveformScaler,
-                            fmodCore);
+                            fmodCore,
+                            waveformRenderer);
             waveformBuffer.start();
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));

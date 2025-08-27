@@ -1,4 +1,4 @@
-package audio.display;
+package graphics;
 
 import com.google.inject.Singleton;
 import org.slf4j.Logger;

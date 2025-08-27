@@ -1,13 +1,13 @@
 package components.waveform;
 
 import audio.FmodCore;
-import audio.display.WaveformScaler;
 import audio.signal.AudioRenderer;
 import audio.signal.Resampler;
 import env.PreferenceKeys;
+import graphics.WaveformRenderer;
+import graphics.WaveformScaler;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -16,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
 import state.PreferencesManager;
-import ui.UiColors;
 import ui.UiConstants;
-import ui.UiShapes;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -47,8 +45,6 @@ public class WaveformBuffer extends Buffer {
     private final double minBand;
     private final double maxBand;
 
-    private final DecimalFormat secFormat = new DecimalFormat("0.00s");
-
     private static volatile WaveformChunk[] chunkArray;
 
     private volatile boolean finish;
@@ -63,6 +59,7 @@ public class WaveformBuffer extends Buffer {
     private final Resampler resampler;
     private final WaveformScaler waveformScaler;
     private final FmodCore fmodCore;
+    private final WaveformRenderer waveformRenderer;
 
     /**
      * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
@@ -75,13 +72,15 @@ public class WaveformBuffer extends Buffer {
             AudioRenderer audioRenderer,
             Resampler resampler,
             WaveformScaler waveformScaler,
-            FmodCore fmodCore) {
+            FmodCore fmodCore,
+            WaveformRenderer waveformRenderer) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
         this.audioRenderer = audioRenderer;
         this.resampler = resampler;
         this.waveformScaler = waveformScaler;
         this.fmodCore = fmodCore;
+        this.waveformRenderer = waveformRenderer;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
         chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
@@ -273,51 +272,24 @@ public class WaveformBuffer extends Buffer {
                                 valsToDraw, UiConstants.zoomlessPixelsPerSecond / 2);
             }
 
+            // Calculate Y-axis scaling for waveform amplitude display
             double yScale =
-                    waveformScaler.getPixelScale(valsToDraw, height, biggestConsecutivePixelVals);
+                    waveformRenderer.calculateYScale(
+                            valsToDraw, height, biggestConsecutivePixelVals);
 
-            image = WaveformDisplay.getInstance().createImage(chunkWidthInPixels, height);
-            Graphics2D g2d = (Graphics2D) image.getGraphics();
+            // Calculate start time for this chunk (for time scale labels)
+            double startTimeSeconds =
+                    audioState.getCalculator().framesToSec(audioState.firstFrameOfChunk(myNum));
 
-            g2d.setRenderingHints(UiShapes.getRenderingHints());
-            g2d.setColor(UiColors.waveformBackground);
-            g2d.fillRect(0, 0, chunkWidthInPixels, height); // fill in background color
-            g2d.setColor(UiColors.waveformReferenceLineColor);
-            g2d.drawLine(0, height / 2, chunkWidthInPixels, height / 2); // draw reference line
-
-            // draw seconds line
-            double counter =
-                    audioState
-                            .getCalculator()
-                            .framesToSec(
-                                    audioState.firstFrameOfChunk(
-                                            myNum)); // this works because buffer size is in whole
-            // seconds
-            for (int i = 0; i < chunkWidthInPixels; i += UiConstants.zoomlessPixelsPerSecond) {
-                g2d.setColor(UiColors.waveformScaleLineColor);
-                g2d.drawLine(i, 0, i, height - 1);
-                g2d.setColor(UiColors.waveformScaleTextColor);
-                g2d.drawString(secFormat.format(counter), i + 5, height - 5);
-                counter++;
-            }
-
-            // actually draw the waveform (~5ms)
-            g2d.setColor(UiColors.firstChannelWaveformColor);
-            int topY;
-            int bottomY;
-            final int refLinePos = height / 2;
-            for (int i = 0; i < valsToDraw.length; i++) {
-                // apply yScale
-                double scaledSample = valsToDraw[i] * yScale;
-
-                // separately find wave position above and below reference line, in case we support
-                // stereo audio display in the future
-                topY = (int) (refLinePos - scaledSample);
-                bottomY = (int) (refLinePos + scaledSample);
-
-                g2d.drawLine(i, refLinePos, i, topY);
-                g2d.drawLine(i, refLinePos, i, bottomY);
-            }
+            // Use pure Graphics2D renderer (headless-compatible)
+            image =
+                    waveformRenderer.renderWaveformChunk(
+                            valsToDraw,
+                            chunkWidthInPixels,
+                            height,
+                            yScale,
+                            startTimeSeconds,
+                            biggestConsecutivePixelVals);
         }
 
         private double[] getValsToDraw(int chunkNum) {
