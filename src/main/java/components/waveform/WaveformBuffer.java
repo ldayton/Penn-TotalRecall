@@ -2,17 +2,13 @@ package components.waveform;
 
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
-import java.awt.AlphaComposite;
 import java.awt.Image;
 import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
 import state.PreferencesManager;
-import ui.UiConstants;
-import waveform.PixelScaler;
-import waveform.WaveformProcessor;
-import waveform.WaveformRenderer;
+import waveform.Waveform;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -30,16 +26,7 @@ public class WaveformBuffer extends Buffer {
     /** Audio chunk size in seconds for waveform buffering. */
     public static final int CHUNK_SIZE_SECONDS = 10;
 
-    private final AlphaComposite antiAliasingComposite =
-            AlphaComposite.getInstance(AlphaComposite.SRC_OVER, /* larger is darker */ 0.5F);
-
-    private final double preDataSeconds = 0.25;
-
     private final int numChunks;
-    private final int chunkWidthInPixels;
-
-    private final double minBand;
-    private final double maxBand;
 
     private static volatile WaveformChunk[] chunkArray;
 
@@ -47,38 +34,25 @@ public class WaveformBuffer extends Buffer {
 
     private int bufferedChunkNum;
     private int bufferedHeight;
-
-    private double biggestConsecutivePixelVals;
     private final PreferencesManager preferencesManager;
     private final AudioState audioState;
-    private final PixelScaler pixelScaler;
-    private final WaveformRenderer waveformRenderer;
-    private final WaveformProcessor waveformProcessor;
+    private final Waveform waveform;
 
     /**
      * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
      * the time the constructor runs.
      */
     @Inject
-    public WaveformBuffer(
-            PreferencesManager preferencesManager,
-            AudioState audioState,
-            PixelScaler pixelScaler,
-            WaveformRenderer waveformRenderer,
-            WaveformProcessor waveformProcessor) {
+    public WaveformBuffer(PreferencesManager preferencesManager, AudioState audioState) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
-        this.pixelScaler = pixelScaler;
-        this.waveformRenderer = waveformRenderer;
-        this.waveformProcessor = waveformProcessor;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
-        chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
 
-        // bandpass filter ranges
+        // Calculate bandpass filter ranges
         double minPref =
                 preferencesManager.getInt(
                         PreferenceKeys.MIN_BAND_PASS, PreferenceKeys.DEFAULT_MIN_BAND_PASS);
@@ -87,18 +61,18 @@ public class WaveformBuffer extends Buffer {
                         PreferenceKeys.MAX_BAND_PASS, PreferenceKeys.DEFAULT_MAX_BAND_PASS);
         double sampleRate = audioState.getCalculator().frameRate();
 
-        double tmpMinBand = minPref / sampleRate;
-        double tmpMaxBand = maxPref / sampleRate;
+        double minBand = minPref / sampleRate;
+        double maxBand = maxPref / sampleRate;
 
         final double highestBand = 0.4999999;
         final double lowestBand = 0.0000001;
         boolean bandCorrected = false;
-        if (tmpMaxBand >= 0.5) {
-            tmpMaxBand = highestBand;
+        if (maxBand >= 0.5) {
+            maxBand = highestBand;
             bandCorrected = true;
         }
-        if (tmpMinBand <= 0) {
-            tmpMinBand = lowestBand;
+        if (minBand <= 0) {
+            minBand = lowestBand;
             bandCorrected = true;
         }
         if (bandCorrected) {
@@ -106,14 +80,20 @@ public class WaveformBuffer extends Buffer {
             String message =
                     "Nyquist's Theorem won't let me filter the frequencies you have requested!\n"
                             + "Filtering "
-                            + format.format(tmpMinBand * sampleRate)
+                            + format.format(minBand * sampleRate)
                             + " Hz to "
-                            + format.format(tmpMaxBand * sampleRate)
+                            + format.format(maxBand * sampleRate)
                             + " Hz instead.";
             logger.warn(message);
         }
-        minBand = tmpMinBand;
-        maxBand = tmpMaxBand;
+
+        // Create waveform domain model - no DI needed, just new!
+        this.waveform =
+                new Waveform(
+                        audioState.getCurrentAudioFileAbsolutePath(),
+                        minBand,
+                        maxBand,
+                        audioState.getFmodCore());
     }
 
     /**
@@ -254,43 +234,7 @@ public class WaveformBuffer extends Buffer {
          */
         private WaveformChunk(int chunkNum, int height) {
             myNum = chunkNum;
-
-            double[] valsToDraw = getValsToDraw(chunkNum);
-            if (biggestConsecutivePixelVals <= 0) {
-                biggestConsecutivePixelVals =
-                        pixelScaler.getRenderingPeak(
-                                valsToDraw, UiConstants.zoomlessPixelsPerSecond / 2);
-            }
-
-            // Calculate Y-axis scaling for waveform amplitude display
-            double yScale =
-                    waveformRenderer.calculateYScale(
-                            valsToDraw, height, biggestConsecutivePixelVals);
-
-            // Calculate start time for this chunk (for time scale labels)
-            double startTimeSeconds =
-                    audioState.getCalculator().framesToSec(audioState.firstFrameOfChunk(myNum));
-
-            // Use pure Graphics2D renderer (headless-compatible)
-            image =
-                    waveformRenderer.renderWaveformChunk(
-                            valsToDraw,
-                            chunkWidthInPixels,
-                            height,
-                            yScale,
-                            startTimeSeconds,
-                            biggestConsecutivePixelVals);
-        }
-
-        private double[] getValsToDraw(int chunkNum) {
-            return waveformProcessor.processAudioForDisplay(
-                    audioState.getCurrentAudioFileAbsolutePath(),
-                    chunkNum,
-                    CHUNK_SIZE_SECONDS,
-                    preDataSeconds,
-                    minBand,
-                    maxBand,
-                    chunkWidthInPixels);
+            image = waveform.renderChunk(chunkNum, height);
         }
 
         /**

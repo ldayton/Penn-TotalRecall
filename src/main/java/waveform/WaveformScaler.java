@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Scaling utilities for waveform amplitude visualization. */
-public final class WaveformScaler {
+final class WaveformScaler {
     private static final Logger logger = LoggerFactory.getLogger(WaveformScaler.class);
 
     /** Calculates optimal pixel scaling factor for waveform display. */

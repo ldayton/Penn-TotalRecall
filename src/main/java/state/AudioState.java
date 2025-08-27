@@ -3,6 +3,7 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
+import com.google.inject.Provider;
 import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -28,10 +29,6 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.OsPath;
-import waveform.PixelScaler;
-import waveform.WaveformProcessor;
-import waveform.WaveformRenderer;
-import waveform.WaveformScaler;
 
 /**
  * Injectable service that manages the essential state of the program. This replaces the static
@@ -68,10 +65,7 @@ public class AudioState implements AudioProgressHandler {
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
-    private final WaveformScaler waveformScaler;
-    private final WaveformRenderer waveformRenderer;
-    private final WaveformProcessor waveformProcessor;
-    private final PixelScaler pixelScaler;
+    private final Provider<WaveformBuffer> waveformBufferProvider;
 
     @Inject
     public AudioState(
@@ -79,18 +73,16 @@ public class AudioState implements AudioProgressHandler {
             FmodCore fmodCore,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
-            WaveformScaler waveformScaler,
-            WaveformRenderer waveformRenderer,
-            WaveformProcessor waveformProcessor,
-            PixelScaler pixelScaler) {
+            Provider<WaveformBuffer> waveformBufferProvider) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
-        this.waveformScaler = waveformScaler;
-        this.waveformRenderer = waveformRenderer;
-        this.waveformProcessor = waveformProcessor;
-        this.pixelScaler = pixelScaler;
+        this.waveformBufferProvider = waveformBufferProvider;
+    }
+
+    public FmodCore getFmodCore() {
+        return fmodCore;
     }
 
     /**
@@ -190,13 +182,7 @@ public class AudioState implements AudioProgressHandler {
             }
 
             // start new waveform buffer
-            waveformBuffer =
-                    new WaveformBuffer(
-                            preferencesManager,
-                            this,
-                            pixelScaler,
-                            waveformRenderer,
-                            waveformProcessor);
+            waveformBuffer = waveformBufferProvider.get();
             waveformBuffer.start();
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));

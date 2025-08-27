@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Converts audio samples to pixel resolution and applies smoothing. */
-public final class PixelScaler {
+final class PixelScaler {
     private static final Logger logger = LoggerFactory.getLogger(PixelScaler.class);
 
     /** Converts audio samples to pixel resolution for display. */

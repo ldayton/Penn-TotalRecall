@@ -36,10 +36,6 @@ import java.net.http.HttpClient;
 import state.PreferencesManager;
 import ui.DialogService;
 import ui.MainWindowAccess;
-import waveform.PixelScaler;
-import waveform.WaveformProcessor;
-import waveform.WaveformRenderer;
-import waveform.WaveformScaler;
 
 /**
  * Guice module for dependency injection configuration.
@@ -84,31 +80,6 @@ public class AppModule extends AbstractModule {
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
-    }
-
-    @Provides
-    @Singleton
-    PixelScaler providePixelScaler() {
-        return new PixelScaler();
-    }
-
-    @Provides
-    @Singleton
-    WaveformScaler provideWaveformScaler() {
-        return new WaveformScaler();
-    }
-
-    @Provides
-    @Singleton
-    WaveformRenderer provideWaveformRenderer(WaveformScaler waveformScaler) {
-        return new WaveformRenderer(waveformScaler);
-    }
-
-    @Provides
-    @Singleton
-    WaveformProcessor provideWaveformProcessor(
-            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler) {
-        return new WaveformProcessor(fmodCore, pixelScaler, waveformScaler);
     }
 
     @Provides

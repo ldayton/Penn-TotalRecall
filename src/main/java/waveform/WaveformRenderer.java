@@ -9,7 +9,7 @@ import ui.UiConstants;
 import ui.UiShapes;
 
 /** Headless Graphics2D waveform rendering for display visualization. */
-public final class WaveformRenderer {
+final class WaveformRenderer {
 
     private final DecimalFormat secFormat = new DecimalFormat("0.00s");
     private final WaveformScaler waveformScaler;
