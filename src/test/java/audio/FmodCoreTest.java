@@ -309,13 +309,13 @@ class FmodCoreTest {
     @Test
     @DisplayName("readAudioChunk should read first chunk from sample file")
     void readAudioChunk_FirstChunk_ShouldSucceed() throws Exception {
-        // Try to read first chunk (this is failing in WaveformBuffer)
+        // Try to read first chunk (this is failing in WaveformChunkCache)
         FmodCore.ChunkData chunkData =
                 lib.readAudioChunk(
                         testFile.getAbsolutePath(),
                         0, // First chunk
-                        5.0, // 5 seconds per chunk (same as WaveformBuffer.CHUNK_SIZE_SECONDS)
-                        0.1 // 0.1 seconds overlap (same as WaveformBuffer.preDataSeconds)
+                        5.0, // 5 seconds per chunk (same as WaveformChunkCache.CHUNK_SIZE_SECONDS)
+                        0.1 // 0.1 seconds overlap (same as WaveformChunkCache.preDataSeconds)
                         );
 
         // Verify we got some data

@@ -58,22 +58,22 @@ class AudioCalculatorTest {
     }
 
     @Test
-    void testWaveformBufferArraySizeDoesNotOverflow() throws Exception {
+    void testWaveformChunkCacheArraySizeDoesNotOverflow() throws Exception {
         AudioFile audioFile = new AudioFile(testAudioFile.getAbsolutePath());
         AudioCalculator calculator = new AudioCalculator(audioFile);
 
         double frameRate = calculator.frameRate();
-        int chunkSizeSeconds = 10; // Same as WaveformBuffer.CHUNK_SIZE_SECONDS
-        double preDataSeconds = 0.25; // Same as WaveformBuffer preDataSeconds
+        int chunkSizeSeconds = 10; // Same as WaveformChunkCache.CHUNK_SIZE_SECONDS
+        double preDataSeconds = 0.25; // Same as WaveformChunkCache preDataSeconds
 
         System.out.println("Frame rate for array calculation: " + frameRate);
 
-        // This is the exact calculation that WaveformBuffer does in getValsToDraw()
+        // This is the exact calculation that WaveformChunkCache does in getValsToDraw()
         long samplesArraySize = (long) (frameRate * chunkSizeSeconds);
         long preDataSizeInFrames = (long) (frameRate * preDataSeconds);
         long totalArraySize = samplesArraySize + preDataSizeInFrames;
 
-        System.out.println("WaveformBuffer would allocate array of size: " + totalArraySize);
+        System.out.println("WaveformChunkCache would allocate array of size: " + totalArraySize);
 
         // JVM array size limit is typically Integer.MAX_VALUE - 2 to Integer.MAX_VALUE - 8
         long maxArraySize = Integer.MAX_VALUE - 8;

@@ -67,10 +67,15 @@ public class WaveformDisplay extends JComponent {
     private static WaveformDisplay instance;
     private static AudioState audioState;
     private final EventDispatchBus eventBus;
+    private final WaveformChunkCache waveformChunkCache;
 
     @Inject
-    public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
+    public WaveformDisplay(
+            AudioState audioState,
+            EventDispatchBus eventBus,
+            WaveformChunkCache waveformChunkCache) {
         WaveformDisplay.audioState = audioState;
+        this.waveformChunkCache = waveformChunkCache;
         setOpaque(true);
         setBackground(UiColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
@@ -451,19 +456,16 @@ public class WaveformDisplay extends JComponent {
                 return;
             }
 
-            WaveformChunk[] chunks = WaveformBuffer.getWaveformChunks();
-            if (chunks == null) { // occurs only while WaveformBuffer's constructor is being run
-                return;
-            }
-            if (chunks[chunkNum] == null) {
-                return;
-            }
-            curRefreshChunk = chunks[chunkNum];
+            curRefreshChunk = waveformChunkCache.getChunk(chunkNum, refreshHeight);
             if (chunkNum > 0) {
-                previousRefreshChunk = chunks[chunkNum - 1];
+                previousRefreshChunk = waveformChunkCache.getChunk(chunkNum - 1, refreshHeight);
+            } else {
+                previousRefreshChunk = null;
             }
-            if (chunkNum < chunks.length - 1) {
-                nextRefreshChunk = chunks[chunkNum + 1];
+            if (chunkNum < audioState.lastChunkNum()) {
+                nextRefreshChunk = waveformChunkCache.getChunk(chunkNum + 1, refreshHeight);
+            } else {
+                nextRefreshChunk = null;
             }
 
             wasPlaying = isPlaying;
