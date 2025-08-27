@@ -1,30 +1,28 @@
 package control;
 
+import audio.FmodAudioFormatDetector;
+import audio.FmodCore;
 import components.audiofiles.AudioFile;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
+import env.AppConfig;
+import env.Platform;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JavaSound distributes useful information about a file among sever classes in a way that can be
- * annoying if you don't have the API memorized. This class stores and determines everything the
- * program needs to know about an audio file.
+ * FMOD-based audio format detection and calculation utility that provides comprehensive
+ * information about audio files using FMOD's format detection capabilities.
+ *
+ * <p>This class stores and determines everything the program needs to know about an audio file,
+ * supporting all FMOD-compatible formats including various bit depths, channel configurations,
+ * and encodings.
  *
  * <p>Audio checking policy: <code>AudioCalculator</code> constructor throws exceptions concerning
- * Java Sound's inability to handle a file, as well as exceptions for this program's inability to
+ * FMOD's inability to handle a file, as well as exceptions for this program's inability to
  * handle a format. No other checking needs to be conducted after an AudioCalculator is successfully
  * created. No other methods should throw compatibility exceptions, but should instead suppress them
  * with try/catch blocks if required by Java.
- *
- * <p>Sample and frame rates are guaranteed the same. AudioCalculator constructor rejects audio for
- * which they are different.
  *
  * <p>The current <code>AudioCalculator</code> should be used to perform any and all math
  * conversions related to the open audio file.
@@ -37,17 +35,13 @@ public class AudioCalculator {
     // from constructor
     private final AudioFile audioFile;
 
-    // from AudioInputStream
+    // from FMOD format detection
     private long numSampleFrames;
-
-    // from AudioFormat
-    private boolean isBigEndian;
     private int numChannels;
     private int sampleSizeInBits;
     private int frameSizeInBits;
-    private float framesPerSecond;
     private float sampleRate;
-    private AudioFormat.Encoding encoding;
+    private String formatDescription;
 
     // computed
     private double durationInSeconds;
@@ -57,53 +51,50 @@ public class AudioCalculator {
      * class.
      *
      * @param audioFile the file containing the audio
-     * @throws FileNotFoundException
-     * @throws UnsupportedAudioFileException If Java Sound or some other part of this program can't
-     *     handle the file
-     * @throws IOException
+     * @throws FileNotFoundException if the audio file does not exist
+     * @throws IOException if FMOD cannot handle the file or format detection fails
      */
-    public AudioCalculator(AudioFile audioFile)
-            throws FileNotFoundException, UnsupportedAudioFileException, IOException {
+    public AudioCalculator(AudioFile audioFile) throws FileNotFoundException, IOException {
         this.audioFile = audioFile;
 
-        // open an AudioInputStream
-        AudioInputStream aiStream =
-                AudioSystem.getAudioInputStream(
-                        new BufferedInputStream(new FileInputStream(audioFile)));
-
-        if (aiStream.getFormat().getFrameSize() != 2) {
-            throw new UnsupportedAudioFileException("only 16-bit audio is supported");
-        }
-        if (aiStream.getFormat().getChannels() != 1) {
-            throw new UnsupportedAudioFileException("only mono audio is supported");
+        // Check if file exists
+        if (!audioFile.exists()) {
+            throw new FileNotFoundException("Audio file not found: " + audioFile.getAbsolutePath());
         }
 
-        // grab info from AudioInputStream
-        numSampleFrames = aiStream.getFrameLength();
-        AudioFormat format = aiStream.getFormat();
+        // Use FMOD to detect format information
+        AppConfig appConfig = new AppConfig();
+        Platform platform = new Platform();
+        audio.AudioSystemManager audioManager = new audio.AudioSystemManager(appConfig, platform);
+        FmodCore fmodCore = new FmodCore(audioManager);
+        FmodAudioFormatDetector detector = new FmodAudioFormatDetector(fmodCore);
+        
+        try {
+            FmodCore.AudioFormatInfo formatInfo = detector.detectFormat(audioFile);
+            
+            // Store format information from FMOD
+            numSampleFrames = formatInfo.getFrameLength();
+            numChannels = formatInfo.getChannels();
+            sampleSizeInBits = formatInfo.getBitsPerSample();
+            sampleRate = formatInfo.getSampleRate();
+            formatDescription = formatInfo.getFormatDescription();
 
-        // grab info from AudioFormat
-        numChannels = format.getChannels();
-        framesPerSecond = format.getFrameRate();
-        sampleRate = format.getSampleRate();
-        sampleSizeInBits = format.getSampleSizeInBits();
-        isBigEndian = format.isBigEndian();
-        encoding = format.getEncoding();
+            // Compute derived values
+            durationInSeconds = formatInfo.getDurationInSeconds();
+            frameSizeInBits = sampleSizeInBits * numChannels;
 
-        // computed
-        durationInSeconds = (double) numSampleFrames / (double) framesPerSecond;
-        frameSizeInBits = sampleSizeInBits * numChannels;
-
-        //		printInfo();
-
-        if (sampleSizeInBits != 16) {
-            throw new UnsupportedAudioFileException("Only 16 bit encodings supported.");
-        }
-        if (framesPerSecond != sampleRate) {
-            // this is just a sanity check. in uncompressed audio sample and frame rates should be
-            // the same
-            throw new UnsupportedAudioFileException(
-                    "Frame rate doesn't equal sample rate. Unsupported.");
+            logger.debug("Audio format detected: {}", formatInfo);
+            
+        } catch (IOException e) {
+            logger.error("Failed to detect audio format for file: {}", audioFile.getAbsolutePath(), e);
+            throw new IOException("Failed to detect audio format: " + e.getMessage(), e);
+        } finally {
+            // Clean up FMOD resources
+            try {
+                fmodCore.shutdown();
+            } catch (Exception e) {
+                logger.warn("Failed to shutdown FMOD core during format detection", e);
+            }
         }
     }
 
@@ -113,20 +104,16 @@ public class AudioCalculator {
                 "\n"
                         + "-- AudioCalculator --\n"
                         + "file name: {}\n"
-                        + "encoding: {}\n"
+                        + "format: {}\n"
                         + "number of channels: {}\n"
-                        + "bigEndian: {}\n"
                         + "sample size in bits: {}\n"
-                        + "frames per second: {}\n"
                         + "sample rate: {}\n"
                         + "num frames: {}\n"
                         + "predicted duration: {} seconds\n",
                 audioFile.getName(),
-                encoding,
+                formatDescription,
                 numChannels,
-                isBigEndian,
                 sampleSizeInBits,
-                framesPerSecond,
                 sampleRate,
                 numSampleFrames,
                 durationInSeconds());
@@ -145,7 +132,11 @@ public class AudioCalculator {
     }
 
     public double frameRate() {
-        return framesPerSecond;
+        return sampleRate;
+    }
+
+    public double sampleRate() {
+        return sampleRate;
     }
 
     public int sampleSizeInBits() {

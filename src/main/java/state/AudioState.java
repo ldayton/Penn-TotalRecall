@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.OsPath;
@@ -102,9 +101,6 @@ public class AudioState implements AudioProgressHandler {
             } catch (FileNotFoundException e) {
                 logger.error("Audio file not found: " + file.getAbsolutePath(), e);
                 throw new RuntimeException("Audio file not found: " + file.getAbsolutePath(), e);
-            } catch (UnsupportedAudioFileException e) {
-                logger.error("Unsupported audio format: " + file.getAbsolutePath(), e);
-                throw new RuntimeException("Unsupported audio format: " + e.getMessage(), e);
             } catch (IOException e) {
                 logger.error("Error opening audio file: " + file.getAbsolutePath(), e);
                 throw new RuntimeException(

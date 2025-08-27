@@ -2,7 +2,8 @@ package components.audiofiles;
 
 import env.Constants;
 import java.io.File;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import util.OsPath;
@@ -20,12 +21,16 @@ import util.OsPath;
  *
  * <p>NOTE: This class does NOT represent the actual audio data. For that, see {@link
  * control.AudioCalculator}.
+ * 
+ * <p><strong>Thread Safety:</strong> This class is thread-safe. All state modifications are
+ * properly synchronized using atomic operations and thread-safe collections. Multiple threads
+ * can safely access and modify AudioFile instances concurrently.
  */
 public class AudioFile extends File {
 
-    private final HashSet<ChangeListener> listeners; // notified when completion status changes
+    private final ConcurrentHashMap<ChangeListener, Boolean> listeners; // thread-safe collection for listeners
 
-    private boolean done; // whether or not the AudioFile is done being annotated.
+    private final AtomicBoolean done; // atomic boolean for completion status
 
     /**
      * Creates a new <code>AudioFile</code> from the given path.
@@ -41,7 +46,8 @@ public class AudioFile extends File {
      */
     public AudioFile(String pathname) throws AudioFilePathException {
         super(pathname);
-        listeners = new HashSet<ChangeListener>();
+        listeners = new ConcurrentHashMap<>();
+        done = new AtomicBoolean(false);
         updateDoneStatus();
     }
 
@@ -63,7 +69,7 @@ public class AudioFile extends File {
      * @return <code>true</code> iff this <code>AudioFile</code> is done being annotated.
      */
     public boolean isDone() {
-        return done;
+        return done.get();
     }
 
     /**
@@ -123,19 +129,19 @@ public class AudioFile extends File {
     }
 
     /**
-     * Sets the <code>done</done> field by finding if a temporary annotation file or a final annotation file is present in the same directory as the this <code>File</code>.
+     * Sets the <code>done</code> field by finding if a temporary annotation file or a final annotation file is present in the same directory as this <code>File</code>.
      * Informs listeners if the completion status changes.
+     *
+     * <p>This method is thread-safe and can be called from multiple threads concurrently.
      *
      * @throws AudioFilePathException If both the temporary and final annotation files are present
      */
-    // it's okay that the listeners update loop is entered even if this call came from the
-    // constructor
-    // since there's no constructor that takes in ChangeListeners, that loop will iterate zero times
     public void updateDoneStatus() throws AudioFilePathException {
-        boolean savedStatus = done;
+        boolean savedStatus = done.get();
         boolean updatedStatus = savedStatus;
         boolean annFileExists = false;
         boolean tmpFileExists = false;
+        
         File annFile =
                 new File(
                         OsPath.basename(getAbsolutePath())
@@ -146,6 +152,7 @@ public class AudioFile extends File {
                         OsPath.basename(getAbsolutePath())
                                 + "."
                                 + Constants.temporaryAnnotationFileExtension);
+        
         if (annFile.exists()) {
             annFileExists = true;
             updatedStatus = true;
@@ -161,9 +168,12 @@ public class AudioFile extends File {
                             + "\n"
                             + tmpFile.getPath());
         }
-        done = updatedStatus;
-        if (savedStatus != done) {
-            for (ChangeListener listener : listeners) {
+        
+        // Atomic update - only notify listeners if status actually changed
+        boolean statusChanged = done.compareAndSet(savedStatus, updatedStatus);
+        if (statusChanged) {
+            // Thread-safe iteration over listeners
+            for (ChangeListener listener : listeners.keySet()) {
                 listener.stateChanged(new ChangeEvent(this));
             }
         }
@@ -173,20 +183,22 @@ public class AudioFile extends File {
      * Adds a <code>ChangeListener</code> to be notified of updates in this <code>AudioFile</code>'s
      * completion status.
      *
+     * <p>This method is thread-safe and can be called from multiple threads concurrently.
+     *
      * @param listen The <code>ChangeListener</code> to be added.
      */
     public void addChangeListener(ChangeListener listen) {
-        listeners.add(listen);
+        listeners.put(listen, Boolean.TRUE);
     }
 
     /**
      * Removes all the <code>ChangeListeners</code> registered to receive updates from this <code>
      * AudioFile</code>.
+     *
+     * <p>This method is thread-safe and can be called from multiple threads concurrently.
      */
     public void removeAllChangeListeners() {
-        for (Object o : listeners.toArray()) {
-            listeners.remove(o);
-        }
+        listeners.clear();
     }
 
     /**
