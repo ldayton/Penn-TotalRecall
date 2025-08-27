@@ -100,7 +100,7 @@ public final class WaveformProcessor {
 
     /** Applies signal processing to raw audio data. */
     private AudioChunkData processSignal(AudioChunkData rawAudio, FrequencyRange frequencyFilter) {
-        double[] samples = rawAudio.amplitudeValues.clone();
+        double[] samples = rawAudio.amplitudeValues().clone();
 
         // Apply frequency filtering if samples exist
         if (samples.length > 0) {
@@ -114,10 +114,10 @@ public final class WaveformProcessor {
 
         return new AudioChunkData(
                 samples,
-                rawAudio.sampleRate,
+                rawAudio.sampleRate(),
                 0.0, // Peak calculated later by WaveformBuffer if needed
-                rawAudio.frameCount,
-                rawAudio.overlapFrames);
+                rawAudio.frameCount(),
+                rawAudio.overlapFrames());
     }
 
     /** Scales processed audio data to display pixel resolution. */
@@ -125,10 +125,10 @@ public final class WaveformProcessor {
         // Scale to display pixel resolution
         double[] displayAmplitudes =
                 pixelScaler.toPixelResolution(
-                        processedAudio.amplitudeValues,
-                        processedAudio.overlapFrames,
+                        processedAudio.amplitudeValues(),
+                        processedAudio.overlapFrames(),
                         targetPixelWidth,
-                        processedAudio.frameCount);
+                        processedAudio.frameCount());
 
         // Final visual smoothing
         pixelScaler.smoothPixels(displayAmplitudes);
