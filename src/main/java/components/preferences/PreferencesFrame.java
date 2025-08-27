@@ -164,8 +164,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         prefPanel.add(
                 new SeekSizePreference(
                         "Large Seek (ms)", SeekSizePreference.ShiftSize.LARGE_SHIFT));
-        BandPassFilterPreference bandPref = new BandPassFilterPreference("Band-Pass Filter Range");
-        prefPanel.add(bandPref);
         BooleanPreference warnExitPref =
                 new BooleanPreference(
                         "Warn on Exit",

@@ -26,18 +26,12 @@ public final class PreferenceKeys {
     public static final String WARN_FILE_SWITCH = "WARN_FILE_SWITCH";
     public static final String USE_EMACS = "USE_EMACS";
 
-    // Audio processing preferences
-    public static final String MIN_BAND_PASS = "MIN_BAND_PASS";
-    public static final String MAX_BAND_PASS = "MAX_BAND_PASS";
-
     // Seek and navigation preferences
     public static final String SMALL_SHIFT = "SMALL_SHIFT";
     public static final String MEDIUM_SHIFT = "MEDIUM_SHIFT";
     public static final String LARGE_SHIFT = "LARGE_SHIFT";
 
     // Default values
-    public static final int DEFAULT_MIN_BAND_PASS = 1000;
-    public static final int DEFAULT_MAX_BAND_PASS = 16000;
     public static final boolean DEFAULT_WARN_ON_EXIT = true;
     public static final boolean DEFAULT_WARN_FILE_SWITCH = true;
     public static final boolean DEFAULT_USE_EMACS = false;

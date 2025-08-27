@@ -1,13 +1,11 @@
 package components.waveform;
 
-import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.Image;
 import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
-import state.PreferencesManager;
 import waveform.Waveform;
 
 /**
@@ -34,7 +32,6 @@ public class WaveformBuffer extends Thread {
 
     private int bufferedChunkNum;
     private int bufferedHeight;
-    private final PreferencesManager preferencesManager;
     private final AudioState audioState;
     private final Waveform waveform;
 
@@ -43,8 +40,7 @@ public class WaveformBuffer extends Thread {
      * the time the constructor runs.
      */
     @Inject
-    public WaveformBuffer(PreferencesManager preferencesManager, AudioState audioState) {
-        this.preferencesManager = preferencesManager;
+    public WaveformBuffer(AudioState audioState) {
         this.audioState = audioState;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
@@ -52,27 +48,20 @@ public class WaveformBuffer extends Thread {
         bufferedChunkNum = -1;
         bufferedHeight = -1;
 
-        // Calculate bandpass filter ranges
-        double minPref =
-                preferencesManager.getInt(
-                        PreferenceKeys.MIN_BAND_PASS, PreferenceKeys.DEFAULT_MIN_BAND_PASS);
-        double maxPref =
-                preferencesManager.getInt(
-                        PreferenceKeys.MAX_BAND_PASS, PreferenceKeys.DEFAULT_MAX_BAND_PASS);
+        // Hardcoded bandpass filter ranges - who would change these anyway?
         double sampleRate = audioState.getCalculator().frameRate();
-
-        double minBand = minPref / sampleRate;
-        double maxBand = maxPref / sampleRate;
+        double tmpMinBand = 1000.0 / sampleRate; // 1000 Hz
+        double tmpMaxBand = 16000.0 / sampleRate; // 16000 Hz
 
         final double highestBand = 0.4999999;
         final double lowestBand = 0.0000001;
         boolean bandCorrected = false;
-        if (maxBand >= 0.5) {
-            maxBand = highestBand;
+        if (tmpMaxBand >= 0.5) {
+            tmpMaxBand = highestBand;
             bandCorrected = true;
         }
-        if (minBand <= 0) {
-            minBand = lowestBand;
+        if (tmpMinBand <= 0) {
+            tmpMinBand = lowestBand;
             bandCorrected = true;
         }
         if (bandCorrected) {
@@ -80,12 +69,15 @@ public class WaveformBuffer extends Thread {
             String message =
                     "Nyquist's Theorem won't let me filter the frequencies you have requested!\n"
                             + "Filtering "
-                            + format.format(minBand * sampleRate)
+                            + format.format(tmpMinBand * sampleRate)
                             + " Hz to "
-                            + format.format(maxBand * sampleRate)
+                            + format.format(tmpMaxBand * sampleRate)
                             + " Hz instead.";
             logger.warn(message);
         }
+
+        final double minBand = tmpMinBand;
+        final double maxBand = tmpMaxBand;
 
         // Create waveform domain model - no DI needed, just new!
         this.waveform =
