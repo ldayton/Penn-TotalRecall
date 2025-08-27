@@ -1,4 +1,4 @@
-package graphics;
+package waveform;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

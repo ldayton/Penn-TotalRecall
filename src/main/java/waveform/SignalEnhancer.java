@@ -1,4 +1,4 @@
-package audio.signal;
+package waveform;
 
 import jakarta.inject.Singleton;
 import marytts.signalproc.filter.BandPassFilter;
@@ -8,17 +8,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Pure signal processing operations for audio enhancement.
- * 
- * Handles filtering, envelope detection, and other signal processing tasks
- * without any display or rendering concerns.
+ *
+ * <p>Handles filtering, envelope detection, and other signal processing tasks without any display
+ * or rendering concerns.
  */
 @Singleton
 public class SignalEnhancer {
     private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
 
-    /**
-     * Applies bandpass filtering to audio samples using MaryTTS filter implementation.
-     */
+    /** Applies bandpass filtering to audio samples using MaryTTS filter implementation. */
     public double[] bandpassFilter(
             AudioDoubleDataSource audioSource,
             double minBand,
@@ -40,9 +38,7 @@ public class SignalEnhancer {
         return outputSamples;
     }
 
-    /**
-     * Applies envelope smoothing to reduce noise in audio signal.
-     */
+    /** Applies envelope smoothing to reduce noise in audio signal. */
     public double[] envelopeSmooth(double[] samples, int windowSize) {
         if (windowSize < 1) {
             throw new IllegalArgumentException("Window size must be >= 1: " + windowSize);
@@ -72,9 +68,7 @@ public class SignalEnhancer {
         return samples;
     }
 
-    /**
-     * Calculates peak amplitude for signal analysis.
-     */
+    /** Calculates peak amplitude for signal analysis. */
     public double calculatePeak(double[] samples, int skipInitialSamples) {
         if (samples.length < skipInitialSamples + 2) {
             return 0;

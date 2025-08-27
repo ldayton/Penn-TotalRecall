@@ -1,4 +1,4 @@
-package audio.signal;
+package waveform;
 
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -6,21 +6,23 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Display pixel scaling and smoothing operations.
- * 
- * Converts audio data to pixel resolution and applies visual smoothing
- * for optimal display quality.
+ *
+ * <p>Converts audio data to pixel resolution and applies visual smoothing for optimal display
+ * quality.
  */
 @Singleton
 public class PixelScaler {
     private static final Logger logger = LoggerFactory.getLogger(PixelScaler.class);
 
-    /**
-     * Converts audio samples to pixel resolution for display.
-     */
+    /** Converts audio samples to pixel resolution for display. */
     public double[] toPixelResolution(
-            double[] samples, int skipInitialSamples, int targetPixelWidth, int numSamplesAvailable) {
+            double[] samples,
+            int skipInitialSamples,
+            int targetPixelWidth,
+            int numSamplesAvailable) {
         if (targetPixelWidth <= 0) {
-            throw new IllegalArgumentException("Target pixel width must be > 0: " + targetPixelWidth);
+            throw new IllegalArgumentException(
+                    "Target pixel width must be > 0: " + targetPixelWidth);
         }
         if (skipInitialSamples < 0 || skipInitialSamples >= samples.length) {
             throw new IllegalArgumentException("Invalid skip count: " + skipInitialSamples);
@@ -51,9 +53,7 @@ public class PixelScaler {
         return pixelValues;
     }
 
-    /**
-     * Applies visual smoothing to pixel data to remove display artifacts.
-     */
+    /** Applies visual smoothing to pixel data to remove display artifacts. */
     public double[] smoothPixels(double[] pixelValues) {
         if (pixelValues.length < 3) {
             return pixelValues; // Need at least 3 points for smoothing
@@ -83,9 +83,7 @@ public class PixelScaler {
         return pixelValues;
     }
 
-    /**
-     * Calculates peak amplitude for rendering decisions.
-     */
+    /** Calculates peak amplitude for rendering decisions. */
     public double getRenderingPeak(double[] pixelValues, int skipInitialPixels) {
         if (pixelValues.length < skipInitialPixels + 2) {
             return 0;

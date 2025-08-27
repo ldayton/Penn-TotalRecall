@@ -5,10 +5,6 @@ import actions.ActionsManager;
 import audio.AudioSystemLoader;
 import audio.AudioSystemManager;
 import audio.FmodCore;
-import audio.signal.SampleMath;
-import audio.signal.WaveformProcessor;
-import audio.signal.SignalEnhancer;
-import audio.signal.PixelScaler;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.AppFocusTraversalPolicy;
@@ -35,13 +31,17 @@ import env.Platform;
 import env.ProgramVersion;
 import env.UpdateManager;
 import env.UserHomeProvider;
-import graphics.WaveformRenderer;
-import graphics.WaveformScaler;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 import state.PreferencesManager;
 import ui.DialogService;
 import ui.MainWindowAccess;
+import waveform.PixelScaler;
+import waveform.SampleMath;
+import waveform.SignalEnhancer;
+import waveform.WaveformProcessor;
+import waveform.WaveformRenderer;
+import waveform.WaveformScaler;
 
 /**
  * Guice module for dependency injection configuration.

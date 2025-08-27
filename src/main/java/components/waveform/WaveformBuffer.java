@@ -1,9 +1,6 @@
 package components.waveform;
 
-import audio.signal.PixelScaler;
-import audio.signal.WaveformProcessor;
 import env.PreferenceKeys;
-import graphics.WaveformRenderer;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Image;
@@ -13,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import state.AudioState;
 import state.PreferencesManager;
 import ui.UiConstants;
+import waveform.PixelScaler;
+import waveform.WaveformProcessor;
+import waveform.WaveformRenderer;
 
 /**
  * Handler for buffered portions of the waveform image.

@@ -3,8 +3,6 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
-import audio.signal.WaveformProcessor;
-import audio.signal.PixelScaler;
 import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -20,8 +18,6 @@ import events.AudioFileSwitchedEvent;
 import events.EventDispatchBus;
 import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
-import graphics.WaveformRenderer;
-import graphics.WaveformScaler;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -32,6 +28,10 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.OsPath;
+import waveform.PixelScaler;
+import waveform.WaveformProcessor;
+import waveform.WaveformRenderer;
+import waveform.WaveformScaler;
 
 /**
  * Injectable service that manages the essential state of the program. This replaces the static

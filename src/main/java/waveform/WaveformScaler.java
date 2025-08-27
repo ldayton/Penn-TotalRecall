@@ -1,4 +1,4 @@
-package graphics;
+package waveform;
 
 import com.google.inject.Singleton;
 import org.slf4j.Logger;

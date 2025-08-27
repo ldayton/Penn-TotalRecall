@@ -1,4 +1,4 @@
-package audio.signal;
+package waveform;
 
 import com.google.inject.Singleton;
 
