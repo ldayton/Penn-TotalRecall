@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Rectangle;
 
 /** Interface defining geometric operations needed by overlay components. */
-public interface WaveformGeometry {
+public interface WaveformCoordinateSystem {
     /** Returns the height of the waveform display area. */
     int getHeight();
 

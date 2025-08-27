@@ -9,21 +9,21 @@ import javax.swing.SwingUtilities;
 import state.AudioState;
 
 /** Mouse adapter for the waveform display, for use when {@link info.Constants#mouseMode}. */
-public class WaveformMouseAdapter implements MouseMotionListener, MouseListener {
+public class WaveformSelectionHandler implements MouseMotionListener, MouseListener {
 
     private final Component source;
     private final AudioState audioState;
-    private final WaveformGeometry waveformGeometry;
+    private final WaveformCoordinateSystem waveformCoordinateSystem;
     private final SelectionOverlay selectionOverlay;
 
-    protected WaveformMouseAdapter(
+    protected WaveformSelectionHandler(
             Component source,
             AudioState audioState,
-            WaveformGeometry waveformGeometry,
+            WaveformCoordinateSystem waveformCoordinateSystem,
             SelectionOverlay selectionOverlay) {
         this.source = source;
         this.audioState = audioState;
-        this.waveformGeometry = waveformGeometry;
+        this.waveformCoordinateSystem = waveformCoordinateSystem;
         this.selectionOverlay = selectionOverlay;
     }
 
@@ -59,7 +59,7 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
             int smallerX = Math.min(xs[0], xs[1]);
             smallerX = Math.max(0, smallerX);
             int largerX = Math.max(xs[0], xs[1]);
-            largerX = Math.min(largerX, waveformGeometry.asComponent().getWidth() - 1);
+            largerX = Math.min(largerX, waveformCoordinateSystem.asComponent().getWidth() - 1);
             if (largerX <= smallerX) {
                 return;
             }
@@ -68,8 +68,9 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
             audioState
                     .getPlayer()
                     .playShortInterval(
-                            waveformGeometry.displayXPixelToFrame((int) firstPoint.getX()),
-                            waveformGeometry.displayXPixelToFrame((int) secondPoint.getX()));
+                            waveformCoordinateSystem.displayXPixelToFrame((int) firstPoint.getX()),
+                            waveformCoordinateSystem.displayXPixelToFrame(
+                                    (int) secondPoint.getX()));
         }
     }
 

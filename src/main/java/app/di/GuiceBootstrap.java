@@ -74,7 +74,7 @@ public class GuiceBootstrap {
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
         // Initialize waveform components (this triggers creation of mouse listeners)
-        globalInjector.getInstance(components.waveform.WaveformInitializer.class);
+        globalInjector.getInstance(components.waveform.WaveformMouseSetup.class);
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 

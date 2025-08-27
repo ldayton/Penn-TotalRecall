@@ -6,21 +6,21 @@ import state.AudioState;
 
 /** Initializes waveform display components after DI resolution to avoid circular dependencies. */
 @Singleton
-public class WaveformInitializer {
+public class WaveformMouseSetup {
 
     private final WaveformDisplay waveformDisplay;
-    private final WaveformGeometry waveformGeometry;
+    private final WaveformCoordinateSystem waveformCoordinateSystem;
     private final SelectionOverlay selectionOverlay;
     private final AudioState audioState;
 
     @Inject
-    public WaveformInitializer(
+    public WaveformMouseSetup(
             WaveformDisplay waveformDisplay,
-            WaveformGeometry waveformGeometry,
+            WaveformCoordinateSystem waveformCoordinateSystem,
             SelectionOverlay selectionOverlay,
             AudioState audioState) {
         this.waveformDisplay = waveformDisplay;
-        this.waveformGeometry = waveformGeometry;
+        this.waveformCoordinateSystem = waveformCoordinateSystem;
         this.selectionOverlay = selectionOverlay;
         this.audioState = audioState;
 
@@ -29,9 +29,9 @@ public class WaveformInitializer {
     }
 
     private void initializeMouseListeners() {
-        WaveformMouseAdapter mouseAdapter =
-                new WaveformMouseAdapter(
-                        waveformDisplay, audioState, waveformGeometry, selectionOverlay);
+        WaveformSelectionHandler mouseAdapter =
+                new WaveformSelectionHandler(
+                        waveformDisplay, audioState, waveformCoordinateSystem, selectionOverlay);
 
         waveformDisplay.addMouseListener(mouseAdapter);
         waveformDisplay.addMouseMotionListener(mouseAdapter);

@@ -21,7 +21,7 @@ import ui.UiConstants;
 @Singleton
 public class SelectionOverlay extends JComponent {
 
-    private final WaveformGeometry waveformGeometry;
+    private final WaveformCoordinateSystem waveformCoordinateSystem;
     private final AlphaComposite composite;
 
     private volatile boolean highlightMode;
@@ -42,8 +42,8 @@ public class SelectionOverlay extends JComponent {
                             * (ReplayLast200MillisAction.duration / (double) 1000));
 
     @Inject
-    public SelectionOverlay(WaveformGeometry waveformGeometry) {
-        this.waveformGeometry = waveformGeometry;
+    public SelectionOverlay(WaveformCoordinateSystem waveformCoordinateSystem) {
+        this.waveformCoordinateSystem = waveformCoordinateSystem;
         composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F);
         flashMode = false;
         highlightMode = false;
@@ -69,10 +69,14 @@ public class SelectionOverlay extends JComponent {
             g2d.setColor(UiColors.replay200MillisFlashColor);
             int yPos =
                     (int)
-                            SwingUtilities.convertPoint(waveformGeometry.asComponent(), -1, 0, this)
+                            SwingUtilities.convertPoint(
+                                            waveformCoordinateSystem.asComponent(), -1, 0, this)
                                     .getY();
             g2d.fillRect(
-                    flashRectangleXPos, yPos, flashRectangleWidth, waveformGeometry.getHeight());
+                    flashRectangleXPos,
+                    yPos,
+                    flashRectangleWidth,
+                    waveformCoordinateSystem.getHeight());
         } else {
             setVisible(false);
         }
@@ -100,14 +104,17 @@ public class SelectionOverlay extends JComponent {
                                 : highlightDest.getX());
         int ySource =
                 (int)
-                        SwingUtilities.convertPoint(waveformGeometry.asComponent(), 0, 0, this)
+                        SwingUtilities.convertPoint(
+                                        waveformCoordinateSystem.asComponent(), 0, 0, this)
                                 .getY();
         int width = (int) Math.abs(highlightSource.getX() - highlightDest.getX());
-        int height = waveformGeometry.getHeight();
+        int height = waveformCoordinateSystem.getHeight();
         Rectangle naiveBounds = new Rectangle(xSource, ySource, width, height);
         Rectangle waveformBounds =
                 SwingUtilities.convertRectangle(
-                        waveformGeometry.asComponent(), waveformGeometry.getVisibleRect(), this);
+                        waveformCoordinateSystem.asComponent(),
+                        waveformCoordinateSystem.getVisibleRect(),
+                        this);
         highlightRect = naiveBounds.intersection(waveformBounds);
     }
 
@@ -124,8 +131,9 @@ public class SelectionOverlay extends JComponent {
             this.flashRectangleXPos =
                     (int)
                             SwingUtilities.convertPoint(
-                                            waveformGeometry.asComponent(),
-                                            waveformGeometry.getProgressBarXPos() - flashWidth,
+                                            waveformCoordinateSystem.asComponent(),
+                                            waveformCoordinateSystem.getProgressBarXPos()
+                                                    - flashWidth,
                                             -1,
                                             this)
                                     .getX();
