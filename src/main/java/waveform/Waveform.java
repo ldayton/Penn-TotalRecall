@@ -35,7 +35,7 @@ public final class Waveform {
     }
 
     /** Renders a chunk of waveform as an image with consistent scaling across chunks. */
-    public Image renderChunk(int chunkNumber, int heightPixels) {
+    Image renderChunk(int chunkNumber, int heightPixels) {
         final int chunkDurationSeconds = 10;
         final double preDataSeconds = 0.25;
         final int widthPixels = UiConstants.zoomlessPixelsPerSecond * chunkDurationSeconds;

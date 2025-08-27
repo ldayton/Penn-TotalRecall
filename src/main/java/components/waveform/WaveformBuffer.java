@@ -1,12 +1,11 @@
 package components.waveform;
 
 import jakarta.inject.Inject;
-import java.awt.Image;
-import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
 import waveform.Waveform;
+import waveform.WaveformChunk;
 
 /**
  * Handler for buffered portions of the waveform image.
@@ -42,50 +41,12 @@ public class WaveformBuffer extends Thread {
     @Inject
     public WaveformBuffer(AudioState audioState) {
         this.audioState = audioState;
+        this.waveform = audioState.getCurrentWaveform();
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
         chunkArray = new WaveformChunk[numChunks];
         bufferedChunkNum = -1;
         bufferedHeight = -1;
-
-        // Hardcoded bandpass filter ranges - who would change these anyway?
-        double sampleRate = audioState.getCalculator().frameRate();
-        double tmpMinBand = 1000.0 / sampleRate; // 1000 Hz
-        double tmpMaxBand = 16000.0 / sampleRate; // 16000 Hz
-
-        final double highestBand = 0.4999999;
-        final double lowestBand = 0.0000001;
-        boolean bandCorrected = false;
-        if (tmpMaxBand >= 0.5) {
-            tmpMaxBand = highestBand;
-            bandCorrected = true;
-        }
-        if (tmpMinBand <= 0) {
-            tmpMinBand = lowestBand;
-            bandCorrected = true;
-        }
-        if (bandCorrected) {
-            DecimalFormat format = new DecimalFormat("#");
-            String message =
-                    "Nyquist's Theorem won't let me filter the frequencies you have requested!\n"
-                            + "Filtering "
-                            + format.format(tmpMinBand * sampleRate)
-                            + " Hz to "
-                            + format.format(tmpMaxBand * sampleRate)
-                            + " Hz instead.";
-            logger.warn(message);
-        }
-
-        final double minBand = tmpMinBand;
-        final double maxBand = tmpMaxBand;
-
-        // Create waveform domain model - no DI needed, just new!
-        this.waveform =
-                new Waveform(
-                        audioState.getCurrentAudioFileAbsolutePath(),
-                        minBand,
-                        maxBand,
-                        audioState.getFmodCore());
     }
 
     /**
@@ -187,14 +148,16 @@ public class WaveformBuffer extends Thread {
                 chunkArray[curChunkNum - 2] = null;
             }
             if (curChunkNum + 1 <= chunkArray.length - 1) {
-                chunkArray[curChunkNum + 1] = new WaveformChunk(curChunkNum + 1, curHeight);
+                chunkArray[curChunkNum + 1] =
+                        new WaveformChunk(waveform, curChunkNum + 1, curHeight);
             }
         } else {
             if (curChunkNum + 2 <= chunkArray.length - 1) {
                 chunkArray[curChunkNum + 2] = null;
             }
             if (curChunkNum - 1 >= 0) {
-                chunkArray[curChunkNum - 1] = new WaveformChunk(curChunkNum - 1, curHeight);
+                chunkArray[curChunkNum - 1] =
+                        new WaveformChunk(waveform, curChunkNum - 1, curHeight);
             }
         }
     }
@@ -213,7 +176,7 @@ public class WaveformBuffer extends Thread {
             chunkArray[i] = null;
         }
         // fill current chunk
-        chunkArray[curChunkNum] = new WaveformChunk(curChunkNum, curHeight);
+        chunkArray[curChunkNum] = new WaveformChunk(waveform, curChunkNum, curHeight);
 
         int firstPriority;
         int secondPriority;
@@ -229,62 +192,12 @@ public class WaveformBuffer extends Thread {
 
         // fill first priority chunk, if it exists
         if (firstPriority >= 0 && firstPriority <= chunkArray.length - 1) {
-            chunkArray[firstPriority] = new WaveformChunk(firstPriority, curHeight);
+            chunkArray[firstPriority] = new WaveformChunk(waveform, firstPriority, curHeight);
         }
 
         // fill second priority chunk, if it exists
         if (secondPriority >= 0 && secondPriority <= chunkArray.length - 1) {
-            chunkArray[secondPriority] = new WaveformChunk(secondPriority, curHeight);
-        }
-    }
-
-    /** Wrapper class for a chunk of waveform image. */
-    public class WaveformChunk {
-
-        private final int myNum;
-        private final Image image;
-
-        /**
-         * Creates the <code>Image</code> of a chunk of waveform.
-         *
-         * @param chunkNum The chunk number whose image will be created
-         * @param height The height of the image
-         */
-        private WaveformChunk(int chunkNum, int height) {
-            myNum = chunkNum;
-            image = waveform.renderChunk(chunkNum, height);
-        }
-
-        /**
-         * In keeping with the Java API's recommendation, calls <code>Graphics.dispose()</code> on
-         * the stored image's <code>Graphics</code> context.
-         */
-        public void dispose() {
-            image.getGraphics().dispose();
-        }
-
-        /**
-         * Getter for the chunk number of this part of the waveform.
-         *
-         * @return The chunk number
-         */
-        public int getNum() {
-            return myNum;
-        }
-
-        /**
-         * Getter for the <code>Image</code> of this object's chunk of the waveform.
-         *
-         * @return The <code>Image</code> of the waveform, appropriate for double-buffering
-         */
-        public Image getImage() {
-            return image;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public String toString() {
-            return "WaveformChunk #" + myNum;
+            chunkArray[secondPriority] = new WaveformChunk(waveform, secondPriority, curHeight);
         }
     }
 }

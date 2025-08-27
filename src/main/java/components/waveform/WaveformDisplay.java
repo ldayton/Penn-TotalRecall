@@ -3,7 +3,6 @@ package components.waveform;
 import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
-import components.waveform.WaveformBuffer.WaveformChunk;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.ScreenSeekRequestedEvent;
@@ -29,6 +28,7 @@ import state.AudioState;
 import ui.UiColors;
 import ui.UiConstants;
 import ui.UiShapes;
+import waveform.WaveformChunk;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.

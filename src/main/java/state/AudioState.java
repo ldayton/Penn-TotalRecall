@@ -24,11 +24,13 @@ import jakarta.inject.Singleton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.OsPath;
+import waveform.Waveform;
 
 /**
  * Injectable service that manages the essential state of the program. This replaces the static
@@ -55,6 +57,7 @@ public class AudioState implements AudioProgressHandler {
     private final Stack<Long> playHistory = new Stack<Long>();
 
     private WaveformBuffer waveformBuffer;
+    private Waveform currentWaveform;
 
     private final String audioClosedMessage = "Audio Not Open. You must check first";
     private final String badStateString =
@@ -85,6 +88,45 @@ public class AudioState implements AudioProgressHandler {
         return fmodCore;
     }
 
+    public Waveform getCurrentWaveform() {
+        return currentWaveform;
+    }
+
+    private Waveform createWaveformForCurrentFile() {
+        // Hardcoded bandpass filter ranges - who would change these anyway?
+        double sampleRate = calculator.frameRate();
+        double tmpMinBand = 1000.0 / sampleRate; // 1000 Hz
+        double tmpMaxBand = 16000.0 / sampleRate; // 16000 Hz
+
+        final double highestBand = 0.4999999;
+        final double lowestBand = 0.0000001;
+        boolean bandCorrected = false;
+        if (tmpMaxBand >= 0.5) {
+            tmpMaxBand = highestBand;
+            bandCorrected = true;
+        }
+        if (tmpMinBand <= 0) {
+            tmpMinBand = lowestBand;
+            bandCorrected = true;
+        }
+        if (bandCorrected) {
+            DecimalFormat format = new DecimalFormat("#");
+            String message =
+                    "Nyquist's Theorem won't let me filter the frequencies you have requested!\n"
+                            + "Filtering "
+                            + format.format(tmpMinBand * sampleRate)
+                            + " Hz to "
+                            + format.format(tmpMaxBand * sampleRate)
+                            + " Hz instead.";
+            logger.warn(message);
+        }
+
+        final double minBand = tmpMinBand;
+        final double maxBand = tmpMaxBand;
+
+        return new Waveform(getCurrentAudioFileAbsolutePath(), minBand, maxBand, fmodCore);
+    }
+
     /**
      * Switches all of the program's state, including display, wordpool/annotation/file lists to the
      * provided file.
@@ -95,6 +137,7 @@ public class AudioState implements AudioProgressHandler {
      */
     public void switchFile(AudioFile file) {
         reset();
+        currentWaveform = null;
 
         if (file == null) {
             // Reset to default state - UI components will handle title updates
@@ -180,6 +223,9 @@ public class AudioState implements AudioProgressHandler {
                 List<Annotation> tmpAnns = AnnotationFileParser.parse(tmpFile);
                 AnnotationDisplay.addAnnotations(tmpAnns);
             }
+
+            // Create waveform for this audio file
+            currentWaveform = createWaveformForCurrentFile();
 
             // start new waveform buffer
             waveformBuffer = waveformBufferProvider.get();
