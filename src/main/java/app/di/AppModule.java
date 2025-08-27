@@ -21,6 +21,8 @@ import components.audiofiles.AudioFileList;
 import components.preferences.PreferencesFrame;
 import components.waveform.SelectionOverlay;
 import components.waveform.WaveformDisplay;
+import components.waveform.WaveformGeometry;
+import components.waveform.WaveformInitializer;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolList;
 import components.wordpool.WordpoolTextField;
@@ -67,6 +69,8 @@ public class AppModule extends AbstractModule {
         bind(SelectionOverlay.class).in(Singleton.class);
         bind(PreferencesFrame.class).in(Singleton.class);
         bind(WaveformDisplay.class).in(Singleton.class);
+        bind(WaveformGeometry.class).to(WaveformDisplay.class);
+        bind(WaveformInitializer.class).in(Singleton.class);
         bind(AudioFileDisplay.class).in(Singleton.class);
         bind(AnnotationDisplay.class).in(Singleton.class);
         bind(WordpoolDisplay.class).in(Singleton.class);

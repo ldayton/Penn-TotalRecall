@@ -1,7 +1,7 @@
 package components.waveform;
 
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.List;
@@ -15,6 +15,7 @@ import waveform.WaveformChunk;
 public class WaveformChunkCache {
     /** Audio chunk size in seconds for waveform buffering. */
     public static final int CHUNK_SIZE_SECONDS = 10;
+
     private static final int MAX_CACHE_SIZE = 3; // current + previous + next
 
     private final AudioState audioState;
@@ -26,21 +27,19 @@ public class WaveformChunkCache {
     @Inject
     public WaveformChunkCache(AudioState audioState) {
         this.audioState = audioState;
-        this.chunkCache = Caffeine.newBuilder()
-                .maximumSize(MAX_CACHE_SIZE)
-                .build(this::loadChunk);
+        this.chunkCache = Caffeine.newBuilder().maximumSize(MAX_CACHE_SIZE).build(this::loadChunk);
     }
 
     /** Gets chunk with async read-ahead prefetching of adjacent chunks. */
     public WaveformChunk getChunk(int chunkNumber, int height) {
         requireAudioLoaded();
-        
+
         ChunkKey key = new ChunkKey(chunkNumber, height);
         WaveformChunk chunk = chunkCache.get(key);
-        
+
         // Async prefetch adjacent chunks without blocking
         prefetchAdjacentAsync(chunkNumber, height);
-        
+
         return chunk;
     }
 
@@ -71,14 +70,16 @@ public class WaveformChunkCache {
     /** Async prefetch adjacent chunks without blocking main thread. */
     private void prefetchAdjacentAsync(int chunkNumber, int height) {
         int maxChunk = audioState.lastChunkNum();
-        
+
         // Build list of adjacent chunks to prefetch
-        var adjacentKeys = List.of(
-            chunkNumber > 0 ? new ChunkKey(chunkNumber - 1, height) : null,
-            chunkNumber < maxChunk ? new ChunkKey(chunkNumber + 1, height) : null
-        ).stream()
-         .filter(key -> key != null)
-         .toList();
+        var adjacentKeys = new java.util.ArrayList<ChunkKey>();
+
+        if (chunkNumber > 0) {
+            adjacentKeys.add(new ChunkKey(chunkNumber - 1, height));
+        }
+        if (chunkNumber < maxChunk) {
+            adjacentKeys.add(new ChunkKey(chunkNumber + 1, height));
+        }
 
         // Async prefetch - don't block for results
         if (!adjacentKeys.isEmpty()) {

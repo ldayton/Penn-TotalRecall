@@ -17,12 +17,14 @@ import state.AudioState;
 public class ZoomAction extends BaseAction {
 
     private final AudioState audioState;
+    private final WaveformDisplay waveformDisplay;
     private final boolean zoomIn;
 
     @Inject
-    public ZoomAction(AudioState audioState) {
+    public ZoomAction(AudioState audioState, WaveformDisplay waveformDisplay) {
         super("Zoom", "Zoom waveform display");
         this.audioState = audioState;
+        this.waveformDisplay = waveformDisplay;
         this.zoomIn = true; // Default to zoom in
     }
 
@@ -36,9 +38,9 @@ public class ZoomAction extends BaseAction {
     @Override
     protected void performAction(ActionEvent e) {
         if (zoomIn) {
-            WaveformDisplay.zoomX(true);
+            waveformDisplay.zoomX(true);
         } else {
-            WaveformDisplay.zoomX(false);
+            waveformDisplay.zoomX(false);
         }
     }
 

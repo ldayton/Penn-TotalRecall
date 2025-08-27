@@ -73,6 +73,9 @@ public class GuiceBootstrap {
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
+        // Initialize waveform components (this triggers creation of mouse listeners)
+        globalInjector.getInstance(components.waveform.WaveformInitializer.class);
+
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Register all UpdatingAction instances with ActionsManager

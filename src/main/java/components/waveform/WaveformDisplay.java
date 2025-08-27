@@ -11,6 +11,7 @@ import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -36,7 +37,7 @@ import waveform.WaveformChunk;
  * <p>Keep in mind that events other than the repaint timer going off can cause repaints.
  */
 @Singleton
-public class WaveformDisplay extends JComponent {
+public class WaveformDisplay extends JComponent implements WaveformGeometry {
     private static final Logger logger = LoggerFactory.getLogger(WaveformDisplay.class);
 
     /** Maximum pixels to interpolate when rendering waveform gaps. */
@@ -55,8 +56,6 @@ public class WaveformDisplay extends JComponent {
 
     private volatile boolean chunkInProgress;
 
-    private static volatile int progressBarXPos;
-
     private long refreshFrame;
     private int refreshWidth;
     private int refreshHeight;
@@ -64,17 +63,18 @@ public class WaveformDisplay extends JComponent {
     private WaveformChunk curRefreshChunk;
     private WaveformChunk nextRefreshChunk;
 
-    private static WaveformDisplay instance;
-    private static AudioState audioState;
+    private final AudioState audioState;
     private final EventDispatchBus eventBus;
     private final WaveformChunkCache waveformChunkCache;
+
+    private volatile int progressBarXPos;
 
     @Inject
     public WaveformDisplay(
             AudioState audioState,
             EventDispatchBus eventBus,
             WaveformChunkCache waveformChunkCache) {
-        WaveformDisplay.audioState = audioState;
+        this.audioState = audioState;
         this.waveformChunkCache = waveformChunkCache;
         setOpaque(true);
         setBackground(UiColors.waveformBackground);
@@ -89,37 +89,20 @@ public class WaveformDisplay extends JComponent {
                         getParent().requestFocusInWindow();
                     }
                 });
-        addMouseListener(new WaveformMouseAdapter(this, audioState));
-        addMouseMotionListener(new WaveformMouseAdapter(this, audioState));
+        // Mouse listeners will be added after DI resolution to avoid circular dependency
 
         this.eventBus = eventBus;
 
         // Subscribe to waveform refresh events
         eventBus.subscribe(this);
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
-    public static WaveformDisplay getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "WaveformDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
-    }
-
-    public static int height() {
-        return instance.getHeight();
-    }
-
-    public static void zoomX(boolean in) {
+    public void zoomX(boolean in) {
         if (in) {
-            instance.pixelsPerSecond += UiConstants.xZoomAmount;
+            pixelsPerSecond += UiConstants.xZoomAmount;
         } else {
-            if (instance.pixelsPerSecond >= UiConstants.xZoomAmount + 1) {
-                instance.pixelsPerSecond -= UiConstants.xZoomAmount;
+            if (pixelsPerSecond >= UiConstants.xZoomAmount + 1) {
+                pixelsPerSecond -= UiConstants.xZoomAmount;
             }
         }
     }
@@ -281,7 +264,7 @@ public class WaveformDisplay extends JComponent {
         if (audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
             for (int i = 0; i < anns.length; i++) {
                 int annX =
-                        WaveformDisplay.frameToDisplayXPixel(
+                        frameToDisplayXPixel(
                                 audioState.getCalculator().millisToFrames(anns[i].getTime()));
                 if (progressBarXPos == annX) {
                     foundOverlap = true;
@@ -358,32 +341,32 @@ public class WaveformDisplay extends JComponent {
                         * audioState.getCalculator().framesToSec(frame));
     }
 
-    public static int frameToAbsoluteXPixel(long frame) {
-        if (audioState.audioOpen()) {
-            return instance.absoluteX(frame);
+    public int frameToAbsoluteXPixel(long frame) {
+        if (!audioState.audioOpen()) {
+            throw new IllegalStateException("audio not open");
         }
-        throw new IllegalStateException("audio not open");
+        return absoluteX(frame);
     }
 
-    public static int frameToDisplayXPixel(long frame) {
-        if (audioState.audioOpen()) {
-            return instance.frameToComponentX(frame);
+    public int frameToDisplayXPixel(long frame) {
+        if (!audioState.audioOpen()) {
+            throw new IllegalStateException("audio not open");
         }
-        throw new IllegalStateException("audio not open");
+        return frameToComponentX(frame);
     }
 
-    public static int displayXPixelToFrame(int xPix) {
-        if (audioState.audioOpen()) {
-            return (int)
-                    (instance.refreshFrame
-                            + (xPix - progressBarXPos)
-                                    * ((1. / UiConstants.zoomlessPixelsPerSecond)
-                                            * audioState.getCalculator().frameRate()));
+    public int displayXPixelToFrame(int xPix) {
+        if (!audioState.audioOpen()) {
+            throw new IllegalStateException("audio not open");
         }
-        throw new IllegalStateException("audio not open");
+        return (int)
+                (refreshFrame
+                        + (xPix - progressBarXPos)
+                                * ((1. / UiConstants.zoomlessPixelsPerSecond)
+                                        * audioState.getCalculator().frameRate()));
     }
 
-    public static int getProgressBarXPos() {
+    public int getProgressBarXPos() {
         return progressBarXPos;
     }
 
@@ -476,5 +459,11 @@ public class WaveformDisplay extends JComponent {
 
             repaint();
         }
+    }
+
+    // WaveformGeometry interface implementation
+    @Override
+    public Component asComponent() {
+        return this;
     }
 }

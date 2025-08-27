@@ -13,10 +13,18 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
 
     private final Component source;
     private final AudioState audioState;
+    private final WaveformGeometry waveformGeometry;
+    private final SelectionOverlay selectionOverlay;
 
-    protected WaveformMouseAdapter(Component source, AudioState audioState) {
+    protected WaveformMouseAdapter(
+            Component source,
+            AudioState audioState,
+            WaveformGeometry waveformGeometry,
+            SelectionOverlay selectionOverlay) {
         this.source = source;
         this.audioState = audioState;
+        this.waveformGeometry = waveformGeometry;
+        this.selectionOverlay = selectionOverlay;
     }
 
     //	@Override
@@ -31,19 +39,19 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
     //	}
 
     public void mousePressed(MouseEvent e) {
-        SelectionOverlay.getInstance().setHighlightSource(e.getPoint(), source);
-        SelectionOverlay.getInstance().setHighlightDest(e.getPoint(), source);
-        SelectionOverlay.getInstance().setHighlightMode(true);
-        SelectionOverlay.getInstance().repaint();
+        selectionOverlay.setHighlightSource(e.getPoint(), source);
+        selectionOverlay.setHighlightDest(e.getPoint(), source);
+        selectionOverlay.setHighlightMode(true);
+        selectionOverlay.repaint();
     }
 
     public void mouseReleased(MouseEvent e) {
         int[] xs = null;
-        if (SelectionOverlay.getInstance().isHighlightMode()) {
-            xs = SelectionOverlay.getInstance().getHighlightBounds();
+        if (selectionOverlay.isHighlightMode()) {
+            xs = selectionOverlay.getHighlightBounds();
         }
-        SelectionOverlay.getInstance().setHighlightMode(false);
-        SelectionOverlay.getInstance().repaint();
+        selectionOverlay.setHighlightMode(false);
+        selectionOverlay.repaint();
         if (xs == null) {
             return;
         }
@@ -51,26 +59,23 @@ public class WaveformMouseAdapter implements MouseMotionListener, MouseListener 
             int smallerX = Math.min(xs[0], xs[1]);
             smallerX = Math.max(0, smallerX);
             int largerX = Math.max(xs[0], xs[1]);
-            largerX = Math.min(largerX, WaveformDisplay.getInstance().getWidth() - 1);
+            largerX = Math.min(largerX, waveformGeometry.asComponent().getWidth() - 1);
             if (largerX <= smallerX) {
                 return;
             }
-            Point firstPoint =
-                    SwingUtilities.convertPoint(
-                            SelectionOverlay.getInstance(), smallerX, 0, source);
-            Point secondPoint =
-                    SwingUtilities.convertPoint(SelectionOverlay.getInstance(), largerX, 0, source);
+            Point firstPoint = SwingUtilities.convertPoint(selectionOverlay, smallerX, 0, source);
+            Point secondPoint = SwingUtilities.convertPoint(selectionOverlay, largerX, 0, source);
             audioState
                     .getPlayer()
                     .playShortInterval(
-                            WaveformDisplay.displayXPixelToFrame((int) firstPoint.getX()),
-                            WaveformDisplay.displayXPixelToFrame((int) secondPoint.getX()));
+                            waveformGeometry.displayXPixelToFrame((int) firstPoint.getX()),
+                            waveformGeometry.displayXPixelToFrame((int) secondPoint.getX()));
         }
     }
 
     public void mouseDragged(MouseEvent e) {
-        SelectionOverlay.getInstance().setHighlightDest(e.getPoint(), source);
-        SelectionOverlay.getInstance().repaint();
+        selectionOverlay.setHighlightDest(e.getPoint(), source);
+        selectionOverlay.repaint();
     }
 
     public void mouseMoved(MouseEvent e) {}

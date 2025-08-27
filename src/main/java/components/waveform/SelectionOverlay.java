@@ -21,8 +21,7 @@ import ui.UiConstants;
 @Singleton
 public class SelectionOverlay extends JComponent {
 
-    private static SelectionOverlay instance;
-
+    private final WaveformGeometry waveformGeometry;
     private final AlphaComposite composite;
 
     private volatile boolean highlightMode;
@@ -43,16 +42,14 @@ public class SelectionOverlay extends JComponent {
                             * (ReplayLast200MillisAction.duration / (double) 1000));
 
     @Inject
-    public SelectionOverlay() {
+    public SelectionOverlay(WaveformGeometry waveformGeometry) {
+        this.waveformGeometry = waveformGeometry;
         composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25F);
         flashMode = false;
         highlightMode = false;
         highlightSource = new Point();
         highlightDest = new Point();
         highlightRect = new Rectangle();
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     @Override
@@ -72,9 +69,10 @@ public class SelectionOverlay extends JComponent {
             g2d.setColor(UiColors.replay200MillisFlashColor);
             int yPos =
                     (int)
-                            SwingUtilities.convertPoint(WaveformDisplay.getInstance(), -1, 0, this)
+                            SwingUtilities.convertPoint(waveformGeometry.asComponent(), -1, 0, this)
                                     .getY();
-            g2d.fillRect(flashRectangleXPos, yPos, flashRectangleWidth, WaveformDisplay.height());
+            g2d.fillRect(
+                    flashRectangleXPos, yPos, flashRectangleWidth, waveformGeometry.getHeight());
         } else {
             setVisible(false);
         }
@@ -101,15 +99,15 @@ public class SelectionOverlay extends JComponent {
                                 ? highlightSource.getX()
                                 : highlightDest.getX());
         int ySource =
-                (int) SwingUtilities.convertPoint(WaveformDisplay.getInstance(), 0, 0, this).getY();
+                (int)
+                        SwingUtilities.convertPoint(waveformGeometry.asComponent(), 0, 0, this)
+                                .getY();
         int width = (int) Math.abs(highlightSource.getX() - highlightDest.getX());
-        int height = WaveformDisplay.height();
+        int height = waveformGeometry.getHeight();
         Rectangle naiveBounds = new Rectangle(xSource, ySource, width, height);
         Rectangle waveformBounds =
                 SwingUtilities.convertRectangle(
-                        WaveformDisplay.getInstance(),
-                        WaveformDisplay.getInstance().getVisibleRect(),
-                        this);
+                        waveformGeometry.asComponent(), waveformGeometry.getVisibleRect(), this);
         highlightRect = naiveBounds.intersection(waveformBounds);
     }
 
@@ -126,8 +124,8 @@ public class SelectionOverlay extends JComponent {
             this.flashRectangleXPos =
                     (int)
                             SwingUtilities.convertPoint(
-                                            WaveformDisplay.getInstance(),
-                                            WaveformDisplay.getProgressBarXPos() - flashWidth,
+                                            waveformGeometry.asComponent(),
+                                            waveformGeometry.getProgressBarXPos() - flashWidth,
                                             -1,
                                             this)
                                     .getX();
@@ -146,14 +144,5 @@ public class SelectionOverlay extends JComponent {
             flashMode = false;
             repaint();
         }
-    }
-
-    public static SelectionOverlay getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "SelectionOverlay not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
     }
 }
