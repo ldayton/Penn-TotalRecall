@@ -1,17 +1,13 @@
 package components.waveform;
 
-import audio.FmodCore;
 import audio.signal.AudioRenderer;
-import audio.signal.Resampler;
+import audio.signal.WaveformProcessor;
 import env.PreferenceKeys;
 import graphics.WaveformRenderer;
-import graphics.WaveformScaler;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Image;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import marytts.signalproc.filter.BandPassFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
@@ -56,10 +52,8 @@ public class WaveformBuffer extends Buffer {
     private final PreferencesManager preferencesManager;
     private final AudioState audioState;
     private final AudioRenderer audioRenderer;
-    private final Resampler resampler;
-    private final WaveformScaler waveformScaler;
-    private final FmodCore fmodCore;
     private final WaveformRenderer waveformRenderer;
+    private final WaveformProcessor waveformProcessor;
 
     /**
      * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
@@ -70,17 +64,13 @@ public class WaveformBuffer extends Buffer {
             PreferencesManager preferencesManager,
             AudioState audioState,
             AudioRenderer audioRenderer,
-            Resampler resampler,
-            WaveformScaler waveformScaler,
-            FmodCore fmodCore,
-            WaveformRenderer waveformRenderer) {
+            WaveformRenderer waveformRenderer,
+            WaveformProcessor waveformProcessor) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
         this.audioRenderer = audioRenderer;
-        this.resampler = resampler;
-        this.waveformScaler = waveformScaler;
-        this.fmodCore = fmodCore;
         this.waveformRenderer = waveformRenderer;
+        this.waveformProcessor = waveformProcessor;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
         chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
@@ -293,42 +283,14 @@ public class WaveformBuffer extends Buffer {
         }
 
         private double[] getValsToDraw(int chunkNum) {
-            try {
-                // Load audio chunk using FMOD
-                FmodCore.ChunkData chunkData =
-                        fmodCore.readAudioChunk(
-                                audioState.getCurrentAudioFileAbsolutePath(),
-                                chunkNum,
-                                CHUNK_SIZE_SECONDS,
-                                preDataSeconds);
-
-                double[] samples = chunkData.samples.clone(); // Clone to avoid modifying original
-                int preDataSizeInFrames = chunkData.overlapFrames;
-
-                // Apply bandpass filter directly on double array
-                if (samples.length > 0) {
-                    BandPassFilter filter = new BandPassFilter(minBand, maxBand);
-                    samples = filter.apply(samples);
-                }
-
-                audioRenderer.envelopeSmooth(samples, 20);
-
-                double[] valsToDraw =
-                        resampler.downsample(
-                                samples,
-                                preDataSizeInFrames,
-                                chunkWidthInPixels,
-                                chunkData.totalFrames);
-
-                resampler.smoothPixels(valsToDraw);
-
-                return valsToDraw;
-
-            } catch (IOException e) {
-                logger.error("Failed to read audio chunk " + chunkNum + " using FMOD", e);
-                // Return empty array as fallback
-                return new double[chunkWidthInPixels];
-            }
+            return waveformProcessor.processAudioForDisplay(
+                    audioState.getCurrentAudioFileAbsolutePath(),
+                    chunkNum,
+                    CHUNK_SIZE_SECONDS,
+                    preDataSeconds,
+                    minBand,
+                    maxBand,
+                    chunkWidthInPixels);
         }
 
         /**

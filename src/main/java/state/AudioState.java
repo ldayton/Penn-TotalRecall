@@ -5,6 +5,7 @@ import audio.AudioProgressHandler;
 import audio.FmodCore;
 import audio.signal.AudioRenderer;
 import audio.signal.Resampler;
+import audio.signal.WaveformProcessor;
 import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -72,6 +73,7 @@ public class AudioState implements AudioProgressHandler {
     private final Resampler resampler;
     private final WaveformScaler waveformScaler;
     private final WaveformRenderer waveformRenderer;
+    private final WaveformProcessor waveformProcessor;
 
     @Inject
     public AudioState(
@@ -82,7 +84,8 @@ public class AudioState implements AudioProgressHandler {
             AudioRenderer audioRenderer,
             Resampler resampler,
             WaveformScaler waveformScaler,
-            WaveformRenderer waveformRenderer) {
+            WaveformRenderer waveformRenderer,
+            WaveformProcessor waveformProcessor) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
@@ -91,6 +94,7 @@ public class AudioState implements AudioProgressHandler {
         this.resampler = resampler;
         this.waveformScaler = waveformScaler;
         this.waveformRenderer = waveformRenderer;
+        this.waveformProcessor = waveformProcessor;
     }
 
     /**
@@ -195,10 +199,8 @@ public class AudioState implements AudioProgressHandler {
                             preferencesManager,
                             this,
                             audioRenderer,
-                            resampler,
-                            waveformScaler,
-                            fmodCore,
-                            waveformRenderer);
+                            waveformRenderer,
+                            waveformProcessor);
             waveformBuffer.start();
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));
