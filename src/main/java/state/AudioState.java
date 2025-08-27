@@ -3,9 +3,8 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
-import audio.signal.AudioRenderer;
-import audio.signal.Resampler;
 import audio.signal.WaveformProcessor;
+import audio.signal.PixelScaler;
 import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -69,11 +68,10 @@ public class AudioState implements AudioProgressHandler {
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
-    private final AudioRenderer audioRenderer;
-    private final Resampler resampler;
     private final WaveformScaler waveformScaler;
     private final WaveformRenderer waveformRenderer;
     private final WaveformProcessor waveformProcessor;
+    private final PixelScaler pixelScaler;
 
     @Inject
     public AudioState(
@@ -81,20 +79,18 @@ public class AudioState implements AudioProgressHandler {
             FmodCore fmodCore,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
-            AudioRenderer audioRenderer,
-            Resampler resampler,
             WaveformScaler waveformScaler,
             WaveformRenderer waveformRenderer,
-            WaveformProcessor waveformProcessor) {
+            WaveformProcessor waveformProcessor,
+            PixelScaler pixelScaler) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
-        this.audioRenderer = audioRenderer;
-        this.resampler = resampler;
         this.waveformScaler = waveformScaler;
         this.waveformRenderer = waveformRenderer;
         this.waveformProcessor = waveformProcessor;
+        this.pixelScaler = pixelScaler;
     }
 
     /**
@@ -198,7 +194,7 @@ public class AudioState implements AudioProgressHandler {
                     new WaveformBuffer(
                             preferencesManager,
                             this,
-                            audioRenderer,
+                            pixelScaler,
                             waveformRenderer,
                             waveformProcessor);
             waveformBuffer.start();

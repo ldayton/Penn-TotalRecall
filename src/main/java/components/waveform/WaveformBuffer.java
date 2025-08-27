@@ -1,6 +1,6 @@
 package components.waveform;
 
-import audio.signal.AudioRenderer;
+import audio.signal.PixelScaler;
 import audio.signal.WaveformProcessor;
 import env.PreferenceKeys;
 import graphics.WaveformRenderer;
@@ -51,7 +51,7 @@ public class WaveformBuffer extends Buffer {
     private double biggestConsecutivePixelVals;
     private final PreferencesManager preferencesManager;
     private final AudioState audioState;
-    private final AudioRenderer audioRenderer;
+    private final PixelScaler pixelScaler;
     private final WaveformRenderer waveformRenderer;
     private final WaveformProcessor waveformProcessor;
 
@@ -63,12 +63,12 @@ public class WaveformBuffer extends Buffer {
     public WaveformBuffer(
             PreferencesManager preferencesManager,
             AudioState audioState,
-            AudioRenderer audioRenderer,
+            PixelScaler pixelScaler,
             WaveformRenderer waveformRenderer,
             WaveformProcessor waveformProcessor) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
-        this.audioRenderer = audioRenderer;
+        this.pixelScaler = pixelScaler;
         this.waveformRenderer = waveformRenderer;
         this.waveformProcessor = waveformProcessor;
         finish = false;
@@ -258,7 +258,7 @@ public class WaveformBuffer extends Buffer {
             double[] valsToDraw = getValsToDraw(chunkNum);
             if (biggestConsecutivePixelVals <= 0) {
                 biggestConsecutivePixelVals =
-                        audioRenderer.getRenderingPeak(
+                        pixelScaler.getRenderingPeak(
                                 valsToDraw, UiConstants.zoomlessPixelsPerSecond / 2);
             }
 

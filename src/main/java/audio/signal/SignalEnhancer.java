@@ -1,29 +1,23 @@
 package audio.signal;
 
-import com.google.inject.Singleton;
+import jakarta.inject.Singleton;
 import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Audio-to-visual rendering operations for waveform display.
- *
- * <p>This class handles the conversion of raw audio data into displayable waveform representations,
- * including filtering and envelope detection.
+ * Pure signal processing operations for audio enhancement.
+ * 
+ * Handles filtering, envelope detection, and other signal processing tasks
+ * without any display or rendering concerns.
  */
 @Singleton
-public class AudioRenderer {
-    private static final Logger logger = LoggerFactory.getLogger(AudioRenderer.class);
+public class SignalEnhancer {
+    private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
 
     /**
      * Applies bandpass filtering to audio samples using MaryTTS filter implementation.
-     *
-     * @param audioSource the audio data source containing raw PCM samples
-     * @param minBand normalized minimum frequency (0.0 to 0.5, where 0.5 = Nyquist)
-     * @param maxBand normalized maximum frequency (0.0 to 0.5, where 0.5 = Nyquist)
-     * @param outputSamples pre-allocated array to receive filtered samples
-     * @return the same outputSamples array for method chaining
      */
     public double[] bandpassFilter(
             AudioDoubleDataSource audioSource,
@@ -47,18 +41,7 @@ public class AudioRenderer {
     }
 
     /**
-     * Applies envelope smoothing to reduce visual noise in waveform display.
-     *
-     * <p>For each sample position, finds the maximum absolute amplitude within a symmetric window
-     * around that position. This creates visually appealing waveforms by emphasizing sustained loud
-     * sections while reducing isolated spikes.
-     *
-     * <p>This is the actual algorithm from WaveformBuffer.getValsToDraw() that makes "waveform
-     * prettier by smoothing the audio data (~60ms)".
-     *
-     * @param samples input sample data (modified in-place)
-     * @param windowSize size of sliding window in samples (WaveformBuffer uses 20)
-     * @return the same samples array for method chaining
+     * Applies envelope smoothing to reduce noise in audio signal.
      */
     public double[] envelopeSmooth(double[] samples, int windowSize) {
         if (windowSize < 1) {
@@ -90,31 +73,19 @@ public class AudioRenderer {
     }
 
     /**
-     * Finds peak sustained amplitude for rendering decisions.
-     *
-     * <p>Looks for maximum amplitude that occurs in adjacent samples, representing sustained audio
-     * content versus brief spikes.
-     *
-     * <p>This is the "biggestConsecutivePixelVals" algorithm from WaveformBuffer that finds
-     * "largest value that 2 consecutive pixels will actually draw at".
-     *
-     * @param samples sample data to analyze (typically pixel-resolution data)
-     * @param skipInitialSamples number of initial samples to skip (WaveformBuffer uses
-     *     pixelsPerSecond/2)
-     * @return maximum sustained amplitude found
+     * Calculates peak amplitude for signal analysis.
      */
-    public double getRenderingPeak(double[] samples, int skipInitialSamples) {
+    public double calculatePeak(double[] samples, int skipInitialSamples) {
         if (samples.length < skipInitialSamples + 2) {
             return 0;
         }
 
-        double biggestConsecutivePixelVals = 0;
-
+        double maxSustained = 0;
         for (int i = skipInitialSamples; i < samples.length - 1; i++) {
             double consecutiveVals = Math.min(samples[i], samples[i + 1]);
-            biggestConsecutivePixelVals = Math.max(consecutiveVals, biggestConsecutivePixelVals);
+            maxSustained = Math.max(consecutiveVals, maxSustained);
         }
 
-        return biggestConsecutivePixelVals;
+        return maxSustained;
     }
 }

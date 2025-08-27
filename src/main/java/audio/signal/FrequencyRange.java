@@ -10,16 +10,6 @@ public class FrequencyRange {
     public final double maxFrequency;
     
     public FrequencyRange(double minFrequency, double maxFrequency) {
-        if (minFrequency < 0.0 || minFrequency > 0.5) {
-            throw new IllegalArgumentException("Min frequency must be between 0.0 and 0.5: " + minFrequency);
-        }
-        if (maxFrequency < 0.0 || maxFrequency > 0.5) {
-            throw new IllegalArgumentException("Max frequency must be between 0.0 and 0.5: " + maxFrequency);
-        }
-        if (minFrequency >= maxFrequency) {
-            throw new IllegalArgumentException("Min frequency must be less than max frequency");
-        }
-        
         this.minFrequency = minFrequency;
         this.maxFrequency = maxFrequency;
     }

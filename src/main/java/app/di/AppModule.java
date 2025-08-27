@@ -5,10 +5,10 @@ import actions.ActionsManager;
 import audio.AudioSystemLoader;
 import audio.AudioSystemManager;
 import audio.FmodCore;
-import audio.signal.AudioRenderer;
-import audio.signal.Resampler;
 import audio.signal.SampleMath;
-import audio.signal.WaveformDisplayScaler;
+import audio.signal.WaveformProcessor;
+import audio.signal.SignalEnhancer;
+import audio.signal.PixelScaler;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import components.AppFocusTraversalPolicy;
@@ -87,11 +87,11 @@ public class AppModule extends AbstractModule {
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
 
-        // Signal processing utilities  
-        bind(AudioRenderer.class).in(Singleton.class);
-        bind(Resampler.class).in(Singleton.class);
+        // Signal processing utilities
         bind(SampleMath.class).in(Singleton.class);
-        bind(WaveformDisplayScaler.class).in(Singleton.class);
+        bind(WaveformProcessor.class).in(Singleton.class);
+        bind(SignalEnhancer.class).in(Singleton.class);
+        bind(PixelScaler.class).in(Singleton.class);
 
         // Graphics utilities
         bind(WaveformRenderer.class).in(Singleton.class);
