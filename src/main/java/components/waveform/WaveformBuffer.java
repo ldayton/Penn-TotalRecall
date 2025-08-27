@@ -20,7 +20,7 @@ import waveform.Waveform;
  * <p>This class aims to keep the current chunk as well as the next/previous chunks (when available)
  * stored in the array. All other members of the array will be null, to save memory.
  */
-public class WaveformBuffer extends Buffer {
+public class WaveformBuffer extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(WaveformBuffer.class);
 
     /** Audio chunk size in seconds for waveform buffering. */
@@ -147,10 +147,36 @@ public class WaveformBuffer extends Buffer {
         return chunkArray;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /** Politely asks the thread to stop. */
     public void finish() {
         finish = true;
+    }
+
+    /**
+     * Tries for period of time to terminate the thread.
+     *
+     * @param millis The minimum number of milliseconds to try terminating the thread for
+     * @return Whether or not the thread was successfully terminated in the provided period
+     * @throws InterruptedException If an attempt at sleeping the thread is unsuccessful
+     */
+    public final boolean terminateThread(int millis) throws InterruptedException {
+        if (millis <= 0) {
+            throw new IllegalArgumentException();
+        }
+        finish();
+        final int iterationLength = 25;
+        int counter = 0;
+        while (true) {
+            if (counter > millis) {
+                break;
+            }
+            Thread.sleep(iterationLength);
+            counter += iterationLength;
+            if (isAlive() == false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
