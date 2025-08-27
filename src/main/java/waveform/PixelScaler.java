@@ -53,14 +53,14 @@ public final class PixelScaler {
 
         double[] copy = new double[pixelValues.length];
         System.arraycopy(pixelValues, 0, copy, 0, pixelValues.length);
-        
+
         // Smooth peaks
         for (int i = 1; i < copy.length - 1; i++) {
             if (copy[i] > copy[i - 1] && copy[i] > copy[i + 1]) {
                 pixelValues[i] = Math.max(copy[i + 1], copy[i - 1]);
             }
         }
-        
+
         // Smooth valleys
         for (int i = 1; i < copy.length - 1; i++) {
             if (copy[i] < copy[i - 1] && copy[i] < copy[i + 1]) {
