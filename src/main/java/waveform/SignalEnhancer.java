@@ -5,12 +5,7 @@ import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Pure signal processing operations for audio enhancement.
- *
- * <p>Handles filtering, envelope detection, and other signal processing tasks without any display
- * or rendering concerns.
- */
+/** Signal processing operations for audio enhancement. */
 final class SignalEnhancer {
     private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
 
@@ -42,19 +37,13 @@ final class SignalEnhancer {
             throw new IllegalArgumentException("Window size must be >= 1: " + windowSize);
         }
 
-        // Copy original data to avoid modifying source during window calculations
         double[] copy = new double[samples.length];
         System.arraycopy(samples, 0, copy, 0, copy.length);
 
-        // make the waveform prettier by smoothing the audio data (~60ms)
-        double biggestInWindow;
-        int start;
-        int end;
-
         for (int i = 0; i < samples.length; i++) {
-            biggestInWindow = 0;
-            start = Math.max(0, i - windowSize);
-            end = Math.min(samples.length, i + windowSize);
+            double biggestInWindow = 0;
+            int start = Math.max(0, i - windowSize);
+            int end = Math.min(samples.length, i + windowSize);
             for (int j = start; j < end; j++) {
                 biggestInWindow = Math.max(biggestInWindow, Math.abs(copy[j]));
             }
@@ -77,7 +66,6 @@ final class SignalEnhancer {
             double consecutiveVals = Math.min(samples[i], samples[i + 1]);
             maxSustained = Math.max(consecutiveVals, maxSustained);
         }
-
         return maxSustained;
     }
 }
