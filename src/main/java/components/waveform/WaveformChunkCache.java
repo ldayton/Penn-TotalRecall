@@ -6,40 +6,39 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 import state.AudioState;
 import waveform.Waveform;
 import waveform.WaveformChunk;
 
-/** Modern LRU cache for waveform chunks with async prefetching and LoadingCache pattern. */
+/** LRU cache for waveform chunks with async prefetching. */
 @Singleton
 public class WaveformChunkCache {
     /** Audio chunk size in seconds for waveform buffering. */
     public static final int CHUNK_SIZE_SECONDS = 10;
-
-    private static final int MAX_CACHE_SIZE = 3; // current + previous + next
+    /** Cache size: current + previous + next chunk. */
+    private static final int MAX_CACHE_SIZE = 3;
 
     private final AudioState audioState;
     private final LoadingCache<ChunkKey, WaveformChunk> chunkCache;
 
-    /** Cache key combining chunk number and render height for proper invalidation. */
+    /** Cache key: chunk number + render height. */
     public record ChunkKey(int chunkNumber, int height) {}
 
     @Inject
     public WaveformChunkCache(AudioState audioState) {
         this.audioState = audioState;
-        this.chunkCache = Caffeine.newBuilder().maximumSize(MAX_CACHE_SIZE).build(this::loadChunk);
+        this.chunkCache = Caffeine.newBuilder()
+                .maximumSize(MAX_CACHE_SIZE)
+                .build(this::loadChunk);
     }
 
-    /** Gets chunk with async read-ahead prefetching of adjacent chunks. */
+    /** Get chunk with async prefetching of adjacent chunks. */
     public WaveformChunk getChunk(int chunkNumber, int height) {
         requireAudioLoaded();
-
-        ChunkKey key = new ChunkKey(chunkNumber, height);
-        WaveformChunk chunk = chunkCache.get(key);
-
-        // Async prefetch adjacent chunks without blocking
+        var key = new ChunkKey(chunkNumber, height);
+        var chunk = chunkCache.get(key);
         prefetchAdjacentAsync(chunkNumber, height);
-
         return chunk;
     }
 
@@ -48,40 +47,36 @@ public class WaveformChunkCache {
         chunkCache.invalidateAll();
     }
 
-    /** Gets multiple chunks efficiently for bulk operations. */
+    /** Get multiple chunks for bulk operations. */
     public List<WaveformChunk> getChunks(List<ChunkKey> keys) {
         return chunkCache.getAll(keys).values().stream().toList();
     }
 
+    /** Load chunk from waveform data (called by Caffeine cache loader). */
     private WaveformChunk loadChunk(ChunkKey key) {
-        Waveform currentWaveform = audioState.getCurrentWaveform();
-        if (currentWaveform == null) {
+        var waveform = audioState.getCurrentWaveform();
+        if (waveform == null) {
             throw new IllegalStateException("No audio file loaded - cannot render waveform chunks");
         }
-        return new WaveformChunk(currentWaveform, key.chunkNumber, key.height);
+        return new WaveformChunk(waveform, key.chunkNumber, key.height);
     }
 
+    /** Ensure audio is loaded before cache operations. */
     private void requireAudioLoaded() {
         if (audioState.getCurrentWaveform() == null) {
             throw new IllegalStateException("No audio file loaded - cannot render waveform chunks");
         }
     }
 
-    /** Async prefetch adjacent chunks without blocking main thread. */
+    /** Async prefetch adjacent chunks (previous/next) without blocking. */
     private void prefetchAdjacentAsync(int chunkNumber, int height) {
-        int maxChunk = audioState.lastChunkNum();
+        var maxChunk = audioState.lastChunkNum();
+        var adjacentKeys = Stream.of(
+                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1, height) : null,
+                chunkNumber < maxChunk ? new ChunkKey(chunkNumber + 1, height) : null
+        ).filter(java.util.Objects::nonNull)
+         .toList();
 
-        // Build list of adjacent chunks to prefetch
-        var adjacentKeys = new java.util.ArrayList<ChunkKey>();
-
-        if (chunkNumber > 0) {
-            adjacentKeys.add(new ChunkKey(chunkNumber - 1, height));
-        }
-        if (chunkNumber < maxChunk) {
-            adjacentKeys.add(new ChunkKey(chunkNumber + 1, height));
-        }
-
-        // Async prefetch - don't block for results
         if (!adjacentKeys.isEmpty()) {
             CompletableFuture.runAsync(() -> chunkCache.getAll(adjacentKeys));
         }
