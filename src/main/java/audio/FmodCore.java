@@ -68,6 +68,7 @@ public final class FmodCore {
     private static final int FMOD_MAX_CHANNELS = 32;
     private static final int FMOD_INIT_FLAGS = 0x00000000;
     private static final int FMOD_CREATE_SAMPLE_MODE = 0x00000002;
+    private static final int FMOD_CREATE_STREAM_MODE = 0x00000080;
 
     // Thread naming
     private static final String THREAD_NAME_PREFIX = "FMOD-";
@@ -77,6 +78,7 @@ public final class FmodCore {
         static final int VERSION = 0x00020309;
         static final int INIT_NORMAL = FMOD_INIT_FLAGS;
         static final int CREATE_SAMPLE = FMOD_CREATE_SAMPLE_MODE;
+        static final int CREATE_STREAM = FMOD_CREATE_STREAM_MODE;
         static final int TIMEUNIT_MS = 0x00000001;
         static final int TIMEUNIT_PCM = 0x00000002;
         static final int OK = 0;
@@ -186,6 +188,8 @@ public final class FmodCore {
                 IntByReference format,
                 IntByReference channels,
                 IntByReference bits);
+
+        int FMOD_Sound_ReadData(Pointer sound, Pointer buffer, int lenbytes, IntByReference read);
 
         // Channel/Playback functions
         int FMOD_System_PlaySound(
@@ -697,6 +701,163 @@ public final class FmodCore {
                     logger.warn("Failed to release temporary sound resource", e);
                 }
             }
+        }
+    }
+
+    /**
+     * Reads a chunk of PCM audio data from a file using FMOD.
+     *
+     * @param filePath absolute path to the audio file
+     * @param chunkIndex zero-based chunk number
+     * @param chunkSizeSeconds duration of each chunk in seconds
+     * @param overlapSeconds seconds of overlap/pre-data for signal processing context
+     * @return ChunkData containing the PCM samples and metadata
+     * @throws IOException if file cannot be loaded or read
+     */
+    public ChunkData readAudioChunk(
+            String filePath, int chunkIndex, double chunkSizeSeconds, double overlapSeconds)
+            throws IOException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path cannot be null or empty");
+        }
+        if (chunkIndex < 0) {
+            throw new IllegalArgumentException("Chunk index cannot be negative: " + chunkIndex);
+        }
+        if (chunkSizeSeconds <= 0) {
+            throw new IllegalArgumentException("Chunk size must be > 0: " + chunkSizeSeconds);
+        }
+        if (overlapSeconds < 0) {
+            throw new IllegalArgumentException(
+                    "Overlap seconds cannot be negative: " + overlapSeconds);
+        }
+
+        if (!ensureInitialized()) {
+            throw new IOException("Failed to initialize FMOD system");
+        }
+
+        Pointer tempSound = null;
+        try {
+            // Create sound for reading - use streaming mode for readData support
+            PointerByReference soundRef = new PointerByReference();
+            int result =
+                    fmod.FMOD_System_CreateSound(
+                            system, filePath, FmodConstants.CREATE_STREAM, null, soundRef);
+
+            if (result != FmodConstants.OK) {
+                throw new IOException(
+                        "FMOD failed to load sound file: " + filePath + " (error: " + result + ")");
+            }
+            tempSound = soundRef.getValue();
+
+            // Get audio format info
+            IntByReference channels = new IntByReference();
+            IntByReference bits = new IntByReference();
+            FloatByReference frequency = new FloatByReference();
+
+            result = fmod.FMOD_Sound_GetFormat(tempSound, null, null, channels, bits);
+            if (result != FmodConstants.OK) {
+                throw new IOException("Failed to get sound format");
+            }
+
+            result = fmod.FMOD_Sound_GetDefaults(tempSound, frequency, null);
+            if (result != FmodConstants.OK) {
+                throw new IOException("Failed to get sound defaults");
+            }
+
+            int sampleRate = Math.round(frequency.getValue());
+            int numChannels = channels.getValue();
+            int bytesPerSample = bits.getValue() / 8;
+            int bytesPerFrame = numChannels * bytesPerSample;
+
+            // Calculate chunk parameters
+            int framesPerChunk = (int) Math.round(sampleRate * chunkSizeSeconds);
+            int overlapFrames = chunkIndex > 0 ? (int) Math.round(sampleRate * overlapSeconds) : 0;
+            int totalFramesNeeded = framesPerChunk + overlapFrames;
+            int totalBytesNeeded = totalFramesNeeded * bytesPerFrame;
+
+            // Calculate file position
+            long startFrame = (long) chunkIndex * framesPerChunk;
+            if (overlapFrames > 0) {
+                startFrame -= overlapFrames;
+            }
+            long startByte = startFrame * bytesPerFrame;
+
+            // Allocate buffer for PCM data
+            com.sun.jna.Memory buffer = new com.sun.jna.Memory(totalBytesNeeded);
+            IntByReference bytesRead = new IntByReference();
+
+            // Read the data
+            result = fmod.FMOD_Sound_ReadData(tempSound, buffer, totalBytesNeeded, bytesRead);
+            if (result != FmodConstants.OK) {
+                throw new IOException(
+                        "Failed to read audio data from sound (FMOD error: " + result + ")");
+            }
+
+            // Convert to double array
+            int actualBytesRead = bytesRead.getValue();
+            int actualFramesRead = actualBytesRead / bytesPerFrame;
+            double[] samples = new double[actualFramesRead];
+
+            // Convert based on bit depth
+            if (bits.getValue() == 16) {
+                short[] shortData = buffer.getShortArray(0, actualFramesRead);
+                for (int i = 0; i < actualFramesRead; i++) {
+                    samples[i] = shortData[i] / 32768.0; // Convert 16-bit to [-1, 1]
+                }
+            } else if (bits.getValue() == 24) {
+                byte[] byteData = buffer.getByteArray(0, actualBytesRead);
+                for (int i = 0, sampleIndex = 0; i < actualBytesRead; i += 3, sampleIndex++) {
+                    if (sampleIndex >= samples.length) break;
+                    int sample24 =
+                            ((byteData[i + 2] << 16)
+                                    | ((byteData[i + 1] & 0xFF) << 8)
+                                    | (byteData[i] & 0xFF));
+                    if (sample24 > 8388607) sample24 -= 16777216; // Convert to signed
+                    samples[sampleIndex] = sample24 / 8388608.0; // Convert 24-bit to [-1, 1]
+                }
+            } else if (bits.getValue() == 32) {
+                float[] floatData = buffer.getFloatArray(0, actualFramesRead);
+                System.arraycopy(
+                        floatData, 0, samples, 0, Math.min(floatData.length, samples.length));
+                for (int i = 0; i < samples.length; i++) {
+                    samples[i] = floatData[i]; // 32-bit float is already [-1, 1]
+                }
+            } else {
+                throw new IOException("Unsupported bit depth: " + bits.getValue());
+            }
+
+            return new ChunkData(samples, sampleRate, numChannels, overlapFrames, actualFramesRead);
+
+        } finally {
+            if (tempSound != null) {
+                try {
+                    fmod.FMOD_Sound_Release(tempSound);
+                } catch (Exception e) {
+                    logger.warn("Failed to release temporary sound resource", e);
+                }
+            }
+        }
+    }
+
+    /** Container for audio chunk data read from FMOD. */
+    public static class ChunkData {
+        public final double[] samples;
+        public final int sampleRate;
+        public final int channels;
+        public final int overlapFrames;
+        public final int totalFrames;
+
+        public ChunkData(
+                double[] samples,
+                int sampleRate,
+                int channels,
+                int overlapFrames,
+                int totalFrames) {
+            this.samples = samples;
+            this.sampleRate = sampleRate;
+            this.channels = channels;
+            this.overlapFrames = overlapFrames;
+            this.totalFrames = totalFrames;
         }
     }
 

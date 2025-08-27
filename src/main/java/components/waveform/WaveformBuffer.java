@@ -1,5 +1,6 @@
 package components.waveform;
 
+import audio.FmodCore;
 import audio.display.WaveformScaler;
 import audio.signal.AudioRenderer;
 import audio.signal.Resampler;
@@ -8,13 +9,9 @@ import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import marytts.util.data.audio.AudioDoubleDataSource;
+import marytts.signalproc.filter.BandPassFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
@@ -65,6 +62,7 @@ public class WaveformBuffer extends Buffer {
     private final AudioRenderer audioRenderer;
     private final Resampler resampler;
     private final WaveformScaler waveformScaler;
+    private final FmodCore fmodCore;
 
     /**
      * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
@@ -76,12 +74,14 @@ public class WaveformBuffer extends Buffer {
             AudioState audioState,
             AudioRenderer audioRenderer,
             Resampler resampler,
-            WaveformScaler waveformScaler) {
+            WaveformScaler waveformScaler,
+            FmodCore fmodCore) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
         this.audioRenderer = audioRenderer;
         this.resampler = resampler;
         this.waveformScaler = waveformScaler;
+        this.fmodCore = fmodCore;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
         chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
@@ -321,57 +321,42 @@ public class WaveformBuffer extends Buffer {
         }
 
         private double[] getValsToDraw(int chunkNum) {
-            // get samples from audio file (~1ms)
-            AudioInputStream ais = null;
             try {
-                ais =
-                        AudioSystem.getAudioInputStream(
-                                new File(audioState.getCurrentAudioFileAbsolutePath()));
-            } catch (UnsupportedAudioFileException e) {
-                logger.error("Unsupported audio file format for waveform generation", e);
+                // Load audio chunk using FMOD
+                FmodCore.ChunkData chunkData =
+                        fmodCore.readAudioChunk(
+                                audioState.getCurrentAudioFileAbsolutePath(),
+                                chunkNum,
+                                CHUNK_SIZE_SECONDS,
+                                preDataSeconds);
+
+                double[] samples = chunkData.samples.clone(); // Clone to avoid modifying original
+                int preDataSizeInFrames = chunkData.overlapFrames;
+
+                // Apply bandpass filter directly on double array
+                if (samples.length > 0) {
+                    BandPassFilter filter = new BandPassFilter(minBand, maxBand);
+                    samples = filter.apply(samples);
+                }
+
+                audioRenderer.envelopeSmooth(samples, 20);
+
+                double[] valsToDraw =
+                        resampler.downsample(
+                                samples,
+                                preDataSizeInFrames,
+                                chunkWidthInPixels,
+                                chunkData.totalFrames);
+
+                resampler.smoothPixels(valsToDraw);
+
+                return valsToDraw;
+
             } catch (IOException e) {
-                logger.error("IO error reading audio file for waveform generation", e);
+                logger.error("Failed to read audio chunk " + chunkNum + " using FMOD", e);
+                // Return empty array as fallback
+                return new double[chunkWidthInPixels];
             }
-            int preDataSizeInFrames = 0;
-            long toSkip =
-                    (long)
-                            (chunkNum
-                                    * CHUNK_SIZE_SECONDS
-                                    * audioState.getCalculator().frameRate()
-                                    * (audioState.getCalculator().frameSizeInBytes()));
-            if (chunkNum > 0) {
-                preDataSizeInFrames =
-                        (int) (audioState.getCalculator().frameRate() * preDataSeconds);
-                toSkip -= (preDataSizeInFrames * (audioState.getCalculator().frameSizeInBytes()));
-            }
-            long skipped = -1;
-            try {
-                skipped = ais.skip(toSkip);
-            } catch (IOException e) {
-                logger.error("IO error skipping audio data for waveform chunk", e);
-            }
-            if (toSkip != skipped) {
-                logger.warn("skipped " + skipped + " instead of " + toSkip);
-            }
-            AudioDoubleDataSource adds = new AudioDoubleDataSource(ais);
-
-            double[] samples =
-                    new double
-                            [(int) (audioState.getCalculator().frameRate() * CHUNK_SIZE_SECONDS)
-                                    + preDataSizeInFrames];
-            int numSamplesLeft = adds.available();
-
-            audioRenderer.bandpassFilter(adds, minBand, maxBand, samples);
-
-            audioRenderer.envelopeSmooth(samples, 20);
-
-            double[] valsToDraw =
-                    resampler.downsample(
-                            samples, preDataSizeInFrames, chunkWidthInPixels, numSamplesLeft);
-
-            resampler.smoothPixels(valsToDraw);
-
-            return valsToDraw;
         }
 
         /**

@@ -188,7 +188,12 @@ public class AudioState implements AudioProgressHandler {
             // start new waveform buffer
             waveformBuffer =
                     new WaveformBuffer(
-                            preferencesManager, this, audioRenderer, resampler, waveformScaler);
+                            preferencesManager,
+                            this,
+                            audioRenderer,
+                            resampler,
+                            waveformScaler,
+                            fmodCore);
             waveformBuffer.start();
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));

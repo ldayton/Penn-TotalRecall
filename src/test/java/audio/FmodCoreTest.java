@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -35,22 +32,20 @@ class FmodCoreTest {
         testFile = new File("packaging/samples/sample.wav");
         assertTrue(testFile.exists(), "Test audio file not found: " + testFile.getAbsolutePath());
 
-        // Get actual audio properties
-        try (AudioInputStream ais = AudioSystem.getAudioInputStream(testFile)) {
-            AudioFormat format = ais.getFormat();
-            actualSampleRate = (int) format.getSampleRate();
-            totalFrames = ais.getFrameLength();
+        // Get actual audio properties using FMOD
+        FmodCore.AudioFormatInfo formatInfo = lib.detectAudioFormat(testFile.getAbsolutePath());
+        actualSampleRate = formatInfo.getSampleRate();
+        totalFrames = formatInfo.getFrameLength();
 
-            // Verify expected format
-            assertEquals(44100, actualSampleRate, "Sample rate should be 44100 Hz");
-            assertEquals(1, format.getChannels(), "Should be mono");
-            assertEquals(16, format.getSampleSizeInBits(), "Should be 16-bit");
+        // Verify expected format
+        assertEquals(44100, actualSampleRate, "Sample rate should be 44100 Hz");
+        assertEquals(1, formatInfo.getChannels(), "Should be mono");
+        assertEquals(16, formatInfo.getBitsPerSample(), "Should be 16-bit");
 
-            logger.info("Test file: " + testFile.getName());
-            logger.info("Sample rate: " + actualSampleRate + " Hz");
-            logger.info("Total frames: " + totalFrames);
-            logger.info("Duration: " + (totalFrames / (double) actualSampleRate) + " seconds");
-        }
+        logger.info("Test file: " + testFile.getName());
+        logger.info("Sample rate: " + actualSampleRate + " Hz");
+        logger.info("Total frames: " + totalFrames);
+        logger.info("Duration: " + (totalFrames / (double) actualSampleRate) + " seconds");
     }
 
     @AfterEach
@@ -309,5 +304,44 @@ class FmodCoreTest {
             lib.stopPlayback();
             Thread.sleep(50); // Let system settle between seeks
         }
+    }
+
+    @Test
+    @DisplayName("readAudioChunk should read first chunk from sample file")
+    void readAudioChunk_FirstChunk_ShouldSucceed() throws Exception {
+        // Try to read first chunk (this is failing in WaveformBuffer)
+        FmodCore.ChunkData chunkData =
+                lib.readAudioChunk(
+                        testFile.getAbsolutePath(),
+                        0, // First chunk
+                        5.0, // 5 seconds per chunk (same as WaveformBuffer.CHUNK_SIZE_SECONDS)
+                        0.1 // 0.1 seconds overlap (same as WaveformBuffer.preDataSeconds)
+                        );
+
+        // Verify we got some data
+        assertNotNull(chunkData, "ChunkData should not be null");
+        assertNotNull(chunkData.samples, "Samples array should not be null");
+        assertTrue(chunkData.samples.length > 0, "Should have read some samples");
+        assertTrue(chunkData.sampleRate > 0, "Sample rate should be positive");
+        assertTrue(chunkData.channels > 0, "Channels should be positive");
+
+        logger.info(
+                "Successfully read chunk: "
+                        + chunkData.samples.length
+                        + " samples at "
+                        + chunkData.sampleRate
+                        + "Hz, "
+                        + chunkData.channels
+                        + " channels");
+    }
+
+    @Test
+    @DisplayName("readAudioChunk should handle non-existent file gracefully")
+    void readAudioChunk_NonExistentFile_ShouldThrowIOException() {
+        assertThrows(
+                Exception.class,
+                () -> {
+                    lib.readAudioChunk("non_existent_file.wav", 0, 1.0, 0.0);
+                });
     }
 }
