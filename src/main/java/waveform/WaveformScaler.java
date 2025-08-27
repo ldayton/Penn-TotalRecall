@@ -3,27 +3,11 @@ package waveform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Scaling utilities for waveform visualization in UI components.
- *
- * <p>This class handles the mathematical operations needed to scale audio amplitude values for
- * optimal visual display, ensuring good use of available screen space.
- */
+/** Scaling utilities for waveform amplitude visualization. */
 public final class WaveformScaler {
     private static final Logger logger = LoggerFactory.getLogger(WaveformScaler.class);
 
-    /**
-     * Calculates optimal pixel scaling factor for waveform display.
-     *
-     * <p>This is the exact Y-scaling algorithm from WaveformBuffer lines 276-281. It determines
-     * yScale by finding the largest sustained amplitude and scaling to use most of the available
-     * display height.
-     *
-     * @param samples the sample data to analyze (pixel-resolution data)
-     * @param displayHeight available height in pixels for waveform display
-     * @param biggestConsecutivePixelVals pre-calculated peak sustained amplitude
-     * @return optimal pixel scaling factor (pixels per unit amplitude)
-     */
+    /** Calculates optimal pixel scaling factor for waveform display. */
     public double getPixelScale(
             double[] samples, int displayHeight, double biggestConsecutivePixelVals) {
         if (displayHeight <= 0) {
@@ -50,13 +34,7 @@ public final class WaveformScaler {
         return yScale;
     }
 
-    /**
-     * Normalizes amplitude values to a target peak level.
-     *
-     * @param samples sample data (modified in-place)
-     * @param targetPeak desired peak amplitude after normalization
-     * @return the same samples array for method chaining
-     */
+    /** Normalizes amplitude values to a target peak level. */
     public double[] normalize(double[] samples, double targetPeak) {
         if (targetPeak <= 0) {
             throw new IllegalArgumentException("Target peak must be > 0: " + targetPeak);
@@ -124,7 +102,6 @@ public final class WaveformScaler {
             double sustainedAmplitude = Math.min(Math.abs(samples[i]), Math.abs(samples[i + 1]));
             maxSustained = Math.max(maxSustained, sustainedAmplitude);
         }
-
         return maxSustained;
     }
 
