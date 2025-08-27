@@ -14,7 +14,6 @@ import java.text.DecimalFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import marytts.signalproc.filter.BandPassFilter;
 import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -356,15 +355,13 @@ public class WaveformBuffer extends Buffer {
             }
             AudioDoubleDataSource adds = new AudioDoubleDataSource(ais);
 
-            // bandpass filter (~50ms)
-            BandPassFilter filter = new BandPassFilter(minBand, maxBand);
             double[] samples =
                     new double
                             [(int) (audioState.getCalculator().frameRate() * CHUNK_SIZE_SECONDS)
                                     + preDataSizeInFrames];
             int numSamplesLeft = adds.available();
 
-            filter.apply(adds).getData(samples);
+            audioRenderer.bandpassFilter(adds, minBand, maxBand, samples);
 
             audioRenderer.envelopeSmooth(samples, 20);
 
