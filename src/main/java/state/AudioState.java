@@ -3,6 +3,9 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
+import audio.display.WaveformScaler;
+import audio.signal.AudioRenderer;
+import audio.signal.Resampler;
 import components.AppMenuBar;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
@@ -64,17 +67,26 @@ public class AudioState implements AudioProgressHandler {
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
+    private final AudioRenderer audioRenderer;
+    private final Resampler resampler;
+    private final WaveformScaler waveformScaler;
 
     @Inject
     public AudioState(
             PreferencesManager preferencesManager,
             FmodCore fmodCore,
             EventDispatchBus eventBus,
-            WordpoolDisplay wordpoolDisplay) {
+            WordpoolDisplay wordpoolDisplay,
+            AudioRenderer audioRenderer,
+            Resampler resampler,
+            WaveformScaler waveformScaler) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
+        this.audioRenderer = audioRenderer;
+        this.resampler = resampler;
+        this.waveformScaler = waveformScaler;
     }
 
     /**
@@ -173,8 +185,10 @@ public class AudioState implements AudioProgressHandler {
                 AnnotationDisplay.addAnnotations(tmpAnns);
             }
 
-            // start new video buffers
-            waveformBuffer = new WaveformBuffer(preferencesManager, this);
+            // start new waveform buffer
+            waveformBuffer =
+                    new WaveformBuffer(
+                            preferencesManager, this, audioRenderer, resampler, waveformScaler);
             waveformBuffer.start();
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));

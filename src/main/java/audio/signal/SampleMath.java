@@ -1,11 +1,14 @@
 package audio.signal;
 
+import com.google.inject.Singleton;
+
 /**
  * Basic mathematical operations for audio sample processing.
  *
- * <p>This class provides fundamental calculations needed throughout audio processing,
- * following standard audio engineering formulas and conventions.
+ * <p>This class provides fundamental calculations needed throughout audio processing, following
+ * standard audio engineering formulas and conventions.
  */
+@Singleton
 public class SampleMath {
 
     /**
@@ -22,7 +25,7 @@ public class SampleMath {
         if (bytesPerFrame <= 0) {
             throw new IllegalArgumentException("Bytes per frame must be > 0: " + bytesPerFrame);
         }
-        
+
         return frames * bytesPerFrame;
     }
 
@@ -37,7 +40,7 @@ public class SampleMath {
         if (sampleRate <= 0) {
             throw new IllegalArgumentException("Sample rate must be > 0: " + sampleRate);
         }
-        
+
         return Math.round(seconds * sampleRate);
     }
 
@@ -52,7 +55,7 @@ public class SampleMath {
         if (sampleRate <= 0) {
             throw new IllegalArgumentException("Sample rate must be > 0: " + sampleRate);
         }
-        
+
         return (double) frames / sampleRate;
     }
 
@@ -65,26 +68,26 @@ public class SampleMath {
      * @param bytesPerFrame size of each audio frame in bytes
      * @return byte offset from start of file
      */
-    public long getChunkOffset(int chunkIndex, double chunkSizeSeconds, 
-                              double sampleRate, int bytesPerFrame) {
+    public long getChunkOffset(
+            int chunkIndex, double chunkSizeSeconds, double sampleRate, int bytesPerFrame) {
         if (chunkIndex < 0) {
             throw new IllegalArgumentException("Chunk index cannot be negative: " + chunkIndex);
         }
         if (chunkSizeSeconds <= 0) {
             throw new IllegalArgumentException("Chunk size must be > 0: " + chunkSizeSeconds);
         }
-        
+
         long framesPerChunk = secondsToFrames(chunkSizeSeconds, sampleRate);
         long totalFrames = (long) chunkIndex * framesPerChunk;
-        
+
         return framesToBytes(totalFrames, bytesPerFrame);
     }
 
     /**
      * Calculates overlap frames for signal processing context.
      *
-     * <p>Overlap provides context for operations that need to look backwards
-     * in time (like filters with impulse responses).
+     * <p>Overlap provides context for operations that need to look backwards in time (like filters
+     * with impulse responses).
      *
      * @param overlapSeconds duration of overlap in seconds
      * @param sampleRate audio sample rate in Hz
@@ -92,9 +95,10 @@ public class SampleMath {
      */
     public long getOverlapFrames(double overlapSeconds, double sampleRate) {
         if (overlapSeconds < 0) {
-            throw new IllegalArgumentException("Overlap duration cannot be negative: " + overlapSeconds);
+            throw new IllegalArgumentException(
+                    "Overlap duration cannot be negative: " + overlapSeconds);
         }
-        
+
         return secondsToFrames(overlapSeconds, sampleRate);
     }
 
@@ -110,9 +114,10 @@ public class SampleMath {
             throw new IllegalArgumentException("Channel count must be > 0: " + channels);
         }
         if (bitsPerSample <= 0 || bitsPerSample % 8 != 0) {
-            throw new IllegalArgumentException("Bits per sample must be positive multiple of 8: " + bitsPerSample);
+            throw new IllegalArgumentException(
+                    "Bits per sample must be positive multiple of 8: " + bitsPerSample);
         }
-        
+
         return channels * (bitsPerSample / 8);
     }
 
@@ -132,12 +137,14 @@ public class SampleMath {
             throw new IllegalArgumentException("Channel count must be > 0: " + channels);
         }
         if (bitsPerSample <= 0 || bitsPerSample % 8 != 0) {
-            throw new IllegalArgumentException("Bits per sample must be positive multiple of 8: " + bitsPerSample);
+            throw new IllegalArgumentException(
+                    "Bits per sample must be positive multiple of 8: " + bitsPerSample);
         }
-        
+
         // Sanity check for typical audio ranges
         if (sampleRate < 8000 || sampleRate > 192000) {
-            throw new IllegalArgumentException("Sample rate outside typical range (8kHz-192kHz): " + sampleRate);
+            throw new IllegalArgumentException(
+                    "Sample rate outside typical range (8kHz-192kHz): " + sampleRate);
         }
     }
 }

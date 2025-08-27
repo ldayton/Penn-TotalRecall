@@ -1,5 +1,8 @@
 package components.waveform;
 
+import audio.display.WaveformScaler;
+import audio.signal.AudioRenderer;
+import audio.signal.Resampler;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.AlphaComposite;
@@ -60,15 +63,26 @@ public class WaveformBuffer extends Buffer {
     private double biggestConsecutivePixelVals;
     private final PreferencesManager preferencesManager;
     private final AudioState audioState;
+    private final AudioRenderer audioRenderer;
+    private final Resampler resampler;
+    private final WaveformScaler waveformScaler;
 
     /**
      * Creates a buffer thread using the audio information that <code>AudioState</code> provides at
      * the time the constructor runs.
      */
     @Inject
-    public WaveformBuffer(PreferencesManager preferencesManager, AudioState audioState) {
+    public WaveformBuffer(
+            PreferencesManager preferencesManager,
+            AudioState audioState,
+            AudioRenderer audioRenderer,
+            Resampler resampler,
+            WaveformScaler waveformScaler) {
         this.preferencesManager = preferencesManager;
         this.audioState = audioState;
+        this.audioRenderer = audioRenderer;
+        this.resampler = resampler;
+        this.waveformScaler = waveformScaler;
         finish = false;
         numChunks = audioState.lastChunkNum() + 1;
         chunkWidthInPixels = UiConstants.zoomlessPixelsPerSecond * CHUNK_SIZE_SECONDS;
@@ -255,30 +269,13 @@ public class WaveformBuffer extends Buffer {
 
             double[] valsToDraw = getValsToDraw(chunkNum);
             if (biggestConsecutivePixelVals <= 0) {
-                // determine yScale by finding largest value that 2 consecutive pixels will actually
-                // draw at
-                // larger values might exist in the audio, but over intervals too short to be be
-                // visualized (0 pixels), or meaningfully visualized (1 pixel)
-                // this technique is inappropriate unless the values we are working on have already
-                // been smoothed
-                // we exclude the first half second of audio data due to the loud beep that often
-                // starts psychology experiments
-                double consecutiveVals;
-                for (int i = UiConstants.zoomlessPixelsPerSecond / 2;
-                        i < valsToDraw.length - 1;
-                        i++) {
-                    consecutiveVals = Math.min(valsToDraw[i], valsToDraw[i + 1]);
-                    biggestConsecutivePixelVals =
-                            Math.max(consecutiveVals, biggestConsecutivePixelVals);
-                }
+                biggestConsecutivePixelVals =
+                        audioRenderer.getRenderingPeak(
+                                valsToDraw, UiConstants.zoomlessPixelsPerSecond / 2);
             }
 
-            // determine yScale for the current component height
-            double yScale = ((height / 2) - 1) / (biggestConsecutivePixelVals);
-            if (Double.isInfinite(yScale) || Double.isNaN(yScale)) {
-                logger.warn("yScale is infinite in magnitude, or not a number, using 0 instead");
-                yScale = 0;
-            }
+            double yScale =
+                    waveformScaler.getPixelScale(valsToDraw, height, biggestConsecutivePixelVals);
 
             image = WaveformDisplay.getInstance().createImage(chunkWidthInPixels, height);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
@@ -369,56 +366,13 @@ public class WaveformBuffer extends Buffer {
 
             filter.apply(adds).getData(samples);
 
-            // make the waveform prettier by smoothing the audio data (~60ms)
-            double[] copy = new double[samples.length];
-            System.arraycopy(samples, 0, copy, 0, copy.length);
-            final int window = 20;
-            double biggestInWindow;
-            int start;
-            int end;
-            for (int i = 0; i < samples.length; i++) {
-                biggestInWindow = 0;
-                start = Math.max(0, i - window);
-                end = Math.min(samples.length, i + window);
-                for (int j = start; j < end; j++) {
-                    biggestInWindow = Math.max(biggestInWindow, Math.abs(copy[j]));
-                }
-                samples[i] = biggestInWindow;
-            }
-            copy = null;
+            audioRenderer.envelopeSmooth(samples, 20);
 
-            // extract some of the samples for representation as pixels
-            double[] valsToDraw = new double[chunkWidthInPixels];
-            final double sampleIncrement =
-                    (samples.length - preDataSizeInFrames) / (double) (valsToDraw.length);
-            for (int i = 0; i < valsToDraw.length; i++) {
-                int index = (int) (i * sampleIncrement) + preDataSizeInFrames;
-                if (index > numSamplesLeft - 1) {
-                    break;
-                }
-                valsToDraw[i] = samples[index];
-            }
+            double[] valsToDraw =
+                    resampler.downsample(
+                            samples, preDataSizeInFrames, chunkWidthInPixels, numSamplesLeft);
 
-            // make the waveform prettier by smoothing the pixels
-            for (int j = 0; j < 1; j++) {
-                double[] copy2 = new double[valsToDraw.length];
-                System.arraycopy(valsToDraw, 0, copy2, 0, valsToDraw.length);
-                for (int i = 1; i < copy2.length - 1; i++) {
-                    if (copy2[i] > copy2[i - 1]) {
-                        if (copy2[i] > copy2[i + 1]) {
-                            valsToDraw[i] = Math.max(copy2[i + 1], copy2[i - 1]);
-                        }
-                    }
-                }
-                for (int i = 1; i < copy2.length - 1; i++) {
-                    if (copy2[i] < copy2[i - 1]) {
-                        if (copy2[i] < copy2[i + 1]) {
-                            valsToDraw[i] = Math.min(copy2[i + 1], copy2[i - 1]);
-                        }
-                    }
-                }
-                copy2 = null;
-            }
+            resampler.smoothPixels(valsToDraw);
 
             return valsToDraw;
         }
