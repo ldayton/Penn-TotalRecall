@@ -3,6 +3,7 @@ package components.waveform;
 import audio.AudioPlayer;
 import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
+import events.AudioFileSwitchedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.ScreenSeekRequestedEvent;
@@ -30,6 +31,7 @@ import ui.UiColors;
 import ui.UiConstants;
 import ui.UiShapes;
 import waveform.RenderedChunk;
+import waveform.Waveform;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -66,12 +68,12 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private final AudioState audioState;
     private final EventDispatchBus eventBus;
 
+    private volatile Waveform currentWaveform;
+
     private volatile int progressBarXPos;
 
     @Inject
-    public WaveformDisplay(
-            AudioState audioState,
-            EventDispatchBus eventBus) {
+    public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
         this.audioState = audioState;
         setOpaque(true);
         setBackground(UiColors.waveformBackground);
@@ -125,10 +127,31 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         switch (event.getType()) {
             case START:
                 startRefreshes();
+                // Create waveform when starting refreshes
+                updateCurrentWaveform();
                 break;
             case STOP:
                 stopRefreshes();
+                // Clean up waveform when stopping
+                if (currentWaveform != null) {
+                    currentWaveform.clearCache();
+                    currentWaveform = null;
+                }
                 break;
+        }
+    }
+
+    @Subscribe
+    public void handleAudioFileSwitchedEvent(AudioFileSwitchedEvent event) {
+        // Update waveform when audio file changes
+        if (event.file() != null) {
+            updateCurrentWaveform();
+        } else {
+            // Clear waveform when no audio file
+            if (currentWaveform != null) {
+                currentWaveform.clearCache();
+                currentWaveform = null;
+            }
         }
     }
 
@@ -436,15 +459,21 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                 return;
             }
 
-            curRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum);
-            if (chunkNum > 0) {
-                previousRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum - 1);
+            if (currentWaveform != null) {
+                curRefreshChunk = currentWaveform.renderChunk(chunkNum);
+                if (chunkNum > 0) {
+                    previousRefreshChunk = currentWaveform.renderChunk(chunkNum - 1);
+                } else {
+                    previousRefreshChunk = null;
+                }
+                if (chunkNum < audioState.lastChunkNum()) {
+                    nextRefreshChunk = currentWaveform.renderChunk(chunkNum + 1);
+                } else {
+                    nextRefreshChunk = null;
+                }
             } else {
+                curRefreshChunk = null;
                 previousRefreshChunk = null;
-            }
-            if (chunkNum < audioState.lastChunkNum()) {
-                nextRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum + 1);
-            } else {
                 nextRefreshChunk = null;
             }
 
@@ -462,5 +491,35 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     @Override
     public Component asComponent() {
         return this;
+    }
+
+    /** Creates a new waveform for the current audio file with proper height. */
+    private Waveform createWaveformForCurrentFile() {
+        if (!audioState.audioOpen()) {
+            return null;
+        }
+
+        return Waveform.builder(audioState.getFmodCore())
+                .audioFile(audioState.getCurrentAudioFileAbsolutePath())
+                .timeResolution(200) // Default pixels per second
+                .amplitudeResolution(getHeight()) // Use actual component height
+                .enableCaching(true)
+                .build();
+    }
+
+    /** Updates the current waveform and initializes its cache. */
+    private void updateCurrentWaveform() {
+        // Clear old waveform cache if present
+        if (currentWaveform != null) {
+            currentWaveform.clearCache();
+        }
+
+        // Create new waveform with current height
+        currentWaveform = createWaveformForCurrentFile();
+
+        // Initialize cache if waveform was created
+        if (currentWaveform != null) {
+            currentWaveform.initializeCache(audioState);
+        }
     }
 }

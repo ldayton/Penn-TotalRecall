@@ -18,7 +18,10 @@ final class WaveformProcessor {
     private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
     public WaveformProcessor(
-            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler, boolean cachingEnabled) {
+            FmodCore fmodCore,
+            PixelScaler pixelScaler,
+            WaveformScaler waveformScaler,
+            boolean cachingEnabled) {
         this.fmodCore = fmodCore;
         this.pixelScaler = pixelScaler;
         this.waveformScaler = waveformScaler;
@@ -83,11 +86,16 @@ final class WaveformProcessor {
         if (samples.length > 0) {
             BandPassFilter filter;
             if (filterCache != null) {
-                filter = filterCache.computeIfAbsent(
-                        frequencyFilter,
-                        range -> new BandPassFilter(range.minFrequency(), range.maxFrequency()));
+                filter =
+                        filterCache.computeIfAbsent(
+                                frequencyFilter,
+                                range ->
+                                        new BandPassFilter(
+                                                range.minFrequency(), range.maxFrequency()));
             } else {
-                filter = new BandPassFilter(frequencyFilter.minFrequency(), frequencyFilter.maxFrequency());
+                filter =
+                        new BandPassFilter(
+                                frequencyFilter.minFrequency(), frequencyFilter.maxFrequency());
             }
             samples = filter.apply(samples); // This returns new array
         }

@@ -99,12 +99,13 @@ class WaveformImageRegressionTest {
     private void assertImagesMatch(String name) throws IOException {
         logger.debug("Testing {} waveform images", name);
 
-        Waveform waveform = Waveform.builder(fmodCore)
-                .audioFile(SAMPLE_FILE_PATH)
-                .timeResolution(200)
-                .amplitudeResolution(TEST_IMAGE_HEIGHT)
-                .enableCaching(false)
-                .build();
+        Waveform waveform =
+                Waveform.builder(fmodCore)
+                        .audioFile(SAMPLE_FILE_PATH)
+                        .timeResolution(200)
+                        .amplitudeResolution(TEST_IMAGE_HEIGHT)
+                        .enableCaching(false)
+                        .build();
 
         // Test configured number of chunks at standard height
         for (int chunkNum = 0; chunkNum < TEST_CHUNK_COUNT; chunkNum++) {

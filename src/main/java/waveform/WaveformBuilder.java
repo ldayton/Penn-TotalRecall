@@ -5,9 +5,10 @@ import audio.FmodCore;
 /** Fluent builder for creating Waveform instances with configurable parameters. */
 public final class WaveformBuilder {
     private String audioFilePath;
-    private int timeResolution = WaveformRenderer.PIXELS_PER_SECOND;  // Default: 200 pixels per second
-    private int amplitudeResolution = 600;  // Default height
-    private boolean cachingEnabled = true;  // Default: enabled
+    private int timeResolution =
+            WaveformRenderer.PIXELS_PER_SECOND; // Default: 200 pixels per second
+    private int amplitudeResolution = 600; // Default height
+    private boolean cachingEnabled = true; // Default: enabled
     private final FmodCore fmodCore;
 
     WaveformBuilder(FmodCore fmodCore) {
@@ -44,6 +45,7 @@ public final class WaveformBuilder {
             throw new IllegalArgumentException("Audio file path is required");
         }
 
-        return new Waveform(audioFilePath, timeResolution, amplitudeResolution, cachingEnabled, fmodCore);
+        return new Waveform(
+                audioFilePath, timeResolution, amplitudeResolution, cachingEnabled, fmodCore);
     }
 }

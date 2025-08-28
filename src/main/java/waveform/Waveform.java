@@ -21,7 +21,12 @@ public final class Waveform {
     private volatile double globalRenderingPeak = -1;
 
     // Package-private constructor - only called by builder
-    Waveform(String audioFilePath, int timeResolution, int amplitudeResolution, boolean cachingEnabled, FmodCore fmodCore) {
+    Waveform(
+            String audioFilePath,
+            int timeResolution,
+            int amplitudeResolution,
+            boolean cachingEnabled,
+            FmodCore fmodCore) {
         this.audioFilePath = audioFilePath;
         this.timeResolution = timeResolution;
         this.amplitudeResolution = amplitudeResolution;
@@ -31,8 +36,9 @@ public final class Waveform {
         this.pixelScaler = new PixelScaler();
         WaveformScaler waveformScaler = new WaveformScaler();
         this.renderer = new WaveformRenderer(waveformScaler);
-        this.processor = new WaveformProcessor(fmodCore, pixelScaler, waveformScaler, cachingEnabled);
-        
+        this.processor =
+                new WaveformProcessor(fmodCore, pixelScaler, waveformScaler, cachingEnabled);
+
         // Create cache if caching is enabled - needs AudioState but we don't have it yet
         // For now, cache will be set later via a setter
         this.cache = null;
@@ -65,12 +71,15 @@ public final class Waveform {
                         chunkDurationSeconds,
                         preDataSeconds,
                         0.001, // Minimum valid frequency for BandPassFilter
-                        0.45,  // Maximum frequency matching original fullrange test
+                        0.45, // Maximum frequency matching original fullrange test
                         widthPixels);
 
         ensureGlobalScaling(audioData, widthPixels);
 
-        double yScale = renderer.calculateYScale(audioData, amplitudeResolution, globalRenderingPeak);
+        // Use amplitudeResolution as default height - this loses dynamic resizing but maintains API
+        // simplicity
+        double yScale =
+                renderer.calculateYScale(audioData, amplitudeResolution, globalRenderingPeak);
 
         return renderer.renderWaveformChunk(
                 audioData,
@@ -87,8 +96,7 @@ public final class Waveform {
             synchronized (this) {
                 if (globalRenderingPeak < 0) {
                     globalRenderingPeak =
-                            pixelScaler.getRenderingPeak(
-                                    audioData, timeResolution / 2);
+                            pixelScaler.getRenderingPeak(audioData, timeResolution / 2);
                     logger.debug(
                             "Initialized global rendering peak: {} for file: {}",
                             globalRenderingPeak,
@@ -110,7 +118,7 @@ public final class Waveform {
         }
         logger.debug("Reset global scaling for file: {}", audioFilePath);
     }
-    
+
     /** Initialize caching with AudioState dependency - called by AudioState. */
     public void initializeCache(state.AudioState audioState) {
         if (cachingEnabled && cache == null) {
@@ -121,7 +129,7 @@ public final class Waveform {
             }
         }
     }
-    
+
     /** Clears the cache if present. */
     public void clearCache() {
         if (cache != null) {

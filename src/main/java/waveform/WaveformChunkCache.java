@@ -53,7 +53,7 @@ final class WaveformChunkCache {
 
     /** Ensure audio is loaded before cache operations. */
     private void requireAudioLoaded() {
-        if (audioState.getCurrentWaveform() == null) {
+        if (!audioState.audioOpen()) {
             throw new IllegalStateException("No audio file loaded - cannot render waveform chunks");
         }
     }
@@ -64,9 +64,7 @@ final class WaveformChunkCache {
         var adjacentKeys =
                 Stream.of(
                                 chunkNumber > 0 ? new ChunkKey(chunkNumber - 1) : null,
-                                chunkNumber < maxChunk
-                                        ? new ChunkKey(chunkNumber + 1)
-                                        : null)
+                                chunkNumber < maxChunk ? new ChunkKey(chunkNumber + 1) : null)
                         .filter(java.util.Objects::nonNull)
                         .toList();
 
