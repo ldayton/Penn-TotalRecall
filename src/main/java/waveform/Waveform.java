@@ -4,7 +4,6 @@ import audio.FmodCore;
 import java.awt.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.UiConstants;
 
 /** Complete waveform representation of an audio file with chunked rendering. */
 public final class Waveform {
@@ -38,7 +37,7 @@ public final class Waveform {
     Image renderChunk(int chunkNumber, int heightPixels) {
         final int chunkDurationSeconds = 10;
         final double preDataSeconds = 0.25;
-        final int widthPixels = UiConstants.zoomlessPixelsPerSecond * chunkDurationSeconds;
+        final int widthPixels = WaveformRenderer.PIXELS_PER_SECOND * chunkDurationSeconds;
         final double chunkStartTimeSeconds = chunkNumber * chunkDurationSeconds;
 
         double[] audioData =
@@ -71,7 +70,7 @@ public final class Waveform {
                 if (globalRenderingPeak < 0) {
                     globalRenderingPeak =
                             pixelScaler.getRenderingPeak(
-                                    audioData, UiConstants.zoomlessPixelsPerSecond / 2);
+                                    audioData, WaveformRenderer.PIXELS_PER_SECOND / 2);
                     logger.debug(
                             "Initialized global rendering peak: {} for file: {}",
                             globalRenderingPeak,

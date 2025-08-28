@@ -28,16 +28,10 @@ public class UiColors {
     /** Color of border of header of annotation list. */
     public static final Color annotationListHeaderBorderColor = unfocusedColor;
 
-    /** Color of waveform of first channel of audio. */
-    public static final Color firstChannelWaveformColor = Color.BLACK;
-
     /** Color of background behind waveform. */
     public static final Color waveformBackground = Color.WHITE;
 
     // text colors
-
-    /** Color of time scale text on waveform. */
-    public static final Color waveformScaleTextColor = Color.BLACK;
 
     /** Color of annotation text on waveform. */
     public static final Color annotationTextColor = Color.BLACK;
@@ -52,13 +46,6 @@ public class UiColors {
 
     /** Color of horizontal reference line cutting through waveform. */
     public static final Color waveformReferenceLineColor = Color.BLACK;
-
-    /**
-     * Color of vertical reference lines and associated strings that indicate time scale of
-     * waveform.
-     */
-    public static final Color waveformScaleLineColor =
-            new Color(226, 224, 131); // PyParse color (226, 224, 131)
 
     public static final Color annotationAccentColor = Color.BLUE;
 

@@ -1,17 +1,31 @@
 package waveform;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
-import ui.UiColors;
-import ui.UiConstants;
-import ui.UiShapes;
 
 /** Headless Graphics2D waveform rendering for display visualization. */
 final class WaveformRenderer {
 
     private static final DecimalFormat SEC_FORMAT = new DecimalFormat("0.00s");
+
+    // Waveform rendering constants
+    public static final int PIXELS_PER_SECOND = 200;
+    public static final Color WAVEFORM_BACKGROUND = Color.WHITE;
+    public static final Color WAVEFORM_REFERENCE_LINE = Color.BLACK;
+    public static final Color WAVEFORM_SCALE_LINE = new Color(226, 224, 131);
+    public static final Color WAVEFORM_SCALE_TEXT = Color.BLACK;
+    public static final Color FIRST_CHANNEL_WAVEFORM = Color.BLACK;
+    public static final RenderingHints RENDERING_HINTS =
+            new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    static {
+        RENDERING_HINTS.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    }
+
     private final WaveformScaler waveformScaler;
 
     public WaveformRenderer(WaveformScaler waveformScaler) {
@@ -31,12 +45,12 @@ final class WaveformRenderer {
         Graphics2D g2d = image.createGraphics();
 
         try {
-            g2d.setRenderingHints(UiShapes.getRenderingHints());
+            g2d.setRenderingHints(RENDERING_HINTS);
 
-            g2d.setColor(UiColors.waveformBackground);
+            g2d.setColor(WAVEFORM_BACKGROUND);
             g2d.fillRect(0, 0, width, height);
 
-            g2d.setColor(UiColors.waveformReferenceLineColor);
+            g2d.setColor(WAVEFORM_REFERENCE_LINE);
             g2d.drawLine(0, height / 2, width, height / 2);
 
             drawTimeScale(g2d, width, height, startTimeSeconds);
@@ -58,18 +72,18 @@ final class WaveformRenderer {
     private void drawTimeScale(Graphics2D g2d, int width, int height, double startTimeSeconds) {
         double counter = startTimeSeconds;
 
-        for (int i = 0; i < width; i += UiConstants.zoomlessPixelsPerSecond) {
-            g2d.setColor(UiColors.waveformScaleLineColor);
+        for (int i = 0; i < width; i += PIXELS_PER_SECOND) {
+            g2d.setColor(WAVEFORM_SCALE_LINE);
             g2d.drawLine(i, 0, i, height - 1);
 
-            g2d.setColor(UiColors.waveformScaleTextColor);
+            g2d.setColor(WAVEFORM_SCALE_TEXT);
             g2d.drawString(SEC_FORMAT.format(counter), i + 5, height - 5);
             counter++;
         }
     }
 
     private void drawWaveform(Graphics2D g2d, double[] valsToDraw, int height, double yScale) {
-        g2d.setColor(UiColors.firstChannelWaveformColor);
+        g2d.setColor(FIRST_CHANNEL_WAVEFORM);
 
         final int refLinePos = height / 2;
 
