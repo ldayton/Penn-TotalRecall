@@ -51,20 +51,23 @@ final class PixelScaler {
             return pixelValues;
         }
 
-        double[] copy = new double[pixelValues.length];
-        System.arraycopy(pixelValues, 0, copy, 0, pixelValues.length);
+        // Need original values for smoothing algorithm - prevents feedback from modified values
+        double[] originalValues = new double[pixelValues.length];
+        System.arraycopy(pixelValues, 0, originalValues, 0, pixelValues.length);
 
         // Smooth peaks
-        for (int i = 1; i < copy.length - 1; i++) {
-            if (copy[i] > copy[i - 1] && copy[i] > copy[i + 1]) {
-                pixelValues[i] = Math.max(copy[i + 1], copy[i - 1]);
+        for (int i = 1; i < originalValues.length - 1; i++) {
+            if (originalValues[i] > originalValues[i - 1]
+                    && originalValues[i] > originalValues[i + 1]) {
+                pixelValues[i] = Math.max(originalValues[i + 1], originalValues[i - 1]);
             }
         }
 
         // Smooth valleys
-        for (int i = 1; i < copy.length - 1; i++) {
-            if (copy[i] < copy[i - 1] && copy[i] < copy[i + 1]) {
-                pixelValues[i] = Math.min(copy[i + 1], copy[i - 1]);
+        for (int i = 1; i < originalValues.length - 1; i++) {
+            if (originalValues[i] < originalValues[i - 1]
+                    && originalValues[i] < originalValues[i + 1]) {
+                pixelValues[i] = Math.min(originalValues[i + 1], originalValues[i - 1]);
             }
         }
 

@@ -37,15 +37,16 @@ final class SignalEnhancer {
             throw new IllegalArgumentException("Window size must be >= 1: " + windowSize);
         }
 
-        double[] copy = new double[samples.length];
-        System.arraycopy(samples, 0, copy, 0, copy.length);
+        // Need original values for window calculations - prevents feedback from modified values
+        double[] originalSamples = new double[samples.length];
+        System.arraycopy(samples, 0, originalSamples, 0, originalSamples.length);
 
         for (int i = 0; i < samples.length; i++) {
             double biggestInWindow = 0;
             int start = Math.max(0, i - windowSize);
             int end = Math.min(samples.length, i + windowSize);
             for (int j = start; j < end; j++) {
-                biggestInWindow = Math.max(biggestInWindow, Math.abs(copy[j]));
+                biggestInWindow = Math.max(biggestInWindow, Math.abs(originalSamples[j]));
             }
             samples[i] = biggestInWindow;
         }

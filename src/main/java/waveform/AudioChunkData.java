@@ -12,9 +12,4 @@ record AudioChunkData(
     double getDurationSeconds() {
         return frameCount / sampleRate;
     }
-
-    /** Defensive copy of amplitude values. */
-    double[] amplitudeValuesCopy() {
-        return amplitudeValues.clone();
-    }
 }

@@ -2,6 +2,7 @@ package waveform;
 
 import audio.FmodCore;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 import marytts.signalproc.filter.BandPassFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ final class WaveformProcessor {
     private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
     private final WaveformScaler waveformScaler;
+    private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache =
+            new ConcurrentHashMap<>();
 
     public WaveformProcessor(
             FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler) {
@@ -65,7 +68,7 @@ final class WaveformProcessor {
                         audioFilePath, chunkIndex, chunkDurationSeconds, overlapSeconds);
 
         return new AudioChunkData(
-                chunkData.samples.clone(),
+                chunkData.samples, // FMOD already returns new array, no clone needed
                 chunkData.sampleRate,
                 0.0, // Peak calculated after processing
                 chunkData.totalFrames,
@@ -74,13 +77,16 @@ final class WaveformProcessor {
 
     /** Applies signal processing to raw audio data. */
     private AudioChunkData processSignal(AudioChunkData rawAudio, FrequencyRange frequencyFilter) {
-        double[] samples = rawAudio.amplitudeValues().clone();
+        // BandPassFilter.apply() returns a new array, so no defensive copy needed
+        double[] samples = rawAudio.amplitudeValues();
 
         if (samples.length > 0) {
             BandPassFilter filter =
-                    new BandPassFilter(
-                            frequencyFilter.minFrequency(), frequencyFilter.maxFrequency());
-            samples = filter.apply(samples);
+                    filterCache.computeIfAbsent(
+                            frequencyFilter,
+                            range ->
+                                    new BandPassFilter(range.minFrequency(), range.maxFrequency()));
+            samples = filter.apply(samples); // This returns new array
         }
 
         signalEnhancer.envelopeSmooth(samples, 20);
