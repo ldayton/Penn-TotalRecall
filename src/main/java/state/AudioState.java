@@ -9,7 +9,6 @@ import components.annotations.Annotation;
 import components.annotations.AnnotationDisplay;
 import components.annotations.AnnotationFileParser;
 import components.audiofiles.AudioFile;
-import components.waveform.WaveformChunkCache;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolFileParser;
 import control.AudioCalculator;
@@ -39,6 +38,9 @@ import waveform.Waveform;
 @Singleton
 public class AudioState implements AudioProgressHandler {
     private static final Logger logger = LoggerFactory.getLogger(AudioState.class);
+    
+    /** Audio chunk size in seconds for waveform buffering. */
+    public static final int CHUNK_SIZE_SECONDS = 10;
 
     private AudioCalculator calculator;
     private AudioPlaybackCoordinator playbackCoordinator;
@@ -56,7 +58,6 @@ public class AudioState implements AudioProgressHandler {
 
     private final Stack<Long> playHistory = new Stack<Long>();
 
-    private WaveformChunkCache waveformChunkCache;
     private Waveform currentWaveform;
 
     private final String audioClosedMessage = "Audio Not Open. You must check first";
@@ -68,20 +69,17 @@ public class AudioState implements AudioProgressHandler {
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
-    private final Provider<WaveformChunkCache> waveformChunkCacheProvider;
 
     @Inject
     public AudioState(
             PreferencesManager preferencesManager,
             FmodCore fmodCore,
             EventDispatchBus eventBus,
-            WordpoolDisplay wordpoolDisplay,
-            Provider<WaveformChunkCache> waveformChunkCacheProvider) {
+            WordpoolDisplay wordpoolDisplay) {
         this.preferencesManager = preferencesManager;
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
-        this.waveformChunkCacheProvider = waveformChunkCacheProvider;
     }
 
     public FmodCore getFmodCore() {
@@ -124,7 +122,12 @@ public class AudioState implements AudioProgressHandler {
         final double minBand = tmpMinBand;
         final double maxBand = tmpMaxBand;
 
-        return new Waveform(getCurrentAudioFileAbsolutePath(), minBand, maxBand, fmodCore);
+        return Waveform.builder(fmodCore)
+                .audioFile(getCurrentAudioFileAbsolutePath())
+                .timeResolution(200)  // Default pixels per second
+                .amplitudeResolution(600)  // Default height
+                .enableCaching(true)
+                .build();
     }
 
     /**
@@ -161,9 +164,7 @@ public class AudioState implements AudioProgressHandler {
             // File loaded successfully - UI components will handle title updates
             eventBus.publish(new AudioFileSwitchedEvent(file));
 
-            chunkSize =
-                    components.waveform.WaveformChunkCache.CHUNK_SIZE_SECONDS
-                            * (long) calculator.frameRate();
+            chunkSize = CHUNK_SIZE_SECONDS * (long) calculator.frameRate();
             totalNumOfChunks =
                     (int) Math.ceil((double) calculator.durationInFrames() / (double) chunkSize);
             lastFrameArray = new long[totalNumOfChunks];
@@ -226,10 +227,7 @@ public class AudioState implements AudioProgressHandler {
 
             // Create waveform for this audio file
             currentWaveform = createWaveformForCurrentFile();
-
-            // get waveform chunk cache and clear any previous cache
-            waveformChunkCache = waveformChunkCacheProvider.get();
-            waveformChunkCache.clear();
+            currentWaveform.initializeCache(this);
 
             eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.START));
         }
@@ -247,20 +245,18 @@ public class AudioState implements AudioProgressHandler {
         // stop waveform display
         eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.STOP));
 
+        // clear waveform cache
+        if (currentWaveform != null) {
+            currentWaveform.clearCache();
+        }
+
         // stop audio playback
         if (player != null) {
             player.stop();
         }
 
-        // clear waveform cache
-        if (waveformChunkCache != null) {
-            waveformChunkCache.clear();
-        }
-
         wordpoolDisplay.clearText();
         wordpoolDisplay.undistinguishAllWords();
-
-        waveformChunkCache = null;
 
         player = null;
         calculator = null;

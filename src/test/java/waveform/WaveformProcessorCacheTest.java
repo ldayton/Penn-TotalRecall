@@ -30,7 +30,7 @@ class WaveformProcessorCacheTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         WaveformProcessor processor =
-                new WaveformProcessor(mockFmodCore, mockPixelScaler, mockWaveformScaler);
+                new WaveformProcessor(mockFmodCore, mockPixelScaler, mockWaveformScaler, true);
 
         double[] firstResult =
                 processor.processAudioForDisplay("test.wav", 0, 10.0, 0.25, 0.1, 0.4, 100);

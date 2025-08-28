@@ -1,42 +1,37 @@
-package components.waveform;
+package waveform;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 import state.AudioState;
-import waveform.WaveformChunk;
 
 /** LRU cache for waveform chunks with async prefetching. */
-@Singleton
-public final class WaveformChunkCache {
-    /** Audio chunk size in seconds for waveform buffering. */
-    public static final int CHUNK_SIZE_SECONDS = 10;
+final class WaveformChunkCache {
 
     /** Cache size: current + previous + next chunk. */
     private static final int MAX_CACHE_SIZE = 3;
 
+    private final Waveform waveform;
     private final AudioState audioState;
-    private final LoadingCache<ChunkKey, WaveformChunk> chunkCache;
+    private final LoadingCache<ChunkKey, RenderedChunk> chunkCache;
 
-    /** Cache key: chunk number + render height. */
-    public record ChunkKey(int chunkNumber, int height) {}
+    /** Cache key: chunk number only - height is fixed per waveform. */
+    public record ChunkKey(int chunkNumber) {}
 
-    @Inject
-    public WaveformChunkCache(AudioState audioState) {
+    public WaveformChunkCache(Waveform waveform, AudioState audioState) {
+        this.waveform = waveform;
         this.audioState = audioState;
         this.chunkCache = Caffeine.newBuilder().maximumSize(MAX_CACHE_SIZE).build(this::loadChunk);
     }
 
     /** Get chunk with async prefetching of adjacent chunks. */
-    public WaveformChunk getChunk(int chunkNumber, int height) {
+    public RenderedChunk getChunk(int chunkNumber) {
         requireAudioLoaded();
-        var key = new ChunkKey(chunkNumber, height);
+        var key = new ChunkKey(chunkNumber);
         var chunk = chunkCache.get(key);
-        prefetchAdjacentAsync(chunkNumber, height);
+        prefetchAdjacentAsync(chunkNumber);
         return chunk;
     }
 
@@ -46,17 +41,14 @@ public final class WaveformChunkCache {
     }
 
     /** Get multiple chunks for bulk operations. */
-    public List<WaveformChunk> getChunks(List<ChunkKey> keys) {
+    public List<RenderedChunk> getChunks(List<ChunkKey> keys) {
         return chunkCache.getAll(keys).values().stream().toList();
     }
 
     /** Load chunk from waveform data (called by Caffeine cache loader). */
-    private WaveformChunk loadChunk(ChunkKey key) {
-        var waveform = audioState.getCurrentWaveform();
-        if (waveform == null) {
-            throw new IllegalStateException("No audio file loaded - cannot render waveform chunks");
-        }
-        return new WaveformChunk(waveform, key.chunkNumber, key.height);
+    private RenderedChunk loadChunk(ChunkKey key) {
+        var image = waveform.renderChunkDirect(key.chunkNumber);
+        return new RenderedChunk(key.chunkNumber, image);
     }
 
     /** Ensure audio is loaded before cache operations. */
@@ -67,13 +59,13 @@ public final class WaveformChunkCache {
     }
 
     /** Async prefetch adjacent chunks (previous/next) without blocking. */
-    private void prefetchAdjacentAsync(int chunkNumber, int height) {
+    private void prefetchAdjacentAsync(int chunkNumber) {
         var maxChunk = audioState.lastChunkNum();
         var adjacentKeys =
                 Stream.of(
-                                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1, height) : null,
+                                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1) : null,
                                 chunkNumber < maxChunk
-                                        ? new ChunkKey(chunkNumber + 1, height)
+                                        ? new ChunkKey(chunkNumber + 1)
                                         : null)
                         .filter(java.util.Objects::nonNull)
                         .toList();

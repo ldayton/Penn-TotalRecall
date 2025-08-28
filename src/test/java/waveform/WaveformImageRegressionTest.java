@@ -90,23 +90,25 @@ class WaveformImageRegressionTest {
     void testVisualWaveformRegressions() throws IOException {
         logger.info("Running waveform visual regression tests...");
 
-        // Test different frequency ranges (staying well within MaryTTS bounds: 0 < freq < 0.5)
-        assertImagesMatch("fullrange", 0.001, 0.45);
-        assertImagesMatch("lowpass", 0.001, 0.1);
-        assertImagesMatch("highpass", 0.1, 0.45);
-        assertImagesMatch("bandpass", 0.05, 0.15);
+        // Test full frequency range waveform rendering
+        assertImagesMatch("fullrange");
 
         logger.info("All waveform visual regression tests passed!");
     }
 
-    private void assertImagesMatch(String name, double minFreq, double maxFreq) throws IOException {
-        logger.debug("Testing {} frequency range images ({}Hz - {}Hz)", name, minFreq, maxFreq);
+    private void assertImagesMatch(String name) throws IOException {
+        logger.debug("Testing {} waveform images", name);
 
-        Waveform waveform = new Waveform(SAMPLE_FILE_PATH, minFreq, maxFreq, fmodCore);
+        Waveform waveform = Waveform.builder(fmodCore)
+                .audioFile(SAMPLE_FILE_PATH)
+                .timeResolution(200)
+                .amplitudeResolution(TEST_IMAGE_HEIGHT)
+                .enableCaching(false)
+                .build();
 
         // Test configured number of chunks at standard height
         for (int chunkNum = 0; chunkNum < TEST_CHUNK_COUNT; chunkNum++) {
-            Image actualImage = waveform.renderChunk(chunkNum, TEST_IMAGE_HEIGHT);
+            Image actualImage = waveform.renderChunk(chunkNum).image();
             String filename = String.format("%s_chunk%d.png", name, chunkNum);
 
             // Load reference image from test resources

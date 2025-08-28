@@ -29,7 +29,7 @@ import state.AudioState;
 import ui.UiColors;
 import ui.UiConstants;
 import ui.UiShapes;
-import waveform.WaveformChunk;
+import waveform.RenderedChunk;
 
 /**
  * This WaveformDisplay is totally autonomous except for changes of zoom factor.
@@ -59,23 +59,20 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private long refreshFrame;
     private int refreshWidth;
     private int refreshHeight;
-    private WaveformChunk previousRefreshChunk;
-    private WaveformChunk curRefreshChunk;
-    private WaveformChunk nextRefreshChunk;
+    private RenderedChunk previousRefreshChunk;
+    private RenderedChunk curRefreshChunk;
+    private RenderedChunk nextRefreshChunk;
 
     private final AudioState audioState;
     private final EventDispatchBus eventBus;
-    private final WaveformChunkCache waveformChunkCache;
 
     private volatile int progressBarXPos;
 
     @Inject
     public WaveformDisplay(
             AudioState audioState,
-            EventDispatchBus eventBus,
-            WaveformChunkCache waveformChunkCache) {
+            EventDispatchBus eventBus) {
         this.audioState = audioState;
-        this.waveformChunkCache = waveformChunkCache;
         setOpaque(true);
         setBackground(UiColors.waveformBackground);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
@@ -192,28 +189,28 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
         // draw buffered waveform image
         int curChunkXPos =
-                frameToComponentX(audioState.firstFrameOfChunk(curRefreshChunk.getNum()));
-        g.drawImage(curRefreshChunk.getImage(), curChunkXPos, 0, null);
+                frameToComponentX(audioState.firstFrameOfChunk(curRefreshChunk.chunkNumber()));
+        g.drawImage(curRefreshChunk.image(), curChunkXPos, 0, null);
 
         if (previousRefreshChunk != null) {
             g.drawImage(
-                    previousRefreshChunk.getImage(),
-                    curChunkXPos - curRefreshChunk.getImage().getWidth(null),
+                    previousRefreshChunk.image(),
+                    curChunkXPos - curRefreshChunk.image().getWidth(null),
                     0,
                     null);
         } else {
-            if (curRefreshChunk.getNum() != 0) {
+            if (curRefreshChunk.chunkNumber() != 0) {
                 chunkInProgress = true;
             }
         }
         if (nextRefreshChunk != null) {
             g.drawImage(
-                    nextRefreshChunk.getImage(),
-                    curChunkXPos + curRefreshChunk.getImage().getWidth(null),
+                    nextRefreshChunk.image(),
+                    curChunkXPos + curRefreshChunk.image().getWidth(null),
                     0,
                     null);
         } else {
-            if (curRefreshChunk.getNum() != audioState.lastChunkNum()) {
+            if (curRefreshChunk.chunkNumber() != audioState.lastChunkNum()) {
                 chunkInProgress = true;
             }
         }
@@ -439,14 +436,14 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                 return;
             }
 
-            curRefreshChunk = waveformChunkCache.getChunk(chunkNum, refreshHeight);
+            curRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum);
             if (chunkNum > 0) {
-                previousRefreshChunk = waveformChunkCache.getChunk(chunkNum - 1, refreshHeight);
+                previousRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum - 1);
             } else {
                 previousRefreshChunk = null;
             }
             if (chunkNum < audioState.lastChunkNum()) {
-                nextRefreshChunk = waveformChunkCache.getChunk(chunkNum + 1, refreshHeight);
+                nextRefreshChunk = audioState.getCurrentWaveform().renderChunk(chunkNum + 1);
             } else {
                 nextRefreshChunk = null;
             }
@@ -454,7 +451,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             wasPlaying = isPlaying;
             bufferedFrame = realRefreshFrame;
             bufferedWidth = refreshWidth;
-            bufferedHeight = curRefreshChunk.getImage().getHeight(null);
+            bufferedHeight = curRefreshChunk.image().getHeight(null);
             bufferedNumAnns = AnnotationDisplay.getNumAnnotations();
 
             repaint();

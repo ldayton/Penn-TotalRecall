@@ -15,14 +15,14 @@ final class WaveformProcessor {
     private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
     private final WaveformScaler waveformScaler;
-    private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache =
-            new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
     public WaveformProcessor(
-            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler) {
+            FmodCore fmodCore, PixelScaler pixelScaler, WaveformScaler waveformScaler, boolean cachingEnabled) {
         this.fmodCore = fmodCore;
         this.pixelScaler = pixelScaler;
         this.waveformScaler = waveformScaler;
+        this.filterCache = cachingEnabled ? new ConcurrentHashMap<>() : null;
     }
 
     /** Processes audio and scales for display in one call. */
@@ -81,11 +81,14 @@ final class WaveformProcessor {
         double[] samples = rawAudio.amplitudeValues();
 
         if (samples.length > 0) {
-            BandPassFilter filter =
-                    filterCache.computeIfAbsent(
-                            frequencyFilter,
-                            range ->
-                                    new BandPassFilter(range.minFrequency(), range.maxFrequency()));
+            BandPassFilter filter;
+            if (filterCache != null) {
+                filter = filterCache.computeIfAbsent(
+                        frequencyFilter,
+                        range -> new BandPassFilter(range.minFrequency(), range.maxFrequency()));
+            } else {
+                filter = new BandPassFilter(frequencyFilter.minFrequency(), frequencyFilter.maxFrequency());
+            }
             samples = filter.apply(samples); // This returns new array
         }
 
