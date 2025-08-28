@@ -11,7 +11,7 @@ import ui.UiShapes;
 /** Headless Graphics2D waveform rendering for display visualization. */
 final class WaveformRenderer {
 
-    private final DecimalFormat secFormat = new DecimalFormat("0.00s");
+    private static final DecimalFormat SEC_FORMAT = new DecimalFormat("0.00s");
     private final WaveformScaler waveformScaler;
 
     public WaveformRenderer(WaveformScaler waveformScaler) {
@@ -63,7 +63,7 @@ final class WaveformRenderer {
             g2d.drawLine(i, 0, i, height - 1);
 
             g2d.setColor(UiColors.waveformScaleTextColor);
-            g2d.drawString(secFormat.format(counter), i + 5, height - 5);
+            g2d.drawString(SEC_FORMAT.format(counter), i + 5, height - 5);
             counter++;
         }
     }
