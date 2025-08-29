@@ -1,7 +1,6 @@
 package components.preferences;
 
 import app.di.GuiceBootstrap;
-import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -13,7 +12,6 @@ public class RestoreDefaultsAction extends AbstractAction {
 
     private final PreferencesFrame preferencesFrame;
 
-    @Inject
     public RestoreDefaultsAction(PreferencesFrame preferencesFrame) {
         this.preferencesFrame = preferencesFrame;
     }

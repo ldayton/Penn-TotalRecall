@@ -1,7 +1,6 @@
 package components.preferences;
 
 import app.di.GuiceBootstrap;
-import jakarta.inject.Inject;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class SavePreferencesAction extends AbstractAction {
 
     private final PreferencesFrame preferencesFrame;
 
-    @Inject
     public SavePreferencesAction(PreferencesFrame preferencesFrame) {
         this.preferencesFrame = preferencesFrame;
     }

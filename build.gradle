@@ -340,8 +340,7 @@ test {
         }
     }
 
-    // Ensure FMOD-engine tests run after standard tests in one command
-    finalizedBy 'audioEngineTest'
+    // Do not chain audioEngineTest here; see 'check' wiring below
 }
 
 // FMOD (audio-engine) tests: run sequentially with one JVM per class for isolation
@@ -386,6 +385,14 @@ tasks.register('audioEngineTest', Test.class) {
     System.getProperties().each { k, v ->
         if (k instanceof String && k.startsWith('test.')) systemProperty k, v
     }
+}
+
+// Run audio engine tests as part of the verification lifecycle, not after every 'test' invocation
+tasks.named('audioEngineTest') {
+    mustRunAfter tasks.named('test')
+}
+tasks.named('check') {
+    dependsOn tasks.named('audioEngineTest')
 }
 
 // Packaging integration tests - requires built artifacts

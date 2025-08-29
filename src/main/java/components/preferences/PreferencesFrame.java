@@ -42,8 +42,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     private final KeyboardManager keyboardManager;
     private final env.LookAndFeelManager lookAndFeelManager;
     private final MainWindowAccess windowService;
-    private final SavePreferencesAction savePreferencesAction;
-    private final RestoreDefaultsAction restoreDefaultsAction;
+    // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
     private final JScrollPane prefScrollPane;
@@ -64,14 +63,11 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     public PreferencesFrame(
             KeyboardManager keyboardManager,
             env.LookAndFeelManager lookAndFeelManager,
-            MainWindowAccess windowService,
-            SavePreferencesAction savePreferencesAction,
-            RestoreDefaultsAction restoreDefaultsAction) {
+            MainWindowAccess windowService) {
         this.keyboardManager = keyboardManager;
         this.lookAndFeelManager = lookAndFeelManager;
         this.windowService = windowService;
-        this.savePreferencesAction = savePreferencesAction;
-        this.restoreDefaultsAction = restoreDefaultsAction;
+        // Actions are constructed locally within initButtonsPanel to avoid circular DI
 
         // force handling by the WindowListener (this.windowClosing())
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -206,12 +202,12 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         // frame
 
         JButton jbSavePrefs = new JButton("Save Preferences");
-        jbSavePrefs.addActionListener(savePreferencesAction);
+        jbSavePrefs.addActionListener(new SavePreferencesAction(this));
         buttonPanel.add(jbSavePrefs);
         buttonPanel.add(Box.createHorizontalGlue());
 
         JButton jbRestoreDefaults = new JButton("Restore Defaults");
-        jbRestoreDefaults.addActionListener(restoreDefaultsAction);
+        jbRestoreDefaults.addActionListener(new RestoreDefaultsAction(this));
         buttonPanel.add(jbRestoreDefaults);
         buttonPanel.add(Box.createHorizontalGlue());
 
