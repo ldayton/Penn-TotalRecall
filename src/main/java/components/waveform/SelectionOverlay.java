@@ -4,6 +4,7 @@ import actions.ReplayLast200MillisAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,12 +13,15 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import ui.UiColors;
+import javax.swing.UIManager;
 import ui.UiConstants;
 
 /** Glass pane overlay for mouse selection highlighting and replay flash feedback. */
 @Singleton
 public final class SelectionOverlay extends JComponent {
+
+    private static final Color MOUSE_HIGHLIGHT_COLOR = UIManager.getColor("Component.focusColor");
+    private static final Color REPLAY_FLASH_COLOR = UIManager.getColor("Component.focusColor");
 
     private final WaveformCoordinateSystem waveformCoordinateSystem;
     private final AlphaComposite composite;
@@ -63,14 +67,14 @@ public final class SelectionOverlay extends JComponent {
     /** Paint mouse selection highlight rectangle. */
     private void paintHighlight(Graphics2D g2d) {
         g2d.setComposite(composite);
-        g2d.setColor(UiColors.mouseHighlightColor);
+        g2d.setColor(MOUSE_HIGHLIGHT_COLOR);
         g2d.fillRect(highlightRect.x, highlightRect.y, highlightRect.width, highlightRect.height);
     }
 
     /** Paint 200ms replay flash rectangle. */
     private void paintFlash(Graphics2D g2d) {
         g2d.setComposite(composite);
-        g2d.setColor(UiColors.replay200MillisFlashColor);
+        g2d.setColor(REPLAY_FLASH_COLOR);
         var yPos =
                 SwingUtilities.convertPoint(waveformCoordinateSystem.asComponent(), -1, 0, this).y;
         g2d.fillRect(
