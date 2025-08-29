@@ -2,7 +2,6 @@ package waveform;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 import state.AudioState;
@@ -38,11 +37,6 @@ final class WaveformChunkCache {
     /** Clears all cached chunks. */
     public void clear() {
         chunkCache.invalidateAll();
-    }
-
-    /** Get multiple chunks for bulk operations. */
-    public List<RenderedChunk> getChunks(List<ChunkKey> keys) {
-        return chunkCache.getAll(keys).values().stream().toList();
     }
 
     /** Load chunk from waveform data (called by Caffeine cache loader). */

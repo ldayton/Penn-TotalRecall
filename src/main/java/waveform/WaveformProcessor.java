@@ -53,11 +53,6 @@ final class WaveformProcessor {
         }
     }
 
-    /** Calculates Y-axis scaling factor for display. */
-    public double calculateYScale(double[] amplitudes, int displayHeight, double peakReference) {
-        return waveformScaler.getPixelScale(amplitudes, displayHeight, peakReference);
-    }
-
     /** Loads raw audio chunk from file using FMOD. */
     private AudioChunkData loadChunk(
             String audioFilePath,

@@ -6,10 +6,4 @@ record AudioChunkData(
         double sampleRate,
         double peakAmplitude,
         int frameCount,
-        int overlapFrames) {
-
-    /** Chunk duration in seconds. */
-    double getDurationSeconds() {
-        return frameCount / sampleRate;
-    }
-}
+        int overlapFrames) {}

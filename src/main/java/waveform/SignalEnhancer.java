@@ -2,36 +2,12 @@ package waveform;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import marytts.signalproc.filter.BandPassFilter;
-import marytts.util.data.audio.AudioDoubleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Signal processing operations for audio enhancement. */
 final class SignalEnhancer {
     private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
-
-    /** Applies bandpass filtering to audio samples using MaryTTS filter implementation. */
-    public double[] bandpassFilter(
-            AudioDoubleDataSource audioSource,
-            double minBand,
-            double maxBand,
-            double[] outputSamples) {
-        if (minBand < 0 || maxBand > 0.5 || minBand >= maxBand) {
-            throw new IllegalArgumentException(
-                    "Invalid bandpass range: " + minBand + " to " + maxBand);
-        }
-
-        BandPassFilter filter = new BandPassFilter(minBand, maxBand);
-        filter.apply(audioSource).getData(outputSamples);
-
-        logger.debug(
-                "Applied bandpass filter {}-{} Hz to {} samples",
-                minBand,
-                maxBand,
-                outputSamples.length);
-        return outputSamples;
-    }
 
     /** Applies envelope smoothing to reduce noise in audio signal using sliding window maximum. */
     public double[] envelopeSmooth(double[] samples, int windowSize) {
@@ -82,19 +58,5 @@ final class SignalEnhancer {
         logger.debug(
                 "Applied envelope smoothing (window={}) to {} samples", windowSize, samples.length);
         return samples;
-    }
-
-    /** Calculates peak amplitude for signal analysis. */
-    public double calculatePeak(double[] samples, int skipInitialSamples) {
-        if (samples.length < skipInitialSamples + 2) {
-            return 0;
-        }
-
-        double maxSustained = 0;
-        for (int i = skipInitialSamples; i < samples.length - 1; i++) {
-            double consecutiveVals = Math.min(samples[i], samples[i + 1]);
-            maxSustained = Math.max(consecutiveVals, maxSustained);
-        }
-        return maxSustained;
     }
 }
