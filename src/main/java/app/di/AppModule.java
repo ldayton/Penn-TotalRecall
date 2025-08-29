@@ -27,6 +27,7 @@ import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolList;
 import components.wordpool.WordpoolTextField;
 import env.AppConfig;
+import env.DevModeFileAutoLoader;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
 import env.Platform;
@@ -53,6 +54,7 @@ public class AppModule extends AbstractModule {
         bind(ActionsManager.class).in(Singleton.class);
         bind(AppConfig.class).in(Singleton.class);
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
+        bind(DevModeFileAutoLoader.class).in(Singleton.class);
         bind(FmodCore.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);

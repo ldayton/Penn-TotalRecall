@@ -8,8 +8,11 @@ import components.AppMenuBar;
 import components.ContentSplitPane;
 import components.MainFrame;
 import components.WindowLayoutPersistence;
+import env.DevModeFileAutoLoader;
 import env.LookAndFeelManager;
 import env.UpdateManager;
+import events.ApplicationStartedEvent;
+import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import javax.swing.UIManager;
 import org.slf4j.Logger;
@@ -33,6 +36,7 @@ public class GuiceBootstrap {
     private final MainFrame myFrame;
     private final ContentSplitPane mySplitPane;
     private final AppFocusTraversalPolicy myFocusTraversalPolicy;
+    private final EventDispatchBus eventBus;
 
     @Inject
     public GuiceBootstrap(
@@ -43,7 +47,8 @@ public class GuiceBootstrap {
             AppMenuBar myMenu,
             MainFrame myFrame,
             ContentSplitPane mySplitPane,
-            AppFocusTraversalPolicy myFocusTraversalPolicy) {
+            AppFocusTraversalPolicy myFocusTraversalPolicy,
+            EventDispatchBus eventBus) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
@@ -52,6 +57,7 @@ public class GuiceBootstrap {
         this.myFrame = myFrame;
         this.mySplitPane = mySplitPane;
         this.myFocusTraversalPolicy = myFocusTraversalPolicy;
+        this.eventBus = eventBus;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -75,6 +81,9 @@ public class GuiceBootstrap {
 
         // Initialize waveform components (this triggers creation of mouse listeners)
         globalInjector.getInstance(components.waveform.WaveformMouseSetup.class);
+
+        // Initialize DevModeFileAutoLoader (subscribes to events)
+        globalInjector.getInstance(DevModeFileAutoLoader.class);
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
@@ -279,5 +288,8 @@ public class GuiceBootstrap {
 
         // Check for updates after UI is ready (async, non-blocking)
         updateManager.checkForUpdateOnStartup();
+
+        // Notify that application has fully started
+        eventBus.publish(new ApplicationStartedEvent());
     }
 }
