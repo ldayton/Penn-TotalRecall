@@ -23,6 +23,10 @@ final class WaveformRenderer {
 
     static {
         RENDERING_HINTS.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        RENDERING_HINTS.put(
+                RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        RENDERING_HINTS.put(
+                RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
     }
 
     private final WaveformScaler waveformScaler;

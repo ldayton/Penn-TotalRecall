@@ -22,7 +22,12 @@ ext {
     maintainerEmail = 'lily.dayton.3@gmail.com'
     orgName = 'Computational Memory Lab, UPenn'
     uniqueIdentifier = 'edu.upenn.psych.memory.penntotalrecall'
-    nativeAccessJvmArgs = ['--enable-native-access=ALL-UNNAMED']
+    nativeAccessJvmArgs = [
+        '--enable-native-access=ALL-UNNAMED',
+        '-Dsun.java2d.uiScale.enabled=true',
+        '-Dswing.aatext=true', 
+        '-Dawt.useSystemAAFontSettings=on'
+    ]
     // Single source of truth for CI detection
     isCI = System.getenv('CI') == 'true'
 }
