@@ -4,6 +4,7 @@ import actions.ExitAction;
 import components.waveform.SelectionOverlay;
 import components.wordpool.WordpoolDisplay;
 import env.LookAndFeelManager;
+import env.PreferenceKeys;
 import events.AudioFileSwitchedEvent;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -24,6 +25,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import state.PreferencesManager;
 import ui.UiConstants;
 
 /**
@@ -44,6 +46,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     private final ExitAction exitAction;
     private final EventDispatchBus eventBus;
     private final FileDropListener fileDropListener;
+    private final PreferencesManager preferencesManager;
 
     @Inject
     public MainFrame(
@@ -53,7 +56,8 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
             AppMenuBar myMenu,
             ExitAction exitAction,
             EventDispatchBus eventBus,
-            FileDropListener fileDropListener) {
+            FileDropListener fileDropListener,
+            PreferencesManager preferencesManager) {
         this.lookAndFeelManager = lookAndFeelManager;
         this.mySplitPane = mySplitPane;
         this.myGlassPane = myGlassPane;
@@ -61,6 +65,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         this.exitAction = exitAction;
         this.eventBus = eventBus;
         this.fileDropListener = fileDropListener;
+        this.preferencesManager = preferencesManager;
         setTitle(UiConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
@@ -178,10 +183,17 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         }
     }
 
-    /** Handles exit requested events by showing confirmation dialog. */
+    /** Handles exit requested events, honoring the warn-on-exit preference. */
     @Subscribe
     public void handleExitRequested(ExitRequestedEvent event) {
-        // Show confirmation dialog
+        boolean warn =
+                preferencesManager.getBoolean(
+                        PreferenceKeys.WARN_ON_EXIT, PreferenceKeys.DEFAULT_WARN_ON_EXIT);
+        if (!warn) {
+            System.exit(0);
+            return;
+        }
+
         boolean confirmed =
                 javax.swing.JOptionPane.showConfirmDialog(
                                 this,
@@ -189,10 +201,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
                                 "Confirm Exit",
                                 javax.swing.JOptionPane.YES_NO_OPTION)
                         == javax.swing.JOptionPane.YES_OPTION;
-
-        if (confirmed) {
-            System.exit(0);
-        }
+        if (confirmed) System.exit(0);
     }
 
     /** Handles preferences requested events by opening the preferences window. */

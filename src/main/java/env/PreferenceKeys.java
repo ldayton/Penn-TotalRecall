@@ -13,7 +13,6 @@ public final class PreferenceKeys {
     public static final String WINDOW_Y = "WINDOW_Y";
     public static final String WINDOW_WIDTH = "WINDOW_WIDTH";
     public static final String WINDOW_HEIGHT = "WINDOW_HEIGHT";
-    public static final String WINDOW_MAXIMIZED = "WINDOW_MAXIMIZED";
     public static final String DIVIDER_LOCATION = "DIVIDER_LOCATION";
 
     // File operation preferences
@@ -34,7 +33,6 @@ public final class PreferenceKeys {
     public static final boolean DEFAULT_WARN_ON_EXIT = true;
     public static final boolean DEFAULT_WARN_FILE_SWITCH = true;
     public static final boolean DEFAULT_USE_EMACS = false;
-    public static final boolean DEFAULT_WINDOW_MAXIMIZED = false;
     public static final int DEFAULT_WINDOW_WIDTH = 1000;
     public static final int DEFAULT_WINDOW_HEIGHT = 500;
     public static final int DEFAULT_SMALL_SHIFT = 5;

@@ -10,7 +10,7 @@ import state.PreferencesManager;
 /**
  * Manages window state persistence and restoration.
  *
- * <p>Saves and restores window position, size, maximized state, and split pane divider location.
+ * <p>Saves and restores window position, size, and split pane divider location.
  */
 public class WindowLayoutPersistence {
     private final PreferencesManager prefs;
@@ -33,7 +33,6 @@ public class WindowLayoutPersistence {
      * <ul>
      *   <li>Window position (x, y coordinates)
      *   <li>Window size (width, height)
-     *   <li>Maximized state
      *   <li>Split pane divider location
      * </ul>
      *
@@ -110,8 +109,7 @@ public class WindowLayoutPersistence {
         prefs.putInt(PreferenceKeys.WINDOW_WIDTH, bounds.width);
         prefs.putInt(PreferenceKeys.WINDOW_HEIGHT, bounds.height);
 
-        // Don't bother with maximize state on macOS
-        prefs.putBoolean(PreferenceKeys.WINDOW_MAXIMIZED, false);
+        // Don't persist maximize state (platform behavior is inconsistent)
     }
 
     private void saveDividerLocation(@NonNull ContentSplitPane splitPane) {
