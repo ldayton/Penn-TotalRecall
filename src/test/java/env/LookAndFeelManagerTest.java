@@ -15,7 +15,7 @@ class LookAndFeelManagerTest {
     void userConfigOverridesDefault() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        ExitAction exitAction = mock(ExitAction.class);
+        mock(ExitAction.class);
         when(config.getProperty("ui.look_and_feel")).thenReturn("com.example.CustomLaf");
 
         LookAndFeelManager manager = new LookAndFeelManager(config, platform);
@@ -31,7 +31,7 @@ class LookAndFeelManagerTest {
     void emptyConfigFallsBackToDefault() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        ExitAction exitAction = mock(ExitAction.class);
+        mock(ExitAction.class);
         when(config.getProperty("ui.look_and_feel")).thenReturn("");
         when(config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf"))
                 .thenReturn("com.formdev.flatlaf.FlatLightLaf");
@@ -48,7 +48,7 @@ class LookAndFeelManagerTest {
     void macOSHidesPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        ExitAction exitAction = mock(ExitAction.class);
+        mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
 
         LookAndFeelManager manager = new LookAndFeelManager(config, platform);
@@ -61,7 +61,7 @@ class LookAndFeelManagerTest {
     void nonMacOSShowsPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        ExitAction exitAction = mock(ExitAction.class);
+        mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
 
         LookAndFeelManager manager = new LookAndFeelManager(config, platform);
@@ -77,7 +77,7 @@ class LookAndFeelManagerTest {
 
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
-        ExitAction exitAction = mock(ExitAction.class);
+        mock(ExitAction.class);
         LookAndFeelManager windowsManager = new LookAndFeelManager(config, platform);
         assertEquals("/images/headphones48.png", windowsManager.getAppIconPath());
 

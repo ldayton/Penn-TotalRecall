@@ -3,14 +3,12 @@ package actions;
 import components.audiofiles.AudioFileDisplay;
 import env.Constants;
 import env.PreferenceKeys;
-import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
-import state.AudioState;
 import state.PreferencesManager;
 
 /**
@@ -19,19 +17,11 @@ import state.PreferencesManager;
  */
 @Singleton
 public class OpenAudioFileAction extends BaseAction {
-
-    private final AudioState audioState;
-    private final EventDispatchBus eventBus;
     private final PreferencesManager preferencesManager;
 
     @Inject
-    public OpenAudioFileAction(
-            AudioState audioState,
-            EventDispatchBus eventBus,
-            PreferencesManager preferencesManager) {
+    public OpenAudioFileAction(PreferencesManager preferencesManager) {
         super("Open Audio File", "Select audio files");
-        this.audioState = audioState;
-        this.eventBus = eventBus;
         this.preferencesManager = preferencesManager;
     }
 

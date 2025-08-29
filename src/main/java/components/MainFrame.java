@@ -24,8 +24,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import state.PreferencesManager;
 import ui.UiConstants;
 
@@ -37,16 +35,8 @@ import ui.UiConstants;
  */
 @Singleton
 public class MainFrame extends JFrame implements KeyEventPostProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(MainFrame.class);
 
     private static MainFrame instance;
-    private final LookAndFeelManager lookAndFeelManager;
-    private final ContentSplitPane mySplitPane;
-    private final SelectionOverlay myGlassPane;
-    private final AppMenuBar myMenu;
-    private final ExitAction exitAction;
-    private final EventDispatchBus eventBus;
-    private final FileDropListener fileDropListener;
     private final PreferencesManager preferencesManager;
 
     @Inject
@@ -59,13 +49,6 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
             EventDispatchBus eventBus,
             FileDropListener fileDropListener,
             PreferencesManager preferencesManager) {
-        this.lookAndFeelManager = lookAndFeelManager;
-        this.mySplitPane = mySplitPane;
-        this.myGlassPane = myGlassPane;
-        this.myMenu = myMenu;
-        this.exitAction = exitAction;
-        this.eventBus = eventBus;
-        this.fileDropListener = fileDropListener;
         this.preferencesManager = preferencesManager;
         setTitle(UiConstants.defaultFrameTitle);
         setGlassPane(myGlassPane);

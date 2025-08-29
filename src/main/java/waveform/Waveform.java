@@ -17,7 +17,6 @@ public final class Waveform {
     private final WaveformRenderer renderer;
     private final PixelScaler pixelScaler;
     private volatile WaveformChunkCache cache;
-    private volatile state.AudioState cachedAudioState;
 
     // Rendering peak may depend on time resolution; store per-resolution values
     private final java.util.concurrent.ConcurrentHashMap<Integer, Double> resolutionPeaks =
@@ -39,13 +38,11 @@ public final class Waveform {
         this.pixelScaler = new PixelScaler();
         WaveformScaler waveformScaler = new WaveformScaler();
         this.renderer = new WaveformRenderer(waveformScaler);
-        this.processor =
-                new WaveformProcessor(fmodCore, pixelScaler, waveformScaler, cachingEnabled);
+        this.processor = new WaveformProcessor(fmodCore, pixelScaler, cachingEnabled);
 
         // Create cache if caching is enabled - needs AudioState but we don't have it yet
         // For now, cache will be set later via a setter
         this.cache = null;
-        this.cachedAudioState = null;
     }
 
     /** Creates a new WaveformBuilder for fluent configuration. */
@@ -92,7 +89,7 @@ public final class Waveform {
     private double ensureGlobalScalingForResolution(double[] audioData, int timeRes) {
         return resolutionPeaks.computeIfAbsent(
                 timeRes,
-                k -> {
+                _ -> {
                     double peak = pixelScaler.getRenderingPeak(audioData, Math.max(1, timeRes / 2));
                     logger.debug(
                             "Initialized rendering peak: {} for file: {} at {} px/s",
@@ -119,7 +116,6 @@ public final class Waveform {
         if (cachingEnabled && cache == null) {
             synchronized (this) {
                 if (cache == null) {
-                    this.cachedAudioState = audioState;
                     cache = new WaveformChunkCache(this, audioState);
                 }
             }

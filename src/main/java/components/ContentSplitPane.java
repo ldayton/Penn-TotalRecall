@@ -24,13 +24,6 @@ import javax.swing.KeyStroke;
 public class ContentSplitPane extends JSplitPane {
 
     private static ContentSplitPane instance;
-    private final ControlPanel controlPanel;
-    private final WaveformDisplay waveformDisplay;
-    private final ActionsManager actionsManager;
-    private final PlayPauseAction playPauseAction;
-    private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
-    private final AnnotateIntrusionAction annotateIntrusionAction;
-    private final EventDispatchBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -46,14 +39,6 @@ public class ContentSplitPane extends JSplitPane {
             AnnotateIntrusionAction annotateIntrusionAction,
             EventDispatchBus eventBus) {
         super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
-        this.controlPanel = controlPanel;
-        this.waveformDisplay = waveformDisplay;
-        this.actionsManager = actionsManager;
-        this.playPauseAction = playPauseAction;
-        this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
-        this.annotateIntrusionAction = annotateIntrusionAction;
-        this.eventBus = eventBus;
-
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
         // components, both are essential

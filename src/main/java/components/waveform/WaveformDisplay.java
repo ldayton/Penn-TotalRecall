@@ -119,7 +119,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         resizeDebounceTimer =
                 new Timer(
                         150,
-                        e -> {
+                        _ -> {
                             if (currentWaveform != null && pendingAmplitudeHeight > 0) {
                                 currentWaveform.setAmplitudeResolution(pendingAmplitudeHeight);
                                 if (refreshTimer == null || !refreshTimer.isRunning()) {
@@ -437,7 +437,6 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
         private long bufferedFrame;
         private int bufferedWidth;
-        private int bufferedHeight;
         private int bufferedNumAnns;
 
         private boolean wasPlaying;
@@ -451,7 +450,6 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                             * MAX_INTERPOLATED_PIXELS;
             bufferedFrame = -1;
             bufferedWidth = -1;
-            bufferedHeight = -1;
             bufferedNumAnns = -1;
             wasPlaying = false;
             lastTime = 0;
@@ -526,7 +524,6 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             bufferedFrame = realRefreshFrame;
             bufferedWidth = refreshWidth;
             bufferedNumAnns = AnnotationDisplay.getNumAnnotations();
-            bufferedHeight = curRefreshChunk.image().getHeight(null);
             lastImageKey = currentImageKey;
 
             repaint();

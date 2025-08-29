@@ -144,7 +144,7 @@ class LookAndFeelManagerMacOSTest {
         // Simulate the Guice bootstrap process
         // This should fail because currently the system property is set AFTER Swing components are
         // created
-        GuiceBootstrap bootstrap = GuiceBootstrap.create();
+        GuiceBootstrap.create();
 
         // Verify the system property is set correctly BEFORE any Swing components are created
         String useScreenMenuBar = System.getProperty("apple.laf.useScreenMenuBar");

@@ -211,7 +211,7 @@ class LookAndFeelIntegrationTest {
         AtomicReference<Throwable> caughtException = new AtomicReference<>();
 
         Thread.setDefaultUncaughtExceptionHandler(
-                (thread, throwable) -> {
+                (_, throwable) -> {
                     if (throwable.getMessage() != null
                             && (throwable.getMessage().contains("AquaLookAndFeel")
                                     || throwable.getMessage().contains("cellFocusRingColor"))) {

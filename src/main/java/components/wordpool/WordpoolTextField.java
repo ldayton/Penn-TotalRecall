@@ -40,10 +40,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     private static WordpoolTextField instance;
 
     private String clipboard = "";
-    private final KeyboardManager keyboardManager;
-    private final PreferencesManager preferencesManager;
     private final WordpoolList wordpoolList;
-    private final EventDispatchBus eventBus;
 
     @Inject
     public WordpoolTextField(
@@ -51,10 +48,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
             PreferencesManager preferencesManager,
             WordpoolList wordpoolList,
             EventDispatchBus eventBus) {
-        this.keyboardManager = keyboardManager;
-        this.preferencesManager = preferencesManager;
         this.wordpoolList = wordpoolList;
-        this.eventBus = eventBus;
         setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 

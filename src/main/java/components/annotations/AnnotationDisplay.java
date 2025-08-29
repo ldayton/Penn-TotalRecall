@@ -24,7 +24,6 @@ public class AnnotationDisplay extends JScrollPane {
     private static AnnotationDisplay instance;
     private static AnnotationTable table;
     private final AnnotationTable annotationTable;
-    private final EventDispatchBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
@@ -34,7 +33,6 @@ public class AnnotationDisplay extends JScrollPane {
     @Inject
     public AnnotationDisplay(AnnotationTable annotationTable, EventDispatchBus eventBus) {
         this.annotationTable = annotationTable;
-        this.eventBus = eventBus;
         table = annotationTable;
         getViewport().setView(table);
         setPreferredSize(UiConstants.annotationDisplayDimension);

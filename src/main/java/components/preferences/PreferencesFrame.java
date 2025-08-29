@@ -40,8 +40,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
 
     private static PreferencesFrame instance;
     private final KeyboardManager keyboardManager;
-    private final env.LookAndFeelManager lookAndFeelManager;
-    private final MainWindowAccess windowService;
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
@@ -65,8 +63,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
             env.LookAndFeelManager lookAndFeelManager,
             MainWindowAccess windowService) {
         this.keyboardManager = keyboardManager;
-        this.lookAndFeelManager = lookAndFeelManager;
-        this.windowService = windowService;
         // Actions are constructed locally within initButtonsPanel to avoid circular DI
 
         // force handling by the WindowListener (this.windowClosing())

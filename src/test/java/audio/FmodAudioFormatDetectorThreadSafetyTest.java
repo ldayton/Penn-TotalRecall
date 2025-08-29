@@ -120,7 +120,6 @@ class FmodAudioFormatDetectorThreadSafetyTest {
                             for (int j = 0; j < callsPerThread; j++) {
                                 try {
                                     // Test various convenience methods
-                                    boolean supported = detector.isSupportedFormat(audioFile);
                                     totalCalls.incrementAndGet();
 
                                     // These might throw IOException for test files, which is
@@ -225,7 +224,7 @@ class FmodAudioFormatDetectorThreadSafetyTest {
 
                             // Test that we can safely access the thread-safe AudioFile
                             // while other threads might be modifying it
-                            boolean isDone = audioFile.isDone();
+                            audioFile.isDone();
 
                             // Try to detect format (might fail for test files, which is OK)
                             try {

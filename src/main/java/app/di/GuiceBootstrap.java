@@ -31,8 +31,6 @@ public class GuiceBootstrap {
     private final WindowLayoutPersistence windowManager;
     private final UpdateManager updateManager;
     private final LookAndFeelManager lookAndFeelManager;
-    private final ActionsManager actionsManager;
-    private final AppMenuBar myMenu;
     private final MainFrame myFrame;
     private final ContentSplitPane mySplitPane;
     private final AppFocusTraversalPolicy myFocusTraversalPolicy;
@@ -43,8 +41,6 @@ public class GuiceBootstrap {
             WindowLayoutPersistence windowManager,
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
-            ActionsManager actionsManager,
-            AppMenuBar myMenu,
             MainFrame myFrame,
             ContentSplitPane mySplitPane,
             AppFocusTraversalPolicy myFocusTraversalPolicy,
@@ -52,8 +48,6 @@ public class GuiceBootstrap {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
-        this.actionsManager = actionsManager;
-        this.myMenu = myMenu;
         this.myFrame = myFrame;
         this.mySplitPane = mySplitPane;
         this.myFocusTraversalPolicy = myFocusTraversalPolicy;

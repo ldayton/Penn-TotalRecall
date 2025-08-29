@@ -31,17 +31,12 @@ public class AnnotationTable extends JTable implements FocusListener {
     private static AnnotationTableModel model;
 
     private final AnnotationTableCellRenderer render;
-    private final AnnotationTableMouseAdapter mouseAdapter;
-    private final JumpToAnnotationAction jumpToAnnotationAction;
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AnnotationTable(
             AnnotationTableMouseAdapter mouseAdapter,
             JumpToAnnotationAction jumpToAnnotationAction) {
-        this.mouseAdapter = mouseAdapter;
-        this.jumpToAnnotationAction = jumpToAnnotationAction;
-
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
         JTableHeader header = getTableHeader();

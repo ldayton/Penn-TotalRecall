@@ -39,10 +39,7 @@ import state.PreferencesManager;
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
-
-    @SuppressWarnings("UnusedVariable") // Used in nested ShortcutTable class
     private final ShortcutPreferences.ActionConfigListener listener;
-
     private final ContentPane contentPane;
 
     /**
@@ -164,10 +161,6 @@ class ShortcutTable extends JTable {
     private final ActionConfig[] defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
 
-    @SuppressWarnings(
-            "UnusedVariable") // Listener is passed to ShortcutPreferences for notifications
-    private final ShortcutPreferences.ActionConfigListener listener;
-
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
@@ -177,7 +170,6 @@ class ShortcutTable extends JTable {
             ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = defaultActionConfigs;
         this.shortcutPreferences = shortcutPreferences;
-        this.listener = listener;
         this.shortcutTableModel = new ShortcutTableModel();
 
         setModel(shortcutTableModel);

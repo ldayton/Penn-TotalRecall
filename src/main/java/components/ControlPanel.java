@@ -22,11 +22,6 @@ import ui.UiColors;
 @Singleton
 public class ControlPanel extends JPanel {
 
-    private final DoneButton doneButton;
-    private final AudioFileDisplay audioFileDisplay;
-    private final AnnotationDisplay annotationDisplay;
-    private final WordpoolDisplay wordpoolDisplay;
-
     /** Creates a new instance, initializing listeners and appearance. */
     @Inject
     public ControlPanel(
@@ -34,14 +29,8 @@ public class ControlPanel extends JPanel {
             AudioFileDisplay audioFileDisplay,
             AnnotationDisplay annotationDisplay,
             WordpoolDisplay wordpoolDisplay) {
-        this.doneButton = doneButton;
-        this.audioFileDisplay = audioFileDisplay;
-        this.annotationDisplay = annotationDisplay;
-        this.wordpoolDisplay = wordpoolDisplay;
         setOpaque(false);
-
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
         add(Box.createHorizontalGlue());
         add(Box.createRigidArea(new Dimension(30, 0)));
         add(audioFileDisplay);

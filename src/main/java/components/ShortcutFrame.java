@@ -12,12 +12,9 @@ import jakarta.inject.Singleton;
 @Singleton
 public class ShortcutFrame extends ShortcutManager {
 
-    private final ActionsManager actionsManager;
-
     @Inject
     public ShortcutFrame(ActionsManager actionsManager) {
         super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
-        this.actionsManager = actionsManager;
     }
 
     private static components.shortcuts.ShortcutPreferences.ActionConfigListener

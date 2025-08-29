@@ -27,9 +27,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
-    private final AudioFileListMouseAdapter mouseAdapter;
     private final AudioState audioState;
-    private final EventDispatchBus eventBus;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
@@ -40,9 +38,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
             AudioFileListMouseAdapter mouseAdapter,
             AudioState audioState,
             EventDispatchBus eventBus) {
-        this.mouseAdapter = mouseAdapter;
         this.audioState = audioState;
-        this.eventBus = eventBus;
         model = new AudioFileListModel();
         setModel(model);
 

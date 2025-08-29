@@ -3,6 +3,7 @@ package components.audiofiles;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
@@ -22,11 +23,10 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     private final Font plain;
     private final AudioState audioState;
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public AudioFileListCellRenderer(AudioState audioState) {
         this.audioState = audioState;
         plain = getFont();
-        Map attributes = plain.getAttributes();
+        Map<TextAttribute, Object> attributes = new HashMap<>(plain.getAttributes());
         attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
         strikethrough = new Font(attributes);
         bold = plain.deriveFont(Font.BOLD);
@@ -35,16 +35,18 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     /** {@inheritDoc} */
     @Override
     public Component getListCellRendererComponent(
-            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        if (((AudioFile) value).isDone()) {
+        AudioFile audioFile = (value instanceof AudioFile) ? (AudioFile) value : null;
+        if (audioFile != null && audioFile.isDone()) {
             setEnabled(false);
             setFont(strikethrough);
         } else {
             if (audioState.audioOpen()) {
-                if (((AudioFile) value)
-                        .getAbsolutePath()
-                        .equals(audioState.getCurrentAudioFileAbsolutePath())) {
+                if (audioFile != null
+                        && audioFile
+                                .getAbsolutePath()
+                                .equals(audioState.getCurrentAudioFileAbsolutePath())) {
                     setFont(bold);
                 } else {
                     setFont(plain);

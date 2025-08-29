@@ -23,9 +23,10 @@ public class WordpoolListCellRenderer extends DefaultListCellRenderer {
     /** {@inheritDoc} */
     @Override
     public Component getListCellRendererComponent(
-            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        if (((WordpoolWord) value).isLst()) {
+        WordpoolWord word = (value instanceof WordpoolWord) ? (WordpoolWord) value : null;
+        if (word != null && word.isLst()) {
             setFont(boldFont);
         }
         return this;

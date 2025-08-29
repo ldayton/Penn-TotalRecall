@@ -23,8 +23,6 @@ public class StopAction extends BaseAction {
         if (!audioState.audioOpen()) {
             return;
         }
-
-        boolean currentlyPlaying = audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
         audioState.getPlayer().stop();
         audioState.setAudioProgressWithoutUpdatingActions(0);
     }

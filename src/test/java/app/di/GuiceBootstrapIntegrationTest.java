@@ -1,8 +1,7 @@
-package integration;
+package app.di;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.di.GuiceBootstrap;
 import audio.AudioSystemLoader;
 import audio.FmodCore;
 import components.WindowLayoutPersistence;

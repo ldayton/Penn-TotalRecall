@@ -47,18 +47,17 @@ class ApplicationLifecycleTest {
         logger.info("🚀 Testing full application startup and shutdown...");
 
         // Start application in background thread
-        CompletableFuture<Void> startupFuture =
-                CompletableFuture.runAsync(
-                        () -> {
-                            try {
-                                logger.info("Starting main application...");
-                                // This is the actual application entry point
-                                Main.main(new String[0]);
-                            } catch (Exception e) {
-                                logger.error("Application startup failed", e);
-                                throw new RuntimeException("Application startup failed", e);
-                            }
-                        });
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        logger.info("Starting main application...");
+                        // This is the actual application entry point
+                        Main.main(new String[0]);
+                    } catch (Exception e) {
+                        logger.error("Application startup failed", e);
+                        throw new RuntimeException("Application startup failed", e);
+                    }
+                });
 
         // Wait for application to start (check that GUI appears)
         boolean guiStarted = waitForGuiToAppear(STARTUP_TIMEOUT_SECONDS);
@@ -177,18 +176,17 @@ class ApplicationLifecycleTest {
         logger.info("🧪 Testing application with invalid command line arguments...");
 
         // Test with some invalid arguments
-        CompletableFuture<Void> testFuture =
-                CompletableFuture.runAsync(
-                        () -> {
-                            try {
-                                // This should not crash the application
-                                Main.main(new String[] {"--invalid-flag", "--nonsense=value"});
-                            } catch (Exception e) {
-                                logger.error("Application failed with invalid args", e);
-                                throw new RuntimeException(
-                                        "Application should handle invalid args gracefully", e);
-                            }
-                        });
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        // This should not crash the application
+                        Main.main(new String[] {"--invalid-flag", "--nonsense=value"});
+                    } catch (Exception e) {
+                        logger.error("Application failed with invalid args", e);
+                        throw new RuntimeException(
+                                "Application should handle invalid args gracefully", e);
+                    }
+                });
 
         // The app should still start (even with invalid args)
         boolean guiStarted = waitForGuiToAppear(15);

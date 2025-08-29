@@ -63,7 +63,6 @@ public class AppMenuBar extends JMenuBar {
     private final env.LookAndFeelManager lookAndFeelManager;
     private final OpenWordpoolAction openWordpoolAction;
     private final ExitAction exitAction;
-    private final actions.ActionsManager actionsManager;
     private final EditShortcutsAction editShortcutsAction;
     private final PreferencesAction preferencesAction;
     private final PlayPauseAction playPauseAction;
@@ -118,7 +117,6 @@ public class AppMenuBar extends JMenuBar {
         this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
-        this.actionsManager = actionsManager;
         this.editShortcutsAction = editShortcutsAction;
         this.preferencesAction = preferencesAction;
         this.playPauseAction = playPauseAction;
@@ -260,7 +258,6 @@ public class AppMenuBar extends JMenuBar {
     }
 
     /** Creates the View menu, which controls aspects of the waveform's appearance. */
-    @SuppressWarnings("unused")
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
         JMenuItem jmiZoomIn = new JMenuItem(zoomInAction);

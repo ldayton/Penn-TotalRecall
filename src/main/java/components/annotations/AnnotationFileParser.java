@@ -32,18 +32,19 @@ public class AnnotationFileParser {
     private AnnotationFileParser() {}
 
     private static Annotation parseLine(String line) {
-        Scanner sc = new Scanner(line).useDelimiter(delimiter);
-        if (sc.hasNextDouble()) {
-            double time = sc.nextDouble();
-            if (sc.hasNextInt()) {
-                int wordNum = sc.nextInt();
-                if (sc.hasNext()) {
-                    String text = sc.next().toUpperCase();
-                    return new Annotation(time, wordNum, text);
+        try (Scanner sc = new Scanner(line).useDelimiter(delimiter)) {
+            if (sc.hasNextDouble()) {
+                double time = sc.nextDouble();
+                if (sc.hasNextInt()) {
+                    int wordNum = sc.nextInt();
+                    if (sc.hasNext()) {
+                        String text = sc.next().toUpperCase();
+                        return new Annotation(time, wordNum, text);
+                    }
                 }
             }
+            return null;
         }
-        return null;
     }
 
     private static String makeLine(Annotation ann) {
@@ -60,19 +61,11 @@ public class AnnotationFileParser {
      *     if the file does not exist or causes an <code>IOException</code>
      */
     public static List<Annotation> parse(File file) {
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            logger.error("Annotation file not found: " + file.getAbsolutePath(), e);
-            return null;
-        }
         ArrayList<Annotation> anns = new ArrayList<Annotation>();
-        String line;
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
             int lineNum = 1;
-            line = br.readLine();
-            while (line != null) {
+            while ((line = br.readLine()) != null) {
                 Matcher m = commentPattern.matcher(line);
                 if (m.matches()) {
                     line = m.group(1);
@@ -88,12 +81,13 @@ public class AnnotationFileParser {
                         }
                     }
                 }
-                line = br.readLine();
                 lineNum++;
             }
+        } catch (FileNotFoundException e) {
+            logger.error("Annotation file not found: " + file.getAbsolutePath(), e);
+            return null;
         } catch (IOException e) {
             logger.error("IO error reading annotation file: " + file.getAbsolutePath(), e);
-            return anns;
         }
         return anns;
     }

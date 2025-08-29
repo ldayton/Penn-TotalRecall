@@ -17,7 +17,6 @@ class WaveformProcessorCacheTest {
     void shouldCacheBandPassFiltersForSameFrequencyRange() throws Exception {
         FmodCore mockFmodCore = Mockito.mock(FmodCore.class);
         PixelScaler mockPixelScaler = Mockito.mock(PixelScaler.class);
-        WaveformScaler mockWaveformScaler = Mockito.mock(WaveformScaler.class);
 
         ChunkData chunkData = new ChunkData(new double[] {0.1, 0.2, -0.1, 0.3}, 44100, 1, 0, 4);
 
@@ -29,8 +28,7 @@ class WaveformProcessorCacheTest {
         when(mockPixelScaler.smoothPixels(Mockito.any(double[].class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        WaveformProcessor processor =
-                new WaveformProcessor(mockFmodCore, mockPixelScaler, mockWaveformScaler, true);
+        WaveformProcessor processor = new WaveformProcessor(mockFmodCore, mockPixelScaler, true);
 
         double[] firstResult =
                 processor.processAudioForDisplay("test.wav", 0, 10.0, 0.25, 0.1, 0.4, 100);

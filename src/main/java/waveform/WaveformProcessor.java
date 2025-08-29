@@ -14,17 +14,11 @@ final class WaveformProcessor {
     private final FmodCore fmodCore;
     private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
-    private final WaveformScaler waveformScaler;
     private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
-    public WaveformProcessor(
-            FmodCore fmodCore,
-            PixelScaler pixelScaler,
-            WaveformScaler waveformScaler,
-            boolean cachingEnabled) {
+    public WaveformProcessor(FmodCore fmodCore, PixelScaler pixelScaler, boolean cachingEnabled) {
         this.fmodCore = fmodCore;
         this.pixelScaler = pixelScaler;
-        this.waveformScaler = waveformScaler;
         this.filterCache = cachingEnabled ? new ConcurrentHashMap<>() : null;
     }
 

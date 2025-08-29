@@ -124,13 +124,11 @@ public class AppConfig {
     }
 
     /** Gets an integer property with optional default value. */
-    @SuppressWarnings("unused")
     public int getIntProperty(@NonNull String key, int defaultValue) {
         return getProperty(key, defaultValue, new IntProperty());
     }
 
     /** Gets a double property with optional default value. */
-    @SuppressWarnings("unused")
     public double getDoubleProperty(@NonNull String key, double defaultValue) {
         return getProperty(key, defaultValue, new DoubleProperty());
     }

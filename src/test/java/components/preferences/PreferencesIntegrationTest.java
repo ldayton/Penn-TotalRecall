@@ -11,14 +11,11 @@ import javax.swing.SwingUtilities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Integration test that launches the Preferences window through the real DI + event system. */
 @Windowing
 @DisplayName("Preferences Integration")
 class PreferencesIntegrationTest {
-    private static final Logger logger = LoggerFactory.getLogger(PreferencesIntegrationTest.class);
 
     @Test
     @DisplayName("launches Preferences via DI on EDT and shows window")

@@ -42,10 +42,8 @@ public class AudioFileDisplay extends JScrollPane {
     private static final String title = "Audio Files";
 
     private static AudioFileDisplay instance;
-    private final AudioFileList audioFileList;
     private final PreferencesManager preferencesManager;
     private static AudioState audioState;
-    private final EventDispatchBus eventBus;
 
     private static AudioFileList list;
 
@@ -60,10 +58,8 @@ public class AudioFileDisplay extends JScrollPane {
             PreferencesManager preferencesManager,
             AudioState audioState,
             EventDispatchBus eventBus) {
-        this.audioFileList = audioFileList;
         this.preferencesManager = preferencesManager;
         AudioFileDisplay.audioState = audioState;
-        this.eventBus = eventBus;
         list = audioFileList;
         getViewport().setView(list);
 

@@ -41,20 +41,12 @@ import org.slf4j.LoggerFactory;
 public class AppFocusTraversalPolicy extends FocusTraversalPolicy {
     private static final Logger logger = LoggerFactory.getLogger(AppFocusTraversalPolicy.class);
 
-    private static final String genericFailureMessage =
-            "can't find a focus-appropriate component to give focus to";
-
-    private final MainFrame myFrame;
-    private final DoneButton doneButton;
-
     // these are components that can take focus, in the order of focus traversal desired
     // must have at least one element to avoid ArrayIndexOutOfBoundsException
     private final Component[] focusLoop;
 
     @Inject
     public AppFocusTraversalPolicy(MainFrame myFrame, DoneButton doneButton) {
-        this.myFrame = myFrame;
-        this.doneButton = doneButton;
         this.focusLoop =
                 new Component[] {
                     myFrame,

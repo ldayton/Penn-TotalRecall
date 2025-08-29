@@ -30,7 +30,7 @@ class UpdateManagerTest {
         HttpResponse<String> newerResponse = mock(HttpResponse.class);
         when(newerResponse.body()).thenReturn("{\"tag_name\":\"v2025.12.25\"}");
         when(mockClient.sendAsync(any(), any()))
-                .thenAnswer(invocation -> CompletableFuture.completedFuture(newerResponse));
+                .thenAnswer(_ -> CompletableFuture.completedFuture(newerResponse));
 
         UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
 
@@ -99,7 +99,7 @@ class UpdateManagerTest {
         // Test timeout scenario
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(
-                        invocation -> {
+                        _ -> {
                             CompletableFuture<HttpResponse<String>> timeoutFuture =
                                     new CompletableFuture<>();
                             timeoutFuture.completeExceptionally(
@@ -116,7 +116,7 @@ class UpdateManagerTest {
         when(notFoundResponse.statusCode()).thenReturn(404);
         when(notFoundResponse.body()).thenReturn("Not Found");
         when(mockClient.sendAsync(any(), any()))
-                .thenAnswer(invocation -> CompletableFuture.completedFuture(notFoundResponse));
+                .thenAnswer(_ -> CompletableFuture.completedFuture(notFoundResponse));
 
         UpdateManager manager404 = new UpdateManager(mockConfig, mockClient, mockDialogService);
         assertDoesNotThrow(() -> manager404.checkForUpdateOnStartup());
@@ -126,7 +126,7 @@ class UpdateManagerTest {
         HttpResponse<String> emptyResponse = mock(HttpResponse.class);
         when(emptyResponse.body()).thenReturn("");
         when(mockClient.sendAsync(any(), any()))
-                .thenAnswer(invocation -> CompletableFuture.completedFuture(emptyResponse));
+                .thenAnswer(_ -> CompletableFuture.completedFuture(emptyResponse));
 
         UpdateManager managerEmpty = new UpdateManager(mockConfig, mockClient, mockDialogService);
         assertDoesNotThrow(() -> managerEmpty.checkForUpdateOnStartup());

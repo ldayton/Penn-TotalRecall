@@ -59,19 +59,13 @@ public class AudioState implements AudioProgressHandler {
     private final String badStateString =
             "ERROR: potential violation of guarantee that either calculator and player are both"
                     + " null, or neither is";
-
-    private final PreferencesManager preferencesManager;
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
     public AudioState(
-            PreferencesManager preferencesManager,
-            FmodCore fmodCore,
-            EventDispatchBus eventBus,
-            WordpoolDisplay wordpoolDisplay) {
-        this.preferencesManager = preferencesManager;
+            FmodCore fmodCore, EventDispatchBus eventBus, WordpoolDisplay wordpoolDisplay) {
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;

@@ -70,16 +70,16 @@ public final class FmodCore {
     private static final int FMOD_CREATE_SAMPLE_MODE = 0x00000002;
     private static final int FMOD_CREATE_STREAM_MODE = 0x00000080;
 
-    // Thread naming
-    private static final String THREAD_NAME_PREFIX = "FMOD-";
-
     /** FMOD API error codes and constants. */
     private static final class FmodConstants {
         static final int VERSION = 0x00020309;
         static final int INIT_NORMAL = FMOD_INIT_FLAGS;
         static final int CREATE_SAMPLE = FMOD_CREATE_SAMPLE_MODE;
         static final int CREATE_STREAM = FMOD_CREATE_STREAM_MODE;
+
+        @SuppressWarnings("unused")
         static final int TIMEUNIT_MS = 0x00000001;
+
         static final int TIMEUNIT_PCM = 0x00000002;
         static final int OK = 0;
         // Mode flags
@@ -94,30 +94,72 @@ public final class FmodCore {
 
     /** FMOD format constants for audio format detection. */
     private static final class FmodFormats {
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_UNKNOWN = 0;
+
         static final int FMOD_SOUND_TYPE_AIFF = 1;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_ASF = 2;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_DLS = 3;
+
         static final int FMOD_SOUND_TYPE_FLAC = 4;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_FSB = 5;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_IT = 6;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_MIDI = 7;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_MOD = 8;
+
         static final int FMOD_SOUND_TYPE_MPEG = 9;
         static final int FMOD_SOUND_TYPE_OGGVORBIS = 10;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_PLAYLIST = 11;
+
         static final int FMOD_SOUND_TYPE_RAW = 12;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_S3M = 13;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_USER = 14;
+
         static final int FMOD_SOUND_TYPE_WAV = 15;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_XM = 16;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_XMA = 17;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_AUDIOQUEUE = 18;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_AT9 = 19;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_VORBIS = 20;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_MEDIA_FOUNDATION = 21;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_MEDIACODEC = 22;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_FADPCM = 23;
+
+        @SuppressWarnings("unused")
         static final int FMOD_SOUND_TYPE_OPUS = 24;
     }
 
@@ -789,11 +831,9 @@ public final class FmodCore {
             int totalBytesNeeded = totalFramesNeeded * bytesPerFrame;
 
             // Calculate file position
-            long startFrame = (long) chunkIndex * framesPerChunk;
             if (overlapFrames > 0) {
                 startFrame -= overlapFrames;
             }
-            long startByte = startFrame * bytesPerFrame;
 
             // Allocate buffer for PCM data
             com.sun.jna.Memory buffer = new com.sun.jna.Memory(totalBytesNeeded);

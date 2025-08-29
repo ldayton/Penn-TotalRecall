@@ -35,27 +35,24 @@ public class WordpoolFileParser {
      */
     public static List<WordpoolWord> parse(File file, boolean suppressLineNumbers)
             throws IOException {
-        BufferedReader br;
-        br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8);
         ArrayList<WordpoolWord> words = new ArrayList<WordpoolWord>();
-        String line;
-        int lineNum = 0;
-        line = br.readLine();
-        while (line != null) {
-            lineNum++; // PyParse goes 1-indexes the wordpool words and goes by line num not word
-            // num
-            Matcher whiteSpace = Pattern.compile("\\s*").matcher(line);
-            if (whiteSpace.matches()) {
-                logger.warn("line #" + lineNum + " not a valid wordpool word: " + line);
-            } else {
-                line = line.trim();
-                if (suppressLineNumbers == false) {
-                    words.add(new WordpoolWord(line, lineNum));
+        try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+            String line;
+            int lineNum = 0;
+            while ((line = br.readLine()) != null) {
+                lineNum++; // PyParse 1-indexes wordpool words by line number
+                Matcher whiteSpace = Pattern.compile("\\s*").matcher(line);
+                if (whiteSpace.matches()) {
+                    logger.warn("line #" + lineNum + " not a valid wordpool word: " + line);
                 } else {
-                    words.add(new WordpoolWord(line, -1));
+                    String trimmed = line.trim();
+                    if (suppressLineNumbers == false) {
+                        words.add(new WordpoolWord(trimmed, lineNum));
+                    } else {
+                        words.add(new WordpoolWord(trimmed, -1));
+                    }
                 }
             }
-            line = br.readLine();
         }
         return words;
     }

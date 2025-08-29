@@ -137,10 +137,7 @@ class EventDispatchBusTest {
                     throw new RuntimeException("Test exception");
                 });
 
-        SwingUtilities.invokeAndWait(
-                () -> {
-                    eventBus.publish(new TestEvent("test"));
-                });
+        SwingUtilities.invokeAndWait(() -> eventBus.publish(new TestEvent()));
 
         assertTrue(
                 goodLatch.await(1, TimeUnit.SECONDS),
@@ -148,17 +145,7 @@ class EventDispatchBusTest {
     }
 
     /** Test event class */
-    private static class TestEvent {
-        private final String message;
-
-        public TestEvent(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-    }
+    private static class TestEvent {}
 
     /** Test event with no subscribers */
     private static class UnsubscribedEvent {}

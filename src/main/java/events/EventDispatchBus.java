@@ -48,7 +48,7 @@ public class EventDispatchBus {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 if (parameterTypes.length == 1) {
                     Class<?> eventType = parameterTypes[0];
-                    subscribers.computeIfAbsent(eventType, k -> new ArrayList<>()).add(subscriber);
+                    subscribers.computeIfAbsent(eventType, _ -> new ArrayList<>()).add(subscriber);
                     logger.debug(
                             "Subscribed {} to {}",
                             subscriber.getClass().getSimpleName(),

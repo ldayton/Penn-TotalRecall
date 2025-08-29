@@ -97,7 +97,7 @@ public class ActionsManager {
      */
     public void registerInputMap(Action action, Enum<?> e, String mapKey, InputMap map) {
         var id = makeId(action.getClass().getName(), e != null ? e.name() : null);
-        inputMapMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new InputMapPair(mapKey, map));
+        inputMapMap.computeIfAbsent(id, _ -> new ArrayList<>()).add(new InputMapPair(mapKey, map));
     }
 
     /**
@@ -108,7 +108,7 @@ public class ActionsManager {
      */
     public void registerAction(Action action, Enum<?> e) {
         var id = makeId(action.getClass().getName(), e != null ? e.name() : null);
-        listenersMap.computeIfAbsent(id, k -> new HashSet<>()).add(action);
+        listenersMap.computeIfAbsent(id, _ -> new HashSet<>()).add(action);
         update(id, null);
     }
 

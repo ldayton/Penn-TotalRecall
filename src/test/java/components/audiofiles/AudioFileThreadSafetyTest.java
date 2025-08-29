@@ -87,7 +87,6 @@ class AudioFileThreadSafetyTest {
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            final int threadId = i;
             executor.submit(
                     () -> {
                         try {
@@ -152,7 +151,7 @@ class AudioFileThreadSafetyTest {
         }
 
         // Wait for notification (with timeout)
-        boolean notified = notificationLatch.await(1, java.util.concurrent.TimeUnit.SECONDS);
+        notificationLatch.await(1, java.util.concurrent.TimeUnit.SECONDS);
 
         // Note: updateDoneStatus might not actually change the status in this test
         // environment, so we can't guarantee the listener will be called

@@ -93,6 +93,7 @@ public final class ActionsFileParser {
         private final List<ActionElement> actions;
 
         // Jackson requires default constructor
+        @SuppressWarnings("unused")
         private ActionsDocument() {
             this.actions = new ArrayList<>();
         }
@@ -138,6 +139,7 @@ public final class ActionsFileParser {
         private final String arg;
 
         // Jackson requires default constructor
+        @SuppressWarnings("unused")
         private ActionElement() {
             this.className = null;
             this.name = null;
@@ -288,6 +290,7 @@ public final class ActionsFileParser {
         private final List<KeyElement> keys;
 
         // Jackson requires default constructor
+        @SuppressWarnings("unused")
         private ShortcutElement() {
             this.masks = new ArrayList<>();
             this.keys = new ArrayList<>();
@@ -327,6 +330,7 @@ public final class ActionsFileParser {
         private final String keyname;
 
         // Jackson requires default constructor
+        @SuppressWarnings("unused")
         private KeyElement() {
             this.keyname = null;
         }

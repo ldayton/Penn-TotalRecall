@@ -195,9 +195,6 @@ public class ShortcutTest {
         void numpadKeysShouldShowUserFriendlyNames() {
 
             KeyStroke numpad1 = KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD1, 0);
-            KeyStroke numpadEnter =
-                    KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0); // Assume numpad enter
-
             assertEquals("Num 1", new Shortcut(numpad1, pcKeyboard).toString());
         }
 

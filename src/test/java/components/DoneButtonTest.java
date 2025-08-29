@@ -81,7 +81,7 @@ class DoneButtonTest {
     void actionsManagerShouldBeInitializedWithActionsXml() {
         // The ActionsManager should be initialized with actions.xml
         // Get the injected ShortcutFrame to trigger initialization
-        var shortcutFrame = GuiceBootstrap.getInjectedInstance(components.ShortcutFrame.class);
+        GuiceBootstrap.getInjectedInstance(components.ShortcutFrame.class);
 
         // Now call updateActions
         AppMenuBar.updateActions();

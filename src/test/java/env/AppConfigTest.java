@@ -26,13 +26,11 @@ class AppConfigTest {
     @TempDir Path tempDir;
 
     private String originalUserHome;
-    private String originalAppData;
 
     @BeforeEach
     void setUp() {
         // Save original system properties
         originalUserHome = System.getProperty("user.home");
-        originalAppData = System.getenv("APPDATA");
     }
 
     @AfterEach

@@ -35,13 +35,14 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
     }
 
     private void parseVersion(String repr) {
-        Scanner sc = new Scanner(repr).useDelimiter(versionDelimiter);
-        majorNumber = -1;
-        minorNumber = -1;
-        if (sc.hasNextInt()) {
-            majorNumber = sc.nextInt();
+        try (Scanner sc = new Scanner(repr).useDelimiter(versionDelimiter)) {
+            majorNumber = -1;
+            minorNumber = -1;
             if (sc.hasNextInt()) {
-                minorNumber = sc.nextInt();
+                majorNumber = sc.nextInt();
+                if (sc.hasNextInt()) {
+                    minorNumber = sc.nextInt();
+                }
             }
         }
     }
@@ -116,14 +117,15 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
      * @return true if the version string is valid
      */
     public boolean validateVersionString(@NonNull String version) {
-        Scanner sc = new Scanner(version).useDelimiter(versionDelimiter);
-        if (sc.hasNextInt()) {
-            sc.nextInt();
+        try (Scanner sc = new Scanner(version).useDelimiter(versionDelimiter)) {
             if (sc.hasNextInt()) {
                 sc.nextInt();
-                return true;
+                if (sc.hasNextInt()) {
+                    sc.nextInt();
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 }

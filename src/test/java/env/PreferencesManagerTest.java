@@ -10,6 +10,7 @@ import ch.qos.logback.core.read.ListAppender;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -334,21 +335,21 @@ class PreferencesManagerTest {
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
         try {
-            @SuppressWarnings({"unchecked", "rawtypes"})
-            CompletableFuture<Void>[] futures = new CompletableFuture[100];
+            List<CompletableFuture<Void>> futures = new ArrayList<>(100);
 
             for (int i = 0; i < 100; i++) {
                 final int index = i;
-                futures[i] =
+                futures.add(
                         CompletableFuture.runAsync(
                                 () -> {
                                     prefsManager.putInt("concurrent.key." + index, index);
                                     prefsManager.getInt("concurrent.key." + index, -1);
                                 },
-                                executor);
+                                executor));
             }
 
-            CompletableFuture.allOf(futures).get(5, TimeUnit.SECONDS);
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture<?>[0]))
+                    .get(5, TimeUnit.SECONDS);
 
             // Verify all values were stored correctly
             for (int i = 0; i < 100; i++) {
