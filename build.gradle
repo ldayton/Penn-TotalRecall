@@ -20,6 +20,8 @@ ext {
     orgName = 'Computational Memory Lab, UPenn'
     uniqueIdentifier = 'edu.upenn.psych.memory.penntotalrecall'
     nativeAccessJvmArgs = ['--enable-native-access=ALL-UNNAMED']
+    // Single source of truth for CI detection
+    isCI = System.getenv('CI') == 'true'
 }
 
 java {
@@ -265,10 +267,8 @@ def loadEnvironmentConfig(task, String env) {
 
 // Test configuration
 test {
-    // Detect CI environment
-    def isCI = System.getenv('CI') == 'true' || 
-               System.getenv('GITHUB_ACTIONS') == 'true' ||
-               System.getenv('BUILDKITE') == 'true'
+    // CI detection: single source of truth
+    def isCI = project.ext.isCI
     
     // Enable native access for JNA and FlatLAF
     jvmArgs = nativeAccessJvmArgs
@@ -297,32 +297,22 @@ test {
     }
     
     useJUnitPlatform {
-        // Exclude packaging tests from regular test runs (use packageTest target instead)
+        // Always skip packaging tests here (they run in `packageTest`)
         excludeTags 'packaging'
 
-        // Always exclude FMOD-tagged tests from this task; they run in isolated tasks below
-        excludeTags 'audio-engine', 'audio-hardware'
+        // Single source of truth from loaded config (development.properties, plus ci.properties on CI)
+        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
+        if (audioHardwareAvailable == 'false') excludeTags 'audio-hardware'
 
-        // Use the loaded properties to control windowing exclusion
-        def windowingSystemAvailable = configProps.getProperty('windowing.system.available')
-        if (windowingSystemAvailable == 'false') {
-            excludeTags 'windowing'
-        }
+        def windowingAvailable = configProps.getProperty('windowing.system.available')
+        if (windowingAvailable == 'false') excludeTags 'windowing'
 
-        // Exclude macOS-specific tests on non-Mac platforms
+        // Always run FMOD-tagged tests in an isolated task (see audioEngineTest)
+        excludeTags 'audio-engine'
+
+        // Only run mac-specific tests on macOS
         def osName = System.getProperty('os.name').toLowerCase()
-        if (!osName.contains('mac')) {
-            excludeTags 'macos'
-        }
-    }
-
-    // Chain isolated FMOD tasks so `gradlew test` runs everything in one command
-    finalizedBy 'audioEngineTest'
-
-    // Locally, run tests serially to avoid FMOD contention and hear audio
-    if (!isCI) {
-        maxParallelForks = 1
-        forkEvery = 0
+        if (!osName.contains('mac')) excludeTags 'macos'
     }
     
     // Also apply these properties to the test task for runtime use
@@ -331,12 +321,64 @@ test {
         loadEnvironmentConfig(test, 'ci')
     }
 
+    // Suppress expected FMOD format error logs from tests that probe invalid files
+    systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
+    // Disable waveform prefetch during tests to avoid background FMOD contention
+    systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
+
     // Forward ad-hoc test.* system properties to the test JVM
     // Example: -Dtest.visualHoldMs=2000
     System.getProperties().each { k, v ->
         if (k instanceof String && k.startsWith('test.')) {
             systemProperty k, v
         }
+    }
+
+    // Ensure FMOD-engine tests run after standard tests in one command
+    finalizedBy 'audioEngineTest'
+}
+
+// FMOD (audio-engine) tests: run sequentially with one JVM per class for isolation
+tasks.register('audioEngineTest', Test.class) {
+    group = 'verification'
+    description = 'Run FMOD engine tests in isolated JVMs (one per class)'
+    dependsOn testClasses
+
+    // Single JVM per class, no parallel forks
+    maxParallelForks = 1
+    forkEvery = 1
+
+    // Use same sources and classpath
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+
+    // Native access for JNA/FlatLaf
+    jvmArgs = nativeAccessJvmArgs
+
+    // Detect CI from top-level flag
+    def isCI = project.ext.isCI
+
+    // Load env config into this test JVM
+    loadEnvironmentConfig(delegate, 'development')
+    if (isCI) {
+        loadEnvironmentConfig(delegate, 'ci')
+    }
+
+    // Include only engine-tagged tests
+    useJUnitPlatform {
+        includeTags 'audio-engine'
+        // macOS-only tests on mac
+        def osName = System.getProperty('os.name').toLowerCase()
+        if (!osName.contains('mac')) excludeTags 'macos'
+    }
+
+    // Stability switches
+    systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
+    systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
+
+    // Forward -Dtest.*
+    System.getProperties().each { k, v ->
+        if (k instanceof String && k.startsWith('test.')) systemProperty k, v
     }
 }
 
@@ -353,10 +395,8 @@ tasks.register('packageTest', Test.class) {
     // Disable caching - always run these integration tests
     outputs.upToDateWhen { false }
     
-    // Detect CI environment (same logic as test task)
-    def isCI = System.getenv('CI') == 'true' || 
-               System.getenv('GITHUB_ACTIONS') == 'true' ||
-               System.getenv('BUILDKITE') == 'true'
+    // CI detection: single source of truth
+    def isCI = project.ext.isCI
     
     // Enable native access for JNA and FlatLAF (same as test task)
     jvmArgs = nativeAccessJvmArgs
@@ -400,71 +440,6 @@ tasks.register('packageTest', Test.class) {
     }
 }
 
-// Audio engine (FMOD) tests that do not require physical hardware, but should not run in parallel
-tasks.register('audioEngineTest', Test.class) {
-    group = 'verification'
-    description = 'Run tests that use FMOD (hardware optional) in isolation'
-    dependsOn testClasses
-
-    // Use the same test sources as the regular test task
-    testClassesDirs = sourceSets.test.output.classesDirs
-    classpath = sourceSets.test.runtimeClasspath
-
-    // Single JVM per test class, no parallel forks for FMOD-dependent tests
-    maxParallelForks = 1
-    forkEvery = 1
-
-    // Detect CI environment (same logic as test task)
-    def isCI = System.getenv('CI') == 'true'
-
-    // Enable native access for JNA and FlatLAF (same as test task)
-    jvmArgs = nativeAccessJvmArgs
-
-    // Enable detailed test output (same as test task)
-    testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-        showStandardStreams = true
-    }
-
-    // Load configuration properties (same logic as test task)
-    def configProps = new Properties()
-
-    // Always load development configuration as baseline
-    def devConfigFile = file("src/main/resources/development.properties")
-    if (devConfigFile.exists()) {
-        devConfigFile.withInputStream { configProps.load(it) }
-    }
-
-    // In CI environments, override with CI-specific settings
-    if (isCI) {
-        def ciConfigFile = file("src/main/resources/ci.properties")
-        if (ciConfigFile.exists()) {
-            ciConfigFile.withInputStream { configProps.load(it) }
-        }
-    }
-
-    useJUnitPlatform {
-        includeTags 'audio-engine'
-    }
-
-    // Apply configuration properties as system properties
-    configProps.each { key, value ->
-        systemProperty key, value
-    }
-
-    // Disable waveform prefetch during tests to avoid FMOD contention from background threads
-    systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
-
-    // Suppress expected FMOD format error logs in tests that use dummy files
-    systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
-
-    // Forward ad-hoc test.* system properties to the test JVM
-    System.getProperties().each { k, v ->
-        if (k instanceof String && k.startsWith('test.')) {
-            systemProperty k, v
-        }
-    }
-}
 
 // Version compatibility check
 tasks.register('checkJavaVersion') {
