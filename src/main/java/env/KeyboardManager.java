@@ -127,6 +127,10 @@ public class KeyboardManager {
     private String getMacKeySymbol(String key) {
         // Returns Mac symbols for keys, null if no specific symbol
         return switch (key.toLowerCase()) {
+            case "equals" -> "="; // Display Cmd+= as ⌘=
+            case "add" -> "+"; // Numpad add
+            case "minus" -> "-"; // Display Cmd+- as ⌘-
+            case "subtract" -> "-"; // Numpad subtract
             case "cmd", "meta" -> "⌘";
             case "option", "alt" -> "⌥";
             case "shift" -> "⇧";
@@ -146,6 +150,10 @@ public class KeyboardManager {
     private String getPcKeySymbol(String key) {
         // PC uses text-based key names, no special symbols
         return switch (key.toLowerCase()) {
+            case "equals" -> "="; // Show = for the equals key
+            case "add" -> "+"; // Numpad add
+            case "minus" -> "-"; // Show - for minus key
+            case "subtract" -> "-"; // Numpad subtract
             case "cmd", "meta" -> "Win";
             case "option", "alt" -> "Alt";
             case "shift" -> "Shift";

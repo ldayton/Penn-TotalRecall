@@ -38,6 +38,11 @@ class WindowLayoutPersistenceTest {
         windowManager.saveWindowLayout(mockFrame, mockSplitPane);
 
         // Window closed and reopened - appears in same spot
+        when(mockPrefs.hasKey(PreferenceKeys.WINDOW_X)).thenReturn(true);
+        when(mockPrefs.hasKey(PreferenceKeys.WINDOW_Y)).thenReturn(true);
+        when(mockPrefs.hasKey(PreferenceKeys.WINDOW_WIDTH)).thenReturn(true);
+        when(mockPrefs.hasKey(PreferenceKeys.WINDOW_HEIGHT)).thenReturn(true);
+        when(mockPrefs.hasKey(PreferenceKeys.DIVIDER_LOCATION)).thenReturn(true);
         when(mockPrefs.getInt(PreferenceKeys.WINDOW_X, 0)).thenReturn(100);
         when(mockPrefs.getInt(PreferenceKeys.WINDOW_Y, 0)).thenReturn(50);
         when(mockPrefs.getInt(PreferenceKeys.WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_WIDTH))
@@ -56,17 +61,13 @@ class WindowLayoutPersistenceTest {
     @DisplayName("opens at default size on first launch")
     void opensAtDefaultsOnFirstLaunch() {
         // No saved preferences - use defaults
-        when(mockPrefs.getInt(anyString(), anyInt()))
-                .thenAnswer(invocation -> invocation.getArgument(1));
+        when(mockPrefs.hasKey(anyString())).thenReturn(false);
 
         windowManager.restoreWindowLayout(mockFrame, mockSplitPane);
 
         verify(mockFrame)
-                .setBounds(
-                        0,
-                        0,
-                        PreferenceKeys.DEFAULT_WINDOW_WIDTH,
-                        PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
+                .setSize(PreferenceKeys.DEFAULT_WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
+        verify(mockFrame).setLocationRelativeTo(null);
         verify(mockSplitPane).setDividerLocation(PreferenceKeys.DEFAULT_WINDOW_HEIGHT / 2);
     }
 

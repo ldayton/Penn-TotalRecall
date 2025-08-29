@@ -131,6 +131,41 @@ public class ShortcutTest {
             assertTrue(result.contains("Alt"), "Should contain Alt");
             assertTrue(result.endsWith("A"), "Should end with the key");
         }
+
+        @Test
+        @DisplayName("Mac Command+= should display as ⌘=")
+        void macCommandEqualsDisplaysAsEquals() {
+            KeyStroke cmdEq = KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, InputEvent.META_DOWN_MASK);
+            Shortcut shortcut = new Shortcut(cmdEq, macKeyboard);
+            assertEquals("⌘=", shortcut.toString());
+        }
+
+        @Test
+        @DisplayName("Mac Command+- should display as ⌘-")
+        void macCommandMinusDisplaysAsMinus() {
+            KeyStroke cmdMinus =
+                    KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.META_DOWN_MASK);
+            Shortcut shortcut = new Shortcut(cmdMinus, macKeyboard);
+            assertEquals("⌘-", shortcut.toString());
+        }
+
+        @Test
+        @DisplayName("PC Ctrl+= should display as Ctrl+=")
+        void pcCtrlEqualsDisplaysAsCtrlPlusEquals() {
+            KeyStroke ctrlEq =
+                    KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, InputEvent.CTRL_DOWN_MASK);
+            Shortcut shortcut = new Shortcut(ctrlEq, pcKeyboard);
+            assertEquals("Ctrl+=", shortcut.toString());
+        }
+
+        @Test
+        @DisplayName("PC Ctrl+- should display as Ctrl+-")
+        void pcCtrlMinusDisplaysAsCtrlPlusMinus() {
+            KeyStroke ctrlMinus =
+                    KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK);
+            Shortcut shortcut = new Shortcut(ctrlMinus, pcKeyboard);
+            assertEquals("Ctrl+-", shortcut.toString());
+        }
     }
 
     @Nested
