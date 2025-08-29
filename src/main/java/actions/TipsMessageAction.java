@@ -22,11 +22,11 @@ public class TipsMessageAction extends BaseAction {
     }
 
     private String makeMessage() {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
 
         out.append(
-                "<html><b>NOTE: You can learn most keyboard shortcuts through File -> Edit Keyboard"
-                        + " Shorcuts.</b>\n\n");
+                "NOTE: You can learn most keyboard shortcuts through File -> Edit Keyboard"
+                        + " Shorcuts.\n\n");
 
         out.append(
                 "Space -- Another binding for play/pause, useful when the cursor is not the text"

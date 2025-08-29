@@ -54,20 +54,19 @@ public class WindowLayoutPersistence {
     }
 
     private void restoreFramePosition(@NonNull JFrame frame) {
-        // Detect presence of saved bounds via sentinels (no separate first-run flag)
-        int x = prefs.getInt(PreferenceKeys.WINDOW_X, Integer.MIN_VALUE);
-        int y = prefs.getInt(PreferenceKeys.WINDOW_Y, Integer.MIN_VALUE);
-        int w = prefs.getInt(PreferenceKeys.WINDOW_WIDTH, Integer.MIN_VALUE);
-        int h = prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, Integer.MIN_VALUE);
+        boolean haveAllBounds =
+                prefs.hasKey(PreferenceKeys.WINDOW_X)
+                        && prefs.hasKey(PreferenceKeys.WINDOW_Y)
+                        && prefs.hasKey(PreferenceKeys.WINDOW_WIDTH)
+                        && prefs.hasKey(PreferenceKeys.WINDOW_HEIGHT);
 
-        boolean hasSavedBounds =
-                x != Integer.MIN_VALUE
-                        && y != Integer.MIN_VALUE
-                        && w != Integer.MIN_VALUE
-                        && h != Integer.MIN_VALUE;
-
-        if (hasSavedBounds) {
-            frame.setBounds(x, y, w, h);
+        if (haveAllBounds) {
+            frame.setBounds(
+                    prefs.getInt(PreferenceKeys.WINDOW_X, 0),
+                    prefs.getInt(PreferenceKeys.WINDOW_Y, 0),
+                    prefs.getInt(PreferenceKeys.WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_WIDTH),
+                    prefs.getInt(
+                            PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT));
         } else {
             // No prior window state: use defaults and center on screen
             frame.setSize(
@@ -80,9 +79,16 @@ public class WindowLayoutPersistence {
 
     private void restoreDividerLocation(@NonNull ContentSplitPane splitPane) {
         int windowHeight =
-                prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
-        splitPane.setDividerLocation(
-                prefs.getInt(PreferenceKeys.DIVIDER_LOCATION, windowHeight / 2));
+                prefs.hasKey(PreferenceKeys.WINDOW_HEIGHT)
+                        ? prefs.getInt(
+                                PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT)
+                        : PreferenceKeys.DEFAULT_WINDOW_HEIGHT;
+        int defaultDivider = windowHeight / 2;
+        int divider =
+                prefs.hasKey(PreferenceKeys.DIVIDER_LOCATION)
+                        ? prefs.getInt(PreferenceKeys.DIVIDER_LOCATION, defaultDivider)
+                        : defaultDivider;
+        splitPane.setDividerLocation(divider);
     }
 
     /**

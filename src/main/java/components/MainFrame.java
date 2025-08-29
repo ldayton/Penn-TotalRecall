@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.PreferencesManager;
@@ -232,7 +233,13 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     /** Handles info requested events by showing info dialogs. */
     @Subscribe
     public void handleInfoRequested(InfoRequestedEvent event) {
+        JTextArea text = new JTextArea(event.getMessage());
+        text.setEditable(false);
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setColumns(60);
+        text.setOpaque(false);
         javax.swing.JOptionPane.showMessageDialog(
-                this, event.getMessage(), "About", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                this, text, "About", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 }

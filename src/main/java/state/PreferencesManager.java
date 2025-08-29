@@ -189,6 +189,11 @@ public class PreferencesManager {
         putString(key, pathToStore);
     }
 
+    /** Returns true if the key exists in preferences without logging. */
+    public boolean hasKey(@NonNull String key) {
+        return prefs.get(key, null) != null;
+    }
+
     /** Flushes preferences to storage. */
     public void flush() {
         try {
