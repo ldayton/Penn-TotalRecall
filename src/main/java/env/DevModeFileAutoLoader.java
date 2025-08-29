@@ -69,28 +69,38 @@ public class DevModeFileAutoLoader {
             return;
         }
 
-        // Check if sample file exists
-        File sampleFile = new File(SAMPLE_FILE_PATH);
-        if (!sampleFile.exists()) {
-            logger.warn("Sample file does not exist: {}", SAMPLE_FILE_PATH);
+        // Gather all sample files from packaging/samples and add them to the list
+        File samplesDir = new File("packaging/samples");
+        File[] allCandidates = samplesDir.exists() ? samplesDir.listFiles() : null;
+        if (allCandidates == null || allCandidates.length == 0) {
+            logger.warn("No sample files found in: {}", samplesDir.getPath());
             return;
         }
 
-        // Load the sample file
-        logger.info("Development mode: auto-loading sample file {}", SAMPLE_FILE_PATH);
-        boolean loaded = AudioFileDisplay.addFilesIfSupported(new File[] {sampleFile});
+        // Add all supported files in the samples directory to the list
+        boolean anyLoaded = AudioFileDisplay.addFilesIfSupported(allCandidates);
+        if (!anyLoaded) {
+            logger.warn("No supported audio files found to auto-load in development mode");
+            return;
+        }
 
-        if (loaded) {
-            logger.info("Successfully auto-loaded sample file in development mode");
-
-            // Switch to the loaded file (should be the first and only file in the list)
-            if (audioFileList.getModel().getSize() > 0) {
-                var loadedFile = audioFileList.getModel().getElementAt(0);
-                audioState.switchFile(loadedFile);
-                logger.info("Successfully switched to auto-loaded sample file");
+        // Switch to sample.wav specifically (waveform ready to play); fallback to first entry
+        File sampleFile = new File(SAMPLE_FILE_PATH);
+        int targetIndex = 0;
+        for (int i = 0; i < audioFileList.getModel().getSize(); i++) {
+            var f = audioFileList.getModel().getElementAt(i);
+            if (f.getAbsolutePath().equals(sampleFile.getAbsolutePath())) {
+                targetIndex = i;
+                break;
             }
-        } else {
-            logger.warn("Failed to auto-load sample file: {}", SAMPLE_FILE_PATH);
+        }
+        if (audioFileList.getModel().getSize() > 0) {
+            var loadedFile = audioFileList.getModel().getElementAt(targetIndex);
+            audioState.switchFile(loadedFile);
+            logger.info(
+                    "Development mode: switched to {} ({} files listed)",
+                    loadedFile.getName(),
+                    audioFileList.getModel().getSize());
         }
 
         // Load sample wordpool file
