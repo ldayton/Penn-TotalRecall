@@ -11,12 +11,13 @@ public final class Waveform {
 
     private final String audioFilePath;
     private final int timeResolution;
-    private final int amplitudeResolution;
+    private volatile int amplitudeResolution;
     private final boolean cachingEnabled;
     private final WaveformProcessor processor;
     private final WaveformRenderer renderer;
     private final PixelScaler pixelScaler;
     private volatile WaveformChunkCache cache;
+    private volatile state.AudioState cachedAudioState;
 
     private volatile double globalRenderingPeak = -1;
 
@@ -42,6 +43,7 @@ public final class Waveform {
         // Create cache if caching is enabled - needs AudioState but we don't have it yet
         // For now, cache will be set later via a setter
         this.cache = null;
+        this.cachedAudioState = null;
     }
 
     /** Creates a new WaveformBuilder for fluent configuration. */
@@ -87,7 +89,8 @@ public final class Waveform {
                 amplitudeResolution,
                 yScale,
                 chunkStartTimeSeconds,
-                globalRenderingPeak);
+                globalRenderingPeak,
+                timeResolution);
     }
 
     /** Thread-safe lazy initialization of global rendering peak for consistent scaling. */
@@ -124,6 +127,7 @@ public final class Waveform {
         if (cachingEnabled && cache == null) {
             synchronized (this) {
                 if (cache == null) {
+                    this.cachedAudioState = audioState;
                     cache = new WaveformChunkCache(this, audioState);
                 }
             }
@@ -135,5 +139,41 @@ public final class Waveform {
         if (cache != null) {
             cache.clear();
         }
+    }
+
+    /**
+     * Updates the waveform display height (amplitude resolution) and resets the chunk cache.
+     *
+     * <p>Guarantee: any call to renderChunk that starts after this method returns will render with
+     * the new height. This is achieved by atomically swapping the cache instance so any in-flight
+     * loads complete into the old cache, which is no longer referenced.
+     */
+    public void setAmplitudeResolution(int newHeightPixels) {
+        if (newHeightPixels <= 0) {
+            throw new IllegalArgumentException(
+                    "Amplitude resolution must be > 0: " + newHeightPixels);
+        }
+
+        synchronized (this) {
+            if (this.amplitudeResolution == newHeightPixels) {
+                return; // no-op
+            }
+            this.amplitudeResolution = newHeightPixels;
+
+            if (cachingEnabled) {
+                // Swap to a fresh cache instance to avoid any stale-height images
+                if (cachedAudioState != null) {
+                    this.cache = new WaveformChunkCache(this, cachedAudioState);
+                } else {
+                    // No audio state yet; just drop the cache reference
+                    this.cache = null;
+                }
+            }
+        }
+
+        logger.debug(
+                "Amplitude resolution updated to {} px for file: {}",
+                newHeightPixels,
+                audioFilePath);
     }
 }

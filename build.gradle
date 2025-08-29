@@ -323,6 +323,14 @@ test {
     if (isCI) {
         loadEnvironmentConfig(test, 'ci')
     }
+
+    // Forward ad-hoc test.* system properties to the test JVM
+    // Example: -Dtest.visualHoldMs=2000
+    System.getProperties().each { k, v ->
+        if (k instanceof String && k.startsWith('test.')) {
+            systemProperty k, v
+        }
+    }
 }
 
 // Packaging integration tests - requires built artifacts

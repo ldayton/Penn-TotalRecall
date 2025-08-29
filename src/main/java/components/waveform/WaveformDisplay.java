@@ -18,6 +18,8 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
@@ -53,6 +55,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private final int REFRESH_DELAY = 20; // people prefer 20 over 30
 
     private Timer refreshTimer;
+    private Timer resizeDebounceTimer;
 
     private int pixelsPerSecond;
 
@@ -71,6 +74,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private volatile Waveform currentWaveform;
 
     private volatile int progressBarXPos;
+    private int pendingAmplitudeHeight;
 
     @Inject
     public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
@@ -94,6 +98,32 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
         // Subscribe to waveform refresh events
         eventBus.subscribe(this);
+
+        // Debounced height update when the component is resized to avoid churn
+        addComponentListener(
+                new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        pendingAmplitudeHeight = getHeight();
+                        if (resizeDebounceTimer != null) {
+                            resizeDebounceTimer.restart();
+                        }
+                    }
+                });
+
+        // Debounce timer applies the new height after user stops resizing briefly
+        resizeDebounceTimer =
+                new Timer(
+                        150,
+                        e -> {
+                            if (currentWaveform != null && pendingAmplitudeHeight > 0) {
+                                currentWaveform.setAmplitudeResolution(pendingAmplitudeHeight);
+                                if (refreshTimer == null || !refreshTimer.isRunning()) {
+                                    repaint();
+                                }
+                            }
+                        });
+        resizeDebounceTimer.setRepeats(false);
     }
 
     public void zoomX(boolean in) {

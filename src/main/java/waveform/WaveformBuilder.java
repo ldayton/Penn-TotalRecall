@@ -4,10 +4,12 @@ import audio.FmodCore;
 
 /** Fluent builder for creating Waveform instances with configurable parameters. */
 public final class WaveformBuilder {
+    private static final int DEFAULT_TIME_RESOLUTION_PX_PER_SEC = 50;
+    private static final int DEFAULT_AMPLITUDE_RESOLUTION_PX = 300;
+
     private String audioFilePath;
-    private int timeResolution =
-            WaveformRenderer.PIXELS_PER_SECOND; // Default: 200 pixels per second
-    private int amplitudeResolution = 600; // Default height
+    private int timeResolution = DEFAULT_TIME_RESOLUTION_PX_PER_SEC; // Default: 50 px/sec
+    private int amplitudeResolution = DEFAULT_AMPLITUDE_RESOLUTION_PX; // Default: 300 px height
     private boolean cachingEnabled = true; // Default: enabled
     private final FmodCore fmodCore;
 

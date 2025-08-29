@@ -12,8 +12,7 @@ final class WaveformRenderer {
 
     private static final DecimalFormat SEC_FORMAT = new DecimalFormat("0.00s");
 
-    // Waveform rendering constants
-    public static final int PIXELS_PER_SECOND = 200;
+    // Waveform rendering constants (colors, hints)
     public static final Color WAVEFORM_BACKGROUND = Color.WHITE;
     public static final Color WAVEFORM_REFERENCE_LINE = Color.BLACK;
     public static final Color WAVEFORM_SCALE_LINE = new Color(226, 224, 131);
@@ -39,7 +38,8 @@ final class WaveformRenderer {
             int height,
             double yScale,
             double startTimeSeconds,
-            double biggestConsecutivePixelVals) {
+            double biggestConsecutivePixelVals,
+            int pixelsPerSecond) {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
@@ -53,7 +53,7 @@ final class WaveformRenderer {
             g2d.setColor(WAVEFORM_REFERENCE_LINE);
             g2d.drawLine(0, height / 2, width, height / 2);
 
-            drawTimeScale(g2d, width, height, startTimeSeconds);
+            drawTimeScale(g2d, width, height, startTimeSeconds, pixelsPerSecond);
             drawWaveform(g2d, valsToDraw, height, yScale);
 
             return image;
@@ -69,16 +69,19 @@ final class WaveformRenderer {
         return waveformScaler.getPixelScale(valsToDraw, height, biggestConsecutivePixelVals);
     }
 
-    private void drawTimeScale(Graphics2D g2d, int width, int height, double startTimeSeconds) {
-        double counter = startTimeSeconds;
+    private void drawTimeScale(
+            Graphics2D g2d, int width, int height, double startTimeSeconds, int pixelsPerSecond) {
+        if (pixelsPerSecond <= 0) {
+            return;
+        }
 
-        for (int i = 0; i < width; i += PIXELS_PER_SECOND) {
+        for (int i = 0; i < width; i += pixelsPerSecond) {
             g2d.setColor(WAVEFORM_SCALE_LINE);
             g2d.drawLine(i, 0, i, height - 1);
 
             g2d.setColor(WAVEFORM_SCALE_TEXT);
-            g2d.drawString(SEC_FORMAT.format(counter), i + 5, height - 5);
-            counter++;
+            double seconds = startTimeSeconds + (i / (double) pixelsPerSecond);
+            g2d.drawString(SEC_FORMAT.format(seconds), i + 5, height - 5);
         }
     }
 
