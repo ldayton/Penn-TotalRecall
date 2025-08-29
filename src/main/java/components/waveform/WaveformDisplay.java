@@ -12,10 +12,12 @@ import events.UIUpdateRequestedEvent;
 import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
 import ui.UiConstants;
-import ui.UiShapes;
 import waveform.RenderedChunk;
 import waveform.Waveform;
 
@@ -52,6 +53,25 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private static final Color PROGRESS_BAR_COLOR = UIManager.getColor("Label.foreground");
     private static final Color ANNOTATION_LINE_COLOR = Color.RED;
     private static final Color ANNOTATION_ACCENT_COLOR = Color.BLUE;
+
+    private static final BasicStroke PROGRESS_BAR_STROKE =
+            new BasicStroke(
+                    1,
+                    BasicStroke.CAP_SQUARE,
+                    BasicStroke.JOIN_BEVEL,
+                    0,
+                    new float[] {10.0f, 3.0f},
+                    0);
+
+    private static final RenderingHints RENDERING_HINTS = createRenderingHints();
+
+    private static RenderingHints createRenderingHints() {
+        RenderingHints hints =
+                new RenderingHints(
+                        RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        return hints;
+    }
 
     /** Maximum pixels to interpolate when rendering waveform gaps. */
     public static final int MAX_INTERPOLATED_PIXELS = 10;
@@ -289,7 +309,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         }
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHints(UiShapes.getRenderingHints());
+        g2d.setRenderingHints(RENDERING_HINTS);
 
         // draw current time
         g2d.drawString(
@@ -365,7 +385,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         // draw progress bar
         if (foundOverlap == false) {
             Stroke originalStroke = g2d.getStroke();
-            g2d.setStroke(UiShapes.getProgressBarStroke());
+            g2d.setStroke(PROGRESS_BAR_STROKE);
             g2d.setXORMode(BACKGROUND_COLOR);
 
             g2d.setColor(PROGRESS_BAR_COLOR);

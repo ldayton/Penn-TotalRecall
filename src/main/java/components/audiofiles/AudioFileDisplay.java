@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -26,7 +27,6 @@ import state.AudioState;
 import state.PreferencesManager;
 import ui.DialogService;
 import ui.UiConstants;
-import ui.UiShapes;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -66,7 +66,7 @@ public class AudioFileDisplay extends JScrollPane {
         setPreferredSize(UiConstants.soundFileDisplayDimension);
         setMaximumSize(UiConstants.soundFileDisplayDimension);
 
-        setBorder(UiShapes.createMyUnfocusedTitledBorder(title));
+        setBorder(BorderFactory.createTitledBorder(title));
 
         // overrides JScrollPane key bindings for the benefit of SeekAction's key bindings
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
