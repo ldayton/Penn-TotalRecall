@@ -265,6 +265,12 @@ def loadEnvironmentConfig(task, String env) {
     }
 }
 
+// Apply per-Test-task isolated Java Preferences namespace to avoid user prefs leakage
+tasks.withType(Test).configureEach {
+    systemProperty 'prefs.namespace', 
+        "/edu/upenn/psych/memory/penntotalrecall/test/" + java.util.UUID.randomUUID().toString()
+}
+
 // Test configuration
 test {
     // CI detection: single source of truth

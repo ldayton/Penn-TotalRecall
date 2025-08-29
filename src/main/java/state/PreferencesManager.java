@@ -22,7 +22,7 @@ public class PreferencesManager {
 
     @Inject
     public PreferencesManager(@NonNull UserHomeProvider userManager) {
-        this(userManager, APP_PREFERENCES_NODE);
+        this(userManager, System.getProperty("prefs.namespace", APP_PREFERENCES_NODE));
     }
 
     /** Test constructor allowing custom namespace for isolation. */
