@@ -55,11 +55,26 @@ public class WindowLayoutPersistence {
     }
 
     private void restoreFramePosition(@NonNull JFrame frame) {
-        frame.setBounds(
-                prefs.getInt(PreferenceKeys.WINDOW_X, 0),
-                prefs.getInt(PreferenceKeys.WINDOW_Y, 0),
-                prefs.getInt(PreferenceKeys.WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_WIDTH),
-                prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, PreferenceKeys.DEFAULT_WINDOW_HEIGHT));
+        // Detect presence of saved bounds via sentinels (no separate first-run flag)
+        int x = prefs.getInt(PreferenceKeys.WINDOW_X, Integer.MIN_VALUE);
+        int y = prefs.getInt(PreferenceKeys.WINDOW_Y, Integer.MIN_VALUE);
+        int w = prefs.getInt(PreferenceKeys.WINDOW_WIDTH, Integer.MIN_VALUE);
+        int h = prefs.getInt(PreferenceKeys.WINDOW_HEIGHT, Integer.MIN_VALUE);
+
+        boolean hasSavedBounds =
+                x != Integer.MIN_VALUE
+                        && y != Integer.MIN_VALUE
+                        && w != Integer.MIN_VALUE
+                        && h != Integer.MIN_VALUE;
+
+        if (hasSavedBounds) {
+            frame.setBounds(x, y, w, h);
+        } else {
+            // No prior window state: use defaults and center on screen
+            frame.setSize(
+                    PreferenceKeys.DEFAULT_WINDOW_WIDTH, PreferenceKeys.DEFAULT_WINDOW_HEIGHT);
+            frame.setLocationRelativeTo(null);
+        }
         // Don't try to maximize on macOS - it doesn't work properly
         // Just let the saved bounds determine the size
     }

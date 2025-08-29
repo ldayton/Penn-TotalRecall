@@ -15,7 +15,6 @@ public final class PreferenceKeys {
     public static final String WINDOW_HEIGHT = "WINDOW_HEIGHT";
     public static final String WINDOW_MAXIMIZED = "WINDOW_MAXIMIZED";
     public static final String DIVIDER_LOCATION = "DIVIDER_LOCATION";
-    public static final String FIRST_RUN = "FIRST_RUN";
 
     // File operation preferences
     public static final String OPEN_LOCATION_PATH = "OPEN_LOCATION_PATH";
