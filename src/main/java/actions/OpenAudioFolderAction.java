@@ -38,7 +38,6 @@ public class OpenAudioFolderAction extends BaseAction {
             maybeLastPath = System.getProperty("user.home");
         }
 
-        System.setProperty("apple.awt.fileDialogForDirectories", "true");
         JFileChooser fileChooser = new JFileChooser(maybeLastPath);
         fileChooser.setDialogTitle("Open Audio Folder");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -55,8 +54,6 @@ public class OpenAudioFolderAction extends BaseAction {
                 AudioFileDisplay.addFilesIfSupported(selectedFile.listFiles());
             }
         }
-
-        System.setProperty("apple.awt.fileDialogForDirectories", "false");
     }
 
     /** <code>OpenAudioFolderAction</code> is always enabled. */

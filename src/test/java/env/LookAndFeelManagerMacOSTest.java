@@ -92,11 +92,7 @@ class LookAndFeelManagerMacOSTest {
         }
     }
 
-    @Test
-    @DisplayName("Native file choosers are enabled on macOS")
-    void nativeFileChoosersEnabled() {
-        assertTrue(manager.shouldUseAWTFileChoosers());
-    }
+    // JFileChooser is used everywhere; no native chooser toggle.
 
     @Test
     @DisplayName("Preferences menu items are hidden on macOS")

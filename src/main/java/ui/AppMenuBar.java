@@ -155,16 +155,11 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiOpenWordpool = new JMenuItem(openWordpoolAction);
         jmFile.add(jmiOpenWordpool);
 
-        // Add open audio file/folder menu items using separate ADI actions
-        if (lookAndFeelManager.shouldUseAWTFileChoosers()) {
-            JMenuItem jmiOpenAudioFile = new JMenuItem(openAudioFileAction);
-            JMenuItem jmiOpenAudioFolder = new JMenuItem(openAudioFolderAction);
-            jmFile.add(jmiOpenAudioFile);
-            jmFile.add(jmiOpenAudioFolder);
-        } else {
-            JMenuItem jmiOpenAudio = new JMenuItem(openAudioFileAction);
-            jmFile.add(jmiOpenAudio);
-        }
+        // Always use Swing JFileChooser; provide both file and folder options
+        JMenuItem jmiOpenAudioFile = new JMenuItem(openAudioFileAction);
+        JMenuItem jmiOpenAudioFolder = new JMenuItem(openAudioFolderAction);
+        jmFile.add(jmiOpenAudioFile);
+        jmFile.add(jmiOpenAudioFolder);
         JMenuItem jmiShortcuts = new JMenuItem(editShortcutsAction);
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {

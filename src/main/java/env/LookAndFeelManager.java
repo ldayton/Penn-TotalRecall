@@ -128,13 +128,7 @@ public class LookAndFeelManager {
         return platform.detect() != Platform.PlatformType.MACOS;
     }
 
-    /**
-     * Returns true on macOS for native file choosers, configurable via ui.use_native_file_choosers.
-     */
-    public boolean shouldUseAWTFileChoosers() {
-        boolean defaultValue = platform.detect() == Platform.PlatformType.MACOS;
-        return appConfig.getBooleanProperty("ui.use_native_file_choosers", defaultValue);
-    }
+    // All platforms use Swing JFileChooser; no AWT chooser toggle.
 
     /**
      * Returns platform-appropriate preferences menu text, configurable via
