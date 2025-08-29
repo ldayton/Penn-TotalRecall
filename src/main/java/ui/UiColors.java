@@ -25,9 +25,6 @@ public class UiColors {
 
     // component colors
 
-    /** Color of border of header of annotation list. */
-    public static final Color annotationListHeaderBorderColor = unfocusedColor;
-
     /** Color of background behind waveform. */
     public static final Color waveformBackground = Color.WHITE;
 

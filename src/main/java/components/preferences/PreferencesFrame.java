@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.border.Border;
 import ui.DialogCentering;
 import ui.MainWindowAccess;
 import ui.UiConstants;
@@ -207,13 +206,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         buttonPanel.add(jbRestoreDefaults);
         buttonPanel.add(Box.createHorizontalGlue());
 
-        // create some borders for the button panel to grab some space and be pretty
-        Border outsideBorder =
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createRaisedBevelBorder(),
-                        BorderFactory.createLoweredBevelBorder());
-        Border insideBorder = BorderFactory.createEmptyBorder(9, 5, 5, 5);
-        buttonPanel.setBorder(BorderFactory.createCompoundBorder(outsideBorder, insideBorder));
+        // Add spacing around button panel for clean FlatLaf appearance
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(12, 8, 8, 8));
     }
 
     /**

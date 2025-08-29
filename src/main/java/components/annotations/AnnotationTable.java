@@ -18,9 +18,9 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import ui.UiColors;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton
@@ -42,7 +42,8 @@ public class AnnotationTable extends JTable implements FocusListener {
         JTableHeader header = getTableHeader();
         header.setReorderingAllowed(false);
         header.setResizingAllowed(true);
-        header.setBorder(BorderFactory.createLineBorder(UiColors.annotationListHeaderBorderColor));
+        header.setBorder(
+                BorderFactory.createLineBorder(UIManager.getColor("Component.borderColor")));
         setModel(model);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addMouseListener(mouseAdapter);

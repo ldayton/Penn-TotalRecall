@@ -1,10 +1,8 @@
 package ui;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -44,30 +42,13 @@ public class UiShapes {
     // Borders
 
     /**
-     * Creates a titled border whose border color is the program's standard for lack of programmatic
-     * non-LAF focus hints.
+     * Creates a titled border using FlatLaf's built-in styling.
      *
      * @param title The border title
      * @return The constructed <code>Border</code>
      */
     public static TitledBorder createMyUnfocusedTitledBorder(String title) {
-        return createMyTitledBorder(title, UiColors.unfocusedColor);
-    }
-
-    /**
-     * Creates a titled border with the provided title and border color.
-     *
-     * <p>Uses the default system font for the title.
-     *
-     * @param title The title
-     * @param c The color for the border line
-     * @return The constructed border
-     */
-    private static TitledBorder createMyTitledBorder(String title, Color c) {
-        Border blackline = BorderFactory.createLineBorder(c);
-        TitledBorder border = BorderFactory.createTitledBorder(blackline, title);
-        border.setTitleJustification(TitledBorder.CENTER);
-        return border;
+        return BorderFactory.createTitledBorder(title);
     }
 
     // RenderingHints
