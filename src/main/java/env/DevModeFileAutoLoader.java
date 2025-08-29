@@ -47,7 +47,14 @@ public class DevModeFileAutoLoader {
 
     @Subscribe
     public void onApplicationStarted(ApplicationStartedEvent event) {
-        // Check if we're in development mode
+        // Only run during explicit dev runs (./gradlew runDev), not during tests
+        boolean runDevFlag = Boolean.parseBoolean(System.getProperty("app.run.dev", "false"));
+        if (!runDevFlag) {
+            logger.debug("Not runDev execution (app.run.dev=false), skipping auto-load");
+            return;
+        }
+
+        // Check if we're in development mode (unpackaged audio loading)
         String loadingMode = appConfig.getProperty("audio.loading.mode", "packaged");
         if (!"unpackaged".equals(loadingMode)) {
             logger.debug(

@@ -415,6 +415,9 @@ tasks.register('runDev', JavaExec) {
     
     // Load development configuration
     loadEnvironmentConfig(runDev, 'development')
+
+    // Flag this execution as an explicit developer run (used by DevModeFileAutoLoader)
+    systemProperty 'app.run.dev', 'true'
 }
 
 // Spotless code formatting configuration
