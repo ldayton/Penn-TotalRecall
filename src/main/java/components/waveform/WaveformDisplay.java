@@ -26,6 +26,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -246,7 +247,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             g.drawLine(0, getHeight() / 2, getWidth() - 1, getHeight() / 2);
 
             // draw bottom border
-            g.setColor(UiColors.unfocusedColor);
+            g.setColor(UIManager.getColor("Separator.foreground"));
             g.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
             return;
         }
@@ -368,7 +369,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         }
 
         // draw bottom border
-        g2d.setColor(UiColors.unfocusedColor);
+        g2d.setColor(UIManager.getColor("Separator.foreground"));
         g2d.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
     }
 

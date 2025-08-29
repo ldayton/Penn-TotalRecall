@@ -13,7 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import ui.UiColors;
+import javax.swing.UIManager;
 
 /**
  * Custom <code>JPanel</code> that is used as the bottom half of <code>ContentSplitPane</code>,
@@ -60,7 +60,7 @@ public class ControlPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(UiColors.unfocusedColor);
+        g.setColor(UIManager.getColor("Separator.foreground"));
         g.drawLine(0, 0, getWidth() - 1, 0);
     }
 }
