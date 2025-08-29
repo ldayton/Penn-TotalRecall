@@ -21,9 +21,9 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
     private int minorNumber;
 
     @Inject
-    public ProgramVersion() {
-        this.programVersion = Constants.programVersion;
-        this.versionDelimiter = Constants.programVersionDelimiter;
+    public ProgramVersion(AppConfig appConfig) {
+        this.programVersion = appConfig.getProperty(AppConfig.APP_VERSION_KEY);
+        this.versionDelimiter = "\\."; // Standard version delimiter
         parseVersion(programVersion);
     }
 
@@ -127,5 +127,10 @@ public class ProgramVersion implements Comparable<ProgramVersion> {
             }
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return programVersion;
     }
 }

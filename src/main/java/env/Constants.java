@@ -11,25 +11,6 @@ public class Constants {
 
     // program info
 
-    /** This program's name. */
-    public static final String programName = "Penn TotalRecall";
-
-    /**
-     * This program's version number. Should be of the form x.y where x and y are integers, of any
-     * number of digits. Given two versions x1^y1, and x2^y2 (where ^ is some delimiter), the former
-     * is considered newer if (x1 > x2) or if (x1 = x2 and y1 > y2). Otherwise the latter is
-     * considered newer.
-     *
-     * <p>Must use delimiter found in <code>programVersionDelimiter</code>.
-     */
-    public static final String programVersion = "0.00";
-
-    /**
-     * Regex delimiter used in programVersion String, given in the form usable by the Pattern class.
-     * Must be delimiter used in <code>programVersion</code>.
-     */
-    public static final String programVersionDelimiter = "\\.";
-
     /** Maintainer, to whom bugs are reported. */
     public static final String maintainerEmail = "memory-software@psych.upenn.edu";
 

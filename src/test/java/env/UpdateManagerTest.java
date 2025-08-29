@@ -19,11 +19,13 @@ class UpdateManagerTest {
     @DisplayName("Update checking with valid configuration")
     void updateCheckingWithValidConfig() {
         AppConfig mockConfig = mock(AppConfig.class);
+        ProgramVersion mockProgramVersion = mock(ProgramVersion.class);
         HttpClient mockClient = mock(HttpClient.class);
         DialogService mockDialogService = mock(DialogService.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.example.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://example.com");
+        when(mockProgramVersion.toString()).thenReturn("2025.08.15");
 
         // Test case: newer version available - should trigger notification
         @SuppressWarnings("unchecked")
@@ -32,7 +34,8 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(_ -> CompletableFuture.completedFuture(newerResponse));
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
+        UpdateManager manager =
+                new UpdateManager(mockConfig, mockProgramVersion, mockClient, mockDialogService);
 
         // Mock current version to be older
         UpdateManager spyManager = spy(manager);
@@ -51,7 +54,11 @@ class UpdateManagerTest {
         AppConfig mockConfig = mock(AppConfig.class);
         DialogService mockDialogService = mock(DialogService.class);
         UpdateManager manager =
-                new UpdateManager(mockConfig, mock(HttpClient.class), mockDialogService);
+                new UpdateManager(
+                        mockConfig,
+                        mock(ProgramVersion.class),
+                        mock(HttpClient.class),
+                        mockDialogService);
 
         // Test version comparison logic directly
         // Valid formats
@@ -74,16 +81,19 @@ class UpdateManagerTest {
     @DisplayName("getCurrentVersion with different manifest scenarios")
     void getCurrentVersionScenarios() {
         AppConfig mockConfig = mock(AppConfig.class);
+        ProgramVersion mockProgramVersion = mock(ProgramVersion.class);
         DialogService mockDialogService = mock(DialogService.class);
-        UpdateManager manager =
-                new UpdateManager(mockConfig, mock(HttpClient.class), mockDialogService);
 
-        // When called, getCurrentVersion should return either manifest version or "0.0.0"
+        // Configure mock to return the actual version from application.properties
+        when(mockProgramVersion.toString()).thenReturn("2025.08.15");
+
+        UpdateManager manager =
+                new UpdateManager(
+                        mockConfig, mockProgramVersion, mock(HttpClient.class), mockDialogService);
+
+        // When called, getCurrentVersion should return the version from ProgramVersion
         String version = manager.getCurrentVersion();
-        assertTrue(
-                version != null
-                        && (version.equals("0.0.0") || version.matches("\\d{4}\\.\\d{2}\\.\\d{2}")),
-                "Should return either default '0.0.0' or valid CalVer format");
+        assertEquals("2025.08.15", version, "Should return version from ProgramVersion");
     }
 
     @Test
@@ -107,7 +117,9 @@ class UpdateManagerTest {
                             return timeoutFuture;
                         });
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
+        UpdateManager manager =
+                new UpdateManager(
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
         assertDoesNotThrow(() -> manager.checkForUpdateOnStartup());
 
         // Test HTTP 404 error
@@ -118,7 +130,9 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(_ -> CompletableFuture.completedFuture(notFoundResponse));
 
-        UpdateManager manager404 = new UpdateManager(mockConfig, mockClient, mockDialogService);
+        UpdateManager manager404 =
+                new UpdateManager(
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
         assertDoesNotThrow(() -> manager404.checkForUpdateOnStartup());
 
         // Test empty response body
@@ -128,7 +142,9 @@ class UpdateManagerTest {
         when(mockClient.sendAsync(any(), any()))
                 .thenAnswer(_ -> CompletableFuture.completedFuture(emptyResponse));
 
-        UpdateManager managerEmpty = new UpdateManager(mockConfig, mockClient, mockDialogService);
+        UpdateManager managerEmpty =
+                new UpdateManager(
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
         assertDoesNotThrow(() -> managerEmpty.checkForUpdateOnStartup());
 
         Thread.sleep(100); // Allow async operations to complete
@@ -144,7 +160,9 @@ class UpdateManagerTest {
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.test.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://test.com");
 
-        UpdateManager manager = new UpdateManager(mockConfig, mockClient, mockDialogService);
+        UpdateManager manager =
+                new UpdateManager(
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
 
         assertEquals("https://api.test.com", manager.getReleasesApiUrl());
         assertEquals("https://test.com", manager.getReleasesPageUrl());

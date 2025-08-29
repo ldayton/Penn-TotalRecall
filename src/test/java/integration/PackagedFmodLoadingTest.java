@@ -34,7 +34,8 @@ import org.slf4j.LoggerFactory;
 class PackagedFmodLoadingTest {
     private static final Logger logger = LoggerFactory.getLogger(PackagedFmodLoadingTest.class);
 
-    private static final String PROGRAM_NAME = "Penn TotalRecall";
+    private static final String PROGRAM_NAME =
+            new env.AppConfig().getProperty(env.AppConfig.APP_NAME_KEY);
     private static final Path APP_BUNDLE =
             Paths.get("build/packaging/mac/" + PROGRAM_NAME + ".app");
     private static final Path APP_EXECUTABLE = APP_BUNDLE.resolve("Contents/MacOS/" + PROGRAM_NAME);

@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 public class AppConfig {
     private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
+    public static final String APP_NAME_KEY = "app.name";
+    public static final String APP_VERSION_KEY = "app.version";
+
     private static final String CONFIG_FILE_NAME = "application.properties";
     private static final String BUNDLED_CONFIG_PATH = "/" + CONFIG_FILE_NAME;
     private static final String DEFAULTS_CONFIG_PATH = "/config/defaults.properties";
@@ -224,6 +227,7 @@ public class AppConfig {
     private File getUserConfigFile() {
         var platformType = platform.detect();
         var userHome = userManager.getUserHomeDir();
+        // Use hardcoded fallback since this is called during properties loading
         var configDir =
                 switch (platformType) {
                     case MACOS -> userHome + "/Library/Application Support/Penn TotalRecall";

@@ -2,7 +2,7 @@ package ui;
 
 import actions.AboutAction;
 import components.MainFrame;
-import env.Constants;
+import env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.FileDialog;
@@ -24,10 +24,12 @@ public class DialogService {
 
     private final MainFrame mainFrame;
     private final ImageIcon appIcon;
+    private final ProgramName programName;
 
     @Inject
-    public DialogService(@NonNull MainFrame mainFrame) {
+    public DialogService(@NonNull MainFrame mainFrame, @NonNull ProgramName programName) {
         this.mainFrame = mainFrame;
+        this.programName = programName;
         this.appIcon = new ImageIcon(AboutAction.class.getResource("/images/headphones48.png"));
     }
 
@@ -54,7 +56,7 @@ public class DialogService {
         JOptionPane.showMessageDialog(
                 mainFrame,
                 message,
-                Constants.programName,
+                programName.toString(),
                 JOptionPane.INFORMATION_MESSAGE,
                 appIcon);
     }
@@ -70,7 +72,7 @@ public class DialogService {
                 JOptionPane.showInputDialog(
                         mainFrame,
                         message,
-                        Constants.programName,
+                        programName.toString(),
                         JOptionPane.QUESTION_MESSAGE,
                         appIcon,
                         null,

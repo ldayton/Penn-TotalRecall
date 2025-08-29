@@ -36,7 +36,7 @@ class LookAndFeelManagerMacOSTest {
 
         config = new AppConfig();
         platform = new Platform();
-        manager = new LookAndFeelManager(config, platform);
+        manager = new LookAndFeelManager(config, new ProgramName(config), platform);
     }
 
     @Test
@@ -49,7 +49,9 @@ class LookAndFeelManagerMacOSTest {
         assertEquals("on", System.getProperty("apple.awt.antialiasing"));
         assertEquals("quality", System.getProperty("apple.awt.rendering"));
         assertEquals("system", System.getProperty("apple.awt.application.appearance"));
-        assertEquals("Penn TotalRecall", System.getProperty("apple.awt.application.name"));
+        assertEquals(
+                new AppConfig().getProperty(AppConfig.APP_NAME_KEY),
+                System.getProperty("apple.awt.application.name"));
     }
 
     @Test
@@ -124,7 +126,8 @@ class LookAndFeelManagerMacOSTest {
         System.clearProperty("apple.laf.useScreenMenuBar");
 
         // Create and initialize the Look and Feel manager
-        LookAndFeelManager manager = new LookAndFeelManager(config, platform);
+        LookAndFeelManager manager =
+                new LookAndFeelManager(config, new ProgramName(config), platform);
         manager.initialize();
 
         // Verify the system property is set correctly

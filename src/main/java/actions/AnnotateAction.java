@@ -6,6 +6,7 @@ import components.annotations.AnnotationFileParser;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
 import env.Constants;
+import env.ProgramVersion;
 import events.AnnotatorNameProvidedEvent;
 import events.AnnotatorNameRequestedEvent;
 import events.ErrorRequestedEvent;
@@ -31,17 +32,22 @@ public class AnnotateAction extends BaseAction {
     private final AudioState audioState;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
+    private final ProgramVersion programVersion;
     private String annotatorName;
     private String pendingAnnotationText;
     private File pendingAnnotationFile;
 
     @Inject
     public AnnotateAction(
-            AudioState audioState, EventDispatchBus eventBus, WordpoolDisplay wordpoolDisplay) {
+            AudioState audioState,
+            EventDispatchBus eventBus,
+            WordpoolDisplay wordpoolDisplay,
+            ProgramVersion programVersion) {
         super("Annotate", "Commit annotation");
         this.audioState = audioState;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
+        this.programVersion = programVersion;
         eventBus.subscribe(this);
     }
 
@@ -104,7 +110,7 @@ public class AnnotateAction extends BaseAction {
                         eventBus.publish(new AnnotatorNameRequestedEvent("AnnotateAction"));
                         return;
                     }
-                    AnnotationFileParser.prependHeader(oFile, annotatorName);
+                    AnnotationFileParser.prependHeader(oFile, annotatorName, programVersion);
                 }
 
                 // Create annotation based on mode
@@ -163,7 +169,8 @@ public class AnnotateAction extends BaseAction {
             annotatorName = event.getAnnotatorName();
 
             try {
-                AnnotationFileParser.prependHeader(pendingAnnotationFile, annotatorName);
+                AnnotationFileParser.prependHeader(
+                        pendingAnnotationFile, annotatorName, programVersion);
 
                 // Create annotation
                 double time =

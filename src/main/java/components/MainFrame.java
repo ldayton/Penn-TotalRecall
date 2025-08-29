@@ -5,6 +5,8 @@ import components.waveform.SelectionOverlay;
 import components.wordpool.WordpoolDisplay;
 import env.LookAndFeelManager;
 import env.PreferenceKeys;
+import env.ProgramName;
+import env.ProgramVersion;
 import events.AudioFileSwitchedEvent;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -25,7 +27,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import state.PreferencesManager;
-import ui.UiConstants;
 
 /**
  * Main window of the program.
@@ -38,6 +39,8 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
 
     private static MainFrame instance;
     private final PreferencesManager preferencesManager;
+    private final ProgramName programName;
+    private final ProgramVersion programVersion;
 
     @Inject
     public MainFrame(
@@ -48,9 +51,13 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
             ExitAction exitAction,
             EventDispatchBus eventBus,
             FileDropListener fileDropListener,
-            PreferencesManager preferencesManager) {
+            PreferencesManager preferencesManager,
+            ProgramName programName,
+            ProgramVersion programVersion) {
         this.preferencesManager = preferencesManager;
-        setTitle(UiConstants.defaultFrameTitle);
+        this.programName = programName;
+        this.programVersion = programVersion;
+        setTitle(getDefaultFrameTitle());
         setGlassPane(myGlassPane);
         myGlassPane.setVisible(true);
         setJMenuBar(myMenu);
@@ -159,11 +166,11 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     public void handleAudioFileSwitched(AudioFileSwitchedEvent event) {
         if (event.getFile() == null) {
             // Reset to default title and request focus
-            setTitle(UiConstants.defaultFrameTitle);
+            setTitle(getDefaultFrameTitle());
             requestFocus();
         } else {
             // Set title with file path
-            setTitle(UiConstants.defaultFrameTitle + " - " + event.getFile().getPath());
+            setTitle(getDefaultFrameTitle() + " - " + event.getFile().getPath());
         }
     }
 
@@ -224,5 +231,10 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         text.setOpaque(false);
         javax.swing.JOptionPane.showMessageDialog(
                 this, text, "About", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /** Returns the default frame title combining app name and version. */
+    private String getDefaultFrameTitle() {
+        return programName.toString() + " v" + programVersion.toString();
     }
 }

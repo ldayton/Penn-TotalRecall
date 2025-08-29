@@ -8,12 +8,15 @@ plugins {
 }
 
 group = 'edu.upenn.psych.memory'
-version = '2025.08.15'
+
+// Load application properties
+def appProps = loadAppProperties()
+version = appProps.getProperty('app.version')
 
 // Project configuration
 ext {
     javaVersion = JavaVersion.VERSION_24
-    programProperName = 'Penn TotalRecall'
+    programProperName = appProps.getProperty('app.name')
     programExtensionlessFilename = 'PennTotalRecall'
     maintainerName = 'Lily Dayton'
     maintainerEmail = 'lily.dayton.3@gmail.com'
@@ -247,6 +250,18 @@ distributions {
             from jar
             from 'packaging/samples'
         }
+    }
+}
+
+// Helper function to load application properties for build configuration
+def loadAppProperties() {
+    def configFile = file("src/main/resources/application.properties")
+    if (configFile.exists()) {
+        def props = new Properties()
+        configFile.withInputStream { props.load(it) }
+        return props
+    } else {
+        throw new GradleException("Application properties file not found: ${configFile.path}")
     }
 }
 

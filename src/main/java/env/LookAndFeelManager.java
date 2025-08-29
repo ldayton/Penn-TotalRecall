@@ -22,11 +22,16 @@ public class LookAndFeelManager {
     private static final Logger logger = LoggerFactory.getLogger(LookAndFeelManager.class);
 
     private final AppConfig appConfig;
+    private final ProgramName programName;
     private final Platform platform;
 
     @Inject
-    public LookAndFeelManager(@NonNull AppConfig appConfig, @NonNull Platform platform) {
+    public LookAndFeelManager(
+            @NonNull AppConfig appConfig,
+            @NonNull ProgramName programName,
+            @NonNull Platform platform) {
         this.appConfig = appConfig;
+        this.programName = programName;
         this.platform = platform;
     }
 
@@ -61,7 +66,7 @@ public class LookAndFeelManager {
         System.setProperty("apple.awt.antialiasing", "on");
         System.setProperty("apple.awt.rendering", "quality");
         System.setProperty("apple.awt.application.appearance", "system");
-        System.setProperty("apple.awt.application.name", "Penn TotalRecall");
+        System.setProperty("apple.awt.application.name", programName.toString());
     }
 
     /** Returns configured Look and Feel class name, defaulting to FlatLaf. */

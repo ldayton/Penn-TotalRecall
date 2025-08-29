@@ -38,7 +38,7 @@ class EventDispatchBusTest {
                                 latch.countDown();
                             });
 
-                    eventBus.publish(new TestEvent("test"));
+                    eventBus.publish(new TestEvent());
                 });
 
         assertTrue(latch.await(1, TimeUnit.SECONDS), "Event should have been processed");
@@ -63,7 +63,7 @@ class EventDispatchBusTest {
         Thread backgroundThread =
                 new Thread(
                         () -> {
-                            eventBus.publish(new TestEvent("background"));
+                            eventBus.publish(new TestEvent());
                         },
                         "TestBackgroundThread");
 
@@ -94,11 +94,10 @@ class EventDispatchBusTest {
 
         // Publish from multiple background threads
         for (int i = 0; i < eventCount; i++) {
-            final int eventId = i;
             Thread thread =
                     new Thread(
                             () -> {
-                                eventBus.publish(new TestEvent("event-" + eventId));
+                                eventBus.publish(new TestEvent());
                             },
                             "TestThread-" + i);
             thread.start();

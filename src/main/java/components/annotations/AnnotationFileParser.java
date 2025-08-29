@@ -1,6 +1,7 @@
 package components.annotations;
 
 import env.Constants;
+import env.ProgramVersion;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -193,7 +194,8 @@ public class AnnotationFileParser {
         }
     }
 
-    public static void prependHeader(File oFile, String annotatorName) throws IOException {
+    public static void prependHeader(
+            File oFile, String annotatorName, ProgramVersion programVersion) throws IOException {
         if (oFile.exists() == false) {
             throw new FileNotFoundException(oFile + " not found");
         }
@@ -215,7 +217,7 @@ public class AnnotationFileParser {
 
         fw.write(Constants.commentStart + "UNIX: " + System.currentTimeMillis() / 1000 + "\n");
 
-        fw.write(Constants.commentStart + "Program Version: " + Constants.programVersion + "\n");
+        fw.write(Constants.commentStart + "Program Version: " + programVersion.toString() + "\n");
 
         String[] osPropertyStrings = {
             "os.name", "os.arch", "user.name", "user.country", "user.language"

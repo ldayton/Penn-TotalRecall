@@ -6,6 +6,7 @@ import components.annotations.AnnotationFileParser;
 import components.wordpool.WordpoolDisplay;
 import components.wordpool.WordpoolWord;
 import env.Constants;
+import env.ProgramVersion;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -31,6 +32,7 @@ public class AnnotateIntrusionAction extends BaseAction {
     private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
+    private final ProgramVersion programVersion;
     private String annotatorName;
 
     @Inject
@@ -38,12 +40,14 @@ public class AnnotateIntrusionAction extends BaseAction {
             AudioState audioState,
             DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
             EventDispatchBus eventBus,
-            WordpoolDisplay wordpoolDisplay) {
+            WordpoolDisplay wordpoolDisplay,
+            ProgramVersion programVersion) {
         super("Annotate Intrusion", "Commit an intrusion annotation");
         this.audioState = audioState;
         this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
+        this.programVersion = programVersion;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class AnnotateIntrusionAction extends BaseAction {
                     if (annotatorName == null) {
                         annotatorName = "Default"; // Use default name for now
                     }
-                    AnnotationFileParser.prependHeader(oFile, annotatorName);
+                    AnnotationFileParser.prependHeader(oFile, annotatorName, programVersion);
                 }
 
                 Annotation ann = new Annotation(time, match.getNum(), match.getText());
@@ -119,7 +123,8 @@ public class AnnotateIntrusionAction extends BaseAction {
                             annotatorName = "Default"; // Use default name for now
                         }
                         if (!AnnotationFileParser.headerExists(oFile)) {
-                            AnnotationFileParser.prependHeader(oFile, annotatorName);
+                            AnnotationFileParser.prependHeader(
+                                    oFile, annotatorName, programVersion);
                         }
                     } else {
                         throw new IOException("Could not re-create file.");

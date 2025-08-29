@@ -31,15 +31,18 @@ public class UpdateManager {
     private static final String RELEASES_PAGE_URL_KEY = "releases.page.url";
 
     private final AppConfig appConfig;
+    private final ProgramVersion programVersion;
     private final HttpClient httpClient;
     private final DialogService dialogService;
 
     @Inject
     public UpdateManager(
             @NonNull AppConfig appConfig,
+            @NonNull ProgramVersion programVersion,
             @NonNull HttpClient httpClient,
             @NonNull DialogService dialogService) {
         this.appConfig = appConfig;
+        this.programVersion = programVersion;
         this.httpClient = httpClient;
         this.dialogService = dialogService;
     }
@@ -93,9 +96,7 @@ public class UpdateManager {
     }
 
     String getCurrentVersion() {
-        Package pkg = getClass().getPackage();
-        String version = pkg.getImplementationVersion();
-        return version != null ? version : "0.0.0";
+        return programVersion.toString();
     }
 
     private String getLatestVersionFromGitHub(@NonNull String releasesApiUrl) throws Exception {

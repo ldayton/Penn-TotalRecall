@@ -108,7 +108,11 @@ public class GuiceBootstrap {
             System.setProperty("apple.awt.antialiasing", "on");
             System.setProperty("apple.awt.rendering", "quality");
             System.setProperty("apple.awt.application.appearance", "system");
-            System.setProperty("apple.awt.application.name", "Penn TotalRecall");
+            // Load app name from config since this runs before DI
+            env.AppConfig tempConfig = new env.AppConfig();
+            System.setProperty(
+                    "apple.awt.application.name",
+                    tempConfig.getProperty(env.AppConfig.APP_NAME_KEY));
         }
     }
 

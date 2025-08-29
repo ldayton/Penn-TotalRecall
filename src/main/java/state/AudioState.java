@@ -13,6 +13,7 @@ import components.wordpool.WordpoolFileParser;
 import control.AudioCalculator;
 import control.AudioPlaybackCoordinator;
 import env.Constants;
+import env.ProgramName;
 import events.AudioFileSwitchedEvent;
 import events.EventDispatchBus;
 import events.UIUpdateRequestedEvent;
@@ -62,13 +63,18 @@ public class AudioState implements AudioProgressHandler {
     private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
+    private final ProgramName programName;
 
     @Inject
     public AudioState(
-            FmodCore fmodCore, EventDispatchBus eventBus, WordpoolDisplay wordpoolDisplay) {
+            FmodCore fmodCore,
+            EventDispatchBus eventBus,
+            WordpoolDisplay wordpoolDisplay,
+            ProgramName programName) {
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
+        this.programName = programName;
     }
 
     public FmodCore getFmodCore() {
@@ -129,7 +135,7 @@ public class AudioState implements AudioProgressHandler {
                 logger.error("Cannot load audio system", e1);
                 throw new RuntimeException(
                         "Cannot load audio system. You may need to reinstall "
-                                + Constants.programName,
+                                + programName.toString(),
                         e1);
             }
             playbackCoordinator = new AudioPlaybackCoordinator(this, eventBus);

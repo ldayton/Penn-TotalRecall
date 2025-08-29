@@ -1,6 +1,5 @@
 package ui;
 
-import env.Constants;
 import java.awt.Dimension;
 
 /**
@@ -54,10 +53,6 @@ public class UiConstants {
 
     /** Number of pixels added/subtracted to zoomlessPixelsPerSecond for each zoom in/out action. */
     public static final int xZoomAmount = 40;
-
-    /** The title of the <code>MainFrame</code> when audio is closed. */
-    public static final String defaultFrameTitle =
-            Constants.programName + " v" + Constants.programVersion;
 
     /** Private constructor to prevent instantiation. */
     private UiConstants() {}

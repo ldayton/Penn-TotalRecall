@@ -426,12 +426,12 @@ class AppConfigTest {
         String tempHome = tempDir.toString();
         System.setProperty("user.home", tempHome);
 
+        String appName = new AppConfig().getProperty(AppConfig.APP_NAME_KEY);
         String configPath =
                 switch (platformType) {
-                    case MACOS -> tempHome + "/Library/Application Support/Penn TotalRecall";
-                    case WINDOWS ->
-                            tempHome + "/AppData/Roaming/Penn TotalRecall"; // Simplified for test
-                    case LINUX -> tempHome + "/.penn-totalrecall";
+                    case MACOS -> tempHome + "/Library/Application Support/" + appName;
+                    case WINDOWS -> tempHome + "/AppData/Roaming/" + appName; // Simplified for test
+                    case LINUX -> tempHome + "/." + appName.toLowerCase().replace(" ", "-");
                 };
 
         File configDir = new File(configPath);
