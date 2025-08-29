@@ -5,6 +5,8 @@ import env.ProgramVersion;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
+import events.IntrusionAnnotationRequestedEvent;
+import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -159,6 +161,11 @@ public class AnnotateIntrusionAction extends BaseAction {
 
     public void setAnnotatorName(String annotatorName) {
         this.annotatorName = annotatorName;
+    }
+
+    @Subscribe
+    public void handleIntrusionAnnotationRequested(IntrusionAnnotationRequestedEvent evt) {
+        performAction(new ActionEvent(wordpoolDisplay, ActionEvent.ACTION_PERFORMED, null));
     }
 
     private File getOutputFile() {

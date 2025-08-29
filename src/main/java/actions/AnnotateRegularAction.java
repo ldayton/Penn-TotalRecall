@@ -5,6 +5,8 @@ import env.ProgramVersion;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
+import events.RegularAnnotationRequestedEvent;
+import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -49,6 +51,8 @@ public class AnnotateRegularAction extends BaseAction {
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.programVersion = programVersion;
+        // Subscribe to events so Enter in the text field can trigger this action
+        this.eventBus.subscribe(this);
     }
 
     @Override
@@ -161,6 +165,12 @@ public class AnnotateRegularAction extends BaseAction {
 
     public void setAnnotatorName(String annotatorName) {
         this.annotatorName = annotatorName;
+    }
+
+    @Subscribe
+    public void handleRegularAnnotationRequested(RegularAnnotationRequestedEvent evt) {
+        // Bridge event to the existing action logic
+        performAction(new ActionEvent(wordpoolDisplay, ActionEvent.ACTION_PERFORMED, null));
     }
 
     private File getOutputFile() {

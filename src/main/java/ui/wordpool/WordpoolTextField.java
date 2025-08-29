@@ -54,9 +54,30 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "annotate regular");
-        // TODO: Replace with proper ADI action injection - circular dependency prevents direct
-        // injection
-        // getActionMap().put("annotate regular", annotateAction);
+        getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+                .put(
+                        KeyStroke.getKeyStroke(
+                                KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK, false),
+                        "annotate intrusion");
+        // Publish an event to request regular annotation to avoid direct wiring/cycles
+        getActionMap()
+                .put(
+                        "annotate regular",
+                        new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                eventBus.publish(new events.RegularAnnotationRequestedEvent());
+                            }
+                        });
+        getActionMap()
+                .put(
+                        "annotate intrusion",
+                        new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                eventBus.publish(new events.IntrusionAnnotationRequestedEvent());
+                            }
+                        });
 
         Set<AWTKeyStroke> keys = new HashSet<AWTKeyStroke>();
         keys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_DOWN_MASK, false));

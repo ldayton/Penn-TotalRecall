@@ -122,6 +122,7 @@ public class GuiceBootstrap {
      */
     private static void setFlatLafBeforeDI() {
         try {
+            // TODO switch to native flatlaf deps to avoid temp file extraction
             UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
             logger.info("Set FlatLaf before DI initialization");
         } catch (Exception e) {
