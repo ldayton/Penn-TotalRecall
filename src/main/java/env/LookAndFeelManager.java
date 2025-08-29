@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Configures Look and Feel and platform-specific UI integration. Call initialize() before creating
- * any Swing components.
+ * any Swing ui.
  */
 @Singleton
 public class LookAndFeelManager {

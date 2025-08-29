@@ -1,6 +1,5 @@
 package actions;
 
-import components.audiofiles.AudioFileDisplay;
 import env.Constants;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
@@ -10,10 +9,11 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import state.PreferencesManager;
+import ui.audiofiles.AudioFileDisplay;
 
 /**
  * Presents a file chooser to the user for selecting audio files only and then adds the selected
- * files to the {@link components.audiofiles.AudioFileDisplay}.
+ * files to the {@link ui.audiofiles.AudioFileDisplay}.
  */
 @Singleton
 public class OpenAudioFileAction extends BaseAction {

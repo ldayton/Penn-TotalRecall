@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  *
  * This design ensures thread safety for Swing applications where most event handlers need to update
- * UI components.
+ * UI ui.
  */
 @Singleton
 public class EventDispatchBus {

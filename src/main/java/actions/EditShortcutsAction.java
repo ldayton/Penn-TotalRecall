@@ -1,9 +1,9 @@
 package actions;
 
-import components.ShortcutFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
+import ui.ShortcutFrame;
 
 @Singleton
 public class EditShortcutsAction extends BaseAction {

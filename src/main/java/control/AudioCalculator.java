@@ -2,13 +2,13 @@ package control;
 
 import audio.FmodAudioFormatDetector;
 import audio.FmodCore;
-import components.audiofiles.AudioFile;
 import env.AppConfig;
 import env.Platform;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.audiofiles.AudioFile;
 
 /**
  * FMOD-based audio format detection and calculation utility that provides comprehensive information

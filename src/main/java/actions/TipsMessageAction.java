@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
- * in {@link components.AppMenuBar};
+ * in {@link ui.AppMenuBar};
  */
 @Singleton
 public class TipsMessageAction extends BaseAction {

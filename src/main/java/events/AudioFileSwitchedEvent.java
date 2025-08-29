@@ -1,6 +1,6 @@
 package events;
 
-import components.audiofiles.AudioFile;
+import ui.audiofiles.AudioFile;
 
 /**
  * Event fired when an audio file is switched.

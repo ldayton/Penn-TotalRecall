@@ -1,11 +1,11 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.waveform.WaveformDisplay;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import state.AudioState;
+import ui.waveform.WaveformDisplay;
 
 /** Zooms the waveform display in. */
 @Singleton

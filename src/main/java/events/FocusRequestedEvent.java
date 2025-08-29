@@ -1,8 +1,8 @@
 package events;
 
 /**
- * Event for requesting focus changes between UI components. This eliminates direct UI control from
- * event handlers.
+ * Event for requesting focus changes between UI ui. This eliminates direct UI control from event
+ * handlers.
  */
 public class FocusRequestedEvent {
     public enum Component {

@@ -1,7 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.audiofiles.AudioFile.AudioFilePathException;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -12,6 +11,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.audiofiles.AudioFile.AudioFilePathException;
 import util.OsPath;
 
 /**

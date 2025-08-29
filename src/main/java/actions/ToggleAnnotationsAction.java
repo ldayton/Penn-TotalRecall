@@ -1,8 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.annotations.Annotation;
-import components.annotations.AnnotationDisplay;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -13,10 +11,12 @@ import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.annotations.Annotation;
+import ui.annotations.AnnotationDisplay;
 
 /**
- * Tries to move the audio position to the next/previous {@link components.annotations.Annotation},
- * relative to current audio position.
+ * Tries to move the audio position to the next/previous {@link ui.annotations.Annotation}, relative
+ * to current audio position.
  */
 @Singleton
 public class ToggleAnnotationsAction extends BaseAction {

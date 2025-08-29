@@ -1,9 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.annotations.Annotation;
-import components.annotations.AnnotationDisplay;
-import components.annotations.AnnotationTable;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -13,6 +10,9 @@ import java.awt.event.ActionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.annotations.Annotation;
+import ui.annotations.AnnotationDisplay;
+import ui.annotations.AnnotationTable;
 
 @Singleton
 public class JumpToAnnotationAction extends BaseAction {

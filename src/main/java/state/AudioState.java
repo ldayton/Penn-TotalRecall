@@ -3,13 +3,6 @@ package state;
 import audio.AudioPlayer;
 import audio.AudioProgressHandler;
 import audio.FmodCore;
-import components.AppMenuBar;
-import components.annotations.Annotation;
-import components.annotations.AnnotationDisplay;
-import components.annotations.AnnotationFileParser;
-import components.audiofiles.AudioFile;
-import components.wordpool.WordpoolDisplay;
-import components.wordpool.WordpoolFileParser;
 import control.AudioCalculator;
 import control.AudioPlaybackCoordinator;
 import env.Constants;
@@ -27,6 +20,13 @@ import java.util.List;
 import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.AppMenuBar;
+import ui.annotations.Annotation;
+import ui.annotations.AnnotationDisplay;
+import ui.annotations.AnnotationFileParser;
+import ui.audiofiles.AudioFile;
+import ui.wordpool.WordpoolDisplay;
+import ui.wordpool.WordpoolFileParser;
 import util.OsPath;
 
 /**

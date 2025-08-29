@@ -1,6 +1,5 @@
 package actions;
 
-import components.audiofiles.AudioFileDisplay;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -8,10 +7,11 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
 import state.PreferencesManager;
+import ui.audiofiles.AudioFileDisplay;
 
 /**
  * Presents a directory chooser to the user for selecting audio folders and then adds the selected
- * files to the {@link components.audiofiles.AudioFileDisplay}.
+ * files to the {@link ui.audiofiles.AudioFileDisplay}.
  */
 @Singleton
 public class OpenAudioFolderAction extends BaseAction {

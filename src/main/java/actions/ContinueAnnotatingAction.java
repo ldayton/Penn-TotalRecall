@@ -1,7 +1,5 @@
 package actions;
 
-import components.audiofiles.AudioFile;
-import components.audiofiles.AudioFile.AudioFilePathException;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -12,6 +10,8 @@ import java.io.File;
 import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.audiofiles.AudioFile;
+import ui.audiofiles.AudioFile.AudioFilePathException;
 import util.OsPath;
 
 /** Reopens a file which was already done being annotated. */

@@ -2,12 +2,12 @@ package audio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import components.audiofiles.AudioFile;
-import components.audiofiles.AudioFile.AudioFilePathException;
 import java.io.File;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ui.audiofiles.AudioFile;
+import ui.audiofiles.AudioFile.AudioFilePathException;
 
 /** Tests for FmodAudioFormatDetector functionality. */
 @AudioEngine

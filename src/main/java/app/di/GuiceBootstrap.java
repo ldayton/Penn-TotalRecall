@@ -3,11 +3,6 @@ package app.di;
 import actions.ActionsManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import components.AppFocusTraversalPolicy;
-import components.AppMenuBar;
-import components.ContentSplitPane;
-import components.MainFrame;
-import components.WindowLayoutPersistence;
 import env.DevModeFileAutoLoader;
 import env.LookAndFeelManager;
 import env.UpdateManager;
@@ -17,6 +12,11 @@ import jakarta.inject.Inject;
 import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.AppFocusTraversalPolicy;
+import ui.AppMenuBar;
+import ui.ContentSplitPane;
+import ui.MainFrame;
+import ui.WindowLayoutPersistence;
 
 /**
  * Guice-based application bootstrap.
@@ -74,7 +74,7 @@ public class GuiceBootstrap {
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
         // Initialize waveform components (this triggers creation of mouse listeners)
-        globalInjector.getInstance(components.waveform.WaveformMouseSetup.class);
+        globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);
 
         // Initialize DevModeFileAutoLoader (subscribes to events)
         globalInjector.getInstance(DevModeFileAutoLoader.class);

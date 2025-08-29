@@ -1,7 +1,6 @@
 package control;
 
 import app.di.GuiceBootstrap;
-import components.AppMenuBar;
 import events.AudioEvent;
 import events.AudioStateEvent;
 import events.EventDispatchBus;
@@ -12,6 +11,7 @@ import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.AppMenuBar;
 import ui.DialogService;
 
 /**

@@ -1,7 +1,6 @@
 package ui;
 
 import actions.AboutAction;
-import components.MainFrame;
 import env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

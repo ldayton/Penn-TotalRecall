@@ -1,9 +1,9 @@
 package audio;
 
-import components.audiofiles.AudioFile;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.audiofiles.AudioFile;
 
 /**
  * FMOD-based audio format detector that replaces Java Sound format detection.
@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
  *
  * <p><strong>Thread Safety:</strong> This class is thread-safe. All methods are stateless and
  * delegate to the thread-safe {@link FmodCore} for actual format detection. The class can be safely
- * used by multiple threads concurrently, including with thread-safe {@link
- * components.audiofiles.AudioFile} instances.
+ * used by multiple threads concurrently, including with thread-safe {@link ui.audiofiles.AudioFile}
+ * instances.
  */
 public class FmodAudioFormatDetector {
     private static final Logger logger = LoggerFactory.getLogger(FmodAudioFormatDetector.class);

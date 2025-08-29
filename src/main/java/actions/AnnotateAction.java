@@ -1,10 +1,6 @@
 package actions;
 
 import audio.AudioPlayer;
-import components.annotations.Annotation;
-import components.annotations.AnnotationFileParser;
-import components.wordpool.WordpoolDisplay;
-import components.wordpool.WordpoolWord;
 import env.Constants;
 import env.ProgramVersion;
 import events.AnnotatorNameProvidedEvent;
@@ -22,6 +18,10 @@ import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.annotations.Annotation;
+import ui.annotations.AnnotationFileParser;
+import ui.wordpool.WordpoolDisplay;
+import ui.wordpool.WordpoolWord;
 import util.OsPath;
 
 /** Commits an annotation with the specified mode. */

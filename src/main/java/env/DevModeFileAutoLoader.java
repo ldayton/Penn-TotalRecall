@@ -1,8 +1,6 @@
 package env;
 
 import actions.OpenWordpoolAction;
-import components.audiofiles.AudioFileDisplay;
-import components.audiofiles.AudioFileList;
 import events.ApplicationStartedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
@@ -12,6 +10,8 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.audiofiles.AudioFileDisplay;
+import ui.audiofiles.AudioFileList;
 
 /**
  * Automatically loads sample audio and wordpool files when running in development mode.

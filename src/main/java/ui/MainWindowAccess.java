@@ -1,6 +1,5 @@
 package ui;
 
-import components.MainFrame;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Rectangle;

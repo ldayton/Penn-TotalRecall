@@ -2,7 +2,7 @@ package events;
 
 /**
  * Event for AudioFileList operations. This eliminates direct AudioFileList control from popup menus
- * and other components.
+ * and other ui.
  */
 public class AudioFileListEvent {
     public enum Type {

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import components.shortcuts.Shortcut;
 import env.KeyboardManager;
 import env.Platform;
 import jakarta.inject.Inject;
@@ -24,6 +23,7 @@ import javax.swing.KeyStroke;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.shortcuts.Shortcut;
 
 /**
  * Jackson-based parser for actions.xml configuration files.

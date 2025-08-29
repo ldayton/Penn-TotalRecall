@@ -1,9 +1,5 @@
 package actions;
 
-import components.AppMenuBar;
-import components.annotations.Annotation;
-import components.annotations.AnnotationDisplay;
-import components.annotations.AnnotationFileParser;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -16,6 +12,10 @@ import javax.swing.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
+import ui.AppMenuBar;
+import ui.annotations.Annotation;
+import ui.annotations.AnnotationDisplay;
+import ui.annotations.AnnotationFileParser;
 import util.OsPath;
 
 /**

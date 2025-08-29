@@ -1,8 +1,5 @@
 package actions;
 
-import components.wordpool.WordpoolDisplay;
-import components.wordpool.WordpoolFileParser;
-import components.wordpool.WordpoolWord;
 import env.Constants;
 import env.PreferenceKeys;
 import env.UserHomeProvider;
@@ -20,11 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
 import state.PreferencesManager;
+import ui.wordpool.WordpoolDisplay;
+import ui.wordpool.WordpoolFileParser;
+import ui.wordpool.WordpoolWord;
 import util.OsPath;
 
 /**
  * Presents a file chooser to the user and then adds words from the selected file to the {@link
- * components.wordpool.WordpoolDisplay}.
+ * ui.wordpool.WordpoolDisplay}.
  */
 @Singleton
 public class OpenWordpoolAction extends BaseAction {

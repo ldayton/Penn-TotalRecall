@@ -3,7 +3,7 @@ package env;
 import java.util.List;
 
 /**
- * Central location for many kinds of constants other than those used by GUI components.
+ * Central location for many kinds of constants other than those used by GUI ui.
  *
  * <p>Constants used directly by GUI components are stored in UiConstants.
  */

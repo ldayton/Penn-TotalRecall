@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import audio.AudioSystemLoader;
 import audio.FmodCore;
-import components.WindowLayoutPersistence;
 import env.AppConfig;
 import env.KeyboardManager;
 import env.LookAndFeelManager;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.WindowLayoutPersistence;
 
 /**
  * Basic smoke tests for Guice dependency injection configuration.

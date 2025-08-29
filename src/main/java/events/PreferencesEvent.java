@@ -1,7 +1,7 @@
 package events;
 
-import components.preferences.AbstractPreferenceDisplay;
 import java.util.List;
+import ui.preferences.AbstractPreferenceDisplay;
 
 /**
  * Event for preferences-related operations. This eliminates direct PreferencesFrame control from
