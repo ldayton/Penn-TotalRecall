@@ -224,6 +224,23 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
     </shortcut>
   </action>
 
+  <!-- Zoom controls -->
+  <action class="actions.ZoomInAction"
+          name="Zoom In">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="EQUALS" />
+    </shortcut>
+  </action>
+
+  <action class="actions.ZoomOutAction"
+          name="Zoom Out">
+    <shortcut>
+      <mask keyname="menu" />
+      <key keyname="MINUS" />
+    </shortcut>
+  </action>
+
   <!-- Actions without keyboard shortcuts -->
   <action class="actions.PreferencesAction"
           name="Preferences..." />
