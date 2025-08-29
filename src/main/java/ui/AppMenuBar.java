@@ -60,7 +60,6 @@ public class AppMenuBar extends JMenuBar {
 
     private static boolean showPreferencesInMenu;
 
-    private final env.LookAndFeelManager lookAndFeelManager;
     private final OpenWordpoolAction openWordpoolAction;
     private final ExitAction exitAction;
     private final EditShortcutsAction editShortcutsAction;
@@ -114,7 +113,6 @@ public class AppMenuBar extends JMenuBar {
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
             actions.ScreenSeekAction screenSeekAction) {
-        this.lookAndFeelManager = lookAndFeelManager;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
         this.editShortcutsAction = editShortcutsAction;
