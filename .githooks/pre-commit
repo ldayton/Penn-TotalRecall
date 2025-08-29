@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Always run from repo root
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+echo "Running Spotless formatter (pre-commit)…"
+./gradlew -q spotlessApply
+
+# Stage any changes made by formatting
+git add -A
+
+exit 0
+

@@ -48,7 +48,9 @@ final class WaveformProcessor {
             return scaleToDisplay(processedAudio, targetPixelWidth);
 
         } catch (IOException e) {
-            logger.error("Failed to read audio chunk " + chunkIndex + " using FMOD", e);
+            // During file switches or rapid state changes, FMOD may transiently fail reads.
+            // Avoid a noisy stack trace; log a concise warning and render an empty strip.
+            logger.warn("Failed to read audio chunk {} using FMOD: {}", chunkIndex, e.getMessage());
             return new double[targetPixelWidth];
         }
     }
