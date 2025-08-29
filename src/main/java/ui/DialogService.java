@@ -4,9 +4,7 @@ import actions.AboutAction;
 import env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.FileDialog;
 import java.io.File;
-import java.io.FilenameFilter;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -131,35 +129,6 @@ public class DialogService {
         boolean dontShowAgain = checkbox.isSelected();
 
         return new ConfirmationResult(confirmed, dontShowAgain);
-    }
-
-    /**
-     * Shows a file dialog for opening files.
-     *
-     * @param title The dialog title
-     * @param initialDirectory The initial directory to show
-     * @param fileFilter Optional file filter
-     * @return The selected file, or null if cancelled
-     */
-    public File showFileOpenDialog(
-            @NonNull String title, @NonNull String initialDirectory, FilenameFilter fileFilter) {
-        FileDialog fd = new FileDialog(mainFrame, title, FileDialog.LOAD);
-        fd.setDirectory(initialDirectory);
-
-        if (fileFilter != null) {
-            fd.setFilenameFilter(fileFilter);
-        }
-
-        fd.setVisible(true);
-
-        String dir = fd.getDirectory();
-        String file = fd.getFile();
-
-        if (dir != null && file != null) {
-            return new File(dir + file);
-        }
-
-        return null;
     }
 
     /**

@@ -128,8 +128,6 @@ public class LookAndFeelManager {
         return platform.detect() != Platform.PlatformType.MACOS;
     }
 
-    // All platforms use Swing JFileChooser; no AWT chooser toggle.
-
     /**
      * Returns platform-appropriate preferences menu text, configurable via
      * ui.preferences_menu_title.

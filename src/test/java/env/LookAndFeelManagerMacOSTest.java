@@ -92,8 +92,6 @@ class LookAndFeelManagerMacOSTest {
         }
     }
 
-    // JFileChooser is used everywhere; no native chooser toggle.
-
     @Test
     @DisplayName("Preferences menu items are hidden on macOS")
     void preferencesMenuItemsHidden() {

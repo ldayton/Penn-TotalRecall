@@ -155,7 +155,6 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiOpenWordpool = new JMenuItem(openWordpoolAction);
         jmFile.add(jmiOpenWordpool);
 
-        // Always use Swing JFileChooser; provide both file and folder options
         JMenuItem jmiOpenAudioFile = new JMenuItem(openAudioFileAction);
         JMenuItem jmiOpenAudioFolder = new JMenuItem(openAudioFolderAction);
         jmFile.add(jmiOpenAudioFile);
