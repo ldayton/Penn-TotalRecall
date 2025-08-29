@@ -8,14 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.UIManager;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Configures Look and Feel and platform-specific UI integration. Call initialize() before creating
- * any Swing ui.
+ * Configures platform-specific UI integration (macOS properties, handlers, dock icon). Call
+ * initialize() before creating any Swing UI.
  */
 @Singleton
 public class LookAndFeelManager {
@@ -35,23 +34,10 @@ public class LookAndFeelManager {
         this.platform = platform;
     }
 
-    /** Configures platform properties, sets Look and Feel, and enables native integration. */
+    /** Configures platform properties and enables native integration. */
     public void initialize() {
         if (platform.detect() == Platform.PlatformType.MACOS) {
             macBeforeLookAndFeel();
-        }
-
-        String lafClass = getLookAndFeelClassName();
-        logger.info("Attempting to set Look and Feel: {}", lafClass);
-        try {
-            UIManager.setLookAndFeel(lafClass);
-            logger.info("Successfully set Look and Feel: {}", lafClass);
-            logger.info(
-                    "Current Look and Feel: {}", UIManager.getLookAndFeel().getClass().getName());
-        } catch (Exception e) {
-            logger.error("Failed to set Look and Feel: {}", lafClass, e);
-            // No fallback - fail fast if FlatLaf cannot be set
-            throw new RuntimeException("Failed to set Look and Feel: " + lafClass, e);
         }
 
         if (platform.detect() == Platform.PlatformType.MACOS) {
@@ -67,16 +53,6 @@ public class LookAndFeelManager {
         System.setProperty("apple.awt.rendering", "quality");
         System.setProperty("apple.awt.application.appearance", "system");
         System.setProperty("apple.awt.application.name", programName.toString());
-    }
-
-    /** Returns configured Look and Feel class name, defaulting to FlatLaf. */
-    private String getLookAndFeelClassName() {
-        // Check user configuration first
-        String userLaf = appConfig.getProperty("ui.look_and_feel");
-        if (userLaf != null && !userLaf.trim().isEmpty()) {
-            return userLaf;
-        }
-        return appConfig.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf");
     }
 
     /** Configures macOS Desktop API handlers and dock integration. */

@@ -11,41 +11,6 @@ import org.junit.jupiter.api.Test;
 class LookAndFeelManagerTest {
 
     @Test
-    @DisplayName("User configuration overrides default Look and Feel")
-    void userConfigOverridesDefault() {
-        AppConfig config = mock(AppConfig.class);
-        Platform platform = mock(Platform.class);
-        mock(ExitAction.class);
-        when(config.getProperty("ui.look_and_feel")).thenReturn("com.example.CustomLaf");
-
-        LookAndFeelManager manager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
-
-        // Use reflection to access private method
-        String lafClass = invokeLookAndFeelClassName(manager);
-
-        assertEquals("com.example.CustomLaf", lafClass);
-    }
-
-    @Test
-    @DisplayName("Empty user configuration falls back to default")
-    void emptyConfigFallsBackToDefault() {
-        AppConfig config = mock(AppConfig.class);
-        Platform platform = mock(Platform.class);
-        mock(ExitAction.class);
-        when(config.getProperty("ui.look_and_feel")).thenReturn("");
-        when(config.getProperty("ui.look_and_feel", "com.formdev.flatlaf.FlatLightLaf"))
-                .thenReturn("com.formdev.flatlaf.FlatLightLaf");
-
-        LookAndFeelManager manager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
-
-        String lafClass = invokeLookAndFeelClassName(manager);
-
-        assertEquals("com.formdev.flatlaf.FlatLightLaf", lafClass);
-    }
-
-    @Test
     @DisplayName("macOS hides preferences menu items")
     void macOSHidesPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
@@ -99,13 +64,5 @@ class LookAndFeelManagerTest {
         assertEquals("/images/headphones16.png", linuxManager.getAppIconPath());
     }
 
-    private String invokeLookAndFeelClassName(LookAndFeelManager manager) {
-        try {
-            var method = LookAndFeelManager.class.getDeclaredMethod("getLookAndFeelClassName");
-            method.setAccessible(true);
-            return (String) method.invoke(manager);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to invoke getLookAndFeelClassName", e);
-        }
-    }
+    // Removed tests and reflection helper for getLookAndFeelClassName; LAF set in bootstrap.
 }

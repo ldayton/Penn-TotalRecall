@@ -55,21 +55,6 @@ class LookAndFeelManagerMacOSTest {
     }
 
     @Test
-    @DisplayName("Look and Feel is applied to UIManager")
-    void lookAndFeelIsApplied() {
-        String originalLaf = UIManager.getLookAndFeel().getClass().getName();
-
-        manager.initialize();
-
-        String currentLaf = UIManager.getLookAndFeel().getClass().getName();
-        // Should either be FlatLaf or the configured LaF (not the original system LaF)
-        assertNotEquals(
-                originalLaf,
-                currentLaf,
-                "LaF should change from " + originalLaf + " to " + currentLaf);
-    }
-
-    @Test
     @DisplayName("Desktop API handlers are registered")
     void desktopHandlersAreRegistered() {
         assumeDesktopSupported();
