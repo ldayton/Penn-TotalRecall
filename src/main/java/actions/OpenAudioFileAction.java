@@ -1,14 +1,15 @@
 package actions;
 
+import app.di.GuiceBootstrap;
 import env.Constants;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import state.PreferencesManager;
+import ui.DialogService;
 import ui.audiofiles.AudioFileDisplay;
 
 /**
@@ -39,34 +40,30 @@ public class OpenAudioFileAction extends BaseAction {
             maybeLastPath = System.getProperty("user.home");
         }
 
-        JFileChooser fileChooser = new JFileChooser(maybeLastPath);
-        fileChooser.setDialogTitle("Open Audio File");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        fileChooser.setFileFilter(
-                new FileFilter() {
-                    @Override
-                    public boolean accept(File f) {
-                        if (f.isDirectory()) {
-                            return true;
-                        }
-                        for (String ext : Constants.audioFormatsLowerCase) {
-                            if (f.getName().toLowerCase().endsWith(ext)) {
-                                return true;
+        DialogService dialogService =
+                GuiceBootstrap.getRequiredInjectedInstance(DialogService.class, "DialogService");
+        File selectedFile =
+                dialogService.showFileChooser(
+                        "Open Audio File",
+                        maybeLastPath,
+                        javax.swing.JFileChooser.FILES_ONLY,
+                        new FileFilter() {
+                            @Override
+                            public boolean accept(File f) {
+                                if (f.isDirectory()) return true;
+                                for (String ext : Constants.audioFormatsLowerCase) {
+                                    if (f.getName().toLowerCase().endsWith(ext)) return true;
+                                }
+                                return false;
                             }
-                        }
-                        return false;
-                    }
 
-                    @Override
-                    public String getDescription() {
-                        return "Supported Audio Formats";
-                    }
-                });
+                            @Override
+                            public String getDescription() {
+                                return "Supported Audio Formats";
+                            }
+                        });
 
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+        if (selectedFile != null) {
             String path = selectedFile.getAbsolutePath();
 
             preferencesManager.putString(

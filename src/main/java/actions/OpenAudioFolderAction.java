@@ -1,12 +1,13 @@
 package actions;
 
+import app.di.GuiceBootstrap;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import javax.swing.JFileChooser;
 import state.PreferencesManager;
+import ui.DialogService;
 import ui.audiofiles.AudioFileDisplay;
 
 /**
@@ -38,13 +39,15 @@ public class OpenAudioFolderAction extends BaseAction {
             maybeLastPath = System.getProperty("user.home");
         }
 
-        JFileChooser fileChooser = new JFileChooser(maybeLastPath);
-        fileChooser.setDialogTitle("Open Audio Folder");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+        DialogService dialogService =
+                GuiceBootstrap.getRequiredInjectedInstance(DialogService.class, "DialogService");
+        File selectedFile =
+                dialogService.showFileChooser(
+                        "Open Audio Folder",
+                        maybeLastPath,
+                        javax.swing.JFileChooser.DIRECTORIES_ONLY,
+                        null);
+        if (selectedFile != null) {
             String path = selectedFile.getAbsolutePath();
 
             preferencesManager.putString(

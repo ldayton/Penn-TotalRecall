@@ -23,7 +23,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import state.PreferencesManager;
 import ui.waveform.SelectionOverlay;
 import ui.wordpool.WordpoolDisplay;
@@ -185,13 +184,10 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
             return;
         }
 
-        boolean confirmed =
-                javax.swing.JOptionPane.showConfirmDialog(
-                                this,
-                                "Are you sure you want to exit?",
-                                "Confirm Exit",
-                                javax.swing.JOptionPane.YES_NO_OPTION)
-                        == javax.swing.JOptionPane.YES_OPTION;
+        var dialogService =
+                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                        ui.DialogService.class, "DialogService");
+        boolean confirmed = dialogService.showConfirm("Are you sure you want to exit?");
         if (confirmed) System.exit(0);
     }
 
@@ -215,21 +211,19 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     /** Handles error requested events by showing error dialogs. */
     @Subscribe
     public void handleErrorRequested(ErrorRequestedEvent event) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this, event.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        var dialogService =
+                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                        ui.DialogService.class, "DialogService");
+        dialogService.showError(event.getMessage());
     }
 
     /** Handles info requested events by showing info dialogs. */
     @Subscribe
     public void handleInfoRequested(InfoRequestedEvent event) {
-        JTextArea text = new JTextArea(event.getMessage());
-        text.setEditable(false);
-        text.setLineWrap(true);
-        text.setWrapStyleWord(true);
-        text.setColumns(60);
-        text.setOpaque(false);
-        javax.swing.JOptionPane.showMessageDialog(
-                this, text, "About", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        var dialogService =
+                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                        ui.DialogService.class, "DialogService");
+        dialogService.showInfo(event.getMessage());
     }
 
     /** Returns the default frame title combining app name and version. */

@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,28 +59,31 @@ public class OpenWordpoolAction extends BaseAction {
             maybeLastPath = userManager.getUserHomeDir();
         }
 
-        JFileChooser fileChooser = new JFileChooser(maybeLastPath);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setDialogTitle("Open Wordpool File");
-        fileChooser.setFileFilter(
-                new FileFilter() {
-                    @Override
-                    public boolean accept(File f) {
-                        if (f.isDirectory()) {
-                            return true;
-                        }
-                        return f.getName().toLowerCase().endsWith(Constants.wordpoolFileExtension);
-                    }
+        File chosenFile =
+                ui.DialogService.class
+                        .cast(
+                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                        ui.DialogService.class, "DialogService"))
+                        .showFileChooser(
+                                "Open Wordpool File",
+                                maybeLastPath,
+                                javax.swing.JFileChooser.FILES_ONLY,
+                                new FileFilter() {
+                                    @Override
+                                    public boolean accept(File f) {
+                                        if (f.isDirectory()) return true;
+                                        return f.getName()
+                                                .toLowerCase()
+                                                .endsWith(Constants.wordpoolFileExtension);
+                                    }
 
-                    @Override
-                    public String getDescription() {
-                        return "Text (.txt) Files";
-                    }
-                });
+                                    @Override
+                                    public String getDescription() {
+                                        return "Text (.txt) Files";
+                                    }
+                                });
 
-        int result = fileChooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File chosenFile = fileChooser.getSelectedFile();
+        if (chosenFile != null) {
             if (chosenFile != null && chosenFile.isFile()) {
                 preferencesManager.putString(
                         PreferenceKeys.OPEN_WORDPOOL_PATH, chosenFile.getParentFile().getPath());

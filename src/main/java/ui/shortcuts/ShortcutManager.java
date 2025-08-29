@@ -21,7 +21,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,6 +34,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import state.PreferencesManager;
+import ui.DialogService;
 
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;
@@ -130,11 +130,13 @@ public class ShortcutManager extends JFrame {
                                 new AbstractAction("Restore Defaults") {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        int res =
-                                                JOptionPane.showConfirmDialog(
-                                                        ShortcutManager.this,
+                                        DialogService ds =
+                                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                                        DialogService.class, "DialogService");
+                                        boolean res =
+                                                ds.showConfirm(
                                                         "Restore all shortcuts to defaults?");
-                                        if (res == JOptionPane.YES_OPTION) {
+                                        if (res) {
                                             shortcutPreferences.persistDefaults(true);
                                             ContentPane.this.repaint();
                                         }
@@ -258,8 +260,10 @@ class ShortcutTable extends JTable {
                 for (Shortcut existingShortcut : allShortcuts.values()) {
                     if (shortcut.equals(existingShortcut)) {
                         String msg = shortcut + " is already taken.";
-                        JOptionPane.showMessageDialog(
-                                ShortcutTable.this, msg, "Error", JOptionPane.OK_OPTION);
+                        DialogService ds =
+                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                        DialogService.class, "DialogService");
+                        ds.showError(msg);
                         return;
                     }
                 }

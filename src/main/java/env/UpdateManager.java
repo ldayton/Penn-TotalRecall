@@ -95,6 +95,43 @@ public class UpdateManager {
                         });
     }
 
+    /**
+     * Manual update check invoked by the user. Always provides feedback.
+     *
+     * <p>Shows an update notification if a newer version is available, otherwise shows a simple
+     * "You're up to date" info dialog. Runs asynchronously and returns immediately.
+     */
+    public void checkForUpdateManually() {
+        String releasesApiUrl = getReleasesApiUrl();
+        String releasesPageUrl = getReleasesPageUrl();
+
+        if (releasesApiUrl == null || releasesPageUrl == null) {
+            logger.debug("Manual update check skipped - URLs not configured");
+            return;
+        }
+
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        String current = getCurrentVersion();
+                        String latest = getLatestVersionFromGitHub(releasesApiUrl);
+                        if (isNewerVersion(current, latest)) {
+                            SwingUtilities.invokeLater(
+                                    () -> showUpdateNotification(latest, releasesPageUrl));
+                        } else {
+                            SwingUtilities.invokeLater(
+                                    () ->
+                                            dialogService.showInfo(
+                                                    "You're up to date (" + current + ")"));
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Manual update check failed: {}", e.getMessage());
+                        SwingUtilities.invokeLater(
+                                () -> dialogService.showInfo("Could not check for updates."));
+                    }
+                });
+    }
+
     String getCurrentVersion() {
         return programVersion.toString();
     }
@@ -111,6 +148,11 @@ public class UpdateManager {
                         .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                         .get(5, TimeUnit.SECONDS);
 
+        // Require successful response
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException("HTTP status " + response.statusCode());
+        }
+
         var tagPattern =
                 Pattern.compile(
                         """
@@ -119,7 +161,12 @@ public class UpdateManager {
                                 .strip());
 
         var matcher = tagPattern.matcher(response.body());
-        return matcher.find() ? matcher.group(1) : getCurrentVersion();
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        // No releases found
+        throw new IllegalStateException("No releases found (missing tag_name)");
     }
 
     private void showUpdateNotification(

@@ -4,6 +4,7 @@ import actions.AboutAction;
 import actions.AnnotateIntrusionAction;
 import actions.AnnotateRegularAction;
 import actions.BaseAction;
+import actions.CheckUpdatesAction;
 import actions.DoneAction;
 import actions.EditShortcutsAction;
 import actions.ExitAction;
@@ -73,6 +74,7 @@ public class AppMenuBar extends JMenuBar {
     private final AboutAction aboutAction;
     private final TipsMessageAction tipsMessageAction;
     private final VisitTutorialSiteAction visitTutorialSiteAction;
+    private final CheckUpdatesAction checkUpdatesAction;
     private final Last200PlusMoveAction last200PlusMoveAction;
     private final AnnotateRegularAction annotateRegularAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
@@ -103,6 +105,7 @@ public class AppMenuBar extends JMenuBar {
             AboutAction aboutAction,
             TipsMessageAction tipsMessageAction,
             VisitTutorialSiteAction visitTutorialSiteAction,
+            CheckUpdatesAction checkUpdatesAction,
             Last200PlusMoveAction last200PlusMoveAction,
             AnnotateRegularAction annotateRegularAction,
             AnnotateIntrusionAction annotateIntrusionAction,
@@ -126,6 +129,7 @@ public class AppMenuBar extends JMenuBar {
         this.aboutAction = aboutAction;
         this.tipsMessageAction = tipsMessageAction;
         this.visitTutorialSiteAction = visitTutorialSiteAction;
+        this.checkUpdatesAction = checkUpdatesAction;
         this.last200PlusMoveAction = last200PlusMoveAction;
         this.annotateRegularAction = annotateRegularAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
@@ -266,6 +270,9 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiKeys = new JMenuItem(tipsMessageAction);
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
+        // Manual update check menu item
+        JMenuItem jmiCheckUpdates = new JMenuItem(checkUpdatesAction);
+        jmHelp.add(jmiCheckUpdates);
         if (showPreferencesInMenu) {
             jmHelp.addSeparator();
             JMenuItem jmiAbout = new JMenuItem(aboutAction);
@@ -299,6 +306,7 @@ public class AppMenuBar extends JMenuBar {
             instance.editShortcutsAction.update();
             instance.tipsMessageAction.update();
             instance.visitTutorialSiteAction.update();
+            instance.checkUpdatesAction.update();
             instance.last200PlusMoveAction.update();
             instance.openWordpoolAction.update();
             instance.annotateRegularAction.update();

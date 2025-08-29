@@ -20,12 +20,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import ui.DialogCentering;
-import ui.DialogService;
 import ui.MainFrame;
 import ui.MainWindowAccess;
 
@@ -260,13 +258,11 @@ public class PreferencesFrame extends JFrame implements WindowListener {
             String message =
                     "One or more preferences have changed.\n"
                             + "Are you sure you want to exit and lose your changes?";
-            int response =
-                    JOptionPane.showConfirmDialog(
-                            this,
-                            message,
-                            DialogService.YES_NO_DIALOG_TITLE,
-                            JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
+            boolean response =
+                    app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                    ui.DialogService.class, "DialogService")
+                            .showConfirm(message);
+            if (response) {
                 for (AbstractPreferenceDisplay pref : allPrefs) {
                     pref.graphicallyRevert();
                 }

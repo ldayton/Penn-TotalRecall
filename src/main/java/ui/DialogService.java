@@ -1,6 +1,5 @@
 package ui;
 
-import actions.AboutAction;
 import env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -20,10 +19,10 @@ import lombok.NonNull;
 public class DialogService {
 
     /** Title of all yes/no dialogs in the program. */
-    public static final String YES_NO_DIALOG_TITLE = "Select an Option";
+    private static final String YES_NO_DIALOG_TITLE = "Select an Option";
 
     /** Standard String asking whether or not user would like to see similar dialogs again. */
-    public static final String DONT_SHOW_AGAIN_STRING = "Do not show this message again.";
+    private static final String DONT_SHOW_AGAIN_STRING = "Do not show this message again.";
 
     /** Title of all error dialogs in the program. */
     private static final String ERROR_DIALOG_TITLE = "Error";
@@ -36,7 +35,7 @@ public class DialogService {
     public DialogService(@NonNull MainFrame mainFrame, @NonNull ProgramName programName) {
         this.mainFrame = mainFrame;
         this.programName = programName;
-        this.appIcon = new ImageIcon(AboutAction.class.getResource("/images/headphones48.png"));
+        this.appIcon = new ImageIcon(DialogService.class.getResource("/images/headphones48.png"));
     }
 
     /**
@@ -61,30 +60,6 @@ public class DialogService {
                 programName.toString(),
                 JOptionPane.INFORMATION_MESSAGE,
                 appIcon);
-    }
-
-    /**
-     * Shows an input dialog with the provided message.
-     *
-     * @param message The input prompt message
-     * @return The user's input string, or null if cancelled
-     */
-    public String showInput(@NonNull String message) {
-        Object input =
-                JOptionPane.showInputDialog(
-                        mainFrame,
-                        message,
-                        programName.toString(),
-                        JOptionPane.QUESTION_MESSAGE,
-                        appIcon,
-                        null,
-                        "");
-
-        if (input instanceof String string) {
-            return string;
-        } else {
-            return null;
-        }
     }
 
     /**

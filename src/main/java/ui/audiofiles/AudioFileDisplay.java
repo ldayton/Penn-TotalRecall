@@ -16,9 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
@@ -162,23 +160,18 @@ public class AudioFileDisplay extends JScrollPane {
                             PreferenceKeys.WARN_FILE_SWITCH,
                             PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
-                JCheckBox checkbox = new JCheckBox(DialogService.DONT_SHOW_AGAIN_STRING);
                 String message =
                         "Switch to file "
                                 + file
                                 + "?\nYour changes to the current file will not be lost.";
-                Object[] params = {message, checkbox};
-                int response =
-                        JOptionPane.showConfirmDialog(
-                                null,
-                                params,
-                                DialogService.YES_NO_DIALOG_TITLE,
-                                JOptionPane.YES_NO_OPTION);
-                boolean dontShow = checkbox.isSelected();
-                if (dontShow && response != JOptionPane.CLOSED_OPTION) {
+                DialogService dialogService =
+                        GuiceBootstrap.getRequiredInjectedInstance(
+                                DialogService.class, "DialogService");
+                var result = dialogService.showConfirmWithDontShowAgain(message);
+                if (result.isDontShowAgain()) {
                     instance.preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
                 }
-                if (response != JOptionPane.YES_OPTION) {
+                if (!result.isConfirmed()) {
                     return false;
                 }
             }

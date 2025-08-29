@@ -1,26 +1,26 @@
 package actions;
 
-import events.EventDispatchBus;
-import events.InfoRequestedEvent;
+import env.UpdateManager;
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 
 /** Checks for program updates. */
 @Singleton
 public class CheckUpdatesAction extends BaseAction {
-    private final EventDispatchBus eventBus;
+    private final Provider<UpdateManager> updateManagerProvider;
 
     @Inject
-    public CheckUpdatesAction(EventDispatchBus eventBus) {
+    public CheckUpdatesAction(Provider<UpdateManager> updateManagerProvider) {
         super("Check For Updates", "Check for program updates");
-        this.eventBus = eventBus;
+        this.updateManagerProvider = updateManagerProvider;
     }
 
     @Override
     protected void performAction(ActionEvent e) {
-        // TODO: Implement actual update checking logic
-        eventBus.publish(new InfoRequestedEvent("Update checking not yet implemented."));
+        // Manual check: show dialog even when up-to-date
+        updateManagerProvider.get().checkForUpdateManually();
     }
 
     @Override
