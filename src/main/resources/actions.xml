@@ -259,6 +259,6 @@ http://download.oracle.com/javase/6/docs/api/java/awt/event/KeyEvent.html
   <action class="actions.EditShortcutsAction"
           name="Edit Keyboard Shortcuts..." />
 
-  <action class="behaviors.singleact.TipsMessageAction"
+  <action class="actions.TipsMessageAction"
           name="View Program Tips..." />
 </actions>
