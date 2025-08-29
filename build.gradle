@@ -502,6 +502,8 @@ tasks.register('runDev', JavaExec) {
 
     // Flag this execution as an explicit developer run (used by DevModeFileAutoLoader)
     systemProperty 'app.run.dev', 'true'
+    // Set macOS application name for menu bar display
+    systemProperty 'apple.awt.application.name', appProps.getProperty('app.name')
 }
 
 // Spotless code formatting configuration
