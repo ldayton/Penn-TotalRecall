@@ -6,6 +6,7 @@ import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,13 +14,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import ui.UiConstants;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
 public class AnnotationDisplay extends JScrollPane {
 
     private static final String title = "Annotations";
+    private static final Dimension PREFERRED_SIZE = new Dimension(300, Integer.MAX_VALUE);
 
     private static AnnotationDisplay instance;
     private static AnnotationTable table;
@@ -35,8 +36,8 @@ public class AnnotationDisplay extends JScrollPane {
         this.annotationTable = annotationTable;
         table = annotationTable;
         getViewport().setView(table);
-        setPreferredSize(UiConstants.annotationDisplayDimension);
-        setMaximumSize(UiConstants.annotationDisplayDimension);
+        setPreferredSize(PREFERRED_SIZE);
+        setMaximumSize(PREFERRED_SIZE);
 
         setBorder(BorderFactory.createTitledBorder(title));
 

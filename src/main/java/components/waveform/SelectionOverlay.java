@@ -14,7 +14,6 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-import ui.UiConstants;
 
 /** Glass pane overlay for mouse selection highlighting and replay flash feedback. */
 @Singleton
@@ -41,7 +40,7 @@ public final class SelectionOverlay extends JComponent {
     /** Flash rectangle width in pixels (200ms duration at default zoom). */
     private final int flashWidth =
             (int)
-                    (UiConstants.zoomlessPixelsPerSecond
+                    (WaveformDisplay.ZOOMLESS_PIXELS_PER_SECOND
                             * (ReplayLast200MillisAction.duration / 1000.0));
 
     @Inject

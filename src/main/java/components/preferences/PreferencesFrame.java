@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import ui.DialogCentering;
+import ui.DialogService;
 import ui.MainWindowAccess;
-import ui.UiConstants;
 
 /**
  * A <code>JFrame</code> that will contain preferences choosers in a scrollable vertical column.
@@ -262,7 +262,10 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                             + "Are you sure you want to exit and lose your changes?";
             int response =
                     JOptionPane.showConfirmDialog(
-                            this, message, UiConstants.yesNoDialogTitle, JOptionPane.YES_NO_OPTION);
+                            this,
+                            message,
+                            DialogService.YES_NO_DIALOG_TITLE,
+                            JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
                 for (AbstractPreferenceDisplay pref : allPrefs) {
                     pref.graphicallyRevert();

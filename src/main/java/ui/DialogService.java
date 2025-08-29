@@ -22,6 +22,15 @@ import lombok.NonNull;
 @Singleton
 public class DialogService {
 
+    /** Title of all yes/no dialogs in the program. */
+    public static final String YES_NO_DIALOG_TITLE = "Select an Option";
+
+    /** Standard String asking whether or not user would like to see similar dialogs again. */
+    public static final String DONT_SHOW_AGAIN_STRING = "Do not show this message again.";
+
+    /** Title of all error dialogs in the program. */
+    private static final String ERROR_DIALOG_TITLE = "Error";
+
     private final MainFrame mainFrame;
     private final ImageIcon appIcon;
     private final ProgramName programName;
@@ -40,11 +49,7 @@ public class DialogService {
      */
     public void showError(@NonNull String message) {
         JOptionPane.showMessageDialog(
-                mainFrame,
-                message,
-                UiConstants.errorDialogTitle,
-                JOptionPane.ERROR_MESSAGE,
-                appIcon);
+                mainFrame, message, ERROR_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE, appIcon);
     }
 
     /**
@@ -96,7 +101,7 @@ public class DialogService {
                 JOptionPane.showConfirmDialog(
                         mainFrame,
                         message,
-                        UiConstants.yesNoDialogTitle,
+                        YES_NO_DIALOG_TITLE,
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         appIcon);
@@ -111,14 +116,14 @@ public class DialogService {
      * @return ConfirmationResult containing the user's choice and checkbox state
      */
     public ConfirmationResult showConfirmWithDontShowAgain(@NonNull String message) {
-        JCheckBox checkbox = new JCheckBox(UiConstants.dontShowAgainString);
+        JCheckBox checkbox = new JCheckBox(DONT_SHOW_AGAIN_STRING);
         Object[] params = {message, checkbox};
 
         int response =
                 JOptionPane.showConfirmDialog(
                         mainFrame,
                         params,
-                        UiConstants.yesNoDialogTitle,
+                        YES_NO_DIALOG_TITLE,
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
                         appIcon);

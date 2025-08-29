@@ -34,7 +34,6 @@ import javax.swing.plaf.ComponentUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
-import ui.UiConstants;
 import waveform.RenderedChunk;
 import waveform.Waveform;
 
@@ -53,6 +52,14 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     private static final Color PROGRESS_BAR_COLOR = UIManager.getColor("Label.foreground");
     private static final Color ANNOTATION_LINE_COLOR = Color.RED;
     private static final Color ANNOTATION_ACCENT_COLOR = Color.BLUE;
+
+    /** Width in pixels of visualization of one second of audio, prior to any zooming. */
+    static final int ZOOMLESS_PIXELS_PER_SECOND = 200;
+
+    /**
+     * Number of pixels added/subtracted to zoomless pixels per second for each zoom in/out action.
+     */
+    static final int ZOOM_AMOUNT = 40;
 
     private static final BasicStroke PROGRESS_BAR_STROKE =
             new BasicStroke(
@@ -115,7 +122,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         setBackground(BACKGROUND_COLOR);
         setUI(new ComponentUI() {}); // a little bit of magic so the JComponent will draw the
         // background color without subclassing to a JPanel
-        pixelsPerSecond = UiConstants.zoomlessPixelsPerSecond;
+        pixelsPerSecond = ZOOMLESS_PIXELS_PER_SECOND;
         refreshFrame = -1;
         addMouseListener(
                 new MouseAdapter() {
@@ -163,10 +170,10 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
     public void zoomX(boolean in) {
         if (in) {
-            pixelsPerSecond += UiConstants.xZoomAmount;
+            pixelsPerSecond += ZOOM_AMOUNT;
         } else {
-            if (pixelsPerSecond >= UiConstants.xZoomAmount + 1) {
-                pixelsPerSecond -= UiConstants.xZoomAmount;
+            if (pixelsPerSecond >= ZOOM_AMOUNT + 1) {
+                pixelsPerSecond -= ZOOM_AMOUNT;
             }
         }
         if (currentWaveform != null) {
@@ -412,7 +419,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                     -1
                             * (int)
                                     Math.ceil(
-                                            UiConstants.zoomlessPixelsPerSecond
+                                            ZOOMLESS_PIXELS_PER_SECOND
                                                     * audioState
                                                             .getCalculator()
                                                             .durationInSeconds());
@@ -474,7 +481,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             lastFrame = audioState.getCalculator().durationInFrames() - 1;
             maxFramesError =
                     audioState.getCalculator().secondsToFrames(1)
-                            / UiConstants.zoomlessPixelsPerSecond
+                            / ZOOMLESS_PIXELS_PER_SECOND
                             * MAX_INTERPOLATED_PIXELS;
             bufferedFrame = -1;
             bufferedWidth = -1;

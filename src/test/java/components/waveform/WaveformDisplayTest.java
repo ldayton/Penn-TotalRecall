@@ -20,7 +20,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import state.AudioState;
-import ui.UiConstants;
 
 /**
  * Full application lifecycle test that verifies the waveform display updates its rendered height
@@ -185,7 +184,7 @@ class WaveformDisplayTest {
         if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial waveform render
 
         int initialWidth = curChunk.image().getWidth(null);
-        int expectedWidth = initialWidth + UiConstants.xZoomAmount * 10; // chunk is 10s wide
+        int expectedWidth = initialWidth + WaveformDisplay.ZOOM_AMOUNT * 10; // chunk is 10s wide
 
         // Trigger Zoom In via the View menu item
         SwingUtilities.invokeAndWait(
@@ -273,7 +272,7 @@ class WaveformDisplayTest {
         if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial waveform render
 
         int initialWidth = curChunk.image().getWidth(null);
-        int expectedWidth = initialWidth - UiConstants.xZoomAmount * 10; // chunk is 10s wide
+        int expectedWidth = initialWidth - WaveformDisplay.ZOOM_AMOUNT * 10; // chunk is 10s wide
         assertTrue(expectedWidth > 0, "expected width must be positive");
 
         // Trigger Zoom Out via the View menu item

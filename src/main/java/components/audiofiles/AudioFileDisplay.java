@@ -9,6 +9,7 @@ import events.Subscribe;
 import events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import state.AudioState;
 import state.PreferencesManager;
 import ui.DialogService;
-import ui.UiConstants;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -40,6 +40,7 @@ public class AudioFileDisplay extends JScrollPane {
     private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
     private static final String title = "Audio Files";
+    private static final Dimension PREFERRED_SIZE = new Dimension(250, Integer.MAX_VALUE);
 
     private static AudioFileDisplay instance;
     private final PreferencesManager preferencesManager;
@@ -63,8 +64,8 @@ public class AudioFileDisplay extends JScrollPane {
         list = audioFileList;
         getViewport().setView(list);
 
-        setPreferredSize(UiConstants.soundFileDisplayDimension);
-        setMaximumSize(UiConstants.soundFileDisplayDimension);
+        setPreferredSize(PREFERRED_SIZE);
+        setMaximumSize(PREFERRED_SIZE);
 
         setBorder(BorderFactory.createTitledBorder(title));
 
@@ -161,7 +162,7 @@ public class AudioFileDisplay extends JScrollPane {
                             PreferenceKeys.WARN_FILE_SWITCH,
                             PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
-                JCheckBox checkbox = new JCheckBox(UiConstants.dontShowAgainString);
+                JCheckBox checkbox = new JCheckBox(DialogService.DONT_SHOW_AGAIN_STRING);
                 String message =
                         "Switch to file "
                                 + file
@@ -171,7 +172,7 @@ public class AudioFileDisplay extends JScrollPane {
                         JOptionPane.showConfirmDialog(
                                 null,
                                 params,
-                                UiConstants.yesNoDialogTitle,
+                                DialogService.YES_NO_DIALOG_TITLE,
                                 JOptionPane.YES_NO_OPTION);
                 boolean dontShow = checkbox.isSelected();
                 if (dontShow && response != JOptionPane.CLOSED_OPTION) {

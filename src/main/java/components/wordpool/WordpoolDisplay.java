@@ -2,6 +2,7 @@ package components.wordpool;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -9,7 +10,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import ui.UiConstants;
 
 /**
  * A custom interface component for displaying wordpool and lst words to the user and a text field
@@ -28,6 +28,7 @@ import ui.UiConstants;
 public class WordpoolDisplay extends JPanel {
 
     private static final String title = "Wordpool";
+    private static final Dimension PREFERRED_SIZE = new Dimension(250, Integer.MAX_VALUE);
 
     private static JTextField field;
     private final WordpoolTextField wordpoolTextField;
@@ -53,8 +54,8 @@ public class WordpoolDisplay extends JPanel {
         add(field);
         add(pane);
 
-        setPreferredSize(UiConstants.wordpoolDisplayDimension);
-        setMaximumSize(UiConstants.wordpoolDisplayDimension);
+        setPreferredSize(PREFERRED_SIZE);
+        setMaximumSize(PREFERRED_SIZE);
 
         setBorder(BorderFactory.createTitledBorder(title));
 
