@@ -16,8 +16,8 @@ final class WaveformChunkCache {
     private final AudioState audioState;
     private final LoadingCache<ChunkKey, RenderedChunk> chunkCache;
 
-    /** Cache key: chunk number only - height is fixed per waveform. */
-    public record ChunkKey(int chunkNumber) {}
+    /** Cache key includes all render-affecting inputs. */
+    public record ChunkKey(int chunkNumber, int pxPerSec, int height) {}
 
     public WaveformChunkCache(Waveform waveform, AudioState audioState) {
         this.waveform = waveform;
@@ -26,11 +26,11 @@ final class WaveformChunkCache {
     }
 
     /** Get chunk with async prefetching of adjacent chunks. */
-    public RenderedChunk getChunk(int chunkNumber) {
+    public RenderedChunk getChunk(int chunkNumber, int pxPerSec, int height) {
         requireAudioLoaded();
-        var key = new ChunkKey(chunkNumber);
+        var key = new ChunkKey(chunkNumber, pxPerSec, height);
         var chunk = chunkCache.get(key);
-        prefetchAdjacentAsync(chunkNumber);
+        prefetchAdjacentAsync(chunkNumber, pxPerSec, height);
         return chunk;
     }
 
@@ -41,7 +41,7 @@ final class WaveformChunkCache {
 
     /** Load chunk from waveform data (called by Caffeine cache loader). */
     private RenderedChunk loadChunk(ChunkKey key) {
-        var image = waveform.renderChunkDirect(key.chunkNumber);
+        var image = waveform.renderChunkDirectConfigured(key.chunkNumber, key.pxPerSec, key.height);
         return new RenderedChunk(key.chunkNumber, image);
     }
 
@@ -53,12 +53,16 @@ final class WaveformChunkCache {
     }
 
     /** Async prefetch adjacent chunks (previous/next) without blocking. */
-    private void prefetchAdjacentAsync(int chunkNumber) {
+    private void prefetchAdjacentAsync(int chunkNumber, int pxPerSec, int height) {
         var maxChunk = audioState.lastChunkNum();
         var adjacentKeys =
                 Stream.of(
-                                chunkNumber > 0 ? new ChunkKey(chunkNumber - 1) : null,
-                                chunkNumber < maxChunk ? new ChunkKey(chunkNumber + 1) : null)
+                                chunkNumber > 0
+                                        ? new ChunkKey(chunkNumber - 1, pxPerSec, height)
+                                        : null,
+                                chunkNumber < maxChunk
+                                        ? new ChunkKey(chunkNumber + 1, pxPerSec, height)
+                                        : null)
                         .filter(java.util.Objects::nonNull)
                         .toList();
 

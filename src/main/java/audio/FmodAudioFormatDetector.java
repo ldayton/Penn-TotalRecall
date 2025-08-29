@@ -58,8 +58,17 @@ public class FmodAudioFormatDetector {
             return formatInfo;
 
         } catch (IOException e) {
-            logger.error(
-                    "Failed to detect audio format for file: {}", audioFile.getAbsolutePath(), e);
+            if (Boolean.getBoolean("test.suppress.fmod.format.errors")) {
+                logger.debug(
+                        "Suppressed: failed to detect audio format for file: {}",
+                        audioFile.getAbsolutePath(),
+                        e);
+            } else {
+                logger.error(
+                        "Failed to detect audio format for file: {}",
+                        audioFile.getAbsolutePath(),
+                        e);
+            }
             throw e;
         }
     }
@@ -86,7 +95,11 @@ public class FmodAudioFormatDetector {
             return formatInfo;
 
         } catch (IOException e) {
-            logger.error("Failed to detect audio format for file: {}", filePath, e);
+            if (Boolean.getBoolean("test.suppress.fmod.format.errors")) {
+                logger.debug("Suppressed: failed to detect audio format for file: {}", filePath, e);
+            } else {
+                logger.error("Failed to detect audio format for file: {}", filePath, e);
+            }
             throw e;
         }
     }

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * test actual application functionality or real integration scenarios.
  */
 @DisplayName("Guice Configuration Smoke Tests")
+@audio.AudioEngine
 class GuiceBootstrapIntegrationTest {
     private static final Logger logger =
             LoggerFactory.getLogger(GuiceBootstrapIntegrationTest.class);

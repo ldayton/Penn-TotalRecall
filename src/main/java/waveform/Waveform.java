@@ -10,7 +10,7 @@ public final class Waveform {
     private static final Logger logger = LoggerFactory.getLogger(Waveform.class);
 
     private final String audioFilePath;
-    private final int timeResolution;
+    private volatile int timeResolution;
     private volatile int amplitudeResolution;
     private final boolean cachingEnabled;
     private final WaveformProcessor processor;
@@ -19,7 +19,9 @@ public final class Waveform {
     private volatile WaveformChunkCache cache;
     private volatile state.AudioState cachedAudioState;
 
-    private volatile double globalRenderingPeak = -1;
+    // Rendering peak may depend on time resolution; store per-resolution values
+    private final java.util.concurrent.ConcurrentHashMap<Integer, Double> resolutionPeaks =
+            new java.util.concurrent.ConcurrentHashMap<>();
 
     // Package-private constructor - only called by builder
     Waveform(
@@ -54,16 +56,18 @@ public final class Waveform {
     /** Renders a chunk of waveform as an image with consistent scaling across chunks. */
     public RenderedChunk renderChunk(int chunkNumber) {
         if (cachingEnabled && cache != null) {
-            return cache.getChunk(chunkNumber);
+            return cache.getChunk(chunkNumber, timeResolution, amplitudeResolution);
         }
-        return new RenderedChunk(chunkNumber, renderChunkDirect(chunkNumber));
+        return new RenderedChunk(
+                chunkNumber,
+                renderChunkDirectConfigured(chunkNumber, timeResolution, amplitudeResolution));
     }
 
-    /** Direct rendering without caching - used internally by cache. */
-    Image renderChunkDirect(int chunkNumber) {
+    /** Direct rendering with explicit configuration used by cache loader and no-cache path. */
+    Image renderChunkDirectConfigured(int chunkNumber, int timeRes, int ampRes) {
         final int chunkDurationSeconds = 10;
         final double preDataSeconds = 0.25;
-        final int widthPixels = timeResolution * chunkDurationSeconds;
+        final int widthPixels = timeRes * chunkDurationSeconds;
         final double chunkStartTimeSeconds = chunkNumber * chunkDurationSeconds;
 
         double[] audioData =
@@ -76,37 +80,27 @@ public final class Waveform {
                         0.45, // Maximum frequency matching original fullrange test
                         widthPixels);
 
-        ensureGlobalScaling(audioData, widthPixels);
+        double peak = ensureGlobalScalingForResolution(audioData, timeRes);
 
-        // Use amplitudeResolution as default height - this loses dynamic resizing but maintains API
-        // simplicity
-        double yScale =
-                renderer.calculateYScale(audioData, amplitudeResolution, globalRenderingPeak);
+        double yScale = renderer.calculateYScale(audioData, ampRes, peak);
 
         return renderer.renderWaveformChunk(
-                audioData,
-                widthPixels,
-                amplitudeResolution,
-                yScale,
-                chunkStartTimeSeconds,
-                globalRenderingPeak,
-                timeResolution);
+                audioData, widthPixels, ampRes, yScale, chunkStartTimeSeconds, peak, timeRes);
     }
 
     /** Thread-safe lazy initialization of global rendering peak for consistent scaling. */
-    private void ensureGlobalScaling(double[] audioData, int widthPixels) {
-        if (globalRenderingPeak < 0) {
-            synchronized (this) {
-                if (globalRenderingPeak < 0) {
-                    globalRenderingPeak =
-                            pixelScaler.getRenderingPeak(audioData, timeResolution / 2);
+    private double ensureGlobalScalingForResolution(double[] audioData, int timeRes) {
+        return resolutionPeaks.computeIfAbsent(
+                timeRes,
+                k -> {
+                    double peak = pixelScaler.getRenderingPeak(audioData, Math.max(1, timeRes / 2));
                     logger.debug(
-                            "Initialized global rendering peak: {} for file: {}",
-                            globalRenderingPeak,
-                            audioFilePath);
-                }
-            }
-        }
+                            "Initialized rendering peak: {} for file: {} at {} px/s",
+                            peak,
+                            audioFilePath,
+                            timeRes);
+                    return peak;
+                });
     }
 
     /** Returns the audio file path this waveform represents. */
@@ -116,10 +110,8 @@ public final class Waveform {
 
     /** Resets global scaling to force recalculation on next render. */
     public void resetScaling() {
-        synchronized (this) {
-            globalRenderingPeak = -1;
-        }
-        logger.debug("Reset global scaling for file: {}", audioFilePath);
+        resolutionPeaks.clear();
+        logger.debug("Reset global scaling cache for file: {}", audioFilePath);
     }
 
     /** Initialize caching with AudioState dependency - called by AudioState. */
@@ -142,11 +134,11 @@ public final class Waveform {
     }
 
     /**
-     * Updates the waveform display height (amplitude resolution) and resets the chunk cache.
+     * Updates the waveform display height (amplitude resolution).
      *
-     * <p>Guarantee: any call to renderChunk that starts after this method returns will render with
-     * the new height. This is achieved by atomically swapping the cache instance so any in-flight
-     * loads complete into the old cache, which is no longer referenced.
+     * <p>Keyed caching guarantees freshness: subsequent renders use a different cache key
+     * (chunkNumber, timeResolution, newHeight), so images are recomputed without explicit
+     * invalidation or cache swapping.
      */
     public void setAmplitudeResolution(int newHeightPixels) {
         if (newHeightPixels <= 0) {
@@ -159,21 +151,47 @@ public final class Waveform {
                 return; // no-op
             }
             this.amplitudeResolution = newHeightPixels;
-
-            if (cachingEnabled) {
-                // Swap to a fresh cache instance to avoid any stale-height images
-                if (cachedAudioState != null) {
-                    this.cache = new WaveformChunkCache(this, cachedAudioState);
-                } else {
-                    // No audio state yet; just drop the cache reference
-                    this.cache = null;
-                }
-            }
         }
 
         logger.debug(
                 "Amplitude resolution updated to {} px for file: {}",
                 newHeightPixels,
                 audioFilePath);
+    }
+
+    /**
+     * Updates the waveform time resolution (pixels per second).
+     *
+     * <p>Keyed caching guarantees freshness: subsequent renders use a different cache key
+     * (chunkNumber, newTimeResolution, amplitudeResolution), so images are recomputed without
+     * explicit invalidation or cache swapping.
+     */
+    public void setTimeResolution(int newPixelsPerSecond) {
+        if (newPixelsPerSecond <= 0) {
+            throw new IllegalArgumentException(
+                    "Time resolution must be > 0: " + newPixelsPerSecond);
+        }
+
+        synchronized (this) {
+            if (this.timeResolution == newPixelsPerSecond) {
+                return; // no-op
+            }
+            this.timeResolution = newPixelsPerSecond;
+        }
+
+        logger.debug(
+                "Time resolution updated to {} px/sec for file: {}",
+                newPixelsPerSecond,
+                audioFilePath);
+    }
+
+    /** Current time resolution in pixels per second. */
+    public int getTimeResolution() {
+        return timeResolution;
+    }
+
+    /** Current amplitude resolution (image height in pixels). */
+    public int getAmplitudeResolution() {
+        return amplitudeResolution;
     }
 }

@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +48,7 @@ import org.slf4j.LoggerFactory;
  *   <li>Restore test to comparison mode
  * </ol>
  */
-@EnabledIf("isSampleFileAvailable")
+@audio.AudioEngine
 class WaveformImageRegressionTest {
     private static final Logger logger = LoggerFactory.getLogger(WaveformImageRegressionTest.class);
 
@@ -182,14 +181,5 @@ class WaveformImageRegressionTest {
         bufferedImage.createGraphics().drawImage(image, 0, 0, null);
 
         return bufferedImage;
-    }
-
-    /**
-     * Condition method for JUnit @EnabledIf - only run if sample file exists.
-     *
-     * @return true if the sample audio file is available for testing
-     */
-    static boolean isSampleFileAvailable() {
-        return Files.exists(Paths.get(SAMPLE_FILE_PATH));
     }
 }

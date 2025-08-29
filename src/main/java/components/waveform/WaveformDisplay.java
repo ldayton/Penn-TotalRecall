@@ -23,6 +23,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
+import java.util.Objects;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 import javax.swing.plaf.ComponentUI;
@@ -75,6 +76,9 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
     private volatile int progressBarXPos;
     private int pendingAmplitudeHeight;
+    private ImageKey lastImageKey;
+
+    private static record ImageKey(int chunkNum, int timeRes, int height) {}
 
     @Inject
     public WaveformDisplay(AudioState audioState, EventDispatchBus eventBus) {
@@ -124,6 +128,9 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                             }
                         });
         resizeDebounceTimer.setRepeats(false);
+
+        // Initialize last image key tracker
+        lastImageKey = null;
     }
 
     public void zoomX(boolean in) {
@@ -132,6 +139,12 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         } else {
             if (pixelsPerSecond >= UiConstants.xZoomAmount + 1) {
                 pixelsPerSecond -= UiConstants.xZoomAmount;
+            }
+        }
+        if (currentWaveform != null) {
+            currentWaveform.setTimeResolution(pixelsPerSecond);
+            if (refreshTimer == null || !refreshTimer.isRunning()) {
+                repaint();
             }
         }
     }
@@ -194,8 +207,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
     @Subscribe
     public void handleScreenSeekRequestedEvent(ScreenSeekRequestedEvent event) {
-        int shift =
-                (int) (((double) getWidth() / (double) UiConstants.zoomlessPixelsPerSecond) * 1000);
+        int shift = (int) (((double) getWidth() / (double) pixelsPerSecond) * 1000);
         shift -= shift / 5;
         if (event.getDirection() == ScreenSeekRequestedEvent.Direction.BACKWARD) {
             shift *= -1;
@@ -386,9 +398,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
     }
 
     private int absoluteX(long frame) {
-        return (int)
-                (UiConstants.zoomlessPixelsPerSecond
-                        * audioState.getCalculator().framesToSec(frame));
+        return (int) (pixelsPerSecond * audioState.getCalculator().framesToSec(frame));
     }
 
     public int frameToAbsoluteXPixel(long frame) {
@@ -412,7 +422,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         return (int)
                 (refreshFrame
                         + (xPix - progressBarXPos)
-                                * ((1. / UiConstants.zoomlessPixelsPerSecond)
+                                * ((1. / (double) pixelsPerSecond)
                                         * audioState.getCalculator().frameRate()));
     }
 
@@ -454,6 +464,11 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             int chunkNum = audioState.lookupChunkNum(realRefreshFrame);
             int numAnns = AnnotationDisplay.getNumAnnotations();
             boolean isPlaying = audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
+            int currentTimeRes =
+                    (currentWaveform != null) ? currentWaveform.getTimeResolution() : -1;
+            int currentAmpRes =
+                    (currentWaveform != null) ? currentWaveform.getAmplitudeResolution() : -1;
+            ImageKey currentImageKey = new ImageKey(chunkNum, currentTimeRes, currentAmpRes);
 
             long curTime = System.nanoTime();
             if (isPlaying && wasPlaying) {
@@ -482,9 +497,9 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             lastTime = curTime;
 
             if (chunkInProgress == false
+                    && Objects.equals(currentImageKey, lastImageKey)
                     && refreshFrame == bufferedFrame
                     && bufferedWidth == refreshWidth
-                    && bufferedHeight == refreshHeight
                     && bufferedNumAnns == numAnns) {
                 return;
             }
@@ -510,8 +525,9 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             wasPlaying = isPlaying;
             bufferedFrame = realRefreshFrame;
             bufferedWidth = refreshWidth;
-            bufferedHeight = curRefreshChunk.image().getHeight(null);
             bufferedNumAnns = AnnotationDisplay.getNumAnnotations();
+            bufferedHeight = curRefreshChunk.image().getHeight(null);
+            lastImageKey = currentImageKey;
 
             repaint();
         }
@@ -531,7 +547,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
         return Waveform.builder(audioState.getFmodCore())
                 .audioFile(audioState.getCurrentAudioFileAbsolutePath())
-                .timeResolution(200) // Default pixels per second
+                .timeResolution(pixelsPerSecond)
                 .amplitudeResolution(getHeight()) // Use actual component height
                 .enableCaching(true)
                 .build();

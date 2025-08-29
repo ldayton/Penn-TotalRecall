@@ -6,25 +6,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import annotation.Windowing;
 import app.di.GuiceBootstrap;
+import components.MainFrame;
 import java.awt.Dimension;
 import java.awt.Window;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.condition.EnabledIf;
 import state.AudioState;
+import ui.UiConstants;
 
 /**
  * Full application lifecycle test that verifies the waveform display updates its rendered height
  * when the component is resized. Uses the dev auto-loader to load the sample audio file.
  */
 @Windowing
+@audio.AudioEngine
 class WaveformDisplayTest {
 
     @BeforeEach
@@ -49,7 +52,6 @@ class WaveformDisplayTest {
     @Test
     @DisplayName("Waveform resizes with component height")
     @Timeout(value = 30, unit = TimeUnit.SECONDS)
-    @EnabledIf("isSampleFileAvailable")
     void waveformResizesWithComponentHeight() throws Exception {
         // Optional visual hold divided across key moments
         long visualHold = Long.getLong("test.visualHoldMs", 0L);
@@ -142,8 +144,182 @@ class WaveformDisplayTest {
         if (holdSegment > 0) Thread.sleep(holdSegment); // Observe final state
     }
 
-    /** Only run if sample file exists locally. */
-    static boolean isSampleFileAvailable() {
-        return Files.exists(Path.of("packaging/samples/sample.wav"));
+    // Sample file is part of the repo; tests always assume it exists
+
+    @Test
+    @DisplayName("Zoom In increases chunk image width")
+    @Timeout(value = 30, unit = TimeUnit.SECONDS)
+    void zoomInIncreasesImageWidth() throws Exception {
+        long visualHold = Long.getLong("test.visualHoldMs", 0L);
+        int holdSlices = 4;
+        long holdSegment = visualHold > 0 ? Math.max(1L, visualHold / holdSlices) : 0L;
+
+        var bootstrap = GuiceBootstrap.create();
+        SwingUtilities.invokeAndWait(bootstrap::startApplication);
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial app window
+
+        AudioState audioState = GuiceBootstrap.getInjectedInstance(AudioState.class);
+        WaveformDisplay display = GuiceBootstrap.getInjectedInstance(WaveformDisplay.class);
+
+        long start = System.currentTimeMillis();
+        while (!audioState.audioOpen() && System.currentTimeMillis() - start < 5000) {
+            Thread.sleep(50);
+        }
+        assertTrue(audioState.audioOpen(), "audio should be open via DevModeFileAutoLoader");
+
+        var curChunkField = WaveformDisplay.class.getDeclaredField("curRefreshChunk");
+        curChunkField.setAccessible(true);
+        start = System.currentTimeMillis();
+        waveform.RenderedChunk curChunk = null;
+        while (curChunk == null && System.currentTimeMillis() - start < 5000) {
+            Object val = curChunkField.get(display);
+            if (val instanceof waveform.RenderedChunk rc && rc.image() != null) {
+                curChunk = rc;
+                break;
+            }
+            Thread.sleep(50);
+        }
+        assertNotNull(curChunk, "waveform should render an initial chunk");
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial waveform render
+
+        int initialWidth = curChunk.image().getWidth(null);
+        int expectedWidth = initialWidth + UiConstants.xZoomAmount * 10; // chunk is 10s wide
+
+        // Trigger Zoom In via the View menu item
+        SwingUtilities.invokeAndWait(
+                () -> {
+                    MainFrame frame = GuiceBootstrap.getInjectedInstance(MainFrame.class);
+                    JMenuBar menuBar = frame.getJMenuBar();
+                    JMenu viewMenu = null;
+                    for (int i = 0; i < menuBar.getMenuCount(); i++) {
+                        JMenu m = menuBar.getMenu(i);
+                        if (m != null && "View".equals(m.getText())) {
+                            viewMenu = m;
+                            break;
+                        }
+                    }
+                    if (viewMenu == null) throw new IllegalStateException("View menu not found");
+                    JMenuItem zoomInItem = null;
+                    for (int i = 0; i < viewMenu.getItemCount(); i++) {
+                        JMenuItem it = viewMenu.getItem(i);
+                        if (it != null && "Zoom In".equals(it.getText())) {
+                            zoomInItem = it;
+                            break;
+                        }
+                    }
+                    if (zoomInItem == null) throw new IllegalStateException("Zoom In not found");
+                    zoomInItem.doClick();
+                });
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe post-zoom state before update
+
+        start = System.currentTimeMillis();
+        int observedWidth = initialWidth;
+        while (System.currentTimeMillis() - start < 4000) {
+            Object val = curChunkField.get(display);
+            if (val instanceof waveform.RenderedChunk rc && rc.image() != null) {
+                observedWidth = rc.image().getWidth(null);
+                if (observedWidth == expectedWidth) {
+                    break;
+                }
+            }
+            Thread.sleep(50);
+        }
+
+        assertEquals(
+                expectedWidth, observedWidth, "zoom in should increase image width by 10*xZoom");
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe final state
+    }
+
+    @Test
+    @DisplayName("Zoom Out decreases chunk image width")
+    @Timeout(value = 30, unit = TimeUnit.SECONDS)
+    void zoomOutDecreasesImageWidth() throws Exception {
+        long visualHold = Long.getLong("test.visualHoldMs", 0L);
+        int holdSlices = 4;
+        long holdSegment = visualHold > 0 ? Math.max(1L, visualHold / holdSlices) : 0L;
+
+        var bootstrap = GuiceBootstrap.create();
+        SwingUtilities.invokeAndWait(bootstrap::startApplication);
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial app window
+
+        AudioState audioState = GuiceBootstrap.getInjectedInstance(AudioState.class);
+        WaveformDisplay display = GuiceBootstrap.getInjectedInstance(WaveformDisplay.class);
+
+        long start = System.currentTimeMillis();
+        while (!audioState.audioOpen() && System.currentTimeMillis() - start < 5000) {
+            Thread.sleep(50);
+        }
+        assertTrue(audioState.audioOpen(), "audio should be open via DevModeFileAutoLoader");
+
+        var curChunkField = WaveformDisplay.class.getDeclaredField("curRefreshChunk");
+        curChunkField.setAccessible(true);
+        start = System.currentTimeMillis();
+        waveform.RenderedChunk curChunk = null;
+        while (curChunk == null && System.currentTimeMillis() - start < 5000) {
+            Object val = curChunkField.get(display);
+            if (val instanceof waveform.RenderedChunk rc && rc.image() != null) {
+                curChunk = rc;
+                break;
+            }
+            Thread.sleep(50);
+        }
+        assertNotNull(curChunk, "waveform should render an initial chunk");
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe initial waveform render
+
+        int initialWidth = curChunk.image().getWidth(null);
+        int expectedWidth = initialWidth - UiConstants.xZoomAmount * 10; // chunk is 10s wide
+        assertTrue(expectedWidth > 0, "expected width must be positive");
+
+        // Trigger Zoom Out via the View menu item
+        SwingUtilities.invokeAndWait(
+                () -> {
+                    MainFrame frame = GuiceBootstrap.getInjectedInstance(MainFrame.class);
+                    JMenuBar menuBar = frame.getJMenuBar();
+                    JMenu viewMenu = null;
+                    for (int i = 0; i < menuBar.getMenuCount(); i++) {
+                        JMenu m = menuBar.getMenu(i);
+                        if (m != null && "View".equals(m.getText())) {
+                            viewMenu = m;
+                            break;
+                        }
+                    }
+                    if (viewMenu == null) throw new IllegalStateException("View menu not found");
+                    JMenuItem zoomOutItem = null;
+                    for (int i = 0; i < viewMenu.getItemCount(); i++) {
+                        JMenuItem it = viewMenu.getItem(i);
+                        if (it != null && "Zoom Out".equals(it.getText())) {
+                            zoomOutItem = it;
+                            break;
+                        }
+                    }
+                    if (zoomOutItem == null) throw new IllegalStateException("Zoom Out not found");
+                    zoomOutItem.doClick();
+                });
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe post-zoom state before update
+
+        start = System.currentTimeMillis();
+        int observedWidth = initialWidth;
+        while (System.currentTimeMillis() - start < 4000) {
+            Object val = curChunkField.get(display);
+            if (val instanceof waveform.RenderedChunk rc && rc.image() != null) {
+                observedWidth = rc.image().getWidth(null);
+                if (observedWidth == expectedWidth) {
+                    break;
+                }
+            }
+            Thread.sleep(50);
+        }
+
+        assertEquals(
+                expectedWidth, observedWidth, "zoom out should decrease image width by 10*xZoom");
+
+        if (holdSegment > 0) Thread.sleep(holdSegment); // Observe final state
     }
 }

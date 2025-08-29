@@ -79,7 +79,8 @@ public class AppMenuBar extends JMenuBar {
     private final AnnotateRegularAction annotateRegularAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
     private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    private final actions.ZoomAction zoomAction;
+    private final actions.ZoomInAction zoomInAction;
+    private final actions.ZoomOutAction zoomOutAction;
     private final actions.OpenAudioFileAction openAudioFileAction;
     private final actions.OpenAudioFolderAction openAudioFolderAction;
     private final actions.SeekAction seekAction;
@@ -108,7 +109,8 @@ public class AppMenuBar extends JMenuBar {
             AnnotateRegularAction annotateRegularAction,
             AnnotateIntrusionAction annotateIntrusionAction,
             actions.ToggleAnnotationsAction toggleAnnotationsAction,
-            actions.ZoomAction zoomAction,
+            actions.ZoomInAction zoomInAction,
+            actions.ZoomOutAction zoomOutAction,
             actions.OpenAudioFileAction openAudioFileAction,
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
@@ -132,7 +134,8 @@ public class AppMenuBar extends JMenuBar {
         this.annotateRegularAction = annotateRegularAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
         this.toggleAnnotationsAction = toggleAnnotationsAction;
-        this.zoomAction = zoomAction;
+        this.zoomInAction = zoomInAction;
+        this.zoomOutAction = zoomOutAction;
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
         this.seekAction = seekAction;
@@ -260,10 +263,8 @@ public class AppMenuBar extends JMenuBar {
     @SuppressWarnings("unused")
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn = new JMenuItem(zoomAction);
-        jmiZoomIn.setText("Zoom In");
-        JMenuItem jmiZoomOut = new JMenuItem(zoomAction);
-        jmiZoomOut.setText("Zoom Out");
+        JMenuItem jmiZoomIn = new JMenuItem(zoomInAction);
+        JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction);
         jmView.add(jmiZoomIn);
         jmView.add(jmiZoomOut);
         add(jmView);
@@ -314,7 +315,8 @@ public class AppMenuBar extends JMenuBar {
             instance.annotateRegularAction.update();
             instance.annotateIntrusionAction.update();
             instance.toggleAnnotationsAction.update();
-            instance.zoomAction.update();
+            instance.zoomInAction.update();
+            instance.zoomOutAction.update();
             instance.openAudioFileAction.update();
             instance.openAudioFolderAction.update();
             instance.seekAction.update();

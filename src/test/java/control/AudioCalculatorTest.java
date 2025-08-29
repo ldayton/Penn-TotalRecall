@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /** Tests for the refactored AudioCalculator that uses FMOD for format detection. */
+@audio.AudioEngine
 class AudioCalculatorTest {
 
     private static File testAudioFile;

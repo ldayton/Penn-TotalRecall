@@ -18,6 +18,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /** Tests to verify that FmodAudioFormatDetector is thread-safe. */
 @DisplayName("FmodAudioFormatDetector Thread Safety")
+@AudioEngine
 class FmodAudioFormatDetectorThreadSafetyTest {
 
     @TempDir Path tempDir;

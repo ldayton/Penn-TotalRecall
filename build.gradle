@@ -299,23 +299,30 @@ test {
     useJUnitPlatform {
         // Exclude packaging tests from regular test runs (use packageTest target instead)
         excludeTags 'packaging'
-        
-        // Use the loaded properties to control test exclusion
-        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
-        if (audioHardwareAvailable == 'false') {
-            excludeTags 'audio-hardware'
-        }
-        
+
+        // Always exclude FMOD-tagged tests from this task; they run in isolated tasks below
+        excludeTags 'audio-engine', 'audio-hardware'
+
+        // Use the loaded properties to control windowing exclusion
         def windowingSystemAvailable = configProps.getProperty('windowing.system.available')
         if (windowingSystemAvailable == 'false') {
             excludeTags 'windowing'
         }
-        
+
         // Exclude macOS-specific tests on non-Mac platforms
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) {
             excludeTags 'macos'
         }
+    }
+
+    // Chain isolated FMOD tasks so `gradlew test` runs everything in one command
+    finalizedBy 'audioEngineTest'
+
+    // Locally, run tests serially to avoid FMOD contention and hear audio
+    if (!isCI) {
+        maxParallelForks = 1
+        forkEvery = 0
     }
     
     // Also apply these properties to the test task for runtime use
@@ -390,6 +397,72 @@ tasks.register('packageTest', Test.class) {
     // Load environment-specific configuration in CI (same as test task)
     if (isCI) {
         loadEnvironmentConfig(packageTest, 'ci')
+    }
+}
+
+// Audio engine (FMOD) tests that do not require physical hardware, but should not run in parallel
+tasks.register('audioEngineTest', Test.class) {
+    group = 'verification'
+    description = 'Run tests that use FMOD (hardware optional) in isolation'
+    dependsOn testClasses
+
+    // Use the same test sources as the regular test task
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+
+    // Single JVM per test class, no parallel forks for FMOD-dependent tests
+    maxParallelForks = 1
+    forkEvery = 1
+
+    // Detect CI environment (same logic as test task)
+    def isCI = System.getenv('CI') == 'true'
+
+    // Enable native access for JNA and FlatLAF (same as test task)
+    jvmArgs = nativeAccessJvmArgs
+
+    // Enable detailed test output (same as test task)
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+
+    // Load configuration properties (same logic as test task)
+    def configProps = new Properties()
+
+    // Always load development configuration as baseline
+    def devConfigFile = file("src/main/resources/development.properties")
+    if (devConfigFile.exists()) {
+        devConfigFile.withInputStream { configProps.load(it) }
+    }
+
+    // In CI environments, override with CI-specific settings
+    if (isCI) {
+        def ciConfigFile = file("src/main/resources/ci.properties")
+        if (ciConfigFile.exists()) {
+            ciConfigFile.withInputStream { configProps.load(it) }
+        }
+    }
+
+    useJUnitPlatform {
+        includeTags 'audio-engine'
+    }
+
+    // Apply configuration properties as system properties
+    configProps.each { key, value ->
+        systemProperty key, value
+    }
+
+    // Disable waveform prefetch during tests to avoid FMOD contention from background threads
+    systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
+
+    // Suppress expected FMOD format error logs in tests that use dummy files
+    systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
+
+    // Forward ad-hoc test.* system properties to the test JVM
+    System.getProperties().each { k, v ->
+        if (k instanceof String && k.startsWith('test.')) {
+            systemProperty k, v
+        }
     }
 }
 

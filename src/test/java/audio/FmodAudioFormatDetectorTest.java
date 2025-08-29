@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /** Tests for FmodAudioFormatDetector functionality. */
+@AudioEngine
 class FmodAudioFormatDetectorTest {
 
     private static FmodAudioFormatDetector detector;

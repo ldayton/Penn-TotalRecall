@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @DisplayName("FmodCore")
+@AudioEngine
 class FmodCoreTest {
     private static final Logger logger = LoggerFactory.getLogger(FmodCoreTest.class);
     private static FmodCore lib;
