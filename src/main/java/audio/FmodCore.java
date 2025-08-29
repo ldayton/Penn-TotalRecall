@@ -82,6 +82,8 @@ public final class FmodCore {
         static final int TIMEUNIT_MS = 0x00000001;
         static final int TIMEUNIT_PCM = 0x00000002;
         static final int OK = 0;
+        // Mode flags
+        static final int LOOP_OFF = 0x00000001;
     }
 
     /** FMOD output type configuration. */
@@ -208,6 +210,8 @@ public final class FmodCore {
         int FMOD_Channel_GetPosition(Pointer channel, IntByReference position, int postype);
 
         int FMOD_Channel_SetPosition(Pointer channel, long position, int postype);
+
+        int FMOD_Channel_SetMode(Pointer channel, int mode);
     }
 
     // FMOD Core instance
@@ -441,6 +445,15 @@ public final class FmodCore {
                     return ErrorCode.UNSPECIFIED_ERROR.getCode();
                 }
                 currentChannel = channelRef.getValue();
+
+                // Ensure looping is disabled for this channel
+                try {
+                    fmod.FMOD_Channel_SetMode(currentChannel, FmodConstants.LOOP_OFF);
+                } catch (Exception e) {
+                    logger.debug(
+                            "FMOD_Channel_SetMode(LOOP_OFF) failed or unsupported: {}",
+                            e.getMessage());
+                }
 
                 // Set start position
                 result =
