@@ -8,6 +8,8 @@ import java.util.concurrent.CompletableFuture;
  *
  * <p>Based on industry research: DAW waveform rendering must be async with timeout/cancellation to
  * prevent UI blocking and enable user control over long-running operations.
+ *
+ * <p>Thread-safe.
  */
 public interface Waveform {
 

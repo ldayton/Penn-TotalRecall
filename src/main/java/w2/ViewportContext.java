@@ -1,30 +1,15 @@
 package w2;
 
-/**
- * Viewport context for intelligent caching decisions.
- *
- * <p>Contains the essential information needed to determine optimal cache size and prefetching
- * strategy.
- */
-public interface ViewportContext {
+/** Viewport context for intelligent caching decisions. */
+public record ViewportContext(
+        double startTimeSeconds,
+        double endTimeSeconds,
+        int viewportWidthPx,
+        int viewportHeightPx,
+        int pixelsPerSecond,
+        ScrollDirection scrollDirection) {
 
-    // Time range being displayed
-    double getStartTimeSeconds();
-
-    double getEndTimeSeconds();
-
-    // Viewport dimensions
-    int getViewportWidthPx();
-
-    int getViewportHeightPx();
-
-    // Zoom level
-    double getPixelsPerSecond();
-
-    // Scroll behavior for predictive caching
-    ScrollDirection getScrollDirection();
-
-    enum ScrollDirection {
+    public enum ScrollDirection {
         BACKWARD,
         STATIONARY,
         FORWARD
