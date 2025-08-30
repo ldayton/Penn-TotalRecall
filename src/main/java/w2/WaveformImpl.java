@@ -1,5 +1,6 @@
 package w2;
 
+import audio.FmodCore;
 import java.awt.Image;
 import java.util.concurrent.*;
 
@@ -10,9 +11,11 @@ class WaveformImpl implements Waveform {
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
     private final String audioFilePath;
+    private final FmodCore fmodCore;
 
-    WaveformImpl(String audioFilePath) {
+    WaveformImpl(String audioFilePath, FmodCore fmodCore) {
         this.audioFilePath = audioFilePath;
+        this.fmodCore = fmodCore;
 
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -37,7 +40,11 @@ class WaveformImpl implements Waveform {
                         0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
 
         this.cache = new WaveformSegmentCache(defaultViewport);
-        this.renderer = new WaveformRenderer(audioFilePath, cache, renderPool);
+
+        // TODO Get sample rate from audio file for proper rendering
+        int sampleRate = 44100; // Default, should get from FMOD
+        this.renderer =
+                new WaveformRenderer(audioFilePath, cache, renderPool, fmodCore, sampleRate);
     }
 
     @Override
@@ -63,7 +70,7 @@ class WaveformImpl implements Waveform {
     }
 
     /** Factory method to create waveform for audio file. */
-    public static Waveform create(String audioFilePath) {
-        return new WaveformImpl(audioFilePath);
+    public static Waveform create(String audioFilePath, FmodCore fmodCore) {
+        return new WaveformImpl(audioFilePath, fmodCore);
     }
 }

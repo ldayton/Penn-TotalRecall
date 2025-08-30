@@ -1,23 +1,54 @@
 package w2;
 
+import audio.FmodCore;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import waveform.PixelScaler;
+import waveform.WaveformProcessor;
 
 /**
  * Priority-based waveform renderer with prefetch strategy. Fills segment cache efficiently using
  * industry-standard approaches.
  */
 class WaveformRenderer {
+    private static final Logger logger = LoggerFactory.getLogger(WaveformRenderer.class);
 
     private static final int SEGMENT_WIDTH_PX = 200;
     private static final int PREFETCH_COUNT = 2; // Segments to prefetch in each direction
 
+    // Waveform rendering constants (from original WaveformRenderer)
+    private static final Color WAVEFORM_BACKGROUND = Color.WHITE;
+    private static final Color WAVEFORM_REFERENCE_LINE = Color.BLACK;
+    private static final Color WAVEFORM_SCALE_LINE = new Color(226, 224, 131);
+    private static final Color WAVEFORM_SCALE_TEXT = Color.BLACK;
+    private static final Color FIRST_CHANNEL_WAVEFORM = Color.BLACK;
+    private static final java.text.DecimalFormat SEC_FORMAT = new java.text.DecimalFormat("0.00s");
+    private static final RenderingHints RENDERING_HINTS =
+            new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    static {
+        RENDERING_HINTS.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        RENDERING_HINTS.put(
+                RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        RENDERING_HINTS.put(
+                RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+    }
+
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
     private final String audioFilePath;
+    private final FmodCore fmodCore;
+    private final WaveformProcessor processor;
+    private final int sampleRate;
+
+    // Cache global peak per resolution for consistent scaling
+    private final ConcurrentHashMap<Integer, Double> resolutionPeaks = new ConcurrentHashMap<>();
 
     enum Priority {
         VISIBLE(1),
@@ -44,10 +75,18 @@ class WaveformRenderer {
         }
     }
 
-    WaveformRenderer(String audioFilePath, WaveformSegmentCache cache, ExecutorService renderPool) {
+    WaveformRenderer(
+            String audioFilePath,
+            WaveformSegmentCache cache,
+            ExecutorService renderPool,
+            FmodCore fmodCore,
+            int sampleRate) {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
         this.renderPool = renderPool;
+        this.fmodCore = fmodCore;
+        this.sampleRate = sampleRate;
+        this.processor = new WaveformProcessor(fmodCore, new PixelScaler());
     }
 
     /** Fill cache for viewport with priority-based rendering. */
@@ -177,40 +216,108 @@ class WaveformRenderer {
 
                     BufferedImage image =
                             new BufferedImage(
-                                    SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_ARGB);
+                                    SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_RGB);
+
+                    // Calculate which 10-second chunk this segment belongs to
+                    final double CHUNK_DURATION_SECONDS = 10.0;
+                    final double PRE_DATA_SECONDS = 0.25; // Match original overlap
+                    int chunkIndex = (int) (key.startTime() / CHUNK_DURATION_SECONDS);
+
+                    // Calculate position of this segment within the chunk
+                    double chunkStartTime = chunkIndex * CHUNK_DURATION_SECONDS;
+                    double segmentOffsetInChunk = key.startTime() - chunkStartTime;
+
+                    // Process the full 10-second chunk (matching original implementation)
+                    double[] tempChunkData;
+                    try {
+                        int chunkWidthPixels =
+                                (int) (CHUNK_DURATION_SECONDS * key.pixelsPerSecond());
+                        tempChunkData =
+                                processor.processAudioForDisplay(
+                                        audioFilePath,
+                                        chunkIndex,
+                                        CHUNK_DURATION_SECONDS,
+                                        PRE_DATA_SECONDS, // Match original overlap
+                                        0.001, // Min frequency for BandPassFilter
+                                        0.45, // Max frequency matching original
+                                        chunkWidthPixels);
+                    } catch (Exception e) {
+                        logger.warn(
+                                "Failed to process audio for segment at {}s: {}",
+                                key.startTime(),
+                                e.getMessage());
+                        tempChunkData = new double[0];
+                    }
+                    final double[] fullChunkData = tempChunkData;
+
+                    // Initialize global peak on first chunk if not already set
+                    resolutionPeaks.computeIfAbsent(
+                            key.pixelsPerSecond(),
+                            pps -> {
+                                double p = getRenderingPeak(fullChunkData, Math.max(1, pps / 2));
+                                logger.debug("Initialized rendering peak: {} for {} px/s", p, pps);
+                                return p;
+                            });
+
+                    // Extract the 200px segment we need from the full chunk
+                    double[] valsToDraw = new double[SEGMENT_WIDTH_PX];
+                    int segmentStartPixel = (int) (segmentOffsetInChunk * key.pixelsPerSecond());
+                    for (int i = 0;
+                            i < SEGMENT_WIDTH_PX && segmentStartPixel + i < fullChunkData.length;
+                            i++) {
+                        valsToDraw[i] = fullChunkData[segmentStartPixel + i];
+                    }
 
                     Graphics2D g = image.createGraphics();
                     try {
                         // Enable antialiasing
-                        g.setRenderingHint(
-                                RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g.setRenderingHints(RENDERING_HINTS);
 
                         // Fill background
-                        g.setColor(Color.WHITE);
+                        g.setColor(WAVEFORM_BACKGROUND);
                         g.fillRect(0, 0, SEGMENT_WIDTH_PX, key.height());
 
-                        // TODO: Read audio samples for time range [key.startTime(), key.endTime()]
-                        // TODO: Calculate min/max or RMS values
-                        // TODO: Draw waveform visualization
-
-                        // Placeholder: Draw a simple waveform pattern
-                        g.setColor(Color.BLACK);
-                        g.setStroke(new BasicStroke(1.0f));
+                        // Draw reference line
+                        g.setColor(WAVEFORM_REFERENCE_LINE);
                         int centerY = key.height() / 2;
-
-                        // Draw center line
                         g.drawLine(0, centerY, SEGMENT_WIDTH_PX, centerY);
 
-                        // Placeholder waveform (will be replaced with actual audio data)
-                        g.setColor(new Color(0, 100, 200));
-                        for (int x = 0; x < SEGMENT_WIDTH_PX; x++) {
+                        // Draw time scale (vertical lines and labels)
+                        drawTimeScale(
+                                g,
+                                SEGMENT_WIDTH_PX,
+                                key.height(),
+                                key.startTime(),
+                                key.pixelsPerSecond());
+
+                        // Draw waveform using exact same logic as original
+                        g.setColor(FIRST_CHANNEL_WAVEFORM);
+
+                        // Use global peak for consistent scaling across all segments
+                        double peak = resolutionPeaks.getOrDefault(key.pixelsPerSecond(), 0.0);
+
+                        double yScale;
+                        if (peak <= 0) {
+                            yScale = 0;
+                        } else {
+                            yScale = ((key.height() / 2) - 1) / peak;
+                            if (Double.isInfinite(yScale) || Double.isNaN(yScale)) {
+                                yScale = 0;
+                            }
+                        }
+
+                        // Draw waveform
+                        for (int i = 0; i < valsToDraw.length && i < SEGMENT_WIDTH_PX; i++) {
                             if (Thread.currentThread().isInterrupted()) {
                                 return null;
                             }
-                            // Placeholder: sine wave for testing
-                            double phase = (key.startTime() * 10 + x * 0.1);
-                            int amplitude = (int) (Math.sin(phase) * key.height() * 0.3);
-                            g.drawLine(x, centerY - amplitude, x, centerY + amplitude);
+
+                            double scaledSample = valsToDraw[i] * yScale;
+                            int topY = (int) (centerY - scaledSample);
+                            int bottomY = (int) (centerY + scaledSample);
+
+                            g.drawLine(i, centerY, i, topY);
+                            g.drawLine(i, centerY, i, bottomY);
                         }
 
                     } finally {
@@ -269,5 +376,37 @@ class WaveformRenderer {
         }
 
         return composite;
+    }
+
+    /** Draw time scale lines and labels - matches original WaveformRenderer */
+    private void drawTimeScale(
+            Graphics2D g, int width, int height, double startTimeSeconds, int pixelsPerSecond) {
+        if (pixelsPerSecond <= 0) {
+            return;
+        }
+
+        for (int i = 0; i < width; i += pixelsPerSecond) {
+            g.setColor(WAVEFORM_SCALE_LINE);
+            g.drawLine(i, 0, i, height - 1);
+
+            g.setColor(WAVEFORM_SCALE_TEXT);
+            double seconds = startTimeSeconds + (i / (double) pixelsPerSecond);
+            g.drawString(SEC_FORMAT.format(seconds), i + 5, height - 5);
+        }
+    }
+
+    /** Calculate rendering peak using consecutive pixel minimum - matches original */
+    private double getRenderingPeak(double[] pixelValues, int skipInitialPixels) {
+        if (pixelValues.length < skipInitialPixels + 2) {
+            return 0;
+        }
+
+        double maxConsecutive = 0;
+        for (int i = skipInitialPixels; i < pixelValues.length - 1; i++) {
+            double consecutiveVals = Math.min(pixelValues[i], pixelValues[i + 1]);
+            maxConsecutive = Math.max(consecutiveVals, maxConsecutive);
+        }
+
+        return maxConsecutive;
     }
 }

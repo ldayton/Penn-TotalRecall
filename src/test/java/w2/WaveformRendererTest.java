@@ -1,31 +1,63 @@
 package w2;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import audio.FmodCore;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 class WaveformRendererTest {
 
+    @Mock private FmodCore mockFmodCore;
+    private AutoCloseable mocks;
     private WaveformImpl waveform;
     private ViewportContext viewport;
 
     @BeforeEach
-    void setUp() {
-        waveform = (WaveformImpl) Waveform.forAudioFile("test-audio.wav");
+    void setUp() throws IOException {
+        mocks = MockitoAnnotations.openMocks(this);
+
+        // Mock FMOD to return test data
+        double[] samples = new double[44100]; // 1 second of audio at 44.1kHz
+
+        // Fill with test waveform data (sine wave)
+        for (int i = 0; i < samples.length; i++) {
+            samples[i] = Math.sin(2 * Math.PI * 440 * i / 44100.0); // 440Hz sine
+        }
+
+        FmodCore.ChunkData testChunk =
+                new FmodCore.ChunkData(
+                        samples,
+                        44100, // sampleRate
+                        1, // channels
+                        0, // overlapFrames
+                        44100 // totalFrames
+                        );
+
+        when(mockFmodCore.readAudioChunk(anyString(), anyInt(), anyDouble(), anyDouble()))
+                .thenReturn(testChunk);
+
+        waveform = (WaveformImpl) Waveform.forAudioFile("test-audio.wav", mockFmodCore);
         viewport =
                 new ViewportContext(
                         0.0, 5.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
         if (waveform != null) {
             waveform.shutdown();
+        }
+        if (mocks != null) {
+            mocks.close();
         }
     }
 

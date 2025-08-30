@@ -1,5 +1,6 @@
 package w2;
 
+import audio.FmodCore;
 import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +30,7 @@ public interface Waveform {
     CompletableFuture<Image> renderViewport(ViewportContext viewport);
 
     /** Create waveform for audio file. */
-    static Waveform forAudioFile(String audioFilePath) {
-        return WaveformImpl.create(audioFilePath);
+    static Waveform forAudioFile(String audioFilePath, FmodCore fmodCore) {
+        return WaveformImpl.create(audioFilePath, fmodCore);
     }
 }

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Audio-to-display processing pipeline for waveform visualization. */
-final class WaveformProcessor {
+public final class WaveformProcessor {
     private static final Logger logger = LoggerFactory.getLogger(WaveformProcessor.class);
 
     private final FmodCore fmodCore;
