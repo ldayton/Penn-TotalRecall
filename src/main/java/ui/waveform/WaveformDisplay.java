@@ -602,7 +602,6 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
                 .audioFile(audioState.getCurrentAudioFileAbsolutePath())
                 .timeResolution(pixelsPerSecond)
                 .amplitudeResolution(getHeight()) // Use actual component height
-                .enableCaching(true)
                 .build();
     }
 

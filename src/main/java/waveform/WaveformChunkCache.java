@@ -34,6 +34,24 @@ final class WaveformChunkCache {
         return chunk;
     }
 
+    /** Try to get chunk without blocking; returns null on cache miss. */
+    public RenderedChunk getChunkIfPresent(int chunkNumber, int pxPerSec, int height) {
+        requireAudioLoaded();
+        var key = new ChunkKey(chunkNumber, pxPerSec, height);
+        return chunkCache.getIfPresent(key);
+    }
+
+    /** Ensure the given chunk is loaded by triggering background load if missing. */
+    public void ensureChunkAsync(int chunkNumber, int pxPerSec, int height) {
+        requireAudioLoaded();
+        var key = new ChunkKey(chunkNumber, pxPerSec, height);
+        if (chunkCache.getIfPresent(key) == null) {
+            CompletableFuture.runAsync(() -> chunkCache.get(key));
+        }
+        // Also prefetch neighbors to smooth subsequent paints
+        prefetchAdjacentAsync(chunkNumber, pxPerSec, height);
+    }
+
     /** Clears all cached chunks. */
     public void clear() {
         chunkCache.invalidateAll();

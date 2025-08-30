@@ -28,7 +28,7 @@ class WaveformProcessorCacheTest {
         when(mockPixelScaler.smoothPixels(Mockito.any(double[].class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        WaveformProcessor processor = new WaveformProcessor(mockFmodCore, mockPixelScaler, true);
+        WaveformProcessor processor = new WaveformProcessor(mockFmodCore, mockPixelScaler);
 
         double[] firstResult =
                 processor.processAudioForDisplay("test.wav", 0, 10.0, 0.25, 0.1, 0.4, 100);

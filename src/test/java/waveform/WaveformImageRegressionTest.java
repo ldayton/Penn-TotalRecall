@@ -103,7 +103,6 @@ class WaveformImageRegressionTest {
                         .audioFile(SAMPLE_FILE_PATH)
                         .timeResolution(200)
                         .amplitudeResolution(TEST_IMAGE_HEIGHT)
-                        .enableCaching(false)
                         .build();
 
         // Test configured number of chunks at standard height

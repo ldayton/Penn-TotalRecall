@@ -16,10 +16,10 @@ final class WaveformProcessor {
     private final PixelScaler pixelScaler;
     private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
-    public WaveformProcessor(FmodCore fmodCore, PixelScaler pixelScaler, boolean cachingEnabled) {
+    public WaveformProcessor(FmodCore fmodCore, PixelScaler pixelScaler) {
         this.fmodCore = fmodCore;
         this.pixelScaler = pixelScaler;
-        this.filterCache = cachingEnabled ? new ConcurrentHashMap<>() : null;
+        this.filterCache = new ConcurrentHashMap<>();
     }
 
     /** Processes audio and scales for display in one call. */

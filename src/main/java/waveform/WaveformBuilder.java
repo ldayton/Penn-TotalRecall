@@ -10,7 +10,6 @@ public final class WaveformBuilder {
     private String audioFilePath;
     private int timeResolution = DEFAULT_TIME_RESOLUTION_PX_PER_SEC; // Default: 50 px/sec
     private int amplitudeResolution = DEFAULT_AMPLITUDE_RESOLUTION_PX; // Default: 300 px height
-    private boolean cachingEnabled = true; // Default: enabled
     private final FmodCore fmodCore;
 
     WaveformBuilder(FmodCore fmodCore) {
@@ -35,19 +34,12 @@ public final class WaveformBuilder {
         return this;
     }
 
-    /** Enables or disables caching for testing and debugging purposes. */
-    public WaveformBuilder enableCaching(boolean enabled) {
-        this.cachingEnabled = enabled;
-        return this;
-    }
-
     /** Builds the configured Waveform instance. */
     public Waveform build() {
         if (audioFilePath == null || audioFilePath.trim().isEmpty()) {
             throw new IllegalArgumentException("Audio file path is required");
         }
 
-        return new Waveform(
-                audioFilePath, timeResolution, amplitudeResolution, cachingEnabled, fmodCore);
+        return new Waveform(audioFilePath, timeResolution, amplitudeResolution, fmodCore);
     }
 }

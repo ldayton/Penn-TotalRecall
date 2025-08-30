@@ -12,7 +12,6 @@ public final class Waveform {
     private final String audioFilePath;
     private volatile int timeResolution;
     private volatile int amplitudeResolution;
-    private final boolean cachingEnabled;
     private final WaveformProcessor processor;
     private final WaveformRenderer renderer;
     private final PixelScaler pixelScaler;
@@ -23,25 +22,18 @@ public final class Waveform {
             new java.util.concurrent.ConcurrentHashMap<>();
 
     // Package-private constructor - only called by builder
-    Waveform(
-            String audioFilePath,
-            int timeResolution,
-            int amplitudeResolution,
-            boolean cachingEnabled,
-            FmodCore fmodCore) {
+    Waveform(String audioFilePath, int timeResolution, int amplitudeResolution, FmodCore fmodCore) {
         this.audioFilePath = audioFilePath;
         this.timeResolution = timeResolution;
         this.amplitudeResolution = amplitudeResolution;
-        this.cachingEnabled = cachingEnabled;
 
         // Create dependencies with new - no DI complexity needed
         this.pixelScaler = new PixelScaler();
         WaveformScaler waveformScaler = new WaveformScaler();
         this.renderer = new WaveformRenderer(waveformScaler);
-        this.processor = new WaveformProcessor(fmodCore, pixelScaler, cachingEnabled);
+        this.processor = new WaveformProcessor(fmodCore, pixelScaler);
 
-        // Create cache if caching is enabled - needs AudioState but we don't have it yet
-        // For now, cache will be set later via a setter
+        // Cache will be set later via initializeCache() when AudioState is available
         this.cache = null;
     }
 
@@ -52,9 +44,18 @@ public final class Waveform {
 
     /** Renders a chunk of waveform as an image with consistent scaling across chunks. */
     public RenderedChunk renderChunk(int chunkNumber) {
-        if (cachingEnabled && cache != null) {
-            return cache.getChunk(chunkNumber, timeResolution, amplitudeResolution);
+        if (cache != null) {
+            // Try cache first for best performance
+            RenderedChunk cached =
+                    cache.getChunkIfPresent(chunkNumber, timeResolution, amplitudeResolution);
+            if (cached != null) {
+                return cached;
+            }
+            // Cache miss: trigger async load for next time, but render sync now for immediate
+            // display
+            cache.ensureChunkAsync(chunkNumber, timeResolution, amplitudeResolution);
         }
+        // Render synchronously (either no cache or cache miss)
         return new RenderedChunk(
                 chunkNumber,
                 renderChunkDirectConfigured(chunkNumber, timeResolution, amplitudeResolution));
@@ -111,9 +112,9 @@ public final class Waveform {
         logger.debug("Reset global scaling cache for file: {}", audioFilePath);
     }
 
-    /** Initialize caching with AudioState dependency - called by AudioState. */
+    /** Initialize cache with AudioState dependency - called by AudioState. */
     public void initializeCache(state.AudioState audioState) {
-        if (cachingEnabled && cache == null) {
+        if (cache == null) {
             synchronized (this) {
                 if (cache == null) {
                     cache = new WaveformChunkCache(this, audioState);

@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -23,9 +22,6 @@ import org.slf4j.LoggerFactory;
 import state.AudioState;
 
 @DisplayName("Waveform Smoothness Integration")
-@Disabled(
-        "Temporary: known EDT stutter from synchronous chunk rendering; re-enable after off-EDT"
-                + " prefetch") // TODO fix EDT stutter
 @AudioHardware
 @Windowing
 class WaveformDisplaySmoothnessTest {
