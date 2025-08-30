@@ -30,7 +30,21 @@ ext {
     ]
     // Single source of truth for CI detection
     isCI = System.getenv('CI') == 'true'
-    flatlafVersion = '3.5.+'
+    // Dependency versions (centralized)
+    flatlafVersion = '3.6.+'
+    jnaVersion = '5.17.+'
+    jacksonXmlVersion = '2.20.+'
+    maryttsSignalprocVersion = '5.2.+'
+    slf4jVersion = '2.0.+'
+    logbackVersion = '1.5.+'
+    guiceVersion = '7.0.+'
+    caffeineVersion = '3.2.+'
+    lombokVersion = '1.18.+'
+    junitJupiterVersion = '5.10.+'
+    mockitoVersion = '5.19.+'
+    imageComparisonVersion = '4.4.+'
+    junitPlatformLauncherVersion = '1.10.+'
+    googleJavaFormatVersion = '1.22.0'
 }
 
 java {
@@ -48,9 +62,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.java.dev.jna:jna:5.17.+'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.+'
-    implementation('de.dfki.mary:marytts-signalproc:5.2.+') {
+    implementation "net.java.dev.jna:jna:${jnaVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonXmlVersion}"
+    implementation("de.dfki.mary:marytts-signalproc:${maryttsSignalprocVersion}") {
         exclude group: 'gov.nist.math', module: 'Jampack'
         exclude group: 'com.twmacinta', module: 'fast-md5'
     }
@@ -59,21 +73,21 @@ dependencies {
     implementation "com.formdev:flatlaf:${flatlafVersion}:macos-arm64@dylib"
     implementation "com.formdev:flatlaf:${flatlafVersion}:macos-x86_64@dylib"
     implementation "com.formdev:flatlaf:${flatlafVersion}:windows-x86_64@dll"
-    implementation 'org.slf4j:slf4j-api:2.0.+'
-    implementation 'ch.qos.logback:logback-classic:1.5.+'
-    implementation 'com.google.inject:guice:7.0.+'
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.+'
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+    implementation "com.google.inject:guice:${guiceVersion}"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
     
-    compileOnly 'org.projectlombok:lombok:1.18.+'
-    annotationProcessor 'org.projectlombok:lombok:1.18.+'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.+'
-    testImplementation 'org.mockito:mockito-core:5.14.+'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.14.+'
-    testImplementation 'com.github.romankh3:image-comparison:4.4.+'
-    testCompileOnly 'org.projectlombok:lombok:1.18.+'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.+'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.+'
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    testImplementation "com.github.romankh3:image-comparison:${imageComparisonVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}"
     
 }
 
@@ -537,7 +551,7 @@ tasks.register('runDev', JavaExec) {
 spotless {
     java {
         target 'src/**/*.java'
-        googleJavaFormat('1.22.0').aosp().reflowLongStrings()
+        googleJavaFormat(googleJavaFormatVersion).aosp().reflowLongStrings()
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
