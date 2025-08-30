@@ -19,6 +19,7 @@ class WaveformSegmentCache {
     private CacheEntry[] entries;
     private int size;
     private int head = 0;
+    private ViewportContext currentViewport;
 
     record CacheEntry(SegmentKey key, CompletableFuture<Image> future) {}
 
@@ -38,13 +39,19 @@ class WaveformSegmentCache {
         int prefetchSegments = 4; // 2 each direction
         this.size = visibleSegments + prefetchSegments;
         this.entries = new CacheEntry[size];
+        this.currentViewport = viewport;
     }
 
     /** Get cached segment or null if not found. */
     CompletableFuture<Image> get(SegmentKey key) {
         lock.readLock().lock();
         try {
-            throw new UnsupportedOperationException("Implementation needed");
+            for (CacheEntry entry : entries) {
+                if (entry != null && entry.key().equals(key)) {
+                    return entry.future();
+                }
+            }
+            return null;
         } finally {
             lock.readLock().unlock();
         }
@@ -54,7 +61,17 @@ class WaveformSegmentCache {
     void put(SegmentKey key, CompletableFuture<Image> future) {
         lock.writeLock().lock();
         try {
-            throw new UnsupportedOperationException("Implementation needed");
+            // Check if key already exists
+            for (int i = 0; i < entries.length; i++) {
+                if (entries[i] != null && entries[i].key().equals(key)) {
+                    entries[i] = new CacheEntry(key, future);
+                    return;
+                }
+            }
+
+            // Add new entry at head position
+            entries[head] = new CacheEntry(key, future);
+            head = (head + 1 >= size) ? 0 : head + 1;
         } finally {
             lock.writeLock().unlock();
         }
@@ -64,7 +81,13 @@ class WaveformSegmentCache {
     void clear() {
         lock.writeLock().lock();
         try {
-            throw new UnsupportedOperationException("Implementation needed");
+            for (int i = 0; i < entries.length; i++) {
+                if (entries[i] != null) {
+                    entries[i].future().cancel(true);
+                    entries[i] = null;
+                }
+            }
+            head = 0;
         } finally {
             lock.writeLock().unlock();
         }
@@ -77,7 +100,13 @@ class WaveformSegmentCache {
     void updateViewport(ViewportContext newViewport) {
         lock.writeLock().lock();
         try {
-            throw new UnsupportedOperationException("Implementation needed");
+            if (currentViewport.pixelsPerSecond() != newViewport.pixelsPerSecond()
+                    || currentViewport.viewportHeightPx() != newViewport.viewportHeightPx()) {
+                clear();
+            } else if (currentViewport.viewportWidthPx() != newViewport.viewportWidthPx()) {
+                resize(newViewport.viewportWidthPx());
+            }
+            currentViewport = newViewport;
         } finally {
             lock.writeLock().unlock();
         }
@@ -86,6 +115,26 @@ class WaveformSegmentCache {
     /** Resize cache array to accommodate new viewport width. Preserves existing valid segments. */
     private void resize(int newViewportWidthPx) {
         // Called from updateViewport() which already holds write lock
-        throw new UnsupportedOperationException("Implementation needed");
+        int visibleSegments = (int) Math.ceil((double) newViewportWidthPx / SEGMENT_WIDTH_PX);
+        int prefetchSegments = 4; // 2 each direction
+        int newSize = visibleSegments + prefetchSegments;
+
+        if (newSize == size) {
+            return; // No resize needed
+        }
+
+        CacheEntry[] newEntries = new CacheEntry[newSize];
+
+        // Copy existing valid entries
+        int copied = 0;
+        for (CacheEntry entry : entries) {
+            if (entry != null && copied < newSize) {
+                newEntries[copied++] = entry;
+            }
+        }
+
+        entries = newEntries;
+        size = newSize;
+        head = copied % newSize;
     }
 }
