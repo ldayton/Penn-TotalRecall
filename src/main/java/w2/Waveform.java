@@ -30,6 +30,6 @@ public interface Waveform {
 
     /** Create waveform for audio file. */
     static Waveform forAudioFile(String audioFilePath) {
-        throw new UnsupportedOperationException("Implementation needed");
+        return WaveformImpl.create(audioFilePath);
     }
 }

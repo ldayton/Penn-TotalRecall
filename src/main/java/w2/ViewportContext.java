@@ -11,7 +11,6 @@ public record ViewportContext(
 
     public enum ScrollDirection {
         BACKWARD,
-        STATIONARY,
         FORWARD
     }
 }

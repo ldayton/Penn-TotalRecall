@@ -23,7 +23,7 @@ class WaveformSegmentCacheTest {
     void setUp() {
         viewport =
                 new ViewportContext(
-                        0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache = new WaveformSegmentCache(viewport);
         mockImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
     }
@@ -112,7 +112,7 @@ class WaveformSegmentCacheTest {
         // Change pixels per second
         var newViewport =
                 new ViewportContext(
-                        0.0, 10.0, 1000, 200, 200, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 1000, 200, 200, ViewportContext.ScrollDirection.FORWARD);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -127,7 +127,7 @@ class WaveformSegmentCacheTest {
         // Change height
         var newViewport =
                 new ViewportContext(
-                        0.0, 10.0, 1000, 400, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 1000, 400, 100, ViewportContext.ScrollDirection.FORWARD);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -147,7 +147,7 @@ class WaveformSegmentCacheTest {
         // Change width only
         var newViewport =
                 new ViewportContext(
-                        0.0, 10.0, 1600, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 1600, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache.updateViewport(newViewport);
 
         // Entries should be preserved
@@ -176,7 +176,7 @@ class WaveformSegmentCacheTest {
     void testVariousViewportWidths(int width) {
         viewport =
                 new ViewportContext(
-                        0.0, 10.0, width, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, width, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache = new WaveformSegmentCache(viewport);
 
         // Expected cache size = ceil(width/200) + 4
@@ -291,7 +291,7 @@ class WaveformSegmentCacheTest {
                                             width,
                                             200,
                                             100,
-                                            ViewportContext.ScrollDirection.STATIONARY);
+                                            ViewportContext.ScrollDirection.FORWARD);
                             cache.updateViewport(newViewport);
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
@@ -349,7 +349,7 @@ class WaveformSegmentCacheTest {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
         var smallViewport =
                 new ViewportContext(
-                        0.0, 10.0, 200, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 200, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         var smallCache = new WaveformSegmentCache(smallViewport); // size = 1 + 4 = 5
 
         // Fill exactly to size
@@ -380,7 +380,7 @@ class WaveformSegmentCacheTest {
         // Shrink viewport - resize() must handle head > newSize
         var smaller =
                 new ViewportContext(
-                        0.0, 10.0, 400, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 400, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache.updateViewport(smaller); // size 9 -> 6
 
         // Verify cache still functional after resize
@@ -394,7 +394,7 @@ class WaveformSegmentCacheTest {
         // Immediate viewport change - currentViewport is set, but entries array empty
         var newViewport =
                 new ViewportContext(
-                        0.0, 10.0, 2000, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, 2000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
 
         // Should not NPE even though no entries exist yet
         assertDoesNotThrow(() -> cache.updateViewport(newViewport));
@@ -523,12 +523,7 @@ class WaveformSegmentCacheTest {
         // Create initial cache
         viewport =
                 new ViewportContext(
-                        0.0,
-                        10.0,
-                        initialWidth,
-                        200,
-                        100,
-                        ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, initialWidth, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache = new WaveformSegmentCache(viewport);
 
         // Add entries
@@ -542,7 +537,7 @@ class WaveformSegmentCacheTest {
         // Resize
         var newViewport =
                 new ViewportContext(
-                        0.0, 10.0, newWidth, 200, 100, ViewportContext.ScrollDirection.STATIONARY);
+                        0.0, 10.0, newWidth, 200, 100, ViewportContext.ScrollDirection.FORWARD);
         cache.updateViewport(newViewport);
 
         // Verify entries are preserved (up to new cache size)
