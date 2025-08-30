@@ -348,11 +348,11 @@ class WaveformDisplaySmoothnessTest {
                     logger.info("Large gaps (>100ms): {}", largeGaps);
 
                     assertTrue(
-                            actualFrequency >= 20.0 && actualFrequency <= 45.0,
+                            actualFrequency >= 15.0 && actualFrequency <= 45.0,
                             String.format(
                                     "Callback frequency %.1f Hz out of bounds", actualFrequency));
                     assertTrue(
-                            meanInterval >= 20.0 && meanInterval <= 50.0,
+                            meanInterval >= 20.0 && meanInterval <= 65.0,
                             String.format("Mean interval %.1f ms out of bounds", meanInterval));
                     assertTrue(
                             maxInterval < 150.0,

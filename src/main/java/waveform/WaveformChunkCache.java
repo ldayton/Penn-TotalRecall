@@ -9,8 +9,10 @@ import state.AudioState;
 /** LRU cache for waveform chunks with async prefetching. */
 final class WaveformChunkCache {
 
-    /** Cache size: current + previous + next chunk. */
-    private static final int MAX_CACHE_SIZE = 3;
+    /**
+     * Cache size: enough for smooth playback scrolling (10 chunks covers ~100 seconds at 200px/s).
+     */
+    private static final int MAX_CACHE_SIZE = 10;
 
     private final Waveform waveform;
     private final AudioState audioState;

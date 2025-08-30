@@ -154,6 +154,11 @@ public final class Waveform {
                 "Amplitude resolution updated to {} px for file: {}",
                 newHeightPixels,
                 audioFilePath);
+
+        // Clear cache - height change invalidates all images
+        if (cache != null) {
+            cache.clear();
+        }
     }
 
     /**
