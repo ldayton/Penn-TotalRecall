@@ -211,6 +211,18 @@ public final class FmodCore {
 
         int FMOD_System_Update(Pointer system);
 
+        // Mixer / latency queries
+        int FMOD_Channel_GetDSPClock(
+                Pointer channel,
+                com.sun.jna.ptr.LongByReference dspclock,
+                com.sun.jna.ptr.LongByReference parentclock);
+
+        int FMOD_System_GetSoftwareFormat(
+                Pointer system,
+                IntByReference samplerate,
+                IntByReference speakermode,
+                IntByReference numrawspeakers);
+
         // Sound creation and management
         int FMOD_System_CreateSound(
                 Pointer system,
@@ -234,6 +246,9 @@ public final class FmodCore {
                 IntByReference bits);
 
         int FMOD_Sound_ReadData(Pointer sound, Pointer buffer, int lenbytes, IntByReference read);
+
+        // Stream read head control for chunked decoding
+        int FMOD_Sound_SeekData(Pointer sound, int pcmoffset);
 
         // Channel/Playback functions
         int FMOD_System_PlaySound(
@@ -354,28 +369,65 @@ public final class FmodCore {
             return endFrame > 0 ? endFrame - startFrame : -1;
         }
 
-        try {
-            IntByReference position = new IntByReference();
-            int result =
-                    fmod.FMOD_Channel_GetPosition(
-                            currentChannel, position, FmodConstants.TIMEUNIT_PCM);
-            if (result != FmodConstants.OK) {
-                return -1;
-            }
-
-            long currentPos = position.getValue();
-
-            // Check if we've reached the end frame and auto-stop
-            if (endFrame > 0 && endFrame > startFrame && currentPos >= endFrame) {
-                checkAndAutoStop();
-                return endFrame - startFrame; // Return relative position at stop
-            }
-
-            // Return position relative to start frame
-            return currentPos - startFrame;
-        } catch (Exception e) {
-            return -1;
+        // 1) Query decoded position in source frames
+        IntByReference position = new IntByReference();
+        int result =
+                fmod.FMOD_Channel_GetPosition(currentChannel, position, FmodConstants.TIMEUNIT_PCM);
+        if (result != FmodConstants.OK) {
+            throw new IllegalStateException("FMOD_Channel_GetPosition failed: " + result);
         }
+
+        long currentPosSourceFrames = position.getValue();
+
+        // Stop check uses decoded position (not latency-compensated)
+        if (endFrame > 0 && endFrame > startFrame && currentPosSourceFrames >= endFrame) {
+            checkAndAutoStop();
+            return endFrame - startFrame; // Return relative position at stop
+        }
+
+        // 2) Compute lead time between channel DSP clock and system DSP clock
+        //    leadFramesOutput = channelDSPClock - systemDSPClock (in output frames)
+        com.sun.jna.ptr.LongByReference chClock = new com.sun.jna.ptr.LongByReference();
+        com.sun.jna.ptr.LongByReference chParent = new com.sun.jna.ptr.LongByReference();
+        result = fmod.FMOD_Channel_GetDSPClock(currentChannel, chClock, chParent);
+        if (result != FmodConstants.OK) {
+            throw new IllegalStateException("FMOD_Channel_GetDSPClock failed: " + result);
+        }
+
+        long leadFramesOutput = chClock.getValue() - chParent.getValue();
+        if (leadFramesOutput < 0) leadFramesOutput = 0;
+
+        // 3) Convert output lead (output frames) to source frames using rates
+        int sourceRate = getSampleRate(); // from current sound
+        int outputRate = sourceRate;
+        try {
+            IntByReference outRate = new IntByReference();
+            IntByReference dummyMode = new IntByReference();
+            IntByReference dummyRaw = new IntByReference();
+            result = fmod.FMOD_System_GetSoftwareFormat(system, outRate, dummyMode, dummyRaw);
+            if (result == FmodConstants.OK && outRate.getValue() > 0) {
+                outputRate = outRate.getValue();
+            }
+        } catch (Exception ignored) {
+            // Keep outputRate == sourceRate if query fails
+        }
+
+        long leadFramesSource = leadFramesOutput;
+        if (outputRate != sourceRate) {
+            // Convert with rounding to nearest
+            leadFramesSource =
+                    Math.round((leadFramesOutput * (double) sourceRate) / (double) outputRate);
+        }
+
+        // Clamp compensation to not exceed decoded position relative to start
+        long relDecoded = currentPosSourceFrames - startFrame;
+        if (relDecoded < 0) relDecoded = 0;
+        if (leadFramesSource > relDecoded) {
+            leadFramesSource = relDecoded;
+        }
+
+        long audibleRel = relDecoded - leadFramesSource;
+        return audibleRel;
     }
 
     // Initialize FMOD system if not already done
@@ -830,9 +882,12 @@ public final class FmodCore {
             int totalFramesNeeded = framesPerChunk + overlapFrames;
             int totalBytesNeeded = totalFramesNeeded * bytesPerFrame;
 
-            // Calculate file position
-            if (overlapFrames > 0) {
-                startFrame -= overlapFrames;
+            // Calculate and seek to file position for this chunk (with pre-roll overlap)
+            long startFrameForChunk = (long) chunkIndex * framesPerChunk - overlapFrames;
+            if (startFrameForChunk < 0) startFrameForChunk = 0;
+            result = fmod.FMOD_Sound_SeekData(tempSound, (int) startFrameForChunk);
+            if (result != FmodConstants.OK) {
+                throw new IOException("Failed to seek stream to frame " + startFrameForChunk);
             }
 
             // Allocate buffer for PCM data
