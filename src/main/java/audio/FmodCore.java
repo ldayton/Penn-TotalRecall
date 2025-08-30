@@ -583,7 +583,22 @@ public final class FmodCore {
             }
 
             try {
-                long position = streamPositionInternal();
+                // Return decoded (uncompensated) relative position at stop
+                long position;
+                try {
+                    IntByReference pos = new IntByReference();
+                    int r =
+                            fmod.FMOD_Channel_GetPosition(
+                                    currentChannel, pos, FmodConstants.TIMEUNIT_PCM);
+                    if (r == FmodConstants.OK) {
+                        long abs = pos.getValue();
+                        position = Math.max(0L, abs - startFrame);
+                    } else {
+                        position = streamPositionInternal();
+                    }
+                } catch (Exception ex) {
+                    position = streamPositionInternal();
+                }
                 cleanup(); // cleanup() handles all resource release
                 return position;
             } catch (Exception e) {

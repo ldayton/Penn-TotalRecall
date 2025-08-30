@@ -41,8 +41,16 @@ public class PlayPauseAction extends BaseAction {
             long frame = player.stop();
             audioState.setAudioProgressWithoutUpdatingActions(frame);
             long numFrames = audioState.getCalculator().millisToFrames(200);
-            player.playShortInterval(frame - numFrames, frame - 1);
-            player.playAt(frame);
+
+            // Clamp preview start to 0 to allow preview near file start; ensure valid range
+            if (frame >= 2) { // need at least 2 frames to form a valid [start, end)
+                long previewStart = Math.max(0, frame - numFrames);
+                long previewEnd = frame - 1; // exclusive end in player validation
+                if (previewEnd > previewStart) {
+                    player.playShortInterval(previewStart, previewEnd);
+                }
+            }
+            // Note: Removed playAt(frame) - pause should actually pause, not resume immediately
         } else { // PLAY/RESUME
             long pos = audioState.getAudioProgress();
             player.playAt(pos);
