@@ -9,7 +9,6 @@ import env.UpdateManager;
 import events.ApplicationStartedEvent;
 import events.EventDispatchBus;
 import jakarta.inject.Inject;
-import javax.swing.UIManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.AppFocusTraversalPolicy;
@@ -122,8 +121,7 @@ public class GuiceBootstrap {
      */
     private static void setFlatLafBeforeDI() {
         try {
-            // TODO switch to native flatlaf deps to avoid temp file extraction
-            UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+            com.formdev.flatlaf.FlatLightLaf.setup();
             logger.info("Set FlatLaf before DI initialization");
         } catch (Exception e) {
             logger.error("Failed to set FlatLaf before DI: {}", e.getMessage());

@@ -30,6 +30,7 @@ ext {
     ]
     // Single source of truth for CI detection
     isCI = System.getenv('CI') == 'true'
+    flatlafVersion = '3.5.+'
 }
 
 java {
@@ -53,7 +54,11 @@ dependencies {
         exclude group: 'gov.nist.math', module: 'Jampack'
         exclude group: 'com.twmacinta', module: 'fast-md5'
     }
-    implementation 'com.formdev:flatlaf:3.5.+'
+    implementation "com.formdev:flatlaf:${flatlafVersion}:no-natives"
+    implementation "com.formdev:flatlaf:${flatlafVersion}:linux-x86_64@so"
+    implementation "com.formdev:flatlaf:${flatlafVersion}:macos-arm64@dylib"
+    implementation "com.formdev:flatlaf:${flatlafVersion}:macos-x86_64@dylib"
+    implementation "com.formdev:flatlaf:${flatlafVersion}:windows-x86_64@dll"
     implementation 'org.slf4j:slf4j-api:2.0.+'
     implementation 'ch.qos.logback:logback-classic:1.5.+'
     implementation 'com.google.inject:guice:7.0.+'
@@ -91,9 +96,11 @@ jar {
         )
     }
     
-    // Include all dependencies in the JAR (fat JAR)
+    // Include only JAR dependencies in the fat JAR (exclude native files)
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath
+            .filter { it.isDirectory() || it.name.endsWith('.jar') }
+            .collect { it.isDirectory() ? it : zipTree(it) }
     }
     
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -190,6 +197,21 @@ tasks.register('packageMacApp') {
             from 'src/main/resources/fmod/macos/'
             into frameworksDir
             include '*.dylib'
+        }
+
+        // Copy FlatLaf native libraries (.dylib) into the app bundle Frameworks directory
+        def flatlafArm = configurations.runtimeClasspath
+            .filter { it.name.endsWith('.dylib') && it.name.contains('flatlaf') && it.name.contains('macos-arm64') }
+        def flatlafX64 = configurations.runtimeClasspath
+            .filter { it.name.endsWith('.dylib') && it.name.contains('flatlaf') && it.name.contains('macos-x86_64') }
+
+        if (flatlafArm.isEmpty() || flatlafX64.isEmpty()) {
+            throw new GradleException("FlatLaf macOS native libraries not found on runtimeClasspath (require both arm64 and x86_64)")
+        }
+
+        copy {
+            from(flatlafArm + flatlafX64)
+            into frameworksDir
         }
         
         println "Mac .app created in ${appDir}"

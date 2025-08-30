@@ -161,7 +161,7 @@ class LookAndFeelIntegrationTest {
         logger.info("=== Testing Swing component creation with FlatLaf ===");
 
         // Ensure FlatLaf is set
-        UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+        com.formdev.flatlaf.FlatLightLaf.setup();
         String currentLaf = UIManager.getLookAndFeel().getClass().getName();
         logger.info("Current Look and Feel: {}", currentLaf);
         assertTrue(currentLaf.contains("flatlaf"), "Should be using FlatLaf");
@@ -222,7 +222,7 @@ class LookAndFeelIntegrationTest {
 
         try {
             // Ensure FlatLaf is set
-            UIManager.setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+            com.formdev.flatlaf.FlatLightLaf.setup();
             String currentLaf = UIManager.getLookAndFeel().getClass().getName();
             logger.info("Current Look and Feel: {}", currentLaf);
             assertTrue(currentLaf.contains("flatlaf"), "Should be using FlatLaf");
