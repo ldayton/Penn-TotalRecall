@@ -1,22 +1,30 @@
 package w2;
 
 import java.awt.Image;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Viewport-aware waveform renderer.
+ * Async viewport-aware waveform renderer.
  *
- * <p>Enables intelligent caching based on what's actually visible and scroll behavior.
+ * <p>Based on industry research: DAW waveform rendering must be async with timeout/cancellation to
+ * prevent UI blocking and enable user control over long-running operations.
  */
 public interface Waveform {
 
     /**
-     * Render waveform for viewport context.
+     * Render waveform for viewport context asynchronously.
      *
-     * <p>Implementation can use viewport info to make intelligent caching decisions: - Cache size
-     * based on viewport width, not arbitrary numbers - Prefetch direction based on scroll behavior
-     * - Resolution based on zoom level
+     * <p>Returns immediately with CompletableFuture for timeout/cancellation control:
+     *
+     * <ul>
+     *   <li>Timeout: {@code future.orTimeout(30, TimeUnit.SECONDS)}
+     *   <li>Cancellation: {@code future.cancel(true)}
+     *   <li>Chaining: {@code future.thenApply(image -> ...)}
+     * </ul>
+     *
+     * <p>Implementation can use viewport info for intelligent caching decisions.
      */
-    Image renderViewport(ViewportContext viewport);
+    CompletableFuture<Image> renderViewport(ViewportContext viewport);
 
     /** Create waveform for audio file. */
     static Waveform forAudioFile(String audioFilePath) {
