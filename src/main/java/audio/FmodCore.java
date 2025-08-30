@@ -1,6 +1,7 @@
 package audio;
 
 import com.sun.jna.Library;
+import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
@@ -212,10 +213,7 @@ public final class FmodCore {
         int FMOD_System_Update(Pointer system);
 
         // Mixer / latency queries
-        int FMOD_Channel_GetDSPClock(
-                Pointer channel,
-                com.sun.jna.ptr.LongByReference dspclock,
-                com.sun.jna.ptr.LongByReference parentclock);
+        // Channel DSP clock not required with buffer-size latency approach
 
         int FMOD_System_GetDSPBufferSize(
                 Pointer system, IntByReference bufferlength, IntByReference numbuffers);
@@ -932,7 +930,7 @@ public final class FmodCore {
             }
 
             // Allocate buffer for PCM data
-            com.sun.jna.Memory buffer = new com.sun.jna.Memory(totalBytesNeeded);
+            Memory buffer = new Memory(totalBytesNeeded);
             IntByReference bytesRead = new IntByReference();
 
             // Read the data
