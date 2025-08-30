@@ -313,9 +313,9 @@ public final class FmodCore {
 
             boolean playing = isPlaying.getValue() != 0;
 
-            // Check for end-frame stopping (only if still playing)
+            // End-frame stop check
             if (playing && endFrame > 0 && endFrame > startFrame) {
-                // Use cached position from streamPositionInternal to avoid duplicate FMOD calls
+                // Use cached position to avoid duplicate FMOD calls
                 long currentPos = streamPositionInternal();
                 if (currentPos >= 0 && currentPos >= (endFrame - startFrame)) {
                     checkAndAutoStop();
@@ -365,12 +365,12 @@ public final class FmodCore {
             return -1;
         }
 
-        // Check if already auto-stopped
+        // Already auto-stopped
         if (autoStopped) {
             return endFrame > 0 ? endFrame - startFrame : -1;
         }
 
-        // 1) Query decoded position in source frames
+        // Query decoded position in source frames
         IntByReference position = new IntByReference();
         int result =
                 fmod.FMOD_Channel_GetPosition(currentChannel, position, FmodConstants.TIMEUNIT_PCM);
@@ -386,11 +386,11 @@ public final class FmodCore {
             return endFrame - startFrame; // Return relative position at stop
         }
 
-        // 2) Estimate lead time from mixer buffer configuration
+        // Estimate lead time from mixer buffer configuration
         LatencyInfo latency = getLatencyInfo();
         long leadFramesOutput = (latency != null) ? latency.framesOutput : 0L;
 
-        // 3) Convert output lead (output frames) to source frames using rates
+        // Convert output lead (output frames) to source frames using rates
         int sourceRate = getSampleRate(); // from current sound
         int outputRate =
                 (latency != null && latency.outputRate > 0) ? latency.outputRate : sourceRate;
