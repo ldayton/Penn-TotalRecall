@@ -57,7 +57,7 @@ public class AudioIntegrationMode {
     private static boolean runTestInternal() {
         FmodCore core = null;
         try {
-            logger.info("🧪 Audio Integration Test Starting");
+            logger.warn("🧪 Audio Integration Test Starting");
             logger.info("=================================");
 
             // Test 0: Verify test audio file exists
@@ -78,7 +78,7 @@ public class AudioIntegrationMode {
                 logger.error("Integration tests require application to be initialized with Guice");
                 return false;
             }
-            logger.info("✅ FMOD library loaded successfully");
+            logger.warn("✅ FMOD library loaded successfully");
 
             // Test 2: Audio file loading and playback
             logger.info("Testing audio file loading and playback...");
@@ -91,7 +91,7 @@ public class AudioIntegrationMode {
                 logger.error("❌ Failed to start playback. Error code: {}", result);
                 return false;
             }
-            logger.info("✅ Audio playback started successfully");
+            logger.warn("✅ Audio playback started successfully");
 
             // Test 3: Verify playback is running
             if (!core.playbackInProgress()) {
@@ -117,7 +117,7 @@ public class AudioIntegrationMode {
             }
             logger.info("✅ Playback stopped successfully");
 
-            logger.info("✅ All audio integration tests passed");
+            logger.warn("✅ All audio integration tests passed");
             return true;
 
         } catch (Exception e) {
@@ -138,7 +138,7 @@ public class AudioIntegrationMode {
     /** Exit the application with appropriate status code based on test result. */
     public static void exitWithTestResult(boolean testPassed) {
         if (testPassed) {
-            logger.info("🎉 Integration test completed successfully");
+            logger.warn("🎉 Integration test completed successfully");
             System.exit(0);
         } else {
             logger.error("💥 Integration test failed");
