@@ -280,6 +280,10 @@ public class AudioPlayer {
         listeners.add(listener);
     }
 
+    public void removeListener(@NonNull AudioEvent.Listener listener) {
+        listeners.remove(listener);
+    }
+
     /**
      * Gets the current playback status.
      *
