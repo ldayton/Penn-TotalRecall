@@ -463,8 +463,18 @@ public class AudioPlayer {
                     long now = System.currentTimeMillis();
                     if (now - lastLatencyLogMs >= 1000) {
                         long latencyMs = fmodCore.getMeasuredLatencyMillis();
+                        audio.FmodCore.LatencyInfo info = fmodCore.getLatencyInfo();
                         if (latencyMs >= 0) {
-                            logger.debug("FMOD output latency ~{} ms", latencyMs);
+                            if (info != null) {
+                                logger.debug(
+                                        "FMOD latency ~{} ms (bufLen={}, numBuf={}, outRate={})",
+                                        latencyMs,
+                                        info.bufferLength,
+                                        info.numBuffers,
+                                        info.outputRate);
+                            } else {
+                                logger.debug("FMOD latency ~{} ms", latencyMs);
+                            }
                         }
                         lastLatencyLogMs = now;
                     }

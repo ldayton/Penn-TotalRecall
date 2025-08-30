@@ -217,6 +217,9 @@ public final class FmodCore {
                 com.sun.jna.ptr.LongByReference dspclock,
                 com.sun.jna.ptr.LongByReference parentclock);
 
+        int FMOD_System_GetDSPBufferSize(
+                Pointer system, IntByReference bufferlength, IntByReference numbuffers);
+
         int FMOD_System_GetSoftwareFormat(
                 Pointer system,
                 IntByReference samplerate,
@@ -385,32 +388,14 @@ public final class FmodCore {
             return endFrame - startFrame; // Return relative position at stop
         }
 
-        // 2) Compute lead time between channel DSP clock and system DSP clock
-        //    leadFramesOutput = channelDSPClock - systemDSPClock (in output frames)
-        com.sun.jna.ptr.LongByReference chClock = new com.sun.jna.ptr.LongByReference();
-        com.sun.jna.ptr.LongByReference chParent = new com.sun.jna.ptr.LongByReference();
-        result = fmod.FMOD_Channel_GetDSPClock(currentChannel, chClock, chParent);
-        if (result != FmodConstants.OK) {
-            throw new IllegalStateException("FMOD_Channel_GetDSPClock failed: " + result);
-        }
-
-        long leadFramesOutput = chClock.getValue() - chParent.getValue();
-        if (leadFramesOutput < 0) leadFramesOutput = 0;
+        // 2) Estimate lead time from mixer buffer configuration
+        LatencyInfo latency = getLatencyInfo();
+        long leadFramesOutput = (latency != null) ? latency.framesOutput : 0L;
 
         // 3) Convert output lead (output frames) to source frames using rates
         int sourceRate = getSampleRate(); // from current sound
-        int outputRate = sourceRate;
-        try {
-            IntByReference outRate = new IntByReference();
-            IntByReference dummyMode = new IntByReference();
-            IntByReference dummyRaw = new IntByReference();
-            result = fmod.FMOD_System_GetSoftwareFormat(system, outRate, dummyMode, dummyRaw);
-            if (result == FmodConstants.OK && outRate.getValue() > 0) {
-                outputRate = outRate.getValue();
-            }
-        } catch (Exception ignored) {
-            // Keep outputRate == sourceRate if query fails
-        }
+        int outputRate =
+                (latency != null && latency.outputRate > 0) ? latency.outputRate : sourceRate;
 
         long leadFramesSource = leadFramesOutput;
         if (outputRate != sourceRate) {
@@ -634,33 +619,53 @@ public final class FmodCore {
      * <p>Returns -1 if not available (e.g., not playing).
      */
     public long getMeasuredLatencyMillis() {
-        if (currentChannel == null || system == null) return -1;
+        LatencyInfo info = getLatencyInfo();
+        if (info == null || info.outputRate <= 0) return -1;
+        return (info.framesOutput * 1000L) / info.outputRate;
+    }
+
+    /** Latency details from buffer configuration. */
+    public static class LatencyInfo {
+        public final long framesOutput;
+        public final int bufferLength;
+        public final int numBuffers;
+        public final int outputRate;
+
+        public LatencyInfo(long framesOutput, int bufferLength, int numBuffers, int outputRate) {
+            this.framesOutput = framesOutput;
+            this.bufferLength = bufferLength;
+            this.numBuffers = numBuffers;
+            this.outputRate = outputRate;
+        }
+    }
+
+    /** Returns latency info using DSP buffer size and software format, or null on error. */
+    public LatencyInfo getLatencyInfo() {
+        if (system == null) return null;
         try {
-            com.sun.jna.ptr.LongByReference chClock = new com.sun.jna.ptr.LongByReference();
-            com.sun.jna.ptr.LongByReference chParent = new com.sun.jna.ptr.LongByReference();
-            int result = fmod.FMOD_Channel_GetDSPClock(currentChannel, chClock, chParent);
-            if (result != FmodConstants.OK) return -1;
+            IntByReference blen = new IntByReference();
+            IntByReference nbuf = new IntByReference();
+            int r1 = fmod.FMOD_System_GetDSPBufferSize(system, blen, nbuf);
+            if (r1 != FmodConstants.OK) return null;
 
-            long leadFramesOutput = chClock.getValue() - chParent.getValue();
-            if (leadFramesOutput < 0) leadFramesOutput = 0;
+            IntByReference outRate = new IntByReference();
+            IntByReference dummyMode = new IntByReference();
+            IntByReference dummyRaw = new IntByReference();
+            int r2 = fmod.FMOD_System_GetSoftwareFormat(system, outRate, dummyMode, dummyRaw);
+            if (r2 != FmodConstants.OK) return null;
 
-            int outputRate = getSampleRate();
-            try {
-                IntByReference outRate = new IntByReference();
-                IntByReference dummyMode = new IntByReference();
-                IntByReference dummyRaw = new IntByReference();
-                result = fmod.FMOD_System_GetSoftwareFormat(system, outRate, dummyMode, dummyRaw);
-                if (result == FmodConstants.OK && outRate.getValue() > 0) {
-                    outputRate = outRate.getValue();
-                }
-            } catch (Exception ignored) {
-                // keep outputRate as sample rate if query fails
-            }
+            int bufferLength = Math.max(0, blen.getValue());
+            int numBuffers = Math.max(0, nbuf.getValue());
+            int outputRate = Math.max(0, outRate.getValue());
 
-            if (outputRate <= 0) return -1;
-            return (leadFramesOutput * 1000L) / outputRate;
+            if (bufferLength == 0 || numBuffers == 0 || outputRate == 0) return null;
+
+            // Estimate mixer lead: buffers ahead of output plus half-buffer mix-ahead
+            long leadFramesOutput =
+                    (long) bufferLength * Math.max(0, numBuffers - 1) + bufferLength / 2L;
+            return new LatencyInfo(leadFramesOutput, bufferLength, numBuffers, outputRate);
         } catch (Exception e) {
-            return -1;
+            return null;
         }
     }
 
