@@ -286,6 +286,15 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             // draw bottom border
             g.setColor(UIManager.getColor("Separator.foreground"));
             g.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
+            // Test hook: record paint timestamps (no-op if probe absent)
+            if (Boolean.getBoolean("test.waveform.trackPaint")) {
+                try {
+                    Class<?> probe = Class.forName("ui.waveform.WaveformDisplayTestProbe");
+                    java.lang.reflect.Method m = probe.getMethod("recordPaint", long.class);
+                    m.invoke(null, System.nanoTime());
+                } catch (Throwable ignored) {
+                }
+            }
             return;
         }
         chunkInProgress = false;
@@ -408,6 +417,15 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         // draw bottom border
         g2d.setColor(UIManager.getColor("Separator.foreground"));
         g2d.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
+        // Test hook: record paint timestamps (no-op if probe absent)
+        if (Boolean.getBoolean("test.waveform.trackPaint")) {
+            try {
+                Class<?> probe = Class.forName("ui.waveform.WaveformDisplayTestProbe");
+                java.lang.reflect.Method m = probe.getMethod("recordPaint", long.class);
+                m.invoke(null, System.nanoTime());
+            } catch (Throwable ignored) {
+            }
+        }
     }
 
     private int frameToComponentX(long frame) {
