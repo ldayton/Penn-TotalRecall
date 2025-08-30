@@ -5,13 +5,13 @@
         </encoder>
     </appender>
 
-    <!-- Default to INFO level -->
-    <root level="INFO">
+    <!-- Drive level from system property 'logging.level' with WARN default -->
+    <root level="${logging.level:-WARN}">
         <appender-ref ref="STDOUT" />
     </root>
     
     <!-- Set specific loggers if needed -->
-    <logger name="control.Start" level="${logging.level:-INFO}" />
-    <logger name="audio" level="${logging.level:-INFO}" />
-    <logger name="components" level="${logging.level:-INFO}" />
+    <logger name="control.Start" level="${logging.level:-WARN}" />
+    <logger name="audio" level="${logging.level:-WARN}" />
+    <logger name="components" level="${logging.level:-WARN}" />
 </configuration>
