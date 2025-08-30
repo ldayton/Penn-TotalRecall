@@ -629,6 +629,42 @@ public final class FmodCore {
     }
 
     /**
+     * Measures current output pipeline latency as milliseconds based on DSP clocks.
+     *
+     * <p>Returns -1 if not available (e.g., not playing).
+     */
+    public long getMeasuredLatencyMillis() {
+        if (currentChannel == null || system == null) return -1;
+        try {
+            com.sun.jna.ptr.LongByReference chClock = new com.sun.jna.ptr.LongByReference();
+            com.sun.jna.ptr.LongByReference chParent = new com.sun.jna.ptr.LongByReference();
+            int result = fmod.FMOD_Channel_GetDSPClock(currentChannel, chClock, chParent);
+            if (result != FmodConstants.OK) return -1;
+
+            long leadFramesOutput = chClock.getValue() - chParent.getValue();
+            if (leadFramesOutput < 0) leadFramesOutput = 0;
+
+            int outputRate = getSampleRate();
+            try {
+                IntByReference outRate = new IntByReference();
+                IntByReference dummyMode = new IntByReference();
+                IntByReference dummyRaw = new IntByReference();
+                result = fmod.FMOD_System_GetSoftwareFormat(system, outRate, dummyMode, dummyRaw);
+                if (result == FmodConstants.OK && outRate.getValue() > 0) {
+                    outputRate = outRate.getValue();
+                }
+            } catch (Exception ignored) {
+                // keep outputRate as sample rate if query fails
+            }
+
+            if (outputRate <= 0) return -1;
+            return (leadFramesOutput * 1000L) / outputRate;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
      * Determines whether audio playback is currently active.
      *
      * <p>This method calls FMOD_Channel_IsPlaying to check the current playback state and also

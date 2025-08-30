@@ -42,7 +42,6 @@ import waveform.Waveform;
  *
  * <p>Keep in mind that events other than the repaint timer going off can cause repaints.
  */
-// TODO audio lags behind waveform by a few hundred milliseconds
 @Singleton
 public final class WaveformDisplay extends JComponent implements WaveformCoordinateSystem {
     private static final Logger logger = LoggerFactory.getLogger(WaveformDisplay.class);

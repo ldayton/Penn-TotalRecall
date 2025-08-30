@@ -445,6 +445,8 @@ public class AudioPlayer {
 
             long progressInterval = currentSampleRate / PROGRESS_UPDATES_PER_SECOND;
 
+            long lastLatencyLogMs = 0;
+
             while (!stopRequested && fmodCore.playbackInProgress()) {
                 long currentFrame = fmodCore.streamPosition();
                 lastHearingFrame.set(request.startFrame + currentFrame);
@@ -454,6 +456,18 @@ public class AudioPlayer {
                         || lastProgressFrame == -1) {
                     fireProgressUpdate(lastHearingFrame.get());
                     lastProgressFrame = currentFrame;
+                }
+
+                // Debug: log measured output latency once per second
+                if (logger.isDebugEnabled()) {
+                    long now = System.currentTimeMillis();
+                    if (now - lastLatencyLogMs >= 1000) {
+                        long latencyMs = fmodCore.getMeasuredLatencyMillis();
+                        if (latencyMs >= 0) {
+                            logger.debug("FMOD output latency ~{} ms", latencyMs);
+                        }
+                        lastLatencyLogMs = now;
+                    }
                 }
 
                 try {
