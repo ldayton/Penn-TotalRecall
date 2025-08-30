@@ -11,7 +11,7 @@
     </root>
     
     <!-- Set specific loggers if needed -->
-    <logger name="control.Start" level="${LOG_LEVEL:-INFO}" />
-    <logger name="audio" level="${LOG_LEVEL:-INFO}" />
-    <logger name="components" level="${LOG_LEVEL:-DEBUG}" />
+    <logger name="control.Start" level="${logging.level:-INFO}" />
+    <logger name="audio" level="${logging.level:-INFO}" />
+    <logger name="components" level="${logging.level:-INFO}" />
 </configuration>
