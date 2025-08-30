@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,13 +87,17 @@ class WaveformImageRegressionTest {
     }
 
     @Test
-    void testVisualWaveformRegressions() throws IOException {
-        logger.info("Running waveform visual regression tests...");
+    void testVisualWaveformRegressions() throws Exception {
+        assertTimeoutPreemptively(
+                Duration.ofSeconds(10),
+                () -> {
+                    logger.info("Running waveform visual regression tests...");
 
-        // Test full frequency range waveform rendering
-        assertImagesMatch("fullrange");
+                    // Test full frequency range waveform rendering
+                    assertImagesMatch("fullrange");
 
-        logger.info("All waveform visual regression tests passed!");
+                    logger.info("All waveform visual regression tests passed!");
+                });
     }
 
     private void assertImagesMatch(String name) throws IOException {

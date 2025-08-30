@@ -37,11 +37,11 @@ public final class PixelScaler {
             pixelValues[i] = samples[index];
         }
 
-        logger.debug(
-                "Converted {} samples to {} pixels (increment={})",
-                samples.length,
-                targetPixelWidth,
-                sampleIncrement);
+        // logger.debug(
+        //         "Converted {} samples to {} pixels (increment={})",
+        //         samples.length,
+        //         targetPixelWidth,
+        //         sampleIncrement);
         return pixelValues;
     }
 
@@ -68,7 +68,7 @@ public final class PixelScaler {
             }
         }
 
-        logger.debug("Applied pixel smoothing to {} pixels", pixelValues.length);
+        // logger.debug("Applied pixel smoothing to {} pixels", pixelValues.length);
         return pixelValues;
     }
 

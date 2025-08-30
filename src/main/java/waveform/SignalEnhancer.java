@@ -55,8 +55,9 @@ final class SignalEnhancer {
             samples[i] = maxDeque.isEmpty() ? 0.0 : Math.abs(originalSamples[maxDeque.peekFirst()]);
         }
 
-        logger.debug(
-                "Applied envelope smoothing (window={}) to {} samples", windowSize, samples.length);
+        // logger.debug(
+        //         "Applied envelope smoothing (window={}) to {} samples", windowSize,
+        // samples.length);
         return samples;
     }
 }
