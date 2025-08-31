@@ -255,7 +255,8 @@ class WaveformRenderer {
                             key.pixelsPerSecond(),
                             pps -> {
                                 double p = getRenderingPeak(fullChunkData, Math.max(1, pps / 2));
-                                logger.debug("Initialized rendering peak: {} for {} px/s", p, pps);
+                                // logger.debug("Initialized rendering peak: {} for {} px/s", p,
+                                // pps);
                                 return p;
                             });
 

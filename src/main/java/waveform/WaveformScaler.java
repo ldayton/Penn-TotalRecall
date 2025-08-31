@@ -26,11 +26,11 @@ final class WaveformScaler {
             yScale = 0;
         }
 
-        logger.debug(
-                "Calculated pixel scale: {} (peak={}, height={})",
-                yScale,
-                biggestConsecutivePixelVals,
-                displayHeight);
+        // logger.debug(
+        //         "Calculated pixel scale: {} (peak={}, height={})",
+        //         yScale,
+        //         biggestConsecutivePixelVals,
+        //         displayHeight);
         return yScale;
     }
 }

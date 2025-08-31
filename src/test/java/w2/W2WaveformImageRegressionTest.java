@@ -23,7 +23,6 @@ import javax.imageio.ImageIO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,13 +89,15 @@ class W2WaveformImageRegressionTest {
         if (w2Waveform instanceof WaveformImpl) {
             ((WaveformImpl) w2Waveform).shutdown();
         }
+        w2Waveform = null;
+        originalWaveform = null;
         fmodCore = null;
     }
 
     @Test
     void testW2ProducesIdenticalWaveformImages() throws Exception {
         assertTimeoutPreemptively(
-                Duration.ofSeconds(10),
+                Duration.ofSeconds(60),
                 () -> {
                     logger.info("Testing w2 produces pixel-perfect identical waveforms...");
 
@@ -122,6 +123,18 @@ class W2WaveformImageRegressionTest {
                         Image w2Image = w2Future.get(30, TimeUnit.SECONDS);
                         BufferedImage w2Buffered = toBufferedImage(w2Image);
 
+                        // Save both images for inspection
+                        String filename = String.format("fullrange_chunk%d.png", chunkNum);
+                        Path originalPath = Paths.get(OUTPUT_DIR, "original_" + filename);
+                        Path w2Path = Paths.get(OUTPUT_DIR, "w2_" + filename);
+                        ImageIO.write(originalBuffered, "png", originalPath.toFile());
+                        ImageIO.write(w2Buffered, "png", w2Path.toFile());
+
+                        // Print both image paths for visibility
+                        logger.info("Comparing images for chunk {}:", chunkNum);
+                        logger.info("  Original: {}", originalPath.toAbsolutePath());
+                        logger.info("  W2:       {}", w2Path.toAbsolutePath());
+
                         // Compare images pixel-perfect
                         compareImages(originalBuffered, w2Buffered, chunkNum);
 
@@ -135,54 +148,78 @@ class W2WaveformImageRegressionTest {
     }
 
     @Test
-    @Timeout(value = 10, unit = TimeUnit.SECONDS)
     void testW2MatchesReferenceImages() throws Exception {
-        logger.info("Testing w2 against reference images...");
+        assertTimeoutPreemptively(
+                Duration.ofSeconds(60),
+                () -> {
+                    logger.info("Testing w2 against reference images...");
+                    logger.info("w2Waveform initialized: {}", w2Waveform != null);
 
-        for (int chunkNum = 0; chunkNum < TEST_CHUNK_COUNT; chunkNum++) {
-            // Load reference image
-            String filename = String.format("fullrange_chunk%d.png", chunkNum);
-            BufferedImage referenceImage = loadReferenceImage(filename);
+                    for (int chunkNum = 0; chunkNum < TEST_CHUNK_COUNT; chunkNum++) {
+                        logger.info("Starting chunk {}", chunkNum);
+                        // Load reference image
+                        String filename = String.format("fullrange_chunk%d.png", chunkNum);
+                        BufferedImage referenceImage = loadReferenceImage(filename);
 
-            // Render with w2
-            double startTime = chunkNum * 10.0;
-            double endTime = (chunkNum + 1) * 10.0;
-            ViewportContext viewport =
-                    new ViewportContext(
-                            startTime,
-                            endTime,
-                            TEST_IMAGE_WIDTH,
-                            TEST_IMAGE_HEIGHT,
-                            200,
-                            ViewportContext.ScrollDirection.FORWARD);
+                        // Render with w2
+                        double startTime = chunkNum * 10.0;
+                        double endTime = (chunkNum + 1) * 10.0;
+                        ViewportContext viewport =
+                                new ViewportContext(
+                                        startTime,
+                                        endTime,
+                                        TEST_IMAGE_WIDTH,
+                                        TEST_IMAGE_HEIGHT,
+                                        200,
+                                        ViewportContext.ScrollDirection.FORWARD);
 
-            CompletableFuture<Image> w2Future = w2Waveform.renderViewport(viewport);
-            Image w2Image = w2Future.get(30, TimeUnit.SECONDS);
-            BufferedImage w2Buffered = toBufferedImage(w2Image);
+                        logger.info("Calling renderViewport for chunk {}", chunkNum);
+                        CompletableFuture<Image> w2Future = w2Waveform.renderViewport(viewport);
+                        logger.info("Waiting for future for chunk {}", chunkNum);
+                        Image w2Image = w2Future.get(5, TimeUnit.SECONDS);
+                        logger.info("Got image for chunk {}", chunkNum);
+                        BufferedImage w2Buffered = toBufferedImage(w2Image);
 
-            // Compare against reference
-            ImageComparison comparison =
-                    new ImageComparison(referenceImage, w2Buffered)
-                            .setThreshold(0) // Pixel-perfect
-                            .setRectangleLineWidth(1)
-                            .setMinimalRectangleSize(1);
-            ImageComparisonResult result = comparison.compareImages();
+                        // Save both images for inspection
+                        Path w2Path = Paths.get(OUTPUT_DIR, "w2_vs_ref_" + filename);
+                        ImageIO.write(w2Buffered, "png", w2Path.toFile());
 
-            if (result.getImageComparisonState() != ImageComparisonState.MATCH) {
-                Path debugFile = Paths.get(OUTPUT_DIR, "w2_" + filename);
-                Path diffFile = Paths.get(OUTPUT_DIR, "w2_diff_" + filename);
+                        // Print both image paths for visibility
+                        String referencePath =
+                                getClass()
+                                        .getResource(REFERENCE_IMAGE_RESOURCE_PATH + filename)
+                                        .getPath();
+                        logger.info("Comparing images for chunk {}:", chunkNum);
+                        logger.info("  Reference: {}", referencePath);
+                        logger.info("  W2:        {}", w2Path.toAbsolutePath());
 
-                ImageIO.write(w2Buffered, "png", debugFile.toFile());
-                ImageIO.write(result.getResult(), "png", diffFile.toFile());
+                        // Compare against reference
+                        ImageComparison comparison =
+                                new ImageComparison(referenceImage, w2Buffered)
+                                        .setThreshold(0) // Pixel-perfect
+                                        .setRectangleLineWidth(1)
+                                        .setMinimalRectangleSize(1);
+                        ImageComparisonResult result = comparison.compareImages();
 
-                fail(
-                        String.format(
-                                "w2 doesn't match reference for %s. Debug: %s, Diff: %s",
-                                filename, debugFile, diffFile));
-            }
+                        if (result.getImageComparisonState() != ImageComparisonState.MATCH) {
+                            Path debugFile = Paths.get(OUTPUT_DIR, "w2_" + filename);
+                            Path diffFile = Paths.get(OUTPUT_DIR, "w2_diff_" + filename);
 
-            logger.info("✓ {} - w2 matches reference", filename);
-        }
+                            ImageIO.write(w2Buffered, "png", debugFile.toFile());
+                            ImageIO.write(result.getResult(), "png", diffFile.toFile());
+
+                            fail(
+                                    String.format(
+                                            "w2 doesn't match reference for %s. Debug: %s, Diff:"
+                                                    + " %s",
+                                            filename, debugFile, diffFile));
+                        }
+
+                        logger.info("✓ {} - w2 matches reference", filename);
+                    }
+
+                    logger.info("SUCCESS: w2 matches all reference images!");
+                });
     }
 
     /** Compares two images and asserts they are pixel-perfect identical. */

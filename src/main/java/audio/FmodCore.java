@@ -429,8 +429,9 @@ public final class FmodCore {
                                 "FMOD configured for NOSOUND_NRT mode (no audio hardware"
                                         + " available)");
                     } else {
-                        logger.info(
-                                "FMOD configured for AUTODETECT mode (audio hardware available)");
+                        // logger.info(
+                        //         "FMOD configured for AUTODETECT mode (audio hardware
+                        // available)");
                     }
                 }
 
