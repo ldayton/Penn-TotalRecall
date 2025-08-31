@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 class FmodConstants {
 
     // FMOD Version
-    static final int FMOD_VERSION = 0x00020216; // 2.02.22
+    static final int FMOD_VERSION = 0x00020309; // 2.03.09
 
     // Result codes
     static final int FMOD_OK = 0;
@@ -98,21 +98,23 @@ class FmodConstants {
     static final int FMOD_OUTPUTTYPE_NOSOUND = 2;
     static final int FMOD_OUTPUTTYPE_WAVWRITER = 3;
     static final int FMOD_OUTPUTTYPE_NOSOUND_NRT = 4;
-    static final int FMOD_OUTPUTTYPE_WASAPI = 5;
-    static final int FMOD_OUTPUTTYPE_ASIO = 6;
-    static final int FMOD_OUTPUTTYPE_PULSEAUDIO = 7;
-    static final int FMOD_OUTPUTTYPE_ALSA = 8;
-    static final int FMOD_OUTPUTTYPE_COREAUDIO = 9;
-    static final int FMOD_OUTPUTTYPE_AUDIOTRACK = 10;
-    static final int FMOD_OUTPUTTYPE_OPENSL = 11;
-    static final int FMOD_OUTPUTTYPE_AUDIOOUT = 12;
-    static final int FMOD_OUTPUTTYPE_AUDIO3D = 13;
-    static final int FMOD_OUTPUTTYPE_WEBAUDIO = 14;
-    static final int FMOD_OUTPUTTYPE_NNAUDIO = 15;
-    static final int FMOD_OUTPUTTYPE_WINSONIC = 16;
-    static final int FMOD_OUTPUTTYPE_AAUDIO = 17;
-    static final int FMOD_OUTPUTTYPE_AUDIOWORKLET = 18;
-    static final int FMOD_OUTPUTTYPE_PHASE = 19;
+    static final int FMOD_OUTPUTTYPE_WAVWRITER_NRT = 5;
+    static final int FMOD_OUTPUTTYPE_WASAPI = 6;
+    static final int FMOD_OUTPUTTYPE_ASIO = 7;
+    static final int FMOD_OUTPUTTYPE_PULSEAUDIO = 8;
+    static final int FMOD_OUTPUTTYPE_ALSA = 9;
+    static final int FMOD_OUTPUTTYPE_COREAUDIO = 10;
+    static final int FMOD_OUTPUTTYPE_AUDIOTRACK = 11;
+    static final int FMOD_OUTPUTTYPE_OPENSL = 12;
+    static final int FMOD_OUTPUTTYPE_AUDIOOUT = 13;
+    static final int FMOD_OUTPUTTYPE_AUDIO3D = 14;
+    static final int FMOD_OUTPUTTYPE_WEBAUDIO = 15;
+    static final int FMOD_OUTPUTTYPE_NNAUDIO = 16;
+    static final int FMOD_OUTPUTTYPE_WINSONIC = 17;
+    static final int FMOD_OUTPUTTYPE_AAUDIO = 18;
+    static final int FMOD_OUTPUTTYPE_AUDIOWORKLET = 19;
+    static final int FMOD_OUTPUTTYPE_PHASE = 20;
+    static final int FMOD_OUTPUTTYPE_OHAUDIO = 21;
 
     // FMOD_SPEAKERMODE
     static final int FMOD_SPEAKERMODE_DEFAULT = 0;
