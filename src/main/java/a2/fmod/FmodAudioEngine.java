@@ -417,67 +417,67 @@ public class FmodAudioEngine implements AudioEngine {
         log.info("Shutting down FMOD audio engine");
 
         // Now in CLOSING state - no new operations can start
-        // Wait for any in-progress operations to complete
+        // Acquire and hold the lock for the entire cleanup to ensure
+        // no operations can access resources during teardown
         operationLock.lock();
         try {
-            // All operations check state and acquire this lock
-            // By holding it, we ensure no operations are in progress
+            // Stop all active playback
+            if (fmod != null && !activeChannels.isEmpty()) {
+                for (Map.Entry<Long, Pointer> entry : activeChannels.entrySet()) {
+                    try {
+                        int result = fmod.FMOD_Channel_Stop(entry.getValue());
+                        if (result != FmodConstants.FMOD_OK
+                                && result != FmodConstants.FMOD_ERR_BADCOMMAND) {
+                            log.debug(
+                                    "Error stopping channel {}: {}",
+                                    entry.getKey(),
+                                    fmod.FMOD_ErrorString(result));
+                        }
+                    } catch (Exception e) {
+                        log.debug("Error stopping channel {}", entry.getKey(), e);
+                    }
+                }
+                activeChannels.clear();
+            }
+
+            // Release all cached sounds
+            if (fmod != null && !soundCache.isEmpty()) {
+                for (Map.Entry<Long, Pointer> entry : soundCache.entrySet()) {
+                    try {
+                        int result = fmod.FMOD_Sound_Release(entry.getValue());
+                        if (result != FmodConstants.FMOD_OK) {
+                            log.debug(
+                                    "Error releasing sound {}: {}",
+                                    entry.getKey(),
+                                    fmod.FMOD_ErrorString(result));
+                        }
+                    } catch (Exception e) {
+                        log.debug("Error releasing sound {}", entry.getKey(), e);
+                    }
+                }
+                soundCache.clear();
+            }
+
+            // Release FMOD system
+            if (system != null && fmod != null) {
+                int result = fmod.FMOD_System_Release(system);
+                if (result != FmodConstants.FMOD_OK) {
+                    log.warn("Error releasing FMOD system: {}", fmod.FMOD_ErrorString(result));
+                }
+            }
+
+            // Null out references to prevent use after close
+            system = null;
+            fmod = null;
+            config = null;
+
+            // Transition to CLOSED
+            state.set(State.CLOSED);
+
         } finally {
             operationLock.unlock();
         }
 
-        // Stop all active playback
-        if (fmod != null && !activeChannels.isEmpty()) {
-            for (Map.Entry<Long, Pointer> entry : activeChannels.entrySet()) {
-                try {
-                    int result = fmod.FMOD_Channel_Stop(entry.getValue());
-                    if (result != FmodConstants.FMOD_OK
-                            && result != FmodConstants.FMOD_ERR_BADCOMMAND) {
-                        log.debug(
-                                "Error stopping channel {}: {}",
-                                entry.getKey(),
-                                fmod.FMOD_ErrorString(result));
-                    }
-                } catch (Exception e) {
-                    log.debug("Error stopping channel {}", entry.getKey(), e);
-                }
-            }
-            activeChannels.clear();
-        }
-
-        // Release all cached sounds
-        if (fmod != null && !soundCache.isEmpty()) {
-            for (Map.Entry<Long, Pointer> entry : soundCache.entrySet()) {
-                try {
-                    int result = fmod.FMOD_Sound_Release(entry.getValue());
-                    if (result != FmodConstants.FMOD_OK) {
-                        log.debug(
-                                "Error releasing sound {}: {}",
-                                entry.getKey(),
-                                fmod.FMOD_ErrorString(result));
-                    }
-                } catch (Exception e) {
-                    log.debug("Error releasing sound {}", entry.getKey(), e);
-                }
-            }
-            soundCache.clear();
-        }
-
-        // Release FMOD system
-        if (system != null && fmod != null) {
-            int result = fmod.FMOD_System_Release(system);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Error releasing FMOD system: {}", fmod.FMOD_ErrorString(result));
-            }
-        }
-
-        // Null out references to prevent use after close
-        system = null;
-        fmod = null;
-        config = null;
-
-        // Transition to CLOSED
-        state.set(State.CLOSED);
         log.info("FMOD audio engine shut down");
     }
 }
