@@ -27,8 +27,7 @@ public final class AudioEngineConfig {
 
     @NonNull @Builder.Default private final String engineType = "fmod";
 
-    @Builder.Default
-    private final int threadPoolSize = Runtime.getRuntime().availableProcessors() - 1;
+    @NonNull @Builder.Default private final Mode mode = Mode.PLAYBACK;
 
     @Builder.Default private final long maxCacheBytes = 128L * 1024 * 1024; // 128MB default
 

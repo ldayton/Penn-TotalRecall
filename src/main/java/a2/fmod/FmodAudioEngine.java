@@ -8,18 +8,16 @@ import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackState;
 import app.annotations.ThreadSafe;
-import audio.AudioSystemLoader;
-import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -29,238 +27,163 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FmodAudioEngine implements AudioEngine {
 
-    private FmodLibrary fmod;
-    private Pointer system;
-    private AudioEngineConfig config;
-    private AudioEngineConfig.Mode mode;
-    private final ReentrantLock lock = new ReentrantLock();
-    private volatile boolean closed = false;
+    private volatile FmodLibrary fmod;
+    private volatile Pointer system;
+    private volatile AudioEngineConfig config;
+
+    // State machine for proper lifecycle management
+    private enum State {
+        UNINITIALIZED,
+        INITIALIZING,
+        INITIALIZED,
+        CLOSING,
+        CLOSED
+    }
+
+    private final AtomicReference<State> state = new AtomicReference<>(State.UNINITIALIZED);
+    private final ReentrantLock operationLock = new ReentrantLock();
 
     // Resource management
     private final Map<Long, Pointer> soundCache = new ConcurrentHashMap<>();
     private final Map<Long, Pointer> activeChannels = new ConcurrentHashMap<>();
-    private ExecutorService executor;
-    private long nextHandleId = 1;
-    private long nextPlaybackId = 1;
-
-    /** FMOD Core API interface via JNA. */
-    public interface FmodLibrary extends Library {
-        // System creation and initialization
-        int FMOD_System_Create(PointerByReference system, int headerversion);
-
-        int FMOD_System_Init(Pointer system, int maxchannels, int flags, Pointer extradriverdata);
-
-        int FMOD_System_Release(Pointer system);
-
-        int FMOD_System_Update(Pointer system);
-
-        int FMOD_System_SetOutput(Pointer system, int output);
-
-        int FMOD_System_GetOutput(Pointer system, IntByReference output);
-
-        int FMOD_System_SetSpeakerPosition(
-                Pointer system, int speaker, float x, float y, boolean active);
-
-        int FMOD_System_SetDSPBufferSize(Pointer system, int bufferlength, int numbuffers);
-
-        int FMOD_System_GetDSPBufferSize(
-                Pointer system, IntByReference bufferlength, IntByReference numbuffers);
-
-        int FMOD_System_SetSoftwareFormat(
-                Pointer system, int samplerate, int speakermode, int numrawspeakers);
-
-        int FMOD_System_GetSoftwareFormat(
-                Pointer system,
-                IntByReference samplerate,
-                IntByReference speakermode,
-                IntByReference numrawspeakers);
-
-        int FMOD_System_GetVersion(Pointer system, IntByReference version);
-
-        int FMOD_System_GetDriverInfo(
-                Pointer system,
-                int id,
-                byte[] name,
-                int namelen,
-                byte[] guid,
-                IntByReference systemrate,
-                IntByReference speakermode,
-                IntByReference channels);
-
-        // Sound creation and management
-        int FMOD_System_CreateSound(
-                Pointer system,
-                String name_or_data,
-                int mode,
-                Pointer exinfo,
-                PointerByReference sound);
-
-        int FMOD_System_CreateStream(
-                Pointer system,
-                String name_or_data,
-                int mode,
-                Pointer exinfo,
-                PointerByReference sound);
-
-        int FMOD_Sound_Release(Pointer sound);
-
-        int FMOD_Sound_GetLength(Pointer sound, IntByReference length, int lengthtype);
-
-        int FMOD_Sound_GetFormat(
-                Pointer sound,
-                IntByReference type,
-                IntByReference format,
-                IntByReference channels,
-                IntByReference bits);
-
-        int FMOD_Sound_GetDefaults(
-                Pointer sound, FloatByReference frequency, IntByReference priority);
-
-        int FMOD_Sound_SetMode(Pointer sound, int mode);
-
-        int FMOD_Sound_GetMode(Pointer sound, IntByReference mode);
-
-        // Channel and playback control
-        int FMOD_System_PlaySound(
-                Pointer system,
-                Pointer sound,
-                Pointer channelgroup,
-                boolean paused,
-                PointerByReference channel);
-
-        int FMOD_Channel_Stop(Pointer channel);
-
-        int FMOD_Channel_SetPaused(Pointer channel, boolean paused);
-
-        int FMOD_Channel_GetPaused(Pointer channel, IntByReference paused);
-
-        int FMOD_Channel_SetPosition(Pointer channel, int position, int postype);
-
-        int FMOD_Channel_GetPosition(Pointer channel, IntByReference position, int postype);
-
-        int FMOD_Channel_IsPlaying(Pointer channel, IntByReference isplaying);
-
-        int FMOD_Channel_SetVolume(Pointer channel, float volume);
-
-        int FMOD_Channel_GetVolume(Pointer channel, FloatByReference volume);
-
-        // Error handling
-        String FMOD_ErrorString(int errcode);
-    }
+    private final AtomicLong nextHandleId = new AtomicLong(1);
+    private final AtomicLong nextPlaybackId = new AtomicLong(1);
 
     /** Default constructor for factory use. */
     FmodAudioEngine() {}
 
     /** Package-private initialization method called by factory. */
-    void init(@NonNull AudioEngineConfig config, @NonNull AudioSystemLoader audioSystemLoader) {
-        init(config, audioSystemLoader, AudioEngineConfig.Mode.PLAYBACK);
-    }
+    void init(@NonNull AudioEngineConfig config) {
+        // Transition from UNINITIALIZED to INITIALIZING
+        if (!state.compareAndSet(State.UNINITIALIZED, State.INITIALIZING)) {
+            State currentState = state.get();
+            throw new IllegalStateException("Cannot initialize engine in state: " + currentState);
+        }
 
-    /** Package-private initialization with explicit mode. */
-    void init(
-            @NonNull AudioEngineConfig config,
-            @NonNull AudioSystemLoader audioSystemLoader,
-            @NonNull AudioEngineConfig.Mode mode) {
-        lock.lock();
+        FmodLibrary fmodLib = null;
+        Pointer newSystem = null;
+
         try {
-            if (system != null) {
-                throw new IllegalStateException("FMOD engine already initialized");
-            }
+            log.info("Initializing FMOD audio engine with config: {}", config);
+            validateConfig(config);
 
-            log.info("Initializing FMOD audio engine - mode: {}, config: {}", mode, config);
-            this.config = config;
-            this.mode = mode;
-
-            // Create thread pool for async operations
-            this.executor =
-                    Executors.newFixedThreadPool(
-                            config.getThreadPoolSize(),
-                            r -> {
-                                Thread t = new Thread(r, "FmodAudioEngine-" + System.nanoTime());
-                                t.setDaemon(true);
-                                return t;
-                            });
-
-            // Load FMOD library
-            this.fmod = audioSystemLoader.loadAudioLibrary(FmodLibrary.class);
+            // Load FMOD library and create system (no lock needed, these are local operations)
+            fmodLib = loadFmodLibrary();
 
             // Create FMOD system
             PointerByReference systemRef = new PointerByReference();
-            int result = fmod.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
-            checkResult(result, "Failed to create FMOD system");
-            this.system = systemRef.getValue();
+            int result = fmodLib.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException(
+                        "Failed to create FMOD system: "
+                                + fmodLib.FMOD_ErrorString(result)
+                                + " (code: "
+                                + result
+                                + ")");
+            }
+            newSystem = systemRef.getValue();
 
             // Configure based on mode
-            configureForMode(mode);
+            configureForMode(fmodLib, newSystem, config.getMode());
 
             // Initialize FMOD system
             int maxChannels =
-                    mode == AudioEngineConfig.Mode.PLAYBACK
+                    config.getMode() == AudioEngineConfig.Mode.PLAYBACK
                             ? 2
                             : 1; // 2 for transitions, 1 for rendering
             int initFlags = FmodConstants.FMOD_INIT_NORMAL;
 
-            result = fmod.FMOD_System_Init(system, maxChannels, initFlags, null);
+            result = fmodLib.FMOD_System_Init(newSystem, maxChannels, initFlags, null);
             if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_System_Release(system);
-                system = null;
-                checkResult(result, "Failed to initialize FMOD system");
+                throw new RuntimeException(
+                        "Failed to initialize FMOD system: "
+                                + fmodLib.FMOD_ErrorString(result)
+                                + " (code: "
+                                + result
+                                + ")");
             }
 
-            // Log system info
-            logSystemInfo();
+            // Update shared state and transition to INITIALIZED
+            this.system = newSystem;
+            this.fmod = fmodLib;
+            this.config = config;
 
+            // Transition to INITIALIZED
+            if (!state.compareAndSet(State.INITIALIZING, State.INITIALIZED)) {
+                // Someone called close() while we were initializing
+                throw new IllegalStateException("Engine was closed during initialization");
+            }
+
+            // Log system info (after lock released)
+            logSystemInfo();
             log.info("FMOD audio engine initialized successfully");
 
-        } finally {
-            lock.unlock();
+        } catch (Exception e) {
+            // Clean up any resources we created
+            if (newSystem != null && fmodLib != null) {
+                try {
+                    fmodLib.FMOD_System_Release(newSystem);
+                } catch (Exception cleanupEx) {
+                    log.debug("Error during cleanup after init failure", cleanupEx);
+                }
+            }
+
+            // Reset state to allow retry (only if we're still INITIALIZING)
+            // If close() was called, state will be CLOSED and we should leave it
+            state.compareAndSet(State.INITIALIZING, State.UNINITIALIZED);
+
+            // Propagate the original exception
+            throw e;
         }
     }
 
-    private void configureForMode(@NonNull AudioEngineConfig.Mode mode) {
+    private void configureForMode(
+            @NonNull FmodLibrary fmodLib,
+            @NonNull Pointer sys,
+            @NonNull AudioEngineConfig.Mode mode) {
         if (mode == AudioEngineConfig.Mode.PLAYBACK) {
             // Low latency configuration for playback
             // Smaller buffer for lower latency (256 samples, 4 buffers)
-            int result = fmod.FMOD_System_SetDSPBufferSize(system, 256, 4);
+            int result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 256, 4);
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
                         "Could not set DSP buffer size for low latency: {}",
-                        fmod.FMOD_ErrorString(result));
+                        fmodLib.FMOD_ErrorString(result));
             }
 
             // Set software format - mono for audio annotation app
             result =
-                    fmod.FMOD_System_SetSoftwareFormat(
-                            system, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
+                    fmodLib.FMOD_System_SetSoftwareFormat(
+                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
             if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", fmod.FMOD_ErrorString(result));
+                log.warn("Could not set software format: {}", fmodLib.FMOD_ErrorString(result));
             }
 
         } else {
             // RENDERING mode - no audio output needed, just reading samples
             // Use NOSOUND_NRT for faster-than-realtime processing without audio device
             int result =
-                    fmod.FMOD_System_SetOutput(system, FmodConstants.FMOD_OUTPUTTYPE_NOSOUND_NRT);
+                    fmodLib.FMOD_System_SetOutput(sys, FmodConstants.FMOD_OUTPUTTYPE_NOSOUND_NRT);
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
                         "Could not set NOSOUND_NRT output for rendering: {}",
-                        fmod.FMOD_ErrorString(result));
+                        fmodLib.FMOD_ErrorString(result));
             }
 
             // Larger buffers for rendering efficiency (2048 samples, 2 buffers)
-            result = fmod.FMOD_System_SetDSPBufferSize(system, 2048, 2);
+            result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 2048, 2);
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
                         "Could not set DSP buffer size for rendering: {}",
-                        fmod.FMOD_ErrorString(result));
+                        fmodLib.FMOD_ErrorString(result));
             }
 
             // Mono format for rendering as well
             result =
-                    fmod.FMOD_System_SetSoftwareFormat(
-                            system, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
+                    fmodLib.FMOD_System_SetSoftwareFormat(
+                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
             if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", fmod.FMOD_ErrorString(result));
+                log.warn("Could not set software format: {}", fmodLib.FMOD_ErrorString(result));
             }
         }
     }
@@ -303,84 +226,208 @@ public class FmodAudioEngine implements AudioEngine {
         }
     }
 
+    private void validateConfig(@NonNull AudioEngineConfig config) {
+        // Validate cache size (minimum 1MB, maximum 10GB)
+        long cacheBytes = config.getMaxCacheBytes();
+        if (cacheBytes < 1024 * 1024) {
+            throw new IllegalArgumentException(
+                    "maxCacheBytes must be at least 1MB, got: " + cacheBytes);
+        }
+        if (cacheBytes > 10L * 1024 * 1024 * 1024) {
+            throw new IllegalArgumentException(
+                    "maxCacheBytes must not exceed 10GB, got: " + cacheBytes);
+        }
+
+        // Validate prefetch window (0-60 seconds)
+        int prefetchSeconds = config.getPrefetchWindowSeconds();
+        if (prefetchSeconds < 0) {
+            throw new IllegalArgumentException(
+                    "prefetchWindowSeconds must be non-negative, got: " + prefetchSeconds);
+        }
+        if (prefetchSeconds > 60) {
+            throw new IllegalArgumentException(
+                    "prefetchWindowSeconds must not exceed 60 seconds, got: " + prefetchSeconds);
+        }
+    }
+
+    private FmodLibrary loadFmodLibrary() {
+        // Add search path for FMOD libraries
+        String resourcePath = getClass().getResource("/fmod/macos").getPath();
+        NativeLibrary.addSearchPath("fmod", resourcePath);
+
+        // Load the library
+        return Native.load("fmod", FmodLibrary.class);
+    }
+
+    private void checkOperational() {
+        State currentState = state.get();
+        if (currentState != State.INITIALIZED) {
+            throw new IllegalStateException("Operation not allowed in state: " + currentState);
+        }
+    }
+
     @Override
     public AudioHandle loadAudio(@NonNull String filePath) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public CompletableFuture<Void> preloadRange(
             @NonNull AudioHandle handle, long startFrame, long endFrame) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public PlaybackHandle play(@NonNull AudioHandle audio) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational(); // Double-check after acquiring lock
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public PlaybackHandle playRange(@NonNull AudioHandle audio, long startFrame, long endFrame) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational(); // Double-check after acquiring lock
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public void pause(@NonNull PlaybackHandle playback) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational();
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public void resume(@NonNull PlaybackHandle playback) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational();
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public void stop(@NonNull PlaybackHandle playback) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational();
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public void seek(@NonNull PlaybackHandle playback, long frame) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        checkOperational();
+        operationLock.lock();
+        try {
+            checkOperational();
+            throw new UnsupportedOperationException("Not yet implemented");
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
     public PlaybackState getState(@NonNull PlaybackHandle playback) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public long getPosition(@NonNull PlaybackHandle playback) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public boolean isPlaying(@NonNull PlaybackHandle playback) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public CompletableFuture<AudioBuffer> readSamples(
             @NonNull AudioHandle audio, long startFrame, long frameCount) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
+        checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void close() {
-        lock.lock();
-        try {
-            if (closed) {
+        // Try to transition from INITIALIZED to CLOSING
+        State currentState = state.get();
+
+        // Handle each state appropriately
+        switch (currentState) {
+            case CLOSED:
+            case CLOSING:
+                return; // Already closed or closing
+
+            case UNINITIALIZED:
+                // Never initialized - just mark as closed
+                state.compareAndSet(State.UNINITIALIZED, State.CLOSED);
                 return;
-            }
 
-            log.info("Shutting down FMOD audio engine");
+            case INITIALIZING:
+                // Try to interrupt initialization by moving to CLOSED
+                // The init method will check this and cleanup
+                state.compareAndSet(State.INITIALIZING, State.CLOSED);
+                return;
 
-            // Stop all active playback
+            case INITIALIZED:
+                // Normal close path
+                if (!state.compareAndSet(State.INITIALIZED, State.CLOSING)) {
+                    // State changed, retry
+                    close();
+                    return;
+                }
+                break;
+        }
+
+        log.info("Shutting down FMOD audio engine");
+
+        // Now in CLOSING state - no new operations can start
+        // Wait for any in-progress operations to complete
+        operationLock.lock();
+        try {
+            // All operations check state and acquire this lock
+            // By holding it, we ensure no operations are in progress
+        } finally {
+            operationLock.unlock();
+        }
+
+        // Stop all active playback
+        if (fmod != null && !activeChannels.isEmpty()) {
             for (Map.Entry<Long, Pointer> entry : activeChannels.entrySet()) {
                 try {
                     int result = fmod.FMOD_Channel_Stop(entry.getValue());
@@ -396,8 +443,10 @@ public class FmodAudioEngine implements AudioEngine {
                 }
             }
             activeChannels.clear();
+        }
 
-            // Release all cached sounds
+        // Release all cached sounds
+        if (fmod != null && !soundCache.isEmpty()) {
             for (Map.Entry<Long, Pointer> entry : soundCache.entrySet()) {
                 try {
                     int result = fmod.FMOD_Sound_Release(entry.getValue());
@@ -412,37 +461,23 @@ public class FmodAudioEngine implements AudioEngine {
                 }
             }
             soundCache.clear();
-
-            // Shutdown executor
-            if (executor != null) {
-                executor.shutdown();
-                try {
-                    if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
-                        executor.shutdownNow();
-                        if (!executor.awaitTermination(2, TimeUnit.SECONDS)) {
-                            log.warn("Executor did not terminate in time");
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    executor.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
-            }
-
-            // Release FMOD system
-            if (system != null) {
-                int result = fmod.FMOD_System_Release(system);
-                if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing FMOD system: {}", fmod.FMOD_ErrorString(result));
-                }
-                system = null;
-            }
-
-            closed = true;
-            log.info("FMOD audio engine shut down");
-
-        } finally {
-            lock.unlock();
         }
+
+        // Release FMOD system
+        if (system != null && fmod != null) {
+            int result = fmod.FMOD_System_Release(system);
+            if (result != FmodConstants.FMOD_OK) {
+                log.warn("Error releasing FMOD system: {}", fmod.FMOD_ErrorString(result));
+            }
+        }
+
+        // Null out references to prevent use after close
+        system = null;
+        fmod = null;
+        config = null;
+
+        // Transition to CLOSED
+        state.set(State.CLOSED);
+        log.info("FMOD audio engine shut down");
     }
 }

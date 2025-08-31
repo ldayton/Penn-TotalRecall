@@ -1,5 +1,6 @@
 package a2;
 
+import java.lang.reflect.InvocationTargetException;
 import lombok.NonNull;
 
 /** Factory for creating audio engine instances. */
@@ -10,24 +11,20 @@ public final class AudioEngineFactory {
     }
 
     /**
-     * Creates audio engine with given configuration and engine type.
+     * Creates audio engine with given configuration.
      *
-     * @param config The configuration for the engine
-     * @param engineType The type of engine ("fmod" or others in future)
-     * @param mode The mode for optimization (PLAYBACK or RENDERING)
+     * @param config The configuration for the engine (including engine type and mode)
      * @return The created audio engine
      * @throws UnsupportedAudioEngineException if engine type is not supported
+     * @throws InvalidAudioConfigException if configuration contains invalid values
      */
-    public static AudioEngine create(
-            @NonNull AudioEngineConfig config,
-            @NonNull String engineType,
-            @NonNull AudioEngineConfig.Mode mode)
-            throws UnsupportedAudioEngineException {
+    public static AudioEngine create(@NonNull AudioEngineConfig config)
+            throws UnsupportedAudioEngineException, InvalidAudioConfigException {
 
         String className =
-                switch (engineType) {
+                switch (config.getEngineType()) {
                     case "fmod" -> "a2.fmod.FmodAudioEngine";
-                    default -> throw new UnsupportedAudioEngineException(engineType);
+                    default -> throw new UnsupportedAudioEngineException(config.getEngineType());
                 };
 
         try {
@@ -35,13 +32,19 @@ public final class AudioEngineFactory {
             AudioEngine engine = (AudioEngine) engineClass.getDeclaredConstructor().newInstance();
 
             // Call package-private init method using reflection
-            var initMethod =
-                    engineClass.getDeclaredMethod(
-                            "init", AudioEngineConfig.class, audio.AudioSystemLoader.class);
-            initMethod.invoke(config);
+            var initMethod = engineClass.getDeclaredMethod("init", AudioEngineConfig.class);
+            initMethod.invoke(engine, config);
             return engine;
+        } catch (InvocationTargetException e) {
+            // Unwrap the actual exception thrown by init
+            Throwable cause = e.getCause();
+            if (cause instanceof IllegalArgumentException) {
+                // Configuration validation failed
+                throw new InvalidAudioConfigException(cause.getMessage(), cause);
+            }
+            throw new UnsupportedAudioEngineException(config.getEngineType(), e);
         } catch (Exception e) {
-            throw new UnsupportedAudioEngineException(engineType, e);
+            throw new UnsupportedAudioEngineException(config.getEngineType(), e);
         }
     }
 }
