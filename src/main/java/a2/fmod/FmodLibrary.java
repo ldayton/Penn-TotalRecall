@@ -102,6 +102,11 @@ public interface FmodLibrary extends Library {
 
     int FMOD_Channel_IsPlaying(Pointer channel, IntByReference isplaying);
 
+    int FMOD_Channel_SetLoopPoints(
+            Pointer channel, int loopstart, int loopstarttype, int loopend, int loopendtype);
+
+    int FMOD_Channel_SetLoopCount(Pointer channel, int loopcount);
+
     int FMOD_Channel_SetVolume(Pointer channel, float volume);
 
     int FMOD_Channel_GetVolume(Pointer channel, FloatByReference volume);

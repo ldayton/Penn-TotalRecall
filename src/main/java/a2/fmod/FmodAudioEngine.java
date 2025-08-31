@@ -49,9 +49,8 @@ public class FmodAudioEngine implements AudioEngine {
     private final ReentrantLock operationLock = new ReentrantLock();
 
     // Resource management
-    private final Map<Long, Pointer> activeChannels = new ConcurrentHashMap<>();
+    private final Map<Long, FmodPlaybackHandle> activePlaybacks = new ConcurrentHashMap<>();
     private final AtomicLong nextHandleId = new AtomicLong(1);
-    private final AtomicLong nextPlaybackId = new AtomicLong(1);
 
     // Current loaded audio (users work with one file at a time)
     private FmodAudioHandle currentHandle;
@@ -384,19 +383,146 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             checkOperational(); // Double-check after acquiring lock
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            // Validate the handle
+            if (!(audio instanceof FmodAudioHandle)) {
+                throw new IllegalArgumentException("Invalid audio handle type");
+            }
+
+            FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
+            if (!fmodHandle.isValid()) {
+                throw new IllegalArgumentException("Audio handle is no longer valid");
+            }
+
+            // Verify this is the current loaded audio
+            if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+                throw new IllegalArgumentException("Audio handle is not the currently loaded file");
+            }
+
+            // Play the sound - start paused so we can get the channel handle first
+            PointerByReference channelRef = new PointerByReference();
+            int result = fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException(
+                        "Failed to play sound: " + fmod.FMOD_ErrorString(result));
+            }
+
+            Pointer channel = channelRef.getValue();
+
+            // Now unpause to start playback
+            result = fmod.FMOD_Channel_SetPaused(channel, false);
+            if (result != FmodConstants.FMOD_OK) {
+                // Clean up the channel if we can't start it
+                fmod.FMOD_Channel_Stop(channel);
+                throw new RuntimeException(
+                        "Failed to start playback: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Create playback handle
+            FmodPlaybackHandle playbackHandle =
+                    new FmodPlaybackHandle(audio, channel, 0, Long.MAX_VALUE);
+
+            // Track active playback
+            activePlaybacks.put(playbackHandle.getId(), playbackHandle);
+
+            log.debug("Started playback for file: {}", fmodHandle.getFilePath());
+            return playbackHandle;
         } finally {
             operationLock.unlock();
         }
     }
 
     @Override
-    public PlaybackHandle playRange(@NonNull AudioHandle audio, long startFrame, long endFrame) {
+    public void playRange(@NonNull AudioHandle audio, long startFrame, long endFrame) {
         checkOperational();
         operationLock.lock();
         try {
             checkOperational(); // Double-check after acquiring lock
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            // Validate the handle
+            if (!(audio instanceof FmodAudioHandle)) {
+                throw new IllegalArgumentException("Invalid audio handle type");
+            }
+
+            FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
+            if (!fmodHandle.isValid()) {
+                throw new IllegalArgumentException("Audio handle is no longer valid");
+            }
+
+            // Verify this is the current loaded audio
+            if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+                throw new IllegalArgumentException("Audio handle is not the currently loaded file");
+            }
+
+            // Validate range
+            if (startFrame < 0 || endFrame < startFrame) {
+                throw new IllegalArgumentException(
+                        "Invalid playback range: " + startFrame + " to " + endFrame);
+            }
+
+            // Play the sound - start paused so we can set position first
+            PointerByReference channelRef = new PointerByReference();
+            int result = fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException(
+                        "Failed to play sound: " + fmod.FMOD_ErrorString(result));
+            }
+
+            Pointer channel = channelRef.getValue();
+
+            // Set the start position (convert frames to samples/PCM position)
+            if (startFrame > 0) {
+                result =
+                        fmod.FMOD_Channel_SetPosition(
+                                channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
+                if (result != FmodConstants.FMOD_OK) {
+                    fmod.FMOD_Channel_Stop(channel);
+                    throw new RuntimeException(
+                            "Failed to set playback position: " + fmod.FMOD_ErrorString(result));
+                }
+            }
+
+            // Set loop points to play from startFrame to endFrame once
+            // Note: endFrame is inclusive in FMOD, so we use endFrame-1
+            result =
+                    fmod.FMOD_Channel_SetLoopPoints(
+                            channel,
+                            (int) startFrame,
+                            FmodConstants.FMOD_TIMEUNIT_PCM,
+                            (int) (endFrame - 1),
+                            FmodConstants.FMOD_TIMEUNIT_PCM);
+            if (result != FmodConstants.FMOD_OK) {
+                fmod.FMOD_Channel_Stop(channel);
+                throw new RuntimeException(
+                        "Failed to set loop points: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Set loop count to 0 for one-shot playback (play once then stop)
+            result = fmod.FMOD_Channel_SetLoopCount(channel, 0);
+            if (result != FmodConstants.FMOD_OK) {
+                fmod.FMOD_Channel_Stop(channel);
+                throw new RuntimeException(
+                        "Failed to set loop count: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Now unpause to start playback
+            result = fmod.FMOD_Channel_SetPaused(channel, false);
+            if (result != FmodConstants.FMOD_OK) {
+                fmod.FMOD_Channel_Stop(channel);
+                throw new RuntimeException(
+                        "Failed to start playback: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Fire-and-forget: channel will auto-stop at endFrame
+            // No PlaybackHandle needed since it can't be controlled
+
+            log.debug(
+                    "Started range playback for file: {} from {} to {}",
+                    fmodHandle.getFilePath(),
+                    startFrame,
+                    endFrame);
         } finally {
             operationLock.unlock();
         }
@@ -408,7 +534,41 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             checkOperational();
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            // Validate the handle
+            if (!(playback instanceof FmodPlaybackHandle)) {
+                throw new IllegalArgumentException("Invalid playback handle type");
+            }
+
+            FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+            if (!fmodPlayback.isActive()) {
+                log.debug("Playback handle is no longer active");
+                return; // Already stopped
+            }
+
+            // Check if this playback is tracked
+            if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
+                throw new IllegalArgumentException("Unknown playback handle");
+            }
+
+            // Pause the channel
+            Pointer channel = fmodPlayback.getChannel();
+            int result = fmod.FMOD_Channel_SetPaused(channel, true);
+
+            // FMOD_ERR_INVALID_HANDLE means channel already stopped
+            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                log.debug("Channel already stopped");
+                fmodPlayback.markInactive();
+                activePlaybacks.remove(fmodPlayback.getId());
+                return;
+            }
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException(
+                        "Failed to pause playback: " + fmod.FMOD_ErrorString(result));
+            }
+
+            log.debug("Paused playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -420,7 +580,40 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             checkOperational();
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            // Validate the handle
+            if (!(playback instanceof FmodPlaybackHandle)) {
+                throw new IllegalArgumentException("Invalid playback handle type");
+            }
+
+            FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+            if (!fmodPlayback.isActive()) {
+                throw new IllegalStateException("Cannot resume inactive playback");
+            }
+
+            // Check if this playback is tracked
+            if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
+                throw new IllegalArgumentException("Unknown playback handle");
+            }
+
+            // Resume the channel
+            Pointer channel = fmodPlayback.getChannel();
+            int result = fmod.FMOD_Channel_SetPaused(channel, false);
+
+            // FMOD_ERR_INVALID_HANDLE means channel was stopped
+            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                log.debug("Channel was stopped, cannot resume");
+                fmodPlayback.markInactive();
+                activePlaybacks.remove(fmodPlayback.getId());
+                throw new IllegalStateException("Channel was stopped, cannot resume");
+            }
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException(
+                        "Failed to resume playback: " + fmod.FMOD_ErrorString(result));
+            }
+
+            log.debug("Resumed playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -432,7 +625,39 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             checkOperational();
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            // Validate the handle
+            if (!(playback instanceof FmodPlaybackHandle)) {
+                throw new IllegalArgumentException("Invalid playback handle type");
+            }
+
+            FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+            if (!fmodPlayback.isActive()) {
+                log.debug("Playback handle is already inactive");
+                return;
+            }
+
+            // Check if this playback is tracked
+            if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
+                log.debug("Unknown playback handle");
+                return;
+            }
+
+            // Stop the channel
+            Pointer channel = fmodPlayback.getChannel();
+            int result = fmod.FMOD_Channel_Stop(channel);
+
+            // FMOD_ERR_INVALID_HANDLE means channel already stopped
+            if (result != FmodConstants.FMOD_OK
+                    && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                log.warn("Error stopping channel: {}", fmod.FMOD_ErrorString(result));
+            }
+
+            // Mark as inactive and remove from tracking
+            fmodPlayback.markInactive();
+            activePlaybacks.remove(fmodPlayback.getId());
+
+            log.debug("Stopped playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -521,22 +746,24 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             // Stop all active playback
-            if (fmod != null && !activeChannels.isEmpty()) {
-                for (Map.Entry<Long, Pointer> entry : activeChannels.entrySet()) {
+            if (fmod != null && !activePlaybacks.isEmpty()) {
+                for (Map.Entry<Long, FmodPlaybackHandle> entry : activePlaybacks.entrySet()) {
                     try {
-                        int result = fmod.FMOD_Channel_Stop(entry.getValue());
+                        FmodPlaybackHandle playback = entry.getValue();
+                        int result = fmod.FMOD_Channel_Stop(playback.getChannel());
                         if (result != FmodConstants.FMOD_OK
-                                && result != FmodConstants.FMOD_ERR_BADCOMMAND) {
+                                && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                             log.debug(
-                                    "Error stopping channel {}: {}",
+                                    "Error stopping playback {}: {}",
                                     entry.getKey(),
                                     fmod.FMOD_ErrorString(result));
                         }
+                        playback.markInactive();
                     } catch (Exception e) {
-                        log.debug("Error stopping channel {}", entry.getKey(), e);
+                        log.debug("Error stopping playback {}", entry.getKey(), e);
                     }
                 }
-                activeChannels.clear();
+                activePlaybacks.clear();
             }
 
             // Release current sound if any
