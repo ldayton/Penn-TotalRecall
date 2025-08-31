@@ -297,7 +297,7 @@ class FmodAudioEngineInitCloseTest {
                     // Mock slow cleanup
                     when(mockFmod.FMOD_System_Release(any()))
                             .thenAnswer(
-                                    inv -> {
+                                    _ -> {
                                         Thread.sleep(500); // Simulate slow cleanup
                                         return FmodConstants.FMOD_OK;
                                     });

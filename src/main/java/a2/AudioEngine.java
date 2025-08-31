@@ -12,7 +12,10 @@ import lombok.NonNull;
 public interface AudioEngine extends AutoCloseable {
 
     /** Returns existing handle if already loaded. */
-    AudioHandle loadAudio(@NonNull String filePath);
+    AudioHandle loadAudio(@NonNull String filePath)
+            throws java.io.FileNotFoundException,
+                    a2.fmod.exceptions.UnsupportedAudioFormatException,
+                    a2.fmod.exceptions.CorruptedAudioFileException;
 
     /** Non-blocking prefetch for smooth scrolling. */
     CompletableFuture<Void> preloadRange(

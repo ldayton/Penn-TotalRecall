@@ -7,12 +7,17 @@ import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackState;
+import a2.fmod.exceptions.CorruptedAudioFileException;
+import a2.fmod.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +49,14 @@ public class FmodAudioEngine implements AudioEngine {
     private final ReentrantLock operationLock = new ReentrantLock();
 
     // Resource management
-    private final Map<Long, Pointer> soundCache = new ConcurrentHashMap<>();
     private final Map<Long, Pointer> activeChannels = new ConcurrentHashMap<>();
     private final AtomicLong nextHandleId = new AtomicLong(1);
     private final AtomicLong nextPlaybackId = new AtomicLong(1);
+
+    // Current loaded audio (users work with one file at a time)
+    private FmodAudioHandle currentHandle;
+    private Pointer currentSound;
+    private String currentPath;
 
     /** Default constructor for factory use. */
     FmodAudioEngine() {}
@@ -272,9 +281,94 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     @Override
-    public AudioHandle loadAudio(@NonNull String filePath) {
+    public AudioHandle loadAudio(@NonNull String filePath)
+            throws FileNotFoundException,
+                    UnsupportedAudioFormatException,
+                    CorruptedAudioFileException {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        // Validate file exists and get canonical path
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("Audio file not found: " + filePath);
+        }
+        if (!file.canRead()) {
+            throw new IllegalArgumentException("Cannot read audio file: " + filePath);
+        }
+
+        String canonicalPath;
+        try {
+            canonicalPath = file.getCanonicalPath();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot resolve file path: " + filePath, e);
+        }
+
+        operationLock.lock();
+        try {
+            // If same file already loaded, return existing handle
+            if (currentPath != null && currentPath.equals(canonicalPath) && currentHandle != null) {
+                log.debug("Returning existing handle for: {}", canonicalPath);
+                return currentHandle;
+            }
+
+            // Release previous sound if any
+            if (currentSound != null) {
+                log.debug("Releasing previous audio file: {}", currentPath);
+                int result = fmod.FMOD_Sound_Release(currentSound);
+                if (result != FmodConstants.FMOD_OK) {
+                    log.warn("Error releasing previous sound: {}", fmod.FMOD_ErrorString(result));
+                }
+                currentSound = null;
+                currentPath = null;
+                currentHandle = null;
+
+                // Ensure FMOD completes cleanup before loading new file
+                result = fmod.FMOD_System_Update(system);
+                if (result != FmodConstants.FMOD_OK) {
+                    log.debug("Error during system update: {}", fmod.FMOD_ErrorString(result));
+                }
+            }
+
+            // FMOD flags for optimal PLAYBACK mode performance
+            int mode = FmodConstants.FMOD_CREATESTREAM | FmodConstants.FMOD_ACCURATETIME;
+
+            // Create sound
+            PointerByReference soundRef = new PointerByReference();
+            int result = fmod.FMOD_System_CreateSound(system, canonicalPath, mode, null, soundRef);
+
+            // Map FMOD errors to appropriate exceptions
+            if (result != FmodConstants.FMOD_OK) {
+                String errorMsg = fmod.FMOD_ErrorString(result);
+                switch (result) {
+                    case FmodConstants.FMOD_ERR_FILE_NOTFOUND:
+                        throw new FileNotFoundException("FMOD cannot find file: " + canonicalPath);
+                    case FmodConstants.FMOD_ERR_FORMAT:
+                        throw new UnsupportedAudioFormatException(
+                                "Unsupported audio format: " + canonicalPath + " - " + errorMsg);
+                    case FmodConstants.FMOD_ERR_FILE_BAD:
+                        throw new CorruptedAudioFileException(
+                                "Corrupted audio file: " + canonicalPath + " - " + errorMsg);
+                    default:
+                        throw new RuntimeException(
+                                "Failed to load audio file: " + canonicalPath + " - " + errorMsg);
+                }
+            }
+
+            // Create handle and store as current
+            long handleId = nextHandleId.getAndIncrement();
+            Pointer sound = soundRef.getValue();
+            FmodAudioHandle handle = new FmodAudioHandle(handleId, sound, canonicalPath);
+
+            currentSound = sound;
+            currentPath = canonicalPath;
+            currentHandle = handle;
+
+            log.info("Loaded audio file: {}", canonicalPath);
+            return handle;
+
+        } finally {
+            operationLock.unlock();
+        }
     }
 
     @Override
@@ -445,22 +539,19 @@ public class FmodAudioEngine implements AudioEngine {
                 activeChannels.clear();
             }
 
-            // Release all cached sounds
-            if (fmod != null && !soundCache.isEmpty()) {
-                for (Map.Entry<Long, Pointer> entry : soundCache.entrySet()) {
-                    try {
-                        int result = fmod.FMOD_Sound_Release(entry.getValue());
-                        if (result != FmodConstants.FMOD_OK) {
-                            log.debug(
-                                    "Error releasing sound {}: {}",
-                                    entry.getKey(),
-                                    fmod.FMOD_ErrorString(result));
-                        }
-                    } catch (Exception e) {
-                        log.debug("Error releasing sound {}", entry.getKey(), e);
+            // Release current sound if any
+            if (fmod != null && currentSound != null) {
+                try {
+                    int result = fmod.FMOD_Sound_Release(currentSound);
+                    if (result != FmodConstants.FMOD_OK) {
+                        log.debug("Error releasing sound: {}", fmod.FMOD_ErrorString(result));
                     }
+                } catch (Exception e) {
+                    log.debug("Error releasing sound", e);
                 }
-                soundCache.clear();
+                currentSound = null;
+                currentPath = null;
+                currentHandle = null;
             }
 
             // Release FMOD system
