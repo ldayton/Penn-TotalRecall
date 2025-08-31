@@ -14,9 +14,13 @@ import a2.exceptions.AudioPlaybackException;
 import a2.exceptions.CorruptedAudioFileException;
 import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalListener;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.io.File;
@@ -32,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +47,7 @@ public class FmodAudioEngine implements AudioEngine {
 
     private volatile FmodLibrary fmod;
     private volatile Pointer system;
-    private volatile AudioEngineConfig config;
+    @Getter private volatile AudioEngineConfig config;
 
     // State machine for proper lifecycle management
     private enum State {
@@ -70,8 +75,38 @@ public class FmodAudioEngine implements AudioEngine {
     private ScheduledExecutorService progressTimer;
     private static final long PROGRESS_UPDATE_INTERVAL_MS = 100;
 
+    // Preload cache for instant replay of recent segments (e.g., last 200ms)
+    private final Cache<PreloadKey, Pointer> preloadCache;
+
+    /** Key for preload cache - identifies a specific audio segment. */
+    private record PreloadKey(String filePath, long startFrame, long endFrame) {}
+
     /** Default constructor for factory use. */
-    FmodAudioEngine() {}
+    FmodAudioEngine() {
+        // Initialize preload cache with LRU eviction and automatic FMOD sound cleanup
+        this.preloadCache =
+                Caffeine.newBuilder()
+                        .maximumSize(10)
+                        .removalListener(
+                                (RemovalListener<PreloadKey, Pointer>)
+                                        (key, sound, _) -> {
+                                            if (sound != null && fmod != null) {
+                                                log.debug(
+                                                        "Evicting preloaded segment: {} frames"
+                                                                + " {}-{}",
+                                                        key.filePath,
+                                                        key.startFrame,
+                                                        key.endFrame);
+                                                try {
+                                                    fmod.FMOD_Sound_Release(sound);
+                                                } catch (Exception e) {
+                                                    log.warn(
+                                                            "Failed to release preloaded sound", e);
+                                                }
+                                            }
+                                        })
+                        .build();
+    }
 
     /** Package-private initialization method called by factory. */
     void init(@NonNull AudioEngineConfig config) {
@@ -255,13 +290,6 @@ public class FmodAudioEngine implements AudioEngine {
         }
     }
 
-    private void checkResult(int result, String message) {
-        if (result != FmodConstants.FMOD_OK) {
-            throw new AudioEngineException(
-                    message + ": " + fmod.FMOD_ErrorString(result) + " (code: " + result + ")");
-        }
-    }
-
     private void validateConfig(@NonNull AudioEngineConfig config) {
         // Validate cache size (minimum 1MB, maximum 10GB)
         long cacheBytes = config.getMaxCacheBytes();
@@ -338,6 +366,10 @@ public class FmodAudioEngine implements AudioEngine {
             // Release previous sound if any
             if (currentSound != null) {
                 log.debug("Releasing previous audio file: {}", currentPath);
+
+                // Clear preload cache first (will trigger removal listener to release sounds)
+                preloadCache.invalidateAll();
+
                 int result = fmod.FMOD_Sound_Release(currentSound);
                 if (result != FmodConstants.FMOD_OK) {
                     log.warn("Error releasing previous sound: {}", fmod.FMOD_ErrorString(result));
@@ -399,7 +431,70 @@ public class FmodAudioEngine implements AudioEngine {
     public CompletableFuture<Void> preloadRange(
             @NonNull AudioHandle handle, long startFrame, long endFrame) {
         checkOperational();
-        throw new AudioEngineException("Not yet implemented");
+
+        if (!(handle instanceof FmodAudioHandle)) {
+            throw new AudioPlaybackException("Invalid audio handle type");
+        }
+
+        FmodAudioHandle fmodHandle = (FmodAudioHandle) handle;
+        if (!fmodHandle.isValid()) {
+            throw new AudioPlaybackException("Audio handle is no longer valid");
+        }
+
+        // Verify this is the current loaded audio
+        if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+            throw new AudioPlaybackException("Can only preload the currently loaded file");
+        }
+
+        if (startFrame < 0 || endFrame <= startFrame) {
+            throw new AudioPlaybackException(
+                    "Invalid frame range: " + startFrame + " to " + endFrame);
+        }
+
+        // Run preload asynchronously to avoid blocking
+        return CompletableFuture.runAsync(
+                () -> {
+                    PreloadKey key = new PreloadKey(currentPath, startFrame, endFrame);
+
+                    // Check if already cached
+                    if (preloadCache.getIfPresent(key) != null) {
+                        log.debug("Segment already preloaded: frames {}-{}", startFrame, endFrame);
+                        return;
+                    }
+
+                    operationLock.lock();
+                    try {
+                        // Double-check after acquiring lock
+                        if (preloadCache.getIfPresent(key) != null) {
+                            return;
+                        }
+
+                        // Create a separate sound object for this segment
+                        // Use FMOD_CREATESAMPLE to load entire segment into memory
+                        int mode =
+                                FmodConstants.FMOD_CREATESAMPLE | FmodConstants.FMOD_ACCURATETIME;
+
+                        PointerByReference soundRef = new PointerByReference();
+                        int result =
+                                fmod.FMOD_System_CreateSound(
+                                        system, currentPath, mode, null, soundRef);
+
+                        if (result != FmodConstants.FMOD_OK) {
+                            log.warn(
+                                    "Failed to preload segment: {}", fmod.FMOD_ErrorString(result));
+                            return;
+                        }
+
+                        Pointer preloadedSound = soundRef.getValue();
+
+                        // Store in cache (will auto-evict LRU if at capacity)
+                        preloadCache.put(key, preloadedSound);
+                        log.debug("Preloaded segment: frames {}-{}", startFrame, endFrame);
+
+                    } finally {
+                        operationLock.unlock();
+                    }
+                });
     }
 
     @Override
@@ -489,9 +584,21 @@ public class FmodAudioEngine implements AudioEngine {
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
 
+            // Check if this range is preloaded for instant playback
+            PreloadKey key = new PreloadKey(currentPath, startFrame, endFrame);
+            Pointer soundToPlay = preloadCache.getIfPresent(key);
+
+            if (soundToPlay == null) {
+                // Not preloaded, use the main streaming sound
+                soundToPlay = currentSound;
+                log.debug("Playing range {}-{} from streaming sound", startFrame, endFrame);
+            } else {
+                log.debug("Playing range {}-{} from preloaded cache", startFrame, endFrame);
+            }
+
             // Play the sound - start paused so we can set position first
             PointerByReference channelRef = new PointerByReference();
-            int result = fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
+            int result = fmod.FMOD_System_PlaySound(system, soundToPlay, null, true, channelRef);
 
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException(
@@ -500,40 +607,46 @@ public class FmodAudioEngine implements AudioEngine {
 
             Pointer channel = channelRef.getValue();
 
-            // Set the start position (convert frames to samples/PCM position)
-            if (startFrame > 0) {
+            // If using the main streaming sound, we need to set position and loop points
+            if (soundToPlay == currentSound) {
+                // Set the start position (convert frames to samples/PCM position)
+                if (startFrame > 0) {
+                    result =
+                            fmod.FMOD_Channel_SetPosition(
+                                    channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
+                    if (result != FmodConstants.FMOD_OK) {
+                        fmod.FMOD_Channel_Stop(channel);
+                        throw new AudioPlaybackException(
+                                "Failed to set playback position: "
+                                        + fmod.FMOD_ErrorString(result));
+                    }
+                }
+
+                // Set loop points to play from startFrame to endFrame once
+                // Note: endFrame is inclusive in FMOD, so we use endFrame-1
                 result =
-                        fmod.FMOD_Channel_SetPosition(
-                                channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
+                        fmod.FMOD_Channel_SetLoopPoints(
+                                channel,
+                                (int) startFrame,
+                                FmodConstants.FMOD_TIMEUNIT_PCM,
+                                (int) (endFrame - 1),
+                                FmodConstants.FMOD_TIMEUNIT_PCM);
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
                     throw new AudioPlaybackException(
-                            "Failed to set playback position: " + fmod.FMOD_ErrorString(result));
+                            "Failed to set loop points: " + fmod.FMOD_ErrorString(result));
+                }
+
+                // Set loop count to 0 for one-shot playback (play once then stop)
+                result = fmod.FMOD_Channel_SetLoopCount(channel, 0);
+                if (result != FmodConstants.FMOD_OK) {
+                    fmod.FMOD_Channel_Stop(channel);
+                    throw new AudioPlaybackException(
+                            "Failed to set loop count: " + fmod.FMOD_ErrorString(result));
                 }
             }
-
-            // Set loop points to play from startFrame to endFrame once
-            // Note: endFrame is inclusive in FMOD, so we use endFrame-1
-            result =
-                    fmod.FMOD_Channel_SetLoopPoints(
-                            channel,
-                            (int) startFrame,
-                            FmodConstants.FMOD_TIMEUNIT_PCM,
-                            (int) (endFrame - 1),
-                            FmodConstants.FMOD_TIMEUNIT_PCM);
-            if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_Channel_Stop(channel);
-                throw new AudioPlaybackException(
-                        "Failed to set loop points: " + fmod.FMOD_ErrorString(result));
-            }
-
-            // Set loop count to 0 for one-shot playback (play once then stop)
-            result = fmod.FMOD_Channel_SetLoopCount(channel, 0);
-            if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_Channel_Stop(channel);
-                throw new AudioPlaybackException(
-                        "Failed to set loop count: " + fmod.FMOD_ErrorString(result));
-            }
+            // If using preloaded sound, it's already the exact segment we want
+            // Just play it once from beginning to end
 
             // Now unpause to start playback
             result = fmod.FMOD_Channel_SetPaused(channel, false);
@@ -761,7 +874,56 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public PlaybackState getState(@NonNull PlaybackHandle playback) {
         checkOperational();
-        throw new AudioEngineException("Not yet implemented");
+
+        if (!(playback instanceof FmodPlaybackHandle)) {
+            throw new AudioPlaybackException("Invalid playback handle type");
+        }
+
+        FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+        if (!fmodPlayback.isActive()) {
+            return PlaybackState.STOPPED;
+        }
+
+        // Check if this playback is tracked
+        if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
+            return PlaybackState.STOPPED;
+        }
+
+        Pointer channel = fmodPlayback.getChannel();
+
+        // Check if channel is playing
+        IntByReference isPlayingRef = new IntByReference();
+        int result = fmod.FMOD_Channel_IsPlaying(channel, isPlayingRef);
+
+        if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+            // Channel has stopped
+            fmodPlayback.markInactive();
+            activePlaybacks.remove(fmodPlayback.getId());
+            return PlaybackState.STOPPED;
+        }
+
+        if (result != FmodConstants.FMOD_OK) {
+            throw new AudioPlaybackException(
+                    "Failed to check playback state: " + fmod.FMOD_ErrorString(result));
+        }
+
+        if (isPlayingRef.getValue() == 0) {
+            // Channel exists but is not playing - it has finished
+            fmodPlayback.markInactive();
+            activePlaybacks.remove(fmodPlayback.getId());
+            return PlaybackState.STOPPED;
+        }
+
+        // Check if paused
+        IntByReference isPausedRef = new IntByReference();
+        result = fmod.FMOD_Channel_GetPaused(channel, isPausedRef);
+
+        if (result != FmodConstants.FMOD_OK) {
+            throw new AudioPlaybackException(
+                    "Failed to check pause state: " + fmod.FMOD_ErrorString(result));
+        }
+
+        return isPausedRef.getValue() != 0 ? PlaybackState.PAUSED : PlaybackState.PLAYING;
     }
 
     @Override
@@ -799,21 +961,121 @@ public class FmodAudioEngine implements AudioEngine {
 
     @Override
     public boolean isPlaying(@NonNull PlaybackHandle playback) {
-        checkOperational();
-        throw new AudioEngineException("Not yet implemented");
+        return getState(playback) == PlaybackState.PLAYING;
+    }
+
+    @Override
+    public boolean isPaused(@NonNull PlaybackHandle playback) {
+        return getState(playback) == PlaybackState.PAUSED;
+    }
+
+    @Override
+    public boolean isStopped(@NonNull PlaybackHandle playback) {
+        return getState(playback) == PlaybackState.STOPPED;
     }
 
     @Override
     public CompletableFuture<AudioBuffer> readSamples(
             @NonNull AudioHandle audio, long startFrame, long frameCount) {
-        checkOperational();
-        throw new AudioEngineException("Not yet implemented");
+        throw new AudioEngineException(
+                "Reading samples is not supported in PLAYBACK mode. "
+                        + "Use ANALYSIS mode for waveform visualization.");
     }
 
     @Override
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
         checkOperational();
-        throw new AudioEngineException("Not yet implemented");
+
+        if (!(audio instanceof FmodAudioHandle)) {
+            throw new AudioPlaybackException("Invalid audio handle type");
+        }
+
+        FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
+        if (!fmodHandle.isValid()) {
+            throw new AudioPlaybackException("Audio handle is no longer valid");
+        }
+
+        // Verify this is the current loaded audio
+        if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+            throw new AudioPlaybackException("Audio handle is not the currently loaded file");
+        }
+
+        operationLock.lock();
+        try {
+            // Get format information
+            IntByReference typeRef = new IntByReference();
+            IntByReference formatRef = new IntByReference();
+            IntByReference channelsRef = new IntByReference();
+            IntByReference bitsRef = new IntByReference();
+
+            int result =
+                    fmod.FMOD_Sound_GetFormat(
+                            currentSound, typeRef, formatRef, channelsRef, bitsRef);
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioEngineException(
+                        "Failed to get sound format: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Get sample rate
+            FloatByReference frequencyRef = new FloatByReference();
+            result = fmod.FMOD_Sound_GetDefaults(currentSound, frequencyRef, null);
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioEngineException(
+                        "Failed to get sample rate: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Get length in PCM samples (frames)
+            IntByReference lengthRef = new IntByReference();
+            result =
+                    fmod.FMOD_Sound_GetLength(
+                            currentSound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioEngineException(
+                        "Failed to get sound length: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Extract values
+            int sampleRate = Math.round(frequencyRef.getValue());
+            int channelCount = channelsRef.getValue();
+            int bitsPerSample = bitsRef.getValue();
+            long frameCount = lengthRef.getValue();
+            double durationSeconds = frameCount / (double) sampleRate;
+
+            // Map sound type to format string
+            String format = mapSoundTypeToFormat(typeRef.getValue());
+
+            return new AudioMetadata(
+                    sampleRate, channelCount, bitsPerSample, format, frameCount, durationSeconds);
+
+        } finally {
+            operationLock.unlock();
+        }
+    }
+
+    private String mapSoundTypeToFormat(int soundType) {
+        switch (soundType) {
+            case FmodConstants.FMOD_SOUND_TYPE_WAV:
+                return "WAV";
+            case FmodConstants.FMOD_SOUND_TYPE_MPEG:
+                return "MP3";
+            case FmodConstants.FMOD_SOUND_TYPE_OGGVORBIS:
+                return "OGG";
+            case FmodConstants.FMOD_SOUND_TYPE_FLAC:
+                return "FLAC";
+            case FmodConstants.FMOD_SOUND_TYPE_AIFF:
+                return "AIFF";
+            case FmodConstants.FMOD_SOUND_TYPE_OPUS:
+                return "OPUS";
+            case FmodConstants.FMOD_SOUND_TYPE_VORBIS:
+                return "VORBIS";
+            case FmodConstants.FMOD_SOUND_TYPE_ASF:
+                return "ASF";
+            case FmodConstants.FMOD_SOUND_TYPE_RAW:
+                return "RAW";
+            case FmodConstants.FMOD_SOUND_TYPE_UNKNOWN:
+            default:
+                return "UNKNOWN";
+        }
     }
 
     @Override
@@ -975,6 +1237,15 @@ public class FmodAudioEngine implements AudioEngine {
                     }
                 }
                 activePlaybacks.clear();
+            }
+
+            // Clear preload cache (removal listener will release all cached sounds)
+            if (preloadCache != null) {
+                try {
+                    preloadCache.invalidateAll();
+                } catch (Exception e) {
+                    log.debug("Error clearing preload cache", e);
+                }
             }
 
             // Release current sound if any

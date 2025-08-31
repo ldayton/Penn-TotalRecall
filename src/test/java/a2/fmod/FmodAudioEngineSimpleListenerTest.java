@@ -16,21 +16,21 @@ class FmodAudioEngineSimpleListenerTest {
 
     @Test
     void testListenerManagement() {
-        FmodAudioEngine engine = new FmodAudioEngine();
+        try (FmodAudioEngine engine = new FmodAudioEngine()) {
+            // Test adding listeners
+            PlaybackListener listener1 = new PlaybackListener() {};
+            PlaybackListener listener2 = new PlaybackListener() {};
 
-        // Test adding listeners
-        PlaybackListener listener1 = new PlaybackListener() {};
-        PlaybackListener listener2 = new PlaybackListener() {};
+            engine.addPlaybackListener(listener1);
+            engine.addPlaybackListener(listener2);
 
-        engine.addPlaybackListener(listener1);
-        engine.addPlaybackListener(listener2);
+            // Test removing listeners
+            engine.removePlaybackListener(listener1);
+            engine.removePlaybackListener(listener2);
 
-        // Test removing listeners
-        engine.removePlaybackListener(listener1);
-        engine.removePlaybackListener(listener2);
-
-        // No exceptions should be thrown
-        assertTrue(true);
+            // No exceptions should be thrown
+            assertTrue(true);
+        }
     }
 
     @Test

@@ -39,6 +39,10 @@ public interface AudioEngine extends AutoCloseable {
 
     boolean isPlaying(@NonNull PlaybackHandle playback);
 
+    boolean isPaused(@NonNull PlaybackHandle playback);
+
+    boolean isStopped(@NonNull PlaybackHandle playback);
+
     CompletableFuture<AudioBuffer> readSamples(
             @NonNull AudioHandle audio, long startFrame, long frameCount);
 
@@ -47,6 +51,8 @@ public interface AudioEngine extends AutoCloseable {
     void addPlaybackListener(@NonNull PlaybackListener listener);
 
     void removePlaybackListener(@NonNull PlaybackListener listener);
+
+    AudioEngineConfig getConfig();
 
     @Override
     void close();
