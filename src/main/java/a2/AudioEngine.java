@@ -1,5 +1,6 @@
 package a2;
 
+import a2.exceptions.AudioLoadException;
 import app.annotations.ThreadSafe;
 import java.util.concurrent.CompletableFuture;
 import lombok.NonNull;
@@ -12,10 +13,7 @@ import lombok.NonNull;
 public interface AudioEngine extends AutoCloseable {
 
     /** Returns existing handle if already loaded. */
-    AudioHandle loadAudio(@NonNull String filePath)
-            throws java.io.FileNotFoundException,
-                    a2.fmod.exceptions.UnsupportedAudioFormatException,
-                    a2.fmod.exceptions.CorruptedAudioFileException;
+    AudioHandle loadAudio(@NonNull String filePath) throws AudioLoadException;
 
     /** Non-blocking prefetch for smooth scrolling. */
     CompletableFuture<Void> preloadRange(

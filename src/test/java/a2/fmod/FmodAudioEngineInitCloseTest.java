@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import a2.AudioEngineConfig;
+import a2.exceptions.AudioEngineException;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -112,8 +113,8 @@ class FmodAudioEngineInitCloseTest {
         spyEngine.init(config);
 
         // Second init should fail
-        IllegalStateException ex =
-                assertThrows(IllegalStateException.class, () -> spyEngine.init(config));
+        AudioEngineException ex =
+                assertThrows(AudioEngineException.class, () -> spyEngine.init(config));
         assertTrue(ex.getMessage().contains("Cannot initialize engine in state: INITIALIZED"));
     }
 
@@ -343,9 +344,8 @@ class FmodAudioEngineInitCloseTest {
                     // Operation should have failed with state error
                     assertNotNull(opException.get(), "Expected an exception but got none");
                     assertTrue(
-                            opException.get() instanceof IllegalStateException
-                                    || opException.get() instanceof UnsupportedOperationException,
-                            "Expected IllegalStateException or UnsupportedOperationException but"
+                            opException.get() instanceof AudioEngineException,
+                            "Expected AudioEngineException but"
                                     + " got: "
                                     + opException.get().getClass()
                                     + " - "
@@ -362,8 +362,8 @@ class FmodAudioEngineInitCloseTest {
                         .maxCacheBytes(1000) // Less than 1MB
                         .build();
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> spyEngine.init(invalidConfig));
+        AudioEngineException ex =
+                assertThrows(AudioEngineException.class, () -> spyEngine.init(invalidConfig));
         assertTrue(ex.getMessage().contains("maxCacheBytes must be at least 1MB"));
 
         // Verify state returned to UNINITIALIZED
@@ -378,8 +378,8 @@ class FmodAudioEngineInitCloseTest {
                         .maxCacheBytes(11L * 1024 * 1024 * 1024) // More than 10GB
                         .build();
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> spyEngine.init(invalidConfig));
+        AudioEngineException ex =
+                assertThrows(AudioEngineException.class, () -> spyEngine.init(invalidConfig));
         assertTrue(ex.getMessage().contains("maxCacheBytes must not exceed 10GB"));
     }
 
@@ -389,8 +389,8 @@ class FmodAudioEngineInitCloseTest {
         AudioEngineConfig invalidConfig =
                 AudioEngineConfig.builder().prefetchWindowSeconds(-1).build();
 
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> spyEngine.init(invalidConfig));
+        AudioEngineException ex =
+                assertThrows(AudioEngineException.class, () -> spyEngine.init(invalidConfig));
         assertTrue(ex.getMessage().contains("prefetchWindowSeconds must be non-negative"));
     }
 

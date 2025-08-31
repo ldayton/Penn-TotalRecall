@@ -8,8 +8,11 @@ import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
-import a2.fmod.exceptions.CorruptedAudioFileException;
-import a2.fmod.exceptions.UnsupportedAudioFormatException;
+import a2.exceptions.AudioEngineException;
+import a2.exceptions.AudioLoadException;
+import a2.exceptions.AudioPlaybackException;
+import a2.exceptions.CorruptedAudioFileException;
+import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
@@ -17,7 +20,6 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +78,7 @@ public class FmodAudioEngine implements AudioEngine {
         // Transition from UNINITIALIZED to INITIALIZING
         if (!state.compareAndSet(State.UNINITIALIZED, State.INITIALIZING)) {
             State currentState = state.get();
-            throw new IllegalStateException("Cannot initialize engine in state: " + currentState);
+            throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
 
         FmodLibrary fmodLib = null;
@@ -93,7 +95,7 @@ public class FmodAudioEngine implements AudioEngine {
             PointerByReference systemRef = new PointerByReference();
             int result = fmodLib.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioEngineException(
                         "Failed to create FMOD system: "
                                 + fmodLib.FMOD_ErrorString(result)
                                 + " (code: "
@@ -114,7 +116,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             result = fmodLib.FMOD_System_Init(newSystem, maxChannels, initFlags, null);
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioEngineException(
                         "Failed to initialize FMOD system: "
                                 + fmodLib.FMOD_ErrorString(result)
                                 + " (code: "
@@ -130,7 +132,7 @@ public class FmodAudioEngine implements AudioEngine {
             // Transition to INITIALIZED
             if (!state.compareAndSet(State.INITIALIZING, State.INITIALIZED)) {
                 // Someone called close() while we were initializing
-                throw new IllegalStateException("Engine was closed during initialization");
+                throw new AudioEngineException("Engine was closed during initialization");
             }
 
             // Log system info (after lock released)
@@ -255,7 +257,7 @@ public class FmodAudioEngine implements AudioEngine {
 
     private void checkResult(int result, String message) {
         if (result != FmodConstants.FMOD_OK) {
-            throw new RuntimeException(
+            throw new AudioEngineException(
                     message + ": " + fmod.FMOD_ErrorString(result) + " (code: " + result + ")");
         }
     }
@@ -264,22 +266,22 @@ public class FmodAudioEngine implements AudioEngine {
         // Validate cache size (minimum 1MB, maximum 10GB)
         long cacheBytes = config.getMaxCacheBytes();
         if (cacheBytes < 1024 * 1024) {
-            throw new IllegalArgumentException(
+            throw new AudioEngineException(
                     "maxCacheBytes must be at least 1MB, got: " + cacheBytes);
         }
         if (cacheBytes > 10L * 1024 * 1024 * 1024) {
-            throw new IllegalArgumentException(
+            throw new AudioEngineException(
                     "maxCacheBytes must not exceed 10GB, got: " + cacheBytes);
         }
 
         // Validate prefetch window (0-60 seconds)
         int prefetchSeconds = config.getPrefetchWindowSeconds();
         if (prefetchSeconds < 0) {
-            throw new IllegalArgumentException(
+            throw new AudioEngineException(
                     "prefetchWindowSeconds must be non-negative, got: " + prefetchSeconds);
         }
         if (prefetchSeconds > 60) {
-            throw new IllegalArgumentException(
+            throw new AudioEngineException(
                     "prefetchWindowSeconds must not exceed 60 seconds, got: " + prefetchSeconds);
         }
     }
@@ -301,31 +303,28 @@ public class FmodAudioEngine implements AudioEngine {
     private void checkOperational() {
         State currentState = state.get();
         if (currentState != State.INITIALIZED) {
-            throw new IllegalStateException("Operation not allowed in state: " + currentState);
+            throw new AudioEngineException("Operation not allowed in state: " + currentState);
         }
     }
 
     @Override
-    public AudioHandle loadAudio(@NonNull String filePath)
-            throws FileNotFoundException,
-                    UnsupportedAudioFormatException,
-                    CorruptedAudioFileException {
+    public AudioHandle loadAudio(@NonNull String filePath) throws AudioLoadException {
         checkOperational();
 
         // Validate file exists and get canonical path
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new FileNotFoundException("Audio file not found: " + filePath);
+            throw new AudioLoadException("Audio file not found: " + filePath);
         }
         if (!file.canRead()) {
-            throw new IllegalArgumentException("Cannot read audio file: " + filePath);
+            throw new AudioLoadException("Cannot read audio file: " + filePath);
         }
 
         String canonicalPath;
         try {
             canonicalPath = file.getCanonicalPath();
         } catch (IOException e) {
-            throw new IllegalArgumentException("Cannot resolve file path: " + filePath, e);
+            throw new AudioLoadException("Cannot resolve file path: " + filePath, e);
         }
 
         operationLock.lock();
@@ -366,7 +365,7 @@ public class FmodAudioEngine implements AudioEngine {
                 String errorMsg = fmod.FMOD_ErrorString(result);
                 switch (result) {
                     case FmodConstants.FMOD_ERR_FILE_NOTFOUND:
-                        throw new FileNotFoundException("FMOD cannot find file: " + canonicalPath);
+                        throw new AudioLoadException("FMOD cannot find file: " + canonicalPath);
                     case FmodConstants.FMOD_ERR_FORMAT:
                         throw new UnsupportedAudioFormatException(
                                 "Unsupported audio format: " + canonicalPath + " - " + errorMsg);
@@ -374,7 +373,7 @@ public class FmodAudioEngine implements AudioEngine {
                         throw new CorruptedAudioFileException(
                                 "Corrupted audio file: " + canonicalPath + " - " + errorMsg);
                     default:
-                        throw new RuntimeException(
+                        throw new AudioLoadException(
                                 "Failed to load audio file: " + canonicalPath + " - " + errorMsg);
                 }
             }
@@ -400,7 +399,7 @@ public class FmodAudioEngine implements AudioEngine {
     public CompletableFuture<Void> preloadRange(
             @NonNull AudioHandle handle, long startFrame, long endFrame) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new AudioEngineException("Not yet implemented");
     }
 
     @Override
@@ -412,17 +411,17 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Validate the handle
             if (!(audio instanceof FmodAudioHandle)) {
-                throw new IllegalArgumentException("Invalid audio handle type");
+                throw new AudioPlaybackException("Invalid audio handle type");
             }
 
             FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
             if (!fmodHandle.isValid()) {
-                throw new IllegalArgumentException("Audio handle is no longer valid");
+                throw new AudioPlaybackException("Audio handle is no longer valid");
             }
 
             // Verify this is the current loaded audio
             if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
-                throw new IllegalArgumentException("Audio handle is not the currently loaded file");
+                throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
 
             // Play the sound - start paused so we can get the channel handle first
@@ -430,7 +429,7 @@ public class FmodAudioEngine implements AudioEngine {
             int result = fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to play sound: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -441,7 +440,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 // Clean up the channel if we can't start it
                 fmod.FMOD_Channel_Stop(channel);
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to start playback: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -471,22 +470,22 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Validate the handle
             if (!(audio instanceof FmodAudioHandle)) {
-                throw new IllegalArgumentException("Invalid audio handle type");
+                throw new AudioPlaybackException("Invalid audio handle type");
             }
 
             FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
             if (!fmodHandle.isValid()) {
-                throw new IllegalArgumentException("Audio handle is no longer valid");
+                throw new AudioPlaybackException("Audio handle is no longer valid");
             }
 
             // Verify this is the current loaded audio
             if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
-                throw new IllegalArgumentException("Audio handle is not the currently loaded file");
+                throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
 
             // Validate range
             if (startFrame < 0 || endFrame < startFrame) {
-                throw new IllegalArgumentException(
+                throw new AudioPlaybackException(
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
 
@@ -495,7 +494,7 @@ public class FmodAudioEngine implements AudioEngine {
             int result = fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to play sound: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -508,7 +507,7 @@ public class FmodAudioEngine implements AudioEngine {
                                 channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
-                    throw new RuntimeException(
+                    throw new AudioPlaybackException(
                             "Failed to set playback position: " + fmod.FMOD_ErrorString(result));
                 }
             }
@@ -524,7 +523,7 @@ public class FmodAudioEngine implements AudioEngine {
                             FmodConstants.FMOD_TIMEUNIT_PCM);
             if (result != FmodConstants.FMOD_OK) {
                 fmod.FMOD_Channel_Stop(channel);
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to set loop points: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -532,7 +531,7 @@ public class FmodAudioEngine implements AudioEngine {
             result = fmod.FMOD_Channel_SetLoopCount(channel, 0);
             if (result != FmodConstants.FMOD_OK) {
                 fmod.FMOD_Channel_Stop(channel);
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to set loop count: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -540,7 +539,7 @@ public class FmodAudioEngine implements AudioEngine {
             result = fmod.FMOD_Channel_SetPaused(channel, false);
             if (result != FmodConstants.FMOD_OK) {
                 fmod.FMOD_Channel_Stop(channel);
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to start playback: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -566,7 +565,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Validate the handle
             if (!(playback instanceof FmodPlaybackHandle)) {
-                throw new IllegalArgumentException("Invalid playback handle type");
+                throw new AudioPlaybackException("Invalid playback handle type");
             }
 
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
@@ -577,7 +576,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Check if this playback is tracked
             if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
-                throw new IllegalArgumentException("Unknown playback handle");
+                throw new AudioPlaybackException("Unknown playback handle");
             }
 
             // Pause the channel
@@ -593,7 +592,7 @@ public class FmodAudioEngine implements AudioEngine {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to pause playback: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -615,17 +614,17 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Validate the handle
             if (!(playback instanceof FmodPlaybackHandle)) {
-                throw new IllegalArgumentException("Invalid playback handle type");
+                throw new AudioPlaybackException("Invalid playback handle type");
             }
 
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
             if (!fmodPlayback.isActive()) {
-                throw new IllegalStateException("Cannot resume inactive playback");
+                throw new AudioPlaybackException("Cannot resume inactive playback");
             }
 
             // Check if this playback is tracked
             if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
-                throw new IllegalArgumentException("Unknown playback handle");
+                throw new AudioPlaybackException("Unknown playback handle");
             }
 
             // Resume the channel
@@ -637,11 +636,11 @@ public class FmodAudioEngine implements AudioEngine {
                 log.debug("Channel was stopped, cannot resume");
                 fmodPlayback.markInactive();
                 activePlaybacks.remove(fmodPlayback.getId());
-                throw new IllegalStateException("Channel was stopped, cannot resume");
+                throw new AudioPlaybackException("Channel was stopped, cannot resume");
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException(
+                throw new AudioPlaybackException(
                         "Failed to resume playback: " + fmod.FMOD_ErrorString(result));
             }
 
@@ -663,7 +662,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Validate the handle
             if (!(playback instanceof FmodPlaybackHandle)) {
-                throw new IllegalArgumentException("Invalid playback handle type");
+                throw new AudioPlaybackException("Invalid playback handle type");
             }
 
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
@@ -709,20 +708,20 @@ public class FmodAudioEngine implements AudioEngine {
             checkOperational();
 
             if (!(playback instanceof FmodPlaybackHandle)) {
-                throw new IllegalArgumentException("Invalid playback handle type");
+                throw new AudioPlaybackException("Invalid playback handle type");
             }
 
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
             if (!fmodPlayback.isActive()) {
-                throw new IllegalStateException("Cannot seek inactive playback");
+                throw new AudioPlaybackException("Cannot seek inactive playback");
             }
 
             if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
-                throw new IllegalArgumentException("Unknown playback handle");
+                throw new AudioPlaybackException("Unknown playback handle");
             }
 
             if (frame < 0) {
-                throw new IllegalArgumentException("Invalid seek position: " + frame);
+                throw new AudioPlaybackException("Invalid seek position: " + frame);
             }
 
             // Get current state to restore after seek
@@ -740,11 +739,12 @@ public class FmodAudioEngine implements AudioEngine {
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                 fmodPlayback.markInactive();
                 activePlaybacks.remove(fmodPlayback.getId());
-                throw new IllegalStateException("Channel was stopped, cannot seek");
+                throw new AudioPlaybackException("Channel was stopped, cannot seek");
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new RuntimeException("Failed to seek: " + fmod.FMOD_ErrorString(result));
+                throw new AudioPlaybackException(
+                        "Failed to seek: " + fmod.FMOD_ErrorString(result));
             }
 
             // Notify listeners of state change
@@ -761,7 +761,7 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public PlaybackState getState(@NonNull PlaybackHandle playback) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new AudioEngineException("Not yet implemented");
     }
 
     @Override
@@ -790,7 +790,7 @@ public class FmodAudioEngine implements AudioEngine {
         }
 
         if (result != FmodConstants.FMOD_OK) {
-            throw new RuntimeException(
+            throw new AudioPlaybackException(
                     "Failed to get playback position: " + fmod.FMOD_ErrorString(result));
         }
 
@@ -800,20 +800,20 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public boolean isPlaying(@NonNull PlaybackHandle playback) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new AudioEngineException("Not yet implemented");
     }
 
     @Override
     public CompletableFuture<AudioBuffer> readSamples(
             @NonNull AudioHandle audio, long startFrame, long frameCount) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new AudioEngineException("Not yet implemented");
     }
 
     @Override
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new AudioEngineException("Not yet implemented");
     }
 
     @Override

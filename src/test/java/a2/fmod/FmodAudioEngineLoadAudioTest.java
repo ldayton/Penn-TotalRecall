@@ -6,12 +6,12 @@ import static org.mockito.Mockito.*;
 
 import a2.AudioEngineConfig;
 import a2.AudioHandle;
-import a2.fmod.exceptions.CorruptedAudioFileException;
-import a2.fmod.exceptions.UnsupportedAudioFormatException;
+import a2.exceptions.AudioLoadException;
+import a2.exceptions.CorruptedAudioFileException;
+import a2.exceptions.UnsupportedAudioFormatException;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -79,9 +79,8 @@ class FmodAudioEngineLoadAudioTest {
     void testLoadNonExistentFile() {
         String nonExistentPath = "/does/not/exist/audio.wav";
 
-        FileNotFoundException ex =
-                assertThrows(
-                        FileNotFoundException.class, () -> spyEngine.loadAudio(nonExistentPath));
+        AudioLoadException ex =
+                assertThrows(AudioLoadException.class, () -> spyEngine.loadAudio(nonExistentPath));
 
         assertTrue(ex.getMessage().contains("Audio file not found"));
         assertTrue(ex.getMessage().contains(nonExistentPath));
@@ -165,7 +164,7 @@ class FmodAudioEngineLoadAudioTest {
                 .thenReturn(FmodConstants.FMOD_ERR_FILE_NOTFOUND);
         when(mockFmod.FMOD_ErrorString(anyInt())).thenReturn("File not found");
 
-        assertThrows(FileNotFoundException.class, () -> spyEngine.loadAudio(audioFile.toString()));
+        assertThrows(AudioLoadException.class, () -> spyEngine.loadAudio(audioFile.toString()));
 
         // Test FORMAT error
         when(mockFmod.FMOD_System_CreateSound(any(), any(), anyInt(), any(), any()))
