@@ -91,4 +91,64 @@ class FmodConstants {
     static final int FMOD_CHANNELMASK_SURROUND_RIGHT = 0x00000020;
     static final int FMOD_CHANNELMASK_BACK_LEFT = 0x00000040;
     static final int FMOD_CHANNELMASK_BACK_RIGHT = 0x00000080;
+
+    // FMOD_OUTPUTTYPE
+    static final int FMOD_OUTPUTTYPE_AUTODETECT = 0;
+    static final int FMOD_OUTPUTTYPE_UNKNOWN = 1;
+    static final int FMOD_OUTPUTTYPE_NOSOUND = 2;
+    static final int FMOD_OUTPUTTYPE_WAVWRITER = 3;
+    static final int FMOD_OUTPUTTYPE_NOSOUND_NRT = 4;
+    static final int FMOD_OUTPUTTYPE_WASAPI = 5;
+    static final int FMOD_OUTPUTTYPE_ASIO = 6;
+    static final int FMOD_OUTPUTTYPE_PULSEAUDIO = 7;
+    static final int FMOD_OUTPUTTYPE_ALSA = 8;
+    static final int FMOD_OUTPUTTYPE_COREAUDIO = 9;
+    static final int FMOD_OUTPUTTYPE_AUDIOTRACK = 10;
+    static final int FMOD_OUTPUTTYPE_OPENSL = 11;
+    static final int FMOD_OUTPUTTYPE_AUDIOOUT = 12;
+    static final int FMOD_OUTPUTTYPE_AUDIO3D = 13;
+    static final int FMOD_OUTPUTTYPE_WEBAUDIO = 14;
+    static final int FMOD_OUTPUTTYPE_NNAUDIO = 15;
+    static final int FMOD_OUTPUTTYPE_WINSONIC = 16;
+    static final int FMOD_OUTPUTTYPE_AAUDIO = 17;
+    static final int FMOD_OUTPUTTYPE_AUDIOWORKLET = 18;
+    static final int FMOD_OUTPUTTYPE_PHASE = 19;
+
+    // FMOD_SPEAKERMODE
+    static final int FMOD_SPEAKERMODE_DEFAULT = 0;
+    static final int FMOD_SPEAKERMODE_RAW = 1;
+    static final int FMOD_SPEAKERMODE_MONO = 2;
+    static final int FMOD_SPEAKERMODE_STEREO = 3;
+    static final int FMOD_SPEAKERMODE_QUAD = 4;
+    static final int FMOD_SPEAKERMODE_SURROUND = 5;
+    static final int FMOD_SPEAKERMODE_5POINT1 = 6;
+    static final int FMOD_SPEAKERMODE_7POINT1 = 7;
+    static final int FMOD_SPEAKERMODE_7POINT1POINT4 = 8;
+
+    // FMOD_SOUND_TYPE
+    static final int FMOD_SOUND_TYPE_UNKNOWN = 0;
+    static final int FMOD_SOUND_TYPE_AIFF = 1;
+    static final int FMOD_SOUND_TYPE_ASF = 2;
+    static final int FMOD_SOUND_TYPE_DLS = 3;
+    static final int FMOD_SOUND_TYPE_FLAC = 4;
+    static final int FMOD_SOUND_TYPE_FSB = 5;
+    static final int FMOD_SOUND_TYPE_IT = 6;
+    static final int FMOD_SOUND_TYPE_MIDI = 7;
+    static final int FMOD_SOUND_TYPE_MOD = 8;
+    static final int FMOD_SOUND_TYPE_MPEG = 9;
+    static final int FMOD_SOUND_TYPE_OGGVORBIS = 10;
+    static final int FMOD_SOUND_TYPE_PLAYLIST = 11;
+    static final int FMOD_SOUND_TYPE_RAW = 12;
+    static final int FMOD_SOUND_TYPE_S3M = 13;
+    static final int FMOD_SOUND_TYPE_USER = 14;
+    static final int FMOD_SOUND_TYPE_WAV = 15;
+    static final int FMOD_SOUND_TYPE_XM = 16;
+    static final int FMOD_SOUND_TYPE_XMA = 17;
+    static final int FMOD_SOUND_TYPE_AUDIOQUEUE = 18;
+    static final int FMOD_SOUND_TYPE_AT9 = 19;
+    static final int FMOD_SOUND_TYPE_VORBIS = 20;
+    static final int FMOD_SOUND_TYPE_MEDIA_FOUNDATION = 21;
+    static final int FMOD_SOUND_TYPE_MEDIACODEC = 22;
+    static final int FMOD_SOUND_TYPE_FADPCM = 23;
+    static final int FMOD_SOUND_TYPE_OPUS = 24;
 }
