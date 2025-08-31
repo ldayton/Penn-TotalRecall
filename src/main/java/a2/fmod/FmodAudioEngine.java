@@ -6,6 +6,7 @@ import a2.AudioEngineConfig;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.PlaybackHandle;
+import a2.PlaybackListener;
 import a2.PlaybackState;
 import a2.fmod.exceptions.CorruptedAudioFileException;
 import a2.fmod.exceptions.UnsupportedAudioFormatException;
@@ -18,9 +19,14 @@ import com.sun.jna.ptr.PointerByReference;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -56,6 +62,11 @@ public class FmodAudioEngine implements AudioEngine {
     private FmodAudioHandle currentHandle;
     private Pointer currentSound;
     private String currentPath;
+
+    // Listener management
+    private final List<PlaybackListener> listeners = new CopyOnWriteArrayList<>();
+    private ScheduledExecutorService progressTimer;
+    private static final long PROGRESS_UPDATE_INTERVAL_MS = 100;
 
     /** Default constructor for factory use. */
     FmodAudioEngine() {}
@@ -124,6 +135,21 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Log system info (after lock released)
             logSystemInfo();
+
+            // Start progress timer for callbacks
+            progressTimer =
+                    Executors.newSingleThreadScheduledExecutor(
+                            r -> {
+                                Thread t = new Thread(r, "FmodProgressTimer");
+                                t.setDaemon(true);
+                                return t;
+                            });
+            progressTimer.scheduleAtFixedRate(
+                    this::updateProgress,
+                    PROGRESS_UPDATE_INTERVAL_MS,
+                    PROGRESS_UPDATE_INTERVAL_MS,
+                    TimeUnit.MILLISECONDS);
+
             log.info("FMOD audio engine initialized successfully");
 
         } catch (Exception e) {
@@ -426,6 +452,9 @@ public class FmodAudioEngine implements AudioEngine {
             // Track active playback
             activePlaybacks.put(playbackHandle.getId(), playbackHandle);
 
+            // Notify listeners
+            notifyStateChanged(playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+
             log.debug("Started playback for file: {}", fmodHandle.getFilePath());
             return playbackHandle;
         } finally {
@@ -568,6 +597,9 @@ public class FmodAudioEngine implements AudioEngine {
                         "Failed to pause playback: " + fmod.FMOD_ErrorString(result));
             }
 
+            // Notify listeners
+            notifyStateChanged(fmodPlayback, PlaybackState.PAUSED, PlaybackState.PLAYING);
+
             log.debug("Paused playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -613,6 +645,9 @@ public class FmodAudioEngine implements AudioEngine {
                         "Failed to resume playback: " + fmod.FMOD_ErrorString(result));
             }
 
+            // Notify listeners
+            notifyStateChanged(fmodPlayback, PlaybackState.PLAYING, PlaybackState.PAUSED);
+
             log.debug("Resumed playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -657,6 +692,9 @@ public class FmodAudioEngine implements AudioEngine {
             fmodPlayback.markInactive();
             activePlaybacks.remove(fmodPlayback.getId());
 
+            // Notify listeners
+            notifyStateChanged(fmodPlayback, PlaybackState.STOPPED, PlaybackState.PLAYING);
+
             log.debug("Stopped playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -669,7 +707,52 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             checkOperational();
-            throw new UnsupportedOperationException("Not yet implemented");
+
+            if (!(playback instanceof FmodPlaybackHandle)) {
+                throw new IllegalArgumentException("Invalid playback handle type");
+            }
+
+            FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+            if (!fmodPlayback.isActive()) {
+                throw new IllegalStateException("Cannot seek inactive playback");
+            }
+
+            if (!activePlaybacks.containsKey(fmodPlayback.getId())) {
+                throw new IllegalArgumentException("Unknown playback handle");
+            }
+
+            if (frame < 0) {
+                throw new IllegalArgumentException("Invalid seek position: " + frame);
+            }
+
+            // Get current state to restore after seek
+            IntByReference pausedRef = new IntByReference();
+            int result = fmod.FMOD_Channel_GetPaused(fmodPlayback.getChannel(), pausedRef);
+            boolean wasPaused = (result == FmodConstants.FMOD_OK && pausedRef.getValue() != 0);
+
+            // Perform the seek
+            result =
+                    fmod.FMOD_Channel_SetPosition(
+                            fmodPlayback.getChannel(),
+                            (int) frame,
+                            FmodConstants.FMOD_TIMEUNIT_PCM);
+
+            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                fmodPlayback.markInactive();
+                activePlaybacks.remove(fmodPlayback.getId());
+                throw new IllegalStateException("Channel was stopped, cannot seek");
+            }
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new RuntimeException("Failed to seek: " + fmod.FMOD_ErrorString(result));
+            }
+
+            // Notify listeners of state change
+            PlaybackState currentState = wasPaused ? PlaybackState.PAUSED : PlaybackState.PLAYING;
+            notifyStateChanged(fmodPlayback, PlaybackState.SEEKING, currentState);
+            notifyStateChanged(fmodPlayback, currentState, PlaybackState.SEEKING);
+
+            log.debug("Seeked playback {} to frame {}", fmodPlayback.getId(), frame);
         } finally {
             operationLock.unlock();
         }
@@ -684,7 +767,34 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public long getPosition(@NonNull PlaybackHandle playback) {
         checkOperational();
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        if (!(playback instanceof FmodPlaybackHandle)) {
+            throw new IllegalArgumentException("Invalid playback handle type");
+        }
+
+        FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
+        if (!fmodPlayback.isActive()) {
+            return 0;
+        }
+
+        IntByReference positionRef = new IntByReference();
+        int result =
+                fmod.FMOD_Channel_GetPosition(
+                        fmodPlayback.getChannel(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+
+        if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+            // Channel has stopped
+            fmodPlayback.markInactive();
+            activePlaybacks.remove(fmodPlayback.getId());
+            return 0;
+        }
+
+        if (result != FmodConstants.FMOD_OK) {
+            throw new RuntimeException(
+                    "Failed to get playback position: " + fmod.FMOD_ErrorString(result));
+        }
+
+        return positionRef.getValue();
     }
 
     @Override
@@ -704,6 +814,93 @@ public class FmodAudioEngine implements AudioEngine {
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
         checkOperational();
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void addPlaybackListener(@NonNull PlaybackListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removePlaybackListener(@NonNull PlaybackListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void updateProgress() {
+        if (listeners.isEmpty() || activePlaybacks.isEmpty()) {
+            return;
+        }
+
+        for (FmodPlaybackHandle playback : activePlaybacks.values()) {
+            if (!playback.isActive()) {
+                continue;
+            }
+
+            try {
+                IntByReference positionRef = new IntByReference();
+                int result =
+                        fmod.FMOD_Channel_GetPosition(
+                                playback.getChannel(),
+                                positionRef,
+                                FmodConstants.FMOD_TIMEUNIT_PCM);
+
+                if (result == FmodConstants.FMOD_OK) {
+                    long position = positionRef.getValue();
+                    long total = getAudioDuration(playback.getAudioHandle());
+
+                    for (PlaybackListener listener : listeners) {
+                        try {
+                            listener.onProgress(playback, position, total);
+                        } catch (Exception e) {
+                            log.debug("Error in progress listener", e);
+                        }
+                    }
+                } else if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                    // Channel has stopped
+                    handlePlaybackComplete(playback);
+                }
+            } catch (Exception e) {
+                log.debug("Error updating progress for playback {}", playback.getId(), e);
+            }
+        }
+    }
+
+    private void handlePlaybackComplete(FmodPlaybackHandle playback) {
+        playback.markInactive();
+        activePlaybacks.remove(playback.getId());
+
+        notifyStateChanged(playback, PlaybackState.FINISHED, PlaybackState.PLAYING);
+
+        for (PlaybackListener listener : listeners) {
+            try {
+                listener.onPlaybackComplete(playback);
+            } catch (Exception e) {
+                log.debug("Error in completion listener", e);
+            }
+        }
+    }
+
+    private void notifyStateChanged(
+            PlaybackHandle playback, PlaybackState newState, PlaybackState oldState) {
+        for (PlaybackListener listener : listeners) {
+            try {
+                listener.onStateChanged(playback, newState, oldState);
+            } catch (Exception e) {
+                log.debug("Error in state change listener", e);
+            }
+        }
+    }
+
+    private long getAudioDuration(AudioHandle handle) {
+        if (!(handle instanceof FmodAudioHandle) || currentSound == null) {
+            return 0;
+        }
+
+        IntByReference lengthRef = new IntByReference();
+        int result =
+                fmod.FMOD_Sound_GetLength(currentSound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+
+        return result == FmodConstants.FMOD_OK ? lengthRef.getValue() : 0;
     }
 
     @Override
@@ -741,6 +938,20 @@ public class FmodAudioEngine implements AudioEngine {
         log.info("Shutting down FMOD audio engine");
 
         // Now in CLOSING state - no new operations can start
+
+        // Stop progress timer first
+        if (progressTimer != null) {
+            progressTimer.shutdown();
+            try {
+                if (!progressTimer.awaitTermination(1, TimeUnit.SECONDS)) {
+                    progressTimer.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                progressTimer.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+
         // Acquire and hold the lock for the entire cleanup to ensure
         // no operations can access resources during teardown
         operationLock.lock();

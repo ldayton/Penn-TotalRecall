@@ -46,6 +46,10 @@ public interface AudioEngine extends AutoCloseable {
 
     AudioMetadata getMetadata(@NonNull AudioHandle audio);
 
+    void addPlaybackListener(@NonNull PlaybackListener listener);
+
+    void removePlaybackListener(@NonNull PlaybackListener listener);
+
     @Override
     void close();
 }
