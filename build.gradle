@@ -415,6 +415,14 @@ tasks.register('audioEngineTest', Test.class) {
 
     // Native access for JNA/FlatLaf
     jvmArgs = nativeAccessJvmArgs
+    
+    // Enable detailed test output with INFO level logging
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+        info.events = ["passed", "skipped", "failed"]
+        info.exceptionFormat = "full"
+    }
 
     // Detect CI from top-level flag
     def isCI = project.ext.isCI

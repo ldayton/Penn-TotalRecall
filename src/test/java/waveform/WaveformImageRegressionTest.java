@@ -121,6 +121,17 @@ class WaveformImageRegressionTest {
             // Convert actual image to BufferedImage for comparison
             BufferedImage actualBuffered = toBufferedImage(actualImage);
 
+            // Always save the generated image for inspection
+            Path actualPath = Paths.get(OUTPUT_DIR, "actual_" + filename);
+            ImageIO.write(actualBuffered, "png", actualPath.toFile());
+
+            // Print both image paths for visibility
+            String referencePath =
+                    getClass().getResource(REFERENCE_IMAGE_RESOURCE_PATH + filename).getPath();
+            logger.info("Comparing images:");
+            logger.info("  Reference: {}", referencePath);
+            logger.info("  Actual:    {}", actualPath.toAbsolutePath());
+
             // Compare images using the library with pixel-perfect tolerance
             ImageComparison comparison =
                     new ImageComparison(referenceImage, actualBuffered)
