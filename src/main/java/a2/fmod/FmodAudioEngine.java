@@ -251,6 +251,11 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     private FmodLibrary loadFmodLibrary() {
+        return doLoadFmodLibrary();
+    }
+
+    // Package-private for testing - can be overridden by spy
+    FmodLibrary doLoadFmodLibrary() {
         // Add search path for FMOD libraries
         String resourcePath = getClass().getResource("/fmod/macos").getPath();
         NativeLibrary.addSearchPath("fmod", resourcePath);
