@@ -38,7 +38,7 @@ public interface FmodLibrary extends Library {
             IntByReference speakermode,
             IntByReference numrawspeakers);
 
-    int FMOD_System_GetVersion(Pointer system, IntByReference version);
+    int FMOD_System_GetVersion(Pointer system, IntByReference version, IntByReference buildnumber);
 
     int FMOD_System_GetDriverInfo(
             Pointer system,
@@ -111,6 +111,7 @@ public interface FmodLibrary extends Library {
 
     int FMOD_Channel_GetVolume(Pointer channel, FloatByReference volume);
 
-    // Error handling
-    String FMOD_ErrorString(int errcode);
+    // Note: FMOD_ErrorString is a static inline function in the header,
+    // not an exported library symbol, so it cannot be called via JNA.
+    // Error codes must be translated manually or via a lookup table.
 }

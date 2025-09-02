@@ -132,7 +132,9 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioEngineException(
                         "Failed to create FMOD system: "
-                                + fmodLib.FMOD_ErrorString(result)
+                                + " (error code: "
+                                + result
+                                + ")"
                                 + " (code: "
                                 + result
                                 + ")");
@@ -153,7 +155,9 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioEngineException(
                         "Failed to initialize FMOD system: "
-                                + fmodLib.FMOD_ErrorString(result)
+                                + " (error code: "
+                                + result
+                                + ")"
                                 + " (code: "
                                 + result
                                 + ")");
@@ -219,7 +223,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
                         "Could not set DSP buffer size for low latency: {}",
-                        fmodLib.FMOD_ErrorString(result));
+                        "error code: " + result);
             }
 
             // Set software format - mono for audio annotation app
@@ -227,7 +231,7 @@ public class FmodAudioEngine implements AudioEngine {
                     fmodLib.FMOD_System_SetSoftwareFormat(
                             sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
             if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", fmodLib.FMOD_ErrorString(result));
+                log.warn("Could not set software format: {}", "error code: " + result);
             }
 
         } else {
@@ -238,15 +242,14 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
                         "Could not set NOSOUND_NRT output for rendering: {}",
-                        fmodLib.FMOD_ErrorString(result));
+                        "error code: " + result);
             }
 
             // Larger buffers for rendering efficiency (2048 samples, 2 buffers)
             result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 2048, 2);
             if (result != FmodConstants.FMOD_OK) {
                 log.warn(
-                        "Could not set DSP buffer size for rendering: {}",
-                        fmodLib.FMOD_ErrorString(result));
+                        "Could not set DSP buffer size for rendering: {}", "error code: " + result);
             }
 
             // Mono format for rendering as well
@@ -254,17 +257,23 @@ public class FmodAudioEngine implements AudioEngine {
                     fmodLib.FMOD_System_SetSoftwareFormat(
                             sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
             if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", fmodLib.FMOD_ErrorString(result));
+                log.warn("Could not set software format: {}", "error code: " + result);
             }
         }
     }
 
     private void logSystemInfo() {
         IntByReference version = new IntByReference();
-        int result = fmod.FMOD_System_GetVersion(system, version);
+        IntByReference buildnumber = new IntByReference();
+        int result = fmod.FMOD_System_GetVersion(system, version, buildnumber);
         if (result == FmodConstants.FMOD_OK) {
             int v = version.getValue();
-            log.info("FMOD version: {}.{}.{}", (v >> 16) & 0xFFFF, (v >> 8) & 0xFF, v & 0xFF);
+            log.info(
+                    "FMOD version: {}.{}.{} (build {})",
+                    (v >> 16) & 0xFFFF,
+                    (v >> 8) & 0xFF,
+                    v & 0xFF,
+                    buildnumber.getValue());
         }
 
         IntByReference bufferLength = new IntByReference();
@@ -372,7 +381,7 @@ public class FmodAudioEngine implements AudioEngine {
 
                 int result = fmod.FMOD_Sound_Release(currentSound);
                 if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing previous sound: {}", fmod.FMOD_ErrorString(result));
+                    log.warn("Error releasing previous sound: {}", "error code: " + result);
                 }
                 currentSound = null;
                 currentPath = null;
@@ -381,7 +390,7 @@ public class FmodAudioEngine implements AudioEngine {
                 // Ensure FMOD completes cleanup before loading new file
                 result = fmod.FMOD_System_Update(system);
                 if (result != FmodConstants.FMOD_OK) {
-                    log.debug("Error during system update: {}", fmod.FMOD_ErrorString(result));
+                    log.debug("Error during system update: {}", "error code: " + result);
                 }
             }
 
@@ -394,7 +403,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Map FMOD errors to appropriate exceptions
             if (result != FmodConstants.FMOD_OK) {
-                String errorMsg = fmod.FMOD_ErrorString(result);
+                String errorMsg = "error code: " + result;
                 switch (result) {
                     case FmodConstants.FMOD_ERR_FILE_NOTFOUND:
                         throw new AudioLoadException("FMOD cannot find file: " + canonicalPath);
@@ -480,8 +489,7 @@ public class FmodAudioEngine implements AudioEngine {
                                         system, currentPath, mode, null, soundRef);
 
                         if (result != FmodConstants.FMOD_OK) {
-                            log.warn(
-                                    "Failed to preload segment: {}", fmod.FMOD_ErrorString(result));
+                            log.warn("Failed to preload segment: {}", "error code: " + result);
                             return;
                         }
 
@@ -525,7 +533,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException(
-                        "Failed to play sound: " + fmod.FMOD_ErrorString(result));
+                        "Failed to play sound: " + "error code: " + result);
             }
 
             Pointer channel = channelRef.getValue();
@@ -536,7 +544,7 @@ public class FmodAudioEngine implements AudioEngine {
                 // Clean up the channel if we can't start it
                 fmod.FMOD_Channel_Stop(channel);
                 throw new AudioPlaybackException(
-                        "Failed to start playback: " + fmod.FMOD_ErrorString(result));
+                        "Failed to start playback: " + "error code: " + result);
             }
 
             // Create playback handle
@@ -602,7 +610,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException(
-                        "Failed to play sound: " + fmod.FMOD_ErrorString(result));
+                        "Failed to play sound: " + "error code: " + result);
             }
 
             Pointer channel = channelRef.getValue();
@@ -617,8 +625,7 @@ public class FmodAudioEngine implements AudioEngine {
                     if (result != FmodConstants.FMOD_OK) {
                         fmod.FMOD_Channel_Stop(channel);
                         throw new AudioPlaybackException(
-                                "Failed to set playback position: "
-                                        + fmod.FMOD_ErrorString(result));
+                                "Failed to set playback position: " + "error code: " + result);
                     }
                 }
 
@@ -634,7 +641,7 @@ public class FmodAudioEngine implements AudioEngine {
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
                     throw new AudioPlaybackException(
-                            "Failed to set loop points: " + fmod.FMOD_ErrorString(result));
+                            "Failed to set loop points: " + "error code: " + result);
                 }
 
                 // Set loop count to 0 for one-shot playback (play once then stop)
@@ -642,7 +649,7 @@ public class FmodAudioEngine implements AudioEngine {
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
                     throw new AudioPlaybackException(
-                            "Failed to set loop count: " + fmod.FMOD_ErrorString(result));
+                            "Failed to set loop count: " + "error code: " + result);
                 }
             }
             // If using preloaded sound, it's already the exact segment we want
@@ -653,7 +660,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (result != FmodConstants.FMOD_OK) {
                 fmod.FMOD_Channel_Stop(channel);
                 throw new AudioPlaybackException(
-                        "Failed to start playback: " + fmod.FMOD_ErrorString(result));
+                        "Failed to start playback: " + "error code: " + result);
             }
 
             // Fire-and-forget: channel will auto-stop at endFrame
@@ -706,7 +713,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException(
-                        "Failed to pause playback: " + fmod.FMOD_ErrorString(result));
+                        "Failed to pause playback: " + "error code: " + result);
             }
 
             // Notify listeners
@@ -754,7 +761,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException(
-                        "Failed to resume playback: " + fmod.FMOD_ErrorString(result));
+                        "Failed to resume playback: " + "error code: " + result);
             }
 
             // Notify listeners
@@ -797,7 +804,7 @@ public class FmodAudioEngine implements AudioEngine {
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result != FmodConstants.FMOD_OK
                     && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                log.warn("Error stopping channel: {}", fmod.FMOD_ErrorString(result));
+                log.warn("Error stopping channel: {}", "error code: " + result);
             }
 
             // Mark as inactive and remove from tracking
@@ -856,8 +863,7 @@ public class FmodAudioEngine implements AudioEngine {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException(
-                        "Failed to seek: " + fmod.FMOD_ErrorString(result));
+                throw new AudioPlaybackException("Failed to seek: " + "error code: " + result);
             }
 
             // Notify listeners of state change
@@ -904,7 +910,7 @@ public class FmodAudioEngine implements AudioEngine {
 
         if (result != FmodConstants.FMOD_OK) {
             throw new AudioPlaybackException(
-                    "Failed to check playback state: " + fmod.FMOD_ErrorString(result));
+                    "Failed to check playback state: " + "error code: " + result);
         }
 
         if (isPlayingRef.getValue() == 0) {
@@ -920,7 +926,7 @@ public class FmodAudioEngine implements AudioEngine {
 
         if (result != FmodConstants.FMOD_OK) {
             throw new AudioPlaybackException(
-                    "Failed to check pause state: " + fmod.FMOD_ErrorString(result));
+                    "Failed to check pause state: " + "error code: " + result);
         }
 
         return isPausedRef.getValue() != 0 ? PlaybackState.PAUSED : PlaybackState.PLAYING;
@@ -953,7 +959,7 @@ public class FmodAudioEngine implements AudioEngine {
 
         if (result != FmodConstants.FMOD_OK) {
             throw new AudioPlaybackException(
-                    "Failed to get playback position: " + fmod.FMOD_ErrorString(result));
+                    "Failed to get playback position: " + "error code: " + result);
         }
 
         return positionRef.getValue();
@@ -1013,7 +1019,7 @@ public class FmodAudioEngine implements AudioEngine {
                             currentSound, typeRef, formatRef, channelsRef, bitsRef);
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioEngineException(
-                        "Failed to get sound format: " + fmod.FMOD_ErrorString(result));
+                        "Failed to get sound format: " + "error code: " + result);
             }
 
             // Get sample rate
@@ -1021,7 +1027,7 @@ public class FmodAudioEngine implements AudioEngine {
             result = fmod.FMOD_Sound_GetDefaults(currentSound, frequencyRef, null);
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioEngineException(
-                        "Failed to get sample rate: " + fmod.FMOD_ErrorString(result));
+                        "Failed to get sample rate: " + "error code: " + result);
             }
 
             // Get length in PCM samples (frames)
@@ -1031,7 +1037,7 @@ public class FmodAudioEngine implements AudioEngine {
                             currentSound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioEngineException(
-                        "Failed to get sound length: " + fmod.FMOD_ErrorString(result));
+                        "Failed to get sound length: " + "error code: " + result);
             }
 
             // Extract values
@@ -1229,7 +1235,7 @@ public class FmodAudioEngine implements AudioEngine {
                             log.debug(
                                     "Error stopping playback {}: {}",
                                     entry.getKey(),
-                                    fmod.FMOD_ErrorString(result));
+                                    "error code: " + result);
                         }
                         playback.markInactive();
                     } catch (Exception e) {
@@ -1253,7 +1259,7 @@ public class FmodAudioEngine implements AudioEngine {
                 try {
                     int result = fmod.FMOD_Sound_Release(currentSound);
                     if (result != FmodConstants.FMOD_OK) {
-                        log.debug("Error releasing sound: {}", fmod.FMOD_ErrorString(result));
+                        log.debug("Error releasing sound: {}", "error code: " + result);
                     }
                 } catch (Exception e) {
                     log.debug("Error releasing sound", e);
@@ -1267,7 +1273,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (system != null && fmod != null) {
                 int result = fmod.FMOD_System_Release(system);
                 if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing FMOD system: {}", fmod.FMOD_ErrorString(result));
+                    log.warn("Error releasing FMOD system: {}", "error code: " + result);
                 }
             }
 
