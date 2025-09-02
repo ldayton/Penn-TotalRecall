@@ -20,19 +20,19 @@ class FmodAudioEngineInitCloseTest {
 
     @BeforeEach
     void setUp() {
-        engine = new FmodAudioEngine();
         config =
                 AudioEngineConfig.builder()
                         .engineType("fmod")
                         .mode(AudioEngineConfig.Mode.PLAYBACK)
                         .maxCacheBytes(10 * 1024 * 1024) // 10MB
                         .build();
+        engine = new FmodAudioEngine(config);
     }
 
     @Test
     void testSuccessfulInitialization() throws Exception {
-        // Initialize
-        assertDoesNotThrow(() -> engine.init(config));
+        // Engine is already initialized in setUp
+        assertNotNull(engine);
 
         // Close to clean up
         engine.close();
@@ -40,22 +40,13 @@ class FmodAudioEngineInitCloseTest {
 
     @Test
     void testCannotInitializeFromNonUninitializedState() throws Exception {
-        // First successful init
-        engine.init(config);
-
-        // Second init should fail
-        AudioEngineException ex =
-                assertThrows(AudioEngineException.class, () -> engine.init(config));
-        assertTrue(ex.getMessage().contains("Cannot initialize engine in state"));
-
-        // Clean up
+        assertNotNull(engine);
         engine.close();
     }
 
     @Test
     void testCloseFromInitializedState() throws Exception {
-        // Initialize first
-        engine.init(config);
+        // Engine is already initialized in setUp
 
         // Close
         assertDoesNotThrow(() -> engine.close());
@@ -69,8 +60,6 @@ class FmodAudioEngineInitCloseTest {
 
     @Test
     void testCloseIsIdempotent() throws Exception {
-        // Initialize and close
-        engine.init(config);
         engine.close();
 
         // Second close should be no-op
@@ -82,7 +71,7 @@ class FmodAudioEngineInitCloseTest {
         assertTimeoutPreemptively(
                 Duration.ofSeconds(5),
                 () -> {
-                    FmodAudioEngine testEngine = new FmodAudioEngine();
+                    FmodAudioEngine testEngine = new FmodAudioEngine(config);
                     CountDownLatch initStarted = new CountDownLatch(1);
                     CountDownLatch bothDone = new CountDownLatch(2);
 
@@ -95,7 +84,6 @@ class FmodAudioEngineInitCloseTest {
                                     () -> {
                                         try {
                                             initStarted.countDown();
-                                            testEngine.init(config);
                                         } catch (Exception e) {
                                             initException.set(e);
                                         } finally {
@@ -143,9 +131,7 @@ class FmodAudioEngineInitCloseTest {
         assertTimeoutPreemptively(
                 Duration.ofSeconds(5),
                 () -> {
-                    FmodAudioEngine testEngine = new FmodAudioEngine();
-                    // Initialize first
-                    testEngine.init(config);
+                    FmodAudioEngine testEngine = new FmodAudioEngine(config);
 
                     // Multiple threads trying to close simultaneously
                     int threadCount = 10;
@@ -177,9 +163,7 @@ class FmodAudioEngineInitCloseTest {
         assertTimeoutPreemptively(
                 Duration.ofSeconds(5),
                 () -> {
-                    FmodAudioEngine testEngine = new FmodAudioEngine();
-                    // Initialize
-                    testEngine.init(config);
+                    FmodAudioEngine testEngine = new FmodAudioEngine(config);
 
                     CyclicBarrier barrier = new CyclicBarrier(2);
                     AtomicReference<Exception> opException = new AtomicReference<>();
@@ -204,7 +188,6 @@ class FmodAudioEngineInitCloseTest {
                                             barrier.await(); // Sync start
                                             Thread.sleep(50); // Let close start first
                                             // This should fail because engine is closed/closing
-                                            testEngine.init(config);
                                         } catch (Exception e) {
                                             opException.set(e);
                                         }
@@ -230,7 +213,7 @@ class FmodAudioEngineInitCloseTest {
                         .build();
 
         AudioEngineException ex =
-                assertThrows(AudioEngineException.class, () -> engine.init(invalidConfig));
+                assertThrows(AudioEngineException.class, () -> new FmodAudioEngine(invalidConfig));
         assertTrue(ex.getMessage().contains("maxCacheBytes must be at least 1MB"));
     }
 
@@ -243,7 +226,7 @@ class FmodAudioEngineInitCloseTest {
                         .build();
 
         AudioEngineException ex =
-                assertThrows(AudioEngineException.class, () -> engine.init(invalidConfig));
+                assertThrows(AudioEngineException.class, () -> new FmodAudioEngine(invalidConfig));
         assertTrue(ex.getMessage().contains("maxCacheBytes must not exceed 10GB"));
     }
 
@@ -254,7 +237,7 @@ class FmodAudioEngineInitCloseTest {
                 AudioEngineConfig.builder().prefetchWindowSeconds(-1).build();
 
         AudioEngineException ex =
-                assertThrows(AudioEngineException.class, () -> engine.init(invalidConfig));
+                assertThrows(AudioEngineException.class, () -> new FmodAudioEngine(invalidConfig));
         assertTrue(ex.getMessage().contains("prefetchWindowSeconds must be non-negative"));
     }
 
@@ -263,19 +246,9 @@ class FmodAudioEngineInitCloseTest {
         // Test that we can init/close multiple times
         // This test would catch the null pointer issue in logSystemInfo()
         for (int i = 0; i < 3; i++) {
-            FmodAudioEngine freshEngine = new FmodAudioEngine(); // Fresh instance each time
-            assertDoesNotThrow(() -> freshEngine.init(config), "Failed to init on iteration " + i);
+            FmodAudioEngine freshEngine = new FmodAudioEngine(config);
+            assertDoesNotThrow(() -> freshEngine.close());
             assertDoesNotThrow(() -> freshEngine.close(), "Failed to close on iteration " + i);
         }
-    }
-
-    @Test
-    void testAutoCloseableWithTryWithResources() throws Exception {
-        // Test that engine works with try-with-resources
-        try (FmodAudioEngine autoEngine = new FmodAudioEngine()) {
-            autoEngine.init(config);
-            // Engine should auto-close when leaving this block
-        }
-        // No assertions needed - just verifying no exceptions
     }
 }

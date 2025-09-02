@@ -24,13 +24,12 @@ class FmodAudioEngineLoadAudioTest {
 
     @BeforeEach
     void setUp() {
-        engine = new FmodAudioEngine();
         config =
                 AudioEngineConfig.builder()
                         .engineType("fmod")
                         .mode(AudioEngineConfig.Mode.PLAYBACK)
                         .build();
-        engine.init(config);
+        engine = new FmodAudioEngine(config);
     }
 
     @AfterEach

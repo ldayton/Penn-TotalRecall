@@ -2,7 +2,7 @@ package app.di;
 
 import a2.AudioEngine;
 import a2.AudioEngineConfig;
-import a2.fmod.FmodAudioEngineProvider;
+import a2.fmod.FmodAudioEngine;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
 import audio.AudioSystemLoader;
@@ -91,8 +91,7 @@ public class AppModule extends AbstractModule {
         bind(MainWindowAccess.class).in(Singleton.class);
 
         // Audio Engine (a2 package)
-        bind(AudioEngine.class).toProvider(FmodAudioEngineProvider.class);
-        bind(FmodAudioEngineProvider.class).in(Singleton.class);
+        bind(AudioEngine.class).to(FmodAudioEngine.class).in(Singleton.class);
     }
 
     @Provides

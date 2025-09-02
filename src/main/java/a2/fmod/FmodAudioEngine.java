@@ -17,6 +17,7 @@ import app.annotations.ThreadSafe;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalListener;
+import com.google.inject.Inject;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -71,8 +72,9 @@ public class FmodAudioEngine implements AudioEngine {
     /** Key for preload cache - identifies a specific audio segment. */
     private record PreloadKey(String filePath, long startFrame, long endFrame) {}
 
-    /** Default constructor for factory use. */
-    FmodAudioEngine() {
+    /** Constructor that initializes the engine with the given configuration. */
+    @Inject
+    public FmodAudioEngine(@NonNull AudioEngineConfig config) {
         // Initialize preload cache with LRU eviction and automatic FMOD sound cleanup
         this.preloadCache =
                 Caffeine.newBuilder()
@@ -96,10 +98,7 @@ public class FmodAudioEngine implements AudioEngine {
                                             }
                                         })
                         .build();
-    }
 
-    /** Package-private initialization method called by factory. */
-    void init(@NonNull AudioEngineConfig config) {
         // Validate config before changing state
         validateConfig(config);
 

@@ -16,7 +16,7 @@ class FmodAudioEngineSimpleListenerTest {
 
     @Test
     void testListenerManagement() {
-        try (FmodAudioEngine engine = new FmodAudioEngine()) {
+        try (FmodAudioEngine engine = new FmodAudioEngine(a2.AudioEngineConfig.defaults())) {
             // Test adding listeners
             PlaybackListener listener1 = new PlaybackListener() {};
             PlaybackListener listener2 = new PlaybackListener() {};
