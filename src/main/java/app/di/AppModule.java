@@ -1,5 +1,8 @@
 package app.di;
 
+import a2.AudioEngine;
+import a2.AudioEngineConfig;
+import a2.fmod.FmodAudioEngineProvider;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
 import audio.AudioSystemLoader;
@@ -86,11 +89,21 @@ public class AppModule extends AbstractModule {
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
+
+        // Audio Engine (a2 package)
+        bind(AudioEngine.class).toProvider(FmodAudioEngineProvider.class);
+        bind(FmodAudioEngineProvider.class).in(Singleton.class);
     }
 
     @Provides
     @Singleton
     HttpClient provideHttpClient() {
         return HttpClient.newHttpClient();
+    }
+
+    @Provides
+    @Singleton
+    AudioEngineConfig provideAudioEngineConfig() {
+        return AudioEngineConfig.defaults();
     }
 }

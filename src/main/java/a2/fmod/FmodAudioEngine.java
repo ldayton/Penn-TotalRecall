@@ -60,6 +60,7 @@ public class FmodAudioEngine implements AudioEngine {
 
     private final AtomicReference<State> state = new AtomicReference<>(State.UNINITIALIZED);
     private final ReentrantLock operationLock = new ReentrantLock();
+    private final FmodStateManager stateManager = new FmodStateManager();
 
     // Resource management
     private final Map<Long, FmodPlaybackHandle> activePlaybacks = new ConcurrentHashMap<>();
