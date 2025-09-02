@@ -19,7 +19,8 @@ public class FmodCrashDemo {
         int FMOD_System_Create(PointerByReference system, int headerversion);
         int FMOD_System_Init(Pointer system, int maxchannels, int flags, Pointer extradriverdata);
         int FMOD_System_Release(Pointer system);
-        int FMOD_System_GetVersion(Pointer system, IntByReference version);
+        // FIXED: GetVersion takes 3 params, not 2! (system, version, buildnumber)
+        int FMOD_System_GetVersion(Pointer system, IntByReference version, IntByReference buildnumber);
     }
     
     public static void main(String[] args) {
@@ -43,13 +44,15 @@ public class FmodCrashDemo {
         System.out.println("System_Init result: " + result);
         
         IntByReference version = new IntByReference();
+        IntByReference buildnumber = new IntByReference();  // Added missing parameter!
         System.out.println("About to call GetVersion with FmodLibrary2...");
         
-        // Does this crash?
-        result = fmod.FMOD_System_GetVersion(system, version);
+        // Should not crash now with correct signature
+        result = fmod.FMOD_System_GetVersion(system, version, buildnumber);
         
         System.out.println("GetVersion result: " + result);
         System.out.println("Version: 0x" + Integer.toHexString(version.getValue()));
+        System.out.println("Build number: " + buildnumber.getValue());
         
         fmod.FMOD_System_Release(system);
         System.out.println("SUCCESS - FmodLibrary2 did not crash!");
