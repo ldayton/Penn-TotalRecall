@@ -11,8 +11,6 @@ import a2.PlaybackState;
 import a2.exceptions.AudioEngineException;
 import a2.exceptions.AudioLoadException;
 import a2.exceptions.AudioPlaybackException;
-import a2.exceptions.CorruptedAudioFileException;
-import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -21,11 +19,8 @@ import com.google.inject.Inject;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -34,7 +29,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.Getter;
 import lombok.NonNull;
@@ -51,10 +45,10 @@ public class FmodAudioEngine implements AudioEngine {
 
     private final ReentrantLock operationLock = new ReentrantLock();
     private final FmodStateManager stateManager = new FmodStateManager();
+    private FmodAudioLoadingManager loadingManager;
 
     // Resource management
     private final Map<Long, FmodPlaybackHandle> activePlaybacks = new ConcurrentHashMap<>();
-    private final AtomicLong nextHandleId = new AtomicLong(1);
 
     // Current loaded audio (users work with one file at a time)
     private FmodAudioHandle currentHandle;
@@ -159,6 +153,10 @@ public class FmodAudioEngine implements AudioEngine {
             this.system = newSystem;
             this.fmod = fmodLib;
             this.config = config;
+
+            // Create the loading manager now that FMOD is initialized
+            this.loadingManager =
+                    new FmodAudioLoadingManager(fmodLib, newSystem, stateManager, config.getMode());
 
             // Transition to INITIALIZED
             if (!stateManager.compareAndSetState(
@@ -334,89 +332,19 @@ public class FmodAudioEngine implements AudioEngine {
     public AudioHandle loadAudio(@NonNull String filePath) throws AudioLoadException {
         checkOperational();
 
-        // Validate file exists and get canonical path
-        File file = new File(filePath);
-        if (!file.exists()) {
-            throw new AudioLoadException("Audio file not found: " + filePath);
-        }
-        if (!file.canRead()) {
-            throw new AudioLoadException("Cannot read audio file: " + filePath);
-        }
-
-        String canonicalPath;
-        try {
-            canonicalPath = file.getCanonicalPath();
-        } catch (IOException e) {
-            throw new AudioLoadException("Cannot resolve file path: " + filePath, e);
-        }
-
         operationLock.lock();
         try {
-            // If same file already loaded, return existing handle
-            if (currentPath != null && currentPath.equals(canonicalPath) && currentHandle != null) {
-                log.debug("Returning existing handle for: {}", canonicalPath);
-                return currentHandle;
-            }
+            AudioHandle handle = loadingManager.loadAudio(filePath);
 
-            // Release previous sound if any
-            if (currentSound != null) {
-                log.debug("Releasing previous audio file: {}", currentPath);
+            // Update our local references for compatibility with existing playback code
+            currentHandle = (FmodAudioHandle) handle;
+            currentSound = loadingManager.getCurrentSound().orElse(null);
+            currentPath = currentHandle.getFilePath();
 
-                // Clear preload cache first (will trigger removal listener to release sounds)
-                preloadCache.invalidateAll();
+            // Clear preload cache when loading new audio
+            preloadCache.invalidateAll();
 
-                int result = fmod.FMOD_Sound_Release(currentSound);
-                if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing previous sound: {}", "error code: " + result);
-                }
-                currentSound = null;
-                currentPath = null;
-                currentHandle = null;
-
-                // Ensure FMOD completes cleanup before loading new file
-                result = fmod.FMOD_System_Update(system);
-                if (result != FmodConstants.FMOD_OK) {
-                    log.debug("Error during system update: {}", "error code: " + result);
-                }
-            }
-
-            // FMOD flags for optimal PLAYBACK mode performance
-            int mode = FmodConstants.FMOD_CREATESTREAM | FmodConstants.FMOD_ACCURATETIME;
-
-            // Create sound
-            PointerByReference soundRef = new PointerByReference();
-            int result = fmod.FMOD_System_CreateSound(system, canonicalPath, mode, null, soundRef);
-
-            // Map FMOD errors to appropriate exceptions
-            if (result != FmodConstants.FMOD_OK) {
-                String errorMsg = "error code: " + result;
-                switch (result) {
-                    case FmodConstants.FMOD_ERR_FILE_NOTFOUND:
-                        throw new AudioLoadException("FMOD cannot find file: " + canonicalPath);
-                    case FmodConstants.FMOD_ERR_FORMAT:
-                        throw new UnsupportedAudioFormatException(
-                                "Unsupported audio format: " + canonicalPath + " - " + errorMsg);
-                    case FmodConstants.FMOD_ERR_FILE_BAD:
-                        throw new CorruptedAudioFileException(
-                                "Corrupted audio file: " + canonicalPath + " - " + errorMsg);
-                    default:
-                        throw new AudioLoadException(
-                                "Failed to load audio file: " + canonicalPath + " - " + errorMsg);
-                }
-            }
-
-            // Create handle and store as current
-            long handleId = nextHandleId.getAndIncrement();
-            Pointer sound = soundRef.getValue();
-            FmodAudioHandle handle = new FmodAudioHandle(handleId, sound, canonicalPath);
-
-            currentSound = sound;
-            currentPath = canonicalPath;
-            currentHandle = handle;
-
-            log.info("Loaded audio file: {}", canonicalPath);
             return handle;
-
         } finally {
             operationLock.unlock();
         }
@@ -978,96 +906,17 @@ public class FmodAudioEngine implements AudioEngine {
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
         checkOperational();
 
-        if (!(audio instanceof FmodAudioHandle)) {
-            throw new AudioPlaybackException("Invalid audio handle type");
-        }
-
-        FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
-        if (!fmodHandle.isValid()) {
-            throw new AudioPlaybackException("Audio handle is no longer valid");
-        }
-
         // Verify this is the current loaded audio
-        if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+        if (!loadingManager.isCurrent(audio)) {
             throw new AudioPlaybackException("Audio handle is not the currently loaded file");
         }
 
-        operationLock.lock();
-        try {
-            // Get format information
-            IntByReference typeRef = new IntByReference();
-            IntByReference formatRef = new IntByReference();
-            IntByReference channelsRef = new IntByReference();
-            IntByReference bitsRef = new IntByReference();
-
-            int result =
-                    fmod.FMOD_Sound_GetFormat(
-                            currentSound, typeRef, formatRef, channelsRef, bitsRef);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to get sound format: " + "error code: " + result);
-            }
-
-            // Get sample rate
-            FloatByReference frequencyRef = new FloatByReference();
-            result = fmod.FMOD_Sound_GetDefaults(currentSound, frequencyRef, null);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to get sample rate: " + "error code: " + result);
-            }
-
-            // Get length in PCM samples (frames)
-            IntByReference lengthRef = new IntByReference();
-            result =
-                    fmod.FMOD_Sound_GetLength(
-                            currentSound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to get sound length: " + "error code: " + result);
-            }
-
-            // Extract values
-            int sampleRate = Math.round(frequencyRef.getValue());
-            int channelCount = channelsRef.getValue();
-            int bitsPerSample = bitsRef.getValue();
-            long frameCount = lengthRef.getValue();
-            double durationSeconds = frameCount / (double) sampleRate;
-
-            // Map sound type to format string
-            String format = mapSoundTypeToFormat(typeRef.getValue());
-
-            return new AudioMetadata(
-                    sampleRate, channelCount, bitsPerSample, format, frameCount, durationSeconds);
-
-        } finally {
-            operationLock.unlock();
-        }
-    }
-
-    private String mapSoundTypeToFormat(int soundType) {
-        switch (soundType) {
-            case FmodConstants.FMOD_SOUND_TYPE_WAV:
-                return "WAV";
-            case FmodConstants.FMOD_SOUND_TYPE_MPEG:
-                return "MP3";
-            case FmodConstants.FMOD_SOUND_TYPE_OGGVORBIS:
-                return "OGG";
-            case FmodConstants.FMOD_SOUND_TYPE_FLAC:
-                return "FLAC";
-            case FmodConstants.FMOD_SOUND_TYPE_AIFF:
-                return "AIFF";
-            case FmodConstants.FMOD_SOUND_TYPE_OPUS:
-                return "OPUS";
-            case FmodConstants.FMOD_SOUND_TYPE_VORBIS:
-                return "VORBIS";
-            case FmodConstants.FMOD_SOUND_TYPE_ASF:
-                return "ASF";
-            case FmodConstants.FMOD_SOUND_TYPE_RAW:
-                return "RAW";
-            case FmodConstants.FMOD_SOUND_TYPE_UNKNOWN:
-            default:
-                return "UNKNOWN";
-        }
+        return loadingManager
+                .getCurrentMetadata()
+                .orElseThrow(
+                        () ->
+                                new AudioPlaybackException(
+                                        "No metadata available for current audio"));
     }
 
     @Override
