@@ -62,6 +62,32 @@ public class FmodAudioEngine implements AudioEngine {
     private final ReentrantLock operationLock = new ReentrantLock();
     private final FmodStateManager stateManager = new FmodStateManager();
 
+    // Helper methods to transition to stateManager
+    private State getCurrentState() {
+        // Convert from FmodStateManager.State to local State enum
+        FmodStateManager.State managerState = stateManager.getCurrentState();
+        return State.valueOf(managerState.name());
+    }
+
+    private boolean compareAndSetState(State expected, State newState) {
+        // Convert between enum types
+        FmodStateManager.State expectedManager = FmodStateManager.State.valueOf(expected.name());
+        FmodStateManager.State newManager = FmodStateManager.State.valueOf(newState.name());
+        boolean result = stateManager.compareAndSetState(expectedManager, newManager);
+
+        // Also update the old state field for now (during transition)
+        if (result) {
+            state.set(newState);
+        }
+        return result;
+    }
+
+    private void setState(State newState) {
+        // For forced state changes (used in finally blocks)
+        state.set(newState); // Keep old mechanism for now
+        // We'll fully migrate this later when we handle cleanup scenarios
+    }
+
     // Resource management
     private final Map<Long, FmodPlaybackHandle> activePlaybacks = new ConcurrentHashMap<>();
     private final AtomicLong nextHandleId = new AtomicLong(1);
@@ -111,9 +137,12 @@ public class FmodAudioEngine implements AudioEngine {
 
     /** Package-private initialization method called by factory. */
     void init(@NonNull AudioEngineConfig config) {
+        // Validate config before changing state
+        validateConfig(config);
+
         // Transition from UNINITIALIZED to INITIALIZING
-        if (!state.compareAndSet(State.UNINITIALIZED, State.INITIALIZING)) {
-            State currentState = state.get();
+        if (!compareAndSetState(State.UNINITIALIZED, State.INITIALIZING)) {
+            State currentState = getCurrentState();
             throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
 
@@ -122,7 +151,6 @@ public class FmodAudioEngine implements AudioEngine {
 
         try {
             log.info("Initializing FMOD audio engine with config: {}", config);
-            validateConfig(config);
 
             // Load FMOD library and create system (no lock needed, these are local operations)
             fmodLib = loadFmodLibrary();
@@ -170,7 +198,7 @@ public class FmodAudioEngine implements AudioEngine {
             this.config = config;
 
             // Transition to INITIALIZED
-            if (!state.compareAndSet(State.INITIALIZING, State.INITIALIZED)) {
+            if (!compareAndSetState(State.INITIALIZING, State.INITIALIZED)) {
                 // Someone called close() while we were initializing
                 throw new AudioEngineException("Engine was closed during initialization");
             }
@@ -206,7 +234,7 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Reset state to allow retry (only if we're still INITIALIZING)
             // If close() was called, state will be CLOSED and we should leave it
-            state.compareAndSet(State.INITIALIZING, State.UNINITIALIZED);
+            compareAndSetState(State.INITIALIZING, State.UNINITIALIZED);
 
             // Propagate the original exception
             throw e;
@@ -339,7 +367,7 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     private void checkOperational() {
-        State currentState = state.get();
+        State currentState = getCurrentState();
         if (currentState != State.INITIALIZED) {
             throw new AudioEngineException("Operation not allowed in state: " + currentState);
         }
@@ -1175,7 +1203,7 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public void close() {
         // Try to transition from INITIALIZED to CLOSING
-        State currentState = state.get();
+        State currentState = getCurrentState();
 
         // Handle each state appropriately
         switch (currentState) {
@@ -1184,19 +1212,19 @@ public class FmodAudioEngine implements AudioEngine {
                 return; // Already closed or closing
 
             case UNINITIALIZED:
-                // Never initialized - just mark as closed
-                state.compareAndSet(State.UNINITIALIZED, State.CLOSED);
+                // Never initialized - no-op, leave state unchanged
+                log.debug("close() called on uninitialized engine - no-op");
                 return;
 
             case INITIALIZING:
                 // Try to interrupt initialization by moving to CLOSED
                 // The init method will check this and cleanup
-                state.compareAndSet(State.INITIALIZING, State.CLOSED);
+                compareAndSetState(State.INITIALIZING, State.CLOSED);
                 return;
 
             case INITIALIZED:
                 // Normal close path
-                if (!state.compareAndSet(State.INITIALIZED, State.CLOSING)) {
+                if (!compareAndSetState(State.INITIALIZED, State.CLOSING)) {
                     // State changed, retry
                     close();
                     return;
@@ -1284,7 +1312,7 @@ public class FmodAudioEngine implements AudioEngine {
             config = null;
 
             // Transition to CLOSED
-            state.set(State.CLOSED);
+            setState(State.CLOSED);
 
         } finally {
             operationLock.unlock();
