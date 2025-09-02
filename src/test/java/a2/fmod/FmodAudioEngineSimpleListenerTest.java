@@ -1,8 +1,8 @@
 package a2.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
+import a2.AudioHandle;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
@@ -63,11 +63,11 @@ class FmodAudioEngineSimpleListenerTest {
                     }
                 };
 
-        // Simulate callbacks with mock handle
-        PlaybackHandle mockHandle = mock(PlaybackHandle.class);
-        listener.onProgress(mockHandle, 100, 1000);
-        listener.onStateChanged(mockHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-        listener.onPlaybackComplete(mockHandle);
+        // Simulate callbacks with test handle
+        PlaybackHandle testHandle = new TestPlaybackHandle();
+        listener.onProgress(testHandle, 100, 1000);
+        listener.onStateChanged(testHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+        listener.onPlaybackComplete(testHandle);
 
         // Verify callbacks were received
         assertTrue(progressLatch.await(100, TimeUnit.MILLISECONDS));
@@ -84,13 +84,46 @@ class FmodAudioEngineSimpleListenerTest {
 
         // These should all work without throwing exceptions
         // Most methods require non-null playback handle
-        PlaybackHandle mockHandle = mock(PlaybackHandle.class);
-        minimalListener.onProgress(mockHandle, 0, 100);
-        minimalListener.onStateChanged(mockHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-        minimalListener.onPlaybackComplete(mockHandle);
+        PlaybackHandle testHandle = new TestPlaybackHandle();
+        minimalListener.onProgress(testHandle, 0, 100);
+        minimalListener.onStateChanged(testHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+        minimalListener.onPlaybackComplete(testHandle);
         minimalListener.onPlaybackError(null, "test error"); // This one allows null
 
         // No exceptions should be thrown
         assertTrue(true);
+    }
+
+    // Simple test implementation of PlaybackHandle
+    private static class TestPlaybackHandle implements PlaybackHandle {
+        @Override
+        public long getId() {
+            return 12345L;
+        }
+
+        @Override
+        public AudioHandle getAudioHandle() {
+            return null; // Not needed for listener tests
+        }
+
+        @Override
+        public long getStartFrame() {
+            return 0;
+        }
+
+        @Override
+        public long getEndFrame() {
+            return 44100; // 1 second at 44.1kHz
+        }
+
+        @Override
+        public boolean isActive() {
+            return true;
+        }
+
+        @Override
+        public void close() {
+            // No-op for test
+        }
     }
 }
