@@ -142,7 +142,7 @@ tasks.register('createCustomRuntime') {
         
         providers.exec {
             commandLine('jlink',
-                '--add-modules', 'java.base,java.desktop,java.prefs,java.net.http',
+                '--add-modules', 'java.base,java.desktop,java.prefs,java.net.http,java.naming',
                 '--strip-debug',
                 '--no-man-pages',
                 '--no-header-files',
