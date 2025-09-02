@@ -1,0 +1,2 @@
+#!/bin/bash
+[ ! -d fmod ] && cp -r ../build/resources/main/fmod . ; javac -cp "$(find ~/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna -name 'jna-*.jar' | grep -v sources | head -1)" FmodCrashDemo.java && java -cp ".:$(find ~/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna -name 'jna-*.jar' | grep -v sources | head -1)" FmodCrashDemo
