@@ -1,6 +1,7 @@
 package a2.fmod;
 
 import a2.exceptions.AudioEngineException;
+import app.annotations.ThreadSafe;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * Manages the state lifecycle and thread-safe transitions for the FMOD audio engine. Ensures all
  * state changes are atomic and properly synchronized.
  */
+@ThreadSafe
 @Slf4j
 class FmodStateManager {
 
@@ -142,7 +144,12 @@ class FmodStateManager {
         stateLock.lock();
         try {
             if (currentState == expected) {
-                validateTransition(currentState, newState);
+                try {
+                    validateTransition(currentState, newState);
+                } catch (AudioEngineException e) {
+                    // Invalid transition, return false
+                    return false;
+                }
                 currentState = newState;
                 log.debug("State transition: {} -> {}", expected, newState);
                 return true;
@@ -151,13 +158,5 @@ class FmodStateManager {
         } finally {
             stateLock.unlock();
         }
-    }
-
-    /**
-     * Get the state lock for operations that need custom locking. Use sparingly - prefer the
-     * execute methods.
-     */
-    ReentrantLock getStateLock() {
-        return stateLock;
     }
 }
