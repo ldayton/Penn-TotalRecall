@@ -9,6 +9,7 @@ import a2.exceptions.CorruptedAudioFileException;
 import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.io.File;
@@ -313,14 +314,10 @@ class FmodAudioLoadingManager {
                     "Failed to get audio duration (error code: " + result + ")");
         }
 
-        // Get the actual sample rate from system (since GetFormat doesn't return it)
-        // We'll use the system's output rate as approximation
-        IntByReference sampleRateRef = new IntByReference();
-        IntByReference speakerModeRef = new IntByReference();
-        IntByReference numRawSpeakersRef = new IntByReference();
-        result =
-                fmod.FMOD_System_GetSoftwareFormat(
-                        system, sampleRateRef, speakerModeRef, numRawSpeakersRef);
+        // Get the actual sample rate from the sound
+        FloatByReference frequencyRef = new FloatByReference();
+        IntByReference priorityRef = new IntByReference(); // Not used
+        result = fmod.FMOD_Sound_GetDefaults(sound, frequencyRef, priorityRef);
 
         if (result != FmodConstants.FMOD_OK) {
             throw new AudioLoadException("Failed to get sample rate (error code: " + result + ")");
@@ -337,7 +334,7 @@ class FmodAudioLoadingManager {
         }
 
         long totalSamples = Integer.toUnsignedLong(lengthSamplesRef.getValue());
-        int sampleRate = sampleRateRef.getValue();
+        int sampleRate = Math.round(frequencyRef.getValue());
 
         // Map sound type to format string
         String format = mapSoundTypeToFormat(typeRef.getValue());
