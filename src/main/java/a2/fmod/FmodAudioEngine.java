@@ -16,8 +16,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalListener;
 import com.google.inject.Inject;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -45,6 +43,7 @@ public class FmodAudioEngine implements AudioEngine {
 
     private final ReentrantLock operationLock = new ReentrantLock();
     private final FmodStateManager stateManager = new FmodStateManager();
+    private FmodSystemManager systemManager;
     private FmodAudioLoadingManager loadingManager;
 
     // Resource management
@@ -103,60 +102,21 @@ public class FmodAudioEngine implements AudioEngine {
             throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
 
-        FmodLibrary fmodLib = null;
-        Pointer newSystem = null;
-
         try {
             log.info("Initializing FMOD audio engine with config: {}", config);
 
-            // Load FMOD library and create system (no lock needed, these are local operations)
-            fmodLib = loadFmodLibrary();
+            // Create and initialize the system manager
+            systemManager = new FmodSystemManager(config.getMode());
+            systemManager.initialize(config);
 
-            // Create FMOD system
-            PointerByReference systemRef = new PointerByReference();
-            int result = fmodLib.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to create FMOD system: "
-                                + " (error code: "
-                                + result
-                                + ")"
-                                + " (code: "
-                                + result
-                                + ")");
-            }
-            newSystem = systemRef.getValue();
-
-            // Configure based on mode
-            configureForMode(fmodLib, newSystem, config.getMode());
-
-            // Initialize FMOD system
-            int maxChannels =
-                    config.getMode() == AudioEngineConfig.Mode.PLAYBACK
-                            ? 2
-                            : 1; // 2 for transitions, 1 for rendering
-            int initFlags = FmodConstants.FMOD_INIT_NORMAL;
-
-            result = fmodLib.FMOD_System_Init(newSystem, maxChannels, initFlags, null);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to initialize FMOD system: "
-                                + " (error code: "
-                                + result
-                                + ")"
-                                + " (code: "
-                                + result
-                                + ")");
-            }
-
-            // Update shared state and transition to INITIALIZED
-            this.system = newSystem;
-            this.fmod = fmodLib;
+            // Get references from system manager
+            this.fmod = systemManager.getFmodLibrary();
+            this.system = systemManager.getSystem();
             this.config = config;
 
             // Create the loading manager now that FMOD is initialized
             this.loadingManager =
-                    new FmodAudioLoadingManager(fmodLib, newSystem, stateManager, config.getMode());
+                    new FmodAudioLoadingManager(fmod, system, stateManager, config.getMode());
 
             // Transition to INITIALIZED
             if (!stateManager.compareAndSetState(
@@ -164,9 +124,6 @@ public class FmodAudioEngine implements AudioEngine {
                 // Someone called close() while we were initializing
                 throw new AudioEngineException("Engine was closed during initialization");
             }
-
-            // Log system info (after lock released)
-            logSystemInfo();
 
             // Start progress timer for callbacks
             progressTimer =
@@ -186,9 +143,9 @@ public class FmodAudioEngine implements AudioEngine {
 
         } catch (Exception e) {
             // Clean up any resources we created
-            if (newSystem != null && fmodLib != null) {
+            if (systemManager != null) {
                 try {
-                    fmodLib.FMOD_System_Release(newSystem);
+                    systemManager.shutdown();
                 } catch (Exception cleanupEx) {
                     log.debug("Error during cleanup after init failure", cleanupEx);
                 }
@@ -201,93 +158,6 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Propagate the original exception
             throw e;
-        }
-    }
-
-    private void configureForMode(
-            @NonNull FmodLibrary fmodLib,
-            @NonNull Pointer sys,
-            @NonNull AudioEngineConfig.Mode mode) {
-        if (mode == AudioEngineConfig.Mode.PLAYBACK) {
-            // Low latency configuration for playback
-            // Smaller buffer for lower latency (256 samples, 4 buffers)
-            int result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 256, 4);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set DSP buffer size for low latency: {}",
-                        "error code: " + result);
-            }
-
-            // Set software format - mono for audio annotation app
-            result =
-                    fmodLib.FMOD_System_SetSoftwareFormat(
-                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", "error code: " + result);
-            }
-
-        } else {
-            // RENDERING mode - no audio output needed, just reading samples
-            // Use NOSOUND_NRT for faster-than-realtime processing without audio device
-            int result =
-                    fmodLib.FMOD_System_SetOutput(sys, FmodConstants.FMOD_OUTPUTTYPE_NOSOUND_NRT);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set NOSOUND_NRT output for rendering: {}",
-                        "error code: " + result);
-            }
-
-            // Larger buffers for rendering efficiency (2048 samples, 2 buffers)
-            result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 2048, 2);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set DSP buffer size for rendering: {}", "error code: " + result);
-            }
-
-            // Mono format for rendering as well
-            result =
-                    fmodLib.FMOD_System_SetSoftwareFormat(
-                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", "error code: " + result);
-            }
-        }
-    }
-
-    private void logSystemInfo() {
-        IntByReference version = new IntByReference();
-        IntByReference buildnumber = new IntByReference();
-        int result = fmod.FMOD_System_GetVersion(system, version, buildnumber);
-        if (result == FmodConstants.FMOD_OK) {
-            int v = version.getValue();
-            log.info(
-                    "FMOD version: {}.{}.{} (build {})",
-                    (v >> 16) & 0xFFFF,
-                    (v >> 8) & 0xFF,
-                    v & 0xFF,
-                    buildnumber.getValue());
-        }
-
-        IntByReference bufferLength = new IntByReference();
-        IntByReference numBuffers = new IntByReference();
-        result = fmod.FMOD_System_GetDSPBufferSize(system, bufferLength, numBuffers);
-        if (result == FmodConstants.FMOD_OK) {
-            log.info(
-                    "DSP buffer configuration: {} samples x {} buffers",
-                    bufferLength.getValue(),
-                    numBuffers.getValue());
-        }
-
-        IntByReference sampleRate = new IntByReference();
-        IntByReference speakerMode = new IntByReference();
-        IntByReference numRawSpeakers = new IntByReference();
-        result =
-                fmod.FMOD_System_GetSoftwareFormat(system, sampleRate, speakerMode, numRawSpeakers);
-        if (result == FmodConstants.FMOD_OK) {
-            log.info(
-                    "Software format: {} Hz, speaker mode: {}",
-                    sampleRate.getValue(),
-                    speakerMode.getValue());
         }
     }
 
@@ -313,15 +183,6 @@ public class FmodAudioEngine implements AudioEngine {
             throw new AudioEngineException(
                     "prefetchWindowSeconds must not exceed 60 seconds, got: " + prefetchSeconds);
         }
-    }
-
-    private FmodLibrary loadFmodLibrary() {
-        // Add search path for FMOD libraries
-        String resourcePath = getClass().getResource("/fmod/macos").getPath();
-        NativeLibrary.addSearchPath("fmod", resourcePath);
-
-        // Load the library
-        return Native.load("fmod", FmodLibrary.class);
     }
 
     private void checkOperational() {
@@ -1106,18 +967,16 @@ public class FmodAudioEngine implements AudioEngine {
                 currentHandle = null;
             }
 
-            // Release FMOD system
-            if (system != null && fmod != null) {
-                int result = fmod.FMOD_System_Release(system);
-                if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing FMOD system: {}", "error code: " + result);
-                }
+            // Shutdown the system manager
+            if (systemManager != null) {
+                systemManager.shutdown();
             }
 
             // Null out references to prevent use after close
             system = null;
             fmod = null;
             config = null;
+            systemManager = null;
 
             // Transition to CLOSED
             if (!stateManager.compareAndSetState(
