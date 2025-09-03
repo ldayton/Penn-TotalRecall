@@ -15,10 +15,6 @@ public interface AudioEngine extends AutoCloseable {
     /** Returns existing handle if already loaded. */
     AudioHandle loadAudio(@NonNull String filePath) throws AudioLoadException;
 
-    /** Non-blocking prefetch for smooth scrolling. */
-    CompletableFuture<Void> preloadRange(
-            @NonNull AudioHandle handle, long startFrame, long endFrame);
-
     PlaybackHandle play(@NonNull AudioHandle audio);
 
     /** Fire-and-forget playback of a range. Cannot be paused/stopped. */
@@ -51,8 +47,6 @@ public interface AudioEngine extends AutoCloseable {
     void addPlaybackListener(@NonNull PlaybackListener listener);
 
     void removePlaybackListener(@NonNull PlaybackListener listener);
-
-    AudioEngineConfig getConfig();
 
     @Override
     void close();

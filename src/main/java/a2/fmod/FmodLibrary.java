@@ -111,6 +111,11 @@ public interface FmodLibrary extends Library {
 
     int FMOD_Channel_GetVolume(Pointer channel, FloatByReference volume);
 
+    // Sound data reading
+    int FMOD_Sound_ReadData(Pointer sound, Pointer buffer, int lenbytes, IntByReference read);
+
+    int FMOD_Sound_SeekData(Pointer sound, int pcmoffset);
+
     // Note: FMOD_ErrorString is a static inline function in the header,
     // not an exported library symbol, so it cannot be called via JNA.
     // Error codes must be translated manually or via a lookup table.

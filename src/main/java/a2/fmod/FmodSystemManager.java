@@ -1,6 +1,5 @@
 package a2.fmod;
 
-import a2.AudioEngineConfig;
 import a2.exceptions.AudioEngineException;
 import app.annotations.ThreadSafe;
 import com.sun.jna.Native;
@@ -25,36 +24,26 @@ class FmodSystemManager {
     private volatile Pointer system;
     private volatile boolean initialized = false;
 
-    // Configuration
-    private final AudioEngineConfig.Mode mode;
-
     // Thread safety
     private final ReentrantLock systemLock = new ReentrantLock();
 
-    /**
-     * Creates a new FMOD system manager for the specified mode.
-     *
-     * @param mode The audio engine mode (PLAYBACK or ANALYSIS)
-     */
-    FmodSystemManager(@NonNull AudioEngineConfig.Mode mode) {
-        this.mode = mode;
-    }
+    /** Creates a new FMOD system manager. */
+    FmodSystemManager() {}
 
     /**
-     * Initialize the FMOD system with the given configuration. This loads the FMOD library, creates
-     * the system, configures it, and initializes it.
+     * Initialize the FMOD system. This loads the FMOD library, creates the system, configures it,
+     * and initializes it.
      *
-     * @param config The audio engine configuration
      * @throws AudioEngineException if initialization fails
      */
-    void initialize(@NonNull AudioEngineConfig config) {
+    void initialize() {
         systemLock.lock();
         try {
             if (initialized) {
                 throw new AudioEngineException("FMOD system already initialized");
             }
 
-            log.info("Initializing FMOD system with config: {}", config);
+            log.info("Initializing FMOD system for playback");
 
             // Load FMOD library
             fmod = loadFmodLibrary();
@@ -74,11 +63,11 @@ class FmodSystemManager {
             }
             system = systemRef.getValue();
 
-            // Configure based on mode
-            configureForMode(fmod, system, mode);
+            // Configure for playback
+            configureForPlayback(fmod, system);
 
             // Initialize FMOD system
-            int maxChannels = (mode == AudioEngineConfig.Mode.PLAYBACK) ? 2 : 1;
+            int maxChannels = 2; // Stereo playback
             int initFlags = FmodConstants.FMOD_INIT_NORMAL;
 
             result = fmod.FMOD_System_Init(system, maxChannels, initFlags, null);
@@ -118,61 +107,26 @@ class FmodSystemManager {
     }
 
     /**
-     * Configure the FMOD system based on the engine mode. Sets output mode, sample rate, and other
-     * mode-specific settings.
+     * Configure the FMOD system for low-latency playback.
      *
      * @param fmodLib The FMOD library interface
      * @param sys The FMOD system pointer
-     * @param mode The engine mode
      * @throws AudioEngineException if configuration fails
      */
-    private void configureForMode(
-            @NonNull FmodLibrary fmodLib,
-            @NonNull Pointer sys,
-            @NonNull AudioEngineConfig.Mode mode) {
-        if (mode == AudioEngineConfig.Mode.PLAYBACK) {
-            // Low latency configuration for playback
-            // Smaller buffer for lower latency (256 samples, 4 buffers)
-            int result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 256, 4);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set DSP buffer size for low latency: {}",
-                        "error code: " + result);
-            }
+    private void configureForPlayback(@NonNull FmodLibrary fmodLib, @NonNull Pointer sys) {
+        // Low latency configuration for playback
+        // Smaller buffer for lower latency (256 samples, 4 buffers)
+        int result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 256, 4);
+        if (result != FmodConstants.FMOD_OK) {
+            log.warn("Could not set DSP buffer size for low latency: {}", "error code: " + result);
+        }
 
-            // Set software format - mono for audio annotation app
-            result =
-                    fmodLib.FMOD_System_SetSoftwareFormat(
-                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", "error code: " + result);
-            }
-
-        } else {
-            // RENDERING mode - no audio output needed, just reading samples
-            // Use NOSOUND_NRT for faster-than-realtime processing without audio device
-            int result =
-                    fmodLib.FMOD_System_SetOutput(sys, FmodConstants.FMOD_OUTPUTTYPE_NOSOUND_NRT);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set NOSOUND_NRT output for rendering: {}",
-                        "error code: " + result);
-            }
-
-            // Larger buffers for rendering efficiency (2048 samples, 2 buffers)
-            result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 2048, 2);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn(
-                        "Could not set DSP buffer size for rendering: {}", "error code: " + result);
-            }
-
-            // Mono format for rendering as well
-            result =
-                    fmodLib.FMOD_System_SetSoftwareFormat(
-                            sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Could not set software format: {}", "error code: " + result);
-            }
+        // Set software format - mono for audio annotation app
+        result =
+                fmodLib.FMOD_System_SetSoftwareFormat(
+                        sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
+        if (result != FmodConstants.FMOD_OK) {
+            log.warn("Could not set software format: {}", "error code: " + result);
         }
     }
 

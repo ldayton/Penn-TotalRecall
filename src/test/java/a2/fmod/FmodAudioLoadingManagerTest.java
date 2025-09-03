@@ -2,7 +2,6 @@ package a2.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioEngineConfig;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.exceptions.AudioLoadException;
@@ -84,9 +83,7 @@ class FmodAudioLoadingManagerTest {
             loadingManager.releaseAll();
         }
         // Create fresh loading manager for each test
-        loadingManager =
-                new FmodAudioLoadingManager(
-                        fmod, system, stateManager, AudioEngineConfig.Mode.PLAYBACK);
+        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager);
     }
 
     @AfterAll

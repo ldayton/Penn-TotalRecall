@@ -2,7 +2,6 @@ package a2.fmod;
 
 import a2.AudioBuffer;
 import a2.AudioEngine;
-import a2.AudioEngineConfig;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.PlaybackHandle;
@@ -17,8 +16,9 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,24 +29,22 @@ public class FmodAudioEngine implements AudioEngine {
 
     private volatile FmodLibrary fmod;
     private volatile Pointer system;
-    @Getter private volatile AudioEngineConfig config;
 
     private final ReentrantLock operationLock = new ReentrantLock();
+    private final ExecutorService readExecutor = Executors.newCachedThreadPool();
     private final FmodSystemStateManager systemStateManager = new FmodSystemStateManager();
     private FmodSystemManager systemManager;
     private FmodAudioLoadingManager loadingManager;
     private FmodPlaybackManager playbackManager;
-    private FmodPreloadManager preloadManager;
     private FmodListenerManager listenerManager;
+    private FmodSampleReader sampleReader;
 
     private FmodPlaybackHandle currentPlayback;
     private FmodAudioHandle currentHandle;
     private Pointer currentSound;
-    private String currentPath;
 
     @Inject
-    public FmodAudioEngine(@NonNull AudioEngineConfig config) {
-        validateConfig(config);
+    public FmodAudioEngine() {
 
         if (!systemStateManager.compareAndSetState(
                 FmodSystemStateManager.State.UNINITIALIZED,
@@ -55,17 +53,15 @@ public class FmodAudioEngine implements AudioEngine {
             throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
         try {
-            log.info("Initializing FMOD audio engine with config: {}", config);
-            systemManager = new FmodSystemManager(config.getMode());
-            systemManager.initialize(config);
+            log.info("Initializing FMOD audio engine");
+            systemManager = new FmodSystemManager();
+            systemManager.initialize();
             this.fmod = systemManager.getFmodLibrary();
             this.system = systemManager.getSystem();
-            this.config = config;
-            this.loadingManager =
-                    new FmodAudioLoadingManager(fmod, system, systemStateManager, config.getMode());
+            this.loadingManager = new FmodAudioLoadingManager(fmod, system, systemStateManager);
             this.playbackManager = new FmodPlaybackManager(fmod, system);
-            this.preloadManager = new FmodPreloadManager(fmod, system, 10);
             this.listenerManager = new FmodListenerManager(fmod);
+            this.sampleReader = new FmodSampleReader(fmod, system);
 
             if (!systemStateManager.compareAndSetState(
                     FmodSystemStateManager.State.INITIALIZING,
@@ -89,27 +85,6 @@ public class FmodAudioEngine implements AudioEngine {
         }
     }
 
-    private void validateConfig(@NonNull AudioEngineConfig config) {
-        long cacheBytes = config.getMaxCacheBytes();
-        if (cacheBytes < 1024 * 1024) {
-            throw new AudioEngineException(
-                    "maxCacheBytes must be at least 1MB, got: " + cacheBytes);
-        }
-        if (cacheBytes > 10L * 1024 * 1024 * 1024) {
-            throw new AudioEngineException(
-                    "maxCacheBytes must not exceed 10GB, got: " + cacheBytes);
-        }
-        int prefetchSeconds = config.getPrefetchWindowSeconds();
-        if (prefetchSeconds < 0) {
-            throw new AudioEngineException(
-                    "prefetchWindowSeconds must be non-negative, got: " + prefetchSeconds);
-        }
-        if (prefetchSeconds > 60) {
-            throw new AudioEngineException(
-                    "prefetchWindowSeconds must not exceed 60 seconds, got: " + prefetchSeconds);
-        }
-    }
-
     private void checkOperational() {
         systemStateManager.checkState(FmodSystemStateManager.State.INITIALIZED);
     }
@@ -122,35 +97,10 @@ public class FmodAudioEngine implements AudioEngine {
             AudioHandle handle = loadingManager.loadAudio(filePath);
             currentHandle = (FmodAudioHandle) handle;
             currentSound = loadingManager.getCurrentSound().orElse(null);
-            currentPath = currentHandle.getFilePath();
-            if (preloadManager != null) {
-                preloadManager.clearCache();
-            }
             return handle;
         } finally {
             operationLock.unlock();
         }
-    }
-
-    @Override
-    public CompletableFuture<Void> preloadRange(
-            @NonNull AudioHandle handle, long startFrame, long endFrame) {
-        checkOperational();
-        if (!(handle instanceof FmodAudioHandle)) {
-            throw new AudioPlaybackException("Invalid audio handle type");
-        }
-        FmodAudioHandle fmodHandle = (FmodAudioHandle) handle;
-        if (!fmodHandle.isValid()) {
-            throw new AudioPlaybackException("Audio handle is no longer valid");
-        }
-        if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
-            throw new AudioPlaybackException("Can only preload the currently loaded file");
-        }
-        if (startFrame < 0 || endFrame <= startFrame) {
-            throw new AudioPlaybackException(
-                    "Invalid frame range: " + startFrame + " to " + endFrame);
-        }
-        return preloadManager.preloadRange(currentPath, startFrame, endFrame);
     }
 
     @Override
@@ -202,17 +152,8 @@ public class FmodAudioEngine implements AudioEngine {
                 throw new AudioPlaybackException(
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
-            Pointer soundToPlay =
-                    preloadManager
-                            .getPreloadedSound(currentPath, startFrame, endFrame)
-                            .orElse(null);
-
-            if (soundToPlay == null) {
-                soundToPlay = currentSound;
-                log.debug("Playing range {}-{} from streaming sound", startFrame, endFrame);
-            } else {
-                log.debug("Playing range {}-{} from preloaded cache", startFrame, endFrame);
-            }
+            Pointer soundToPlay = currentSound;
+            log.debug("Playing range {}-{} from sound", startFrame, endFrame);
             PointerByReference channelRef = new PointerByReference();
             int result = fmod.FMOD_System_PlaySound(system, soundToPlay, null, true, channelRef);
 
@@ -473,9 +414,29 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public CompletableFuture<AudioBuffer> readSamples(
             @NonNull AudioHandle audio, long startFrame, long frameCount) {
-        throw new AudioEngineException(
-                "Reading samples is not supported in PLAYBACK mode. "
-                        + "Use ANALYSIS mode for waveform visualization.");
+        checkOperational();
+
+        if (!(audio instanceof FmodAudioHandle)) {
+            return CompletableFuture.failedFuture(
+                    new AudioEngineException("Invalid audio handle type"));
+        }
+
+        FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
+        if (!fmodHandle.isValid() || !loadingManager.isCurrent(audio)) {
+            return CompletableFuture.failedFuture(
+                    new AudioEngineException("Audio handle is not the currently loaded file"));
+        }
+
+        if (startFrame < 0 || frameCount <= 0) {
+            return CompletableFuture.failedFuture(
+                    new AudioEngineException(
+                            "Invalid frame range: start=" + startFrame + ", count=" + frameCount));
+        }
+
+        String filePath = fmodHandle.getFilePath();
+
+        return CompletableFuture.supplyAsync(
+                () -> sampleReader.readSamples(filePath, startFrame, frameCount), readExecutor);
     }
 
     @Override
@@ -554,13 +515,6 @@ public class FmodAudioEngine implements AudioEngine {
                 currentPlayback = null;
             }
 
-            if (preloadManager != null) {
-                try {
-                    preloadManager.shutdown();
-                } catch (Exception e) {
-                    log.debug("Error shutting down preload manager", e);
-                }
-            }
             if (listenerManager != null) {
                 try {
                     listenerManager.shutdown();
@@ -578,20 +532,21 @@ public class FmodAudioEngine implements AudioEngine {
                     log.debug("Error releasing sound", e);
                 }
                 currentSound = null;
-                currentPath = null;
                 currentHandle = null;
             }
 
+            if (readExecutor != null) {
+                readExecutor.shutdown();
+            }
             if (systemManager != null) {
                 systemManager.shutdown();
             }
             system = null;
             fmod = null;
-            config = null;
             systemManager = null;
             playbackManager = null;
-            preloadManager = null;
             listenerManager = null;
+            sampleReader = null;
             if (!systemStateManager.compareAndSetState(
                     FmodSystemStateManager.State.CLOSING, FmodSystemStateManager.State.CLOSED)) {
                 log.warn("Unexpected state during close transition");

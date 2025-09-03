@@ -1,6 +1,5 @@
 package a2.fmod;
 
-import a2.AudioEngineConfig;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.exceptions.AudioEngineException;
@@ -35,7 +34,6 @@ class FmodAudioLoadingManager {
     private final FmodLibrary fmod;
     private final Pointer system;
     private final FmodSystemStateManager stateManager;
-    private final AudioEngineConfig.Mode mode;
     private final AtomicLong nextHandleId = new AtomicLong(1);
     private final ReentrantLock loadingLock = new ReentrantLock();
 
@@ -45,12 +43,10 @@ class FmodAudioLoadingManager {
     FmodAudioLoadingManager(
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
-            @NonNull FmodSystemStateManager stateManager,
-            @NonNull AudioEngineConfig.Mode mode) {
+            @NonNull FmodSystemStateManager stateManager) {
         this.fmod = fmod;
         this.system = system;
         this.stateManager = stateManager;
-        this.mode = mode;
     }
 
     /**
@@ -231,12 +227,8 @@ class FmodAudioLoadingManager {
             throw new AudioLoadException("Audio engine not initialized");
         }
 
-        // Set appropriate flags based on mode
+        // Set appropriate flags for playback
         int flags = FmodConstants.FMOD_DEFAULT | FmodConstants.FMOD_ACCURATETIME;
-        if (mode == AudioEngineConfig.Mode.RENDERING) {
-            // For rendering, we just need to read samples, not play in real-time
-            flags |= FmodConstants.FMOD_OPENONLY; // Don't prebuffer
-        }
 
         // Create the sound
         PointerByReference soundRef = new PointerByReference();

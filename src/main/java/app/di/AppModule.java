@@ -1,7 +1,6 @@
 package app.di;
 
 import a2.AudioEngine;
-import a2.AudioEngineConfig;
 import a2.fmod.FmodAudioEngine;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
@@ -98,11 +97,5 @@ public class AppModule extends AbstractModule {
     @Singleton
     HttpClient provideHttpClient() {
         return HttpClient.newHttpClient();
-    }
-
-    @Provides
-    @Singleton
-    AudioEngineConfig provideAudioEngineConfig() {
-        return AudioEngineConfig.defaults();
     }
 }
