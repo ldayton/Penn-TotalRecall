@@ -104,14 +104,13 @@ class FmodPlaybackStateManager {
     }
 
     /**
-     * Transition to STOPPED state from any active state.
-     *
-     * @throws AudioPlaybackException if the transition is invalid
+     * Transition to STOPPED state from any state. This is the "nuclear option" - stop everything
+     * regardless of current state.
      */
     void transitionToStopped() {
         stateLock.lock();
         try {
-            if (!isActive()) {
+            if (currentState == PlaybackState.STOPPED) {
                 log.debug("Already in stopped state");
                 return;
             }
@@ -124,9 +123,8 @@ class FmodPlaybackStateManager {
     }
 
     /**
-     * Validate that seeking is allowed in the current state.
-     * Seeking is allowed from PLAYING or PAUSED states.
-     * Does not change state since FMOD seeks are instant.
+     * Validate that seeking is allowed in the current state. Seeking is allowed from PLAYING or
+     * PAUSED states. Does not change state since FMOD seeks are instant.
      *
      * @throws AudioPlaybackException if seeking is not allowed from current state
      */
@@ -164,9 +162,8 @@ class FmodPlaybackStateManager {
     }
 
     /**
-     * Force transition to STOPPED when FMOD channel becomes invalid.
-     * Used when FMOD operations return FMOD_ERR_INVALID_HANDLE.
-     * This ensures state stays synchronized with actual FMOD state.
+     * Force transition to STOPPED when FMOD channel becomes invalid. Used when FMOD operations
+     * return FMOD_ERR_INVALID_HANDLE. This ensures state stays synchronized with actual FMOD state.
      */
     void handleChannelInvalid() {
         stateLock.lock();
@@ -180,9 +177,7 @@ class FmodPlaybackStateManager {
         }
     }
 
-    /**
-     * Reset the state machine to STOPPED. Used for cleanup or error recovery.
-     */
+    /** Reset the state machine to STOPPED. Used for cleanup or error recovery. */
     void reset() {
         stateLock.lock();
         try {
@@ -246,14 +241,13 @@ class FmodPlaybackStateManager {
      */
     private boolean isValidTransition(PlaybackState from, PlaybackState to) {
         return switch (from) {
-            case STOPPED, FINISHED -> to == PlaybackState.PLAYING;
+            case STOPPED -> to == PlaybackState.PLAYING;
+            case FINISHED -> to == PlaybackState.PLAYING || to == PlaybackState.STOPPED;
             case PLAYING ->
                     to == PlaybackState.PAUSED
                             || to == PlaybackState.STOPPED
                             || to == PlaybackState.FINISHED;
-            case PAUSED ->
-                    to == PlaybackState.PLAYING
-                            || to == PlaybackState.STOPPED;
+            case PAUSED -> to == PlaybackState.PLAYING || to == PlaybackState.STOPPED;
             case SEEKING -> false; // SEEKING state no longer used
             default -> false; // Handle any future states
         };

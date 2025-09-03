@@ -70,10 +70,12 @@ class FmodAudioLoadingManagerTest {
         stateManager = new FmodSystemStateManager();
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.UNINITIALIZED,
+                        FmodSystemStateManager.State.INITIALIZING));
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED));
+                        FmodSystemStateManager.State.INITIALIZING,
+                        FmodSystemStateManager.State.INITIALIZED));
     }
 
     @BeforeEach

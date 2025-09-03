@@ -34,20 +34,23 @@ class FmodSystemStateManagerTest {
         // UNINITIALIZED -> INITIALIZING
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.UNINITIALIZED,
+                        FmodSystemStateManager.State.INITIALIZING));
         assertEquals(FmodSystemStateManager.State.INITIALIZING, stateManager.getCurrentState());
 
         // INITIALIZING -> INITIALIZED
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED));
+                        FmodSystemStateManager.State.INITIALIZING,
+                        FmodSystemStateManager.State.INITIALIZED));
         assertEquals(FmodSystemStateManager.State.INITIALIZED, stateManager.getCurrentState());
         assertTrue(stateManager.isRunning());
 
         // INITIALIZED -> CLOSING
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZED, FmodSystemStateManager.State.CLOSING));
+                        FmodSystemStateManager.State.INITIALIZED,
+                        FmodSystemStateManager.State.CLOSING));
         assertEquals(FmodSystemStateManager.State.CLOSING, stateManager.getCurrentState());
         assertFalse(stateManager.isRunning());
 
@@ -60,7 +63,8 @@ class FmodSystemStateManagerTest {
         // CLOSED -> INITIALIZING (re-initialization)
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.CLOSED, FmodSystemStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.CLOSED,
+                        FmodSystemStateManager.State.INITIALIZING));
         assertEquals(FmodSystemStateManager.State.INITIALIZING, stateManager.getCurrentState());
     }
 
@@ -69,7 +73,9 @@ class FmodSystemStateManagerTest {
         // UNINITIALIZED -> INITIALIZED (skipping INITIALIZING)
         assertThrows(
                 AudioEngineException.class,
-                () -> stateManager.transitionTo(FmodSystemStateManager.State.INITIALIZED, () -> {}));
+                () ->
+                        stateManager.transitionTo(
+                                FmodSystemStateManager.State.INITIALIZED, () -> {}));
 
         // UNINITIALIZED -> CLOSING
         assertThrows(
@@ -79,7 +85,8 @@ class FmodSystemStateManagerTest {
         // UNINITIALIZED -> CLOSED (no longer allowed)
         assertFalse(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.CLOSED));
+                        FmodSystemStateManager.State.UNINITIALIZED,
+                        FmodSystemStateManager.State.CLOSED));
     }
 
     @Test
@@ -112,9 +119,11 @@ class FmodSystemStateManagerTest {
     void testExecuteInState() {
         // Move to INITIALIZED state
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING);
+                FmodSystemStateManager.State.UNINITIALIZED,
+                FmodSystemStateManager.State.INITIALIZING);
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED);
+                FmodSystemStateManager.State.INITIALIZING,
+                FmodSystemStateManager.State.INITIALIZED);
 
         // Execute action in correct state
         AtomicInteger result = new AtomicInteger();
@@ -128,13 +137,16 @@ class FmodSystemStateManagerTest {
         // Try to execute in wrong state
         assertThrows(
                 AudioEngineException.class,
-                () -> stateManager.executeInState(FmodSystemStateManager.State.UNINITIALIZED, () -> {}));
+                () ->
+                        stateManager.executeInState(
+                                FmodSystemStateManager.State.UNINITIALIZED, () -> {}));
     }
 
     @Test
     void testCheckStateAny() {
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING);
+                FmodSystemStateManager.State.UNINITIALIZED,
+                FmodSystemStateManager.State.INITIALIZING);
 
         // Should pass - current state is one of the expected
         assertDoesNotThrow(
@@ -148,7 +160,8 @@ class FmodSystemStateManagerTest {
                 AudioEngineException.class,
                 () ->
                         stateManager.checkStateAny(
-                                FmodSystemStateManager.State.CLOSED, FmodSystemStateManager.State.CLOSING));
+                                FmodSystemStateManager.State.CLOSED,
+                                FmodSystemStateManager.State.CLOSING));
     }
 
     @Test
@@ -210,11 +223,13 @@ class FmodSystemStateManagerTest {
         assertFalse(stateManager.isRunning());
 
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING);
+                FmodSystemStateManager.State.UNINITIALIZED,
+                FmodSystemStateManager.State.INITIALIZING);
         assertFalse(stateManager.isRunning());
 
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED);
+                FmodSystemStateManager.State.INITIALIZING,
+                FmodSystemStateManager.State.INITIALIZED);
         assertTrue(stateManager.isRunning());
 
         stateManager.compareAndSetState(
@@ -240,9 +255,11 @@ class FmodSystemStateManagerTest {
 
         // First, get to INITIALIZED state
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING);
+                FmodSystemStateManager.State.UNINITIALIZED,
+                FmodSystemStateManager.State.INITIALIZING);
         stateManager.compareAndSetState(
-                FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED);
+                FmodSystemStateManager.State.INITIALIZING,
+                FmodSystemStateManager.State.INITIALIZED);
 
         for (int i = 0; i < threadCount; i++) {
             executor.submit(
@@ -401,17 +418,20 @@ class FmodSystemStateManagerTest {
         // Can reach INITIALIZING
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.UNINITIALIZED,
+                        FmodSystemStateManager.State.INITIALIZING));
 
         // Can reach INITIALIZED
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED));
+                        FmodSystemStateManager.State.INITIALIZING,
+                        FmodSystemStateManager.State.INITIALIZED));
 
         // Can reach CLOSING
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZED, FmodSystemStateManager.State.CLOSING));
+                        FmodSystemStateManager.State.INITIALIZED,
+                        FmodSystemStateManager.State.CLOSING));
 
         // Can reach CLOSED
         assertTrue(
@@ -421,7 +441,8 @@ class FmodSystemStateManagerTest {
         // CLOSED can restart the cycle (re-initialization)
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodSystemStateManager.State.CLOSED, FmodSystemStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.CLOSED,
+                        FmodSystemStateManager.State.INITIALIZING));
 
         // Verify all states were reachable
         // (We've transitioned through all 5 states)

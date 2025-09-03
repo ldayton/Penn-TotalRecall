@@ -49,7 +49,8 @@ public class FmodAudioEngine implements AudioEngine {
         validateConfig(config);
 
         if (!systemStateManager.compareAndSetState(
-                FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING)) {
+                FmodSystemStateManager.State.UNINITIALIZED,
+                FmodSystemStateManager.State.INITIALIZING)) {
             FmodSystemStateManager.State currentState = systemStateManager.getCurrentState();
             throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
@@ -67,7 +68,8 @@ public class FmodAudioEngine implements AudioEngine {
             this.listenerManager = new FmodListenerManager(fmod);
 
             if (!systemStateManager.compareAndSetState(
-                    FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED)) {
+                    FmodSystemStateManager.State.INITIALIZING,
+                    FmodSystemStateManager.State.INITIALIZED)) {
                 throw new AudioEngineException("Engine was closed during initialization");
             }
             log.info("FMOD audio engine initialized successfully");
@@ -81,7 +83,8 @@ public class FmodAudioEngine implements AudioEngine {
                 }
             }
             systemStateManager.compareAndSetState(
-                    FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.UNINITIALIZED);
+                    FmodSystemStateManager.State.INITIALIZING,
+                    FmodSystemStateManager.State.UNINITIALIZED);
             throw e;
         }
     }
@@ -170,7 +173,8 @@ public class FmodAudioEngine implements AudioEngine {
             currentPlayback = playbackHandle;
             long totalFrames = getAudioDuration(audio);
             listenerManager.startMonitoring(playbackHandle, totalFrames);
-            listenerManager.notifyStateChanged(playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+            listenerManager.notifyStateChanged(
+                    playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
             log.debug("Started playback for file: {}", fmodHandle.getFilePath());
             return playbackHandle;
         } finally {
@@ -198,8 +202,10 @@ public class FmodAudioEngine implements AudioEngine {
                 throw new AudioPlaybackException(
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
-            Pointer soundToPlay = preloadManager.getPreloadedSound(currentPath, startFrame, endFrame)
-                    .orElse(null);
+            Pointer soundToPlay =
+                    preloadManager
+                            .getPreloadedSound(currentPath, startFrame, endFrame)
+                            .orElse(null);
 
             if (soundToPlay == null) {
                 soundToPlay = currentSound;
@@ -286,7 +292,8 @@ public class FmodAudioEngine implements AudioEngine {
                 currentPlayback = null;
                 return;
             }
-            listenerManager.notifyStateChanged(fmodPlayback, PlaybackState.PAUSED, PlaybackState.PLAYING);
+            listenerManager.notifyStateChanged(
+                    fmodPlayback, PlaybackState.PAUSED, PlaybackState.PLAYING);
             log.debug("Paused playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -316,7 +323,8 @@ public class FmodAudioEngine implements AudioEngine {
                 currentPlayback = null;
                 throw new AudioPlaybackException("Channel was stopped, cannot resume");
             }
-            listenerManager.notifyStateChanged(fmodPlayback, PlaybackState.PLAYING, PlaybackState.PAUSED);
+            listenerManager.notifyStateChanged(
+                    fmodPlayback, PlaybackState.PLAYING, PlaybackState.PAUSED);
             log.debug("Resumed playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -345,7 +353,8 @@ public class FmodAudioEngine implements AudioEngine {
             fmodPlayback.markInactive();
             currentPlayback = null;
             listenerManager.stopMonitoring();
-            listenerManager.notifyStateChanged(fmodPlayback, PlaybackState.STOPPED, PlaybackState.PLAYING);
+            listenerManager.notifyStateChanged(
+                    fmodPlayback, PlaybackState.STOPPED, PlaybackState.PLAYING);
             log.debug("Stopped playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
@@ -493,7 +502,6 @@ public class FmodAudioEngine implements AudioEngine {
         listenerManager.removeListener(listener);
     }
 
-
     private long getAudioDuration(AudioHandle handle) {
         if (!(handle instanceof FmodAudioHandle) || currentSound == null) {
             return 0;
@@ -516,11 +524,13 @@ public class FmodAudioEngine implements AudioEngine {
                 return;
             case INITIALIZING:
                 systemStateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.CLOSED);
+                        FmodSystemStateManager.State.INITIALIZING,
+                        FmodSystemStateManager.State.CLOSED);
                 return;
             case INITIALIZED:
                 if (!systemStateManager.compareAndSetState(
-                        FmodSystemStateManager.State.INITIALIZED, FmodSystemStateManager.State.CLOSING)) {
+                        FmodSystemStateManager.State.INITIALIZED,
+                        FmodSystemStateManager.State.CLOSING)) {
                     close();
                     return;
                 }
@@ -535,9 +545,7 @@ public class FmodAudioEngine implements AudioEngine {
                     int result = fmod.FMOD_Channel_Stop(currentPlayback.getChannel());
                     if (result != FmodConstants.FMOD_OK
                             && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                        log.debug(
-                                "Error stopping playback: {}",
-                                "error code: " + result);
+                        log.debug("Error stopping playback: {}", "error code: " + result);
                     }
                     currentPlayback.markInactive();
                 } catch (Exception e) {
