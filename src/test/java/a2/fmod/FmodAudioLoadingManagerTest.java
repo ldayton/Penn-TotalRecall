@@ -40,7 +40,7 @@ class FmodAudioLoadingManagerTest {
 
     private FmodLibrary fmod;
     private Pointer system;
-    private FmodStateManager stateManager;
+    private FmodSystemStateManager stateManager;
     private FmodAudioLoadingManager loadingManager;
 
     @TempDir Path tempDir;
@@ -67,13 +67,13 @@ class FmodAudioLoadingManagerTest {
         assertEquals(FmodConstants.FMOD_OK, result, "Failed to initialize FMOD system");
 
         // Create state manager and set to INITIALIZED
-        stateManager = new FmodStateManager();
+        stateManager = new FmodSystemStateManager();
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodStateManager.State.UNINITIALIZED, FmodStateManager.State.INITIALIZING));
+                        FmodSystemStateManager.State.UNINITIALIZED, FmodSystemStateManager.State.INITIALIZING));
         assertTrue(
                 stateManager.compareAndSetState(
-                        FmodStateManager.State.INITIALIZING, FmodStateManager.State.INITIALIZED));
+                        FmodSystemStateManager.State.INITIALIZING, FmodSystemStateManager.State.INITIALIZED));
     }
 
     @BeforeEach

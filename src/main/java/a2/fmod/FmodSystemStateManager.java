@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ThreadSafe
 @Slf4j
-class FmodStateManager {
+class FmodSystemStateManager {
 
     enum State {
         UNINITIALIZED,

@@ -34,7 +34,7 @@ class FmodAudioLoadingManager {
 
     private final FmodLibrary fmod;
     private final Pointer system;
-    private final FmodStateManager stateManager;
+    private final FmodSystemStateManager stateManager;
     private final AudioEngineConfig.Mode mode;
     private final AtomicLong nextHandleId = new AtomicLong(1);
     private final ReentrantLock loadingLock = new ReentrantLock();
@@ -45,7 +45,7 @@ class FmodAudioLoadingManager {
     FmodAudioLoadingManager(
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
-            @NonNull FmodStateManager stateManager,
+            @NonNull FmodSystemStateManager stateManager,
             @NonNull AudioEngineConfig.Mode mode) {
         this.fmod = fmod;
         this.system = system;
@@ -226,7 +226,7 @@ class FmodAudioLoadingManager {
     private Pointer createSound(@NonNull String canonicalPath) throws AudioLoadException {
         // Check we're in the right state
         try {
-            stateManager.checkState(FmodStateManager.State.INITIALIZED);
+            stateManager.checkState(FmodSystemStateManager.State.INITIALIZED);
         } catch (AudioEngineException e) {
             throw new AudioLoadException("Audio engine not initialized");
         }
