@@ -60,7 +60,7 @@ public class FmodAudioEngine implements AudioEngine {
             this.system = systemManager.getSystem();
             this.loadingManager = new FmodAudioLoadingManager(fmod, system, systemStateManager);
             this.playbackManager = new FmodPlaybackManager(fmod, system);
-            this.listenerManager = new FmodListenerManager(fmod);
+            this.listenerManager = new FmodListenerManager(fmod, system);
             this.sampleReader = new FmodSampleReader(fmod, system);
 
             if (!systemStateManager.compareAndSetState(

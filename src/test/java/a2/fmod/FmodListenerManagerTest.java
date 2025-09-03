@@ -80,7 +80,7 @@ class FmodListenerManagerTest {
 
     @BeforeEach
     void createManagers() {
-        listenerManager = new FmodListenerManager(fmod, PROGRESS_INTERVAL_MS);
+        listenerManager = new FmodListenerManager(fmod, system, PROGRESS_INTERVAL_MS);
         loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager);
         playbackManager = new FmodPlaybackManager(fmod, system);
     }
@@ -463,7 +463,7 @@ class FmodListenerManagerTest {
 
         // Create a new listener manager with 100ms interval for this test
         listenerManager.shutdown();
-        listenerManager = new FmodListenerManager(fmod, 100);
+        listenerManager = new FmodListenerManager(fmod, system, 100);
 
         TestListener listener = new TestListener();
         listenerManager.addListener(listener);
