@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Test-specific logging configuration -->
+    
+    <!-- Console appender that suppresses stack traces -->
+    <appender name="CONSOLE_NO_STACK" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Only show message, no stack trace -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Console appender with full stack traces for other errors -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Suppress stack traces for expected listener errors during tests -->
+    <logger name="a2.fmod.FmodListenerManager" level="WARN" additivity="false">
+        <appender-ref ref="CONSOLE_NO_STACK"/>
+    </logger>
+
+    <!-- Default log level for tests -->
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

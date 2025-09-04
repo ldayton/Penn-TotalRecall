@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.Timeout;
  */
 @Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 class FmodPlaybackManagerTest {
 
     private FmodLibrary fmod;
@@ -155,6 +157,7 @@ class FmodPlaybackManagerTest {
 
     @Test
     void testPlayMultipleSounds() throws Exception {
+        log.warn("=== EXPECTED WARNING FOLLOWS - Testing channel cleanup on multiple plays ===");
         // Load first sound
         AudioHandle handle1 = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound1 = loadSound(SAMPLE_WAV);

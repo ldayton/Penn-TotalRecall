@@ -100,7 +100,6 @@ class FmodAudioLoadingManager {
             // Update current state atomically
             current = Optional.of(new CurrentAudio(newHandle, newSound, canonicalPath));
 
-            log.info("Loaded audio file: {}", canonicalPath);
             return newHandle;
 
         } finally {
@@ -253,7 +252,6 @@ class FmodAudioLoadingManager {
             throw new AudioLoadException("FMOD returned null sound for: " + canonicalPath);
         }
 
-        log.debug("Created FMOD sound for: {}", canonicalPath);
         return sound;
     }
 

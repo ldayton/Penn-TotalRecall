@@ -3,6 +3,7 @@ package a2.fmod;
 import static org.junit.jupiter.api.Assertions.*;
 
 import a2.AudioHandle;
+import lombok.extern.slf4j.Slf4j;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
@@ -13,7 +14,6 @@ import com.sun.jna.ptr.PointerByReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +22,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +35,7 @@ import org.junit.jupiter.api.Timeout;
  * detection.
  */
 @Audio
+@Slf4j
 class FmodListenerManagerTest {
 
     private FmodListenerManager listenerManager;
@@ -49,7 +49,6 @@ class FmodListenerManagerTest {
     private Pointer system;
     
     private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
-    private static final String SWEEP_WAV = "packaging/samples/sweep.wav";
     private static final long TEST_PROGRESS_INTERVAL_MS = 50; // Fast interval for testing
 
     @BeforeEach
@@ -135,6 +134,7 @@ class FmodListenerManagerTest {
         
         // Try to add another listener - should be rejected
         TestListener listener2 = new TestListener("L2");
+        log.warn("=== EXPECTED WARNING FOLLOWS - Testing shutdown rejection ===");
         listenerManager.addListener(listener2);
         
         // Count should not increase
@@ -429,21 +429,23 @@ class FmodListenerManagerTest {
     @Test
     @DisplayName("Should handle listener exceptions gracefully")
     void testListenerExceptionHandling() throws Exception {
+        log.warn("=== EXPECTED TEST EXCEPTIONS FOLLOW - Testing error handling ===");
+        
         // Create a listener that throws exceptions
         PlaybackListener badListener = new PlaybackListener() {
             @Override
             public void onProgress(PlaybackHandle handle, long position, long total) {
-                throw new RuntimeException("Progress error");
+                throw new TestListenerException("Progress error");
             }
             
             @Override
             public void onStateChanged(PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
-                throw new RuntimeException("State change error");
+                throw new TestListenerException("State change error");
             }
             
             @Override
             public void onPlaybackComplete(PlaybackHandle handle) {
-                throw new RuntimeException("Completion error");
+                throw new TestListenerException("Completion error");
             }
         };
         

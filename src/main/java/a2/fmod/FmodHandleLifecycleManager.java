@@ -48,12 +48,8 @@ class FmodHandleLifecycleManager {
         FmodAudioHandle previousHandle = currentHandle;
         currentHandle = handle;
         
-        log.debug("Created handle {} with generation {} for file: {}", 
-                  id, generation, filePath);
         
         if (previousHandle != null) {
-            log.debug("Invalidated previous handle {} with generation {}", 
-                      previousHandle.getId(), previousHandle.getGeneration());
         }
         
         return handle;
@@ -114,6 +110,5 @@ class FmodHandleLifecycleManager {
      */
     void clear() {
         currentHandle = null;
-        log.debug("Cleared current handle");
     }
 }

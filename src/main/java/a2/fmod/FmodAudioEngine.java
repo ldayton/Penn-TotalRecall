@@ -72,7 +72,6 @@ public class FmodAudioEngine implements AudioEngine {
             throw new AudioEngineException("Cannot initialize engine in state: " + currentState);
         }
         try {
-            log.info("Initializing FMOD audio engine");
 
             // Initialize the system if needed
             if (!systemManager.isInitialized()) {
@@ -88,14 +87,12 @@ public class FmodAudioEngine implements AudioEngine {
                     FmodSystemStateManager.State.INITIALIZED)) {
                 throw new AudioEngineException("Engine was closed during initialization");
             }
-            log.info("FMOD audio engine initialized successfully");
 
         } catch (Exception e) {
             if (systemManager != null) {
                 try {
                     systemManager.shutdown();
                 } catch (Exception cleanupEx) {
-                    log.debug("Error during cleanup after init failure", cleanupEx);
                 }
             }
             systemStateManager.compareAndSetState(
@@ -144,7 +141,6 @@ public class FmodAudioEngine implements AudioEngine {
             listenerManager.startMonitoring(playbackHandle, totalFrames);
             listenerManager.notifyStateChanged(
                     playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-            log.debug("Started playback for file: {}", fmodHandle.getFilePath());
             return playbackHandle;
         } finally {
             operationLock.unlock();
@@ -172,7 +168,6 @@ public class FmodAudioEngine implements AudioEngine {
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
             Pointer soundToPlay = currentSound;
-            log.debug("Playing range {}-{} from sound", startFrame, endFrame);
             PointerByReference channelRef = new PointerByReference();
             int result = fmod.FMOD_System_PlaySound(system, soundToPlay, null, true, channelRef);
 
@@ -219,11 +214,6 @@ public class FmodAudioEngine implements AudioEngine {
                 throw new AudioPlaybackException(
                         "Failed to start playback: " + "error code: " + result);
             }
-            log.debug(
-                    "Started range playback for file: {} from {} to {}",
-                    fmodHandle.getFilePath(),
-                    startFrame,
-                    endFrame);
         } finally {
             operationLock.unlock();
         }
@@ -240,7 +230,6 @@ public class FmodAudioEngine implements AudioEngine {
             }
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
             if (!fmodPlayback.isActive()) {
-                log.debug("Playback handle is no longer active");
                 return;
             }
             if (currentPlayback != fmodPlayback) {
@@ -254,7 +243,6 @@ public class FmodAudioEngine implements AudioEngine {
             }
             listenerManager.notifyStateChanged(
                     fmodPlayback, PlaybackState.PAUSED, PlaybackState.PLAYING);
-            log.debug("Paused playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -278,14 +266,12 @@ public class FmodAudioEngine implements AudioEngine {
             }
             playbackManager.resume();
             if (!playbackManager.hasActivePlayback()) {
-                log.debug("Channel was stopped, cannot resume");
                 fmodPlayback.markInactive();
                 currentPlayback = null;
                 throw new AudioPlaybackException("Channel was stopped, cannot resume");
             }
             listenerManager.notifyStateChanged(
                     fmodPlayback, PlaybackState.PLAYING, PlaybackState.PAUSED);
-            log.debug("Resumed playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -302,11 +288,9 @@ public class FmodAudioEngine implements AudioEngine {
             }
             FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
             if (!fmodPlayback.isActive()) {
-                log.debug("Playback handle is already inactive");
                 return;
             }
             if (currentPlayback != fmodPlayback) {
-                log.debug("Not the current playback handle");
                 return;
             }
             playbackManager.stop();
@@ -315,7 +299,6 @@ public class FmodAudioEngine implements AudioEngine {
             listenerManager.stopMonitoring();
             listenerManager.notifyStateChanged(
                     fmodPlayback, PlaybackState.STOPPED, PlaybackState.PLAYING);
-            log.debug("Stopped playback {}", fmodPlayback.getId());
         } finally {
             operationLock.unlock();
         }
@@ -352,7 +335,6 @@ public class FmodAudioEngine implements AudioEngine {
             PlaybackState currentState = wasPaused ? PlaybackState.PAUSED : PlaybackState.PLAYING;
             listenerManager.notifyStateChanged(fmodPlayback, PlaybackState.SEEKING, currentState);
             listenerManager.notifyStateChanged(fmodPlayback, currentState, PlaybackState.SEEKING);
-            log.debug("Seeked playback {} to frame {}", fmodPlayback.getId(), frame);
         } finally {
             operationLock.unlock();
         }
@@ -501,7 +483,6 @@ public class FmodAudioEngine implements AudioEngine {
             case CLOSING:
                 return;
             case UNINITIALIZED:
-                log.debug("close() called on uninitialized engine - no-op");
                 return;
             case INITIALIZING:
                 systemStateManager.compareAndSetState(
@@ -518,7 +499,6 @@ public class FmodAudioEngine implements AudioEngine {
                 break;
         }
 
-        log.info("Shutting down FMOD audio engine");
         operationLock.lock();
         try {
             if (fmod != null && currentPlayback != null) {
@@ -526,11 +506,9 @@ public class FmodAudioEngine implements AudioEngine {
                     int result = fmod.FMOD_Channel_Stop(currentPlayback.getChannel());
                     if (result != FmodConstants.FMOD_OK
                             && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                        log.debug("Error stopping playback: {}", "error code: " + result);
                     }
                     currentPlayback.markInactive();
                 } catch (Exception e) {
-                    log.debug("Error stopping playback", e);
                 }
                 currentPlayback = null;
             }
@@ -539,17 +517,14 @@ public class FmodAudioEngine implements AudioEngine {
                 try {
                     listenerManager.shutdown();
                 } catch (Exception e) {
-                    log.debug("Error shutting down listener manager", e);
                 }
             }
             if (fmod != null && currentSound != null) {
                 try {
                     int result = fmod.FMOD_Sound_Release(currentSound);
                     if (result != FmodConstants.FMOD_OK) {
-                        log.debug("Error releasing sound: {}", "error code: " + result);
                     }
                 } catch (Exception e) {
-                    log.debug("Error releasing sound", e);
                 }
                 currentSound = null;
             }
@@ -567,6 +542,5 @@ public class FmodAudioEngine implements AudioEngine {
         } finally {
             operationLock.unlock();
         }
-        log.info("FMOD audio engine shut down");
     }
 }

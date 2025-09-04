@@ -140,10 +140,8 @@ class FmodSampleReader {
                 try {
                     int result = fmod.FMOD_Sound_Release(tempSound);
                     if (result != FmodConstants.FMOD_OK) {
-                        log.debug("Error releasing temporary sound: {}", "error code: " + result);
                     }
                 } catch (Exception e) {
-                    log.debug("Error releasing temporary sound", e);
                 }
             }
         }

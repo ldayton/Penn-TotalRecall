@@ -43,7 +43,6 @@ class FmodSystemManager {
                 throw new AudioEngineException("FMOD system already initialized");
             }
 
-            log.info("Initializing FMOD system for playback");
 
             // Load FMOD library
             fmod = loadFmodLibrary();
@@ -84,7 +83,6 @@ class FmodSystemManager {
 
             initialized = true;
             logSystemInfo();
-            log.info("FMOD system initialized successfully");
 
         } finally {
             systemLock.unlock();
@@ -135,44 +133,7 @@ class FmodSystemManager {
      * software format.
      */
     private void logSystemInfo() {
-        if (!initialized || fmod == null || system == null) {
-            return;
-        }
-
-        IntByReference version = new IntByReference();
-        IntByReference buildnumber = new IntByReference();
-        int result = fmod.FMOD_System_GetVersion(system, version, buildnumber);
-        if (result == FmodConstants.FMOD_OK) {
-            int v = version.getValue();
-            log.info(
-                    "FMOD version: {}.{}.{} (build {})",
-                    (v >> 16) & 0xFFFF,
-                    (v >> 8) & 0xFF,
-                    v & 0xFF,
-                    buildnumber.getValue());
-        }
-
-        IntByReference bufferLength = new IntByReference();
-        IntByReference numBuffers = new IntByReference();
-        result = fmod.FMOD_System_GetDSPBufferSize(system, bufferLength, numBuffers);
-        if (result == FmodConstants.FMOD_OK) {
-            log.info(
-                    "DSP buffer configuration: {} samples x {} buffers",
-                    bufferLength.getValue(),
-                    numBuffers.getValue());
-        }
-
-        IntByReference sampleRate = new IntByReference();
-        IntByReference speakerMode = new IntByReference();
-        IntByReference numRawSpeakers = new IntByReference();
-        result =
-                fmod.FMOD_System_GetSoftwareFormat(system, sampleRate, speakerMode, numRawSpeakers);
-        if (result == FmodConstants.FMOD_OK) {
-            log.info(
-                    "Software format: {} Hz, speaker mode: {}",
-                    sampleRate.getValue(),
-                    speakerMode.getValue());
-        }
+        // Logging removed
     }
 
     /**
@@ -185,10 +146,7 @@ class FmodSystemManager {
             return;
         }
 
-        int result = fmod.FMOD_System_Update(system);
-        if (result != FmodConstants.FMOD_OK && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-            log.debug("Error during system update: {}", "error code: " + result);
-        }
+        fmod.FMOD_System_Update(system);
     }
 
     /**
@@ -202,7 +160,6 @@ class FmodSystemManager {
                 return; // Already shut down
             }
 
-            log.info("Shutting down FMOD system");
 
             if (system != null && fmod != null) {
                 int result = fmod.FMOD_System_Release(system);
@@ -215,7 +172,6 @@ class FmodSystemManager {
             fmod = null;
             initialized = false;
 
-            log.info("FMOD system shut down");
         } finally {
             systemLock.unlock();
         }

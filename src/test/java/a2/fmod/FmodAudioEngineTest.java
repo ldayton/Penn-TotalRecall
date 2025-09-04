@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.Timeout;
  * without mocks to verify real behavior and catch integration-specific bugs.
  */
 @Audio
+@Slf4j
 class FmodAudioEngineTest {
 
     private FmodAudioEngine engine;
@@ -112,6 +114,7 @@ class FmodAudioEngineTest {
     @Test
     @DisplayName("Should reject playback with stale handle after reload")
     void testStaleHandleRejection() throws Exception {
+        log.warn("=== EXPECTED WARNING FOLLOWS - Testing stale handle cleanup ===");
         AudioHandle handle1 = engine.loadAudio(SAMPLE_WAV);
         PlaybackHandle playback1 = engine.play(handle1);
         engine.pause(playback1);
@@ -639,7 +642,7 @@ class FmodAudioEngineTest {
         AudioHandle firstHandle = engine.loadAudio(SAMPLE_WAV);
         
         // Load second audio - should invalidate first
-        AudioHandle secondHandle = engine.loadAudio(SWEEP_WAV);
+        engine.loadAudio(SWEEP_WAV);
         
         // THIS IS THE BUG: Should throw exception but might not
         assertThrows(Exception.class, () -> engine.play(firstHandle),
@@ -655,7 +658,7 @@ class FmodAudioEngineTest {
         assertTrue(engine.isPlaying(playback), "Should be playing initially");
         
         // Load new audio while first is playing
-        AudioHandle secondHandle = engine.loadAudio(SWEEP_WAV);
+        engine.loadAudio(SWEEP_WAV);
         
         // THIS IS THE BUG: Old playback should be stopped/invalid
         assertFalse(engine.isPlaying(playback), 
@@ -701,7 +704,7 @@ class FmodAudioEngineTest {
         });
         
         // Load new file
-        AudioHandle handle2 = engine.loadAudio(SWEEP_WAV);
+        engine.loadAudio(SWEEP_WAV);
         
         // Now operations on handle1 should fail
         assertThrows(Exception.class, () -> engine.getMetadata(handle1),

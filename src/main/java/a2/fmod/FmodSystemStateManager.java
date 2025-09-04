@@ -46,7 +46,6 @@ class FmodSystemStateManager {
             validateTransition(currentState, newState);
             State oldState = currentState;
             currentState = newState;
-            log.debug("State transition: {} -> {}", oldState, newState);
 
             try {
                 action.run();
@@ -151,7 +150,6 @@ class FmodSystemStateManager {
                     return false;
                 }
                 currentState = newState;
-                log.debug("State transition: {} -> {}", expected, newState);
                 return true;
             }
             return false;

@@ -59,9 +59,7 @@ class FmodPlaybackStateManager {
                 throw new AudioPlaybackException(
                         "Cannot start playback from state: " + currentState);
             }
-            PlaybackState oldState = currentState;
             currentState = PlaybackState.PLAYING;
-            log.debug("Playback state transition: {} -> PLAYING", oldState);
         } finally {
             stateLock.unlock();
         }
@@ -79,7 +77,6 @@ class FmodPlaybackStateManager {
                 throw new AudioPlaybackException("Cannot pause from state: " + currentState);
             }
             currentState = PlaybackState.PAUSED;
-            log.debug("Playback state transition: PLAYING -> PAUSED");
         } finally {
             stateLock.unlock();
         }
@@ -97,7 +94,6 @@ class FmodPlaybackStateManager {
                 throw new AudioPlaybackException("Cannot resume from state: " + currentState);
             }
             currentState = PlaybackState.PLAYING;
-            log.debug("Playback state transition: PAUSED -> PLAYING");
         } finally {
             stateLock.unlock();
         }
@@ -111,12 +107,9 @@ class FmodPlaybackStateManager {
         stateLock.lock();
         try {
             if (currentState == PlaybackState.STOPPED) {
-                log.debug("Already in stopped state");
                 return;
             }
-            PlaybackState oldState = currentState;
             currentState = PlaybackState.STOPPED;
-            log.debug("Playback state transition: {} -> STOPPED", oldState);
         } finally {
             stateLock.unlock();
         }
@@ -135,7 +128,6 @@ class FmodPlaybackStateManager {
                 throw new AudioPlaybackException("Cannot seek from state: " + currentState);
             }
             // No state change - seek is instant in FMOD
-            log.debug("Seek validated in state: {}", currentState);
         } finally {
             stateLock.unlock();
         }
@@ -155,7 +147,6 @@ class FmodPlaybackStateManager {
                         "Cannot finish playback from state: " + currentState);
             }
             currentState = PlaybackState.FINISHED;
-            log.debug("Playback state transition: PLAYING -> FINISHED");
         } finally {
             stateLock.unlock();
         }
@@ -169,7 +160,6 @@ class FmodPlaybackStateManager {
         stateLock.lock();
         try {
             if (currentState != PlaybackState.STOPPED && currentState != PlaybackState.FINISHED) {
-                log.debug("Channel invalid, forcing state: {} -> STOPPED", currentState);
                 currentState = PlaybackState.STOPPED;
             }
         } finally {
@@ -184,7 +174,6 @@ class FmodPlaybackStateManager {
             PlaybackState oldState = currentState;
             currentState = PlaybackState.STOPPED;
             if (oldState != PlaybackState.STOPPED) {
-                log.debug("Playback state reset: {} -> STOPPED", oldState);
             }
         } finally {
             stateLock.unlock();
@@ -223,7 +212,6 @@ class FmodPlaybackStateManager {
                     return false;
                 }
                 currentState = newState;
-                log.debug("Playback state transition: {} -> {}", expected, newState);
                 return true;
             }
             return false;

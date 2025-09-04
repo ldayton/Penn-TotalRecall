@@ -439,6 +439,10 @@ tasks.register('audioTest', Test.class) {
         // macOS-only tests on mac
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
+        // Allow excluding additional tags via property: -PexcludeTags=windowing
+        if (project.hasProperty('excludeTags')) {
+            excludeTags project.property('excludeTags').toString().split(',')
+        }
     }
 
     // Stability switches

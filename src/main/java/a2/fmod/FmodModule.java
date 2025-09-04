@@ -26,7 +26,6 @@ public class FmodModule extends AbstractModule {
     @Singleton
     FmodLibrary provideFmodLibrary(@NonNull FmodSystemManager systemManager) {
         if (!systemManager.isInitialized()) {
-            log.info("Initializing FMOD system for library access");
             systemManager.initialize();
         }
         return systemManager.getFmodLibrary();
@@ -37,7 +36,6 @@ public class FmodModule extends AbstractModule {
     @Singleton
     Pointer provideFmodSystem(@NonNull FmodSystemManager systemManager) {
         if (!systemManager.isInitialized()) {
-            log.info("Initializing FMOD system for pointer access");
             systemManager.initialize();
         }
         return systemManager.getSystem();

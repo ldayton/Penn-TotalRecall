@@ -76,7 +76,6 @@ class FmodPlaybackManager {
             currentPlayback = Optional.of(playbackHandle);
             currentChannel = Optional.of(channel);
 
-            log.debug("Started playback");
             return playbackHandle;
         } finally {
             playbackLock.unlock();
@@ -145,7 +144,6 @@ class FmodPlaybackManager {
             currentPlayback = Optional.of(playbackHandle);
             currentChannel = Optional.of(channel);
 
-            log.debug("Started playback of range {}-{}", startFrame, endFrame);
             return playbackHandle;
         } finally {
             playbackLock.unlock();
@@ -168,7 +166,6 @@ class FmodPlaybackManager {
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                log.debug("Channel already stopped");
                 cleanupCurrentPlayback();
                 return;
             }
@@ -177,7 +174,6 @@ class FmodPlaybackManager {
                 throw new AudioPlaybackException("Failed to pause: error code: " + result);
             }
 
-            log.debug("Paused playback");
         } finally {
             playbackLock.unlock();
         }
@@ -199,7 +195,6 @@ class FmodPlaybackManager {
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                log.debug("Channel already stopped");
                 cleanupCurrentPlayback();
                 return;
             }
@@ -208,7 +203,6 @@ class FmodPlaybackManager {
                 throw new AudioPlaybackException("Failed to resume: error code: " + result);
             }
 
-            log.debug("Resumed playback");
         } finally {
             playbackLock.unlock();
         }
@@ -227,7 +221,6 @@ class FmodPlaybackManager {
             }
 
             cleanupCurrentPlayback();
-            log.debug("Stopped playback");
         } finally {
             playbackLock.unlock();
         }
@@ -253,7 +246,6 @@ class FmodPlaybackManager {
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                log.debug("Channel already stopped");
                 cleanupCurrentPlayback();
                 return;
             }
@@ -262,7 +254,6 @@ class FmodPlaybackManager {
                 throw new AudioPlaybackException("Failed to seek: error code: " + result);
             }
 
-            log.debug("Seeked to frame {}", frame);
         } finally {
             playbackLock.unlock();
         }
@@ -325,7 +316,6 @@ class FmodPlaybackManager {
 
                 // Channel has finished
                 cleanupCurrentPlayback();
-                log.debug("Playback finished");
                 return true;
             }
 
