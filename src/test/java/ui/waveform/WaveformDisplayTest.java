@@ -26,7 +26,7 @@ import ui.MainFrame;
  * when the component is resized. Uses the dev auto-loader to load the sample audio file.
  */
 @Windowing
-@annotations.AudioEngine
+@annotations.Audio
 class WaveformDisplayTest {
 
     @BeforeEach

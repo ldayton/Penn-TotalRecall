@@ -43,14 +43,22 @@ public class FmodModule extends AbstractModule {
         return systemManager.getSystem();
     }
 
+    /** Provide HandleLifecycleManager as a singleton. */
+    @Provides
+    @Singleton
+    HandleLifecycleManager provideHandleLifecycleManager() {
+        return new HandleLifecycleManager();
+    }
+
     /** Provide FmodAudioLoadingManager with dependencies. */
     @Provides
     @Singleton
     FmodAudioLoadingManager provideFmodAudioLoadingManager(
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
-            @NonNull FmodSystemStateManager stateManager) {
-        return new FmodAudioLoadingManager(fmod, system, stateManager);
+            @NonNull FmodSystemStateManager stateManager,
+            @NonNull HandleLifecycleManager lifecycleManager) {
+        return new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
     }
 
     /** Provide FmodPlaybackManager with dependencies. */

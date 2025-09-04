@@ -29,7 +29,6 @@ public class AudioIntegrationMode {
     private static final int PLAYBACK_DURATION_MS = 1000;
     private static final int CLEANUP_WAIT_MS = 100;
     private static final String TEST_AUDIO_FILE = "packaging/samples/sample.wav";
-    private static final int EXPECTED_SAMPLE_RATE = 44100;
 
     /**
      * Run the audio integration test with timeout protection.

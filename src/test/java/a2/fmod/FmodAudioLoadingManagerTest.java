@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.exceptions.AudioLoadException;
-import annotations.AudioEngine;
+import annotations.Audio;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -35,13 +35,14 @@ import org.junit.jupiter.api.io.TempDir;
  * High-value tests for FmodAudioLoadingManager focusing on concurrency, resource management, and
  * error handling.
  */
-@AudioEngine
+@Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FmodAudioLoadingManagerTest {
 
     private FmodLibrary fmod;
     private Pointer system;
     private FmodSystemStateManager stateManager;
+    private HandleLifecycleManager lifecycleManager;
     private FmodAudioLoadingManager loadingManager;
 
     @TempDir Path tempDir;
@@ -85,7 +86,8 @@ class FmodAudioLoadingManagerTest {
             loadingManager.releaseAll();
         }
         // Create fresh loading manager for each test
-        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager);
+        lifecycleManager = new HandleLifecycleManager();
+        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
     }
 
     @AfterAll

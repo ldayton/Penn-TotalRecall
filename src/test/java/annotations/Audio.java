@@ -13,5 +13,5 @@ import org.junit.jupiter.api.Tag;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Tag("audio-engine")
-public @interface AudioEngine {}
+@Tag("audio")
+public @interface Audio {}

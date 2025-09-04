@@ -5,17 +5,22 @@ import com.sun.jna.Pointer;
 import lombok.Getter;
 import lombok.NonNull;
 
-/** FMOD implementation of AudioHandle. */
+/** FMOD implementation of AudioHandle with generation-based validity tracking. */
 class FmodAudioHandle implements AudioHandle {
 
     @Getter private final long id;
+    @Getter private final long generation;
     private final Pointer sound;
     @Getter @NonNull private final String filePath;
+    private final HandleLifecycleManager lifecycleManager;
 
-    FmodAudioHandle(long id, @NonNull Pointer sound, @NonNull String filePath) {
+    FmodAudioHandle(long id, long generation, @NonNull Pointer sound, 
+                    @NonNull String filePath, @NonNull HandleLifecycleManager lifecycleManager) {
         this.id = id;
+        this.generation = generation;
         this.sound = sound;
         this.filePath = filePath;
+        this.lifecycleManager = lifecycleManager;
     }
 
     Pointer getSound() {
@@ -24,7 +29,7 @@ class FmodAudioHandle implements AudioHandle {
 
     @Override
     public boolean isValid() {
-        // In simplified version, handle is always valid until engine closes
-        return sound != null;
+        // Delegate validity check to the lifecycle manager
+        return lifecycleManager.isValid(this);
     }
 }

@@ -37,6 +37,7 @@ public class FmodAudioEngine implements AudioEngine {
     private final FmodListenerManager listenerManager;
     private final FmodSampleReader sampleReader;
     private final FmodSystemStateManager systemStateManager;
+    private final HandleLifecycleManager lifecycleManager;
 
     // Cached references for performance
     private final FmodLibrary fmod;
@@ -44,7 +45,6 @@ public class FmodAudioEngine implements AudioEngine {
 
     // Runtime state
     private FmodPlaybackHandle currentPlayback;
-    private FmodAudioHandle currentHandle;
     private Pointer currentSound;
 
     @Inject
@@ -54,7 +54,8 @@ public class FmodAudioEngine implements AudioEngine {
             @NonNull FmodPlaybackManager playbackManager,
             @NonNull FmodListenerManager listenerManager,
             @NonNull FmodSampleReader sampleReader,
-            @NonNull FmodSystemStateManager systemStateManager) {
+            @NonNull FmodSystemStateManager systemStateManager,
+            @NonNull HandleLifecycleManager lifecycleManager) {
 
         this.systemManager = systemManager;
         this.loadingManager = loadingManager;
@@ -62,6 +63,7 @@ public class FmodAudioEngine implements AudioEngine {
         this.listenerManager = listenerManager;
         this.sampleReader = sampleReader;
         this.systemStateManager = systemStateManager;
+        this.lifecycleManager = lifecycleManager;
 
         if (!systemStateManager.compareAndSetState(
                 FmodSystemStateManager.State.UNINITIALIZED,
@@ -113,7 +115,6 @@ public class FmodAudioEngine implements AudioEngine {
         operationLock.lock();
         try {
             AudioHandle handle = loadingManager.loadAudio(filePath);
-            currentHandle = (FmodAudioHandle) handle;
             currentSound = loadingManager.getCurrentSound().orElse(null);
             return handle;
         } finally {
@@ -134,7 +135,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (!fmodHandle.isValid()) {
                 throw new AudioPlaybackException("Audio handle is no longer valid");
             }
-            if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+            if (!lifecycleManager.isCurrent(fmodHandle)) {
                 throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
             FmodPlaybackHandle playbackHandle = playbackManager.play(currentSound, audio);
@@ -163,7 +164,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (!fmodHandle.isValid()) {
                 throw new AudioPlaybackException("Audio handle is no longer valid");
             }
-            if (currentHandle == null || currentHandle.getId() != fmodHandle.getId()) {
+            if (!lifecycleManager.isCurrent(fmodHandle)) {
                 throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
             if (startFrame < 0 || endFrame < startFrame) {
@@ -550,7 +551,6 @@ public class FmodAudioEngine implements AudioEngine {
                     log.debug("Error releasing sound", e);
                 }
                 currentSound = null;
-                currentHandle = null;
             }
 
             if (readExecutor != null) {

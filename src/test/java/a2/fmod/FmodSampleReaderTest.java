@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import a2.AudioBuffer;
 import a2.exceptions.AudioEngineException;
-import annotations.AudioEngine;
+import annotations.Audio;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.io.TempDir;
  * Comprehensive tests for FmodSampleReader including core functionality, edge cases, and
  * concurrency.
  */
-@AudioEngine
+@Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FmodSampleReaderTest {
 

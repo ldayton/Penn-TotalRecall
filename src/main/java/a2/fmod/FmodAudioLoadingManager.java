@@ -7,6 +7,7 @@ import a2.exceptions.AudioLoadException;
 import a2.exceptions.CorruptedAudioFileException;
 import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
+import com.google.inject.Inject;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
@@ -14,7 +15,6 @@ import com.sun.jna.ptr.PointerByReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -34,19 +34,22 @@ class FmodAudioLoadingManager {
     private final FmodLibrary fmod;
     private final Pointer system;
     private final FmodSystemStateManager stateManager;
-    private final AtomicLong nextHandleId = new AtomicLong(1);
+    private final HandleLifecycleManager lifecycleManager;
     private final ReentrantLock loadingLock = new ReentrantLock();
 
     // Current loaded audio (single-audio paradigm) - guarded by loadingLock
     private volatile Optional<CurrentAudio> current = Optional.empty();
 
+    @Inject
     FmodAudioLoadingManager(
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
-            @NonNull FmodSystemStateManager stateManager) {
+            @NonNull FmodSystemStateManager stateManager,
+            @NonNull HandleLifecycleManager lifecycleManager) {
         this.fmod = fmod;
         this.system = system;
         this.stateManager = stateManager;
+        this.lifecycleManager = lifecycleManager;
     }
 
     /**
@@ -91,9 +94,8 @@ class FmodAudioLoadingManager {
                 }
             }
 
-            // Create handle for the new audio
-            long handleId = nextHandleId.getAndIncrement();
-            FmodAudioHandle newHandle = new FmodAudioHandle(handleId, newSound, canonicalPath);
+            // Create handle for the new audio using the lifecycle manager
+            FmodAudioHandle newHandle = lifecycleManager.createHandle(newSound, canonicalPath);
 
             // Update current state atomically
             current = Optional.of(new CurrentAudio(newHandle, newSound, canonicalPath));
@@ -145,7 +147,7 @@ class FmodAudioLoadingManager {
      * @return true if this is the current audio
      */
     boolean isCurrent(@NonNull AudioHandle handle) {
-        return current.map(audio -> audio.handle().equals(handle)).orElse(false);
+        return lifecycleManager.isCurrent(handle);
     }
 
     /**

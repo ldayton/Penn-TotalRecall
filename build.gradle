@@ -369,8 +369,8 @@ test {
         def windowingAvailable = configProps.getProperty('windowing.system.available')
         if (windowingAvailable == 'false') excludeTags 'windowing'
 
-        // Always run FMOD-tagged tests in an isolated task (see audioEngineTest)
-        excludeTags 'audio-engine'
+        // Always run FMOD-tagged tests in an isolated task (see audioTest)
+        excludeTags 'audio'
 
         // Only run mac-specific tests on macOS
         def osName = System.getProperty('os.name').toLowerCase()
@@ -396,11 +396,11 @@ test {
         }
     }
 
-    // Do not chain audioEngineTest here; see 'check' wiring below
+    // Do not chain audioTest here; see 'check' wiring below
 }
 
-// FMOD (audio-engine) tests: run sequentially with one JVM per class for isolation
-tasks.register('audioEngineTest', Test.class) {
+// FMOD (audio) tests: run sequentially with one JVM per class for isolation
+tasks.register('audioTest', Test.class) {
     group = 'verification'
     description = 'Run FMOD engine tests in isolated JVMs (one per class)'
     dependsOn testClasses
@@ -435,7 +435,7 @@ tasks.register('audioEngineTest', Test.class) {
 
     // Include only engine-tagged tests
     useJUnitPlatform {
-        includeTags 'audio-engine'
+        includeTags 'audio'
         // macOS-only tests on mac
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
@@ -451,12 +451,12 @@ tasks.register('audioEngineTest', Test.class) {
     }
 }
 
-// Run audio engine tests as part of the verification lifecycle, not after every 'test' invocation
-tasks.named('audioEngineTest') {
+// Run audio tests as part of the verification lifecycle, not after every 'test' invocation
+tasks.named('audioTest') {
     mustRunAfter tasks.named('test')
 }
 tasks.named('check') {
-    dependsOn tasks.named('audioEngineTest')
+    dependsOn tasks.named('audioTest')
 }
 
 // Packaging integration tests - requires built artifacts
