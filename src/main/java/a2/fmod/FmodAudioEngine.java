@@ -121,38 +121,21 @@ public class FmodAudioEngine implements AudioEngine {
 
     @Override
     public PlaybackHandle play(@NonNull AudioHandle audio) {
-        checkOperational();
-        operationLock.lock();
-        try {
-            checkOperational();
-            if (!(audio instanceof FmodAudioHandle)) {
-                throw new AudioPlaybackException("Invalid audio handle type");
-            }
-            FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
-            if (!fmodHandle.isValid()) {
-                throw new AudioPlaybackException("Audio handle is no longer valid");
-            }
-            if (!lifecycleManager.isCurrent(fmodHandle)) {
-                throw new AudioPlaybackException("Audio handle is not the currently loaded file");
-            }
-            // Check if there's already an active playback
-            if (currentPlayback != null && currentPlayback.isActive()) {
-                throw new AudioPlaybackException("Another playback is already active");
-            }
-            FmodPlaybackHandle playbackHandle = playbackManager.play(currentSound, audio);
-            currentPlayback = playbackHandle;
-            long totalFrames = getAudioDuration(audio);
-            listenerManager.startMonitoring(playbackHandle, totalFrames);
-            listenerManager.notifyStateChanged(
-                    playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-            return playbackHandle;
-        } finally {
-            operationLock.unlock();
-        }
+        AudioMetadata metadata = getMetadata(audio);
+        return playInternal(audio, 0, metadata.frameCount(), false);
     }
 
-    @Override
-    public void playRange(@NonNull AudioHandle audio, long startFrame, long endFrame) {
+    /**
+     * Internal unified play implementation used by both play() and playRange().
+     *
+     * @param audio The audio handle to play
+     * @param startFrame Starting frame (0 for beginning)
+     * @param endFrame Ending frame (inclusive)
+     * @param isRange Whether this is a range playback (affects single playback check)
+     * @return PlaybackHandle for the playback
+     */
+    private PlaybackHandle playInternal(
+            @NonNull AudioHandle audio, long startFrame, long endFrame, boolean isRange) {
         checkOperational();
         operationLock.lock();
         try {
@@ -167,25 +150,47 @@ public class FmodAudioEngine implements AudioEngine {
             if (!lifecycleManager.isCurrent(fmodHandle)) {
                 throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
-            // Check if there's already an active playback
-            if (currentPlayback != null && currentPlayback.isActive()) {
-                throw new AudioPlaybackException("Another playback is already active");
-            }
+
+            // Validate range
             if (startFrame < 0 || endFrame < startFrame) {
                 throw new AudioPlaybackException(
                         "Invalid playback range: " + startFrame + " to " + endFrame);
             }
-            Pointer soundToPlay = currentSound;
-            PointerByReference channelRef = new PointerByReference();
-            int result = fmod.FMOD_System_PlaySound(system, soundToPlay, null, true, channelRef);
 
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException(
-                        "Failed to play sound: " + "error code: " + result);
+            // For range playback, stop existing playback. For normal play, enforce single playback.
+            if (currentPlayback != null && currentPlayback.isActive()) {
+                if (isRange) {
+                    // Range playback stops current playback
+                    playbackManager.stop();
+                    currentPlayback.markInactive();
+                    listenerManager.stopMonitoring();
+                    listenerManager.notifyStateChanged(
+                            currentPlayback, PlaybackState.STOPPED, PlaybackState.PLAYING);
+                    currentPlayback = null;
+                } else {
+                    // Normal play enforces single playback restriction
+                    throw new AudioPlaybackException("Another playback is already active");
+                }
             }
-            Pointer channel = channelRef.getValue();
 
-            if (soundToPlay == currentSound) {
+            // For range playback, we need to create the channel manually to configure it
+            // For full playback, use the normal playbackManager
+            FmodPlaybackHandle playbackHandle;
+            AudioMetadata metadata = getMetadata(audio);
+
+            if (startFrame > 0 || endFrame < metadata.frameCount()) {
+                // Range playback - create and configure channel manually
+                PointerByReference channelRef = new PointerByReference();
+                int result =
+                        fmod.FMOD_System_PlaySound(system, currentSound, null, true, channelRef);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioPlaybackException(
+                            "Failed to create playback channel: error code: " + result);
+                }
+
+                Pointer channel = channelRef.getValue();
+
+                // Configure range
                 if (startFrame > 0) {
                     result =
                             fmod.FMOD_Channel_SetPosition(
@@ -193,9 +198,11 @@ public class FmodAudioEngine implements AudioEngine {
                     if (result != FmodConstants.FMOD_OK) {
                         fmod.FMOD_Channel_Stop(channel);
                         throw new AudioPlaybackException(
-                                "Failed to set playback position: " + "error code: " + result);
+                                "Failed to set playback position: error code: " + result);
                     }
                 }
+
+                // Set loop points to limit playback to range
                 result =
                         fmod.FMOD_Channel_SetLoopPoints(
                                 channel,
@@ -206,25 +213,47 @@ public class FmodAudioEngine implements AudioEngine {
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
                     throw new AudioPlaybackException(
-                            "Failed to set loop points: " + "error code: " + result);
+                            "Failed to set loop points: error code: " + result);
                 }
+
+                // Set loop count to 0 (play once)
                 result = fmod.FMOD_Channel_SetLoopCount(channel, 0);
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
                     throw new AudioPlaybackException(
-                            "Failed to set loop count: " + "error code: " + result);
+                            "Failed to set loop count: error code: " + result);
                 }
+
+                // Start playback
+                result = fmod.FMOD_Channel_SetPaused(channel, false);
+                if (result != FmodConstants.FMOD_OK) {
+                    fmod.FMOD_Channel_Stop(channel);
+                    throw new AudioPlaybackException(
+                            "Failed to start playback: error code: " + result);
+                }
+
+                // Create handle for this range playback
+                playbackHandle = new FmodPlaybackHandle(audio, channel, startFrame, endFrame);
+            } else {
+                // Full playback - use normal playbackManager
+                playbackHandle = playbackManager.play(currentSound, audio);
             }
 
-            result = fmod.FMOD_Channel_SetPaused(channel, false);
-            if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_Channel_Stop(channel);
-                throw new AudioPlaybackException(
-                        "Failed to start playback: " + "error code: " + result);
-            }
+            // Track and monitor
+            currentPlayback = playbackHandle;
+            long duration = endFrame - startFrame;
+            listenerManager.startMonitoring(playbackHandle, duration);
+            listenerManager.notifyStateChanged(
+                    playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+            return playbackHandle;
         } finally {
             operationLock.unlock();
         }
+    }
+
+    @Override
+    public void playRange(@NonNull AudioHandle audio, long startFrame, long endFrame) {
+        playInternal(audio, startFrame, endFrame, true);
     }
 
     @Override
