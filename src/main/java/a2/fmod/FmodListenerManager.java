@@ -133,7 +133,7 @@ class FmodListenerManager {
 
             progressTimer.scheduleAtFixedRate(
                     this::updateProgress,
-                    progressIntervalMs,
+                    0, // Start immediately to capture initial position
                     progressIntervalMs,
                     TimeUnit.MILLISECONDS);
 

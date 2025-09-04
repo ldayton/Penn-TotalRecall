@@ -534,6 +534,42 @@ class FmodListenerManagerTest {
         assertTrue(listener.progressCount.get() > 0, "Should have received some progress updates");
     }
 
+    @Test
+    @DisplayName("Should not receive callbacks after stopMonitoring")
+    @Timeout(3)
+    void testNoCallbacksAfterStop() throws Exception {
+        TestListener listener = new TestListener("StopTest");
+        listenerManager.addListener(listener);
+        
+        // Load and start playback
+        AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
+        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
+        
+        // Start monitoring
+        listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
+        
+        // Wait for at least 2 progress updates to confirm monitoring is working
+        assertTrue(listener.waitForProgressUpdates(2, 1, TimeUnit.SECONDS),
+                "Should receive initial progress updates");
+        
+        // Stop monitoring
+        listenerManager.stopMonitoring();
+        
+        // Record the count immediately after stopping
+        int countAfterStop = listener.progressCount.get();
+        
+        // Wait for 3x the progress interval to ensure no more callbacks
+        Thread.sleep(TEST_PROGRESS_INTERVAL_MS * 3);
+        
+        // Verify no additional progress updates were received
+        assertEquals(countAfterStop, listener.progressCount.get(),
+                "Should not receive any progress callbacks after stopMonitoring");
+        
+        // Clean up
+        playbackManager.stop();
+    }
+
     // ========== Latency Compensation Tests ==========
 
     @Test

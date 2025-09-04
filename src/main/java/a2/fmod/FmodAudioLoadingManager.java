@@ -187,6 +187,8 @@ class FmodAudioLoadingManager {
                     });
             // Always clear reference even if release failed to prevent use-after-free
             current = Optional.empty();
+            // Clear the lifecycle manager's current handle
+            lifecycleManager.clear();
         } finally {
             loadingLock.unlock();
         }

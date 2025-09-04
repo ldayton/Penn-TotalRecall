@@ -374,7 +374,8 @@ public class FmodAudioEngine implements AudioEngine {
         Pointer channel = fmodPlayback.getChannel();
         IntByReference isPlayingRef = new IntByReference();
         int result = fmod.FMOD_Channel_IsPlaying(channel, isPlayingRef);
-        if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+        if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE
+                || result == FmodConstants.FMOD_ERR_CHANNEL_STOLEN) {
             fmodPlayback.markInactive();
             currentPlayback = null;
             return PlaybackState.STOPPED;
