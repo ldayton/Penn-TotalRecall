@@ -59,7 +59,7 @@ public class Last200PlusMoveAction extends BaseAction {
         }
 
         audioState.setAudioProgressAndUpdateActions(replayStartFrame);
-        audioState.getPlayer().playAt(replayStartFrame);
+        audioState.play(replayStartFrame);
     }
 
     @Override

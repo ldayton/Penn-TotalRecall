@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.EventDispatchBus;
 import events.ScreenSeekRequestedEvent;
 import jakarta.inject.Inject;
@@ -36,7 +35,7 @@ public class ScreenSeekAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 setEnabled(false);
             } else {
                 setEnabled(true);

@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -59,7 +58,7 @@ public class ToggleAnnotationsAction extends BaseAction {
                 return;
             }
             audioState.setAudioProgressAndUpdateActions(approxFrame);
-            audioState.getPlayer().playAt(approxFrame);
+            audioState.play(approxFrame);
         }
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
@@ -72,7 +71,7 @@ public class ToggleAnnotationsAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 setEnabled(false);
             } else {
                 // Get direction from action name

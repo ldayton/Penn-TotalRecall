@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -59,8 +58,7 @@ public class DeleteSelectedAnnotationAction extends BaseAction {
 
     @Override
     public void update() {
-        if (audioState.audioOpen()
-                && audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
+        if (audioState.audioOpen() && !audioState.isPlaying()) {
             setEnabled(true);
         } else {
             setEnabled(false);

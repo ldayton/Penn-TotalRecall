@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -43,7 +42,7 @@ public class JumpToAnnotationAction extends BaseAction {
                 return;
             }
             audioState.setAudioProgressAndUpdateActions(curFrame);
-            audioState.getPlayer().playAt(curFrame);
+            audioState.play(curFrame);
         }
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
@@ -51,7 +50,7 @@ public class JumpToAnnotationAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 setEnabled(false);
             } else {
                 if (AnnotationDisplay.getNumAnnotations() > 0) {

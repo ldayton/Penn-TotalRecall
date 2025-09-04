@@ -1,7 +1,10 @@
 package state;
 
-import audio.AudioPlayer;
-import audio.AudioProgressHandler;
+import a2.AudioEngine;
+import a2.AudioHandle;
+import a2.PlaybackHandle;
+import a2.PlaybackListener;
+import a2.PlaybackState;
 import audio.FmodCore;
 import control.AudioCalculator;
 import control.AudioPlaybackCoordinator;
@@ -34,7 +37,7 @@ import util.OsPath;
  * CurAudio class with proper dependency injection.
  */
 @Singleton
-public class AudioState implements AudioProgressHandler {
+public class AudioState implements PlaybackListener {
     private static final Logger logger = LoggerFactory.getLogger(AudioState.class);
 
     /** Audio chunk size in seconds for waveform buffering. */
@@ -44,7 +47,9 @@ public class AudioState implements AudioProgressHandler {
     private AudioPlaybackCoordinator playbackCoordinator;
 
     private File curAudioFile;
-    private AudioPlayer player;
+    private AudioEngine audioEngine;
+    private AudioHandle currentAudioHandle;
+    private PlaybackHandle currentPlaybackHandle;
     private long chunkSize;
 
     private int desiredLoudness = 100;
@@ -64,17 +69,20 @@ public class AudioState implements AudioProgressHandler {
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private final ProgramName programName;
+    private final AudioEngine injectedAudioEngine;
 
     @Inject
     public AudioState(
             FmodCore fmodCore,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
-            ProgramName programName) {
+            ProgramName programName,
+            AudioEngine audioEngine) {
         this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.programName = programName;
+        this.injectedAudioEngine = audioEngine;
     }
 
     public FmodCore getFmodCore() {
@@ -128,25 +136,17 @@ public class AudioState implements AudioProgressHandler {
             }
 
             // prepare playback
-            AudioPlayer pp;
-            try {
-                pp = new AudioPlayer(fmodCore);
-            } catch (Throwable e1) {
-                logger.error("Cannot load audio system", e1);
-                throw new RuntimeException(
-                        "Cannot load audio system. You may need to reinstall "
-                                + programName.toString(),
-                        e1);
-            }
+            audioEngine = injectedAudioEngine;
             playbackCoordinator = new AudioPlaybackCoordinator(this, eventBus);
-            pp.addListener(playbackCoordinator);
-            setPlayer(pp);
+            audioEngine.addPlaybackListener(this);
+            audioEngine.addPlaybackListener(playbackCoordinator);
 
             try {
-                pp.open(file.getAbsolutePath());
-            } catch (FileNotFoundException e) {
-                logger.error("AudioPlayer: Audio file not found: " + file.getAbsolutePath(), e);
-                throw new RuntimeException("Audio file not found: " + file.getAbsolutePath(), e);
+                currentAudioHandle = audioEngine.loadAudio(file.getAbsolutePath());
+            } catch (Exception e) {
+                logger.error("Failed to load audio file: " + file.getAbsolutePath(), e);
+                throw new RuntimeException(
+                        "Failed to load audio file: " + file.getAbsolutePath(), e);
             }
 
             // add words from lst file to display
@@ -193,14 +193,17 @@ public class AudioState implements AudioProgressHandler {
         eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.STOP));
 
         // stop audio playback
-        if (player != null) {
-            player.stop();
+        if (currentPlaybackHandle != null) {
+            audioEngine.stop(currentPlaybackHandle);
+            currentPlaybackHandle = null;
         }
 
         wordpoolDisplay.clearText();
         wordpoolDisplay.undistinguishAllWords();
 
-        player = null;
+        audioEngine = null;
+        currentAudioHandle = null;
+        currentPlaybackHandle = null;
         calculator = null;
         playbackCoordinator = null;
 
@@ -275,13 +278,13 @@ public class AudioState implements AudioProgressHandler {
      */
     public boolean audioOpen() {
         if (calculator != null) {
-            if (getPlayer() == null) {
+            if (getAudioEngine() == null) {
                 throw new IllegalStateException(badStateString);
             } else {
                 return true;
             }
         } else {
-            if (player != null) {
+            if (audioEngine != null) {
                 throw new IllegalStateException(badStateString);
             } else {
                 return false;
@@ -298,7 +301,7 @@ public class AudioState implements AudioProgressHandler {
         if (calculator == null) {
             throw new IllegalStateException(audioClosedMessage);
         }
-        if (player != null) {
+        if (audioEngine != null) {
             return calculator;
         } else {
             throw new IllegalStateException(badStateString);
@@ -310,16 +313,16 @@ public class AudioState implements AudioProgressHandler {
     }
 
     /**
-     * Returns the current <code>AudioPlayer</code> that is used for audio playback.
+     * Returns the current <code>AudioEngine</code> that is used for audio playback.
      *
      * @throws IllegalStateException If audio is not open
      */
-    public AudioPlayer getPlayer() {
-        if (player == null) {
+    public AudioEngine getAudioEngine() {
+        if (audioEngine == null) {
             throw new IllegalStateException(audioClosedMessage);
         }
         if (calculator != null) {
-            return player;
+            return audioEngine;
         } else {
             throw new IllegalStateException(badStateString);
         }
@@ -338,8 +341,8 @@ public class AudioState implements AudioProgressHandler {
         }
     }
 
-    private void setPlayer(AudioPlayer player) {
-        this.player = player;
+    private void setAudioEngine(AudioEngine audioEngine) {
+        this.audioEngine = audioEngine;
     }
 
     /**
@@ -409,7 +412,109 @@ public class AudioState implements AudioProgressHandler {
     }
 
     @Override
-    public void updateProgress(long frame) {
-        setAudioProgressWithoutUpdatingActions(frame);
+    public void onProgress(PlaybackHandle playback, long positionFrames, long totalFrames) {
+        setAudioProgressWithoutUpdatingActions(positionFrames);
+    }
+
+    // Convenience methods for handle-based audio operations
+
+    /**
+     * Play audio from a specific position.
+     *
+     * @param startFrame The frame to start playback from
+     */
+    public void play(long startFrame) {
+        if (currentAudioHandle == null) {
+            throw new IllegalStateException("No audio loaded");
+        }
+        // Stop any existing playback
+        if (currentPlaybackHandle != null) {
+            audioEngine.stop(currentPlaybackHandle);
+        }
+        currentPlaybackHandle = audioEngine.play(currentAudioHandle);
+        if (startFrame > 0) {
+            audioEngine.seek(currentPlaybackHandle, startFrame);
+        }
+    }
+
+    /**
+     * Stop current playback and return the position.
+     *
+     * @return The position when stopped, or 0 if not playing
+     */
+    public long stop() {
+        if (currentPlaybackHandle != null) {
+            long position = audioEngine.getPosition(currentPlaybackHandle);
+            audioEngine.stop(currentPlaybackHandle);
+            currentPlaybackHandle = null;
+            return position;
+        }
+        return 0;
+    }
+
+    /**
+     * Pause current playback and return the position.
+     *
+     * @return The position when paused, or 0 if not playing
+     */
+    public long pause() {
+        if (currentPlaybackHandle != null) {
+            long position = audioEngine.getPosition(currentPlaybackHandle);
+            audioEngine.pause(currentPlaybackHandle);
+            return position;
+        }
+        return 0;
+    }
+
+    /**
+     * Play a short interval (fire-and-forget).
+     *
+     * @param startFrame Start of the interval
+     * @param endFrame End of the interval
+     */
+    public void playInterval(long startFrame, long endFrame) {
+        if (currentAudioHandle == null) {
+            throw new IllegalStateException("No audio loaded");
+        }
+        audioEngine.playRange(currentAudioHandle, startFrame, endFrame);
+    }
+
+    /**
+     * Check if audio is currently playing.
+     *
+     * @return true if playing, false otherwise
+     */
+    public boolean isPlaying() {
+        return currentPlaybackHandle != null && audioEngine.isPlaying(currentPlaybackHandle);
+    }
+
+    /**
+     * Check if audio is currently paused.
+     *
+     * @return true if paused, false otherwise
+     */
+    public boolean isPaused() {
+        return currentPlaybackHandle != null && audioEngine.isPaused(currentPlaybackHandle);
+    }
+
+    /**
+     * Check if audio is currently stopped.
+     *
+     * @return true if stopped (no active playback)
+     */
+    public boolean isStopped() {
+        return currentPlaybackHandle == null || audioEngine.isStopped(currentPlaybackHandle);
+    }
+
+    /**
+     * Get the current playback state.
+     *
+     * @return The playback state, or STOPPED if no playback
+     */
+    PlaybackState getPlaybackState() {
+        if (currentPlaybackHandle != null) {
+            return audioEngine.getState(currentPlaybackHandle);
+        }
+        return PlaybackState.STOPPED;
     }
 }

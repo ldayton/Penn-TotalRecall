@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
@@ -36,24 +35,22 @@ public class PlayPauseAction extends BaseAction {
             return;
         }
 
-        AudioPlayer player = audioState.getPlayer();
-        if (player.getStatus() == AudioPlayer.Status.PLAYING) { // PAUSE
-            long frame = player.stop();
+        if (audioState.isPlaying()) { // PAUSE
+            long frame = audioState.pause();
             audioState.setAudioProgressWithoutUpdatingActions(frame);
             long numFrames = audioState.getCalculator().millisToFrames(200);
 
             // Clamp preview start to 0 to allow preview near file start; ensure valid range
             if (frame >= 2) { // need at least 2 frames to form a valid [start, end)
                 long previewStart = Math.max(0, frame - numFrames);
-                long previewEnd = frame - 1; // exclusive end in player validation
+                long previewEnd = frame - 1; // exclusive end in validation
                 if (previewEnd > previewStart) {
-                    player.playShortInterval(previewStart, previewEnd);
+                    audioState.playInterval(previewStart, previewEnd);
                 }
             }
-            // Note: Removed playAt(frame) - pause should actually pause, not resume immediately
         } else { // PLAY/RESUME
             long pos = audioState.getAudioProgress();
-            player.playAt(pos);
+            audioState.play(pos);
             audioState.pushPlayPos(pos);
         }
 
@@ -71,7 +68,7 @@ public class PlayPauseAction extends BaseAction {
                 setEnabled(true);
             }
 
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 putValue(NAME, PAUSE_TEXT);
             } else {
                 putValue(NAME, PLAY_TEXT);

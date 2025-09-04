@@ -1,6 +1,5 @@
 package ui.waveform;
 
-import audio.AudioPlayer;
 import events.AudioFileSwitchedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -265,7 +264,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
         }
 
         audioState.setAudioProgressAndUpdateActions(finalPosition);
-        audioState.getPlayer().playAt(finalPosition);
+        audioState.play(finalPosition);
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
@@ -370,7 +369,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
 
         // accent selected annotation
         boolean foundOverlap = false;
-        if (audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
+        if (!audioState.isPlaying()) {
             for (int i = 0; i < anns.length; i++) {
                 int annX =
                         frameToDisplayXPixel(
@@ -517,7 +516,7 @@ public final class WaveformDisplay extends JComponent implements WaveformCoordin
             refreshHeight = getHeight();
             int chunkNum = audioState.lookupChunkNum(realRefreshFrame);
             int numAnns = AnnotationDisplay.getNumAnnotations();
-            boolean isPlaying = audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING;
+            boolean isPlaying = audioState.isPlaying();
             int currentTimeRes =
                     (currentWaveform != null) ? currentWaveform.getTimeResolution() : -1;
             int currentAmpRes =

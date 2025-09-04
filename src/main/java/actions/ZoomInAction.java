@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,7 @@ public class ZoomInAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            setEnabled(audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING);
+            setEnabled(!audioState.isPlaying());
         } else {
             setEnabled(false);
         }

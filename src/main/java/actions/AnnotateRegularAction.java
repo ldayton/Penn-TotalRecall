@@ -156,7 +156,7 @@ public class AnnotateRegularAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            setEnabled(audioState.getPlayer().getStatus() != audio.AudioPlayer.Status.PLAYING);
+            setEnabled(!audioState.isPlaying());
         } else {
             setEnabled(false);
             wordpoolDisplay.clearText();

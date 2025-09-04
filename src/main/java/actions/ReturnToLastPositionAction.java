@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import jakarta.inject.Inject;
@@ -25,7 +24,7 @@ public class ReturnToLastPositionAction extends BaseAction {
     protected void performAction(ActionEvent e) {
         long pos = audioState.popLastPlayPos();
         audioState.setAudioProgressAndUpdateActions(pos);
-        audioState.getPlayer().playAt(pos);
+        audioState.play(pos);
         // Fire focus requested event - UI will handle focus updates
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
@@ -34,7 +33,7 @@ public class ReturnToLastPositionAction extends BaseAction {
     public void update() {
         if (audioState.audioOpen()) {
             if (audioState.hasLastPlayPos()) {
-                if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+                if (audioState.isPlaying()) {
                     setEnabled(false);
                 } else {
                     setEnabled(true);

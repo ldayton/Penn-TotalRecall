@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -80,7 +79,7 @@ public class DoneAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING == false) {
+            if (!audioState.isPlaying()) {
                 setEnabled(true);
             } else {
                 setEnabled(false);

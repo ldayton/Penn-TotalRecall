@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -35,12 +34,11 @@ public class ReplayLast200MillisAction extends BaseAction {
      */
     @Override
     protected void performAction(ActionEvent e) {
-        AudioPlayer player = audioState.getPlayer();
 
         long curFrame = audioState.getAudioProgress();
         long numFrames = audioState.getCalculator().millisToFrames(duration);
 
-        player.playShortInterval(curFrame - numFrames, curFrame - 1);
+        audioState.playInterval(curFrame - numFrames, curFrame - 1);
         glassPane.flashRectangle();
     }
 
@@ -50,7 +48,7 @@ public class ReplayLast200MillisAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 setEnabled(false);
             } else {
                 if (audioState.getAudioProgress() <= 0) {

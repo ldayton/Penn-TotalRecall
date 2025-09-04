@@ -1,7 +1,6 @@
 package ui.annotations;
 
 import actions.JumpToAnnotationAction;
-import audio.AudioPlayer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-            if ((audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) == false) {
+            if (!audioState.isPlaying()) {
                 // we are manually generating the event, so we must ourselves check the conditions
                 jumpToAnnotationAction.actionPerformed(
                         new ActionEvent(

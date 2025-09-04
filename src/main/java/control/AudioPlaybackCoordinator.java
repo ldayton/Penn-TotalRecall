@@ -1,68 +1,54 @@
 package control;
 
-import audio.AudioProgressHandler;
-import events.AudioEvent;
-import events.AudioStateEvent;
+import a2.PlaybackHandle;
+import a2.PlaybackListener;
+import a2.PlaybackState;
 import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Coordinates audio playback events with a hybrid approach for optimal performance and thread
- * safety.
- *
- * <p>This coordinator implements a hybrid architecture:
- *
- * <ul>
- *   <li><strong>Fast Progress Updates:</strong> Direct callback to AudioProgressHandler for
- *       high-frequency progress updates (~30fps) that must be lightweight to avoid audio glitches
- *   <li><strong>EDT-Safe State Events:</strong> Events published to EventDispatchBus for proper
- *       Swing thread safety and UI updates
- * </ul>
- *
- * <p>This design separates concerns between performance-critical progress updates and UI state
- * changes that require EDT execution.
- */
+/** Coordinates audio playback events between the a2 audio engine and the application. */
 @Singleton
-public class AudioPlaybackCoordinator implements AudioEvent.Listener {
+public class AudioPlaybackCoordinator implements PlaybackListener {
     private static final Logger logger = LoggerFactory.getLogger(AudioPlaybackCoordinator.class);
 
-    private final AudioProgressHandler progressHandler;
+    private final PlaybackListener progressHandler;
     private final EventDispatchBus eventBus;
 
     @Inject
-    public AudioPlaybackCoordinator(
-            AudioProgressHandler progressHandler, EventDispatchBus eventBus) {
+    public AudioPlaybackCoordinator(PlaybackListener progressHandler, EventDispatchBus eventBus) {
         this.progressHandler = progressHandler;
         this.eventBus = eventBus;
     }
 
-    /**
-     * Fast progress update - called directly in playback thread.
-     *
-     * <p>This method is called approximately 30 times per second during audio playback. It
-     * delegates directly to the progress handler for maximum performance.
-     *
-     * @param frame Current playback frame position
-     */
     @Override
-    public void onProgress(long frame) {
-        progressHandler.updateProgress(frame);
+    public void onProgress(
+            @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {
+        // Forward frame progress to the main progress handler
+        progressHandler.onProgress(playback, positionFrames, totalFrames);
     }
 
-    /**
-     * Audio state event - published to EventDispatchBus for EDT-safe handling.
-     *
-     * <p>This method is called in a separate event thread and publishes the event to
-     * EventDispatchBus to ensure all UI updates happen on the EDT.
-     *
-     * @param event The audio event that occurred
-     */
     @Override
-    public void onEvent(AudioEvent event) {
-        logger.debug("Publishing audio state event: {}", event.type());
-        eventBus.publish(new AudioStateEvent(event));
+    public void onStateChanged(
+            @NonNull PlaybackHandle playback,
+            @NonNull PlaybackState newState,
+            @NonNull PlaybackState oldState) {
+        logger.debug("Playback state changed: {} -> {}", oldState, newState);
+        // TODO: Publish state change events when needed
+    }
+
+    @Override
+    public void onPlaybackComplete(@NonNull PlaybackHandle playback) {
+        logger.debug("Playback completed");
+        // TODO: Publish completion event when needed
+    }
+
+    @Override
+    public void onPlaybackError(PlaybackHandle playback, @NonNull String error) {
+        logger.error("Playback error: {}", error);
+        // TODO: Publish error event when needed
     }
 }

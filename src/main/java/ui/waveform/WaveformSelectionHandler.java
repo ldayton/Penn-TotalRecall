@@ -66,7 +66,7 @@ public final class WaveformSelectionHandler implements MouseMotionListener, Mous
             var endPoint = SwingUtilities.convertPoint(selectionOverlay, endX, 0, source);
             var startFrame = coordinateSystem.displayXPixelToFrame(startPoint.x);
             var endFrame = coordinateSystem.displayXPixelToFrame(endPoint.x);
-            audioState.getPlayer().playShortInterval(startFrame, endFrame);
+            audioState.playInterval(startFrame, endFrame);
         }
     }
 

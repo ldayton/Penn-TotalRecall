@@ -29,7 +29,7 @@ public class ExitAction extends BaseAction {
         // Stop any playing audio
         if (audioState.audioOpen()) {
             try {
-                audioState.getPlayer().stop();
+                audioState.stop();
             } catch (Exception ex) {
                 // Log the error but don't prevent exit
                 logger.warn("Error stopping audio during exit: {}", ex.getMessage());

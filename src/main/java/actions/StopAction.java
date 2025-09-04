@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -23,18 +22,14 @@ public class StopAction extends BaseAction {
         if (!audioState.audioOpen()) {
             return;
         }
-        audioState.getPlayer().stop();
+        audioState.stop();
         audioState.setAudioProgressWithoutUpdatingActions(0);
     }
 
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() != AudioPlayer.Status.PLAYING) {
-                setEnabled(false);
-            } else {
-                setEnabled(true);
-            }
+            setEnabled(audioState.isPlaying());
         } else {
             setEnabled(false);
         }

@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import env.PreferenceKeys;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
@@ -57,7 +56,7 @@ public class SeekAction extends BaseAction {
         }
 
         audioState.setAudioProgressAndUpdateActions(finalPosition);
-        audioState.getPlayer().playAt(finalPosition);
+        audioState.play(finalPosition);
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
 
@@ -88,7 +87,7 @@ public class SeekAction extends BaseAction {
     @Override
     public void update() {
         if (audioState.audioOpen()) {
-            if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+            if (audioState.isPlaying()) {
                 setEnabled(false);
             } else {
                 setEnabled(true);

@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import env.Constants;
 import env.ProgramVersion;
 import events.AnnotatorNameProvidedEvent;
@@ -156,7 +155,7 @@ public class AnnotateAction extends BaseAction {
         }
 
         // Only enable if not playing
-        if (audioState.getPlayer().getStatus() == AudioPlayer.Status.PLAYING) {
+        if (audioState.isPlaying()) {
             setEnabled(false);
         } else {
             setEnabled(true);

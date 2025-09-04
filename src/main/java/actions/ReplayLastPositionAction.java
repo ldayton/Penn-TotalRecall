@@ -1,6 +1,5 @@
 package actions;
 
-import audio.AudioPlayer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -26,9 +25,9 @@ public class ReplayLastPositionAction extends BaseAction {
 
     @Override
     protected void performAction(ActionEvent e) {
-        AudioPlayer player = audioState.getPlayer();
-        if (player.getStatus() == AudioPlayer.Status.PLAYING) {
-            player.stop();
+
+        if (audioState.isPlaying()) {
+            audioState.stop();
         }
 
         // Return to last position and then play
