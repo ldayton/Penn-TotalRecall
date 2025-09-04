@@ -58,21 +58,36 @@ class FmodAudioEngineTest {
         stateManager = new FmodSystemStateManager();
         systemManager = new FmodSystemManager();
         lifecycleManager = new FmodHandleLifecycleManager();
-        
+
         // Initialize the system manager first to load FMOD
         systemManager.initialize();
-        
-        loadingManager = new FmodAudioLoadingManager(
-                systemManager.getFmodLibrary(), systemManager.getSystem(), stateManager, lifecycleManager);
-        playbackManager = new FmodPlaybackManager(
-                systemManager.getFmodLibrary(), systemManager.getSystem());
-        listenerManager = new FmodListenerManager(
-                systemManager.getFmodLibrary(), systemManager.getSystem(), PROGRESS_INTERVAL_MS);
-        sampleReader = new FmodSampleReader(systemManager.getFmodLibrary(), systemManager.getSystem());
+
+        loadingManager =
+                new FmodAudioLoadingManager(
+                        systemManager.getFmodLibrary(),
+                        systemManager.getSystem(),
+                        stateManager,
+                        lifecycleManager);
+        playbackManager =
+                new FmodPlaybackManager(systemManager.getFmodLibrary(), systemManager.getSystem());
+        listenerManager =
+                new FmodListenerManager(
+                        systemManager.getFmodLibrary(),
+                        systemManager.getSystem(),
+                        PROGRESS_INTERVAL_MS);
+        sampleReader =
+                new FmodSampleReader(systemManager.getFmodLibrary(), systemManager.getSystem());
 
         // Create the engine with real components
-        engine = new FmodAudioEngine(
-                systemManager, loadingManager, playbackManager, listenerManager, sampleReader, stateManager, lifecycleManager);
+        engine =
+                new FmodAudioEngine(
+                        systemManager,
+                        loadingManager,
+                        playbackManager,
+                        listenerManager,
+                        sampleReader,
+                        stateManager,
+                        lifecycleManager);
     }
 
     @AfterEach
@@ -142,7 +157,7 @@ class FmodAudioEngineTest {
     @DisplayName("Should enforce single active playback")
     void testSinglePlaybackRestriction() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         // Start first playback
         PlaybackHandle playback1 = engine.play(handle);
         assertTrue(engine.isPlaying(playback1));
@@ -164,7 +179,7 @@ class FmodAudioEngineTest {
     @DisplayName("Should invalidate old playback when starting new one after stop")
     void testPlaybackHandleInvalidation() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         PlaybackHandle playback1 = engine.play(handle);
         engine.stop(playback1);
         assertTrue(engine.isStopped(playback1));
@@ -176,7 +191,7 @@ class FmodAudioEngineTest {
         // Old handle operations should fail gracefully
         assertFalse(engine.isPlaying(playback1));
         assertEquals(0, engine.getPosition(playback1));
-        
+
         engine.stop(playback2);
     }
 
@@ -208,7 +223,11 @@ class FmodAudioEngineTest {
 
         // Verify position doesn't change while paused
         Thread.sleep(100);
-        assertEquals(pausePos, engine.getPosition(playback), 1000, "Position should not change while paused");
+        assertEquals(
+                pausePos,
+                engine.getPosition(playback),
+                1000,
+                "Position should not change while paused");
 
         // Resume
         engine.resume(playback);
@@ -250,8 +269,9 @@ class FmodAudioEngineTest {
         // Progress should be increasing
         List<Long> positions = listener.getProgressPositions();
         for (int i = 1; i < positions.size(); i++) {
-            assertTrue(positions.get(i) >= positions.get(i - 1), 
-                "Progress should increase or stay same");
+            assertTrue(
+                    positions.get(i) >= positions.get(i - 1),
+                    "Progress should increase or stay same");
         }
 
         engine.stop(playback);
@@ -264,7 +284,7 @@ class FmodAudioEngineTest {
     void testOperationsOnClosedEngine() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
         PlaybackHandle playback = engine.play(handle);
-        
+
         engine.close();
 
         // All operations should fail gracefully
@@ -298,7 +318,7 @@ class FmodAudioEngineTest {
 
         // Seek beyond end
         engine.seek(playback, metadata.frameCount() * 2);
-        
+
         // Playback might stop or clamp to end
         Thread.sleep(100);
         long pos = engine.getPosition(playback);
@@ -334,7 +354,13 @@ class FmodAudioEngineTest {
         engine.stop(playback);
 
         // Should have received state changes for all playbacks
-        assertTrue(listener.playbackCompleteCount.get() >= 10);
+        // Note: onPlaybackComplete is only for natural completion, not manual stop()
+        // Each playback generates PLAYING and STOPPED state changes
+        assertTrue(
+                listener.stateChanges.size() >= 20,
+                "Expected at least 20 state changes (PLAYING + STOPPED for each of 10 playbacks),"
+                        + " got "
+                        + listener.stateChanges.size());
     }
 
     @Test
@@ -367,68 +393,76 @@ class FmodAudioEngineTest {
 
         // Multiple threads trying different operations
         List<Future<?>> futures = new ArrayList<>();
-        
+
         // Thread 1: Pause/Resume
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 20; i++) {
-                    engine.pause(playback);
-                    Thread.sleep(10);
-                    engine.resume(playback);
-                    Thread.sleep(10);
-                }
-            } catch (Exception e) {
-                if (!(e instanceof AudioPlaybackException)) {
-                    error.set(true);
-                }
-            }
-        }));
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 20; i++) {
+                                    engine.pause(playback);
+                                    Thread.sleep(10);
+                                    engine.resume(playback);
+                                    Thread.sleep(10);
+                                }
+                            } catch (Exception e) {
+                                if (!(e instanceof AudioPlaybackException)) {
+                                    error.set(true);
+                                }
+                            }
+                        }));
 
         // Thread 2: Seek
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 20; i++) {
-                    engine.seek(playback, i * 1000);
-                    Thread.sleep(20);
-                }
-            } catch (Exception e) {
-                if (!(e instanceof AudioPlaybackException)) {
-                    error.set(true);
-                }
-            }
-        }));
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 20; i++) {
+                                    engine.seek(playback, i * 1000);
+                                    Thread.sleep(20);
+                                }
+                            } catch (Exception e) {
+                                if (!(e instanceof AudioPlaybackException)) {
+                                    error.set(true);
+                                }
+                            }
+                        }));
 
         // Thread 3: Get position
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 40; i++) {
-                    engine.getPosition(playback);
-                    engine.getState(playback);
-                    Thread.sleep(10);
-                }
-            } catch (Exception e) {
-                error.set(true);
-            }
-        }));
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 40; i++) {
+                                    engine.getPosition(playback);
+                                    engine.getState(playback);
+                                    Thread.sleep(10);
+                                }
+                            } catch (Exception e) {
+                                error.set(true);
+                            }
+                        }));
 
         // Thread 4: Add/remove listeners
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                TestListener listener = new TestListener();
-                for (int i = 0; i < 20; i++) {
-                    engine.addPlaybackListener(listener);
-                    Thread.sleep(10);
-                    engine.removePlaybackListener(listener);
-                    Thread.sleep(10);
-                }
-            } catch (Exception e) {
-                error.set(true);
-            }
-        }));
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                TestListener listener = new TestListener();
+                                for (int i = 0; i < 20; i++) {
+                                    engine.addPlaybackListener(listener);
+                                    Thread.sleep(10);
+                                    engine.removePlaybackListener(listener);
+                                    Thread.sleep(10);
+                                }
+                            } catch (Exception e) {
+                                error.set(true);
+                            }
+                        }));
 
         // Wait for completion
         for (Future<?> future : futures) {
@@ -436,7 +470,7 @@ class FmodAudioEngineTest {
         }
 
         assertFalse(error.get(), "No unexpected errors should occur");
-        
+
         // Engine should still be functional
         engine.stop(playback);
         PlaybackHandle newPlayback = engine.play(handle);
@@ -455,7 +489,7 @@ class FmodAudioEngineTest {
         PlaybackHandle playback = engine.play(handle);
 
         List<CompletableFuture<AudioBuffer>> readFutures = new ArrayList<>();
-        
+
         // Start multiple concurrent reads while playing
         for (int i = 0; i < 5; i++) {
             long start = i * 1000;
@@ -486,14 +520,14 @@ class FmodAudioEngineTest {
     void testPlayRangeMethod() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
         AudioMetadata metadata = engine.getMetadata(handle);
-        
+
         long startFrame = metadata.frameCount() / 4;
         long endFrame = metadata.frameCount() / 2;
 
         // This method appears broken - it doesn't track the playback handle
         // and doesn't integrate with the listener system
         assertDoesNotThrow(() -> engine.playRange(handle, startFrame, endFrame));
-        
+
         // Sleep to let it play
         Thread.sleep(500);
 
@@ -511,14 +545,11 @@ class FmodAudioEngineTest {
         AudioMetadata metadata = engine.getMetadata(handle);
 
         // Invalid ranges should be rejected
-        assertThrows(AudioPlaybackException.class, () -> 
-            engine.playRange(handle, -1, 1000));
-        assertThrows(AudioPlaybackException.class, () -> 
-            engine.playRange(handle, 1000, 500));
-        
+        assertThrows(AudioPlaybackException.class, () -> engine.playRange(handle, -1, 1000));
+        assertThrows(AudioPlaybackException.class, () -> engine.playRange(handle, 1000, 500));
+
         // Valid range should work
-        assertDoesNotThrow(() -> 
-            engine.playRange(handle, 0, metadata.frameCount() / 2));
+        assertDoesNotThrow(() -> engine.playRange(handle, 0, metadata.frameCount() / 2));
     }
 
     // ========== State Consistency Tests ==========
@@ -530,28 +561,28 @@ class FmodAudioEngineTest {
         engine.addPlaybackListener(listener);
 
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         // Initial state
         assertEquals(FmodSystemStateManager.State.INITIALIZED, stateManager.getCurrentState());
 
         // Start playback
         PlaybackHandle playback = engine.play(handle);
         assertTrue(((FmodPlaybackHandle) playback).isActive());
-        
+
         // Pause should maintain handle validity
         engine.pause(playback);
         assertTrue(((FmodPlaybackHandle) playback).isActive());
-        
+
         // Stop should invalidate handle
         engine.stop(playback);
         assertFalse(((FmodPlaybackHandle) playback).isActive());
-        
+
         // New playback should get new handle
         PlaybackHandle playback2 = engine.play(handle);
         assertNotSame(playback, playback2);
         assertTrue(((FmodPlaybackHandle) playback2).isActive());
         assertFalse(((FmodPlaybackHandle) playback).isActive());
-        
+
         engine.stop(playback2);
     }
 
@@ -559,7 +590,7 @@ class FmodAudioEngineTest {
     @DisplayName("Should handle rapid state transitions")
     void testRapidStateTransitions() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         for (int i = 0; i < 10; i++) {
             PlaybackHandle playback = engine.play(handle);
             engine.pause(playback);
@@ -616,8 +647,9 @@ class FmodAudioEngineTest {
         // Load first audio file
         AudioHandle firstHandle = engine.loadAudio(SAMPLE_WAV);
         assertNotNull(firstHandle);
-        assertTrue(((FmodAudioHandle) firstHandle).isValid(), 
-            "First handle should be valid after loading");
+        assertTrue(
+                ((FmodAudioHandle) firstHandle).isValid(),
+                "First handle should be valid after loading");
 
         // Verify we can play the first handle
         PlaybackHandle playback1 = engine.play(firstHandle);
@@ -627,12 +659,14 @@ class FmodAudioEngineTest {
         // Load second audio file - this should invalidate the first handle
         AudioHandle secondHandle = engine.loadAudio(SWEEP_WAV);
         assertNotNull(secondHandle);
-        assertTrue(((FmodAudioHandle) secondHandle).isValid(), 
-            "Second handle should be valid after loading");
+        assertTrue(
+                ((FmodAudioHandle) secondHandle).isValid(),
+                "Second handle should be valid after loading");
 
         // THIS IS THE BUG: First handle should be invalid but it's not
-        assertFalse(((FmodAudioHandle) firstHandle).isValid(), 
-            "First handle should be INVALID after second audio is loaded");
+        assertFalse(
+                ((FmodAudioHandle) firstHandle).isValid(),
+                "First handle should be INVALID after second audio is loaded");
     }
 
     @Test
@@ -640,13 +674,15 @@ class FmodAudioEngineTest {
     void testCannotPlayOldHandleAfterNewLoad() throws Exception {
         // Load first audio
         AudioHandle firstHandle = engine.loadAudio(SAMPLE_WAV);
-        
+
         // Load second audio - should invalidate first
         engine.loadAudio(SWEEP_WAV);
-        
+
         // THIS IS THE BUG: Should throw exception but might not
-        assertThrows(Exception.class, () -> engine.play(firstHandle),
-            "Playing old handle after new load should throw exception");
+        assertThrows(
+                Exception.class,
+                () -> engine.play(firstHandle),
+                "Playing old handle after new load should throw exception");
     }
 
     @Test
@@ -656,17 +692,17 @@ class FmodAudioEngineTest {
         AudioHandle firstHandle = engine.loadAudio(SAMPLE_WAV);
         PlaybackHandle playback = engine.play(firstHandle);
         assertTrue(engine.isPlaying(playback), "Should be playing initially");
-        
+
         // Load new audio while first is playing
         engine.loadAudio(SWEEP_WAV);
-        
+
         // THIS IS THE BUG: Old playback should be stopped/invalid
-        assertFalse(engine.isPlaying(playback), 
-            "Old playback should stop when new audio is loaded");
-        assertTrue(engine.isStopped(playback), 
-            "Old playback should be in stopped state");
-        assertFalse(((FmodPlaybackHandle) playback).isActive(),
-            "Old playback handle should be inactive");
+        assertFalse(
+                engine.isPlaying(playback), "Old playback should stop when new audio is loaded");
+        assertTrue(engine.isStopped(playback), "Old playback should be in stopped state");
+        assertFalse(
+                ((FmodPlaybackHandle) playback).isActive(),
+                "Old playback handle should be inactive");
     }
 
     @Test
@@ -675,44 +711,50 @@ class FmodAudioEngineTest {
         // Load multiple files in sequence
         AudioHandle handle1 = engine.loadAudio(SAMPLE_WAV);
         AudioHandle handle2 = engine.loadAudio(SWEEP_WAV);
-        AudioHandle handle3 = engine.loadAudio(SAMPLE_WAV);  // Load first file again
-        
+        AudioHandle handle3 = engine.loadAudio(SAMPLE_WAV); // Load first file again
+
         // Only the last handle should be valid
         assertFalse(((FmodAudioHandle) handle1).isValid(), "Handle 1 should be invalid");
         assertFalse(((FmodAudioHandle) handle2).isValid(), "Handle 2 should be invalid");
         assertTrue(((FmodAudioHandle) handle3).isValid(), "Handle 3 should be valid");
-        
+
         // Only the last handle should be playable
         assertThrows(Exception.class, () -> engine.play(handle1));
         assertThrows(Exception.class, () -> engine.play(handle2));
-        assertDoesNotThrow(() -> {
-            PlaybackHandle p = engine.play(handle3);
-            engine.stop(p);
-        });
+        assertDoesNotThrow(
+                () -> {
+                    PlaybackHandle p = engine.play(handle3);
+                    engine.stop(p);
+                });
     }
 
     @Test
     @DisplayName("Handle validation should prevent operations on stale handles")
     void testHandleValidationPreventsStaleOperations() throws Exception {
         AudioHandle handle1 = engine.loadAudio(SAMPLE_WAV);
-        
+
         // These operations should work
         assertDoesNotThrow(() -> engine.getMetadata(handle1));
-        assertDoesNotThrow(() -> {
-            PlaybackHandle p = engine.play(handle1);
-            engine.stop(p);
-        });
-        
+        assertDoesNotThrow(
+                () -> {
+                    PlaybackHandle p = engine.play(handle1);
+                    engine.stop(p);
+                });
+
         // Load new file
         engine.loadAudio(SWEEP_WAV);
-        
+
         // Now operations on handle1 should fail
-        assertThrows(Exception.class, () -> engine.getMetadata(handle1),
-            "Getting metadata for stale handle should throw");
-        assertThrows(Exception.class, () -> engine.play(handle1),
-            "Playing stale handle should throw");
-        assertThrows(Exception.class, () -> engine.readSamples(handle1, 0, 1000).get(),
-            "Reading samples from stale handle should throw");
+        assertThrows(
+                Exception.class,
+                () -> engine.getMetadata(handle1),
+                "Getting metadata for stale handle should throw");
+        assertThrows(
+                Exception.class, () -> engine.play(handle1), "Playing stale handle should throw");
+        assertThrows(
+                Exception.class,
+                () -> engine.readSamples(handle1, 0, 1000).get(),
+                "Reading samples from stale handle should throw");
     }
 
     // ========== Race Condition Tests ==========
@@ -722,85 +764,90 @@ class FmodAudioEngineTest {
     @Timeout(10)
     void testChannelStolenRaceCondition() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         AtomicInteger errorCount = new AtomicInteger(0);
         AtomicReference<Exception> lastException = new AtomicReference<>();
         CountDownLatch startLatch = new CountDownLatch(1);
         CountDownLatch doneLatch = new CountDownLatch(2);
-        
+
         ExecutorService executor = Executors.newFixedThreadPool(2);
-        
+
         // Thread 1: Rapidly play/stop to trigger channel stealing
-        executor.submit(() -> {
-            try {
-                startLatch.await();
-                for (int i = 0; i < 50; i++) {
+        executor.submit(
+                () -> {
                     try {
-                        PlaybackHandle playback = engine.play(handle);
-                        Thread.sleep(5);
-                        engine.stop(playback);
-                        Thread.sleep(5);
+                        startLatch.await();
+                        for (int i = 0; i < 50; i++) {
+                            try {
+                                PlaybackHandle playback = engine.play(handle);
+                                Thread.sleep(5);
+                                engine.stop(playback);
+                                Thread.sleep(5);
+                            } catch (Exception e) {
+                                // Some operations may fail during rapid cycling - that's ok
+                            }
+                        }
                     } catch (Exception e) {
-                        // Some operations may fail during rapid cycling - that's ok
+                        e.printStackTrace();
+                    } finally {
+                        doneLatch.countDown();
                     }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                doneLatch.countDown();
-            }
-        });
-        
+                });
+
         // Thread 2: Continuously check state (simulating UI refresh timer)
-        executor.submit(() -> {
-            try {
-                startLatch.await();
-                PlaybackHandle lastPlayback = null;
-                
-                for (int i = 0; i < 200; i++) {
+        executor.submit(
+                () -> {
                     try {
-                        // Try to get current state if we have a handle
-                        if (lastPlayback != null) {
-                            // This is where FMOD_ERR_CHANNEL_STOLEN happens
-                            engine.getState(lastPlayback);
-                            engine.isPlaying(lastPlayback);
-                            engine.isPaused(lastPlayback);
+                        startLatch.await();
+                        PlaybackHandle lastPlayback = null;
+
+                        for (int i = 0; i < 200; i++) {
+                            try {
+                                // Try to get current state if we have a handle
+                                if (lastPlayback != null) {
+                                    // This is where FMOD_ERR_CHANNEL_STOLEN happens
+                                    engine.getState(lastPlayback);
+                                    engine.isPlaying(lastPlayback);
+                                    engine.isPaused(lastPlayback);
+                                }
+
+                                // Try to track new playback
+                                // Note: There's no getCurrentPlayback() method, so we simulate by
+                                // attempting play and immediately checking
+                                try {
+                                    PlaybackHandle newPlayback = engine.play(handle);
+                                    lastPlayback = newPlayback;
+                                } catch (AudioPlaybackException e) {
+                                    // Playback already active or handle invalid
+                                }
+
+                                Thread.sleep(10); // Simulate UI refresh rate
+                            } catch (AudioPlaybackException e) {
+                                if (e.getMessage().contains("error code: 3")) {
+                                    errorCount.incrementAndGet();
+                                    lastException.set(e);
+                                }
+                            }
                         }
-                        
-                        // Try to track new playback
-                        // Note: There's no getCurrentPlayback() method, so we simulate by
-                        // attempting play and immediately checking
-                        try {
-                            PlaybackHandle newPlayback = engine.play(handle);
-                            lastPlayback = newPlayback;
-                        } catch (AudioPlaybackException e) {
-                            // Playback already active or handle invalid
-                        }
-                        
-                        Thread.sleep(10); // Simulate UI refresh rate
-                    } catch (AudioPlaybackException e) {
-                        if (e.getMessage().contains("error code: 3")) {
-                            errorCount.incrementAndGet();
-                            lastException.set(e);
-                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        doneLatch.countDown();
                     }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                doneLatch.countDown();
-            }
-        });
-        
+                });
+
         startLatch.countDown();
         assertTrue(doneLatch.await(8, TimeUnit.SECONDS));
         executor.shutdown();
-        
+
         // Currently this test SHOULD FAIL with error code 3
         // After the fix, errorCount should be 0
         if (errorCount.get() > 0) {
-            fail("FMOD_ERR_CHANNEL_STOLEN occurred " + errorCount.get() + 
-                 " times. Last exception: " + lastException.get().getMessage());
+            fail(
+                    "FMOD_ERR_CHANNEL_STOLEN occurred "
+                            + errorCount.get()
+                            + " times. Last exception: "
+                            + lastException.get().getMessage());
         }
     }
 
@@ -809,19 +856,19 @@ class FmodAudioEngineTest {
     @Timeout(3)
     void testStateCheckAfterStop() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        
+
         for (int i = 0; i < 20; i++) {
             PlaybackHandle playback = engine.play(handle);
-            
+
             // Stop releases the channel
             engine.stop(playback);
-            
+
             // These calls immediately after stop should handle channel issues gracefully
-            // Currently may throw "error code: 3" 
+            // Currently may throw "error code: 3"
             assertDoesNotThrow(() -> engine.getState(playback));
             assertDoesNotThrow(() -> engine.isPlaying(playback));
             assertDoesNotThrow(() -> engine.isPaused(playback));
-            
+
             // Should report stopped state
             assertEquals(PlaybackState.STOPPED, engine.getState(playback));
             assertFalse(engine.isPlaying(playback));
@@ -836,7 +883,7 @@ class FmodAudioEngineTest {
         final List<Long> progressPositions = Collections.synchronizedList(new ArrayList<>());
         final AtomicInteger progressCount = new AtomicInteger();
         final AtomicInteger playbackCompleteCount = new AtomicInteger();
-        
+
         private final AtomicReference<CountDownLatch> stateLatch = new AtomicReference<>();
         private final AtomicReference<CountDownLatch> progressLatch = new AtomicReference<>();
         private final AtomicReference<PlaybackState> expectedState = new AtomicReference<>();
@@ -852,7 +899,8 @@ class FmodAudioEngineTest {
         }
 
         @Override
-        public void onStateChanged(PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
+        public void onStateChanged(
+                PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
             stateChanges.add(newState);
             CountDownLatch latch = stateLatch.get();
             PlaybackState expected = expectedState.get();
@@ -873,7 +921,8 @@ class FmodAudioEngineTest {
             return latch.await(2, TimeUnit.SECONDS);
         }
 
-        boolean waitForProgress(int count, long timeout, TimeUnit unit) throws InterruptedException {
+        boolean waitForProgress(int count, long timeout, TimeUnit unit)
+                throws InterruptedException {
             CountDownLatch latch = new CountDownLatch(count);
             progressLatch.set(latch);
             return latch.await(timeout, unit);

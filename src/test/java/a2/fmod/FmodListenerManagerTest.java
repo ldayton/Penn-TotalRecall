@@ -3,7 +3,6 @@ package a2.fmod;
 import static org.junit.jupiter.api.Assertions.*;
 
 import a2.AudioHandle;
-import lombok.extern.slf4j.Slf4j;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
@@ -23,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,10 +44,10 @@ class FmodListenerManagerTest {
     private FmodPlaybackManager playbackManager;
     private FmodSystemStateManager stateManager;
     private FmodHandleLifecycleManager lifecycleManager;
-    
+
     private FmodLibrary fmod;
     private Pointer system;
-    
+
     private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
     private static final long TEST_PROGRESS_INTERVAL_MS = 50; // Fast interval for testing
 
@@ -57,16 +57,16 @@ class FmodListenerManagerTest {
         stateManager = new FmodSystemStateManager();
         systemManager = new FmodSystemManager();
         lifecycleManager = new FmodHandleLifecycleManager();
-        
+
         systemManager.initialize();
         fmod = systemManager.getFmodLibrary();
         system = systemManager.getSystem();
-        
+
         // Create managers
         loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
         playbackManager = new FmodPlaybackManager(fmod, system);
         listenerManager = new FmodListenerManager(fmod, system, TEST_PROGRESS_INTERVAL_MS);
-        
+
         // Set state to initialized
         stateManager.compareAndSetState(
                 FmodSystemStateManager.State.UNINITIALIZED,
@@ -97,22 +97,22 @@ class FmodListenerManagerTest {
         TestListener listener1 = new TestListener("L1");
         TestListener listener2 = new TestListener("L2");
         TestListener listener3 = new TestListener("L3");
-        
+
         assertEquals(0, listenerManager.getListenerCount());
         assertFalse(listenerManager.hasListeners());
-        
+
         listenerManager.addListener(listener1);
         assertEquals(1, listenerManager.getListenerCount());
         assertTrue(listenerManager.hasListeners());
-        
+
         listenerManager.addListener(listener2);
         listenerManager.addListener(listener3);
         assertEquals(3, listenerManager.getListenerCount());
-        
+
         // Remove one listener
         listenerManager.removeListener(listener2);
         assertEquals(2, listenerManager.getListenerCount());
-        
+
         // Remove remaining listeners
         listenerManager.removeListener(listener1);
         listenerManager.removeListener(listener3);
@@ -124,19 +124,19 @@ class FmodListenerManagerTest {
     @DisplayName("Should reject listener registration after shutdown")
     void testListenerRegistrationAfterShutdown() {
         TestListener listener = new TestListener("L1");
-        
+
         listenerManager.addListener(listener);
         assertEquals(1, listenerManager.getListenerCount());
-        
+
         // Shutdown the manager
         listenerManager.shutdown();
         assertTrue(listenerManager.isShutdown());
-        
+
         // Try to add another listener - should be rejected
         TestListener listener2 = new TestListener("L2");
         log.warn("=== EXPECTED WARNING FOLLOWS - Testing shutdown rejection ===");
         listenerManager.addListener(listener2);
-        
+
         // Count should not increase
         assertEquals(0, listenerManager.getListenerCount()); // Cleared on shutdown
     }
@@ -151,39 +151,42 @@ class FmodListenerManagerTest {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         assertNotNull(sound);
-        
+
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         assertNotNull(playbackHandle);
-        
+
         // Add listener and start monitoring
         TestListener listener = new TestListener("Progress");
         listenerManager.addListener(listener);
-        
+
         long totalFrames = getAudioFrameCount(sound);
         listenerManager.startMonitoring(playbackHandle, totalFrames);
-        
+
         // Wait for at least 5 progress updates
         boolean received = listener.waitForProgressUpdates(5, 2, TimeUnit.SECONDS);
         assertTrue(received, "Should receive at least 5 progress updates");
-        
+
         // Verify progress is increasing
         List<Long> positions = listener.getProgressPositions();
         for (int i = 1; i < positions.size(); i++) {
-            assertTrue(positions.get(i) >= positions.get(i - 1),
-                "Progress should increase or stay same");
+            assertTrue(
+                    positions.get(i) >= positions.get(i - 1),
+                    "Progress should increase or stay same");
         }
-        
+
         // Stop monitoring
         listenerManager.stopMonitoring();
         playbackManager.stop();
-        
+
         // Record count before wait
         int countBeforeWait = listener.progressCount.get();
-        
+
         // Should not receive more updates
         Thread.sleep(200);
-        assertEquals(countBeforeWait, listener.progressCount.get(),
-            "Should not receive updates after stopping");
+        assertEquals(
+                countBeforeWait,
+                listener.progressCount.get(),
+                "Should not receive updates after stopping");
     }
 
     @Test
@@ -193,29 +196,31 @@ class FmodListenerManagerTest {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         // Start monitoring without any listeners
         long totalFrames = getAudioFrameCount(sound);
         listenerManager.startMonitoring(playbackHandle, totalFrames);
-        
+
         // Should not create timer (can't directly verify, but should not throw)
         Thread.sleep(100);
-        
+
         // Add listener after monitoring started - won't get updates until restart
         TestListener listener = new TestListener("Late");
         listenerManager.addListener(listener);
-        
+
         Thread.sleep(200);
-        assertEquals(0, listener.progressCount.get(),
-            "Late listener should not receive updates without restart");
-        
+        assertEquals(
+                0,
+                listener.progressCount.get(),
+                "Late listener should not receive updates without restart");
+
         // Restart monitoring with listener present
         listenerManager.startMonitoring(playbackHandle, totalFrames);
-        
+
         // Now should receive updates
         boolean received = listener.waitForProgressUpdates(3, 1, TimeUnit.SECONDS);
         assertTrue(received, "Should receive updates after restart with listener");
-        
+
         listenerManager.stopMonitoring();
         playbackManager.stop();
     }
@@ -227,33 +232,38 @@ class FmodListenerManagerTest {
     void testStateChangeNotifications() throws Exception {
         TestListener listener1 = new TestListener("L1");
         TestListener listener2 = new TestListener("L2");
-        
+
         listenerManager.addListener(listener1);
         listenerManager.addListener(listener2);
-        
+
         // Create a mock playback handle
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         // Notify state changes
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.PAUSED, PlaybackState.PLAYING);
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.SEEKING, PlaybackState.PAUSED);
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.PLAYING, PlaybackState.SEEKING);
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.STOPPED, PlaybackState.PLAYING);
-        
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.PAUSED, PlaybackState.PLAYING);
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.SEEKING, PlaybackState.PAUSED);
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.PLAYING, PlaybackState.SEEKING);
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.STOPPED, PlaybackState.PLAYING);
+
         // Both listeners should receive all state changes
         assertEquals(5, listener1.stateChanges.size());
         assertEquals(5, listener2.stateChanges.size());
-        
+
         // Verify the sequence
         assertEquals(PlaybackState.PLAYING, listener1.stateChanges.get(0));
         assertEquals(PlaybackState.PAUSED, listener1.stateChanges.get(1));
         assertEquals(PlaybackState.SEEKING, listener1.stateChanges.get(2));
         assertEquals(PlaybackState.PLAYING, listener1.stateChanges.get(3));
         assertEquals(PlaybackState.STOPPED, listener1.stateChanges.get(4));
-        
+
         playbackManager.stop();
     }
 
@@ -266,43 +276,43 @@ class FmodListenerManagerTest {
         // Load a short audio file
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
-        
+
         // Create a range playback that will complete quickly
         PointerByReference channelRef = new PointerByReference();
         int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
         assertEquals(FmodConstants.FMOD_OK, result);
-        
+
         Pointer channel = channelRef.getValue();
-        
+
         // Set to play only first 1000 frames
         result = fmod.FMOD_Channel_SetPosition(channel, 0, FmodConstants.FMOD_TIMEUNIT_PCM);
         assertEquals(FmodConstants.FMOD_OK, result);
-        
+
         // Create playback handle with end frame
         FmodPlaybackHandle playbackHandle = new FmodPlaybackHandle(audioHandle, channel, 0, 1000);
-        
+
         // Add listener
         TestListener listener = new TestListener("Completion");
         listenerManager.addListener(listener);
-        
+
         // Start monitoring
         listenerManager.startMonitoring(playbackHandle, 1000);
-        
+
         // Start playback
         result = fmod.FMOD_Channel_SetPaused(channel, false);
         assertEquals(FmodConstants.FMOD_OK, result);
-        
+
         // Wait for completion
         boolean completed = listener.waitForCompletion(3, TimeUnit.SECONDS);
         assertTrue(completed, "Should detect playback completion");
-        
+
         // Verify FINISHED state was notified
-        assertTrue(listener.stateChanges.contains(PlaybackState.FINISHED),
-            "Should notify FINISHED state");
-        
+        assertTrue(
+                listener.stateChanges.contains(PlaybackState.FINISHED),
+                "Should notify FINISHED state");
+
         // Verify completion callback
-        assertEquals(1, listener.completionCount.get(),
-            "Should call onPlaybackComplete once");
+        assertEquals(1, listener.completionCount.get(), "Should call onPlaybackComplete once");
     }
 
     @Test
@@ -313,24 +323,25 @@ class FmodListenerManagerTest {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         // Add listener and start monitoring
         TestListener listener = new TestListener("Invalid");
         listenerManager.addListener(listener);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
-        
+
         // Wait for some progress
         listener.waitForProgressUpdates(2, 1, TimeUnit.SECONDS);
-        
+
         // Stop the channel directly (simulating invalid handle)
         fmod.FMOD_Channel_Stop(playbackHandle.getChannel());
-        
+
         // Should detect and notify completion
         boolean completed = listener.waitForCompletion(1, TimeUnit.SECONDS);
         assertTrue(completed, "Should detect channel became invalid");
-        
-        assertTrue(listener.stateChanges.contains(PlaybackState.FINISHED),
-            "Should notify FINISHED state");
+
+        assertTrue(
+                listener.stateChanges.contains(PlaybackState.FINISHED),
+                "Should notify FINISHED state");
     }
 
     // ========== Concurrency Tests ==========
@@ -342,84 +353,96 @@ class FmodListenerManagerTest {
         AtomicBoolean error = new AtomicBoolean(false);
         CyclicBarrier barrier = new CyclicBarrier(4);
         ExecutorService executor = Executors.newFixedThreadPool(4);
-        
+
         // Start playback for notifications
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
-        
+
         List<Future<?>> futures = new ArrayList<>();
-        
+
         // Thread 1: Add/remove listeners
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 50; i++) {
-                    TestListener listener = new TestListener("T1-" + i);
-                    listenerManager.addListener(listener);
-                    Thread.sleep(5);
-                    listenerManager.removeListener(listener);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                error.set(true);
-            }
-        }));
-        
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 50; i++) {
+                                    TestListener listener = new TestListener("T1-" + i);
+                                    listenerManager.addListener(listener);
+                                    Thread.sleep(5);
+                                    listenerManager.removeListener(listener);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                error.set(true);
+                            }
+                        }));
+
         // Thread 2: Send state notifications
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 100; i++) {
-                    listenerManager.notifyStateChanged(
-                        playbackHandle,
-                        i % 2 == 0 ? PlaybackState.PLAYING : PlaybackState.PAUSED,
-                        i % 2 == 0 ? PlaybackState.PAUSED : PlaybackState.PLAYING);
-                    Thread.sleep(5);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                error.set(true);
-            }
-        }));
-        
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 100; i++) {
+                                    listenerManager.notifyStateChanged(
+                                            playbackHandle,
+                                            i % 2 == 0
+                                                    ? PlaybackState.PLAYING
+                                                    : PlaybackState.PAUSED,
+                                            i % 2 == 0
+                                                    ? PlaybackState.PAUSED
+                                                    : PlaybackState.PLAYING);
+                                    Thread.sleep(5);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                error.set(true);
+                            }
+                        }));
+
         // Thread 3: Check listener count
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 200; i++) {
-                    int count = listenerManager.getListenerCount();
-                    assertTrue(count >= 0, "Count should never be negative");
-                    Thread.sleep(2);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                error.set(true);
-            }
-        }));
-        
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 200; i++) {
+                                    int count = listenerManager.getListenerCount();
+                                    assertTrue(count >= 0, "Count should never be negative");
+                                    Thread.sleep(2);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                error.set(true);
+                            }
+                        }));
+
         // Thread 4: Progress notifications
-        futures.add(executor.submit(() -> {
-            try {
-                barrier.await();
-                for (int i = 0; i < 100; i++) {
-                    listenerManager.notifyProgress(playbackHandle, i * 100, 10000);
-                    Thread.sleep(5);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                error.set(true);
-            }
-        }));
-        
+        futures.add(
+                executor.submit(
+                        () -> {
+                            try {
+                                barrier.await();
+                                for (int i = 0; i < 100; i++) {
+                                    listenerManager.notifyProgress(playbackHandle, i * 100, 10000);
+                                    Thread.sleep(5);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                error.set(true);
+                            }
+                        }));
+
         // Wait for all threads
         for (Future<?> future : futures) {
             future.get(3, TimeUnit.SECONDS);
         }
-        
+
         assertFalse(error.get(), "No errors should occur during concurrent operations");
-        
+
         playbackManager.stop();
         executor.shutdown();
     }
@@ -430,46 +453,49 @@ class FmodListenerManagerTest {
     @DisplayName("Should handle listener exceptions gracefully")
     void testListenerExceptionHandling() throws Exception {
         log.warn("=== EXPECTED TEST EXCEPTIONS FOLLOW - Testing error handling ===");
-        
+
         // Create a listener that throws exceptions
-        PlaybackListener badListener = new PlaybackListener() {
-            @Override
-            public void onProgress(PlaybackHandle handle, long position, long total) {
-                throw new TestListenerException("Progress error");
-            }
-            
-            @Override
-            public void onStateChanged(PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
-                throw new TestListenerException("State change error");
-            }
-            
-            @Override
-            public void onPlaybackComplete(PlaybackHandle handle) {
-                throw new TestListenerException("Completion error");
-            }
-        };
-        
+        PlaybackListener badListener =
+                new PlaybackListener() {
+                    @Override
+                    public void onProgress(PlaybackHandle handle, long position, long total) {
+                        throw new TestListenerException("Progress error");
+                    }
+
+                    @Override
+                    public void onStateChanged(
+                            PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
+                        throw new TestListenerException("State change error");
+                    }
+
+                    @Override
+                    public void onPlaybackComplete(PlaybackHandle handle) {
+                        throw new TestListenerException("Completion error");
+                    }
+                };
+
         // Also add a good listener
         TestListener goodListener = new TestListener("Good");
-        
+
         listenerManager.addListener(badListener);
         listenerManager.addListener(goodListener);
-        
+
         // Create playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         // Send notifications - bad listener should not prevent good listener from receiving
-        listenerManager.notifyStateChanged(playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
+        listenerManager.notifyStateChanged(
+                playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
         listenerManager.notifyProgress(playbackHandle, 1000, 10000);
         listenerManager.notifyPlaybackComplete(playbackHandle);
-        
+
         // Good listener should still receive all notifications
         assertEquals(2, goodListener.stateChanges.size()); // PLAYING and FINISHED
         assertEquals(1, goodListener.progressCount.get());
         assertEquals(1, goodListener.completionCount.get());
-        
+
         playbackManager.stop();
     }
 
@@ -483,32 +509,32 @@ class FmodListenerManagerTest {
         TestListener listener2 = new TestListener("L2");
         listenerManager.addListener(listener1);
         listenerManager.addListener(listener2);
-        
+
         // Start monitoring
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
-        
+
         // Wait for some progress
         listener1.waitForProgressUpdates(2, 1, TimeUnit.SECONDS);
-        
+
         // Shutdown
         assertFalse(listenerManager.isShutdown());
         listenerManager.shutdown();
         assertTrue(listenerManager.isShutdown());
-        
+
         // Should clear listeners
         assertEquals(0, listenerManager.getListenerCount());
-        
+
         // Should stop monitoring (no more updates)
         int count = listener1.progressCount.get();
         Thread.sleep(200);
         assertEquals(count, listener1.progressCount.get(), "No updates after shutdown");
-        
+
         // Double shutdown should be safe
         assertDoesNotThrow(() -> listenerManager.shutdown());
-        
+
         playbackManager.stop();
     }
 
@@ -518,11 +544,11 @@ class FmodListenerManagerTest {
     void testRapidMonitoringCycles() throws Exception {
         TestListener listener = new TestListener("Rapid");
         listenerManager.addListener(listener);
-        
+
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         long totalFrames = getAudioFrameCount(sound);
-        
+
         // Rapid start/stop cycles
         for (int i = 0; i < 20; i++) {
             FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
@@ -531,7 +557,7 @@ class FmodListenerManagerTest {
             listenerManager.stopMonitoring();
             playbackManager.stop();
         }
-        
+
         // Should not crash or leak resources
         assertTrue(listener.progressCount.get() > 0, "Should have received some progress updates");
     }
@@ -542,32 +568,35 @@ class FmodListenerManagerTest {
     void testNoCallbacksAfterStop() throws Exception {
         TestListener listener = new TestListener("StopTest");
         listenerManager.addListener(listener);
-        
+
         // Load and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         // Start monitoring
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
-        
+
         // Wait for at least 2 progress updates to confirm monitoring is working
-        assertTrue(listener.waitForProgressUpdates(2, 1, TimeUnit.SECONDS),
+        assertTrue(
+                listener.waitForProgressUpdates(2, 1, TimeUnit.SECONDS),
                 "Should receive initial progress updates");
-        
+
         // Stop monitoring
         listenerManager.stopMonitoring();
-        
+
         // Record the count immediately after stopping
         int countAfterStop = listener.progressCount.get();
-        
+
         // Wait for 3x the progress interval to ensure no more callbacks
         Thread.sleep(TEST_PROGRESS_INTERVAL_MS * 3);
-        
+
         // Verify no additional progress updates were received
-        assertEquals(countAfterStop, listener.progressCount.get(),
+        assertEquals(
+                countAfterStop,
+                listener.progressCount.get(),
                 "Should not receive any progress callbacks after stopMonitoring");
-        
+
         // Clean up
         playbackManager.stop();
     }
@@ -581,25 +610,25 @@ class FmodListenerManagerTest {
         // This test verifies that updateProgress() applies latency compensation
         TestListener listener = new TestListener("Latency");
         listenerManager.addListener(listener);
-        
+
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         Pointer sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
-        
+
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
-        
+
         // Collect several progress updates
         listener.waitForProgressUpdates(10, 2, TimeUnit.SECONDS);
-        
+
         List<Long> positions = listener.getProgressPositions();
         assertTrue(positions.size() >= 10, "Should have enough samples");
-        
+
         // Positions should be reasonable (not negative, not huge)
         for (Long pos : positions) {
             assertTrue(pos >= 0, "Position should not be negative");
             assertTrue(pos <= getAudioFrameCount(sound), "Position should not exceed total frames");
         }
-        
+
         listenerManager.stopMonitoring();
         playbackManager.stop();
     }
@@ -622,11 +651,11 @@ class FmodListenerManagerTest {
         final AtomicInteger completionCount = new AtomicInteger();
         final AtomicReference<CountDownLatch> progressLatch = new AtomicReference<>();
         final AtomicReference<CountDownLatch> completionLatch = new AtomicReference<>();
-        
+
         TestListener(String name) {
             this.name = name;
         }
-        
+
         @Override
         public void onProgress(PlaybackHandle handle, long positionFrames, long totalFrames) {
             progressCount.incrementAndGet();
@@ -636,12 +665,13 @@ class FmodListenerManagerTest {
                 latch.countDown();
             }
         }
-        
+
         @Override
-        public void onStateChanged(PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
+        public void onStateChanged(
+                PlaybackHandle handle, PlaybackState newState, PlaybackState oldState) {
             stateChanges.add(newState);
         }
-        
+
         @Override
         public void onPlaybackComplete(PlaybackHandle handle) {
             completionCount.incrementAndGet();
@@ -650,23 +680,24 @@ class FmodListenerManagerTest {
                 latch.countDown();
             }
         }
-        
-        boolean waitForProgressUpdates(int count, long timeout, TimeUnit unit) throws InterruptedException {
+
+        boolean waitForProgressUpdates(int count, long timeout, TimeUnit unit)
+                throws InterruptedException {
             CountDownLatch latch = new CountDownLatch(count);
             progressLatch.set(latch);
             return latch.await(timeout, unit);
         }
-        
+
         boolean waitForCompletion(long timeout, TimeUnit unit) throws InterruptedException {
             CountDownLatch latch = new CountDownLatch(1);
             completionLatch.set(latch);
             return latch.await(timeout, unit);
         }
-        
+
         List<Long> getProgressPositions() {
             return new ArrayList<>(progressPositions);
         }
-        
+
         @Override
         public String toString() {
             return "TestListener[" + name + "]";

@@ -173,8 +173,7 @@ class FmodPlaybackStateManager {
         try {
             PlaybackState oldState = currentState;
             currentState = PlaybackState.STOPPED;
-            if (oldState != PlaybackState.STOPPED) {
-            }
+            if (oldState != PlaybackState.STOPPED) {}
         } finally {
             stateLock.unlock();
         }

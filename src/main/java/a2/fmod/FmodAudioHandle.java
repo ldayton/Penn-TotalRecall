@@ -14,8 +14,12 @@ class FmodAudioHandle implements AudioHandle {
     @Getter @NonNull private final String filePath;
     private final FmodHandleLifecycleManager lifecycleManager;
 
-    FmodAudioHandle(long id, long generation, @NonNull Pointer sound, 
-                    @NonNull String filePath, @NonNull FmodHandleLifecycleManager lifecycleManager) {
+    FmodAudioHandle(
+            long id,
+            long generation,
+            @NonNull Pointer sound,
+            @NonNull String filePath,
+            @NonNull FmodHandleLifecycleManager lifecycleManager) {
         this.id = id;
         this.generation = generation;
         this.sound = sound;

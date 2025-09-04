@@ -1,8 +1,8 @@
 package app.di;
 
 import a2.AudioEngine;
-import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodAudioEngine;
+import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodModule;
 import actions.ActionsFileParser;
 import actions.ActionsManager;

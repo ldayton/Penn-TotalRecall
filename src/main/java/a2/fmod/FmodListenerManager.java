@@ -424,7 +424,6 @@ class FmodListenerManager {
 
             // Clear all listeners
             listeners.clear();
-
         }
     }
 

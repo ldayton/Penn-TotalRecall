@@ -139,8 +139,7 @@ class FmodSampleReader {
             if (tempSound != null) {
                 try {
                     int result = fmod.FMOD_Sound_Release(tempSound);
-                    if (result != FmodConstants.FMOD_OK) {
-                    }
+                    if (result != FmodConstants.FMOD_OK) {}
                 } catch (Exception e) {
                 }
             }

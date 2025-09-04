@@ -505,8 +505,7 @@ public class FmodAudioEngine implements AudioEngine {
                 try {
                     int result = fmod.FMOD_Channel_Stop(currentPlayback.getChannel());
                     if (result != FmodConstants.FMOD_OK
-                            && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                    }
+                            && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {}
                     currentPlayback.markInactive();
                 } catch (Exception e) {
                 }
@@ -522,8 +521,7 @@ public class FmodAudioEngine implements AudioEngine {
             if (fmod != null && currentSound != null) {
                 try {
                     int result = fmod.FMOD_Sound_Release(currentSound);
-                    if (result != FmodConstants.FMOD_OK) {
-                    }
+                    if (result != FmodConstants.FMOD_OK) {}
                 } catch (Exception e) {
                 }
                 currentSound = null;

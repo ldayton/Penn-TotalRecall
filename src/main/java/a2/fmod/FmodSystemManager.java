@@ -43,7 +43,6 @@ class FmodSystemManager {
                 throw new AudioEngineException("FMOD system already initialized");
             }
 
-
             // Load FMOD library
             fmod = loadFmodLibrary();
 
@@ -159,7 +158,6 @@ class FmodSystemManager {
             if (!initialized) {
                 return; // Already shut down
             }
-
 
             if (system != null && fmod != null) {
                 int result = fmod.FMOD_System_Release(system);
