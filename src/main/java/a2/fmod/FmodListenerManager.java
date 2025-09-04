@@ -151,9 +151,7 @@ class FmodListenerManager {
                     progressTimer.shutdownNow();
                 }
             } catch (InterruptedException e) {
-                if (progressTimer != null) {
-                    progressTimer.shutdownNow();
-                }
+                progressTimer.shutdownNow();
                 Thread.currentThread().interrupt();
             }
             progressTimer = null;
