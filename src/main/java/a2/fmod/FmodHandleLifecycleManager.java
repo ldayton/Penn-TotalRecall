@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @ThreadSafe
 @Singleton
 @Slf4j
-class HandleLifecycleManager {
+class FmodHandleLifecycleManager {
     
     private final AtomicLong currentGeneration = new AtomicLong(0);
     private final AtomicLong nextHandleId = new AtomicLong(1);

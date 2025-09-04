@@ -42,7 +42,7 @@ class FmodAudioLoadingManagerTest {
     private FmodLibrary fmod;
     private Pointer system;
     private FmodSystemStateManager stateManager;
-    private HandleLifecycleManager lifecycleManager;
+    private FmodHandleLifecycleManager lifecycleManager;
     private FmodAudioLoadingManager loadingManager;
 
     @TempDir Path tempDir;
@@ -86,7 +86,7 @@ class FmodAudioLoadingManagerTest {
             loadingManager.releaseAll();
         }
         // Create fresh loading manager for each test
-        lifecycleManager = new HandleLifecycleManager();
+        lifecycleManager = new FmodHandleLifecycleManager();
         loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
     }
 

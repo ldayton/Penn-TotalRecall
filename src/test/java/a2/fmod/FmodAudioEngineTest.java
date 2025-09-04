@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Timeout;
  * without mocks to verify real behavior and catch integration-specific bugs.
  */
 @Audio
-class FmodAudioEngineIntegrationTest {
+class FmodAudioEngineTest {
 
     private FmodAudioEngine engine;
     private FmodSystemManager systemManager;
@@ -44,7 +44,7 @@ class FmodAudioEngineIntegrationTest {
     private FmodListenerManager listenerManager;
     private FmodSampleReader sampleReader;
     private FmodSystemStateManager stateManager;
-    private HandleLifecycleManager lifecycleManager;
+    private FmodHandleLifecycleManager lifecycleManager;
 
     private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
     private static final String SWEEP_WAV = "packaging/samples/sweep.wav";
@@ -55,7 +55,7 @@ class FmodAudioEngineIntegrationTest {
         // Create all real components - no mocks
         stateManager = new FmodSystemStateManager();
         systemManager = new FmodSystemManager();
-        lifecycleManager = new HandleLifecycleManager();
+        lifecycleManager = new FmodHandleLifecycleManager();
         
         // Initialize the system manager first to load FMOD
         systemManager.initialize();

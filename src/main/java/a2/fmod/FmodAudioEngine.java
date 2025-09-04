@@ -37,7 +37,7 @@ public class FmodAudioEngine implements AudioEngine {
     private final FmodListenerManager listenerManager;
     private final FmodSampleReader sampleReader;
     private final FmodSystemStateManager systemStateManager;
-    private final HandleLifecycleManager lifecycleManager;
+    private final FmodHandleLifecycleManager lifecycleManager;
 
     // Cached references for performance
     private final FmodLibrary fmod;
@@ -55,7 +55,7 @@ public class FmodAudioEngine implements AudioEngine {
             @NonNull FmodListenerManager listenerManager,
             @NonNull FmodSampleReader sampleReader,
             @NonNull FmodSystemStateManager systemStateManager,
-            @NonNull HandleLifecycleManager lifecycleManager) {
+            @NonNull FmodHandleLifecycleManager lifecycleManager) {
 
         this.systemManager = systemManager;
         this.loadingManager = loadingManager;

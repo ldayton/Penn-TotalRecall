@@ -34,7 +34,7 @@ class FmodAudioLoadingManager {
     private final FmodLibrary fmod;
     private final Pointer system;
     private final FmodSystemStateManager stateManager;
-    private final HandleLifecycleManager lifecycleManager;
+    private final FmodHandleLifecycleManager lifecycleManager;
     private final ReentrantLock loadingLock = new ReentrantLock();
 
     // Current loaded audio (single-audio paradigm) - guarded by loadingLock
@@ -45,7 +45,7 @@ class FmodAudioLoadingManager {
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
             @NonNull FmodSystemStateManager stateManager,
-            @NonNull HandleLifecycleManager lifecycleManager) {
+            @NonNull FmodHandleLifecycleManager lifecycleManager) {
         this.fmod = fmod;
         this.system = system;
         this.stateManager = stateManager;

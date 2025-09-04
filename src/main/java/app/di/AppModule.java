@@ -1,8 +1,7 @@
 package app.di;
 
 import a2.AudioEngine;
-import a2.fmod.AudioSystemLoader;
-import a2.fmod.AudioSystemManager;
+import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodAudioEngine;
 import a2.fmod.FmodModule;
 import actions.ActionsFileParser;
@@ -58,7 +57,7 @@ public class AppModule extends AbstractModule {
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);
         bind(AppConfig.class).in(Singleton.class);
-        bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
+        bind(FmodLibraryLoader.class).in(Singleton.class);
         bind(DevModeFileAutoLoader.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);

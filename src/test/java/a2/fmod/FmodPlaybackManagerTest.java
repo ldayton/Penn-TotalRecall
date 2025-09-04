@@ -36,7 +36,7 @@ class FmodPlaybackManagerTest {
 
     // For loading test sounds
     private FmodSystemStateManager stateManager;
-    private HandleLifecycleManager lifecycleManager;
+    private FmodHandleLifecycleManager lifecycleManager;
     private FmodAudioLoadingManager loadingManager;
 
     // Test audio files
@@ -76,7 +76,7 @@ class FmodPlaybackManagerTest {
     void createManagers() {
         // Create fresh managers for each test
         playbackManager = new FmodPlaybackManager(fmod, system);
-        lifecycleManager = new HandleLifecycleManager();
+        lifecycleManager = new FmodHandleLifecycleManager();
         loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
     }
 

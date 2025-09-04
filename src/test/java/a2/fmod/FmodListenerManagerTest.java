@@ -36,14 +36,14 @@ import org.junit.jupiter.api.Timeout;
  * detection.
  */
 @Audio
-class FmodListenerManagerIntegrationTest {
+class FmodListenerManagerTest {
 
     private FmodListenerManager listenerManager;
     private FmodSystemManager systemManager;
     private FmodAudioLoadingManager loadingManager;
     private FmodPlaybackManager playbackManager;
     private FmodSystemStateManager stateManager;
-    private HandleLifecycleManager lifecycleManager;
+    private FmodHandleLifecycleManager lifecycleManager;
     
     private FmodLibrary fmod;
     private Pointer system;
@@ -57,7 +57,7 @@ class FmodListenerManagerIntegrationTest {
         // Initialize real FMOD components
         stateManager = new FmodSystemStateManager();
         systemManager = new FmodSystemManager();
-        lifecycleManager = new HandleLifecycleManager();
+        lifecycleManager = new FmodHandleLifecycleManager();
         
         systemManager.initialize();
         fmod = systemManager.getFmodLibrary();

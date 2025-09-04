@@ -1,5 +1,6 @@
 package a2.fmod;
 
+import a2.exceptions.AudioEngineException;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
@@ -61,7 +62,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  */
 @Singleton
-public class AudioSystemManager implements AudioSystemLoader {
+public class FmodLibraryLoader {
 
     /**
      * Determines how native libraries should be loaded by the application.
@@ -95,7 +96,7 @@ public class AudioSystemManager implements AudioSystemLoader {
         LOGGING
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(AudioSystemManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(FmodLibraryLoader.class);
 
     // Configuration keys for audio system settings
     private static final String LOADING_MODE_KEY = "audio.loading.mode";
@@ -122,7 +123,7 @@ public class AudioSystemManager implements AudioSystemLoader {
      *
      * @param interfaceClass The JNA interface class to load
      * @return The loaded library instance
-     * @throws AudioSystemException if library cannot be loaded
+     * @throws AudioEngineException if library cannot be loaded
      */
     public <T extends Library> T loadAudioLibrary(@NonNull Class<T> interfaceClass) {
         synchronized (loadLock) {
@@ -140,7 +141,7 @@ public class AudioSystemManager implements AudioSystemLoader {
                         ? loadUnpackaged(interfaceClass, libraryType)
                         : loadPackaged(interfaceClass, libraryType);
             } catch (Exception e) {
-                throw new AudioSystemException("Failed to load audio library", e);
+                throw new AudioEngineException("Failed to load audio library", e);
             }
         }
     }

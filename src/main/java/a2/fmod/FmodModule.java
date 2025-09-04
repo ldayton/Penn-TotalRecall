@@ -46,8 +46,8 @@ public class FmodModule extends AbstractModule {
     /** Provide HandleLifecycleManager as a singleton. */
     @Provides
     @Singleton
-    HandleLifecycleManager provideHandleLifecycleManager() {
-        return new HandleLifecycleManager();
+    FmodHandleLifecycleManager provideHandleLifecycleManager() {
+        return new FmodHandleLifecycleManager();
     }
 
     /** Provide FmodAudioLoadingManager with dependencies. */
@@ -57,7 +57,7 @@ public class FmodModule extends AbstractModule {
             @NonNull FmodLibrary fmod,
             @NonNull Pointer system,
             @NonNull FmodSystemStateManager stateManager,
-            @NonNull HandleLifecycleManager lifecycleManager) {
+            @NonNull FmodHandleLifecycleManager lifecycleManager) {
         return new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
     }
 
