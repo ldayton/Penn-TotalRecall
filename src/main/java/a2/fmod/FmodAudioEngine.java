@@ -135,6 +135,10 @@ public class FmodAudioEngine implements AudioEngine {
             if (!lifecycleManager.isCurrent(fmodHandle)) {
                 throw new AudioPlaybackException("Audio handle is not the currently loaded file");
             }
+            // Check if there's already an active playback
+            if (currentPlayback != null && currentPlayback.isActive()) {
+                throw new AudioPlaybackException("Another playback is already active");
+            }
             FmodPlaybackHandle playbackHandle = playbackManager.play(currentSound, audio);
             currentPlayback = playbackHandle;
             long totalFrames = getAudioDuration(audio);
@@ -162,6 +166,10 @@ public class FmodAudioEngine implements AudioEngine {
             }
             if (!lifecycleManager.isCurrent(fmodHandle)) {
                 throw new AudioPlaybackException("Audio handle is not the currently loaded file");
+            }
+            // Check if there's already an active playback
+            if (currentPlayback != null && currentPlayback.isActive()) {
+                throw new AudioPlaybackException("Another playback is already active");
             }
             if (startFrame < 0 || endFrame < startFrame) {
                 throw new AudioPlaybackException(
