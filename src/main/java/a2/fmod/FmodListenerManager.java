@@ -144,17 +144,18 @@ class FmodListenerManager {
         currentHandle = null;
         totalFrames = 0;
 
-        if (progressTimer != null) {
-            progressTimer.shutdown();
+        ScheduledExecutorService timer = progressTimer;
+        if (timer != null) {
+            progressTimer = null;
+            timer.shutdown();
             try {
-                if (!progressTimer.awaitTermination(100, TimeUnit.MILLISECONDS)) {
-                    progressTimer.shutdownNow();
+                if (!timer.awaitTermination(100, TimeUnit.MILLISECONDS)) {
+                    timer.shutdownNow();
                 }
             } catch (InterruptedException e) {
-                progressTimer.shutdownNow();
+                timer.shutdownNow();
                 Thread.currentThread().interrupt();
             }
-            progressTimer = null;
         }
     }
 
