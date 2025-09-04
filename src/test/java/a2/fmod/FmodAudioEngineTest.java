@@ -212,13 +212,15 @@ class FmodAudioEngineTest {
         PlaybackHandle playback = engine.play(handle);
         assertTrue(engine.isPlaying(playback));
         assertEquals(PlaybackState.PLAYING, engine.getState(playback));
-        listener.waitForStateChange(PlaybackState.PLAYING);
+        // State already changed, just verify it was recorded
+        assertTrue(listener.stateChanges.contains(PlaybackState.PLAYING));
 
         // Pause
         engine.pause(playback);
         assertTrue(engine.isPaused(playback));
         assertEquals(PlaybackState.PAUSED, engine.getState(playback));
-        listener.waitForStateChange(PlaybackState.PAUSED);
+        // State already changed, just verify it was recorded
+        assertTrue(listener.stateChanges.contains(PlaybackState.PAUSED));
         long pausePos = engine.getPosition(playback);
 
         // Verify position doesn't change while paused
@@ -245,7 +247,8 @@ class FmodAudioEngineTest {
         engine.stop(playback);
         assertTrue(engine.isStopped(playback));
         assertEquals(PlaybackState.STOPPED, engine.getState(playback));
-        listener.waitForStateChange(PlaybackState.STOPPED);
+        // State already changed, just verify it was recorded
+        assertTrue(listener.stateChanges.contains(PlaybackState.STOPPED));
 
         // Verify listener received all state changes
         assertTrue(listener.stateChanges.contains(PlaybackState.PLAYING));
