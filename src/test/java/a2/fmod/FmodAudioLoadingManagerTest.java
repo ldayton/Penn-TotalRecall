@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.exceptions.AudioLoadException;
+import annotations.AudioEngine;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.io.TempDir;
  * High-value tests for FmodAudioLoadingManager focusing on concurrency, resource management, and
  * error handling.
  */
+@AudioEngine
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FmodAudioLoadingManagerTest {
 

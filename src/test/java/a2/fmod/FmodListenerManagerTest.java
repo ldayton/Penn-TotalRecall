@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
+import annotations.AudioEngine;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.Timeout;
  * Integration tests for FmodListenerManager. Tests listener notifications and progress monitoring
  * with real FMOD operations.
  */
+@AudioEngine
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FmodListenerManagerTest {
 

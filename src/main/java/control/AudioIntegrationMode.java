@@ -124,7 +124,6 @@ public class AudioIntegrationMode {
             // Test 7: Stop playback and cleanup
             logger.info("Testing playback stop and cleanup...");
             audioEngine.stop(playbackHandle);
-            playbackHandle = null;
 
             // Brief wait for cleanup
             Thread.sleep(CLEANUP_WAIT_MS);
@@ -133,6 +132,7 @@ public class AudioIntegrationMode {
                 logger.error("❌ Playback still running after stop");
                 return false;
             }
+            playbackHandle = null;
             logger.info("✅ Playback stopped successfully");
 
             logger.warn("✅ All audio integration tests passed");

@@ -159,9 +159,9 @@ class PackagedFmodLoadingTest {
                 "Test should start audio integration phase");
 
         assertTrue(
-                output.contains("✅ FMOD library loaded successfully")
-                        || output.contains("FMOD library loaded successfully"),
-                "Test should successfully load FMOD library");
+                output.contains("✅ Audio engine initialized successfully")
+                        || output.contains("Audio engine initialized successfully"),
+                "Test should successfully initialize audio engine");
 
         assertTrue(
                 output.contains("✅ Audio playback started successfully")

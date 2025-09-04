@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import a2.AudioHandle;
 import a2.exceptions.AudioPlaybackException;
+import annotations.AudioEngine;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Timeout;
  * Integration tests for FmodPlaybackManager. Tests the playback management logic with real FMOD
  * operations.
  */
+@AudioEngine
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FmodPlaybackManagerTest {
 

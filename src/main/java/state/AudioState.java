@@ -6,6 +6,7 @@ import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
+import com.google.inject.Provider;
 import control.AudioCalculator;
 import control.AudioPlaybackCoordinator;
 import env.Constants;
@@ -67,18 +68,18 @@ public class AudioState implements PlaybackListener {
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private final ProgramName programName;
-    private final AudioEngine injectedAudioEngine;
+    private final Provider<AudioEngine> audioEngineProvider;
 
     @Inject
     public AudioState(
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
             ProgramName programName,
-            AudioEngine audioEngine) {
+            Provider<AudioEngine> audioEngineProvider) {
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.programName = programName;
-        this.injectedAudioEngine = audioEngine;
+        this.audioEngineProvider = audioEngineProvider;
     }
 
     /**
@@ -98,8 +99,10 @@ public class AudioState implements PlaybackListener {
         } else {
             curAudioFile = file;
 
-            // Load audio first to get metadata
-            audioEngine = injectedAudioEngine;
+            // Load audio first to get metadata - lazily initialize engine on first use
+            if (audioEngine == null) {
+                audioEngine = audioEngineProvider.get();
+            }
             try {
                 currentAudioHandle = audioEngine.loadAudio(file.getAbsolutePath());
             } catch (Exception e) {
@@ -177,7 +180,7 @@ public class AudioState implements PlaybackListener {
         eventBus.publish(new WaveformRefreshEvent(WaveformRefreshEvent.Type.STOP));
 
         // stop audio playback
-        if (currentPlaybackHandle != null) {
+        if (currentPlaybackHandle != null && audioEngine != null) {
             audioEngine.stop(currentPlaybackHandle);
             currentPlaybackHandle = null;
         }
@@ -412,6 +415,9 @@ public class AudioState implements PlaybackListener {
             throw new IllegalStateException("No audio loaded");
         }
         // Stop any existing playback
+        if (audioEngine == null) {
+            audioEngine = audioEngineProvider.get();
+        }
         if (currentPlaybackHandle != null) {
             audioEngine.stop(currentPlaybackHandle);
         }
@@ -427,7 +433,7 @@ public class AudioState implements PlaybackListener {
      * @return The position when stopped, or 0 if not playing
      */
     public long stop() {
-        if (currentPlaybackHandle != null) {
+        if (currentPlaybackHandle != null && audioEngine != null) {
             long position = audioEngine.getPosition(currentPlaybackHandle);
             audioEngine.stop(currentPlaybackHandle);
             currentPlaybackHandle = null;
@@ -442,7 +448,7 @@ public class AudioState implements PlaybackListener {
      * @return The position when paused, or 0 if not playing
      */
     public long pause() {
-        if (currentPlaybackHandle != null) {
+        if (currentPlaybackHandle != null && audioEngine != null) {
             long position = audioEngine.getPosition(currentPlaybackHandle);
             audioEngine.pause(currentPlaybackHandle);
             return position;
@@ -460,6 +466,9 @@ public class AudioState implements PlaybackListener {
         if (currentAudioHandle == null) {
             throw new IllegalStateException("No audio loaded");
         }
+        if (audioEngine == null) {
+            audioEngine = audioEngineProvider.get();
+        }
         audioEngine.playRange(currentAudioHandle, startFrame, endFrame);
     }
 
@@ -469,7 +478,9 @@ public class AudioState implements PlaybackListener {
      * @return true if playing, false otherwise
      */
     public boolean isPlaying() {
-        return currentPlaybackHandle != null && audioEngine.isPlaying(currentPlaybackHandle);
+        return currentPlaybackHandle != null
+                && audioEngine != null
+                && audioEngine.isPlaying(currentPlaybackHandle);
     }
 
     /**
@@ -478,7 +489,9 @@ public class AudioState implements PlaybackListener {
      * @return true if paused, false otherwise
      */
     public boolean isPaused() {
-        return currentPlaybackHandle != null && audioEngine.isPaused(currentPlaybackHandle);
+        return currentPlaybackHandle != null
+                && audioEngine != null
+                && audioEngine.isPaused(currentPlaybackHandle);
     }
 
     /**
@@ -487,7 +500,9 @@ public class AudioState implements PlaybackListener {
      * @return true if stopped (no active playback)
      */
     public boolean isStopped() {
-        return currentPlaybackHandle == null || audioEngine.isStopped(currentPlaybackHandle);
+        return currentPlaybackHandle == null
+                || audioEngine == null
+                || audioEngine.isStopped(currentPlaybackHandle);
     }
 
     /**
@@ -496,7 +511,7 @@ public class AudioState implements PlaybackListener {
      * @return The playback state, or STOPPED if no playback
      */
     PlaybackState getPlaybackState() {
-        if (currentPlaybackHandle != null) {
+        if (currentPlaybackHandle != null && audioEngine != null) {
             return audioEngine.getState(currentPlaybackHandle);
         }
         return PlaybackState.STOPPED;
@@ -511,6 +526,9 @@ public class AudioState implements PlaybackListener {
     public AudioMetadata getAudioMetadata() {
         if (currentAudioHandle == null) {
             throw new IllegalStateException("No audio loaded");
+        }
+        if (audioEngine == null) {
+            audioEngine = audioEngineProvider.get();
         }
         return audioEngine.getMetadata(currentAudioHandle);
     }
