@@ -1,11 +1,6 @@
 package control;
 
-import audio.FmodAudioFormatDetector;
-import audio.FmodCore;
-import env.AppConfig;
-import env.Platform;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import a2.AudioMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.audiofiles.AudioFile;
@@ -47,57 +42,33 @@ public class AudioCalculator {
     private double durationInSeconds;
 
     /**
-     * Incompatible file types are rejected, forcing error handling on whoever is instantiating the
-     * class.
+     * Creates an AudioCalculator from audio metadata.
      *
      * @param audioFile the file containing the audio
-     * @throws FileNotFoundException if the audio file does not exist
-     * @throws IOException if FMOD cannot handle the file or format detection fails
+     * @param metadata the audio metadata from AudioEngine
      */
-    public AudioCalculator(AudioFile audioFile) throws FileNotFoundException, IOException {
+    public AudioCalculator(AudioFile audioFile, AudioMetadata metadata) {
         this.audioFile = audioFile;
 
-        // Check if file exists
-        if (!audioFile.exists()) {
-            throw new FileNotFoundException("Audio file not found: " + audioFile.getAbsolutePath());
-        }
+        // Store format information from metadata
+        numSampleFrames = metadata.frameCount();
+        numChannels = metadata.channelCount();
+        sampleSizeInBits = metadata.bitsPerSample();
+        sampleRate = metadata.sampleRate();
+        formatDescription = metadata.format();
+        durationInSeconds = metadata.durationSeconds();
 
-        // Use FMOD to detect format information
-        AppConfig appConfig = new AppConfig();
-        Platform platform = new Platform();
-        a2.fmod.AudioSystemManager audioManager =
-                new a2.fmod.AudioSystemManager(appConfig, platform);
-        FmodCore fmodCore = new FmodCore(audioManager);
-        FmodAudioFormatDetector detector = new FmodAudioFormatDetector(fmodCore);
+        // Compute derived values
+        frameSizeInBits = sampleSizeInBits * numChannels;
 
-        try {
-            FmodCore.AudioFormatInfo formatInfo = detector.detectFormat(audioFile);
-
-            // Store format information from FMOD
-            numSampleFrames = formatInfo.getFrameLength();
-            numChannels = formatInfo.getChannels();
-            sampleSizeInBits = formatInfo.getBitsPerSample();
-            sampleRate = formatInfo.getSampleRate();
-            formatDescription = formatInfo.getFormatDescription();
-
-            // Compute derived values
-            durationInSeconds = formatInfo.getDurationInSeconds();
-            frameSizeInBits = sampleSizeInBits * numChannels;
-
-            logger.debug("Audio format detected: {}", formatInfo);
-
-        } catch (IOException e) {
-            logger.error(
-                    "Failed to detect audio format for file: {}", audioFile.getAbsolutePath(), e);
-            throw new IOException("Failed to detect audio format: " + e.getMessage(), e);
-        } finally {
-            // Clean up FMOD resources
-            try {
-                fmodCore.shutdown();
-            } catch (Exception e) {
-                logger.warn("Failed to shutdown FMOD core during format detection", e);
-            }
-        }
+        logger.debug(
+                "Audio format from metadata: channels={}, sampleRate={}, bitsPerSample={},"
+                        + " frames={}, duration={}s",
+                numChannels,
+                sampleRate,
+                sampleSizeInBits,
+                numSampleFrames,
+                durationInSeconds);
     }
 
     @SuppressWarnings("unused")

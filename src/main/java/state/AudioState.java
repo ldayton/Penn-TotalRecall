@@ -2,6 +2,7 @@ package state;
 
 import a2.AudioEngine;
 import a2.AudioHandle;
+import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
@@ -17,7 +18,6 @@ import events.WaveformRefreshEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
@@ -106,18 +106,19 @@ public class AudioState implements PlaybackListener {
         } else {
             curAudioFile = file;
 
-            // create AudioCalculator and handle bad formats/files
-            calculator = null;
+            // Load audio first to get metadata
+            audioEngine = injectedAudioEngine;
             try {
-                calculator = new AudioCalculator(file);
-            } catch (FileNotFoundException e) {
-                logger.error("Audio file not found: " + file.getAbsolutePath(), e);
-                throw new RuntimeException("Audio file not found: " + file.getAbsolutePath(), e);
-            } catch (IOException e) {
-                logger.error("Error opening audio file: " + file.getAbsolutePath(), e);
+                currentAudioHandle = audioEngine.loadAudio(file.getAbsolutePath());
+            } catch (Exception e) {
+                logger.error("Failed to load audio file: " + file.getAbsolutePath(), e);
                 throw new RuntimeException(
-                        "Error opening audio file: " + file.getAbsolutePath(), e);
+                        "Failed to load audio file: " + file.getAbsolutePath(), e);
             }
+
+            // Create AudioCalculator with metadata from loaded audio
+            AudioMetadata metadata = audioEngine.getMetadata(currentAudioHandle);
+            calculator = new AudioCalculator(file, metadata);
 
             // Note: AudioFileSwitchedEvent will be published after full initialization
 
@@ -136,18 +137,9 @@ public class AudioState implements PlaybackListener {
             }
 
             // prepare playback
-            audioEngine = injectedAudioEngine;
             playbackCoordinator = new AudioPlaybackCoordinator(this, eventBus);
             audioEngine.addPlaybackListener(this);
             audioEngine.addPlaybackListener(playbackCoordinator);
-
-            try {
-                currentAudioHandle = audioEngine.loadAudio(file.getAbsolutePath());
-            } catch (Exception e) {
-                logger.error("Failed to load audio file: " + file.getAbsolutePath(), e);
-                throw new RuntimeException(
-                        "Failed to load audio file: " + file.getAbsolutePath(), e);
-            }
 
             // add words from lst file to display
             File lstFile =
@@ -516,5 +508,18 @@ public class AudioState implements PlaybackListener {
             return audioEngine.getState(currentPlaybackHandle);
         }
         return PlaybackState.STOPPED;
+    }
+
+    /**
+     * Get metadata for the currently loaded audio.
+     *
+     * @return AudioMetadata for the current audio file
+     * @throws IllegalStateException if no audio is loaded
+     */
+    public AudioMetadata getAudioMetadata() {
+        if (currentAudioHandle == null) {
+            throw new IllegalStateException("No audio loaded");
+        }
+        return audioEngine.getMetadata(currentAudioHandle);
     }
 }
