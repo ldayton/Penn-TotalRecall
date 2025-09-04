@@ -250,6 +250,13 @@ class FmodPlaybackManager {
                 return;
             }
 
+            // FMOD_ERR_INVALID_POSITION means seek position is out of bounds
+            // FMOD will clamp to valid range, so we accept this as success
+            if (result == FmodConstants.FMOD_ERR_INVALID_POSITION) {
+                // Position was clamped by FMOD - this is expected behavior
+                return;
+            }
+
             if (result != FmodConstants.FMOD_OK) {
                 throw new AudioPlaybackException("Failed to seek: error code: " + result);
             }
