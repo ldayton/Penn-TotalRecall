@@ -624,10 +624,11 @@ class FmodAudioEngineTest {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
         PlaybackHandle playback = engine.play(handle);
 
-        // All listeners should receive state change
-        assertTrue(listener1.waitForStateChange(PlaybackState.PLAYING));
-        assertTrue(listener2.waitForStateChange(PlaybackState.PLAYING));
-        assertTrue(listener3.waitForStateChange(PlaybackState.PLAYING));
+        // All listeners should receive state change (synchronous notification)
+        Thread.sleep(50); // Give a moment for any async processing
+        assertTrue(listener1.stateChanges.contains(PlaybackState.PLAYING));
+        assertTrue(listener2.stateChanges.contains(PlaybackState.PLAYING));
+        assertTrue(listener3.stateChanges.contains(PlaybackState.PLAYING));
 
         // Remove one listener
         engine.removePlaybackListener(listener2);
@@ -635,8 +636,9 @@ class FmodAudioEngineTest {
         engine.pause(playback);
 
         // Only remaining listeners should receive pause
-        assertTrue(listener1.waitForStateChange(PlaybackState.PAUSED));
-        assertTrue(listener3.waitForStateChange(PlaybackState.PAUSED));
+        Thread.sleep(50); // Give a moment for any async processing
+        assertTrue(listener1.stateChanges.contains(PlaybackState.PAUSED));
+        assertTrue(listener3.stateChanges.contains(PlaybackState.PAUSED));
         assertFalse(listener2.stateChanges.contains(PlaybackState.PAUSED));
 
         engine.stop(playback);
