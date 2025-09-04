@@ -414,6 +414,7 @@ public class AudioState implements PlaybackListener {
         }
         if (currentPlaybackHandle != null) {
             audioEngine.stop(currentPlaybackHandle);
+            currentPlaybackHandle = null; // Clear the handle after stopping
         }
         currentPlaybackHandle = audioEngine.play(currentAudioHandle);
         if (startFrame > 0) {
