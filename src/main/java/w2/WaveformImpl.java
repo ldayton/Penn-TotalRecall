@@ -12,15 +12,8 @@ class WaveformImpl implements Waveform {
     private final WaveformRenderer renderer;
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
-    private final String audioFilePath;
-    private final AudioEngine audioEngine;
-    private final AudioHandle audioHandle;
 
     WaveformImpl(String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
-        this.audioFilePath = audioFilePath;
-        this.audioEngine = audioEngine;
-        this.audioHandle = audioHandle;
-
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         this.renderPool =

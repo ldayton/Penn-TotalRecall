@@ -2,12 +2,9 @@ package waveform;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Signal processing operations for audio enhancement. */
 final class SignalEnhancer {
-    private static final Logger logger = LoggerFactory.getLogger(SignalEnhancer.class);
 
     /** Applies envelope smoothing to reduce noise in audio signal using sliding window maximum. */
     public double[] envelopeSmooth(double[] samples, int windowSize) {

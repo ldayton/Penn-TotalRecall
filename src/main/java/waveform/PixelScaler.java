@@ -1,11 +1,7 @@
 package waveform;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /** Converts audio samples to pixel resolution and applies smoothing. */
 public final class PixelScaler {
-    private static final Logger logger = LoggerFactory.getLogger(PixelScaler.class);
 
     /** Converts audio samples to pixel resolution for display. */
     public double[] toPixelResolution(
@@ -37,7 +33,7 @@ public final class PixelScaler {
             pixelValues[i] = samples[index];
         }
 
-        // logger.debug(
+        // log.debug(
         //         "Converted {} samples to {} pixels (increment={})",
         //         samples.length,
         //         targetPixelWidth,
@@ -68,7 +64,7 @@ public final class PixelScaler {
             }
         }
 
-        // logger.debug("Applied pixel smoothing to {} pixels", pixelValues.length);
+        // log.debug("Applied pixel smoothing to {} pixels", pixelValues.length);
         return pixelValues;
     }
 

@@ -44,10 +44,7 @@ class WaveformRenderer {
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
     private final String audioFilePath;
-    private final AudioEngine audioEngine;
-    private final AudioHandle audioHandle;
     private final WaveformProcessor processor;
-    private final int sampleRate;
 
     // Cache global peak per resolution for consistent scaling
     private final ConcurrentHashMap<Integer, Double> resolutionPeaks = new ConcurrentHashMap<>();
@@ -87,9 +84,6 @@ class WaveformRenderer {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
         this.renderPool = renderPool;
-        this.audioEngine = audioEngine;
-        this.audioHandle = audioHandle;
-        this.sampleRate = sampleRate;
         this.processor = new WaveformProcessor(audioEngine, audioHandle, new PixelScaler());
     }
 
@@ -122,7 +116,7 @@ class WaveformRenderer {
         // Composite segments when all ready
         return CompletableFuture.allOf(segmentFutures.toArray(CompletableFuture[]::new))
                 .thenApply(
-                        v -> {
+                        _ -> {
                             List<Image> segments =
                                     segmentFutures.stream().map(f -> f.getNow(null)).toList();
                             return compositeSegments(segments, viewport);

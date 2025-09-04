@@ -16,12 +16,10 @@ public class AudioPlaybackCoordinator implements PlaybackListener {
     private static final Logger logger = LoggerFactory.getLogger(AudioPlaybackCoordinator.class);
 
     private final PlaybackListener progressHandler;
-    private final EventDispatchBus eventBus;
 
     @Inject
     public AudioPlaybackCoordinator(PlaybackListener progressHandler, EventDispatchBus eventBus) {
         this.progressHandler = progressHandler;
-        this.eventBus = eventBus;
     }
 
     @Override

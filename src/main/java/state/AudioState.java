@@ -67,7 +67,6 @@ public class AudioState implements PlaybackListener {
                     + " null, or neither is";
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
-    private final ProgramName programName;
     private final Provider<AudioEngine> audioEngineProvider;
 
     @Inject
@@ -78,7 +77,6 @@ public class AudioState implements PlaybackListener {
             Provider<AudioEngine> audioEngineProvider) {
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
-        this.programName = programName;
         this.audioEngineProvider = audioEngineProvider;
     }
 
@@ -326,10 +324,6 @@ public class AudioState implements PlaybackListener {
         } else {
             throw new IllegalStateException(audioClosedMessage);
         }
-    }
-
-    private void setAudioEngine(AudioEngine audioEngine) {
-        this.audioEngine = audioEngine;
     }
 
     /**
