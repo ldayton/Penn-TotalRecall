@@ -2,6 +2,7 @@ package app.di;
 
 import a2.AudioEngine;
 import a2.fmod.FmodAudioEngine;
+import a2.fmod.FmodModule;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
 import audio.AudioSystemLoader;
@@ -52,6 +53,9 @@ public class AppModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // Install FMOD module for audio system dependencies
+        install(new FmodModule());
+
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);
         bind(AppConfig.class).in(Singleton.class);

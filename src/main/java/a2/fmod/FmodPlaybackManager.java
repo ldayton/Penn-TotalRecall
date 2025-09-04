@@ -274,7 +274,7 @@ class FmodPlaybackManager {
      *
      * @return The current position in frames, or 0 if nothing is playing
      */
-    long getPosition() {
+    public long getPosition() {
         playbackLock.lock();
         try {
             if (!currentChannel.isPresent()) {

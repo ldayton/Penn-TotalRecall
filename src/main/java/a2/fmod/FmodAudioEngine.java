@@ -27,24 +27,41 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FmodAudioEngine implements AudioEngine {
 
-    private volatile FmodLibrary fmod;
-    private volatile Pointer system;
-
     private final ReentrantLock operationLock = new ReentrantLock();
     private final ExecutorService readExecutor = Executors.newCachedThreadPool();
-    private final FmodSystemStateManager systemStateManager = new FmodSystemStateManager();
-    private FmodSystemManager systemManager;
-    private FmodAudioLoadingManager loadingManager;
-    private FmodPlaybackManager playbackManager;
-    private FmodListenerManager listenerManager;
-    private FmodSampleReader sampleReader;
 
+    // Injected dependencies
+    private final FmodSystemManager systemManager;
+    private final FmodAudioLoadingManager loadingManager;
+    private final FmodPlaybackManager playbackManager;
+    private final FmodListenerManager listenerManager;
+    private final FmodSampleReader sampleReader;
+    private final FmodSystemStateManager systemStateManager;
+
+    // Cached references for performance
+    private final FmodLibrary fmod;
+    private final Pointer system;
+
+    // Runtime state
     private FmodPlaybackHandle currentPlayback;
     private FmodAudioHandle currentHandle;
     private Pointer currentSound;
 
     @Inject
-    public FmodAudioEngine() {
+    public FmodAudioEngine(
+            @NonNull FmodSystemManager systemManager,
+            @NonNull FmodAudioLoadingManager loadingManager,
+            @NonNull FmodPlaybackManager playbackManager,
+            @NonNull FmodListenerManager listenerManager,
+            @NonNull FmodSampleReader sampleReader,
+            @NonNull FmodSystemStateManager systemStateManager) {
+
+        this.systemManager = systemManager;
+        this.loadingManager = loadingManager;
+        this.playbackManager = playbackManager;
+        this.listenerManager = listenerManager;
+        this.sampleReader = sampleReader;
+        this.systemStateManager = systemStateManager;
 
         if (!systemStateManager.compareAndSetState(
                 FmodSystemStateManager.State.UNINITIALIZED,
@@ -54,14 +71,15 @@ public class FmodAudioEngine implements AudioEngine {
         }
         try {
             log.info("Initializing FMOD audio engine");
-            systemManager = new FmodSystemManager();
-            systemManager.initialize();
+
+            // Initialize the system if needed
+            if (!systemManager.isInitialized()) {
+                systemManager.initialize();
+            }
+
+            // Cache frequently used references
             this.fmod = systemManager.getFmodLibrary();
             this.system = systemManager.getSystem();
-            this.loadingManager = new FmodAudioLoadingManager(fmod, system, systemStateManager);
-            this.playbackManager = new FmodPlaybackManager(fmod, system);
-            this.listenerManager = new FmodListenerManager(fmod, system);
-            this.sampleReader = new FmodSampleReader(fmod, system);
 
             if (!systemStateManager.compareAndSetState(
                     FmodSystemStateManager.State.INITIALIZING,
@@ -541,12 +559,6 @@ public class FmodAudioEngine implements AudioEngine {
             if (systemManager != null) {
                 systemManager.shutdown();
             }
-            system = null;
-            fmod = null;
-            systemManager = null;
-            playbackManager = null;
-            listenerManager = null;
-            sampleReader = null;
             if (!systemStateManager.compareAndSetState(
                     FmodSystemStateManager.State.CLOSING, FmodSystemStateManager.State.CLOSED)) {
                 log.warn("Unexpected state during close transition");
