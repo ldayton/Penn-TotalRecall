@@ -113,7 +113,7 @@ public class FmodLibraryLoader {
     private final Object loadLock = new Object();
 
     @Inject
-    public AudioSystemManager(@NonNull AppConfig config, @NonNull Platform platform) {
+    public FmodLibraryLoader(@NonNull AppConfig config, @NonNull Platform platform) {
         this.config = config;
         this.platform = platform;
     }

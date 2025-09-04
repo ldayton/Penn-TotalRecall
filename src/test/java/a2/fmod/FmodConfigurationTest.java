@@ -2,8 +2,8 @@ package a2.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.fmod.AudioSystemManager.LibraryLoadingMode;
-import a2.fmod.AudioSystemManager.LibraryType;
+import a2.fmod.FmodLibraryLoader.LibraryLoadingMode;
+import a2.fmod.FmodLibraryLoader.LibraryType;
 import env.AppConfig;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;
@@ -14,12 +14,12 @@ class FmodConfigurationTest {
 
     private final Platform platform = new Platform();
     private final AppConfig config = new AppConfig();
-    private final AudioSystemManager audioManager = new AudioSystemManager(config, platform);
+    private final FmodLibraryLoader audioManager = new FmodLibraryLoader(config, platform);
 
     @Test
-    @DisplayName("AudioSystemManager provides correct FMOD library filenames for each platform")
+    @DisplayName("FmodLibraryLoader provides correct FMOD library filenames for each platform")
     void testFmodLibraryFilenames() {
-        assertNotNull(audioManager, "AudioSystemManager instance should not be null");
+        assertNotNull(audioManager, "FmodLibraryLoader instance should not be null");
 
         // Test that we get the correct filenames for each combination
         String standardMac = audioManager.getLibraryFilename(LibraryType.STANDARD);
