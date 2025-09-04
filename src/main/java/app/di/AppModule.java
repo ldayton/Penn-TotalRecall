@@ -7,7 +7,6 @@ import a2.fmod.FmodAudioEngine;
 import a2.fmod.FmodModule;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
-import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import env.AppConfig;
@@ -61,7 +60,6 @@ public class AppModule extends AbstractModule {
         bind(AppConfig.class).in(Singleton.class);
         bind(AudioSystemLoader.class).to(AudioSystemManager.class).in(Singleton.class);
         bind(DevModeFileAutoLoader.class).in(Singleton.class);
-        bind(FmodCore.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
         bind(Platform.class).in(Singleton.class);

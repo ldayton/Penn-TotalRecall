@@ -1,6 +1,7 @@
 package waveform;
 
-import audio.FmodCore;
+import a2.AudioEngine;
+import a2.AudioHandle;
 import java.awt.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,12 @@ public final class Waveform {
             new java.util.concurrent.ConcurrentHashMap<>();
 
     // Package-private constructor - only called by builder
-    Waveform(String audioFilePath, int timeResolution, int amplitudeResolution, FmodCore fmodCore) {
+    Waveform(
+            String audioFilePath,
+            int timeResolution,
+            int amplitudeResolution,
+            AudioEngine audioEngine,
+            AudioHandle audioHandle) {
         this.audioFilePath = audioFilePath;
         this.timeResolution = timeResolution;
         this.amplitudeResolution = amplitudeResolution;
@@ -31,15 +37,15 @@ public final class Waveform {
         this.pixelScaler = new PixelScaler();
         WaveformScaler waveformScaler = new WaveformScaler();
         this.renderer = new WaveformRenderer(waveformScaler);
-        this.processor = new WaveformProcessor(fmodCore, pixelScaler);
+        this.processor = new WaveformProcessor(audioEngine, audioHandle, pixelScaler);
 
         // Cache will be set later via initializeCache() when AudioState is available
         this.cache = null;
     }
 
     /** Creates a new WaveformBuilder for fluent configuration. */
-    public static WaveformBuilder builder(FmodCore fmodCore) {
-        return new WaveformBuilder(fmodCore);
+    public static WaveformBuilder builder(AudioEngine audioEngine, AudioHandle audioHandle) {
+        return new WaveformBuilder(audioEngine, audioHandle);
     }
 
     /** Renders a chunk of waveform as an image with consistent scaling across chunks. */

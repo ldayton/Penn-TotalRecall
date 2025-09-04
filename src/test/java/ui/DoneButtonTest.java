@@ -2,7 +2,7 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotation.MacOS;
+import annotations.MacOS;
 import app.di.GuiceBootstrap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

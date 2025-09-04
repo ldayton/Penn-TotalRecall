@@ -1,8 +1,7 @@
-package audio;
+package a2.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.fmod.AudioSystemManager;
 import a2.fmod.AudioSystemManager.LibraryLoadingMode;
 import a2.fmod.AudioSystemManager.LibraryType;
 import env.AppConfig;

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import annotation.Windowing;
+import annotations.Windowing;
 import app.di.GuiceBootstrap;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -26,7 +26,7 @@ import ui.MainFrame;
  * when the component is resized. Uses the dev auto-loader to load the sample audio file.
  */
 @Windowing
-@audio.AudioEngine
+@annotations.AudioEngine
 class WaveformDisplayTest {
 
     @BeforeEach

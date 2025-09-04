@@ -1,6 +1,8 @@
 package control;
 
-import audio.FmodCore;
+import a2.AudioEngine;
+import a2.AudioHandle;
+import a2.PlaybackHandle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -55,7 +57,9 @@ public class AudioIntegrationMode {
      * @return true if test passed, false if failed
      */
     private static boolean runTestInternal() {
-        FmodCore core = null;
+        AudioEngine audioEngine = null;
+        AudioHandle audioHandle = null;
+        PlaybackHandle playbackHandle = null;
         try {
             logger.warn("🧪 Audio Integration Test Starting");
             logger.info("=================================");
@@ -68,51 +72,65 @@ public class AudioIntegrationMode {
             }
             logger.info("✅ Test audio file found: {}", audioFile.getName());
 
-            // Test 1: FMOD library loading
-            logger.info("Testing FMOD library loading...");
+            // Test 1: Audio engine initialization
+            logger.info("Testing audio engine initialization...");
             // Initialize Guice for integration tests
             app.di.GuiceBootstrap.create();
-            core = app.di.GuiceBootstrap.getInjectedInstance(FmodCore.class);
-            if (core == null) {
-                logger.error("❌ FmodCore not available via dependency injection");
+            audioEngine = app.di.GuiceBootstrap.getInjectedInstance(AudioEngine.class);
+            if (audioEngine == null) {
+                logger.error("❌ AudioEngine not available via dependency injection");
                 logger.error("Integration tests require application to be initialized with Guice");
                 return false;
             }
-            logger.warn("✅ FMOD library loaded successfully");
+            logger.warn("✅ Audio engine initialized successfully");
 
-            // Test 2: Audio file loading and playback
-            logger.info("Testing audio file loading and playback...");
+            // Test 2: Audio file loading
+            logger.info("Testing audio file loading...");
+            audioHandle = audioEngine.loadAudio(TEST_AUDIO_FILE);
+            if (audioHandle == null) {
+                logger.error("❌ Failed to load audio file");
+                return false;
+            }
+            logger.warn("✅ Audio file loaded successfully");
 
-            // Try to start playback for 1 second (frames = duration_ms * sample_rate / 1000)
-            long playbackFrames = (long) PLAYBACK_DURATION_MS * EXPECTED_SAMPLE_RATE / 1000;
+            // Test 3: Get metadata
+            var metadata = audioEngine.getMetadata(audioHandle);
+            logger.info(
+                    "✅ Audio metadata: {} Hz, {} channels, {} frames",
+                    metadata.sampleRate(),
+                    metadata.channelCount(),
+                    metadata.frameCount());
 
-            int result = core.startPlayback(TEST_AUDIO_FILE, 0, playbackFrames);
-            if (result != 0) {
-                logger.error("❌ Failed to start playback. Error code: {}", result);
+            // Test 4: Start playback
+            logger.info("Testing audio playback...");
+            playbackHandle = audioEngine.play(audioHandle);
+            if (playbackHandle == null) {
+                logger.error("❌ Failed to start playback");
                 return false;
             }
             logger.warn("✅ Audio playback started successfully");
 
-            // Test 3: Verify playback is running
-            if (!core.playbackInProgress()) {
-                logger.error("❌ Playback not in progress after start");
+            // Test 5: Verify playback is running
+            if (!audioEngine.isPlaying(playbackHandle)) {
+                logger.error("❌ Playback not running after start");
                 return false;
             }
             logger.info("✅ Playback confirmed running");
 
-            // Test 4: Wait for playback duration
+            // Test 6: Wait for playback duration
             logger.info("Playing audio for {} ms...", PLAYBACK_DURATION_MS);
             Thread.sleep(PLAYBACK_DURATION_MS);
 
-            // Test 5: Stop playback and cleanup
+            // Test 7: Stop playback and cleanup
             logger.info("Testing playback stop and cleanup...");
-            core.stopPlayback();
+            audioEngine.stop(playbackHandle);
+            playbackHandle = null;
 
             // Brief wait for cleanup
             Thread.sleep(CLEANUP_WAIT_MS);
 
-            if (core.playbackInProgress()) {
-                logger.error("❌ Playback still in progress after stop");
+            if (audioEngine.isPlaying(playbackHandle)) {
+                logger.error("❌ Playback still running after stop");
                 return false;
             }
             logger.info("✅ Playback stopped successfully");
@@ -125,9 +143,12 @@ public class AudioIntegrationMode {
             return false;
         } finally {
             // Ensure cleanup even if test fails
-            if (core != null) {
+            if (audioEngine != null) {
                 try {
-                    core.stopPlayback();
+                    if (playbackHandle != null) {
+                        audioEngine.stop(playbackHandle);
+                    }
+                    audioEngine.close();
                 } catch (Exception ignored) {
                     // Ignore cleanup errors
                 }

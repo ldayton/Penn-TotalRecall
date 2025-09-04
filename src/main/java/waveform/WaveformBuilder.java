@@ -1,6 +1,7 @@
 package waveform;
 
-import audio.FmodCore;
+import a2.AudioEngine;
+import a2.AudioHandle;
 
 /** Fluent builder for creating Waveform instances with configurable parameters. */
 public final class WaveformBuilder {
@@ -10,10 +11,12 @@ public final class WaveformBuilder {
     private String audioFilePath;
     private int timeResolution = DEFAULT_TIME_RESOLUTION_PX_PER_SEC; // Default: 50 px/sec
     private int amplitudeResolution = DEFAULT_AMPLITUDE_RESOLUTION_PX; // Default: 300 px height
-    private final FmodCore fmodCore;
+    private final AudioEngine audioEngine;
+    private final AudioHandle audioHandle;
 
-    WaveformBuilder(FmodCore fmodCore) {
-        this.fmodCore = fmodCore;
+    WaveformBuilder(AudioEngine audioEngine, AudioHandle audioHandle) {
+        this.audioEngine = audioEngine;
+        this.audioHandle = audioHandle;
     }
 
     /** Sets the audio file path to visualize. */
@@ -40,6 +43,7 @@ public final class WaveformBuilder {
             throw new IllegalArgumentException("Audio file path is required");
         }
 
-        return new Waveform(audioFilePath, timeResolution, amplitudeResolution, fmodCore);
+        return new Waveform(
+                audioFilePath, timeResolution, amplitudeResolution, audioEngine, audioHandle);
     }
 }

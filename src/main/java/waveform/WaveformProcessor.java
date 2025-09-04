@@ -1,6 +1,8 @@
 package waveform;
 
-import audio.FmodCore;
+import a2.AudioBuffer;
+import a2.AudioEngine;
+import a2.AudioHandle;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import marytts.signalproc.filter.BandPassFilter;
@@ -11,13 +13,16 @@ import org.slf4j.LoggerFactory;
 public final class WaveformProcessor {
     private static final Logger logger = LoggerFactory.getLogger(WaveformProcessor.class);
 
-    private final FmodCore fmodCore;
+    private final AudioEngine audioEngine;
+    private final AudioHandle audioHandle;
     private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
     private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
-    public WaveformProcessor(FmodCore fmodCore, PixelScaler pixelScaler) {
-        this.fmodCore = fmodCore;
+    public WaveformProcessor(
+            AudioEngine audioEngine, AudioHandle audioHandle, PixelScaler pixelScaler) {
+        this.audioEngine = audioEngine;
+        this.audioHandle = audioHandle;
         this.pixelScaler = pixelScaler;
         this.filterCache = new ConcurrentHashMap<>();
     }
@@ -49,7 +54,7 @@ public final class WaveformProcessor {
         }
     }
 
-    /** Loads raw audio chunk from file using FMOD. */
+    /** Loads raw audio chunk from file using AudioEngine. */
     private AudioChunkData loadChunk(
             String audioFilePath,
             int chunkIndex,
@@ -57,16 +62,39 @@ public final class WaveformProcessor {
             double overlapSeconds)
             throws IOException {
 
-        FmodCore.ChunkData chunkData =
-                fmodCore.readAudioChunk(
-                        audioFilePath, chunkIndex, chunkDurationSeconds, overlapSeconds);
+        try {
+            // Get metadata to know the sample rate
+            var metadata = audioEngine.getMetadata(audioHandle);
+            int sampleRate = metadata.sampleRate();
 
-        return new AudioChunkData(
-                chunkData.samples, // FMOD already returns new array, no clone needed
-                chunkData.sampleRate,
-                0.0, // Peak calculated after processing
-                chunkData.totalFrames,
-                chunkData.overlapFrames);
+            // Calculate frame positions
+            long startFrame = (long) (chunkIndex * chunkDurationSeconds * sampleRate);
+            long frameCount = (long) (chunkDurationSeconds * sampleRate);
+            long overlapFrames = (long) (overlapSeconds * sampleRate);
+
+            // Adjust for overlap
+            if (chunkIndex > 0) {
+                startFrame -= overlapFrames;
+                frameCount += overlapFrames;
+            }
+
+            // Read samples synchronously
+            AudioBuffer buffer = audioEngine.readSamples(audioHandle, startFrame, frameCount).get();
+            try {
+                double[] samples = buffer.getSamples();
+
+                return new AudioChunkData(
+                        samples,
+                        sampleRate,
+                        0.0, // Peak calculated after processing
+                        (int) frameCount,
+                        (int) overlapFrames);
+            } finally {
+                buffer.close();
+            }
+        } catch (Exception e) {
+            throw new IOException("Failed to read audio chunk: " + e.getMessage(), e);
+        }
     }
 
     /** Applies signal processing to raw audio data. */

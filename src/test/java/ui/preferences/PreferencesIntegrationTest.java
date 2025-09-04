@@ -2,7 +2,7 @@ package ui.preferences;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotation.Windowing;
+import annotations.Windowing;
 import app.di.GuiceBootstrap;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;

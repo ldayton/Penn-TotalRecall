@@ -2,7 +2,7 @@ package app.di;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotation.Windowing;
+import annotations.Windowing;
 import app.Main;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;

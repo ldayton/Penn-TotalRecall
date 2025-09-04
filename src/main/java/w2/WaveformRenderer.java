@@ -1,6 +1,7 @@
 package w2;
 
-import audio.FmodCore;
+import a2.AudioEngine;
+import a2.AudioHandle;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -43,7 +44,8 @@ class WaveformRenderer {
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
     private final String audioFilePath;
-    private final FmodCore fmodCore;
+    private final AudioEngine audioEngine;
+    private final AudioHandle audioHandle;
     private final WaveformProcessor processor;
     private final int sampleRate;
 
@@ -79,14 +81,16 @@ class WaveformRenderer {
             String audioFilePath,
             WaveformSegmentCache cache,
             ExecutorService renderPool,
-            FmodCore fmodCore,
+            AudioEngine audioEngine,
+            AudioHandle audioHandle,
             int sampleRate) {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
         this.renderPool = renderPool;
-        this.fmodCore = fmodCore;
+        this.audioEngine = audioEngine;
+        this.audioHandle = audioHandle;
         this.sampleRate = sampleRate;
-        this.processor = new WaveformProcessor(fmodCore, new PixelScaler());
+        this.processor = new WaveformProcessor(audioEngine, audioHandle, new PixelScaler());
     }
 
     /** Fill cache for viewport with priority-based rendering. */

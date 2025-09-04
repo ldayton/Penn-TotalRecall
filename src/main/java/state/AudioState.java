@@ -6,7 +6,6 @@ import a2.AudioMetadata;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import a2.PlaybackState;
-import audio.FmodCore;
 import control.AudioCalculator;
 import control.AudioPlaybackCoordinator;
 import env.Constants;
@@ -65,7 +64,6 @@ public class AudioState implements PlaybackListener {
     private final String badStateString =
             "ERROR: potential violation of guarantee that either calculator and player are both"
                     + " null, or neither is";
-    private final FmodCore fmodCore;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private final ProgramName programName;
@@ -73,20 +71,14 @@ public class AudioState implements PlaybackListener {
 
     @Inject
     public AudioState(
-            FmodCore fmodCore,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
             ProgramName programName,
             AudioEngine audioEngine) {
-        this.fmodCore = fmodCore;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.programName = programName;
         this.injectedAudioEngine = audioEngine;
-    }
-
-    public FmodCore getFmodCore() {
-        return fmodCore;
     }
 
     /**
@@ -521,5 +513,18 @@ public class AudioState implements PlaybackListener {
             throw new IllegalStateException("No audio loaded");
         }
         return audioEngine.getMetadata(currentAudioHandle);
+    }
+
+    /**
+     * Get the current audio handle.
+     *
+     * @return AudioHandle for the current audio file
+     * @throws IllegalStateException if no audio is loaded
+     */
+    public AudioHandle getCurrentAudioHandle() {
+        if (currentAudioHandle == null) {
+            throw new IllegalStateException("No audio loaded");
+        }
+        return currentAudioHandle;
     }
 }

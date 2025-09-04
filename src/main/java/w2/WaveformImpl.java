@@ -1,6 +1,8 @@
 package w2;
 
-import audio.FmodCore;
+import a2.AudioEngine;
+import a2.AudioHandle;
+import a2.AudioMetadata;
 import java.awt.Image;
 import java.util.concurrent.*;
 
@@ -11,11 +13,13 @@ class WaveformImpl implements Waveform {
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
     private final String audioFilePath;
-    private final FmodCore fmodCore;
+    private final AudioEngine audioEngine;
+    private final AudioHandle audioHandle;
 
-    WaveformImpl(String audioFilePath, FmodCore fmodCore) {
+    WaveformImpl(String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
         this.audioFilePath = audioFilePath;
-        this.fmodCore = fmodCore;
+        this.audioEngine = audioEngine;
+        this.audioHandle = audioHandle;
 
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -41,10 +45,12 @@ class WaveformImpl implements Waveform {
 
         this.cache = new WaveformSegmentCache(defaultViewport);
 
-        // TODO Get sample rate from audio file for proper rendering
-        int sampleRate = 44100; // Default, should get from FMOD
+        // Get sample rate from audio metadata
+        AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
+        int sampleRate = metadata.sampleRate();
         this.renderer =
-                new WaveformRenderer(audioFilePath, cache, renderPool, fmodCore, sampleRate);
+                new WaveformRenderer(
+                        audioFilePath, cache, renderPool, audioEngine, audioHandle, sampleRate);
     }
 
     @Override
@@ -70,7 +76,8 @@ class WaveformImpl implements Waveform {
     }
 
     /** Factory method to create waveform for audio file. */
-    public static Waveform create(String audioFilePath, FmodCore fmodCore) {
-        return new WaveformImpl(audioFilePath, fmodCore);
+    public static Waveform create(
+            String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
+        return new WaveformImpl(audioFilePath, audioEngine, audioHandle);
     }
 }
