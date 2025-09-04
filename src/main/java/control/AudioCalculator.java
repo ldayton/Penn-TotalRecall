@@ -65,7 +65,8 @@ public class AudioCalculator {
         // Use FMOD to detect format information
         AppConfig appConfig = new AppConfig();
         Platform platform = new Platform();
-        audio.AudioSystemManager audioManager = new audio.AudioSystemManager(appConfig, platform);
+        a2.fmod.AudioSystemManager audioManager =
+                new a2.fmod.AudioSystemManager(appConfig, platform);
         FmodCore fmodCore = new FmodCore(audioManager);
         FmodAudioFormatDetector detector = new FmodAudioFormatDetector(fmodCore);
 

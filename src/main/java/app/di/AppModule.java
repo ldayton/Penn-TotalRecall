@@ -1,12 +1,12 @@
 package app.di;
 
 import a2.AudioEngine;
+import a2.fmod.AudioSystemLoader;
+import a2.fmod.AudioSystemManager;
 import a2.fmod.FmodAudioEngine;
 import a2.fmod.FmodModule;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
-import audio.AudioSystemLoader;
-import audio.AudioSystemManager;
 import audio.FmodCore;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

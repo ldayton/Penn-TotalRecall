@@ -2,7 +2,7 @@ package waveform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.AudioSystemManager;
+import a2.fmod.AudioSystemManager;
 import audio.FmodCore;
 import com.github.romankh3.image.comparison.ImageComparison;
 import com.github.romankh3.image.comparison.model.ImageComparisonResult;

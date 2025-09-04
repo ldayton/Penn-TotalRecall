@@ -2,7 +2,7 @@ package app.di;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.AudioSystemLoader;
+import a2.fmod.AudioSystemLoader;
 import audio.FmodCore;
 import env.AppConfig;
 import env.KeyboardManager;

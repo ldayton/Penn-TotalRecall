@@ -1,4 +1,4 @@
-package audio;
+package a2.fmod;
 
 import com.sun.jna.Library;
 import lombok.NonNull;

@@ -2,8 +2,9 @@ package audio;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.AudioSystemManager.LibraryLoadingMode;
-import audio.AudioSystemManager.LibraryType;
+import a2.fmod.AudioSystemManager;
+import a2.fmod.AudioSystemManager.LibraryLoadingMode;
+import a2.fmod.AudioSystemManager.LibraryType;
 import env.AppConfig;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;

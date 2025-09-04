@@ -1,7 +1,7 @@
 package integration;
 
-import audio.AudioSystemManager;
-import audio.AudioSystemManager.LibraryLoadingMode;
+import a2.fmod.AudioSystemManager;
+import a2.fmod.AudioSystemManager.LibraryLoadingMode;
 import audio.FmodCore;
 import env.AppConfig;
 import org.slf4j.Logger;
