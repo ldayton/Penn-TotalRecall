@@ -12,7 +12,7 @@ import actions.Last200PlusMoveAction;
 import actions.OpenWordpoolAction;
 import actions.PlayPauseAction;
 import actions.PreferencesAction;
-import actions.ReplayLast200MillisAction;
+// import actions.ReplayLast200MillisAction; // Disabled - depends on SelectionOverlay
 import actions.ReplayLastPositionAction;
 import actions.ReturnToLastPositionAction;
 import actions.StopAction;
@@ -67,7 +67,7 @@ public class AppMenuBar extends JMenuBar {
     private final PreferencesAction preferencesAction;
     private final PlayPauseAction playPauseAction;
     private final StopAction stopAction;
-    private final ReplayLast200MillisAction replayLast200MillisAction;
+    // private final ReplayLast200MillisAction replayLast200MillisAction; // Disabled
     private final ReturnToLastPositionAction returnToLastPositionAction;
     private final ReplayLastPositionAction replayLastPositionAction;
     private final DoneAction doneAction;
@@ -79,8 +79,8 @@ public class AppMenuBar extends JMenuBar {
     private final AnnotateRegularAction annotateRegularAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
     private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    private final actions.ZoomInAction zoomInAction;
-    private final actions.ZoomOutAction zoomOutAction;
+    // private final actions.ZoomInAction zoomInAction; // Disabled
+    // private final actions.ZoomOutAction zoomOutAction; // Disabled
     private final actions.OpenAudioFileAction openAudioFileAction;
     private final actions.OpenAudioFolderAction openAudioFolderAction;
     private final actions.SeekAction seekAction;
@@ -98,7 +98,7 @@ public class AppMenuBar extends JMenuBar {
             PreferencesAction preferencesAction,
             PlayPauseAction playPauseAction,
             StopAction stopAction,
-            ReplayLast200MillisAction replayLast200MillisAction,
+            // ReplayLast200MillisAction replayLast200MillisAction, // Disabled
             ReturnToLastPositionAction returnToLastPositionAction,
             ReplayLastPositionAction replayLastPositionAction,
             DoneAction doneAction,
@@ -110,8 +110,8 @@ public class AppMenuBar extends JMenuBar {
             AnnotateRegularAction annotateRegularAction,
             AnnotateIntrusionAction annotateIntrusionAction,
             actions.ToggleAnnotationsAction toggleAnnotationsAction,
-            actions.ZoomInAction zoomInAction,
-            actions.ZoomOutAction zoomOutAction,
+            // actions.ZoomInAction zoomInAction, // Disabled
+            // actions.ZoomOutAction zoomOutAction, // Disabled
             actions.OpenAudioFileAction openAudioFileAction,
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
@@ -122,7 +122,7 @@ public class AppMenuBar extends JMenuBar {
         this.preferencesAction = preferencesAction;
         this.playPauseAction = playPauseAction;
         this.stopAction = stopAction;
-        this.replayLast200MillisAction = replayLast200MillisAction;
+        // this.replayLast200MillisAction = replayLast200MillisAction; // Disabled
         this.returnToLastPositionAction = returnToLastPositionAction;
         this.replayLastPositionAction = replayLastPositionAction;
         this.doneAction = doneAction;
@@ -134,8 +134,8 @@ public class AppMenuBar extends JMenuBar {
         this.annotateRegularAction = annotateRegularAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
         this.toggleAnnotationsAction = toggleAnnotationsAction;
-        this.zoomInAction = zoomInAction;
-        this.zoomOutAction = zoomOutAction;
+        // this.zoomInAction = zoomInAction; // Disabled
+        // this.zoomOutAction = zoomOutAction; // Disabled
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
         this.seekAction = seekAction;
@@ -190,7 +190,7 @@ public class AppMenuBar extends JMenuBar {
                 });
 
         JMenuItem jmiStop = new JMenuItem(stopAction);
-        JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
+        // JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction); // Disabled
         JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
@@ -232,7 +232,7 @@ public class AppMenuBar extends JMenuBar {
 
         jmAudio.add(jmiPlayPause);
         jmAudio.add(jmiStop);
-        jmAudio.add(jmiReplay);
+        // jmAudio.add(jmiReplay); // Disabled
         jmAudio.add(jmiLastPos);
         jmAudio.add(jmiReplayLast);
         jmAudio.add(jmSeek);
@@ -256,10 +256,10 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the View menu, which controls aspects of the waveform's appearance. */
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn = new JMenuItem(zoomInAction);
-        JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction);
-        jmView.add(jmiZoomIn);
-        jmView.add(jmiZoomOut);
+        // JMenuItem jmiZoomIn = new JMenuItem(zoomInAction); // Disabled
+        // JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction); // Disabled
+        // jmView.add(jmiZoomIn);
+        // jmView.add(jmiZoomOut);
         add(jmView);
     }
 
@@ -298,7 +298,7 @@ public class AppMenuBar extends JMenuBar {
             instance.exitAction.update();
             instance.playPauseAction.update();
             instance.stopAction.update();
-            instance.replayLast200MillisAction.update();
+            // instance.replayLast200MillisAction.update(); // Disabled
             instance.returnToLastPositionAction.update();
             instance.replayLastPositionAction.update();
             instance.aboutAction.update();
@@ -312,8 +312,8 @@ public class AppMenuBar extends JMenuBar {
             instance.annotateRegularAction.update();
             instance.annotateIntrusionAction.update();
             instance.toggleAnnotationsAction.update();
-            instance.zoomInAction.update();
-            instance.zoomOutAction.update();
+            // instance.zoomInAction.update();
+            // instance.zoomOutAction.update();
             instance.openAudioFileAction.update();
             instance.openAudioFolderAction.update();
             instance.seekAction.update();

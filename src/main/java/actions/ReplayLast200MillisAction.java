@@ -4,7 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import state.AudioState;
-import ui.waveform.SelectionOverlay;
+
+// import ui.waveform.SelectionOverlay;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been
@@ -16,13 +17,16 @@ public class ReplayLast200MillisAction extends BaseAction {
     public static final int duration = 200;
 
     private final AudioState audioState;
-    private final SelectionOverlay glassPane;
+
+    // private final SelectionOverlay glassPane;
 
     @Inject
-    public ReplayLast200MillisAction(AudioState audioState, SelectionOverlay glassPane) {
+    public ReplayLast200MillisAction(AudioState audioState
+            // SelectionOverlay glassPane
+            ) {
         super("Replay Last 200ms", "Replay the last 200 milliseconds of audio");
         this.audioState = audioState;
-        this.glassPane = glassPane;
+        // this.glassPane = glassPane;
     }
 
     /**
@@ -39,7 +43,7 @@ public class ReplayLast200MillisAction extends BaseAction {
         long numFrames = audioState.getCalculator().millisToFrames(duration);
 
         audioState.playInterval(curFrame - numFrames, curFrame - 1);
-        glassPane.flashRectangle();
+        // glassPane.flashRectangle();
     }
 
     /**

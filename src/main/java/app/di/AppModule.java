@@ -31,16 +31,13 @@ import ui.DialogService;
 import ui.DoneButton;
 import ui.MainFrame;
 import ui.MainWindowAccess;
+import ui.WaveformCanvas;
 import ui.WindowLayoutPersistence;
 import ui.annotations.AnnotationDisplay;
 import ui.annotations.AnnotationTable;
 import ui.audiofiles.AudioFileDisplay;
 import ui.audiofiles.AudioFileList;
 import ui.preferences.PreferencesFrame;
-import ui.waveform.SelectionOverlay;
-import ui.waveform.WaveformCoordinateSystem;
-import ui.waveform.WaveformDisplay;
-import ui.waveform.WaveformMouseSetup;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolList;
 import ui.wordpool.WordpoolTextField;
@@ -83,15 +80,8 @@ public class AppModule extends AbstractModule {
         bind(ContentSplitPane.class).in(Singleton.class);
         bind(ControlPanel.class).in(Singleton.class);
         bind(DoneButton.class).in(Singleton.class);
-        bind(SelectionOverlay.class).in(Singleton.class);
         bind(PreferencesFrame.class).in(Singleton.class);
-        bind(WaveformDisplay.class).in(Singleton.class);
-        bind(WaveformCoordinateSystem.class).to(WaveformDisplay.class);
-        bind(WaveformMouseSetup.class).in(Singleton.class);
-
-        // RenderSurface will be implemented by WaveformDisplay (when it's updated)
-        // For now, create a provider that throws an exception
-        // bind(RenderSurface.class).to(WaveformDisplay.class);
+        bind(WaveformCanvas.class).in(Singleton.class);
         bind(AudioFileDisplay.class).in(Singleton.class);
         bind(AnnotationDisplay.class).in(Singleton.class);
         bind(WordpoolDisplay.class).in(Singleton.class);

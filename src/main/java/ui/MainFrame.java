@@ -24,7 +24,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import state.PreferencesManager;
-import ui.waveform.SelectionOverlay;
 import ui.wordpool.WordpoolDisplay;
 
 /**
@@ -45,7 +44,6 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     public MainFrame(
             LookAndFeelManager lookAndFeelManager,
             ContentSplitPane mySplitPane,
-            SelectionOverlay myGlassPane,
             AppMenuBar myMenu,
             ExitAction exitAction,
             EventDispatchBus eventBus,
@@ -57,8 +55,6 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         this.programName = programName;
         this.programVersion = programVersion;
         setTitle(getDefaultFrameTitle());
-        setGlassPane(myGlassPane);
-        myGlassPane.setVisible(true);
         setJMenuBar(myMenu);
 
         // force handling by  WindowListener below

@@ -8,12 +8,13 @@ import jakarta.inject.Singleton;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import ui.audiofiles.AudioFile;
 import w2.Waveform;
 import w2.WaveformPainter;
 import w2.WaveformViewport;
 
 /**
- * Manages the waveform session, coordinating rendering based on audio state. Replaces the
+ * Manages thei waveform session, coordinating rendering based on audio state. Replaces the
  * monolithic WaveformDisplay with clean separation of concerns.
  */
 @Singleton
@@ -70,11 +71,28 @@ public class WaveformSessionManager {
                 log.debug("Started waveform repaint timer");
             }
 
-            case PAUSED, READY -> {
+            case PAUSED -> {
                 // Stop repaint timer but keep display
                 painter.stop();
                 requestRepaint(); // One final paint to show stopped state
                 log.debug("Stopped waveform repaint timer");
+            }
+
+            case READY -> {
+                // Stop repaint timer
+                painter.stop();
+
+                // If transitioning from LOADING to READY, we need a waveform
+                if (event.getPreviousState() == AudioSessionStateMachine.State.LOADING
+                        && event.getContext() instanceof AudioFile) {
+                    AudioFile audioFile = (AudioFile) event.getContext();
+                    log.info("Audio file ready, waveform needed for: {}", audioFile.getName());
+                    // TODO: Waveform creation will be handled by a separate component
+                    // that has access to AudioEngine and AudioHandle
+                }
+
+                requestRepaint();
+                log.debug("Ready state");
             }
 
             case NO_AUDIO -> {

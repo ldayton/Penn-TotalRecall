@@ -32,7 +32,7 @@ public class AnnotateRegularAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(AnnotateRegularAction.class);
 
     private final AudioState audioState;
-    private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
+    // private final DeleteSelectedAnnotationAction deleteSelectedAnnotationAction;
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
     private final ProgramVersion programVersion;
@@ -41,13 +41,13 @@ public class AnnotateRegularAction extends BaseAction {
     @Inject
     public AnnotateRegularAction(
             AudioState audioState,
-            DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
+            // DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
             EventDispatchBus eventBus,
             WordpoolDisplay wordpoolDisplay,
             ProgramVersion programVersion) {
         super("Annotate Regular", "Commit a regular annotation");
         this.audioState = audioState;
-        this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
+        // this.deleteSelectedAnnotationAction = deleteSelectedAnnotationAction;
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.programVersion = programVersion;
@@ -111,13 +111,13 @@ public class AnnotateRegularAction extends BaseAction {
 
                 // check if we are annotating the same position as an existing annotation, if so
                 // delete
-                deleteSelectedAnnotationAction.actionPerformed(
-                        new ActionEvent(
-                                wordpoolDisplay,
-                                ActionEvent.ACTION_PERFORMED,
-                                null,
-                                System.currentTimeMillis(),
-                                0));
+                // deleteSelectedAnnotationAction.actionPerformed(
+                //         new ActionEvent(
+                //                 wordpoolDisplay,
+                //                 ActionEvent.ACTION_PERFORMED,
+                //                 null,
+                //                 System.currentTimeMillis(),
+                //                 0));
                 eventBus.publish(
                         new UIUpdateRequestedEvent(
                                 UIUpdateRequestedEvent.Component.WAVEFORM_DISPLAY));

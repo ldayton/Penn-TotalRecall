@@ -2,7 +2,7 @@ package ui;
 
 import actions.ActionsManager;
 import actions.AnnotateIntrusionAction;
-import actions.DeleteSelectedAnnotationAction;
+// import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import actions.PlayPauseAction;
 import events.EventDispatchBus;
 import events.LayoutUpdateRequestedEvent;
@@ -14,7 +14,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import ui.waveform.WaveformDisplay;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.
@@ -32,13 +31,13 @@ public class ContentSplitPane extends JSplitPane {
     @Inject
     public ContentSplitPane(
             ControlPanel controlPanel,
-            WaveformDisplay waveformDisplay,
+            WaveformCanvas waveformCanvas,
             ActionsManager actionsManager,
             PlayPauseAction playPauseAction,
-            DeleteSelectedAnnotationAction deleteSelectedAnnotationAction,
+            // DeleteSelectedAnnotationAction deleteSelectedAnnotationAction, // Disabled
             AnnotateIntrusionAction annotateIntrusionAction,
             EventDispatchBus eventBus) {
-        super(JSplitPane.VERTICAL_SPLIT, waveformDisplay, controlPanel);
+        super(JSplitPane.VERTICAL_SPLIT, waveformCanvas, controlPanel);
         setOneTouchExpandable(
                 false); // we don't want to make it easy to totally lost view of one of the
         // components, both are essential
@@ -56,13 +55,14 @@ public class ContentSplitPane extends JSplitPane {
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "none");
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "none");
 
-        InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        String DELETE_ACTION_KEY = "delete action";
-        deleteActionMap.put(
-                actionsManager.lookup(deleteSelectedAnnotationAction, null), DELETE_ACTION_KEY);
-        getActionMap().put(DELETE_ACTION_KEY, deleteSelectedAnnotationAction);
-        actionsManager.registerInputMap(
-                deleteSelectedAnnotationAction, null, DELETE_ACTION_KEY, deleteActionMap);
+        // DeleteSelectedAnnotationAction disabled
+        // InputMap deleteActionMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        // String DELETE_ACTION_KEY = "delete action";
+        // deleteActionMap.put(
+        //         actionsManager.lookup(deleteSelectedAnnotationAction, null), DELETE_ACTION_KEY);
+        // getActionMap().put(DELETE_ACTION_KEY, deleteSelectedAnnotationAction);
+        // actionsManager.registerInputMap(
+        //         deleteSelectedAnnotationAction, null, DELETE_ACTION_KEY, deleteActionMap);
 
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");

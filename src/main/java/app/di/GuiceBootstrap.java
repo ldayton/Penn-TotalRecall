@@ -72,8 +72,8 @@ public class GuiceBootstrap {
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
         var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
 
-        // Initialize waveform components (this triggers creation of mouse listeners)
-        globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);
+        // WaveformMouseSetup disabled during refactoring
+        // globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);
 
         // Initialize DevModeFileAutoLoader (subscribes to events)
         globalInjector.getInstance(DevModeFileAutoLoader.class);
@@ -192,9 +192,10 @@ public class GuiceBootstrap {
         var preferencesAction = globalInjector.getInstance(actions.PreferencesAction.class);
         actionsManager.registerAction(preferencesAction);
 
-        var replayLast200MillisAction =
-                globalInjector.getInstance(actions.ReplayLast200MillisAction.class);
-        actionsManager.registerAction(replayLast200MillisAction);
+        // ReplayLast200MillisAction disabled - depends on SelectionOverlay
+        // var replayLast200MillisAction =
+        //         globalInjector.getInstance(actions.ReplayLast200MillisAction.class);
+        // actionsManager.registerAction(replayLast200MillisAction);
 
         var returnToLastPositionAction =
                 globalInjector.getInstance(actions.ReturnToLastPositionAction.class);
@@ -230,9 +231,9 @@ public class GuiceBootstrap {
                 globalInjector.getInstance(actions.DeleteAnnotationAction.class);
         actionsManager.registerAction(deleteAnnotationAction);
 
-        var deleteSelectedAnnotationAction =
-                globalInjector.getInstance(actions.DeleteSelectedAnnotationAction.class);
-        actionsManager.registerAction(deleteSelectedAnnotationAction);
+        // var deleteSelectedAnnotationAction =
+        //         globalInjector.getInstance(actions.DeleteSelectedAnnotationAction.class);
+        // actionsManager.registerAction(deleteSelectedAnnotationAction);
 
         var jumpToAnnotationAction =
                 globalInjector.getInstance(actions.JumpToAnnotationAction.class);
@@ -264,10 +265,10 @@ public class GuiceBootstrap {
         var last200PlusMoveAction = globalInjector.getInstance(actions.Last200PlusMoveAction.class);
         actionsManager.registerAction(last200PlusMoveAction);
 
-        var zoomInAction = globalInjector.getInstance(actions.ZoomInAction.class);
-        actionsManager.registerAction(zoomInAction);
-        var zoomOutAction = globalInjector.getInstance(actions.ZoomOutAction.class);
-        actionsManager.registerAction(zoomOutAction);
+        // var zoomInAction = globalInjector.getInstance(actions.ZoomInAction.class);
+        // actionsManager.registerAction(zoomInAction);
+        // var zoomOutAction = globalInjector.getInstance(actions.ZoomOutAction.class);
+        // actionsManager.registerAction(zoomOutAction);
     }
 
     /** Initializes and starts the GUI application. */
