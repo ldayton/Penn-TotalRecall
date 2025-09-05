@@ -96,7 +96,7 @@ public class AppModule extends AbstractModule {
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
 
-        bind(AudioEngine.class).to(FmodAudioEngine.class);
+        bind(AudioEngine.class).to(FmodAudioEngine.class).in(Singleton.class);
     }
 
     @Provides

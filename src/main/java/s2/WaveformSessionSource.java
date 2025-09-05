@@ -1,5 +1,6 @@
 package s2;
 
+import a2.AudioHandle;
 import java.util.Optional;
 
 /**
@@ -25,4 +26,10 @@ public interface WaveformSessionSource {
 
     /** Get any error message to display. */
     Optional<String> getErrorMessage();
+
+    /** Get the current audio handle for waveform rendering. */
+    Optional<AudioHandle> getCurrentAudioHandle();
+
+    /** Get the current audio file path. */
+    Optional<String> getCurrentAudioFilePath();
 }

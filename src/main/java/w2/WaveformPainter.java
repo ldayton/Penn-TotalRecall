@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
 import lombok.NonNull;
 
@@ -69,12 +72,18 @@ public class WaveformPainter {
      * whether and what to paint.
      */
     public void suggestPaint() {
-        if (viewport == null || dataSource == null) {
+        if (viewport == null) {
+            System.out.println("WaveformPainter: No viewport set");
+            return;
+        }
+        if (dataSource == null) {
+            System.out.println("WaveformPainter: No data source set");
             return;
         }
 
         Graphics2D g = viewport.getPaintGraphics();
         if (g == null) {
+            System.out.println("WaveformPainter: No graphics context");
             return;
         }
 
@@ -93,13 +102,17 @@ public class WaveformPainter {
         }
 
         Rectangle bounds = viewport.getBounds();
+        System.out.println("WaveformPainter: Bounds = " + bounds);
+
         TimeRange timeRange = dataSource.getTimeRange();
 
         if (timeRange == null) {
             // No audio loaded
+            System.out.println("WaveformPainter: No time range, painting empty state");
             paintEmptyState(g, bounds);
             return;
         }
+        System.out.println("WaveformPainter: Time range = " + timeRange);
 
         // Construct ViewportContext from the pieces
         ViewportContext context =
@@ -119,10 +132,26 @@ public class WaveformPainter {
             return;
         }
 
-        // TODO: Get rendered image from WaveformRenderer
-        // For now, just clear and draw cursor
-        clearBackground(g, bounds);
+        // Get rendered waveform image
+        try {
+            CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
+            Image waveformImage =
+                    imageFuture.get(100, TimeUnit.MILLISECONDS); // Quick timeout for UI
 
+            if (waveformImage != null) {
+                paintWaveform(g, bounds, waveformImage);
+            } else {
+                clearBackground(g, bounds);
+            }
+        } catch (TimeoutException e) {
+            // Still rendering, show previous or loading
+            paintLoadingIndicator(g, bounds);
+        } catch (Exception e) {
+            // Error rendering
+            clearBackground(g, bounds);
+        }
+
+        // Paint cursor on top if playing
         if (dataSource.isPlaying()) {
             paintPlaybackCursor(
                     g,

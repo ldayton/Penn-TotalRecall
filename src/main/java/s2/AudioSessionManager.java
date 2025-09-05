@@ -266,6 +266,16 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         return Optional.ofNullable(errorMessage);
     }
 
+    @Override
+    public Optional<AudioHandle> getCurrentAudioHandle() {
+        return currentAudioHandle;
+    }
+
+    @Override
+    public Optional<String> getCurrentAudioFilePath() {
+        return currentFile.map(f -> f.getAbsolutePath());
+    }
+
     /**
      * Stop playback and transition to READY state. Used when user explicitly stops playback (not
      * pause).

@@ -2,40 +2,75 @@ package w2;
 
 import a2.AudioEngine;
 import a2.AudioHandle;
+import a2.AudioMetadata;
 import java.awt.Image;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
 import lombok.NonNull;
 
 /**
- * Async viewport-aware waveform renderer.
- *
- * <p>Based on industry research: DAW waveform rendering must be async with timeout/cancellation to
- * prevent UI blocking and enable user control over long-running operations.
- *
- * <p>Thread-safe.
+ * Viewport-aware waveform renderer with segment caching. Thread-safe implementation that manages
+ * parallel rendering.
  */
-public interface Waveform {
+public class Waveform {
 
-    /**
-     * Render waveform for viewport context asynchronously.
-     *
-     * <p>Returns immediately with CompletableFuture for timeout/cancellation control:
-     *
-     * <ul>
-     *   <li>Timeout: {@code future.orTimeout(30, TimeUnit.SECONDS)}
-     *   <li>Cancellation: {@code future.cancel(true)}
-     *   <li>Chaining: {@code future.thenApply(image -> ...)}
-     * </ul>
-     *
-     * <p>Implementation can use viewport info for intelligent caching decisions.
-     */
-    CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport);
+    private final WaveformRenderer renderer;
+    private final WaveformSegmentCache cache;
+    private final ExecutorService renderPool;
 
-    /** Create waveform for audio file. */
-    static Waveform forAudioFile(
+    public Waveform(
             @NonNull String audioFilePath,
             @NonNull AudioEngine audioEngine,
             @NonNull AudioHandle audioHandle) {
-        return WaveformImpl.create(audioFilePath, audioEngine, audioHandle);
+        // Create thread pool for rendering (leave 1 core for UI)
+        int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+        this.renderPool =
+                Executors.newFixedThreadPool(
+                        threads,
+                        new ThreadFactory() {
+                            private int counter = 0;
+
+                            @Override
+                            public Thread newThread(@NonNull Runnable r) {
+                                Thread t = new Thread(r);
+                                t.setName("WaveformRenderer-" + counter++);
+                                t.setDaemon(true);
+                                return t;
+                            }
+                        });
+
+        // Initialize with default viewport (will be updated on first render)
+        ViewportContext defaultViewport =
+                new ViewportContext(
+                        0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+
+        this.cache = new WaveformSegmentCache(defaultViewport);
+
+        // Get sample rate from audio metadata
+        AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
+        int sampleRate = metadata.sampleRate();
+        this.renderer =
+                new WaveformRenderer(
+                        audioFilePath, cache, renderPool, audioEngine, audioHandle, sampleRate);
+    }
+
+    public CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
+        return renderer.renderViewport(viewport);
+    }
+
+    /** Shutdown the renderer and release resources. */
+    public void shutdown() {
+        // Cancel all pending renders
+        cache.clear();
+
+        // Shutdown thread pool
+        renderPool.shutdown();
+        try {
+            if (!renderPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                renderPool.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            renderPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }

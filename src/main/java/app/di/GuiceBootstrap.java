@@ -78,6 +78,9 @@ public class GuiceBootstrap {
         // Initialize DevModeFileAutoLoader (subscribes to events)
         globalInjector.getInstance(DevModeFileAutoLoader.class);
 
+        // Initialize WaveformSessionManager (sets up painter data source)
+        globalInjector.getInstance(s2.WaveformSessionManager.class);
+
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Register all UpdatingAction instances with ActionsManager

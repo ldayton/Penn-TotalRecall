@@ -1,5 +1,8 @@
 package s2;
 
+import a2.AudioEngine;
+import a2.AudioHandle;
+import com.google.inject.Provider;
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
@@ -8,7 +11,6 @@ import jakarta.inject.Singleton;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import ui.audiofiles.AudioFile;
 import w2.TimeRange;
 import w2.Waveform;
 import w2.WaveformPainter;
@@ -27,20 +29,28 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
 
     private final WaveformSessionSource sessionSource;
     private final WaveformPainter painter;
+    private final Provider<AudioEngine> audioEngineProvider;
 
     private Optional<Waveform> currentWaveform = Optional.empty();
     private Optional<WaveformViewport> viewport = Optional.empty();
+    private Optional<AudioEngine> audioEngine = Optional.empty();
     private double viewStartSeconds = 0.0; // View start position
 
     @Inject
     public WaveformSessionManager(
             @NonNull WaveformSessionSource sessionSource,
             @NonNull WaveformPainter painter,
-            @NonNull EventDispatchBus eventBus) {
+            @NonNull Provider<AudioEngine> audioEngineProvider,
+            @NonNull EventDispatchBus eventBus,
+            @NonNull ui.WaveformCanvas canvas) {
         this.sessionSource = sessionSource;
         this.painter = painter;
+        this.audioEngineProvider = audioEngineProvider;
         painter.setDataSource(this); // We are the data source
         eventBus.subscribe(this);
+
+        // Set the canvas as our viewport
+        setViewport(canvas);
     }
 
     /** Set the viewport that this coordinator manages. */
@@ -90,12 +100,8 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
                 painter.stop();
 
                 // If transitioning from LOADING to READY, we need a waveform
-                if (event.getPreviousState() == AudioSessionStateMachine.State.LOADING
-                        && event.getContext() instanceof AudioFile) {
-                    AudioFile audioFile = (AudioFile) event.getContext();
-                    log.info("Audio file ready, waveform needed for: {}", audioFile.getName());
-                    // TODO: Waveform creation will be handled by a separate component
-                    // that has access to AudioEngine and AudioHandle
+                if (event.getPreviousState() == AudioSessionStateMachine.State.LOADING) {
+                    createWaveformForCurrentAudio();
                 }
 
                 requestRepaint();
@@ -105,6 +111,8 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
             case NO_AUDIO -> {
                 // Clear waveform and stop timer
                 painter.stop();
+                // Clean up waveform resources
+                currentWaveform.ifPresent(Waveform::shutdown);
                 clearWaveform();
                 log.debug("Cleared waveform display");
             }
@@ -185,5 +193,30 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
     @Override
     public boolean isPlaying() {
         return sessionSource.isPlaying();
+    }
+
+    private void createWaveformForCurrentAudio() {
+        // Get audio handle and path from session source
+        Optional<AudioHandle> audioHandle = sessionSource.getCurrentAudioHandle();
+        Optional<String> audioPath = sessionSource.getCurrentAudioFilePath();
+
+        if (audioHandle.isPresent() && audioPath.isPresent()) {
+            // Get or create audio engine
+            if (audioEngine.isEmpty()) {
+                audioEngine = Optional.of(audioEngineProvider.get());
+            }
+
+            // Create new waveform for the audio file
+            Waveform waveform = new Waveform(audioPath.get(), audioEngine.get(), audioHandle.get());
+
+            // Clean up old waveform if present
+            currentWaveform.ifPresent(Waveform::shutdown);
+
+            // Set the new waveform
+            currentWaveform = Optional.of(waveform);
+            log.info("Created waveform for: {}", audioPath.get());
+        } else {
+            log.warn("Cannot create waveform - missing audio handle or path");
+        }
     }
 }
