@@ -13,20 +13,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import s2.AudioSessionStateMachine;
 
 @Slf4j
 class AppStateManagerTest {
 
-    private AppStateManager stateManager;
+    private AudioSessionStateMachine stateManager;
 
     @BeforeEach
     void setUp() {
-        stateManager = new AppStateManager();
+        stateManager = new AudioSessionStateMachine();
     }
 
     @Test
     void testInitialState() {
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
         assertFalse(stateManager.isAudioLoaded());
         assertFalse(stateManager.isPlaybackActive());
     }
@@ -36,50 +37,57 @@ class AppStateManagerTest {
         // NO_AUDIO -> LOADING
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.NO_AUDIO, AppStateManager.State.LOADING));
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.NO_AUDIO,
+                        AudioSessionStateMachine.State.LOADING));
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
         assertFalse(stateManager.isAudioLoaded());
 
         // LOADING -> READY
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.LOADING, AppStateManager.State.READY));
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.LOADING,
+                        AudioSessionStateMachine.State.READY));
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
         assertTrue(stateManager.isAudioLoaded());
         assertFalse(stateManager.isPlaybackActive());
 
         // READY -> PLAYING
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.READY, AppStateManager.State.PLAYING));
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.READY,
+                        AudioSessionStateMachine.State.PLAYING));
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
         assertTrue(stateManager.isAudioLoaded());
         assertTrue(stateManager.isPlaybackActive());
 
         // PLAYING -> PAUSED
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.PLAYING, AppStateManager.State.PAUSED));
-        assertEquals(AppStateManager.State.PAUSED, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.PLAYING,
+                        AudioSessionStateMachine.State.PAUSED));
+        assertEquals(AudioSessionStateMachine.State.PAUSED, stateManager.getCurrentState());
         assertTrue(stateManager.isPlaybackActive());
 
         // PAUSED -> PLAYING (resume)
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.PAUSED, AppStateManager.State.PLAYING));
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.PAUSED,
+                        AudioSessionStateMachine.State.PLAYING));
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // PLAYING -> READY (stop)
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.PLAYING, AppStateManager.State.READY));
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.PLAYING,
+                        AudioSessionStateMachine.State.READY));
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
 
         // READY -> NO_AUDIO (close)
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.READY, AppStateManager.State.NO_AUDIO));
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+                        AudioSessionStateMachine.State.READY,
+                        AudioSessionStateMachine.State.NO_AUDIO));
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
     }
 
     @Test
@@ -87,17 +95,20 @@ class AppStateManagerTest {
         // NO_AUDIO -> PLAYING (skipping LOADING and READY)
         assertFalse(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.NO_AUDIO, AppStateManager.State.PLAYING));
+                        AudioSessionStateMachine.State.NO_AUDIO,
+                        AudioSessionStateMachine.State.PLAYING));
 
         // NO_AUDIO -> PAUSED
         assertFalse(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.NO_AUDIO, AppStateManager.State.PAUSED));
+                        AudioSessionStateMachine.State.NO_AUDIO,
+                        AudioSessionStateMachine.State.PAUSED));
 
         // NO_AUDIO -> READY (skipping LOADING)
         assertFalse(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.NO_AUDIO, AppStateManager.State.READY));
+                        AudioSessionStateMachine.State.NO_AUDIO,
+                        AudioSessionStateMachine.State.READY));
 
         // Move to LOADING
         stateManager.transitionToLoading();
@@ -105,43 +116,45 @@ class AppStateManagerTest {
         // LOADING -> PLAYING (skipping READY)
         assertFalse(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.LOADING, AppStateManager.State.PLAYING));
+                        AudioSessionStateMachine.State.LOADING,
+                        AudioSessionStateMachine.State.PLAYING));
 
         // LOADING -> PAUSED
         assertFalse(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.LOADING, AppStateManager.State.PAUSED));
+                        AudioSessionStateMachine.State.LOADING,
+                        AudioSessionStateMachine.State.PAUSED));
     }
 
     @Test
     void testTransitionMethods() {
         // Test transitionToLoading
         stateManager.transitionToLoading();
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         // Test transitionToReady
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
 
         // Test transitionToPlaying
         stateManager.transitionToPlaying();
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // Test transitionToPaused
         stateManager.transitionToPaused();
-        assertEquals(AppStateManager.State.PAUSED, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PAUSED, stateManager.getCurrentState());
 
         // Test resume (PAUSED -> PLAYING)
         stateManager.transitionToPlaying();
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // Test stop (PLAYING -> READY)
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
 
         // Test transitionToNoAudio
         stateManager.transitionToNoAudio();
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
     }
 
     @Test
@@ -149,24 +162,24 @@ class AppStateManagerTest {
         // LOADING -> ERROR
         stateManager.transitionToLoading();
         stateManager.transitionToError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
         assertFalse(stateManager.isAudioLoaded());
         assertFalse(stateManager.isPlaybackActive());
 
         // ERROR -> NO_AUDIO (reset)
         stateManager.transitionToNoAudio();
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
 
         // ERROR -> LOADING (retry)
         stateManager.forceError(); // Use forceError to get back to ERROR state
         stateManager.transitionToLoading();
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         // PLAYING -> ERROR
         stateManager.transitionToReady();
         stateManager.transitionToPlaying();
         stateManager.transitionToError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
     }
 
     @Test
@@ -195,7 +208,7 @@ class AppStateManagerTest {
         // Execute action in correct state
         AtomicInteger result = new AtomicInteger();
         stateManager.executeInState(
-                AppStateManager.State.READY,
+                AudioSessionStateMachine.State.READY,
                 () -> {
                     result.set(42);
                 });
@@ -204,7 +217,9 @@ class AppStateManagerTest {
         // Try to execute in wrong state
         assertThrows(
                 IllegalStateException.class,
-                () -> stateManager.executeInState(AppStateManager.State.PLAYING, () -> {}));
+                () ->
+                        stateManager.executeInState(
+                                AudioSessionStateMachine.State.PLAYING, () -> {}));
     }
 
     @Test
@@ -216,14 +231,16 @@ class AppStateManagerTest {
         assertDoesNotThrow(
                 () ->
                         stateManager.checkStateAny(
-                                AppStateManager.State.READY, AppStateManager.State.PLAYING));
+                                AudioSessionStateMachine.State.READY,
+                                AudioSessionStateMachine.State.PLAYING));
 
         // Should fail - current state is not in the list
         assertThrows(
                 IllegalStateException.class,
                 () ->
                         stateManager.checkStateAny(
-                                AppStateManager.State.LOADING, AppStateManager.State.NO_AUDIO));
+                                AudioSessionStateMachine.State.LOADING,
+                                AudioSessionStateMachine.State.NO_AUDIO));
     }
 
     @Test
@@ -232,22 +249,22 @@ class AppStateManagerTest {
         stateManager.transitionToLoading();
         stateManager.transitionToReady();
         stateManager.transitionToPlaying();
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // Reset should go back to NO_AUDIO
         stateManager.reset();
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
     }
 
     @Test
     void testForceError() {
         // From NO_AUDIO
         stateManager.forceError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
 
         // Force error when already in error should be idempotent
         stateManager.forceError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
 
         // From PLAYING
         stateManager.reset();
@@ -255,7 +272,7 @@ class AppStateManagerTest {
         stateManager.transitionToReady();
         stateManager.transitionToPlaying();
         stateManager.forceError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
     }
 
     @Test
@@ -275,8 +292,8 @@ class AppStateManagerTest {
                             startLatch.await();
                             // Only one thread should succeed
                             if (stateManager.compareAndSetState(
-                                    AppStateManager.State.NO_AUDIO,
-                                    AppStateManager.State.LOADING)) {
+                                    AudioSessionStateMachine.State.NO_AUDIO,
+                                    AudioSessionStateMachine.State.LOADING)) {
                                 successCount.incrementAndGet();
                             }
                         } catch (InterruptedException e) {
@@ -292,24 +309,24 @@ class AppStateManagerTest {
 
         // Only one thread should have succeeded
         assertEquals(1, successCount.get());
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         executor.shutdown();
     }
 
     @Test
     void testExecuteWithLock() {
-        AtomicReference<AppStateManager.State> capturedState = new AtomicReference<>();
+        AtomicReference<AudioSessionStateMachine.State> capturedState = new AtomicReference<>();
 
-        AppStateManager.State result =
+        AudioSessionStateMachine.State result =
                 stateManager.executeWithLock(
                         () -> {
                             capturedState.set(stateManager.getCurrentState());
                             return stateManager.getCurrentState();
                         });
 
-        assertEquals(AppStateManager.State.NO_AUDIO, result);
-        assertEquals(AppStateManager.State.NO_AUDIO, capturedState.get());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, result);
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, capturedState.get());
     }
 
     @Test
@@ -379,7 +396,7 @@ class AppStateManagerTest {
                             for (int j = 0; j < operationsPerThread; j++) {
                                 try {
                                     stateManager.executeInState(
-                                            AppStateManager.State.READY,
+                                            AudioSessionStateMachine.State.READY,
                                             () -> {
                                                 // Simulate some work
                                                 successfulOps.incrementAndGet();
@@ -429,7 +446,7 @@ class AppStateManagerTest {
             new Thread(
                             () -> {
                                 if (stateManager.getCurrentState()
-                                        == AppStateManager.State.PLAYING) {
+                                        == AudioSessionStateMachine.State.PLAYING) {
                                     correctReads.incrementAndGet();
                                 }
                                 latch.countDown();
@@ -476,36 +493,41 @@ class AppStateManagerTest {
         // Verify we can reach every state
 
         // Start at NO_AUDIO
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
 
         // Can reach LOADING
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.NO_AUDIO, AppStateManager.State.LOADING));
+                        AudioSessionStateMachine.State.NO_AUDIO,
+                        AudioSessionStateMachine.State.LOADING));
 
         // Can reach READY
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.LOADING, AppStateManager.State.READY));
+                        AudioSessionStateMachine.State.LOADING,
+                        AudioSessionStateMachine.State.READY));
 
         // Can reach PLAYING
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.READY, AppStateManager.State.PLAYING));
+                        AudioSessionStateMachine.State.READY,
+                        AudioSessionStateMachine.State.PLAYING));
 
         // Can reach PAUSED
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.PLAYING, AppStateManager.State.PAUSED));
+                        AudioSessionStateMachine.State.PLAYING,
+                        AudioSessionStateMachine.State.PAUSED));
 
         // Can reach ERROR (via forceError since normal transition requires specific states)
         stateManager.forceError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
 
         // ERROR can go to NO_AUDIO
         assertTrue(
                 stateManager.compareAndSetState(
-                        AppStateManager.State.ERROR, AppStateManager.State.NO_AUDIO));
+                        AudioSessionStateMachine.State.ERROR,
+                        AudioSessionStateMachine.State.NO_AUDIO));
 
         // Verify all 6 states were reachable
     }
@@ -516,31 +538,31 @@ class AppStateManagerTest {
 
         // Load audio
         stateManager.transitionToLoading();
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         // Loading completes
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
 
         // Start playback
         stateManager.transitionToPlaying();
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // Pause playback
         stateManager.transitionToPaused();
-        assertEquals(AppStateManager.State.PAUSED, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PAUSED, stateManager.getCurrentState());
 
         // Resume playback
         stateManager.transitionToPlaying();
-        assertEquals(AppStateManager.State.PLAYING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateManager.getCurrentState());
 
         // Stop playback
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
 
         // Close audio
         stateManager.transitionToNoAudio();
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
     }
 
     @Test
@@ -552,19 +574,19 @@ class AppStateManagerTest {
 
         // Loading fails
         stateManager.transitionToError();
-        assertEquals(AppStateManager.State.ERROR, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.ERROR, stateManager.getCurrentState());
 
         // Reset to NO_AUDIO
         stateManager.transitionToNoAudio();
-        assertEquals(AppStateManager.State.NO_AUDIO, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.NO_AUDIO, stateManager.getCurrentState());
 
         // Retry loading
         stateManager.transitionToLoading();
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         // This time it succeeds
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
     }
 
     @Test
@@ -581,10 +603,10 @@ class AppStateManagerTest {
 
         // Switch to new file (READY -> LOADING)
         stateManager.transitionToLoading();
-        assertEquals(AppStateManager.State.LOADING, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.LOADING, stateManager.getCurrentState());
 
         // New file loaded
         stateManager.transitionToReady();
-        assertEquals(AppStateManager.State.READY, stateManager.getCurrentState());
+        assertEquals(AudioSessionStateMachine.State.READY, stateManager.getCurrentState());
     }
 }

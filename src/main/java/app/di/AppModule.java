@@ -18,6 +18,9 @@ import env.UpdateManager;
 import env.UserHomeProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
+import s2.AudioSessionManager;
+import s2.AudioSessionStateMachine;
+import s2.WaveformSessionSource;
 import state.PreferencesManager;
 import ui.AppFocusTraversalPolicy;
 import ui.AppMenuBar;
@@ -54,6 +57,11 @@ public class AppModule extends AbstractModule {
         // Install FMOD module for audio system dependencies
         install(new FmodModule());
 
+        // Configure s2 package bindings
+        bind(AudioSessionManager.class).in(Singleton.class);
+        bind(AudioSessionStateMachine.class).in(Singleton.class);
+        bind(WaveformSessionSource.class).to(AudioSessionManager.class).in(Singleton.class);
+
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);
         bind(AppConfig.class).in(Singleton.class);
@@ -76,6 +84,10 @@ public class AppModule extends AbstractModule {
         bind(WaveformDisplay.class).in(Singleton.class);
         bind(WaveformCoordinateSystem.class).to(WaveformDisplay.class);
         bind(WaveformMouseSetup.class).in(Singleton.class);
+
+        // RenderSurface will be implemented by WaveformDisplay (when it's updated)
+        // For now, create a provider that throws an exception
+        // bind(RenderSurface.class).to(WaveformDisplay.class);
         bind(AudioFileDisplay.class).in(Singleton.class);
         bind(AnnotationDisplay.class).in(Singleton.class);
         bind(WordpoolDisplay.class).in(Singleton.class);

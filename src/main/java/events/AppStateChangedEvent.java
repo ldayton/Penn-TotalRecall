@@ -1,7 +1,7 @@
 package events;
 
 import lombok.Getter;
-import state.AppStateManager;
+import s2.AudioSessionStateMachine;
 
 /**
  * Event fired when the application state changes. This is the primary event for communicating state
@@ -20,8 +20,8 @@ import state.AppStateManager;
  */
 @Getter
 public class AppStateChangedEvent {
-    private final AppStateManager.State previousState;
-    private final AppStateManager.State newState;
+    private final AudioSessionStateMachine.State previousState;
+    private final AudioSessionStateMachine.State newState;
     private final Object context;
 
     /**
@@ -32,7 +32,9 @@ public class AppStateChangedEvent {
      * @param context Optional context object with additional information
      */
     public AppStateChangedEvent(
-            AppStateManager.State previousState, AppStateManager.State newState, Object context) {
+            AudioSessionStateMachine.State previousState,
+            AudioSessionStateMachine.State newState,
+            Object context) {
         this.previousState = previousState;
         this.newState = newState;
         this.context = context;
@@ -45,7 +47,7 @@ public class AppStateChangedEvent {
      * @param newState The new state after transition
      */
     public AppStateChangedEvent(
-            AppStateManager.State previousState, AppStateManager.State newState) {
+            AudioSessionStateMachine.State previousState, AudioSessionStateMachine.State newState) {
         this(previousState, newState, null);
     }
 
@@ -55,7 +57,7 @@ public class AppStateChangedEvent {
      * @return true if transitioning to PLAYING
      */
     public boolean isTransitionToPlaying() {
-        return newState == AppStateManager.State.PLAYING;
+        return newState == AudioSessionStateMachine.State.PLAYING;
     }
 
     /**
@@ -64,7 +66,7 @@ public class AppStateChangedEvent {
      * @return true if transitioning to PAUSED
      */
     public boolean isTransitionToPaused() {
-        return newState == AppStateManager.State.PAUSED;
+        return newState == AudioSessionStateMachine.State.PAUSED;
     }
 
     /**
@@ -73,7 +75,7 @@ public class AppStateChangedEvent {
      * @return true if transitioning to READY
      */
     public boolean isTransitionToReady() {
-        return newState == AppStateManager.State.READY;
+        return newState == AudioSessionStateMachine.State.READY;
     }
 
     /**
@@ -82,7 +84,7 @@ public class AppStateChangedEvent {
      * @return true if transitioning to ERROR
      */
     public boolean isTransitionToError() {
-        return newState == AppStateManager.State.ERROR;
+        return newState == AudioSessionStateMachine.State.ERROR;
     }
 
     /**
@@ -91,8 +93,8 @@ public class AppStateChangedEvent {
      * @return true if transitioning from LOADING to READY
      */
     public boolean isAudioLoaded() {
-        return previousState == AppStateManager.State.LOADING
-                && newState == AppStateManager.State.READY;
+        return previousState == AudioSessionStateMachine.State.LOADING
+                && newState == AudioSessionStateMachine.State.READY;
     }
 
     /**
@@ -101,7 +103,7 @@ public class AppStateChangedEvent {
      * @return true if transitioning to NO_AUDIO
      */
     public boolean isAudioClosed() {
-        return newState == AppStateManager.State.NO_AUDIO;
+        return newState == AudioSessionStateMachine.State.NO_AUDIO;
     }
 
     /**
@@ -110,8 +112,8 @@ public class AppStateChangedEvent {
      * @return true if transitioning from PLAYING to READY with "completed" context
      */
     public boolean isPlaybackCompleted() {
-        return previousState == AppStateManager.State.PLAYING
-                && newState == AppStateManager.State.READY
+        return previousState == AudioSessionStateMachine.State.PLAYING
+                && newState == AudioSessionStateMachine.State.READY
                 && "completed".equals(context);
     }
 

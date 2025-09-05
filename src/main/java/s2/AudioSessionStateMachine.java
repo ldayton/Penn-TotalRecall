@@ -1,4 +1,4 @@
-package state;
+package s2;
 
 import app.annotations.ThreadSafe;
 import java.util.concurrent.locks.ReentrantLock;
@@ -6,9 +6,8 @@ import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Manages the application state transitions and enforces valid state machine transitions. This
- * class ensures that all application state changes follow the defined state machine rules and are
- * properly synchronized.
+ * State machine for audio session transitions. This class ensures that all session state changes
+ * follow the defined state machine rules and are properly synchronized.
  *
  * <p>State machine transitions:
  *
@@ -35,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ThreadSafe
 @Slf4j
-public class AppStateManager {
+public class AudioSessionStateMachine {
 
     public enum State {
         NO_AUDIO, // No file loaded
