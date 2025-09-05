@@ -78,6 +78,22 @@ public final class WaveformProcessor {
             Path audioPath = Paths.get(audioFilePath);
             AudioData audioData = sampleReader.readSamples(audioPath, startFrame, frameCount).get();
 
+            // Debug: Check if we have actual audio data
+            double[] samples = audioData.samples();
+            if (samples != null && samples.length > 0) {
+                double max = 0;
+                for (double s : samples) {
+                    if (Math.abs(s) > max) max = Math.abs(s);
+                }
+                logger.info(
+                        "Loaded chunk {} with {} samples, max amplitude: {}",
+                        chunkIndex,
+                        samples.length,
+                        max);
+            } else {
+                logger.warn("Chunk {} has no samples!", chunkIndex);
+            }
+
             return new AudioChunkData(
                     audioData.samples(),
                     audioData.sampleRate(),

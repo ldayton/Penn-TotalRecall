@@ -124,9 +124,10 @@ public class FmodSampleReader implements SampleReader {
             // Update system
             fmod.FMOD_System_Update(system);
 
-            // Create sound as sample (loads entire file)
+            // Create sound as sample (loads entire file into memory)
+            // Don't use FMOD_OPENONLY - that prevents actual data loading!
             PointerByReference soundRef = new PointerByReference();
-            int flags = FmodConstants.FMOD_CREATESAMPLE | FmodConstants.FMOD_OPENONLY;
+            int flags = FmodConstants.FMOD_CREATESAMPLE;
 
             int result = fmod.FMOD_System_CreateSound(system, filePath, flags, null, soundRef);
             if (result != FmodConstants.FMOD_OK) {
@@ -201,6 +202,19 @@ public class FmodSampleReader implements SampleReader {
                     ptr2Ref.getValue().read(0, buffer, len1Ref.getValue(), len2Ref.getValue());
                 }
 
+                // Debug: Check raw byte data
+                boolean hasNonZero = false;
+                for (int i = 0; i < Math.min(1000, buffer.length); i++) {
+                    if (buffer[i] != 0) {
+                        hasNonZero = true;
+                        break;
+                    }
+                }
+                log.debug(
+                        "Raw PCM bytes: {} total, has non-zero data: {}",
+                        totalBytesRead,
+                        hasNonZero);
+
                 // Convert to normalized doubles
                 int totalSamples = totalBytesRead / bytesPerSample;
                 double[] samples = new double[totalSamples];
@@ -221,15 +235,22 @@ public class FmodSampleReader implements SampleReader {
                                 totalFrames,
                                 msLengthRef.getValue() / 1000.0);
 
+                // Debug: Check if samples have actual data
+                double maxSample = 0;
+                for (double s : samples) {
+                    if (Math.abs(s) > maxSample) maxSample = Math.abs(s);
+                }
+
                 // Cache and return
                 cached = new CachedAudio(samples, metadata);
                 cache.put(audioFile, cached);
 
                 log.debug(
-                        "Loaded and cached {} ({} frames, {} MB)",
+                        "Loaded and cached {} ({} frames, {} MB, max amplitude: {})",
                         audioFile.getFileName(),
                         totalFrames,
-                        String.format("%.2f", totalBytesRead / 1_000_000.0));
+                        String.format("%.2f", totalBytesRead / 1_000_000.0),
+                        maxSample);
 
                 return cached;
 
