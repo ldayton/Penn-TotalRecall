@@ -37,6 +37,11 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
     private Optional<PlaybackHandle> currentPlaybackHandle = Optional.empty();
     private String errorMessage = null;
 
+    // Progress tracking
+    private volatile long currentPositionFrames = 0;
+    private volatile long totalFrames = 0;
+    private volatile int sampleRate = 0;
+
     @Inject
     public AudioSessionManager(
             @NonNull Provider<AudioEngine> audioEngineProvider,
@@ -74,6 +79,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         try {
             var handle = audioEngine.get().loadAudio(event.getFile().getAbsolutePath());
             currentAudioHandle = Optional.of(handle);
+
+            // Cache metadata for efficient access
+            var metadata = audioEngine.get().getMetadata(handle);
+            this.sampleRate = metadata.sampleRate();
+            this.totalFrames = metadata.frameCount();
+            this.currentPositionFrames = 0;
+
             var prevState = stateManager.getCurrentState();
             stateManager.transitionToReady();
             eventBus.publish(
@@ -176,7 +188,9 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
     @Override
     public void onProgress(
             @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {
-        // Progress updates handled here, could publish events if needed
+        // Store progress for efficient access
+        this.currentPositionFrames = positionFrames;
+        this.totalFrames = totalFrames;
     }
 
     @Override
@@ -205,6 +219,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         var prevState = stateManager.getCurrentState();
         stateManager.transitionToReady();
         currentPlaybackHandle = Optional.empty();
+        currentPositionFrames = 0; // Reset position
         eventBus.publish(
                 new AppStateChangedEvent(
                         prevState, AudioSessionStateMachine.State.READY, "completed"));
@@ -215,21 +230,20 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
 
     @Override
     public Optional<Double> getPlaybackPosition() {
-        if (currentPlaybackHandle.isEmpty() || audioEngine.isEmpty()) {
+        if (currentPlaybackHandle.isEmpty() || sampleRate == 0) {
             return Optional.empty();
         }
-        var position = audioEngine.get().getPosition(currentPlaybackHandle.get());
-        var metadata = audioEngine.get().getMetadata(currentAudioHandle.get());
-        return Optional.of((double) position / metadata.sampleRate());
+        // Use cached position for efficiency
+        return Optional.of((double) currentPositionFrames / sampleRate);
     }
 
     @Override
     public Optional<Double> getTotalDuration() {
-        if (currentAudioHandle.isEmpty() || audioEngine.isEmpty()) {
+        if (currentAudioHandle.isEmpty() || sampleRate == 0) {
             return Optional.empty();
         }
-        var metadata = audioEngine.get().getMetadata(currentAudioHandle.get());
-        return Optional.of(metadata.durationSeconds());
+        // Use cached values for efficiency
+        return Optional.of((double) totalFrames / sampleRate);
     }
 
     @Override
@@ -262,6 +276,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
             audioEngine.get().stop(currentPlaybackHandle.get());
             currentPlaybackHandle.get().close();
             currentPlaybackHandle = Optional.empty();
+            currentPositionFrames = 0; // Reset position on stop
 
             if (prevState == AudioSessionStateMachine.State.PLAYING
                     || prevState == AudioSessionStateMachine.State.PAUSED) {
@@ -285,8 +300,11 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         // Clear handles (audio handle doesn't need explicit closing)
         currentAudioHandle = Optional.empty();
 
-        // Clear state
+        // Clear state and cached values
         currentFile = Optional.empty();
         errorMessage = null;
+        currentPositionFrames = 0;
+        totalFrames = 0;
+        sampleRate = 0;
     }
 }
