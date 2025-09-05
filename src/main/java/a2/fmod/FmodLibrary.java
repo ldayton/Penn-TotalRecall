@@ -116,6 +116,17 @@ public interface FmodLibrary extends Library {
 
     int FMOD_Sound_SeekData(Pointer sound, int pcmoffset);
 
+    int FMOD_Sound_Lock(
+            Pointer sound,
+            int offset,
+            int length,
+            PointerByReference ptr1,
+            PointerByReference ptr2,
+            IntByReference len1,
+            IntByReference len2);
+
+    int FMOD_Sound_Unlock(Pointer sound, Pointer ptr1, Pointer ptr2, int len1, int len2);
+
     // Note: FMOD_ErrorString is a static inline function in the header,
     // not an exported library symbol, so it cannot be called via JNA.
     // Error codes must be translated manually or via a lookup table.

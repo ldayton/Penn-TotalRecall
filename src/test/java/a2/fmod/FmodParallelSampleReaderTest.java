@@ -35,7 +35,7 @@ class FmodParallelSampleReaderTest {
     private static final int SAMPLE_WAV_RATE = 44100;
     private static final int SAMPLE_WAV_CHANNELS = 1;
     private static final int SAMPLE_WAV_BITS = 16;
-    private static final int SAMPLE_WAV_FRAMES = 74593; // ~1.7 seconds
+    private static final int SAMPLE_WAV_FRAMES = 1993624; // ~45.2 seconds
 
     private FmodLibraryLoader libraryLoader;
 

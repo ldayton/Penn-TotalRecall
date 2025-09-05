@@ -194,43 +194,55 @@ public class FmodParallelSampleReader implements SampleReader {
                 return AudioData.empty(sampleRate, channelCount, startFrame);
             }
 
-            // Seek to start position if needed
-            if (startFrame > 0) {
-                int offsetBytes = (int) (startFrame * channelCount * bytesPerSample);
-                result = fmod.FMOD_Sound_SeekData(sound, offsetBytes);
-                if (result != FmodConstants.FMOD_OK) {
-                    throw new AudioReadException(
-                            "Failed to seek: " + FmodError.describe(result), audioFile);
-                }
-            }
+            // Use Sound_Lock to directly access PCM data in memory
+            PointerByReference ptr1Ref = new PointerByReference();
+            PointerByReference ptr2Ref = new PointerByReference();
+            IntByReference len1Ref = new IntByReference();
+            IntByReference len2Ref = new IntByReference();
 
-            // Read the samples
-            int samplesPerFrame = channelCount;
-            int totalSamples = (int) (actualFrameCount * samplesPerFrame);
-            int bytesNeeded = totalSamples * bytesPerSample;
+            int offsetBytes = (int) (startFrame * channelCount * bytesPerSample);
+            int bytesNeeded = (int) (actualFrameCount * channelCount * bytesPerSample);
 
-            IntByReference bytesReadRef = new IntByReference();
-            com.sun.jna.Memory memory = new com.sun.jna.Memory(bytesNeeded);
-            result = fmod.FMOD_Sound_ReadData(sound, memory, bytesNeeded, bytesReadRef);
-
-            if (result != FmodConstants.FMOD_OK && result != FmodConstants.FMOD_ERR_FILE_EOF) {
+            result =
+                    fmod.FMOD_Sound_Lock(
+                            sound, offsetBytes, bytesNeeded, ptr1Ref, ptr2Ref, len1Ref, len2Ref);
+            if (result != FmodConstants.FMOD_OK) {
                 throw new AudioReadException(
-                        "Failed to read samples: " + FmodError.describe(result), audioFile);
+                        "Failed to lock sound data: " + FmodError.describe(result), audioFile);
             }
 
-            int bytesRead = bytesReadRef.getValue();
-            int samplesRead = bytesRead / bytesPerSample;
+            try {
+                int totalBytesRead = len1Ref.getValue() + len2Ref.getValue();
+                byte[] buffer = new byte[totalBytesRead];
 
-            // Only read the actual bytes that were read
-            byte[] buffer = new byte[bytesRead];
-            memory.read(0, buffer, 0, bytesRead);
+                // Read from first pointer
+                if (len1Ref.getValue() > 0 && ptr1Ref.getValue() != null) {
+                    ptr1Ref.getValue().read(0, buffer, 0, len1Ref.getValue());
+                }
 
-            // Convert bytes to normalized double samples
-            double[] samples = new double[samplesRead];
-            convertToDouble(buffer, samples, bitsPerSample, samplesRead);
+                // Read from second pointer if sound wraps (shouldn't happen with CREATESAMPLE)
+                if (len2Ref.getValue() > 0 && ptr2Ref.getValue() != null) {
+                    ptr2Ref.getValue().read(0, buffer, len1Ref.getValue(), len2Ref.getValue());
+                }
 
-            long framesRead = samplesRead / channelCount;
-            return new AudioData(samples, sampleRate, channelCount, startFrame, framesRead);
+                int samplesRead = totalBytesRead / bytesPerSample;
+
+                // Convert bytes to normalized double samples
+                double[] samples = new double[samplesRead];
+                convertToDouble(buffer, samples, bitsPerSample, samplesRead);
+
+                long framesRead = samplesRead / channelCount;
+                return new AudioData(samples, sampleRate, channelCount, startFrame, framesRead);
+
+            } finally {
+                // Always unlock the sound data
+                fmod.FMOD_Sound_Unlock(
+                        sound,
+                        ptr1Ref.getValue(),
+                        ptr2Ref.getValue(),
+                        len1Ref.getValue(),
+                        len2Ref.getValue());
+            }
 
         } finally {
             // Always release the sound object
