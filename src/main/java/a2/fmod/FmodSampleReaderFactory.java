@@ -30,25 +30,22 @@ public class FmodSampleReaderFactory implements SampleReaderFactory {
     @Override
     @NonNull
     public SampleReader createReader() {
-        // Create a basic reader with single thread
-        return new FmodParallelSampleReader(libraryLoader, 1);
+        // Create a simple reader that loads files into memory
+        return new FmodSampleReader(libraryLoader);
     }
 
     @Override
     @NonNull
     public SampleReader createPooledReader(int parallelism) {
-        if (parallelism < 1) {
-            throw new IllegalArgumentException("Parallelism must be at least 1: " + parallelism);
-        }
-        return new FmodParallelSampleReader(libraryLoader, parallelism);
+        // Since we're loading entire files into memory with FMOD_CREATESAMPLE,
+        // the simple reader handles concurrent reads efficiently from cache
+        return new FmodSampleReader(libraryLoader);
     }
 
     @Override
     @NonNull
     public SampleReader createThreadLocalReader() {
-        // For thread-local, we create a reader with parallelism matching CPU cores
-        // This gives good performance for typical use cases
-        return new FmodParallelSampleReader(
-                libraryLoader, Runtime.getRuntime().availableProcessors());
+        // Simple reader is thread-safe and handles all patterns well
+        return new FmodSampleReader(libraryLoader);
     }
 }
