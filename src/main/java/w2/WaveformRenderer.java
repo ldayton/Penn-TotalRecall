@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import waveform.PixelScaler;
@@ -65,21 +66,21 @@ class WaveformRenderer {
         }
     }
 
-    record RenderTask(WaveformSegmentCache.SegmentKey key, Priority priority)
+    record RenderTask(@NonNull WaveformSegmentCache.SegmentKey key, @NonNull Priority priority)
             implements Comparable<RenderTask> {
 
         @Override
-        public int compareTo(RenderTask other) {
+        public int compareTo(@NonNull RenderTask other) {
             return Integer.compare(this.priority.getValue(), other.priority.getValue());
         }
     }
 
     WaveformRenderer(
-            String audioFilePath,
-            WaveformSegmentCache cache,
-            ExecutorService renderPool,
-            AudioEngine audioEngine,
-            AudioHandle audioHandle,
+            @NonNull String audioFilePath,
+            @NonNull WaveformSegmentCache cache,
+            @NonNull ExecutorService renderPool,
+            @NonNull AudioEngine audioEngine,
+            @NonNull AudioHandle audioHandle,
             int sampleRate) {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
@@ -88,7 +89,7 @@ class WaveformRenderer {
     }
 
     /** Fill cache for viewport with priority-based rendering. */
-    CompletableFuture<Image> renderViewport(ViewportContext viewport) {
+    CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
         // Update cache for new viewport
         cache.updateViewport(viewport);
 
@@ -125,7 +126,7 @@ class WaveformRenderer {
 
     /** Calculate which segments are needed for the viewport. */
     private List<WaveformSegmentCache.SegmentKey> calculateVisibleSegments(
-            ViewportContext viewport) {
+            @NonNull ViewportContext viewport) {
         List<WaveformSegmentCache.SegmentKey> segments = new ArrayList<>();
 
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
@@ -142,7 +143,7 @@ class WaveformRenderer {
     }
 
     /** Add prefetch tasks based on scroll direction. */
-    private void addPrefetchTasks(ViewportContext viewport) {
+    private void addPrefetchTasks(@NonNull ViewportContext viewport) {
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
 
         if (viewport.scrollDirection() == ViewportContext.ScrollDirection.FORWARD) {
@@ -204,7 +205,7 @@ class WaveformRenderer {
     }
 
     /** Render single 200px segment. */
-    private CompletableFuture<Image> renderSegment(WaveformSegmentCache.SegmentKey key) {
+    private CompletableFuture<Image> renderSegment(@NonNull WaveformSegmentCache.SegmentKey key) {
         return CompletableFuture.supplyAsync(
                 () -> {
                     // Check for cancellation
@@ -329,7 +330,8 @@ class WaveformRenderer {
     }
 
     /** Composite segments into single viewport image. */
-    private Image compositeSegments(List<Image> segments, ViewportContext viewport) {
+    private Image compositeSegments(
+            @NonNull List<Image> segments, @NonNull ViewportContext viewport) {
         if (segments.isEmpty()) {
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
@@ -379,7 +381,11 @@ class WaveformRenderer {
 
     /** Draw time scale lines and labels - matches original WaveformRenderer */
     private void drawTimeScale(
-            Graphics2D g, int width, int height, double startTimeSeconds, int pixelsPerSecond) {
+            @NonNull Graphics2D g,
+            int width,
+            int height,
+            double startTimeSeconds,
+            int pixelsPerSecond) {
         if (pixelsPerSecond <= 0) {
             return;
         }
@@ -395,7 +401,7 @@ class WaveformRenderer {
     }
 
     /** Calculate rendering peak using consecutive pixel minimum - matches original */
-    private double getRenderingPeak(double[] pixelValues, int skipInitialPixels) {
+    private double getRenderingPeak(@NonNull double[] pixelValues, int skipInitialPixels) {
         if (pixelValues.length < skipInitialPixels + 2) {
             return 0;
         }

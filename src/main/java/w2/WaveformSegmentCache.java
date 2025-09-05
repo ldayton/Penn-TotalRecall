@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import lombok.NonNull;
 
 /**
  * Circular cache for 200px-wide waveform segments. Optimized for timeline scrolling with
@@ -21,7 +22,7 @@ class WaveformSegmentCache {
     private int head = 0;
     private ViewportContext currentViewport;
 
-    record CacheEntry(SegmentKey key, CompletableFuture<Image> future) {}
+    record CacheEntry(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {}
 
     record SegmentKey(double startTime, int pixelsPerSecond, int height) {
         double duration() {
@@ -33,7 +34,7 @@ class WaveformSegmentCache {
         }
     }
 
-    WaveformSegmentCache(ViewportContext viewport) {
+    WaveformSegmentCache(@NonNull ViewportContext viewport) {
         int visibleSegments =
                 (int) Math.ceil((double) viewport.viewportWidthPx() / SEGMENT_WIDTH_PX);
         int prefetchSegments = 4; // 2 each direction
@@ -43,7 +44,7 @@ class WaveformSegmentCache {
     }
 
     /** Get cached segment or null if not found. */
-    CompletableFuture<Image> get(SegmentKey key) {
+    CompletableFuture<Image> get(@NonNull SegmentKey key) {
         lock.readLock().lock();
         try {
             for (CacheEntry entry : entries) {
@@ -58,7 +59,7 @@ class WaveformSegmentCache {
     }
 
     /** Add segment to cache, overwriting oldest entry if full. */
-    void put(SegmentKey key, CompletableFuture<Image> future) {
+    void put(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {
         lock.writeLock().lock();
         try {
             // Check if key already exists
@@ -97,7 +98,7 @@ class WaveformSegmentCache {
      * Update cache for new viewport context. Clears cache if pixelsPerSecond or height changed,
      * resizes if width changed.
      */
-    void updateViewport(ViewportContext newViewport) {
+    void updateViewport(@NonNull ViewportContext newViewport) {
         lock.writeLock().lock();
         try {
             if (currentViewport.pixelsPerSecond() != newViewport.pixelsPerSecond()

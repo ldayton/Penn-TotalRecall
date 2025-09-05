@@ -4,6 +4,7 @@ import a2.AudioEngine;
 import a2.AudioHandle;
 import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
+import lombok.NonNull;
 
 /**
  * Async viewport-aware waveform renderer.
@@ -28,11 +29,13 @@ public interface Waveform {
      *
      * <p>Implementation can use viewport info for intelligent caching decisions.
      */
-    CompletableFuture<Image> renderViewport(ViewportContext viewport);
+    CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport);
 
     /** Create waveform for audio file. */
     static Waveform forAudioFile(
-            String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
+            @NonNull String audioFilePath,
+            @NonNull AudioEngine audioEngine,
+            @NonNull AudioHandle audioHandle) {
         return WaveformImpl.create(audioFilePath, audioEngine, audioHandle);
     }
 }

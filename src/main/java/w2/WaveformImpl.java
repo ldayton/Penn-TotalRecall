@@ -5,6 +5,7 @@ import a2.AudioHandle;
 import a2.AudioMetadata;
 import java.awt.Image;
 import java.util.concurrent.*;
+import lombok.NonNull;
 
 /** Implementation of viewport-aware waveform renderer with segment caching. */
 class WaveformImpl implements Waveform {
@@ -13,7 +14,10 @@ class WaveformImpl implements Waveform {
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
 
-    WaveformImpl(String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
+    WaveformImpl(
+            @NonNull String audioFilePath,
+            @NonNull AudioEngine audioEngine,
+            @NonNull AudioHandle audioHandle) {
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         this.renderPool =
@@ -23,7 +27,7 @@ class WaveformImpl implements Waveform {
                             private int counter = 0;
 
                             @Override
-                            public Thread newThread(Runnable r) {
+                            public Thread newThread(@NonNull Runnable r) {
                                 Thread t = new Thread(r);
                                 t.setName("WaveformRenderer-" + counter++);
                                 t.setDaemon(true);
@@ -47,7 +51,7 @@ class WaveformImpl implements Waveform {
     }
 
     @Override
-    public CompletableFuture<Image> renderViewport(ViewportContext viewport) {
+    public CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
         return renderer.renderViewport(viewport);
     }
 
@@ -70,7 +74,9 @@ class WaveformImpl implements Waveform {
 
     /** Factory method to create waveform for audio file. */
     public static Waveform create(
-            String audioFilePath, AudioEngine audioEngine, AudioHandle audioHandle) {
+            @NonNull String audioFilePath,
+            @NonNull AudioEngine audioEngine,
+            @NonNull AudioHandle audioHandle) {
         return new WaveformImpl(audioFilePath, audioEngine, audioHandle);
     }
 }
