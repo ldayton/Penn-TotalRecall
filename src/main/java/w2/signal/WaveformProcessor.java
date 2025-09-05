@@ -1,4 +1,4 @@
-package waveform;
+package w2.signal;
 
 import a2.AudioBuffer;
 import a2.AudioEngine;

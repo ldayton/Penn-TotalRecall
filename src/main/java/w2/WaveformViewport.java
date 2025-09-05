@@ -1,5 +1,8 @@
 package w2;
 
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 /**
  * Interface for a waveform display viewport. Decouples WaveformPainter from Swing-specific
  * components.
@@ -10,11 +13,11 @@ public interface WaveformViewport {
     void repaint();
 
     /**
-     * Get the current viewport context (scroll position, zoom, size).
+     * Get the current display bounds.
      *
-     * @return Current viewport context
+     * @return Current display bounds (x, y, width, height)
      */
-    ViewportContext getViewportContext();
+    Rectangle getBounds();
 
     /**
      * Check if the viewport is visible and should be painted.
@@ -22,4 +25,11 @@ public interface WaveformViewport {
      * @return true if visible
      */
     boolean isVisible();
+
+    /**
+     * Get graphics context for painting.
+     *
+     * @return Graphics2D for painting, or null if not in paint context
+     */
+    Graphics2D getPaintGraphics();
 }

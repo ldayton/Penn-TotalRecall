@@ -9,8 +9,10 @@ import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import ui.audiofiles.AudioFile;
+import w2.TimeRange;
 import w2.Waveform;
 import w2.WaveformPainter;
+import w2.WaveformPaintingDataSource;
 import w2.WaveformViewport;
 
 /**
@@ -19,13 +21,16 @@ import w2.WaveformViewport;
  */
 @Singleton
 @Slf4j
-public class WaveformSessionManager {
+public class WaveformSessionManager implements WaveformPaintingDataSource {
+
+    private static final int PIXELS_PER_SECOND = 200;
 
     private final WaveformSessionSource sessionSource;
     private final WaveformPainter painter;
 
     private Optional<Waveform> currentWaveform = Optional.empty();
     private Optional<WaveformViewport> viewport = Optional.empty();
+    private double viewStartSeconds = 0.0; // View start position
 
     @Inject
     public WaveformSessionManager(
@@ -34,6 +39,7 @@ public class WaveformSessionManager {
             @NonNull EventDispatchBus eventBus) {
         this.sessionSource = sessionSource;
         this.painter = painter;
+        painter.setDataSource(this); // We are the data source
         eventBus.subscribe(this);
     }
 
@@ -41,6 +47,7 @@ public class WaveformSessionManager {
     public void setViewport(@NonNull WaveformViewport viewport) {
         this.viewport = Optional.of(viewport);
         painter.setViewport(viewport);
+        painter.setDataSource(this); // We implement WaveformPaintingDataSource
 
         // If we're playing, start the repaint timer
         if (sessionSource.isPlaying()) {
@@ -137,5 +144,46 @@ public class WaveformSessionManager {
     /** Force stop all rendering activity. */
     public void stopRendering() {
         painter.stop();
+    }
+
+    // WaveformPaintingDataSource implementation
+
+    @Override
+    public TimeRange getTimeRange() {
+        if (!viewport.isPresent()) {
+            return null;
+        }
+
+        // Calculate visible time range based on viewport width and zoom
+        double widthSeconds = viewport.get().getBounds().width / (double) PIXELS_PER_SECOND;
+        double endSeconds = viewStartSeconds + widthSeconds;
+
+        // Clamp to audio duration if we have it
+        Optional<Double> totalDuration = sessionSource.getTotalDuration();
+        if (totalDuration.isPresent() && totalDuration.get() > 0) {
+            endSeconds = Math.min(endSeconds, totalDuration.get());
+        }
+
+        return new TimeRange(viewStartSeconds, endSeconds);
+    }
+
+    @Override
+    public int getPixelsPerSecond() {
+        return PIXELS_PER_SECOND;
+    }
+
+    @Override
+    public double getPlaybackPositionSeconds() {
+        return sessionSource.getPlaybackPosition().orElse(0.0);
+    }
+
+    @Override
+    public Waveform getWaveform() {
+        return currentWaveform.orElse(null);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return sessionSource.isPlaying();
     }
 }

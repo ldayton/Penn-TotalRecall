@@ -16,11 +16,13 @@ public class WaveformPainter {
     private static final int FPS = 30;
     private final Timer repaintTimer;
     private volatile WaveformViewport viewport;
+    private volatile WaveformPaintingDataSource dataSource;
     private volatile boolean needsRepaint;
 
     /** Create a painter without a viewport. Viewport must be set before painting operations. */
     public WaveformPainter() {
         this.viewport = null;
+        this.dataSource = null;
         this.needsRepaint = false;
         this.repaintTimer = new Timer(1000 / FPS, e -> repaintIfNeeded());
     }
@@ -28,6 +30,11 @@ public class WaveformPainter {
     /** Set the viewport to paint to. */
     public void setViewport(WaveformViewport viewport) {
         this.viewport = viewport;
+    }
+
+    /** Set the data source for painting information. */
+    public void setDataSource(WaveformPaintingDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     /** Request a repaint on the next timer tick. */
@@ -58,6 +65,75 @@ public class WaveformPainter {
     }
 
     /**
+     * Called by the viewport during its paint cycle to suggest painting. The painter decides
+     * whether and what to paint.
+     */
+    public void suggestPaint() {
+        if (viewport == null || dataSource == null) {
+            return;
+        }
+
+        Graphics2D g = viewport.getPaintGraphics();
+        if (g == null) {
+            return;
+        }
+
+        paint(g);
+    }
+
+    /**
+     * Main paint orchestration method. Queries data sources, constructs ViewportContext, gets
+     * rendered image, and paints.
+     *
+     * @param g Graphics context from the viewport
+     */
+    private void paint(@NonNull Graphics2D g) {
+        if (viewport == null || dataSource == null) {
+            return;
+        }
+
+        Rectangle bounds = viewport.getBounds();
+        TimeRange timeRange = dataSource.getTimeRange();
+
+        if (timeRange == null) {
+            // No audio loaded
+            paintEmptyState(g, bounds);
+            return;
+        }
+
+        // Construct ViewportContext from the pieces
+        ViewportContext context =
+                new ViewportContext(
+                        timeRange.startSeconds(),
+                        timeRange.endSeconds(),
+                        bounds.width,
+                        bounds.height,
+                        dataSource.getPixelsPerSecond(),
+                        ViewportContext.ScrollDirection.FORWARD // TODO: track scroll direction
+                        );
+
+        // Get the waveform
+        Waveform waveform = dataSource.getWaveform();
+        if (waveform == null) {
+            paintLoadingIndicator(g, bounds);
+            return;
+        }
+
+        // TODO: Get rendered image from WaveformRenderer
+        // For now, just clear and draw cursor
+        clearBackground(g, bounds);
+
+        if (dataSource.isPlaying()) {
+            paintPlaybackCursor(
+                    g,
+                    bounds,
+                    timeRange,
+                    dataSource.getPixelsPerSecond(),
+                    dataSource.getPlaybackPositionSeconds());
+        }
+    }
+
+    /**
      * Paint the waveform image within the given bounds.
      *
      * @param g Graphics context
@@ -74,18 +150,18 @@ public class WaveformPainter {
      *
      * @param g Graphics context
      * @param bounds Area of the waveform
-     * @param viewport Current viewport context
+     * @param timeRange Current time range being displayed
+     * @param pixelsPerSecond Zoom level
      * @param playbackSeconds Current playback position in seconds
      */
     public void paintPlaybackCursor(
             @NonNull Graphics2D g,
             @NonNull Rectangle bounds,
-            @NonNull ViewportContext viewport,
+            @NonNull TimeRange timeRange,
+            int pixelsPerSecond,
             double playbackSeconds) {
-        // Calculate x position from playback time and viewport
-        double pixelsPerSecond =
-                bounds.width / (viewport.endTimeSeconds() - viewport.startTimeSeconds());
-        double relativeTime = playbackSeconds - viewport.startTimeSeconds();
+        // Calculate x position from playback time and time range
+        double relativeTime = playbackSeconds - timeRange.startSeconds();
         int cursorX = bounds.x + (int) (relativeTime * pixelsPerSecond);
 
         // Draw vertical cursor line if within bounds

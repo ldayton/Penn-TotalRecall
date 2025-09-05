@@ -5,9 +5,13 @@ import jakarta.inject.Singleton;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
+import w2.WaveformPainter;
+import w2.WaveformViewport;
 
 /**
  * A clean canvas for waveform rendering. Unlike WaveformDisplay, this component has no internal
@@ -16,12 +20,17 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton
 @Slf4j
-public class WaveformCanvas extends JComponent {
+public class WaveformCanvas extends JComponent implements WaveformViewport {
 
     private static final Color BACKGROUND_COLOR = UIManager.getColor("Panel.background");
 
+    private final WaveformPainter painter;
+    private Graphics2D currentGraphics; // Only valid during paintComponent
+
     @Inject
-    public WaveformCanvas() {
+    public WaveformCanvas(WaveformPainter painter) {
+        this.painter = painter;
+        painter.setViewport(this); // Register ourselves as the viewport
         setOpaque(true);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(800, 200));
@@ -32,15 +41,25 @@ public class WaveformCanvas extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // For now, just paint the background
-        g.setColor(getBackground());
-        g.fillRect(0, 0, getWidth(), getHeight());
+        // Store graphics for getPaintGraphics() during paint cycle
+        currentGraphics = (Graphics2D) g;
+        try {
+            // Suggest to the painter that now is a good time to paint
+            painter.suggestPaint();
+        } finally {
+            currentGraphics = null;
+        }
+    }
 
-        // Placeholder text to show it's working
-        g.setColor(Color.GRAY);
-        String message = "WaveformCanvas";
-        int x = (getWidth() - g.getFontMetrics().stringWidth(message)) / 2;
-        int y = getHeight() / 2;
-        g.drawString(message, x, y);
+    // WaveformViewport implementation
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    public Graphics2D getPaintGraphics() {
+        return currentGraphics;
     }
 }

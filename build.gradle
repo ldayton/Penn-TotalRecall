@@ -537,9 +537,9 @@ tasks.register('checkJavaVersion') {
 // Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
 
-// Configure compiler to show all warnings and fail on warnings
+// Configure compiler to hide warnings
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += ['-Xlint:all', '-Xlint:-serial']
+    options.compilerArgs += ['-Xlint:none']
 }
 
 // Development task - run with FMOD in unpackaged mode

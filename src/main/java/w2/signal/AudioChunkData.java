@@ -1,4 +1,4 @@
-package waveform;
+package w2.signal;
 
 /** Audio chunk with amplitude data and metadata. */
 record AudioChunkData(
