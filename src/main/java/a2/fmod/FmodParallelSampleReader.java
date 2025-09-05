@@ -138,10 +138,10 @@ public class FmodParallelSampleReader implements SampleReader {
                 fmod.FMOD_System_Update(system);
             }
 
-            // Create sound with COMPRESSEDSAMPLE for concurrent reads
+            // Create sound as a sample (loads entire file into memory) for concurrent reads
             PointerByReference soundRef = new PointerByReference();
             int flags =
-                    FmodConstants.FMOD_CREATECOMPRESSEDSAMPLE
+                    FmodConstants.FMOD_CREATESAMPLE
                             | FmodConstants.FMOD_OPENONLY
                             | FmodConstants.FMOD_ACCURATETIME;
 
@@ -196,9 +196,8 @@ public class FmodParallelSampleReader implements SampleReader {
 
             // Seek to start position if needed
             if (startFrame > 0) {
-                result =
-                        fmod.FMOD_Sound_SeekData(
-                                sound, (int) (startFrame * channelCount * bytesPerSample));
+                int offsetBytes = (int) (startFrame * channelCount * bytesPerSample);
+                result = fmod.FMOD_Sound_SeekData(sound, offsetBytes);
                 if (result != FmodConstants.FMOD_OK) {
                     throw new AudioReadException(
                             "Failed to seek: " + FmodError.describe(result), audioFile);
@@ -209,11 +208,9 @@ public class FmodParallelSampleReader implements SampleReader {
             int samplesPerFrame = channelCount;
             int totalSamples = (int) (actualFrameCount * samplesPerFrame);
             int bytesNeeded = totalSamples * bytesPerSample;
-            byte[] buffer = new byte[bytesNeeded];
 
             IntByReference bytesReadRef = new IntByReference();
             com.sun.jna.Memory memory = new com.sun.jna.Memory(bytesNeeded);
-            memory.write(0, buffer, 0, bytesNeeded);
             result = fmod.FMOD_Sound_ReadData(sound, memory, bytesNeeded, bytesReadRef);
 
             if (result != FmodConstants.FMOD_OK && result != FmodConstants.FMOD_ERR_FILE_EOF) {
@@ -223,6 +220,9 @@ public class FmodParallelSampleReader implements SampleReader {
 
             int bytesRead = bytesReadRef.getValue();
             int samplesRead = bytesRead / bytesPerSample;
+
+            // Only read the actual bytes that were read
+            byte[] buffer = new byte[bytesRead];
             memory.read(0, buffer, 0, bytesRead);
 
             // Convert bytes to normalized double samples
@@ -269,7 +269,7 @@ public class FmodParallelSampleReader implements SampleReader {
 
             // Open with minimal flags for metadata
             PointerByReference soundRef = new PointerByReference();
-            int flags = FmodConstants.FMOD_CREATECOMPRESSEDSAMPLE | FmodConstants.FMOD_OPENONLY;
+            int flags = FmodConstants.FMOD_CREATESAMPLE | FmodConstants.FMOD_OPENONLY;
 
             int result = fmod.FMOD_System_CreateSound(system, filePath, flags, null, soundRef);
             if (result != FmodConstants.FMOD_OK) {
@@ -325,8 +325,8 @@ public class FmodParallelSampleReader implements SampleReader {
 
             return new AudioMetadata(
                     Math.round(frequencyRef.getValue()), // sampleRate
+                    channelsRef.getValue(), // channelCount
                     bitsRef.getValue(), // bitsPerSample
-                    channelsRef.getValue(), // channels
                     formatStr, // format string
                     lengthRef.getValue(), // frameCount
                     msLengthRef.getValue() / 1000.0 // duration in seconds
