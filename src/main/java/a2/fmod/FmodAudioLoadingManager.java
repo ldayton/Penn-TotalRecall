@@ -4,8 +4,6 @@ import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.exceptions.AudioEngineException;
 import a2.exceptions.AudioLoadException;
-import a2.exceptions.CorruptedAudioFileException;
-import a2.exceptions.UnsupportedAudioFormatException;
 import app.annotations.ThreadSafe;
 import com.google.inject.Inject;
 import com.sun.jna.Pointer;
@@ -244,7 +242,7 @@ class FmodAudioLoadingManager {
                         soundRef);
 
         if (result != FmodConstants.FMOD_OK) {
-            throwAppropriateException(result, canonicalPath);
+            throw FmodError.toLoadException(result, canonicalPath);
         }
 
         Pointer sound = soundRef.getValue();
@@ -255,30 +253,7 @@ class FmodAudioLoadingManager {
         return sound;
     }
 
-    /** Throw the appropriate exception based on FMOD error code. */
-    private void throwAppropriateException(int errorCode, String filePath)
-            throws AudioLoadException {
-        switch (errorCode) {
-            case FmodConstants.FMOD_ERR_FILE_NOTFOUND ->
-                    throw new AudioLoadException("Audio file not found: " + filePath);
-            case FmodConstants.FMOD_ERR_FORMAT ->
-                    throw new UnsupportedAudioFormatException(
-                            "Unsupported audio format: " + filePath);
-            case FmodConstants.FMOD_ERR_FILE_BAD ->
-                    throw new CorruptedAudioFileException(
-                            "Corrupted or invalid audio file: " + filePath);
-            case FmodConstants.FMOD_ERR_MEMORY ->
-                    throw new AudioLoadException(
-                            "Insufficient memory to load audio file: " + filePath);
-            default ->
-                    throw new AudioLoadException(
-                            "Failed to load audio file '"
-                                    + filePath
-                                    + "' (error code: "
-                                    + errorCode
-                                    + ")");
-        }
-    }
+    // Error mapping centralized in FmodError
 
     /**
      * Extract metadata from an FMOD sound. This method must be called while holding the

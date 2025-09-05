@@ -56,7 +56,7 @@ class FmodPlaybackManager {
             int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException("Failed to play sound: error code: " + result);
+                throw FmodError.toPlaybackException(result, "play sound");
             }
 
             Pointer channel = channelRef.getValue();
@@ -66,7 +66,7 @@ class FmodPlaybackManager {
             if (result != FmodConstants.FMOD_OK) {
                 // Clean up the channel if we can't start it
                 fmod.FMOD_Channel_Stop(channel);
-                throw new AudioPlaybackException("Failed to start playback: error code: " + result);
+                throw FmodError.toPlaybackException(result, "start playback");
             }
 
             // Create and track playback handle
@@ -113,7 +113,7 @@ class FmodPlaybackManager {
             int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException("Failed to play sound: error code: " + result);
+                throw FmodError.toPlaybackException(result, "play sound");
             }
 
             Pointer channel = channelRef.getValue();
@@ -125,8 +125,7 @@ class FmodPlaybackManager {
                                 channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
                 if (result != FmodConstants.FMOD_OK) {
                     fmod.FMOD_Channel_Stop(channel);
-                    throw new AudioPlaybackException(
-                            "Failed to set position: error code: " + result);
+                    throw FmodError.toPlaybackException(result, "set position");
                 }
             }
 
@@ -134,7 +133,7 @@ class FmodPlaybackManager {
             result = fmod.FMOD_Channel_SetPaused(channel, false);
             if (result != FmodConstants.FMOD_OK) {
                 fmod.FMOD_Channel_Stop(channel);
-                throw new AudioPlaybackException("Failed to start playback: error code: " + result);
+                throw FmodError.toPlaybackException(result, "start playback");
             }
 
             // Create and track playback handle
@@ -171,7 +170,7 @@ class FmodPlaybackManager {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException("Failed to pause: error code: " + result);
+                throw FmodError.toPlaybackException(result, "pause");
             }
 
         } finally {
@@ -200,7 +199,7 @@ class FmodPlaybackManager {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException("Failed to resume: error code: " + result);
+                throw FmodError.toPlaybackException(result, "resume");
             }
 
         } finally {
@@ -258,7 +257,7 @@ class FmodPlaybackManager {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioPlaybackException("Failed to seek: error code: " + result);
+                throw FmodError.toPlaybackException(result, "seek");
             }
 
         } finally {
@@ -291,7 +290,7 @@ class FmodPlaybackManager {
             }
 
             if (result != FmodConstants.FMOD_OK) {
-                log.warn("Failed to get position: error code {}", result);
+                log.warn("Failed to get position: {}", FmodError.describe(result));
                 return 0;
             }
 

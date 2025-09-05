@@ -308,7 +308,7 @@ class FmodListenerManager {
                 // Channel has been released
                 handlePlaybackStopped();
             } else {
-                log.trace("Failed to get position: FMOD error {}", result);
+                log.trace("Failed to get position: {}", FmodError.describe(result));
             }
         } catch (Exception e) {
             log.warn("Error updating progress", e);

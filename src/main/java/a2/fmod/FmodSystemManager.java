@@ -50,14 +50,7 @@ class FmodSystemManager {
             PointerByReference systemRef = new PointerByReference();
             int result = fmod.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to create FMOD system: "
-                                + " (error code: "
-                                + result
-                                + ")"
-                                + " (code: "
-                                + result
-                                + ")");
+                throw FmodError.toEngineException(result, "create FMOD system");
             }
             system = systemRef.getValue();
 
@@ -70,14 +63,7 @@ class FmodSystemManager {
 
             result = fmod.FMOD_System_Init(system, maxChannels, initFlags, null);
             if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to initialize FMOD system: "
-                                + " (error code: "
-                                + result
-                                + ")"
-                                + " (code: "
-                                + result
-                                + ")");
+                throw FmodError.toEngineException(result, "initialize FMOD system");
             }
 
             initialized = true;
@@ -115,7 +101,9 @@ class FmodSystemManager {
         // Smaller buffer for lower latency (256 samples, 4 buffers)
         int result = fmodLib.FMOD_System_SetDSPBufferSize(sys, 256, 4);
         if (result != FmodConstants.FMOD_OK) {
-            log.warn("Could not set DSP buffer size for low latency: {}", "error code: " + result);
+            log.warn(
+                    "Could not set DSP buffer size for low latency: {}",
+                    FmodError.describe(result));
         }
 
         // Set software format - mono for audio annotation app
@@ -123,7 +111,7 @@ class FmodSystemManager {
                 fmodLib.FMOD_System_SetSoftwareFormat(
                         sys, 48000, FmodConstants.FMOD_SPEAKERMODE_MONO, 0);
         if (result != FmodConstants.FMOD_OK) {
-            log.warn("Could not set software format: {}", "error code: " + result);
+            log.warn("Could not set software format: {}", FmodError.describe(result));
         }
     }
 
@@ -162,7 +150,7 @@ class FmodSystemManager {
             if (system != null && fmod != null) {
                 int result = fmod.FMOD_System_Release(system);
                 if (result != FmodConstants.FMOD_OK) {
-                    log.warn("Error releasing FMOD system: {}", "error code: " + result);
+                    log.warn("Error releasing FMOD system: {}", FmodError.describe(result));
                 }
             }
 
