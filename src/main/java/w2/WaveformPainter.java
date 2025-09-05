@@ -128,26 +128,46 @@ public class WaveformPainter {
         // Get the waveform
         Waveform waveform = dataSource.getWaveform();
         if (waveform == null) {
+            System.out.println("WaveformPainter: No waveform available");
             paintLoadingIndicator(g, bounds);
             return;
         }
+        System.out.println("WaveformPainter: Got waveform, attempting to render");
 
         // Get rendered waveform image
         try {
             CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
-            Image waveformImage =
-                    imageFuture.get(100, TimeUnit.MILLISECONDS); // Quick timeout for UI
+
+            // Try to get the image with a short timeout for responsiveness
+            Image waveformImage = imageFuture.get(100, TimeUnit.MILLISECONDS);
 
             if (waveformImage != null) {
+                System.out.println("WaveformPainter: Successfully got waveform image, painting it");
                 paintWaveform(g, bounds, waveformImage);
             } else {
+                System.out.println("WaveformPainter: Waveform image was null");
                 clearBackground(g, bounds);
             }
         } catch (TimeoutException e) {
-            // Still rendering, show previous or loading
+            // Still rendering, show loading indicator
+            System.out.println("WaveformPainter: Timed out waiting for waveform render");
             paintLoadingIndicator(g, bounds);
+
+            // Request a repaint when the rendering completes
+            CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
+            imageFuture.whenComplete(
+                    (image, ex) -> {
+                        if (image != null) {
+                            System.out.println(
+                                    "WaveformPainter: Waveform rendering completed, requesting"
+                                            + " repaint");
+                            requestRepaint();
+                        }
+                    });
         } catch (Exception e) {
             // Error rendering
+            System.out.println("WaveformPainter: Exception rendering waveform: " + e.getMessage());
+            e.printStackTrace();
             clearBackground(g, bounds);
         }
 

@@ -3,6 +3,8 @@ package w2;
 import a2.AudioEngine;
 import a2.AudioHandle;
 import a2.AudioMetadata;
+import a2.SampleReader;
+import a2.SampleReaderFactory;
 import java.awt.Image;
 import java.util.concurrent.*;
 import lombok.NonNull;
@@ -16,11 +18,14 @@ public class Waveform {
     private final WaveformRenderer renderer;
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
+    private final SampleReader sampleReader;
 
     public Waveform(
             @NonNull String audioFilePath,
             @NonNull AudioEngine audioEngine,
-            @NonNull AudioHandle audioHandle) {
+            @NonNull AudioHandle audioHandle,
+            @NonNull SampleReaderFactory sampleReaderFactory) {
+
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         this.renderPool =
@@ -48,13 +53,25 @@ public class Waveform {
         // Get sample rate from audio metadata
         AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
         int sampleRate = metadata.sampleRate();
+
+        // Create a pooled sample reader for parallel rendering
+        this.sampleReader = sampleReaderFactory.createPooledReader(threads);
+
         this.renderer =
-                new WaveformRenderer(
-                        audioFilePath, cache, renderPool, audioEngine, audioHandle, sampleRate);
+                new WaveformRenderer(audioFilePath, cache, renderPool, sampleReader, sampleRate);
     }
 
     public CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
-        return renderer.renderViewport(viewport);
+        if (renderer == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        try {
+            CompletableFuture<Image> result = renderer.renderViewport(viewport);
+            return result;
+        } catch (Exception e) {
+            // Log error but don't rethrow
+            return CompletableFuture.completedFuture(null);
+        }
     }
 
     /** Shutdown the renderer and release resources. */
@@ -71,6 +88,16 @@ public class Waveform {
         } catch (InterruptedException e) {
             renderPool.shutdownNow();
             Thread.currentThread().interrupt();
+        }
+
+        // Close the sample reader
+        try {
+            if (sampleReader != null) {
+                sampleReader.close();
+            }
+        } catch (Exception e) {
+            // Log but don't rethrow
+            System.err.println("Error closing sample reader: " + e.getMessage());
         }
     }
 }

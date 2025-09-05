@@ -38,8 +38,8 @@ class WaveformRendererTest {
 
     @AfterEach
     void tearDown() {
-        if (waveform instanceof WaveformImpl impl) {
-            impl.shutdown();
+        if (waveform != null) {
+            waveform.shutdown();
         }
         if (engine != null) {
             engine.close();
@@ -51,12 +51,12 @@ class WaveformRendererTest {
     void renderViewportUnder25ms() throws Exception {
         // Load audio and create waveform
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        waveform = Waveform.forAudioFile(SAMPLE_WAV, engine, handle);
+        waveform = new Waveform(SAMPLE_WAV, engine, handle);
 
-        // Viewport: 10s span at 100 px/sec, 1000x400
+        // Viewport: 5s span at 200 px/sec, 1000x250 (matching actual app)
         ViewportContext viewport =
                 new ViewportContext(
-                        0.0, 10.0, 1000, 400, 100, ViewportContext.ScrollDirection.FORWARD);
+                        0.0, 5.0, 1000, 250, 200, ViewportContext.ScrollDirection.FORWARD);
 
         // Warm up to populate caches and FMOD paths (not timed)
         Image warm = waveform.renderViewport(viewport).get(10, TimeUnit.SECONDS);
@@ -69,5 +69,26 @@ class WaveformRendererTest {
 
         assertNotNull(img);
         assertTrue(elapsedMs < 25, "Expected <25 ms, took " + elapsedMs + " ms");
+    }
+    
+    @Test
+    @DisplayName("Initial render completes within 1 second")
+    void initialRenderUnder1Second() throws Exception {
+        // Load audio and create waveform
+        AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
+        waveform = new Waveform(SAMPLE_WAV, engine, handle);
+
+        // Viewport matching actual app usage
+        ViewportContext viewport =
+                new ViewportContext(
+                        0.0, 5.0, 1000, 250, 200, ViewportContext.ScrollDirection.FORWARD);
+
+        // Measure initial render (should complete in reasonable time)
+        long startNs = System.nanoTime();
+        Image img = waveform.renderViewport(viewport).get(1, TimeUnit.SECONDS);
+        long elapsedMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
+
+        assertNotNull(img, "Initial render should complete within 1 second");
+        System.out.println("Initial render took " + elapsedMs + " ms");
     }
 }

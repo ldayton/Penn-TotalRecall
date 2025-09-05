@@ -1,7 +1,6 @@
 package w2;
 
-import a2.AudioEngine;
-import a2.AudioHandle;
+import a2.SampleReader;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -79,13 +78,12 @@ class WaveformRenderer {
             @NonNull String audioFilePath,
             @NonNull WaveformSegmentCache cache,
             @NonNull ExecutorService renderPool,
-            @NonNull AudioEngine audioEngine,
-            @NonNull AudioHandle audioHandle,
+            @NonNull SampleReader sampleReader,
             int sampleRate) {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
         this.renderPool = renderPool;
-        this.processor = new WaveformProcessor(audioEngine, audioHandle, new PixelScaler());
+        this.processor = new WaveformProcessor(sampleReader, sampleRate, new PixelScaler());
     }
 
     /** Fill cache for viewport with priority-based rendering. */
@@ -121,6 +119,11 @@ class WaveformRenderer {
                             List<Image> segments =
                                     segmentFutures.stream().map(f -> f.getNow(null)).toList();
                             return compositeSegments(segments, viewport);
+                        })
+                .exceptionally(
+                        e -> {
+                            e.printStackTrace();
+                            return null;
                         });
     }
 
@@ -164,9 +167,14 @@ class WaveformRenderer {
             // Prefetch backward (lower priority)
             double backStart = viewport.startTimeSeconds() - segmentDuration;
             for (int i = 0; i < PREFETCH_COUNT / 2; i++) {
+                double segmentTime = backStart - i * segmentDuration;
+                // Don't prefetch segments before the start of the audio
+                if (segmentTime < 0) {
+                    continue;
+                }
                 var key =
                         new WaveformSegmentCache.SegmentKey(
-                                backStart - i * segmentDuration,
+                                segmentTime,
                                 viewport.pixelsPerSecond(),
                                 viewport.viewportHeightPx());
                 if (cache.get(key) == null) {
@@ -178,9 +186,14 @@ class WaveformRenderer {
             // Scrolling backward - reverse priorities
             double backStart = viewport.startTimeSeconds() - segmentDuration;
             for (int i = 0; i < PREFETCH_COUNT; i++) {
+                double segmentTime = backStart - i * segmentDuration;
+                // Don't prefetch segments before the start of the audio
+                if (segmentTime < 0) {
+                    continue;
+                }
                 var key =
                         new WaveformSegmentCache.SegmentKey(
-                                backStart - i * segmentDuration,
+                                segmentTime,
                                 viewport.pixelsPerSecond(),
                                 viewport.viewportHeightPx());
                 if (cache.get(key) == null) {
@@ -206,8 +219,16 @@ class WaveformRenderer {
 
     /** Render single 200px segment. */
     private CompletableFuture<Image> renderSegment(@NonNull WaveformSegmentCache.SegmentKey key) {
+
+        // Safety check: don't render segments with negative time
+        if (key.startTime() < 0) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        long startTime = System.currentTimeMillis();
         return CompletableFuture.supplyAsync(
                 () -> {
+                    long innerStartTime = System.currentTimeMillis();
                     // Check for cancellation
                     if (Thread.currentThread().isInterrupted()) {
                         return null;
@@ -324,6 +345,7 @@ class WaveformRenderer {
                         g.dispose();
                     }
 
+                    long elapsed = System.currentTimeMillis() - innerStartTime;
                     return image;
                 },
                 renderPool);

@@ -2,7 +2,6 @@ package a2.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioBuffer;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.PlaybackHandle;
@@ -14,7 +13,6 @@ import annotations.Audio;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -44,7 +42,6 @@ class FmodAudioEngineTest {
     private FmodAudioLoadingManager loadingManager;
     private FmodPlaybackManager playbackManager;
     private FmodListenerManager listenerManager;
-    private FmodSampleReader sampleReader;
     private FmodSystemStateManager stateManager;
     private FmodHandleLifecycleManager lifecycleManager;
 
@@ -75,8 +72,6 @@ class FmodAudioEngineTest {
                         systemManager.getFmodLibrary(),
                         systemManager.getSystem(),
                         PROGRESS_INTERVAL_MS);
-        sampleReader =
-                new FmodSampleReader(systemManager.getFmodLibrary(), systemManager.getSystem());
 
         // Create the engine with real components
         engine =
@@ -85,7 +80,6 @@ class FmodAudioEngineTest {
                         loadingManager,
                         playbackManager,
                         listenerManager,
-                        sampleReader,
                         stateManager,
                         lifecycleManager);
     }
@@ -483,39 +477,6 @@ class FmodAudioEngineTest {
         executor.shutdown();
     }
 
-    @Test
-    @DisplayName("Should handle concurrent read operations during playback")
-    @Timeout(5)
-    void testConcurrentReadsDuringPlayback() throws Exception {
-        AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-        AudioMetadata metadata = engine.getMetadata(handle);
-        PlaybackHandle playback = engine.play(handle);
-
-        List<CompletableFuture<AudioBuffer>> readFutures = new ArrayList<>();
-
-        // Start multiple concurrent reads while playing
-        for (int i = 0; i < 5; i++) {
-            long start = i * 1000;
-            CompletableFuture<AudioBuffer> future = engine.readSamples(handle, start, 1000);
-            readFutures.add(future);
-        }
-
-        // Manipulate playback while reads are happening
-        engine.pause(playback);
-        Thread.sleep(50);
-        engine.resume(playback);
-        engine.seek(playback, metadata.frameCount() / 2);
-
-        // All reads should complete successfully
-        for (CompletableFuture<AudioBuffer> future : readFutures) {
-            AudioBuffer buffer = future.get(2, TimeUnit.SECONDS);
-            assertNotNull(buffer);
-            assertTrue(buffer.getSamples().length > 0);
-        }
-
-        engine.stop(playback);
-    }
-
     // ========== play() with range Tests ==========
 
     @Test
@@ -758,10 +719,6 @@ class FmodAudioEngineTest {
                 "Getting metadata for stale handle should throw");
         assertThrows(
                 Exception.class, () -> engine.play(handle1), "Playing stale handle should throw");
-        assertThrows(
-                Exception.class,
-                () -> engine.readSamples(handle1, 0, 1000).get(),
-                "Reading samples from stale handle should throw");
     }
 
     // ========== Race Condition Tests ==========

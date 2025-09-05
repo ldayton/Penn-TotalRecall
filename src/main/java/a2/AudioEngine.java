@@ -2,7 +2,6 @@ package a2;
 
 import a2.exceptions.AudioLoadException;
 import app.annotations.ThreadSafe;
-import java.util.concurrent.CompletableFuture;
 import lombok.NonNull;
 
 /**
@@ -37,9 +36,6 @@ public interface AudioEngine extends AutoCloseable {
     boolean isPaused(@NonNull PlaybackHandle playback);
 
     boolean isStopped(@NonNull PlaybackHandle playback);
-
-    CompletableFuture<AudioBuffer> readSamples(
-            @NonNull AudioHandle audio, long startFrame, long frameCount);
 
     AudioMetadata getMetadata(@NonNull AudioHandle audio);
 

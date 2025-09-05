@@ -1,9 +1,10 @@
 package w2.signal;
 
-import a2.AudioBuffer;
-import a2.AudioEngine;
-import a2.AudioHandle;
+import a2.AudioData;
+import a2.SampleReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 import marytts.signalproc.filter.BandPassFilter;
 import org.slf4j.Logger;
@@ -13,16 +14,15 @@ import org.slf4j.LoggerFactory;
 public final class WaveformProcessor {
     private static final Logger logger = LoggerFactory.getLogger(WaveformProcessor.class);
 
-    private final AudioEngine audioEngine;
-    private final AudioHandle audioHandle;
+    private final SampleReader sampleReader;
+    private final int sampleRate;
     private final SignalEnhancer signalEnhancer = new SignalEnhancer();
     private final PixelScaler pixelScaler;
     private final ConcurrentHashMap<FrequencyRange, BandPassFilter> filterCache;
 
-    public WaveformProcessor(
-            AudioEngine audioEngine, AudioHandle audioHandle, PixelScaler pixelScaler) {
-        this.audioEngine = audioEngine;
-        this.audioHandle = audioHandle;
+    public WaveformProcessor(SampleReader sampleReader, int sampleRate, PixelScaler pixelScaler) {
+        this.sampleReader = sampleReader;
+        this.sampleRate = sampleRate;
         this.pixelScaler = pixelScaler;
         this.filterCache = new ConcurrentHashMap<>();
     }
@@ -54,7 +54,7 @@ public final class WaveformProcessor {
         }
     }
 
-    /** Loads raw audio chunk from file using AudioEngine. */
+    /** Loads raw audio chunk from file using SampleReader. */
     private AudioChunkData loadChunk(
             String audioFilePath,
             int chunkIndex,
@@ -63,10 +63,6 @@ public final class WaveformProcessor {
             throws IOException {
 
         try {
-            // Get metadata to know the sample rate
-            var metadata = audioEngine.getMetadata(audioHandle);
-            int sampleRate = metadata.sampleRate();
-
             // Calculate frame positions
             long startFrame = (long) (chunkIndex * chunkDurationSeconds * sampleRate);
             long frameCount = (long) (chunkDurationSeconds * sampleRate);
@@ -78,20 +74,16 @@ public final class WaveformProcessor {
                 frameCount += overlapFrames;
             }
 
-            // Read samples synchronously
-            AudioBuffer buffer = audioEngine.readSamples(audioHandle, startFrame, frameCount).get();
-            try {
-                double[] samples = buffer.getSamples();
+            // Read samples asynchronously but wait for result
+            Path audioPath = Paths.get(audioFilePath);
+            AudioData audioData = sampleReader.readSamples(audioPath, startFrame, frameCount).get();
 
-                return new AudioChunkData(
-                        samples,
-                        sampleRate,
-                        0.0, // Peak calculated after processing
-                        (int) frameCount,
-                        (int) overlapFrames);
-            } finally {
-                buffer.close();
-            }
+            return new AudioChunkData(
+                    audioData.samples(),
+                    audioData.sampleRate(),
+                    0.0, // Peak calculated after processing
+                    (int) audioData.frameCount(),
+                    (int) overlapFrames);
         } catch (Exception e) {
             throw new IOException("Failed to read audio chunk: " + e.getMessage(), e);
         }

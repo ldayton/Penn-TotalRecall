@@ -2,6 +2,7 @@ package s2;
 
 import a2.AudioEngine;
 import a2.AudioHandle;
+import a2.SampleReaderFactory;
 import com.google.inject.Provider;
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
@@ -30,10 +31,12 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
     private final WaveformSessionSource sessionSource;
     private final WaveformPainter painter;
     private final Provider<AudioEngine> audioEngineProvider;
+    private final Provider<SampleReaderFactory> sampleReaderFactoryProvider;
 
     private Optional<Waveform> currentWaveform = Optional.empty();
     private Optional<WaveformViewport> viewport = Optional.empty();
     private Optional<AudioEngine> audioEngine = Optional.empty();
+    private Optional<SampleReaderFactory> sampleReaderFactory = Optional.empty();
     private double viewStartSeconds = 0.0; // View start position
 
     @Inject
@@ -41,11 +44,13 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
             @NonNull WaveformSessionSource sessionSource,
             @NonNull WaveformPainter painter,
             @NonNull Provider<AudioEngine> audioEngineProvider,
+            @NonNull Provider<SampleReaderFactory> sampleReaderFactoryProvider,
             @NonNull EventDispatchBus eventBus,
             @NonNull ui.WaveformCanvas canvas) {
         this.sessionSource = sessionSource;
         this.painter = painter;
         this.audioEngineProvider = audioEngineProvider;
+        this.sampleReaderFactoryProvider = sampleReaderFactoryProvider;
         painter.setDataSource(this); // We are the data source
         eventBus.subscribe(this);
 
@@ -206,8 +211,18 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
                 audioEngine = Optional.of(audioEngineProvider.get());
             }
 
+            // Get or create sample reader factory
+            if (sampleReaderFactory.isEmpty()) {
+                sampleReaderFactory = Optional.of(sampleReaderFactoryProvider.get());
+            }
+
             // Create new waveform for the audio file
-            Waveform waveform = new Waveform(audioPath.get(), audioEngine.get(), audioHandle.get());
+            Waveform waveform =
+                    new Waveform(
+                            audioPath.get(),
+                            audioEngine.get(),
+                            audioHandle.get(),
+                            sampleReaderFactory.get());
 
             // Clean up old waveform if present
             currentWaveform.ifPresent(Waveform::shutdown);

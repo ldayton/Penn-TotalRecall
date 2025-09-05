@@ -1,6 +1,5 @@
 package a2.fmod;
 
-import a2.AudioBuffer;
 import a2.AudioEngine;
 import a2.AudioHandle;
 import a2.AudioMetadata;
@@ -14,9 +13,6 @@ import app.annotations.ThreadSafe;
 import com.google.inject.Inject;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 public class FmodAudioEngine implements AudioEngine {
 
     private final ReentrantLock operationLock = new ReentrantLock();
-    private final ExecutorService readExecutor = Executors.newCachedThreadPool();
 
     // Injected dependencies
     private final FmodSystemManager systemManager;
     private final FmodAudioLoadingManager loadingManager;
     private final FmodPlaybackManager playbackManager;
     private final FmodListenerManager listenerManager;
-    private final FmodSampleReader sampleReader;
     private final FmodSystemStateManager systemStateManager;
     private final FmodHandleLifecycleManager lifecycleManager;
 
@@ -52,7 +46,6 @@ public class FmodAudioEngine implements AudioEngine {
             @NonNull FmodAudioLoadingManager loadingManager,
             @NonNull FmodPlaybackManager playbackManager,
             @NonNull FmodListenerManager listenerManager,
-            @NonNull FmodSampleReader sampleReader,
             @NonNull FmodSystemStateManager systemStateManager,
             @NonNull FmodHandleLifecycleManager lifecycleManager) {
 
@@ -60,7 +53,6 @@ public class FmodAudioEngine implements AudioEngine {
         this.loadingManager = loadingManager;
         this.playbackManager = playbackManager;
         this.listenerManager = listenerManager;
-        this.sampleReader = sampleReader;
         this.systemStateManager = systemStateManager;
         this.lifecycleManager = lifecycleManager;
 
@@ -400,34 +392,6 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     @Override
-    public CompletableFuture<AudioBuffer> readSamples(
-            @NonNull AudioHandle audio, long startFrame, long frameCount) {
-        checkOperational();
-
-        if (!(audio instanceof FmodAudioHandle)) {
-            return CompletableFuture.failedFuture(
-                    new AudioEngineException("Invalid audio handle type"));
-        }
-
-        FmodAudioHandle fmodHandle = (FmodAudioHandle) audio;
-        if (!fmodHandle.isValid() || !loadingManager.isCurrent(audio)) {
-            return CompletableFuture.failedFuture(
-                    new AudioEngineException("Audio handle is not the currently loaded file"));
-        }
-
-        if (startFrame < 0 || frameCount <= 0) {
-            return CompletableFuture.failedFuture(
-                    new AudioEngineException(
-                            "Invalid frame range: start=" + startFrame + ", count=" + frameCount));
-        }
-
-        String filePath = fmodHandle.getFilePath();
-
-        return CompletableFuture.supplyAsync(
-                () -> sampleReader.readSamples(filePath, startFrame, frameCount), readExecutor);
-    }
-
-    @Override
     public AudioMetadata getMetadata(@NonNull AudioHandle audio) {
         checkOperational();
         if (!loadingManager.isCurrent(audio)) {
@@ -513,9 +477,6 @@ public class FmodAudioEngine implements AudioEngine {
                 currentSound = null;
             }
 
-            if (readExecutor != null) {
-                readExecutor.shutdown();
-            }
             if (systemManager != null) {
                 systemManager.shutdown();
             }

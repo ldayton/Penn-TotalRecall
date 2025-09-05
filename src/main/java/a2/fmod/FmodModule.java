@@ -74,11 +74,4 @@ public class FmodModule extends AbstractModule {
             @NonNull FmodLibrary fmod, @NonNull Pointer system) {
         return new FmodListenerManager(fmod, system);
     }
-
-    /** Provide FmodSampleReader with dependencies. */
-    @Provides
-    @Singleton
-    FmodSampleReader provideFmodSampleReader(@NonNull FmodLibrary fmod, @NonNull Pointer system) {
-        return new FmodSampleReader(fmod, system);
-    }
 }

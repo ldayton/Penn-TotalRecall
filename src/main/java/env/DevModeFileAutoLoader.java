@@ -2,6 +2,7 @@ package env;
 
 import actions.OpenWordpoolAction;
 import events.ApplicationStartedEvent;
+import events.AudioFileLoadRequestedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
 import jakarta.inject.Inject;
@@ -9,7 +10,6 @@ import jakarta.inject.Singleton;
 import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import state.AudioState;
 import ui.audiofiles.AudioFileDisplay;
 import ui.audiofiles.AudioFileList;
 
@@ -28,19 +28,18 @@ public class DevModeFileAutoLoader {
 
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
-    private final AudioState audioState;
+    private final EventDispatchBus eventBus;
     private final OpenWordpoolAction openWordpoolAction;
 
     @Inject
     public DevModeFileAutoLoader(
             AppConfig appConfig,
             AudioFileList audioFileList,
-            AudioState audioState,
             OpenWordpoolAction openWordpoolAction,
             EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.audioFileList = audioFileList;
-        this.audioState = audioState;
+        this.eventBus = eventBus;
         this.openWordpoolAction = openWordpoolAction;
         eventBus.subscribe(this);
     }
@@ -96,7 +95,8 @@ public class DevModeFileAutoLoader {
         }
         if (audioFileList.getModel().getSize() > 0) {
             var loadedFile = audioFileList.getModel().getElementAt(targetIndex);
-            audioState.switchFile(loadedFile);
+            // Publish event to load the audio file through the new event-driven system
+            eventBus.publish(new AudioFileLoadRequestedEvent(loadedFile));
             logger.info(
                     "Development mode: switched to {} ({} files listed)",
                     loadedFile.getName(),
