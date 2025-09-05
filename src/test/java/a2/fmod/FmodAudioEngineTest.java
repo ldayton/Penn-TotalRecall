@@ -516,43 +516,45 @@ class FmodAudioEngineTest {
         engine.stop(playback);
     }
 
-    // ========== playRange() Method Tests ==========
+    // ========== play() with range Tests ==========
 
     @Test
-    @DisplayName("Should test playRange() method behavior")
+    @DisplayName("Should test play() with range method behavior")
     void testPlayRangeMethod() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
         AudioMetadata metadata = engine.getMetadata(handle);
 
+        TestListener listener = new TestListener();
+        engine.addPlaybackListener(listener);
+
         long startFrame = metadata.frameCount() / 4;
         long endFrame = metadata.frameCount() / 2;
 
-        // This method appears broken - it doesn't track the playback handle
-        // and doesn't integrate with the listener system
-        assertDoesNotThrow(() -> engine.playRange(handle, startFrame, endFrame));
+        PlaybackHandle playback = engine.play(handle, startFrame, endFrame);
+        assertNotNull(playback);
 
-        // Sleep to let it play
-        Thread.sleep(500);
+        Thread.sleep(100);
+        assertTrue(!listener.stateChanges.isEmpty(), "No state changes received");
+        assertTrue(
+                listener.stateChanges.contains(PlaybackState.PLAYING),
+                "Expected PLAYING state, got: " + listener.stateChanges);
 
-        // There's no way to stop this playback since it's not tracked!
-        // This is a bug in the implementation
-
-        // Load new audio to force cleanup
-        engine.loadAudio(SWEEP_WAV);
+        engine.stop(playback);
+        assertTrue(listener.waitForStateChange(PlaybackState.STOPPED));
     }
 
     @Test
-    @DisplayName("Should validate playRange() parameters")
+    @DisplayName("Should validate play() range parameters")
     void testPlayRangeValidation() throws Exception {
         AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
         AudioMetadata metadata = engine.getMetadata(handle);
 
-        // Invalid ranges should be rejected
-        assertThrows(AudioPlaybackException.class, () -> engine.playRange(handle, -1, 1000));
-        assertThrows(AudioPlaybackException.class, () -> engine.playRange(handle, 1000, 500));
+        assertThrows(AudioPlaybackException.class, () -> engine.play(handle, -1, 1000));
+        assertThrows(AudioPlaybackException.class, () -> engine.play(handle, 1000, 500));
 
-        // Valid range should work
-        assertDoesNotThrow(() -> engine.playRange(handle, 0, metadata.frameCount() / 2));
+        PlaybackHandle playback = engine.play(handle, 0, metadata.frameCount() / 2);
+        assertNotNull(playback);
+        engine.stop(playback);
     }
 
     // ========== State Consistency Tests ==========
@@ -920,9 +922,20 @@ class FmodAudioEngineTest {
         }
 
         boolean waitForStateChange(PlaybackState state) throws InterruptedException {
+            // If the state already arrived, no need to wait
+            if (stateChanges.contains(state)) {
+                return true;
+            }
+
             CountDownLatch latch = new CountDownLatch(1);
             expectedState.set(state);
             stateLatch.set(latch);
+
+            // Check again in case the event fired between set() and await()
+            if (stateChanges.contains(state)) {
+                return true;
+            }
+
             return latch.await(2, TimeUnit.SECONDS);
         }
 

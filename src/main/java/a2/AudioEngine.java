@@ -17,8 +17,7 @@ public interface AudioEngine extends AutoCloseable {
 
     PlaybackHandle play(@NonNull AudioHandle audio);
 
-    /** Fire-and-forget playback of a range. Cannot be paused/stopped. */
-    void playRange(@NonNull AudioHandle audio, long startFrame, long endFrame);
+    PlaybackHandle play(@NonNull AudioHandle audio, long startFrame, long endFrame);
 
     void pause(@NonNull PlaybackHandle playback);
 

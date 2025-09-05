@@ -464,7 +464,7 @@ public class AudioState implements PlaybackListener {
         if (audioEngine == null) {
             audioEngine = audioEngineProvider.get();
         }
-        audioEngine.playRange(currentAudioHandle, startFrame, endFrame);
+        audioEngine.play(currentAudioHandle, startFrame, endFrame);
     }
 
     /**
