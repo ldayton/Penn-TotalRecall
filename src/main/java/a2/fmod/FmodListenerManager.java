@@ -259,13 +259,16 @@ class FmodListenerManager {
      * <p>This is package-private for testing.
      */
     void updateProgress() {
+        // Capture handle in local variable to avoid race conditions
+        FmodPlaybackHandle handle = currentHandle;
+
         // Skip if no handle or listeners
-        if (currentHandle == null || listeners.isEmpty()) {
+        if (handle == null || listeners.isEmpty()) {
             return;
         }
 
         // Check if handle is still active
-        if (!currentHandle.isActive()) {
+        if (!handle.isActive()) {
             // Playback has stopped
             handlePlaybackStopped();
             return;
@@ -276,9 +279,7 @@ class FmodListenerManager {
             IntByReference positionRef = new IntByReference();
             int result =
                     fmod.FMOD_Channel_GetPosition(
-                            currentHandle.getChannel(),
-                            positionRef,
-                            FmodConstants.FMOD_TIMEUNIT_PCM);
+                            handle.getChannel(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
 
             if (result == FmodConstants.FMOD_OK) {
                 // Get the raw decoded position
@@ -286,22 +287,21 @@ class FmodListenerManager {
 
                 // Apply latency compensation if system is available
                 long hearingPosition = decodedPosition;
-                if (system != null && currentHandle.getAudioHandle() instanceof FmodAudioHandle) {
-                    FmodAudioHandle fmodAudioHandle =
-                            (FmodAudioHandle) currentHandle.getAudioHandle();
+                if (system != null && handle.getAudioHandle() instanceof FmodAudioHandle) {
+                    FmodAudioHandle fmodAudioHandle = (FmodAudioHandle) handle.getAudioHandle();
                     Pointer sound = fmodAudioHandle.getSound();
                     if (sound != null) {
                         hearingPosition =
                                 calculateHearingPosition(
-                                        decodedPosition, sound, currentHandle.getStartFrame());
+                                        decodedPosition, sound, handle.getStartFrame());
                     }
                 }
 
-                notifyProgress(currentHandle, hearingPosition, totalFrames);
+                notifyProgress(handle, hearingPosition, totalFrames);
 
                 // Check if we've reached the end (for range playback)
-                if (currentHandle.getEndFrame() != Long.MAX_VALUE
-                        && hearingPosition >= currentHandle.getEndFrame()) {
+                if (handle.getEndFrame() != Long.MAX_VALUE
+                        && hearingPosition >= handle.getEndFrame()) {
                     handlePlaybackStopped();
                 }
             } else if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
