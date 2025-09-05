@@ -1,6 +1,4 @@
-package s2;
-
-import w2.ViewportContext;
+package w2;
 
 /**
  * Interface for a waveform display viewport. Decouples WaveformPainter from Swing-specific

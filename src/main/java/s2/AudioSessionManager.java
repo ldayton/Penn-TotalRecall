@@ -5,6 +5,7 @@ import a2.AudioHandle;
 import a2.PlaybackHandle;
 import a2.PlaybackListener;
 import com.google.inject.Provider;
+import events.AppStateChangedEvent;
 import events.AudioFileCloseRequestedEvent;
 import events.AudioFileLoadRequestedEvent;
 import events.AudioPlayPauseRequestedEvent;
@@ -55,8 +56,12 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         closeCurrentSession();
 
         // Transition to loading state
+        var previousState = stateManager.getCurrentState();
         stateManager.transitionToLoading();
         currentFile = Optional.of(event.getFile());
+        eventBus.publish(
+                new AppStateChangedEvent(
+                        previousState, AudioSessionStateMachine.State.LOADING, event.getFile()));
 
         // Initialize audio engine if needed
         if (audioEngine.isEmpty()) {
@@ -69,11 +74,18 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
         try {
             var handle = audioEngine.get().loadAudio(event.getFile().getAbsolutePath());
             currentAudioHandle = Optional.of(handle);
+            var prevState = stateManager.getCurrentState();
             stateManager.transitionToReady();
+            eventBus.publish(
+                    new AppStateChangedEvent(
+                            prevState, AudioSessionStateMachine.State.READY, event.getFile()));
             log.info("Audio file loaded successfully: {}", event.getFile().getName());
         } catch (Exception e) {
             errorMessage = e.getMessage();
+            var prevState = stateManager.getCurrentState();
             stateManager.transitionToError();
+            eventBus.publish(
+                    new AppStateChangedEvent(prevState, AudioSessionStateMachine.State.ERROR, e));
             log.error("Failed to load audio file: {}", event.getFile().getAbsolutePath(), e);
         }
     }
@@ -89,7 +101,14 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
                         handle -> {
                             var playback = audioEngine.get().play(handle);
                             currentPlaybackHandle = Optional.of(playback);
+                            var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPlaying();
+                            var position = audioEngine.get().getPosition(playback);
+                            eventBus.publish(
+                                    new AppStateChangedEvent(
+                                            prevState,
+                                            AudioSessionStateMachine.State.PLAYING,
+                                            position));
                             log.debug("Started playback");
                         });
             }
@@ -98,7 +117,14 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
                 currentPlaybackHandle.ifPresent(
                         playback -> {
                             audioEngine.get().pause(playback);
+                            var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPaused();
+                            var position = audioEngine.get().getPosition(playback);
+                            eventBus.publish(
+                                    new AppStateChangedEvent(
+                                            prevState,
+                                            AudioSessionStateMachine.State.PAUSED,
+                                            position));
                             log.debug("Paused playback");
                         });
             }
@@ -107,7 +133,14 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
                 currentPlaybackHandle.ifPresent(
                         playback -> {
                             audioEngine.get().resume(playback);
+                            var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPlaying();
+                            var position = audioEngine.get().getPosition(playback);
+                            eventBus.publish(
+                                    new AppStateChangedEvent(
+                                            prevState,
+                                            AudioSessionStateMachine.State.PLAYING,
+                                            position));
                             log.debug("Resumed playback");
                         });
             }
@@ -118,8 +151,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
     @Subscribe
     public void fileclose(@NonNull AudioFileCloseRequestedEvent event) {
         log.debug("Closing audio file");
+        var fileBeingClosed = currentFile.orElse(null);
+        var prevState = stateManager.getCurrentState();
         closeCurrentSession();
         stateManager.transitionToNoAudio();
+        eventBus.publish(
+                new AppStateChangedEvent(
+                        prevState, AudioSessionStateMachine.State.NO_AUDIO, fileBeingClosed));
     }
 
     @Subscribe
@@ -148,13 +186,28 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
             @NonNull a2.PlaybackState oldState) {
         // Handle state changes from audio engine
         log.debug("Playback state changed: {} -> {}", oldState, newState);
+
+        // If audio engine reports an error during playback, transition to error state
+        if (newState == a2.PlaybackState.ERROR
+                && stateManager.getCurrentState() == AudioSessionStateMachine.State.PLAYING) {
+            var prevState = stateManager.getCurrentState();
+            stateManager.transitionToError();
+            errorMessage = "Playback error occurred";
+            eventBus.publish(
+                    new AppStateChangedEvent(
+                            prevState, AudioSessionStateMachine.State.ERROR, "Playback error"));
+        }
     }
 
     @Override
     public void onPlaybackComplete(@NonNull PlaybackHandle playback) {
         // Playback finished, transition to ready state
+        var prevState = stateManager.getCurrentState();
         stateManager.transitionToReady();
         currentPlaybackHandle = Optional.empty();
+        eventBus.publish(
+                new AppStateChangedEvent(
+                        prevState, AudioSessionStateMachine.State.READY, "completed"));
         log.debug("Playback completed");
     }
 
@@ -197,6 +250,28 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionSou
     @Override
     public Optional<String> getErrorMessage() {
         return Optional.ofNullable(errorMessage);
+    }
+
+    /**
+     * Stop playback and transition to READY state. Used when user explicitly stops playback (not
+     * pause).
+     */
+    public void stopPlayback() {
+        if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
+            var prevState = stateManager.getCurrentState();
+            audioEngine.get().stop(currentPlaybackHandle.get());
+            currentPlaybackHandle.get().close();
+            currentPlaybackHandle = Optional.empty();
+
+            if (prevState == AudioSessionStateMachine.State.PLAYING
+                    || prevState == AudioSessionStateMachine.State.PAUSED) {
+                stateManager.transitionToReady();
+                eventBus.publish(
+                        new AppStateChangedEvent(
+                                prevState, AudioSessionStateMachine.State.READY, "stopped"));
+                log.debug("Playback stopped");
+            }
+        }
     }
 
     private void closeCurrentSession() {

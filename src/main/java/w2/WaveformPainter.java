@@ -1,4 +1,4 @@
-package s2;
+package w2;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -6,28 +6,28 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import javax.swing.Timer;
 import lombok.NonNull;
-import w2.ViewportContext;
 
 /**
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform
  * image, playback cursor, and status messages.
  */
-class WaveformPainter {
+public class WaveformPainter {
 
     private static final int FPS = 30;
     private final Timer repaintTimer;
-    private final WaveformViewport viewport;
+    private volatile WaveformViewport viewport;
     private volatile boolean needsRepaint;
 
-    /**
-     * Create a painter for the given viewport.
-     *
-     * @param viewport The viewport to repaint
-     */
-    public WaveformPainter(@NonNull WaveformViewport viewport) {
-        this.viewport = viewport;
+    /** Create a painter without a viewport. Viewport must be set before painting operations. */
+    public WaveformPainter() {
+        this.viewport = null;
         this.needsRepaint = false;
         this.repaintTimer = new Timer(1000 / FPS, e -> repaintIfNeeded());
+    }
+
+    /** Set the viewport to paint to. */
+    public void setViewport(WaveformViewport viewport) {
+        this.viewport = viewport;
     }
 
     /** Request a repaint on the next timer tick. */
@@ -51,7 +51,7 @@ class WaveformPainter {
     }
 
     private void repaintIfNeeded() {
-        if (needsRepaint && viewport.isVisible()) {
+        if (needsRepaint && viewport != null && viewport.isVisible()) {
             needsRepaint = false;
             viewport.repaint();
         }
