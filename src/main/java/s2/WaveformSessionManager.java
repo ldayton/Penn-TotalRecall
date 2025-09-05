@@ -64,10 +64,8 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
         painter.setViewport(viewport);
         painter.setDataSource(this); // We implement WaveformPaintingDataSource
 
-        // If we're playing, start the repaint timer
-        if (sessionSource.isPlaying()) {
-            painter.start();
-        }
+        // Start the repaint timer (always running for now)
+        painter.start();
     }
 
     /** Set the waveform to render. */
@@ -88,21 +86,18 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
 
         switch (event.getNewState()) {
             case PLAYING -> {
-                // Start repaint timer for smooth playback cursor
-                painter.start();
-                log.debug("Started waveform repaint timer");
+                // Timer is always running now
+                log.debug("Playing state - waveform updating");
             }
 
             case PAUSED -> {
-                // Stop repaint timer but keep display
-                painter.stop();
-                requestRepaint(); // One final paint to show stopped state
-                log.debug("Stopped waveform repaint timer");
+                // Timer keeps running for now
+                requestRepaint();
+                log.debug("Paused state");
             }
 
             case READY -> {
-                // Stop repaint timer
-                painter.stop();
+                // Timer keeps running for now
 
                 // If transitioning from LOADING to READY, we need a waveform
                 if (event.getPreviousState() == AudioSessionStateMachine.State.LOADING) {
@@ -114,8 +109,7 @@ public class WaveformSessionManager implements WaveformPaintingDataSource {
             }
 
             case NO_AUDIO -> {
-                // Clear waveform and stop timer
-                painter.stop();
+                // Clear waveform (timer keeps running for now)
                 // Clean up waveform resources
                 currentWaveform.ifPresent(Waveform::shutdown);
                 clearWaveform();
