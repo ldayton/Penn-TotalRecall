@@ -29,6 +29,8 @@ public class DoneAction extends BaseAction {
         super("Mark Complete", "Mark current annotation file complete");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
+        // Start disabled until we know audio is loaded
+        setEnabled(false);
     }
 
     @Override
