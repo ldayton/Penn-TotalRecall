@@ -20,8 +20,6 @@ import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JMenu;
@@ -50,8 +48,6 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class AppMenuBar extends JMenuBar {
     private static final Logger logger = LoggerFactory.getLogger(AppMenuBar.class);
-
-    private static PlayPauseAction workaroundAction;
 
     private static Set<BaseAction> allActions = new HashSet<>();
 
@@ -178,16 +174,8 @@ public class AppMenuBar extends JMenuBar {
     private void initControlsMenu() {
         JMenu jmAudio = new JMenu("Controls");
 
-        // see PlayPauseAction docs for explanation of this funniness
+        // PlayPauseAction is now event-driven, no workaround needed
         JMenuItem jmiPlayPause = new JMenuItem(playPauseAction);
-        workaroundAction = playPauseAction;
-        jmiPlayPause.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        workaroundAction.actionPerformed(e);
-                    }
-                });
 
         JMenuItem jmiStop = new JMenuItem(stopAction);
         // JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction); // Disabled
