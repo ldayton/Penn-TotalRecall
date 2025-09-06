@@ -1,10 +1,10 @@
-package a2.fmod;
+package audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioData;
-import a2.AudioMetadata;
 import annotations.Audio;
+import audio.AudioData;
+import audio.AudioMetadata;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;

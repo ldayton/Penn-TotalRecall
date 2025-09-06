@@ -1,4 +1,4 @@
-package a2.exceptions;
+package audio.exceptions;
 
 /** Thrown when audio engine configuration contains invalid values. */
 public class InvalidAudioConfigException extends Exception {

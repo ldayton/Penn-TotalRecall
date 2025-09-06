@@ -1,8 +1,8 @@
-package s2;
+package state;
 
-import a2.AudioEngine;
-import a2.AudioHandle;
-import a2.SampleReader;
+import audio.AudioEngine;
+import audio.AudioHandle;
+import audio.SampleReader;
 import com.google.inject.Provider;
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
@@ -12,7 +12,7 @@ import jakarta.inject.Singleton;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import w2.Waveform;
+import waveform.Waveform;
 
 /**
  * Manages waveform instance lifecycle. Creates and destroys waveform instances when audio is loaded

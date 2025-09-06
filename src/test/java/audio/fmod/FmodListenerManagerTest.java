@@ -1,12 +1,12 @@
-package a2.fmod;
+package audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioHandle;
-import a2.PlaybackHandle;
-import a2.PlaybackListener;
-import a2.PlaybackState;
 import annotations.Audio;
+import audio.AudioHandle;
+import audio.PlaybackHandle;
+import audio.PlaybackListener;
+import audio.PlaybackState;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;

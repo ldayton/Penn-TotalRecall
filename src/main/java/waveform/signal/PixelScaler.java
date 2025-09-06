@@ -1,4 +1,4 @@
-package w2.signal;
+package waveform.signal;
 
 /** Converts audio samples to pixel resolution and applies smoothing. */
 public final class PixelScaler {

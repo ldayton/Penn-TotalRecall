@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /** Seeks the audio position forward by one screen width. */
 @Singleton

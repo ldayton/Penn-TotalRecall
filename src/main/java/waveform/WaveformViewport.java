@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

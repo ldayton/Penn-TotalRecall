@@ -1,4 +1,4 @@
-package s2;
+package state;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;

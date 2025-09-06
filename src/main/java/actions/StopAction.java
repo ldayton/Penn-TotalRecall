@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /**
  * Stops audio playback and resets position to the beginning using the event-driven system.

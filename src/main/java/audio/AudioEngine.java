@@ -1,7 +1,7 @@
-package a2;
+package audio;
 
-import a2.exceptions.AudioLoadException;
 import app.annotations.ThreadSafe;
+import audio.exceptions.AudioLoadException;
 import lombok.NonNull;
 
 /**

@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 /**
  * Data source for waveform painting operations. Provides temporal information needed by the painter

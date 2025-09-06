@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /**
  * Plays or "pauses" audio using the event-driven system.

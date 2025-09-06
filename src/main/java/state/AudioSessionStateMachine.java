@@ -1,4 +1,4 @@
-package s2;
+package state;
 
 import app.annotations.ThreadSafe;
 import java.util.concurrent.locks.ReentrantLock;

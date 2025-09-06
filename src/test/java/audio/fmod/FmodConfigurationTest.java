@@ -1,9 +1,9 @@
-package a2.fmod;
+package audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.fmod.FmodLibraryLoader.LibraryLoadingMode;
-import a2.fmod.FmodLibraryLoader.LibraryType;
+import audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
+import audio.fmod.FmodLibraryLoader.LibraryType;
 import env.AppConfig;
 import env.Platform;
 import org.junit.jupiter.api.DisplayName;

@@ -13,10 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import s2.AudioSessionStateMachine;
 
 @Slf4j
-class AppStateManagerTest {
+class AudioSessionStateManagerTest {
 
     private AudioSessionStateMachine stateManager;
 

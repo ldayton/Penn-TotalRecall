@@ -1,7 +1,7 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.AudioHandle;
 import app.annotations.ThreadSafe;
+import audio.AudioHandle;
 import com.google.inject.Singleton;
 import com.sun.jna.Pointer;
 import java.util.concurrent.atomic.AtomicLong;

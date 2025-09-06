@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;

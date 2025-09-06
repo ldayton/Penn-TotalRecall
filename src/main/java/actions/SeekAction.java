@@ -11,8 +11,8 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractButton;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
-import s2.WaveformSessionDataSource;
+import state.AudioSessionStateMachine;
+import state.WaveformSessionDataSource;
 import ui.preferences.PreferencesManager;
 
 /**

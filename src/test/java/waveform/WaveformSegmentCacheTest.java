@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 import static org.junit.jupiter.api.Assertions.*;
 

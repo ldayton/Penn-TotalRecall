@@ -1,4 +1,4 @@
-package s2;
+package state;
 
 import jakarta.inject.Singleton;
 

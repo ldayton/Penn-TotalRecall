@@ -1,6 +1,6 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.exceptions.AudioEngineException;
+import audio.exceptions.AudioEngineException;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;

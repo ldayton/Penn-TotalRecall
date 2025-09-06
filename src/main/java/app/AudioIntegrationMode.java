@@ -1,8 +1,8 @@
 package app;
 
-import a2.AudioEngine;
-import a2.AudioHandle;
-import a2.PlaybackHandle;
+import audio.AudioEngine;
+import audio.AudioHandle;
+import audio.PlaybackHandle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;

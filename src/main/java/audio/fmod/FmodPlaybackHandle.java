@@ -1,7 +1,7 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.AudioHandle;
-import a2.PlaybackHandle;
+import audio.AudioHandle;
+import audio.PlaybackHandle;
 import com.sun.jna.Pointer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;

@@ -1,4 +1,4 @@
-package a2.exceptions;
+package audio.exceptions;
 
 /** Thrown when an unsupported audio engine type is requested. */
 public class UnsupportedAudioEngineException extends Exception {

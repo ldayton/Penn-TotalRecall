@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /**
  * Marks the current annotation file complete and then switches program state to reflect that no

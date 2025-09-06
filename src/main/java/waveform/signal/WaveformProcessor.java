@@ -1,7 +1,7 @@
-package w2.signal;
+package waveform.signal;
 
-import a2.AudioData;
-import a2.SampleReader;
+import audio.AudioData;
+import audio.SampleReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -1,6 +1,6 @@
 package app.di;
 
-import a2.fmod.FmodModule;
+import audio.fmod.FmodModule;
 import com.google.inject.AbstractModule;
 
 /**
@@ -16,14 +16,14 @@ public class AppModule extends AbstractModule {
         // Install FMOD module for audio system dependencies
         install(new FmodModule());
 
-        // Install a2 module for audio engine bindings
-        install(new a2.Module());
+        // Install audio module for audio engine bindings
+        install(new audio.Module());
 
-        // Install w2 module for waveform bindings
-        install(new w2.Module());
+        // Install waveform module for waveform bindings
+        install(new waveform.Module());
 
-        // Install s2 module for session management bindings
-        install(new s2.Module());
+        // Install state module for session management bindings
+        install(new state.Module());
 
         // Install env module for environment and platform bindings
         install(new env.Module());

@@ -9,8 +9,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
-import s2.WaveformSessionDataSource;
+import state.AudioSessionStateMachine;
+import state.WaveformSessionDataSource;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been

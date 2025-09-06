@@ -10,8 +10,8 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
-import w2.WaveformPainter;
-import w2.WaveformViewport;
+import waveform.WaveformPainter;
+import waveform.WaveformViewport;
 
 /**
  * A clean canvas for waveform rendering. Unlike WaveformDisplay, this component has no internal

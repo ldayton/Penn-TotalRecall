@@ -1,10 +1,10 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.AudioHandle;
-import a2.AudioMetadata;
-import a2.exceptions.AudioEngineException;
-import a2.exceptions.AudioLoadException;
 import app.annotations.ThreadSafe;
+import audio.AudioHandle;
+import audio.AudioMetadata;
+import audio.exceptions.AudioEngineException;
+import audio.exceptions.AudioLoadException;
 import com.google.inject.Inject;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;

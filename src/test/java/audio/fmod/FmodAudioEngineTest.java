@@ -1,15 +1,15 @@
-package a2.fmod;
+package audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioHandle;
-import a2.AudioMetadata;
-import a2.PlaybackHandle;
-import a2.PlaybackListener;
-import a2.PlaybackState;
-import a2.exceptions.AudioLoadException;
-import a2.exceptions.AudioPlaybackException;
 import annotations.Audio;
+import audio.AudioHandle;
+import audio.AudioMetadata;
+import audio.PlaybackHandle;
+import audio.PlaybackListener;
+import audio.PlaybackState;
+import audio.exceptions.AudioLoadException;
+import audio.exceptions.AudioPlaybackException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,11 +1,11 @@
-package a2.fmod;
+package audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import a2.AudioHandle;
-import a2.AudioMetadata;
-import a2.exceptions.AudioLoadException;
 import annotations.Audio;
+import audio.AudioHandle;
+import audio.AudioMetadata;
+import audio.exceptions.AudioLoadException;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;

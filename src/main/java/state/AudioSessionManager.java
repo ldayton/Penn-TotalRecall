@@ -1,9 +1,9 @@
-package s2;
+package state;
 
-import a2.AudioEngine;
-import a2.AudioHandle;
-import a2.PlaybackHandle;
-import a2.PlaybackListener;
+import audio.AudioEngine;
+import audio.AudioHandle;
+import audio.PlaybackHandle;
+import audio.PlaybackListener;
 import com.google.inject.Provider;
 import events.AppStateChangedEvent;
 import events.AudioFileCloseRequestedEvent;
@@ -311,13 +311,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     @Override
     public void onStateChanged(
             @NonNull PlaybackHandle handle,
-            @NonNull a2.PlaybackState newState,
-            @NonNull a2.PlaybackState oldState) {
+            @NonNull audio.PlaybackState newState,
+            @NonNull audio.PlaybackState oldState) {
         // Handle state changes from audio engine
         log.debug("Playback state changed: {} -> {}", oldState, newState);
 
         // If audio engine reports an error during playback, transition to error state
-        if (newState == a2.PlaybackState.ERROR
+        if (newState == audio.PlaybackState.ERROR
                 && stateManager.getCurrentState() == AudioSessionStateMachine.State.PLAYING) {
             var prevState = stateManager.getCurrentState();
             stateManager.transitionToError();

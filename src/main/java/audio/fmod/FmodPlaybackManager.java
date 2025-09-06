@@ -1,8 +1,8 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.AudioHandle;
-import a2.exceptions.AudioPlaybackException;
 import app.annotations.ThreadSafe;
+import audio.AudioHandle;
+import audio.exceptions.AudioPlaybackException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;

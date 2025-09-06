@@ -1,9 +1,9 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.PlaybackHandle;
-import a2.PlaybackListener;
-import a2.PlaybackState;
 import app.annotations.ThreadSafe;
+import audio.PlaybackHandle;
+import audio.PlaybackListener;
+import audio.PlaybackState;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;

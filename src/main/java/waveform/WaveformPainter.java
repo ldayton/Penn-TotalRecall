@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 import jakarta.inject.Inject;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /**
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform
@@ -37,9 +37,9 @@ public class WaveformPainter {
                             if (viewport != null && viewport.isVisible()) {
                                 // Prepare data for next frame if we have a WaveformPaintDataSource
                                 if (dataSource != null
-                                        && dataSource instanceof s2.WaveformPaintDataSource) {
-                                    s2.WaveformPaintDataSource paintDataSource =
-                                            (s2.WaveformPaintDataSource) dataSource;
+                                        && dataSource instanceof state.WaveformPaintDataSource) {
+                                    state.WaveformPaintDataSource paintDataSource =
+                                            (state.WaveformPaintDataSource) dataSource;
                                     // Update viewport width in case canvas was resized
                                     paintDataSource.updateViewportWidth(viewport.getBounds().width);
 

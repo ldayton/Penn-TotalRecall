@@ -1,4 +1,4 @@
-package a2.fmod;
+package audio.fmod;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;

@@ -1,8 +1,8 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.PlaybackState;
-import a2.exceptions.AudioPlaybackException;
 import app.annotations.ThreadSafe;
+import audio.PlaybackState;
+import audio.exceptions.AudioPlaybackException;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.extern.slf4j.Slf4j;
 

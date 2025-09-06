@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 /** Time range that the session knows about. */
 public record TimeRange(double startSeconds, double endSeconds) {

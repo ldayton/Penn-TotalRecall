@@ -1,7 +1,7 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.*;
-import a2.exceptions.AudioEngineException;
+import audio.*;
+import audio.exceptions.AudioEngineException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;

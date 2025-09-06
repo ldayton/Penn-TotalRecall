@@ -10,7 +10,7 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import lombok.NonNull;
-import s2.AudioSessionStateMachine;
+import state.AudioSessionStateMachine;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
 @Singleton

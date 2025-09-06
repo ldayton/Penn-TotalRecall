@@ -1,7 +1,7 @@
-package a2;
+package audio;
 
-import a2.fmod.FmodAudioEngine;
-import a2.fmod.FmodSampleReader;
+import audio.fmod.FmodAudioEngine;
+import audio.fmod.FmodSampleReader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package s2;
+package state;
 
 import env.Constants;
 import events.AnnotationCompleteRequestedEvent;

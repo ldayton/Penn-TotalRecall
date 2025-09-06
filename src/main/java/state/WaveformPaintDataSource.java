@@ -1,11 +1,11 @@
-package s2;
+package state;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import w2.TimeRange;
-import w2.Waveform;
-import w2.WaveformPaintingDataSource;
+import waveform.TimeRange;
+import waveform.Waveform;
+import waveform.WaveformPaintingDataSource;
 
 /**
  * Aggregates data needed for waveform painting. Coordinates between WaveformManager,

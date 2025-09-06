@@ -1,4 +1,4 @@
-package w2;
+package waveform;
 
 import java.awt.Image;
 import java.util.concurrent.CompletableFuture;

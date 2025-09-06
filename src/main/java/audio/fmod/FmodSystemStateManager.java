@@ -1,7 +1,7 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.exceptions.AudioEngineException;
 import app.annotations.ThreadSafe;
+import audio.exceptions.AudioEngineException;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;

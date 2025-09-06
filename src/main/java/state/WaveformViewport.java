@@ -1,4 +1,4 @@
-package s2;
+package state;
 
 import events.AudioSeekRequestedEvent;
 import events.EventDispatchBus;
@@ -9,7 +9,7 @@ import events.ZoomOutRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import w2.TimeRange;
+import waveform.TimeRange;
 
 /**
  * Manages viewport position and zoom for the waveform display. Handles auto-scrolling during

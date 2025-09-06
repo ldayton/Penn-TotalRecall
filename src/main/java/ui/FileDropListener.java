@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import s2.WaveformSessionDataSource;
+import state.WaveformSessionDataSource;
 import ui.audiofiles.AudioFileDisplay;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolFileParser;

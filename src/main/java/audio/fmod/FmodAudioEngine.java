@@ -1,15 +1,15 @@
-package a2.fmod;
+package audio.fmod;
 
-import a2.AudioEngine;
-import a2.AudioHandle;
-import a2.AudioMetadata;
-import a2.PlaybackHandle;
-import a2.PlaybackListener;
-import a2.PlaybackState;
-import a2.exceptions.AudioEngineException;
-import a2.exceptions.AudioLoadException;
-import a2.exceptions.AudioPlaybackException;
 import app.annotations.ThreadSafe;
+import audio.AudioEngine;
+import audio.AudioHandle;
+import audio.AudioMetadata;
+import audio.PlaybackHandle;
+import audio.PlaybackListener;
+import audio.PlaybackState;
+import audio.exceptions.AudioEngineException;
+import audio.exceptions.AudioLoadException;
+import audio.exceptions.AudioPlaybackException;
 import com.google.inject.Inject;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
