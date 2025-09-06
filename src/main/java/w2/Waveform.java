@@ -4,7 +4,6 @@ import a2.AudioEngine;
 import a2.AudioHandle;
 import a2.AudioMetadata;
 import a2.SampleReader;
-import a2.SampleReaderFactory;
 import java.awt.Image;
 import java.util.concurrent.*;
 import lombok.NonNull;
@@ -24,7 +23,7 @@ public class Waveform {
             @NonNull String audioFilePath,
             @NonNull AudioEngine audioEngine,
             @NonNull AudioHandle audioHandle,
-            @NonNull SampleReaderFactory sampleReaderFactory) {
+            @NonNull SampleReader sampleReader) {
 
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -54,8 +53,7 @@ public class Waveform {
         AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
         int sampleRate = metadata.sampleRate();
 
-        // Create a pooled sample reader for parallel rendering
-        this.sampleReader = sampleReaderFactory.createPooledReader(threads);
+        this.sampleReader = sampleReader;
 
         this.renderer =
                 new WaveformRenderer(audioFilePath, cache, renderPool, sampleReader, sampleRate);

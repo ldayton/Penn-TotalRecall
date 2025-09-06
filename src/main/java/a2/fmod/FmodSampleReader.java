@@ -5,6 +5,7 @@ import a2.exceptions.AudioEngineException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class FmodSampleReader implements SampleReader {
         }
     }
 
+    @Inject
     public FmodSampleReader(@NonNull FmodLibraryLoader libraryLoader) {
         try {
             // Load FMOD library

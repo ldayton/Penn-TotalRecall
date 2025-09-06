@@ -1,11 +1,11 @@
 package app.di;
 
 import a2.AudioEngine;
-import a2.SampleReaderFactory;
+import a2.SampleReader;
 import a2.fmod.FmodAudioEngine;
 import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodModule;
-import a2.fmod.FmodSampleReaderFactory;
+import a2.fmod.FmodSampleReader;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
 import com.google.inject.AbstractModule;
@@ -103,7 +103,7 @@ public class AppModule extends AbstractModule {
         bind(MainWindowAccess.class).in(Singleton.class);
 
         bind(AudioEngine.class).to(FmodAudioEngine.class).in(Singleton.class);
-        bind(SampleReaderFactory.class).to(FmodSampleReaderFactory.class).in(Singleton.class);
+        bind(SampleReader.class).to(FmodSampleReader.class);
     }
 
     @Provides

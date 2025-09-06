@@ -34,7 +34,7 @@ import lombok.NonNull;
  * <p>Example usage:
  *
  * <pre>{@code
- * SampleReader reader = SampleReaderFactory.createPooledReader(4);
+ * SampleReader reader = factory.createReader();
  *
  * // Read multiple segments in parallel
  * var requests = List.of(

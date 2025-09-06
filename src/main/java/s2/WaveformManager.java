@@ -2,7 +2,7 @@ package s2;
 
 import a2.AudioEngine;
 import a2.AudioHandle;
-import a2.SampleReaderFactory;
+import a2.SampleReader;
 import com.google.inject.Provider;
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
@@ -24,21 +24,20 @@ public class WaveformManager {
 
     private final WaveformSessionDataSource sessionSource;
     private final Provider<AudioEngine> audioEngineProvider;
-    private final Provider<SampleReaderFactory> sampleReaderFactoryProvider;
+    private final Provider<SampleReader> sampleReaderProvider;
 
     private Optional<Waveform> currentWaveform = Optional.empty();
     private Optional<AudioEngine> audioEngine = Optional.empty();
-    private Optional<SampleReaderFactory> sampleReaderFactory = Optional.empty();
 
     @Inject
     public WaveformManager(
             @NonNull WaveformSessionDataSource sessionSource,
             @NonNull Provider<AudioEngine> audioEngineProvider,
-            @NonNull Provider<SampleReaderFactory> sampleReaderFactoryProvider,
+            @NonNull Provider<SampleReader> sampleReaderProvider,
             @NonNull EventDispatchBus eventBus) {
         this.sessionSource = sessionSource;
         this.audioEngineProvider = audioEngineProvider;
-        this.sampleReaderFactoryProvider = sampleReaderFactoryProvider;
+        this.sampleReaderProvider = sampleReaderProvider;
         eventBus.subscribe(this);
     }
 
@@ -83,18 +82,13 @@ public class WaveformManager {
                 audioEngine = Optional.of(audioEngineProvider.get());
             }
 
-            // Get or create sample reader factory
-            if (sampleReaderFactory.isEmpty()) {
-                sampleReaderFactory = Optional.of(sampleReaderFactoryProvider.get());
-            }
-
-            // Create new waveform for the audio file
+            // Create new waveform for the audio file with a new sample reader
             Waveform waveform =
                     new Waveform(
                             audioPath.get(),
                             audioEngine.get(),
                             audioHandle.get(),
-                            sampleReaderFactory.get());
+                            sampleReaderProvider.get());
 
             // Clean up old waveform if present
             currentWaveform.ifPresent(Waveform::shutdown);
