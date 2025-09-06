@@ -191,6 +191,15 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
                     });
         } else if (state == AudioSessionStateMachine.State.READY
                 && currentAudioHandle.isPresent()) {
+            // TODO: Fix audio glitch when seeking in READY state
+            // Problem: We need a playback handle to seek, but creating one via play()
+            // causes a brief moment of audio playback before pause() takes effect.
+            // This creates an audible glitch when seeking from READY state.
+            // Possible solutions:
+            // 1. Track desired position without playback handle, apply on play
+            // 2. Add engine support for creating paused playback handles
+            // 3. Use play(startFrame, startFrame+1) with immediate stop
+
             // If in READY state with no playback handle, create one and immediately pause it
             var playback = audioEngine.get().play(currentAudioHandle.get());
             currentPlaybackHandle = Optional.of(playback);
