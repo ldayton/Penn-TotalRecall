@@ -6,8 +6,6 @@ import com.google.inject.Injector;
 import env.DevModeFileAutoLoader;
 import env.LookAndFeelManager;
 import env.UpdateManager;
-import events.ApplicationStartedEvent;
-import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,6 @@ public class GuiceBootstrap {
     private final MainFrame myFrame;
     private final ContentSplitPane mySplitPane;
     private final AppFocusTraversalPolicy myFocusTraversalPolicy;
-    private final EventDispatchBus eventBus;
 
     @Inject
     public GuiceBootstrap(
@@ -42,15 +39,13 @@ public class GuiceBootstrap {
             LookAndFeelManager lookAndFeelManager,
             MainFrame myFrame,
             ContentSplitPane mySplitPane,
-            AppFocusTraversalPolicy myFocusTraversalPolicy,
-            EventDispatchBus eventBus) {
+            AppFocusTraversalPolicy myFocusTraversalPolicy) {
         this.windowManager = windowManager;
         this.updateManager = updateManager;
         this.lookAndFeelManager = lookAndFeelManager;
         this.myFrame = myFrame;
         this.mySplitPane = mySplitPane;
         this.myFocusTraversalPolicy = myFocusTraversalPolicy;
-        this.eventBus = eventBus;
     }
 
     /** Creates the Guice injector and returns a bootstrapped application instance. */
@@ -298,10 +293,28 @@ public class GuiceBootstrap {
 
         myFrame.setVisible(true);
 
+        // Wait for UI to be fully ready before publishing UIReadyEvent
+        // This ensures canvas is sized and initial paint has occurred
+        var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
+        var eventBus = globalInjector.getInstance(events.EventDispatchBus.class);
+
+        javax.swing.Timer readyTimer =
+                new javax.swing.Timer(
+                        100,
+                        e -> {
+                            if (canvas.isShowing()
+                                    && canvas.getWidth() > 0
+                                    && canvas.getHeight() > 0) {
+                                // UI is ready - canvas is visible and sized
+                                ((javax.swing.Timer) e.getSource()).stop();
+                                eventBus.publish(new events.UIReadyEvent());
+                                logger.info("UI is ready - publishing UIReadyEvent");
+                            }
+                        });
+        readyTimer.setRepeats(true);
+        readyTimer.start();
+
         // Check for updates after UI is ready (async, non-blocking)
         updateManager.checkForUpdateOnStartup();
-
-        // Notify that application has fully started
-        eventBus.publish(new ApplicationStartedEvent());
     }
 }

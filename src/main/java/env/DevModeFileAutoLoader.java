@@ -1,10 +1,10 @@
 package env;
 
 import actions.OpenWordpoolAction;
-import events.ApplicationStartedEvent;
 import events.AudioFileLoadRequestedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
+import events.UIReadyEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -16,7 +16,7 @@ import ui.audiofiles.AudioFileList;
 /**
  * Automatically loads sample audio and wordpool files when running in development mode.
  *
- * <p>This service subscribes to ApplicationStartedEvent and loads packaging/samples/sample.wav and
+ * <p>This service subscribes to UIReadyEvent and loads packaging/samples/sample.wav and
  * packaging/samples/wordpool.txt if the application is running in development mode
  * (audio.loading.mode=unpackaged) and no files are currently loaded.
  */
@@ -45,7 +45,7 @@ public class DevModeFileAutoLoader {
     }
 
     @Subscribe
-    public void onApplicationStarted(ApplicationStartedEvent event) {
+    public void onUIReady(UIReadyEvent event) {
         // Only run during explicit dev runs (./gradlew runDev), not during tests
         boolean runDevFlag = Boolean.parseBoolean(System.getProperty("app.run.dev", "false"));
         if (!runDevFlag) {
