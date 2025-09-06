@@ -8,9 +8,9 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-import state.PreferencesManager;
 import ui.DialogService;
 import ui.audiofiles.AudioFileDisplay;
+import ui.preferences.PreferencesManager;
 
 /**
  * Presents a file chooser to the user for selecting audio files only and then adds the selected

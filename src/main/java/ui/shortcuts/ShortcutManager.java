@@ -33,8 +33,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
-import state.PreferencesManager;
 import ui.DialogService;
+import ui.preferences.PreferencesManager;
 
 public class ShortcutManager extends JFrame {
     private final List<ActionConfig> defaultActionConfigs;

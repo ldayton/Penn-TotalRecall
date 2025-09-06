@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import state.PreferencesManager;
 
 /**
  * An <code>AbstractPreferenceDisplay</code> for choosing between one of two options.

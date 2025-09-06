@@ -6,9 +6,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import state.PreferencesManager;
 import ui.DialogService;
 import ui.audiofiles.AudioFileDisplay;
+import ui.preferences.PreferencesManager;
 
 /**
  * Presents a directory chooser to the user for selecting audio folders and then adds the selected

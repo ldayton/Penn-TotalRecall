@@ -26,7 +26,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import state.PreferencesManager;
+import ui.preferences.PreferencesManager;
 
 /**
  * Custom <code>JTextField</code> for entering annotations.

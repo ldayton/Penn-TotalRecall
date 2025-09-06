@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
-import state.PreferencesManager;
+import ui.preferences.PreferencesManager;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolFileParser;
 import ui.wordpool.WordpoolWord;

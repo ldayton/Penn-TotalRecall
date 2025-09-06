@@ -1,4 +1,4 @@
-package state;
+package ui.preferences;
 
 import com.google.common.annotations.VisibleForTesting;
 import env.UserHomeProvider;

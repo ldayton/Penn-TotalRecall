@@ -22,9 +22,9 @@ import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import state.AudioState;
-import state.PreferencesManager;
 import ui.DialogService;
 import ui.audiofiles.AudioFile.AudioFilePathException;
+import ui.preferences.PreferencesManager;
 
 /**
  * A custom interface component for displaying the available audio files to the user.

@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import lombok.NonNull;
-import state.PreferencesManager;
+import ui.preferences.PreferencesManager;
 
 /**
  * Manages window state persistence and restoration.

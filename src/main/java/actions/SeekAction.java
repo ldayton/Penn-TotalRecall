@@ -8,7 +8,7 @@ import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import state.AudioState;
-import state.PreferencesManager;
+import ui.preferences.PreferencesManager;
 
 /**
  * Sets the audio position forward/backward by a pre-defined amount, in response to user request.

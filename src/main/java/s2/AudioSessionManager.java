@@ -283,7 +283,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
      * pause).
      */
     public void stopPlayback() {
-        if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
+        if (currentPlaybackHandle.isPresent()) {
             var prevState = stateManager.getCurrentState();
             audioEngine.get().stop(currentPlaybackHandle.get());
             currentPlaybackHandle.get().close();
