@@ -52,11 +52,6 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource {
         // Use interpolated position for smooth viewport scrolling
         double smoothPosition = playbackTracker.getInterpolatedPosition();
 
-        // Debug logging
-        System.out.printf(
-                "prepareFrame: real=%.2f, smooth=%.2f, playing=%b%n",
-                realPosition, smoothPosition, isPlaying);
-
         viewport.followPlayback(smoothPosition, totalDuration, isPlaying);
     }
 

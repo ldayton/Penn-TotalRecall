@@ -141,7 +141,7 @@ public class DevModeFileAutoLoader {
                         // Auto-start playback after a short delay to ensure waveform is loaded
                         Timer autoPlayTimer =
                                 new Timer(
-                                        2000,
+                                        200,
                                         e -> {
                                             logger.info("Development mode: auto-starting playback");
                                             playPauseAction.actionPerformed(e);

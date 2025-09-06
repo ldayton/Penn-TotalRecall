@@ -30,8 +30,9 @@ public class WaveformViewport {
     }
 
     /**
-     * Update viewport position to follow playback with smooth scrolling. Keeps playhead at a fixed
-     * position on screen (33% from left).
+     * Update viewport position to follow playback with smooth scrolling. Keeps playhead centered
+     * (50%) when possible, but allows it to move from 0-50% at the start and 50-100% at the end of
+     * the audio.
      */
     public void followPlayback(double playbackPosition, double totalDuration, boolean isPlaying) {
         if (totalDuration <= 0) {
@@ -39,31 +40,39 @@ public class WaveformViewport {
         }
 
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
+        double halfWidth = widthSeconds / 2.0;
 
-        // Playhead stays at 33% from the left of the viewport
-        double playheadPositionSeconds = widthSeconds * 0.33;
+        // Calculate target viewport start position
+        double targetStart;
 
-        // Calculate ideal viewport start to keep playhead at fixed position
-        double idealStart = playbackPosition - playheadPositionSeconds;
-
-        double oldStart = startSeconds;
-
-        // Handle bounds at beginning and end of audio
-        if (idealStart < 0) {
-            // At the beginning - viewport locked at 0, playhead moves across screen
-            startSeconds = 0;
-        } else if (idealStart + widthSeconds > totalDuration) {
-            // At the end - viewport locked to show end, playhead moves to right
-            startSeconds = Math.max(0, totalDuration - widthSeconds);
+        if (playbackPosition < halfWidth) {
+            // Zone 1: Beginning - viewport locked at 0, playhead moves from left to center
+            targetStart = 0;
+        } else if (playbackPosition > totalDuration - halfWidth) {
+            // Zone 3: End - viewport locked to show end, playhead moves from center to right
+            targetStart = Math.max(0, totalDuration - widthSeconds);
         } else {
-            // Normal case - smooth continuous scrolling
-            startSeconds = idealStart;
+            // Zone 2: Middle - keep playhead centered at 50%
+            targetStart = playbackPosition - halfWidth;
         }
 
-        // Debug logging
-        System.out.printf(
-                "followPlayback: pos=%.2f, oldStart=%.2f, newStart=%.2f, width=%.2f%n",
-                playbackPosition, oldStart, startSeconds, widthSeconds);
+        // Apply stabilization with dead zone to prevent jitter
+        double deltaPixels = Math.abs(targetStart - startSeconds) * pixelsPerSecond;
+
+        if (deltaPixels < 0.5) {
+            // Less than half a pixel - don't move to prevent wobble
+            return;
+        } else if (deltaPixels < 2.0 && isPlaying) {
+            // Small movement during playback - apply smoothing
+            startSeconds += (targetStart - startSeconds) * 0.3; // 30% lerp for smoothness
+        } else {
+            // Large movement or not playing - jump directly
+            startSeconds = targetStart;
+        }
+
+        // Round to avoid sub-pixel positioning
+        double pixelGranularity = 1.0 / pixelsPerSecond;
+        startSeconds = Math.round(startSeconds / pixelGranularity) * pixelGranularity;
     }
 
     /** Get the current visible time range. */

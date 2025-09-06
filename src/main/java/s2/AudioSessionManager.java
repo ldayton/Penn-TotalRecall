@@ -107,12 +107,10 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     @Subscribe
     public void onAudioPlayPauseRequested(@NonNull AudioPlayPauseRequestedEvent event) {
         var state = stateManager.getCurrentState();
-        System.out.println("AudioSessionManager.onAudioPlayPauseRequested: state=" + state);
 
         switch (state) {
             case READY -> {
                 // Start playback from beginning
-                System.out.println("Starting playback from READY state");
                 currentAudioHandle.ifPresent(
                         handle -> {
                             var playback = audioEngine.get().play(handle);

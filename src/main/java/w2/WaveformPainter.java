@@ -2,7 +2,6 @@ package w2;
 
 import jakarta.inject.Inject;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -183,18 +182,7 @@ public class WaveformPainter {
             clearBackground(g, bounds);
         }
 
-        // Paint playhead on top if playing
-        boolean playing = dataSource.isPlaying();
-        System.out.printf(
-                "WaveformPainter: isPlaying=%b, bounds.width=%d%n", playing, bounds.width);
-        if (playing) {
-            paintPlaybackCursor(
-                    g,
-                    bounds,
-                    timeRange,
-                    dataSource.getPixelsPerSecond(),
-                    dataSource.getPlaybackPositionSeconds());
-        }
+        // Playhead drawing removed
     }
 
     /**
@@ -207,43 +195,6 @@ public class WaveformPainter {
     public void paintWaveform(
             @NonNull Graphics2D g, @NonNull Rectangle bounds, @NonNull Image waveformImage) {
         g.drawImage(waveformImage, bounds.x, bounds.y, bounds.width, bounds.height, null);
-    }
-
-    /**
-     * Paint the playback cursor at a fixed position with stationary playhead. Uses XOR mode for
-     * better visibility over the waveform.
-     *
-     * @param g Graphics context
-     * @param bounds Area of the waveform
-     * @param timeRange Current time range being displayed (not used for stationary playhead)
-     * @param pixelsPerSecond Zoom level (not used for stationary playhead)
-     * @param playbackSeconds Current playback position (not used for stationary playhead)
-     */
-    public void paintPlaybackCursor(
-            @NonNull Graphics2D g,
-            @NonNull Rectangle bounds,
-            @NonNull TimeRange timeRange,
-            int pixelsPerSecond,
-            double playbackSeconds) {
-
-        // Fixed playhead position at 50% (center) of the viewport
-        int playheadX = bounds.x + (int) (bounds.width * 0.5);
-
-        // Save original paint mode
-        Composite originalComposite = g.getComposite();
-        Color originalColor = g.getColor();
-
-        // Use XOR mode for better visibility over waveform
-        g.setXORMode(Color.WHITE);
-        g.setColor(Color.BLACK);
-
-        // Draw the playhead line at the fixed position
-        g.drawLine(playheadX, bounds.y, playheadX, bounds.y + bounds.height);
-
-        // Restore original paint mode
-        g.setPaintMode();
-        g.setComposite(originalComposite);
-        g.setColor(originalColor);
     }
 
     /**

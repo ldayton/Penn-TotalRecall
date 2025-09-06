@@ -26,20 +26,21 @@ public class InterpolatedPlaybackTracker {
      * the audio system reports position.
      */
     public synchronized void updateRealPosition(double positionSeconds) {
-        double previousInterpolated = interpolatedPosition;
-        lastRealPosition = positionSeconds;
+        // Get current interpolated position before update
+        double currentInterpolated = getInterpolatedPosition();
 
-        // Check for drift and correct if needed
-        double drift = Math.abs(previousInterpolated - positionSeconds);
+        // Check for drift between interpolated and real position
+        double drift = Math.abs(currentInterpolated - positionSeconds);
+
         if (drift > MAX_DRIFT_SECONDS) {
             // Too much drift, snap to real position
             interpolatedPosition = positionSeconds;
-        } else {
-            // Small drift, keep interpolated position for smoothness
-            // It will gradually converge through interpolation
-            interpolatedPosition = positionSeconds;
         }
+        // Otherwise, keep using interpolated position for smoothness
+        // The interpolation will naturally converge toward the real position
 
+        // Always update the real position reference
+        lastRealPosition = positionSeconds;
         lastUpdateTimeNanos = System.nanoTime();
     }
 
