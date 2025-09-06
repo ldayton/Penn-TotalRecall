@@ -1,7 +1,6 @@
 package app;
 
 import app.di.GuiceBootstrap;
-import control.AudioIntegrationMode;
 import java.util.Arrays;
 import javax.swing.SwingUtilities;
 

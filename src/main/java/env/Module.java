@@ -20,9 +20,6 @@ public class Module extends AbstractModule {
         bind(ProgramVersion.class).in(Singleton.class);
         bind(UserHomeProvider.class).in(Singleton.class);
 
-        // Development and debugging
-        bind(DevModeFileAutoLoader.class).in(Singleton.class);
-
         // UI environment management
         bind(KeyboardManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);

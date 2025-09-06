@@ -28,6 +28,9 @@ public class AppModule extends AbstractModule {
         // Install env module for environment and platform bindings
         install(new env.Module());
 
+        // Install app module for application-level bindings
+        install(new app.Module());
+
         // Install ui module for user interface bindings
         install(new ui.Module());
 

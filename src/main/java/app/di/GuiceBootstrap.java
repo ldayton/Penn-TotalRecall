@@ -1,9 +1,9 @@
 package app.di;
 
 import actions.ActionsManager;
+import app.DevModeFileAutoLoader;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import env.DevModeFileAutoLoader;
 import env.LookAndFeelManager;
 import env.UpdateManager;
 import jakarta.inject.Inject;

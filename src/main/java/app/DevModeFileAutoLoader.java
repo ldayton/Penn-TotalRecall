@@ -1,6 +1,7 @@
-package env;
+package app;
 
 import actions.PlayPauseAction;
+import env.AppConfig;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIReadyEvent;
