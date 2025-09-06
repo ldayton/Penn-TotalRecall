@@ -1,10 +1,10 @@
 package env;
 
-import actions.OpenWordpoolAction;
 import actions.PlayPauseAction;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIReadyEvent;
+import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseEvent;
@@ -31,19 +31,18 @@ public class DevModeFileAutoLoader {
 
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
-    private final OpenWordpoolAction openWordpoolAction;
+    private final EventDispatchBus eventBus;
     private final PlayPauseAction playPauseAction;
 
     @Inject
     public DevModeFileAutoLoader(
             AppConfig appConfig,
             AudioFileList audioFileList,
-            OpenWordpoolAction openWordpoolAction,
             PlayPauseAction playPauseAction,
             EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.audioFileList = audioFileList;
-        this.openWordpoolAction = openWordpoolAction;
+        this.eventBus = eventBus;
         this.playPauseAction = playPauseAction;
         eventBus.subscribe(this);
     }
@@ -156,7 +155,7 @@ public class DevModeFileAutoLoader {
         if (sampleWordpoolFile.exists()) {
             logger.info(
                     "Development mode: auto-loading sample wordpool file {}", SAMPLE_WORDPOOL_PATH);
-            openWordpoolAction.switchWordpool(sampleWordpoolFile);
+            eventBus.publish(new WordpoolFileSelectedEvent(sampleWordpoolFile));
             logger.info("Successfully auto-loaded sample wordpool file");
         } else {
             logger.warn("Sample wordpool file does not exist: {}", SAMPLE_WORDPOOL_PATH);

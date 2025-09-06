@@ -1,7 +1,8 @@
 package ui;
 
-import actions.OpenWordpoolAction;
 import env.Constants;
+import events.EventDispatchBus;
+import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.dnd.DropTargetDropEvent;
@@ -9,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import state.AudioState;
+import s2.WaveformSessionDataSource;
 import ui.audiofiles.AudioFileDisplay;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolFileParser;
@@ -23,17 +24,17 @@ import util.OsPath;
 public class FileDropListener implements FileDrop.Listener {
     private static final Logger logger = LoggerFactory.getLogger(FileDropListener.class);
 
-    private final OpenWordpoolAction openWordpoolAction;
-    private final AudioState audioState;
+    private final EventDispatchBus eventBus;
+    private final WaveformSessionDataSource sessionDataSource;
     private final WordpoolDisplay wordpoolDisplay;
 
     @Inject
     public FileDropListener(
-            OpenWordpoolAction openWordpoolAction,
-            AudioState audioState,
+            EventDispatchBus eventBus,
+            WaveformSessionDataSource sessionDataSource,
             WordpoolDisplay wordpoolDisplay) {
-        this.openWordpoolAction = openWordpoolAction;
-        this.audioState = audioState;
+        this.eventBus = eventBus;
+        this.sessionDataSource = sessionDataSource;
         this.wordpoolDisplay = wordpoolDisplay;
     }
 
@@ -59,27 +60,32 @@ public class FileDropListener implements FileDrop.Listener {
             boolean wordpoolFound = false;
             if (files.length == 1) { // check for wordpool file
                 if (files[0].getName().toLowerCase().endsWith(Constants.wordpoolFileExtension)) {
-                    openWordpoolAction.switchWordpool(files[0]);
+                    eventBus.publish(new WordpoolFileSelectedEvent(files[0]));
 
-                    if (audioState.audioOpen()) {
-                        File lstFile =
-                                new File(
-                                        OsPath.basename(
-                                                        audioState
-                                                                .getCurrentAudioFileAbsolutePath())
-                                                + "."
-                                                + Constants.lstFileExtension);
-                        if (lstFile.exists()) {
-                            try {
-                                wordpoolDisplay.distinguishAsLst(
-                                        WordpoolFileParser.parse(lstFile, true));
-                            } catch (IOException e) {
-                                logger.error(
-                                        "Error parsing wordpool file during drag and drop: "
-                                                + lstFile.getAbsolutePath(),
-                                        e);
-                            }
-                        }
+                    if (sessionDataSource.isAudioLoaded()) {
+                        sessionDataSource
+                                .getCurrentAudioFilePath()
+                                .ifPresent(
+                                        audioPath -> {
+                                            File lstFile =
+                                                    new File(
+                                                            OsPath.basename(audioPath)
+                                                                    + "."
+                                                                    + Constants.lstFileExtension);
+                                            if (lstFile.exists()) {
+                                                try {
+                                                    wordpoolDisplay.distinguishAsLst(
+                                                            WordpoolFileParser.parse(
+                                                                    lstFile, true));
+                                                } catch (IOException e) {
+                                                    logger.error(
+                                                            "Error parsing wordpool file during"
+                                                                    + " drag and drop: "
+                                                                    + lstFile.getAbsolutePath(),
+                                                            e);
+                                                }
+                                            }
+                                        });
                     }
 
                     somethingAccepted = true;
