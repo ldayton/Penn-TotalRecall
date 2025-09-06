@@ -1,11 +1,7 @@
 package app.di;
 
-import a2.AudioEngine;
-import a2.SampleReader;
-import a2.fmod.FmodAudioEngine;
 import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodModule;
-import a2.fmod.FmodSampleReader;
 import actions.ActionsFileParser;
 import actions.ActionsManager;
 import com.google.inject.AbstractModule;
@@ -60,6 +56,9 @@ public class AppModule extends AbstractModule {
         // Install FMOD module for audio system dependencies
         install(new FmodModule());
 
+        // Install a2 module for audio engine bindings
+        install(new a2.Module());
+
         // Configure s2 package bindings
         bind(AudioSessionManager.class).in(Singleton.class);
         bind(AudioSessionStateMachine.class).in(Singleton.class);
@@ -101,9 +100,6 @@ public class AppModule extends AbstractModule {
         bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
-
-        bind(AudioEngine.class).to(FmodAudioEngine.class).in(Singleton.class);
-        bind(SampleReader.class).to(FmodSampleReader.class);
     }
 
     @Provides
