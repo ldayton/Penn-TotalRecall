@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import state.AudioState;
 
 /**
  * <code>JPopupMenu</code> that presents user with actions for manipulating the <code>AudioFileList
@@ -20,16 +19,12 @@ import state.AudioState;
 public class AudioFilePopupMenu extends JPopupMenu {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
-    private final AudioState audioState;
     private final EventDispatchBus eventBus;
 
     @Inject
     public AudioFilePopupMenu(
-            ContinueAnnotatingAction continueAnnotatingAction,
-            AudioState audioState,
-            EventDispatchBus eventBus) {
+            ContinueAnnotatingAction continueAnnotatingAction, EventDispatchBus eventBus) {
         this.continueAnnotatingAction = continueAnnotatingAction;
-        this.audioState = audioState;
         this.eventBus = eventBus;
     }
 
@@ -41,8 +36,9 @@ public class AudioFilePopupMenu extends JPopupMenu {
      *
      * @param file The <code>AudioFile</code> on whose behalf the menu is being offered
      * @param index The index of <code>file</code> in its <code>AudioFileList</code>
+     * @param isCurrentFile Whether this file is the currently loaded audio file
      */
-    public void configureForFile(AudioFile file, final int index) {
+    public void configureForFile(AudioFile file, final int index, boolean isCurrentFile) {
         removeAll(); // Clear existing items
 
         // most, if not all LAFs do not support JPopupMenu titles
@@ -69,10 +65,8 @@ public class AudioFilePopupMenu extends JPopupMenu {
                             }
                         });
         del.setText("Remove from List");
-        if (audioState.audioOpen()) {
-            if (audioState.getCurrentAudioFileAbsolutePath().equals(file.getAbsolutePath())) {
-                del.setEnabled(false);
-            }
+        if (isCurrentFile) {
+            del.setEnabled(false);
         }
 
         add(fakeTitle);

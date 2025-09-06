@@ -19,7 +19,6 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import state.AudioState;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
 @Singleton
@@ -29,7 +28,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
-    private final AudioState audioState;
+    // private final AudioState audioState;
     private AudioFile currentAudioFile = null;
 
     /**
@@ -39,9 +38,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     @Inject
     public AudioFileList(
             AudioFileListMouseAdapter mouseAdapter,
-            AudioState audioState,
+            // AudioState audioState,
             EventDispatchBus eventBus) {
-        this.audioState = audioState;
+        // this.audioState = audioState;
         model = new AudioFileListModel();
         setModel(model);
 
@@ -93,12 +92,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                                     if (ff == null) {
                                         return;
                                     }
-                                    if (audioState.audioOpen()) {
-                                        if (audioState
-                                                .getCurrentAudioFileAbsolutePath()
-                                                .equals(ff.getAbsolutePath())) {
-                                            return;
-                                        }
+                                    // Don't remove if it's the currently loaded file
+                                    if (currentAudioFile != null && currentAudioFile.equals(ff)) {
+                                        return;
                                     }
                                     model.removeElementAt(index);
                                 }
@@ -281,10 +277,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
             if (event.getIndex() >= 0 && event.getIndex() < model.getSize()) {
                 // Don't remove if it's the currently playing file
                 AudioFile fileToRemove = model.getElementAt(event.getIndex());
-                if (audioState.audioOpen()
-                        && audioState
-                                .getCurrentAudioFileAbsolutePath()
-                                .equals(fileToRemove.getAbsolutePath())) {
+                if (currentAudioFile != null && currentAudioFile.equals(fileToRemove)) {
                     return; // Don't remove currently playing file
                 }
                 model.removeElementAt(event.getIndex());

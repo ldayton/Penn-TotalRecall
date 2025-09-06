@@ -5,7 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import state.AudioState;
+
+// import state.AudioState;
 
 /** Mouse adapter for the <code>AnnotationTable</code>. */
 @Singleton
@@ -13,30 +14,31 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
 
     // private final JumpToAnnotationAction jumpToAnnotationAction;
     private final AnnotationTablePopupMenuFactory popupMenuFactory;
-    private final AudioState audioState;
+
+    // private final AudioState audioState;
 
     @Inject
     public AnnotationTableMouseAdapter(
             // JumpToAnnotationAction jumpToAnnotationAction,
-            AnnotationTablePopupMenuFactory popupMenuFactory, AudioState audioState) {
+            AnnotationTablePopupMenuFactory popupMenuFactory /* , AudioState audioState */) {
         // this.jumpToAnnotationAction = jumpToAnnotationAction;
         this.popupMenuFactory = popupMenuFactory;
-        this.audioState = audioState;
+        // this.audioState = audioState;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-            if (!audioState.isPlaying()) {
-                // we are manually generating the event, so we must ourselves check the conditions
-                // jumpToAnnotationAction.actionPerformed(
-                //         new ActionEvent(
-                //                 AnnotationTable.getInstance(),
-                //                 ActionEvent.ACTION_PERFORMED,
-                //                 null,
-                //                 System.currentTimeMillis(),
-                //                 0));
-            }
+            // if (!audioState.isPlaying()) {
+            // we are manually generating the event, so we must ourselves check the conditions
+            // jumpToAnnotationAction.actionPerformed(
+            //         new ActionEvent(
+            //                 AnnotationTable.getInstance(),
+            //                 ActionEvent.ACTION_PERFORMED,
+            //                 null,
+            //                 System.currentTimeMillis(),
+            //                 0));
+            // }
         }
     }
 

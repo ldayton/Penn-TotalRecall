@@ -21,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import state.AudioState;
 import ui.DialogService;
 import ui.audiofiles.AudioFile.AudioFilePathException;
 import ui.preferences.PreferencesManager;
@@ -42,7 +41,6 @@ public class AudioFileDisplay extends JScrollPane {
 
     private static AudioFileDisplay instance;
     private final PreferencesManager preferencesManager;
-    private static AudioState audioState;
 
     private static AudioFileList list;
 
@@ -55,10 +53,8 @@ public class AudioFileDisplay extends JScrollPane {
     public AudioFileDisplay(
             AudioFileList audioFileList,
             PreferencesManager preferencesManager,
-            AudioState audioState,
             EventDispatchBus eventBus) {
         this.preferencesManager = preferencesManager;
-        AudioFileDisplay.audioState = audioState;
         list = audioFileList;
         getViewport().setView(list);
 
@@ -151,8 +147,9 @@ public class AudioFileDisplay extends JScrollPane {
         if (file.isDone()) {
             return false;
         }
-        if (audioState.audioOpen()) {
-            if (file.getAbsolutePath().equals(audioState.getCurrentAudioFileAbsolutePath())) {
+        AudioFile currentFile = list.getCurrentAudioFile();
+        if (currentFile != null) {
+            if (file.getAbsolutePath().equals(currentFile.getAbsolutePath())) {
                 return true;
             }
             boolean shouldWarn =

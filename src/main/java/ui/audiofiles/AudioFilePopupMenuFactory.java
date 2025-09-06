@@ -13,16 +13,12 @@ import jakarta.inject.Singleton;
 public class AudioFilePopupMenuFactory {
 
     private final ContinueAnnotatingAction continueAnnotatingAction;
-    private final state.AudioState audioState;
     private final EventDispatchBus eventBus;
 
     @Inject
     public AudioFilePopupMenuFactory(
-            ContinueAnnotatingAction continueAnnotatingAction,
-            state.AudioState audioState,
-            EventDispatchBus eventBus) {
+            ContinueAnnotatingAction continueAnnotatingAction, EventDispatchBus eventBus) {
         this.continueAnnotatingAction = continueAnnotatingAction;
-        this.audioState = audioState;
         this.eventBus = eventBus;
     }
 
@@ -34,9 +30,14 @@ public class AudioFilePopupMenuFactory {
      * @return A configured AudioFilePopupMenu instance
      */
     public AudioFilePopupMenu createPopupMenu(AudioFile file, int index) {
-        AudioFilePopupMenu popupMenu =
-                new AudioFilePopupMenu(continueAnnotatingAction, audioState, eventBus);
-        popupMenu.configureForFile(file, index);
+        AudioFilePopupMenu popupMenu = new AudioFilePopupMenu(continueAnnotatingAction, eventBus);
+
+        // Check if this file is the currently loaded one
+        AudioFile currentFile = AudioFileList.getInstance().getCurrentAudioFile();
+        boolean isCurrentFile =
+                currentFile != null && currentFile.getAbsolutePath().equals(file.getAbsolutePath());
+
+        popupMenu.configureForFile(file, index, isCurrentFile);
         return popupMenu;
     }
 }
