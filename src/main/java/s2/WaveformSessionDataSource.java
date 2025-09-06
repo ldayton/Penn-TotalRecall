@@ -32,4 +32,7 @@ public interface WaveformSessionDataSource {
 
     /** Get the current audio file path. */
     Optional<String> getCurrentAudioFilePath();
+
+    /** Get the sample rate of the current audio. */
+    Optional<Integer> getSampleRate();
 }

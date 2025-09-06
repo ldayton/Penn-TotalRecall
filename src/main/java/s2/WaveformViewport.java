@@ -1,6 +1,8 @@
 package s2;
 
+import events.AudioSeekRequestedEvent;
 import events.EventDispatchBus;
+import events.ScreenSeekRequestedEvent;
 import events.Subscribe;
 import events.ZoomInRequestedEvent;
 import events.ZoomOutRequestedEvent;
@@ -24,9 +26,15 @@ public class WaveformViewport {
     private double startSeconds = 0.0;
     private int pixelsPerSecond = DEFAULT_PIXELS_PER_SECOND;
     private int viewportWidthPixels;
+    private final EventDispatchBus eventBus;
+    private final WaveformSessionDataSource sessionDataSource;
 
     @Inject
-    public WaveformViewport(@NonNull EventDispatchBus eventBus) {
+    public WaveformViewport(
+            @NonNull EventDispatchBus eventBus,
+            @NonNull WaveformSessionDataSource sessionDataSource) {
+        this.eventBus = eventBus;
+        this.sessionDataSource = sessionDataSource;
         eventBus.subscribe(this);
     }
 
@@ -44,6 +52,55 @@ public class WaveformViewport {
         if (newZoom >= MIN_PIXELS_PER_SECOND) {
             setZoom(newZoom);
         }
+    }
+
+    @Subscribe
+    public void onScreenSeekRequested(@NonNull ScreenSeekRequestedEvent event) {
+        // Get current position from session data source
+        sessionDataSource
+                .getPlaybackPosition()
+                .ifPresent(
+                        currentPositionSeconds -> {
+                            // Calculate viewport width in seconds
+                            double viewportSeconds = getViewportWidthSeconds();
+
+                            // Calculate new position based on direction
+                            double targetPositionSeconds =
+                                    event.getDirection()
+                                                    == ScreenSeekRequestedEvent.Direction.FORWARD
+                                            ? currentPositionSeconds + viewportSeconds
+                                            : currentPositionSeconds - viewportSeconds;
+
+                            // Ensure within bounds and convert to frames
+                            sessionDataSource
+                                    .getTotalDuration()
+                                    .ifPresent(
+                                            totalDuration -> {
+                                                sessionDataSource
+                                                        .getSampleRate()
+                                                        .ifPresent(
+                                                                sampleRate -> {
+                                                                    double boundedPosition =
+                                                                            Math.max(
+                                                                                    0,
+                                                                                    Math.min(
+                                                                                            targetPositionSeconds,
+                                                                                            totalDuration));
+
+                                                                    // Convert to frames using
+                                                                    // actual sample rate
+                                                                    long targetFrame =
+                                                                            (long)
+                                                                                    (boundedPosition
+                                                                                            * sampleRate);
+
+                                                                    // Publish seek event
+                                                                    eventBus.publish(
+                                                                            new AudioSeekRequestedEvent(
+                                                                                    targetFrame));
+                                                                });
+                                            });
+                        });
     }
 
     /** Set the viewport width in pixels. */

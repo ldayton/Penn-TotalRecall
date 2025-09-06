@@ -260,8 +260,13 @@ public class GuiceBootstrap {
         var seekAction = globalInjector.getInstance(actions.SeekAction.class);
         actionsManager.registerAction(seekAction);
 
-        var screenSeekAction = globalInjector.getInstance(actions.ScreenSeekAction.class);
-        actionsManager.registerAction(screenSeekAction);
+        var screenSeekForwardAction =
+                globalInjector.getInstance(actions.ScreenSeekForwardAction.class);
+        actionsManager.registerAction(screenSeekForwardAction);
+
+        var screenSeekBackwardAction =
+                globalInjector.getInstance(actions.ScreenSeekBackwardAction.class);
+        actionsManager.registerAction(screenSeekBackwardAction);
 
         var toggleAnnotationsAction =
                 globalInjector.getInstance(actions.ToggleAnnotationsAction.class);

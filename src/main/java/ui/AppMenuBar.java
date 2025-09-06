@@ -80,7 +80,8 @@ public class AppMenuBar extends JMenuBar {
     private final actions.OpenAudioFileAction openAudioFileAction;
     private final actions.OpenAudioFolderAction openAudioFolderAction;
     private final actions.SeekAction seekAction;
-    private final actions.ScreenSeekAction screenSeekAction;
+    private final actions.ScreenSeekForwardAction screenSeekForwardAction;
+    private final actions.ScreenSeekBackwardAction screenSeekBackwardAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @SuppressWarnings("StaticAssignmentInConstructor")
@@ -111,7 +112,8 @@ public class AppMenuBar extends JMenuBar {
             actions.OpenAudioFileAction openAudioFileAction,
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
-            actions.ScreenSeekAction screenSeekAction) {
+            actions.ScreenSeekForwardAction screenSeekForwardAction,
+            actions.ScreenSeekBackwardAction screenSeekBackwardAction) {
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
         this.editShortcutsAction = editShortcutsAction;
@@ -135,7 +137,8 @@ public class AppMenuBar extends JMenuBar {
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
         this.seekAction = seekAction;
-        this.screenSeekAction = screenSeekAction;
+        this.screenSeekForwardAction = screenSeekForwardAction;
+        this.screenSeekBackwardAction = screenSeekBackwardAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -201,11 +204,9 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiLast200MoveRight = new JMenuItem(last200PlusMoveAction);
         JMenuItem jmiLast200MoveLeft = new JMenuItem(last200PlusMoveAction);
 
-        // Add screen seek actions using the unified ADI action
-        JMenuItem jmiScreenForward = new JMenuItem(screenSeekAction);
-        jmiScreenForward.setText("Screen Forward");
-        JMenuItem jmiScreenBackward = new JMenuItem(screenSeekAction);
-        jmiScreenBackward.setText("Screen Backward");
+        // Add screen seek actions
+        JMenuItem jmiScreenForward = new JMenuItem(screenSeekForwardAction);
+        JMenuItem jmiScreenBackward = new JMenuItem(screenSeekBackwardAction);
 
         jmSeek.add(jmiSeekForwardSmall);
         jmSeek.add(jmiSeekSmallBackward);
@@ -305,7 +306,8 @@ public class AppMenuBar extends JMenuBar {
             instance.openAudioFileAction.update();
             instance.openAudioFolderAction.update();
             instance.seekAction.update();
-            instance.screenSeekAction.update();
+            instance.screenSeekForwardAction.update();
+            instance.screenSeekBackwardAction.update();
         }
     }
 

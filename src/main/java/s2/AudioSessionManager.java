@@ -362,6 +362,11 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         return currentFile.map(f -> f.getAbsolutePath());
     }
 
+    @Override
+    public Optional<Integer> getSampleRate() {
+        return sampleRate > 0 ? Optional.of(sampleRate) : Optional.empty();
+    }
+
     /**
      * Stop playback and transition to READY state. Used when user explicitly stops playback (not
      * pause).
