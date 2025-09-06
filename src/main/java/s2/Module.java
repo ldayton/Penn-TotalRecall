@@ -15,6 +15,7 @@ public class Module extends AbstractModule {
         // Core session management
         bind(AudioSessionManager.class).in(Singleton.class);
         bind(AudioSessionStateMachine.class).in(Singleton.class);
+        bind(AnnotationManager.class).in(Singleton.class);
 
         // Waveform data sources and management
         bind(WaveformManager.class).in(Singleton.class);

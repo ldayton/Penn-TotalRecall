@@ -80,6 +80,9 @@ public class GuiceBootstrap {
         painter.setDataSource(paintDataSource);
         painter.start(); // Start the repaint timer
 
+        // Initialize annotation manager to handle annotation events
+        globalInjector.getInstance(s2.AnnotationManager.class);
+
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Register all UpdatingAction instances with ActionsManager
