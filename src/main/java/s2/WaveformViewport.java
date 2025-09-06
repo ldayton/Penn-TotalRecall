@@ -30,33 +30,40 @@ public class WaveformViewport {
     }
 
     /**
-     * Update viewport position to follow playback. Only updates when playing to avoid stuttering.
+     * Update viewport position to follow playback with smooth scrolling. Keeps playhead at a fixed
+     * position on screen (33% from left).
      */
     public void followPlayback(double playbackPosition, double totalDuration, boolean isPlaying) {
-        if (totalDuration <= 0 || !isPlaying) {
+        if (totalDuration <= 0) {
             return;
         }
 
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
-        double halfWidth = widthSeconds / 2.0;
 
-        // Calculate centered position
-        double newStart;
-        if (playbackPosition < halfWidth) {
-            // At the beginning - playhead moves from left to center
-            newStart = 0;
-        } else if (playbackPosition > totalDuration - halfWidth) {
-            // At the end - keep the end visible, playhead moves from center to right
-            newStart = Math.max(0, totalDuration - widthSeconds);
+        // Playhead stays at 33% from the left of the viewport
+        double playheadPositionSeconds = widthSeconds * 0.33;
+
+        // Calculate ideal viewport start to keep playhead at fixed position
+        double idealStart = playbackPosition - playheadPositionSeconds;
+
+        double oldStart = startSeconds;
+
+        // Handle bounds at beginning and end of audio
+        if (idealStart < 0) {
+            // At the beginning - viewport locked at 0, playhead moves across screen
+            startSeconds = 0;
+        } else if (idealStart + widthSeconds > totalDuration) {
+            // At the end - viewport locked to show end, playhead moves to right
+            startSeconds = Math.max(0, totalDuration - widthSeconds);
         } else {
-            // In the middle - keep playhead centered
-            newStart = playbackPosition - halfWidth;
+            // Normal case - smooth continuous scrolling
+            startSeconds = idealStart;
         }
 
-        // Only scroll forward during playback to prevent stuttering
-        if (newStart > startSeconds) {
-            startSeconds = newStart;
-        }
+        // Debug logging
+        System.out.printf(
+                "followPlayback: pos=%.2f, oldStart=%.2f, newStart=%.2f, width=%.2f%n",
+                playbackPosition, oldStart, startSeconds, widthSeconds);
     }
 
     /** Get the current visible time range. */

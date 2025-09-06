@@ -1,6 +1,7 @@
 package env;
 
 import actions.OpenWordpoolAction;
+import actions.PlayPauseAction;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIReadyEvent;
@@ -9,6 +10,7 @@ import jakarta.inject.Singleton;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.audiofiles.AudioFileDisplay;
@@ -30,16 +32,19 @@ public class DevModeFileAutoLoader {
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
     private final OpenWordpoolAction openWordpoolAction;
+    private final PlayPauseAction playPauseAction;
 
     @Inject
     public DevModeFileAutoLoader(
             AppConfig appConfig,
             AudioFileList audioFileList,
             OpenWordpoolAction openWordpoolAction,
+            PlayPauseAction playPauseAction,
             EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.audioFileList = audioFileList;
         this.openWordpoolAction = openWordpoolAction;
+        this.playPauseAction = playPauseAction;
         eventBus.subscribe(this);
     }
 
@@ -132,6 +137,17 @@ public class DevModeFileAutoLoader {
                                 "Development mode: switched to {} ({} files listed)",
                                 loadedFile.getName(),
                                 audioFileList.getModel().getSize());
+
+                        // Auto-start playback after a short delay to ensure waveform is loaded
+                        Timer autoPlayTimer =
+                                new Timer(
+                                        2000,
+                                        e -> {
+                                            logger.info("Development mode: auto-starting playback");
+                                            playPauseAction.actionPerformed(e);
+                                        });
+                        autoPlayTimer.setRepeats(false);
+                        autoPlayTimer.start();
                     });
         }
 

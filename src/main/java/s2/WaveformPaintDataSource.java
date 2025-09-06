@@ -17,15 +17,18 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource {
     private final WaveformManager waveformManager;
     private final WaveformViewport viewport;
     private final WaveformSessionDataSource sessionSource;
+    private final InterpolatedPlaybackTracker playbackTracker;
 
     @Inject
     public WaveformPaintDataSource(
             @NonNull WaveformManager waveformManager,
             @NonNull WaveformViewport viewport,
-            @NonNull WaveformSessionDataSource sessionSource) {
+            @NonNull WaveformSessionDataSource sessionSource,
+            @NonNull InterpolatedPlaybackTracker playbackTracker) {
         this.waveformManager = waveformManager;
         this.viewport = viewport;
         this.sessionSource = sessionSource;
+        this.playbackTracker = playbackTracker;
     }
 
     /**
@@ -33,12 +36,36 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource {
      * Should be called before each paint operation.
      */
     public void prepareFrame() {
-        // Update viewport to follow playback
-        double playbackPos = sessionSource.getPlaybackPosition().orElse(0.0);
+        // Get real playback position and update interpolator
+        double realPosition = sessionSource.getPlaybackPosition().orElse(0.0);
         double totalDuration = sessionSource.getTotalDuration().orElse(0.0);
         boolean isPlaying = sessionSource.isPlaying();
 
-        viewport.followPlayback(playbackPos, totalDuration, isPlaying);
+        // Update playing state
+        playbackTracker.setPlaying(isPlaying);
+
+        // Update real position if playing (audio callbacks provide updates)
+        if (isPlaying) {
+            playbackTracker.updateRealPosition(realPosition);
+        }
+
+        // Use interpolated position for smooth viewport scrolling
+        double smoothPosition = playbackTracker.getInterpolatedPosition();
+
+        // Debug logging
+        System.out.printf(
+                "prepareFrame: real=%.2f, smooth=%.2f, playing=%b%n",
+                realPosition, smoothPosition, isPlaying);
+
+        viewport.followPlayback(smoothPosition, totalDuration, isPlaying);
+    }
+
+    /**
+     * Handle seek events to reset interpolation. This should be called when the user seeks to a new
+     * position.
+     */
+    public void onSeek(double positionSeconds) {
+        playbackTracker.reset(positionSeconds);
     }
 
     /** Update viewport width from canvas. Should be called when canvas size changes. */

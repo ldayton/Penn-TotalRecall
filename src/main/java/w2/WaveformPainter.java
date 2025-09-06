@@ -2,6 +2,7 @@ package w2;
 
 import jakarta.inject.Inject;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -84,17 +85,14 @@ public class WaveformPainter {
      */
     public void suggestPaint() {
         if (viewport == null) {
-            System.out.println("WaveformPainter: No viewport set");
             return;
         }
         if (dataSource == null) {
-            System.out.println("WaveformPainter: No data source set");
             return;
         }
 
         Graphics2D g = viewport.getPaintGraphics();
         if (g == null) {
-            System.out.println("WaveformPainter: No graphics context");
             return;
         }
 
@@ -113,25 +111,21 @@ public class WaveformPainter {
         }
 
         Rectangle bounds = viewport.getBounds();
-        System.out.println("WaveformPainter: Bounds = " + bounds);
 
         // Check state to determine what to paint
         AudioSessionStateMachine.State state = stateMachine.getCurrentState();
 
         if (state == AudioSessionStateMachine.State.NO_AUDIO) {
-            System.out.println("WaveformPainter: No audio state, painting empty state");
             paintEmptyState(g, bounds);
             return;
         }
 
         if (state == AudioSessionStateMachine.State.LOADING) {
-            System.out.println("WaveformPainter: Loading state, painting loading indicator");
             paintLoadingIndicator(g, bounds);
             return;
         }
 
         if (state == AudioSessionStateMachine.State.ERROR) {
-            System.out.println("WaveformPainter: Error state");
             paintErrorMessage(g, bounds, "Audio loading failed");
             return;
         }
@@ -140,10 +134,8 @@ public class WaveformPainter {
         TimeRange timeRange = dataSource.getTimeRange();
         if (timeRange == null) {
             // This shouldn't happen if state machine is correct
-            System.out.println("WaveformPainter: WARNING - In " + state + " but no time range");
             return;
         }
-        System.out.println("WaveformPainter: Time range = " + timeRange);
 
         // Construct ViewportContext from the pieces
         ViewportContext context =
@@ -159,11 +151,9 @@ public class WaveformPainter {
         // Get the waveform
         Waveform waveform = dataSource.getWaveform();
         if (waveform == null) {
-            System.out.println("WaveformPainter: No waveform available");
             paintLoadingIndicator(g, bounds);
             return;
         }
-        System.out.println("WaveformPainter: Got waveform, attempting to render");
 
         // Get rendered waveform image
         try {
@@ -173,34 +163,31 @@ public class WaveformPainter {
             Image waveformImage = imageFuture.get(100, TimeUnit.MILLISECONDS);
 
             if (waveformImage != null) {
-                System.out.println("WaveformPainter: Successfully got waveform image, painting it");
                 paintWaveform(g, bounds, waveformImage);
             } else {
-                System.out.println("WaveformPainter: Waveform image was null");
                 clearBackground(g, bounds);
             }
         } catch (TimeoutException e) {
             // Still rendering, show loading indicator
-            System.out.println("WaveformPainter: Timed out waiting for waveform render");
             paintLoadingIndicator(g, bounds);
 
             // Request a repaint when the rendering completes
             CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
             imageFuture.whenComplete(
                     (image, _) -> {
-                        if (image != null) {
-                            System.out.println("WaveformPainter: Waveform rendering completed");
-                        }
+                        if (image != null) {}
                     });
         } catch (Exception e) {
             // Error rendering
-            System.out.println("WaveformPainter: Exception rendering waveform: " + e.getMessage());
             e.printStackTrace();
             clearBackground(g, bounds);
         }
 
-        // Paint cursor on top if playing
-        if (dataSource.isPlaying()) {
+        // Paint playhead on top if playing
+        boolean playing = dataSource.isPlaying();
+        System.out.printf(
+                "WaveformPainter: isPlaying=%b, bounds.width=%d%n", playing, bounds.width);
+        if (playing) {
             paintPlaybackCursor(
                     g,
                     bounds,
@@ -223,13 +210,14 @@ public class WaveformPainter {
     }
 
     /**
-     * Paint the playback cursor at the current position.
+     * Paint the playback cursor at a fixed position with stationary playhead. Uses XOR mode for
+     * better visibility over the waveform.
      *
      * @param g Graphics context
      * @param bounds Area of the waveform
-     * @param timeRange Current time range being displayed
-     * @param pixelsPerSecond Zoom level
-     * @param playbackSeconds Current playback position in seconds
+     * @param timeRange Current time range being displayed (not used for stationary playhead)
+     * @param pixelsPerSecond Zoom level (not used for stationary playhead)
+     * @param playbackSeconds Current playback position (not used for stationary playhead)
      */
     public void paintPlaybackCursor(
             @NonNull Graphics2D g,
@@ -237,15 +225,25 @@ public class WaveformPainter {
             @NonNull TimeRange timeRange,
             int pixelsPerSecond,
             double playbackSeconds) {
-        // Calculate x position from playback time and time range
-        double relativeTime = playbackSeconds - timeRange.startSeconds();
-        int cursorX = bounds.x + (int) (relativeTime * pixelsPerSecond);
 
-        // Draw vertical cursor line if within bounds
-        if (cursorX >= bounds.x && cursorX <= bounds.x + bounds.width) {
-            g.setColor(Color.RED);
-            g.drawLine(cursorX, bounds.y, cursorX, bounds.y + bounds.height);
-        }
+        // Fixed playhead position at 50% (center) of the viewport
+        int playheadX = bounds.x + (int) (bounds.width * 0.5);
+
+        // Save original paint mode
+        Composite originalComposite = g.getComposite();
+        Color originalColor = g.getColor();
+
+        // Use XOR mode for better visibility over waveform
+        g.setXORMode(Color.WHITE);
+        g.setColor(Color.BLACK);
+
+        // Draw the playhead line at the fixed position
+        g.drawLine(playheadX, bounds.y, playheadX, bounds.y + bounds.height);
+
+        // Restore original paint mode
+        g.setPaintMode();
+        g.setComposite(originalComposite);
+        g.setColor(originalColor);
     }
 
     /**

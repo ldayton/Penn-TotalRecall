@@ -35,6 +35,7 @@ public class PlayPauseAction extends BaseAction {
 
     @Override
     protected void performAction(ActionEvent e) {
+        System.out.println("PlayPauseAction.performAction called, current state: " + currentState);
         eventBus.publish(new AudioPlayPauseRequestedEvent());
         eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
     }
