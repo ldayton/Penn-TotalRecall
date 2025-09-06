@@ -179,14 +179,34 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
     @Subscribe
     public void onAudioSeekRequested(@NonNull AudioSeekRequestedEvent event) {
-        currentPlaybackHandle.ifPresent(
-                playback -> {
-                    audioEngine.ifPresent(
-                            engine -> {
-                                engine.seek(playback, event.getFrame());
-                                log.debug("Seeked to frame: {}", event.getFrame());
-                            });
-                });
+        var state = stateManager.getCurrentState();
+
+        if (currentPlaybackHandle.isPresent()) {
+            // If we have a playback handle (playing or paused), just seek it
+            audioEngine.ifPresent(
+                    engine -> {
+                        engine.seek(currentPlaybackHandle.get(), event.getFrame());
+                        currentPositionFrames = event.getFrame(); // Update cached position
+                        log.debug("Seeked to frame: {}", event.getFrame());
+                    });
+        } else if (state == AudioSessionStateMachine.State.READY
+                && currentAudioHandle.isPresent()) {
+            // If in READY state with no playback handle, create one and immediately pause it
+            var playback = audioEngine.get().play(currentAudioHandle.get());
+            currentPlaybackHandle = Optional.of(playback);
+            audioEngine.get().pause(playback);
+            audioEngine.get().seek(playback, event.getFrame());
+            currentPositionFrames = event.getFrame();
+
+            // Transition to PAUSED since we now have a paused playback handle
+            var prevState = stateManager.getCurrentState();
+            stateManager.transitionToPaused();
+            eventBus.publish(
+                    new AppStateChangedEvent(
+                            prevState, AudioSessionStateMachine.State.PAUSED, event.getFrame()));
+
+            log.debug("Created paused playback and seeked to frame: {}", event.getFrame());
+        }
     }
 
     @Subscribe

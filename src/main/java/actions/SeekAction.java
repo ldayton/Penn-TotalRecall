@@ -1,13 +1,18 @@
 package actions;
 
 import env.PreferenceKeys;
+import events.AppStateChangedEvent;
+import events.AudioSeekRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import javax.swing.Action;
-import state.AudioState;
+import javax.swing.AbstractButton;
+import lombok.NonNull;
+import s2.AudioSessionStateMachine;
+import s2.WaveformSessionDataSource;
 import ui.preferences.PreferencesManager;
 
 /**
@@ -16,19 +21,21 @@ import ui.preferences.PreferencesManager;
 @Singleton
 public class SeekAction extends BaseAction {
 
-    private final AudioState audioState;
     private final EventDispatchBus eventBus;
     private final PreferencesManager preferencesManager;
+    private final WaveformSessionDataSource sessionDataSource;
+    private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
 
     @Inject
     public SeekAction(
-            AudioState audioState,
             EventDispatchBus eventBus,
-            PreferencesManager preferencesManager) {
+            PreferencesManager preferencesManager,
+            WaveformSessionDataSource sessionDataSource) {
         super("Seek", "Seek audio position");
-        this.audioState = audioState;
         this.eventBus = eventBus;
         this.preferencesManager = preferencesManager;
+        this.sessionDataSource = sessionDataSource;
+        eventBus.subscribe(this);
     }
 
     /**
@@ -37,33 +44,59 @@ public class SeekAction extends BaseAction {
      */
     @Override
     protected void performAction(ActionEvent e) {
-        // Get the action configuration to determine direction and amount
-        String actionId = getActionId();
-        int shift = getShiftAmount(actionId);
-        boolean forward = isForwardDirection(actionId);
-
-        long curFrame = audioState.getAudioProgress();
-        long frameShift = audioState.getCalculator().millisToFrames(shift);
-        long naivePosition = forward ? curFrame + frameShift : curFrame - frameShift;
-        long frameLength = audioState.getCalculator().durationInFrames();
-
-        long finalPosition = naivePosition;
-
-        if (naivePosition < 0) {
-            finalPosition = 0;
-        } else if (naivePosition >= frameLength) {
-            finalPosition = frameLength - 1;
+        // Get the menu item text to determine direction and amount
+        String actionText = "";
+        if (e.getSource() instanceof AbstractButton) {
+            actionText = ((AbstractButton) e.getSource()).getText();
         }
 
-        audioState.setAudioProgressAndUpdateActions(finalPosition);
-        audioState.play(finalPosition);
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
-    }
+        int shiftMillis = getShiftAmount(actionText);
+        boolean forward = isForwardDirection(actionText);
 
-    private String getActionId() {
-        // This would need to be implemented to get the current action's ID
-        // For now, we'll use a simple approach based on the action name
-        return (String) getValue(Action.NAME);
+        sessionDataSource
+                .getPlaybackPosition()
+                .ifPresent(
+                        currentPositionSeconds -> {
+                            sessionDataSource
+                                    .getSampleRate()
+                                    .ifPresent(
+                                            sampleRate -> {
+                                                sessionDataSource
+                                                        .getTotalDuration()
+                                                        .ifPresent(
+                                                                totalDuration -> {
+                                                                    double shiftSeconds =
+                                                                            shiftMillis / 1000.0;
+                                                                    double targetPositionSeconds =
+                                                                            forward
+                                                                                    ? currentPositionSeconds
+                                                                                            + shiftSeconds
+                                                                                    : currentPositionSeconds
+                                                                                            - shiftSeconds;
+
+                                                                    // Ensure within bounds
+                                                                    double boundedPositionSeconds =
+                                                                            Math.max(
+                                                                                    0,
+                                                                                    Math.min(
+                                                                                            targetPositionSeconds,
+                                                                                            totalDuration));
+                                                                    long targetFrame =
+                                                                            (long)
+                                                                                    (boundedPositionSeconds
+                                                                                            * sampleRate);
+
+                                                                    eventBus.publish(
+                                                                            new AudioSeekRequestedEvent(
+                                                                                    targetFrame));
+                                                                    eventBus.publish(
+                                                                            new FocusRequestedEvent(
+                                                                                    FocusRequestedEvent
+                                                                                            .Component
+                                                                                            .MAIN_WINDOW));
+                                                                });
+                                            });
+                        });
     }
 
     private int getShiftAmount(String actionId) {
@@ -83,17 +116,23 @@ public class SeekAction extends BaseAction {
         return actionId.contains("Forward");
     }
 
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        currentState = event.getNewState();
+        updateActionState();
+    }
+
+    private void updateActionState() {
+        // Enable when audio is loaded but not playing
+        switch (currentState) {
+            case READY, PAUSED -> setEnabled(true);
+            default -> setEnabled(false);
+        }
+    }
+
     /** A <code>SeekAction</code> should be enabled only when audio is open and not playing. */
     @Override
     public void update() {
-        if (audioState.audioOpen()) {
-            if (audioState.isPlaying()) {
-                setEnabled(false);
-            } else {
-                setEnabled(true);
-            }
-        } else {
-            setEnabled(false);
-        }
+        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
     }
 }
