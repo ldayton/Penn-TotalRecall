@@ -1,11 +1,16 @@
 package actions;
 
+import events.AppStateChangedEvent;
+import events.EventDispatchBus;
+import events.FocusRequestedEvent;
+import events.ReplayLast200MillisRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import state.AudioState;
-
-// import ui.waveform.SelectionOverlay;
+import lombok.NonNull;
+import s2.AudioSessionStateMachine;
+import s2.WaveformSessionDataSource;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been
@@ -14,36 +19,43 @@ import state.AudioState;
 @Singleton
 public class ReplayLast200MillisAction extends BaseAction {
 
-    public static final int duration = 200;
+    public static final int DURATION_MS = 200;
 
-    private final AudioState audioState;
-
-    // private final SelectionOverlay glassPane;
+    private final EventDispatchBus eventBus;
+    private final WaveformSessionDataSource sessionSource;
+    private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
 
     @Inject
-    public ReplayLast200MillisAction(AudioState audioState
-            // SelectionOverlay glassPane
-            ) {
+    public ReplayLast200MillisAction(
+            EventDispatchBus eventBus, WaveformSessionDataSource sessionSource) {
         super("Replay Last 200ms", "Replay the last 200 milliseconds of audio");
-        this.audioState = audioState;
-        // this.glassPane = glassPane;
+        this.eventBus = eventBus;
+        this.sessionSource = sessionSource;
+        eventBus.subscribe(this);
     }
 
-    /**
-     * Performs the action by calling the corresponding PrecisionPlayer function.
-     *
-     * <p>As per PrecisionPlayer's docs, this replay cannot be stopped once started.
-     *
-     * @param e The ActionEvent provided by the trigger
-     */
     @Override
     protected void performAction(ActionEvent e) {
+        eventBus.publish(new ReplayLast200MillisRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    }
 
-        long curFrame = audioState.getAudioProgress();
-        long numFrames = audioState.getCalculator().millisToFrames(duration);
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        currentState = event.getNewState();
+        updateActionState();
+    }
 
-        audioState.playInterval(curFrame - numFrames, curFrame - 1);
-        // glassPane.flashRectangle();
+    private void updateActionState() {
+        // User can replay last 200 millis when audio is open, not playing, and not at the beginning
+        if (currentState == AudioSessionStateMachine.State.READY
+                || currentState == AudioSessionStateMachine.State.PAUSED) {
+            // Check if we're not at the beginning
+            double position = sessionSource.getPlaybackPosition().orElse(0.0);
+            setEnabled(position > 0.2); // Enable if we're past 200ms
+        } else {
+            setEnabled(false);
+        }
     }
 
     /**
@@ -51,18 +63,6 @@ public class ReplayLast200MillisAction extends BaseAction {
      */
     @Override
     public void update() {
-        if (audioState.audioOpen()) {
-            if (audioState.isPlaying()) {
-                setEnabled(false);
-            } else {
-                if (audioState.getAudioProgress() <= 0) {
-                    setEnabled(false);
-                } else {
-                    setEnabled(true);
-                }
-            }
-        } else {
-            setEnabled(false);
-        }
+        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
     }
 }

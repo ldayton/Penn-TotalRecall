@@ -12,6 +12,7 @@ import events.AudioPlayPauseRequestedEvent;
 import events.AudioSeekRequestedEvent;
 import events.AudioStopRequestedEvent;
 import events.EventDispatchBus;
+import events.ReplayLast200MillisRequestedEvent;
 import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -195,6 +196,34 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             // Stop playback and reset position to beginning
             stopPlayback();
             log.debug("Stopped playback and reset to beginning");
+        }
+    }
+
+    @Subscribe
+    public void onReplayLast200MillisRequested(@NonNull ReplayLast200MillisRequestedEvent event) {
+        var state = stateManager.getCurrentState();
+
+        if ((state == AudioSessionStateMachine.State.READY
+                        || state == AudioSessionStateMachine.State.PAUSED)
+                && currentAudioHandle.isPresent()) {
+
+            // Get current position
+            long currentFrame = 0;
+            if (currentPlaybackHandle.isPresent()) {
+                currentFrame = audioEngine.get().getPosition(currentPlaybackHandle.get());
+            }
+
+            // Calculate 200ms in frames
+            int currentSampleRate =
+                    this.sampleRate != 0 ? this.sampleRate : 44100; // Use default if not set
+            long framesToReplay = (long) (currentSampleRate * 0.2); // 200ms
+            long startFrame = Math.max(0, currentFrame - framesToReplay);
+            long endFrame = currentFrame;
+
+            // Play the interval from 200ms ago to current position
+            audioEngine.get().play(currentAudioHandle.get(), startFrame, endFrame);
+
+            log.debug("Replaying last 200ms from frame {} to {}", startFrame, endFrame);
         }
     }
 

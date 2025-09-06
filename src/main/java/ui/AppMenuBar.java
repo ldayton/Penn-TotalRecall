@@ -12,7 +12,7 @@ import actions.Last200PlusMoveAction;
 import actions.OpenWordpoolAction;
 import actions.PlayPauseAction;
 import actions.PreferencesAction;
-// import actions.ReplayLast200MillisAction; // Disabled - depends on SelectionOverlay
+import actions.ReplayLast200MillisAction;
 import actions.ReplayLastPositionAction;
 import actions.ReturnToLastPositionAction;
 import actions.StopAction;
@@ -63,7 +63,7 @@ public class AppMenuBar extends JMenuBar {
     private final PreferencesAction preferencesAction;
     private final PlayPauseAction playPauseAction;
     private final StopAction stopAction;
-    // private final ReplayLast200MillisAction replayLast200MillisAction; // Disabled
+    private final ReplayLast200MillisAction replayLast200MillisAction;
     private final ReturnToLastPositionAction returnToLastPositionAction;
     private final ReplayLastPositionAction replayLastPositionAction;
     private final DoneAction doneAction;
@@ -94,7 +94,7 @@ public class AppMenuBar extends JMenuBar {
             PreferencesAction preferencesAction,
             PlayPauseAction playPauseAction,
             StopAction stopAction,
-            // ReplayLast200MillisAction replayLast200MillisAction, // Disabled
+            ReplayLast200MillisAction replayLast200MillisAction,
             ReturnToLastPositionAction returnToLastPositionAction,
             ReplayLastPositionAction replayLastPositionAction,
             DoneAction doneAction,
@@ -118,7 +118,7 @@ public class AppMenuBar extends JMenuBar {
         this.preferencesAction = preferencesAction;
         this.playPauseAction = playPauseAction;
         this.stopAction = stopAction;
-        // this.replayLast200MillisAction = replayLast200MillisAction; // Disabled
+        this.replayLast200MillisAction = replayLast200MillisAction;
         this.returnToLastPositionAction = returnToLastPositionAction;
         this.replayLastPositionAction = replayLastPositionAction;
         this.doneAction = doneAction;
@@ -178,7 +178,7 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiPlayPause = new JMenuItem(playPauseAction);
 
         JMenuItem jmiStop = new JMenuItem(stopAction);
-        // JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction); // Disabled
+        JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
         JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
@@ -220,7 +220,7 @@ public class AppMenuBar extends JMenuBar {
 
         jmAudio.add(jmiPlayPause);
         jmAudio.add(jmiStop);
-        // jmAudio.add(jmiReplay); // Disabled
+        jmAudio.add(jmiReplay);
         jmAudio.add(jmiLastPos);
         jmAudio.add(jmiReplayLast);
         jmAudio.add(jmSeek);
