@@ -1,6 +1,6 @@
 package ui.annotations;
 
-import actions.JumpToAnnotationAction;
+// import actions.JumpToAnnotationAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -34,9 +34,9 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationTable(
-            AnnotationTableMouseAdapter mouseAdapter,
-            JumpToAnnotationAction jumpToAnnotationAction) {
+    public AnnotationTable(AnnotationTableMouseAdapter mouseAdapter
+            // JumpToAnnotationAction jumpToAnnotationAction
+            ) {
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
         JTableHeader header = getTableHeader();
@@ -65,9 +65,9 @@ public class AnnotationTable extends JTable implements FocusListener {
                 });
         addFocusListener(this);
 
-        getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-                .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "jump to annotation");
-        getActionMap().put("jump to annotation", jumpToAnnotationAction);
+        // getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+        //         .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "jump to annotation");
+        // getActionMap().put("jump to annotation", jumpToAnnotationAction);
 
         InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");

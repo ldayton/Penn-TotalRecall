@@ -1,7 +1,7 @@
 package ui;
 
 import actions.ActionsManager;
-import actions.AnnotateIntrusionAction;
+// import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import actions.PlayPauseAction;
 import events.EventDispatchBus;
@@ -35,7 +35,7 @@ public class ContentSplitPane extends JSplitPane {
             ActionsManager actionsManager,
             PlayPauseAction playPauseAction,
             // DeleteSelectedAnnotationAction deleteSelectedAnnotationAction, // Disabled
-            AnnotateIntrusionAction annotateIntrusionAction,
+            // AnnotateIntrusionAction annotateIntrusionAction,
             EventDispatchBus eventBus) {
         super(JSplitPane.VERTICAL_SPLIT, waveformCanvas, controlPanel);
         setOneTouchExpandable(
@@ -69,13 +69,14 @@ public class ContentSplitPane extends JSplitPane {
 
         getActionMap().put("play", playPauseAction);
 
-        InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
-        KeyStroke intrusionKey = actionsManager.lookup(annotateIntrusionAction, null);
-        intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
-        getActionMap().put(ANNOTATE_INTRUSION_KEY, annotateIntrusionAction);
-        actionsManager.registerInputMap(
-                annotateIntrusionAction, null, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
+        // Annotation intrusion action disabled
+        // InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        // String ANNOTATE_INTRUSION_KEY = "annotate intrusion";
+        // KeyStroke intrusionKey = actionsManager.lookup(annotateIntrusionAction, null);
+        // intrusionInputMap.put(intrusionKey, ANNOTATE_INTRUSION_KEY);
+        // getActionMap().put(ANNOTATE_INTRUSION_KEY, annotateIntrusionAction);
+        // actionsManager.registerInputMap(
+        //         annotateIntrusionAction, null, ANNOTATE_INTRUSION_KEY, intrusionInputMap);
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0, false), "none");

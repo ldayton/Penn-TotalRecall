@@ -232,24 +232,25 @@ public class GuiceBootstrap {
                 globalInjector.getInstance(actions.ContinueAnnotatingAction.class);
         actionsManager.registerAction(continueAnnotatingAction);
 
-        var deleteAnnotationAction =
-                globalInjector.getInstance(actions.DeleteAnnotationAction.class);
-        actionsManager.registerAction(deleteAnnotationAction);
+        // Annotation actions disabled - depends on complex UI components
+        // var deleteAnnotationAction =
+        //         globalInjector.getInstance(actions.DeleteAnnotationAction.class);
+        // actionsManager.registerAction(deleteAnnotationAction);
 
         // var deleteSelectedAnnotationAction =
         //         globalInjector.getInstance(actions.DeleteSelectedAnnotationAction.class);
         // actionsManager.registerAction(deleteSelectedAnnotationAction);
 
-        var jumpToAnnotationAction =
-                globalInjector.getInstance(actions.JumpToAnnotationAction.class);
-        actionsManager.registerAction(jumpToAnnotationAction);
+        // var jumpToAnnotationAction =
+        //         globalInjector.getInstance(actions.JumpToAnnotationAction.class);
+        // actionsManager.registerAction(jumpToAnnotationAction);
 
         var openWordpoolAction = globalInjector.getInstance(actions.OpenWordpoolAction.class);
         actionsManager.registerAction(openWordpoolAction);
 
         // Register annotation actions
-        var annotateAction = globalInjector.getInstance(actions.AnnotateAction.class);
-        actionsManager.registerAction(annotateAction);
+        // var annotateAction = globalInjector.getInstance(actions.AnnotateAction.class);
+        // actionsManager.registerAction(annotateAction);
 
         // Register remaining migrated actions
         var openAudioFileAction = globalInjector.getInstance(actions.OpenAudioFileAction.class);
@@ -268,9 +269,9 @@ public class GuiceBootstrap {
                 globalInjector.getInstance(actions.ScreenSeekBackwardAction.class);
         actionsManager.registerAction(screenSeekBackwardAction);
 
-        var toggleAnnotationsAction =
-                globalInjector.getInstance(actions.ToggleAnnotationsAction.class);
-        actionsManager.registerAction(toggleAnnotationsAction);
+        // var toggleAnnotationsAction =
+        //         globalInjector.getInstance(actions.ToggleAnnotationsAction.class);
+        // actionsManager.registerAction(toggleAnnotationsAction);
 
         var last200PlusMoveAction = globalInjector.getInstance(actions.Last200PlusMoveAction.class);
         actionsManager.registerAction(last200PlusMoveAction);

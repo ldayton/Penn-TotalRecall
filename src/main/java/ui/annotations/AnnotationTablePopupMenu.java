@@ -1,6 +1,6 @@
 package ui.annotations;
 
-import actions.DeleteAnnotationAction;
+// import actions.DeleteAnnotationAction;
 import jakarta.inject.Inject;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -8,11 +8,11 @@ import javax.swing.JPopupMenu;
 /** Popup menu launched by right clicking on annotations. */
 public class AnnotationTablePopupMenu extends JPopupMenu {
 
-    private final DeleteAnnotationAction deleteAnnotationAction;
+    // private final DeleteAnnotationAction deleteAnnotationAction;
 
     @Inject
-    public AnnotationTablePopupMenu(DeleteAnnotationAction deleteAnnotationAction) {
-        this.deleteAnnotationAction = deleteAnnotationAction;
+    public AnnotationTablePopupMenu(/* DeleteAnnotationAction deleteAnnotationAction */ ) {
+        // this.deleteAnnotationAction = deleteAnnotationAction;
     }
 
     public void configureForAnnotation(
@@ -23,11 +23,13 @@ public class AnnotationTablePopupMenu extends JPopupMenu {
         fakeTitle.setEnabled(false);
 
         // Configure the injected action for this specific row
-        deleteAnnotationAction.setRowIndex(rowIndex);
-        JMenuItem del = new JMenuItem(deleteAnnotationAction);
+        // deleteAnnotationAction.setRowIndex(rowIndex);
+        // JMenuItem del = new JMenuItem(deleteAnnotationAction);
+        JMenuItem del = new JMenuItem("Delete"); // Temporary placeholder
+        del.setEnabled(false); // Disabled since action is not available
 
         add(fakeTitle);
         addSeparator();
-        add(del);
+        add(del); // Note: Delete functionality disabled
     }
 }

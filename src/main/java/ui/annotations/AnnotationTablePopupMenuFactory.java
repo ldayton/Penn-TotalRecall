@@ -1,6 +1,6 @@
 package ui.annotations;
 
-import actions.DeleteAnnotationAction;
+// import actions.DeleteAnnotationAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -11,11 +11,11 @@ import jakarta.inject.Singleton;
 @Singleton
 public class AnnotationTablePopupMenuFactory {
 
-    private final DeleteAnnotationAction deleteAnnotationAction;
+    // private final DeleteAnnotationAction deleteAnnotationAction;
 
     @Inject
-    public AnnotationTablePopupMenuFactory(DeleteAnnotationAction deleteAnnotationAction) {
-        this.deleteAnnotationAction = deleteAnnotationAction;
+    public AnnotationTablePopupMenuFactory(/* DeleteAnnotationAction deleteAnnotationAction */ ) {
+        // this.deleteAnnotationAction = deleteAnnotationAction;
     }
 
     /**
@@ -29,7 +29,8 @@ public class AnnotationTablePopupMenuFactory {
      */
     public AnnotationTablePopupMenu createPopupMenu(
             Annotation annToDelete, int rowIndex, AnnotationTable table, String rowRepr) {
-        AnnotationTablePopupMenu popupMenu = new AnnotationTablePopupMenu(deleteAnnotationAction);
+        AnnotationTablePopupMenu popupMenu =
+                new AnnotationTablePopupMenu(/* deleteAnnotationAction */ );
         popupMenu.configureForAnnotation(annToDelete, rowIndex, table, rowRepr);
         return popupMenu;
     }

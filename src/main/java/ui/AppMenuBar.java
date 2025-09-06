@@ -1,8 +1,8 @@
 package ui;
 
 import actions.AboutAction;
-import actions.AnnotateIntrusionAction;
-import actions.AnnotateRegularAction;
+// import actions.AnnotateIntrusionAction;
+// import actions.AnnotateRegularAction;
 import actions.BaseAction;
 import actions.CheckUpdatesAction;
 import actions.DoneAction;
@@ -72,9 +72,9 @@ public class AppMenuBar extends JMenuBar {
     private final VisitTutorialSiteAction visitTutorialSiteAction;
     private final CheckUpdatesAction checkUpdatesAction;
     private final Last200PlusMoveAction last200PlusMoveAction;
-    private final AnnotateRegularAction annotateRegularAction;
-    private final AnnotateIntrusionAction annotateIntrusionAction;
-    private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
+    // private final AnnotateRegularAction annotateRegularAction;
+    // private final AnnotateIntrusionAction annotateIntrusionAction;
+    // private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
     private final actions.ZoomInAction zoomInAction;
     private final actions.ZoomOutAction zoomOutAction;
     private final actions.OpenAudioFileAction openAudioFileAction;
@@ -104,9 +104,9 @@ public class AppMenuBar extends JMenuBar {
             VisitTutorialSiteAction visitTutorialSiteAction,
             CheckUpdatesAction checkUpdatesAction,
             Last200PlusMoveAction last200PlusMoveAction,
-            AnnotateRegularAction annotateRegularAction,
-            AnnotateIntrusionAction annotateIntrusionAction,
-            actions.ToggleAnnotationsAction toggleAnnotationsAction,
+            // AnnotateRegularAction annotateRegularAction,
+            // AnnotateIntrusionAction annotateIntrusionAction,
+            // actions.ToggleAnnotationsAction toggleAnnotationsAction,
             actions.ZoomInAction zoomInAction,
             actions.ZoomOutAction zoomOutAction,
             actions.OpenAudioFileAction openAudioFileAction,
@@ -129,9 +129,9 @@ public class AppMenuBar extends JMenuBar {
         this.visitTutorialSiteAction = visitTutorialSiteAction;
         this.checkUpdatesAction = checkUpdatesAction;
         this.last200PlusMoveAction = last200PlusMoveAction;
-        this.annotateRegularAction = annotateRegularAction;
-        this.annotateIntrusionAction = annotateIntrusionAction;
-        this.toggleAnnotationsAction = toggleAnnotationsAction;
+        // this.annotateRegularAction = annotateRegularAction;
+        // this.annotateIntrusionAction = annotateIntrusionAction;
+        // this.toggleAnnotationsAction = toggleAnnotationsAction;
         this.zoomInAction = zoomInAction;
         this.zoomOutAction = zoomOutAction;
         this.openAudioFileAction = openAudioFileAction;
@@ -233,12 +233,12 @@ public class AppMenuBar extends JMenuBar {
         JMenu jmAnnotation = new JMenu("Annotation");
         JMenuItem jmiDone = new JMenuItem(doneAction);
         jmAnnotation.add(jmiDone);
-        JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
-        jmiNextAnn.setText("Next Annotation");
-        jmAnnotation.add(jmiNextAnn);
-        JMenuItem jmiPrevAnn = new JMenuItem(toggleAnnotationsAction);
-        jmiPrevAnn.setText("Previous Annotation");
-        jmAnnotation.add(jmiPrevAnn);
+        // JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
+        // jmiNextAnn.setText("Next Annotation");
+        // jmAnnotation.add(jmiNextAnn);
+        // JMenuItem jmiPrevAnn = new JMenuItem(toggleAnnotationsAction);
+        // jmiPrevAnn.setText("Previous Annotation");
+        // jmAnnotation.add(jmiPrevAnn);
         add(jmAnnotation);
     }
 
@@ -298,9 +298,9 @@ public class AppMenuBar extends JMenuBar {
             instance.checkUpdatesAction.update();
             instance.last200PlusMoveAction.update();
             instance.openWordpoolAction.update();
-            instance.annotateRegularAction.update();
-            instance.annotateIntrusionAction.update();
-            instance.toggleAnnotationsAction.update();
+            // instance.annotateRegularAction.update();
+            // instance.annotateIntrusionAction.update();
+            // instance.toggleAnnotationsAction.update();
             // instance.zoomInAction.update();
             // instance.zoomOutAction.update();
             instance.openAudioFileAction.update();
