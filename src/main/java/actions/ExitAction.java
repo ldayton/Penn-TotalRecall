@@ -5,44 +5,31 @@ import events.ExitRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import state.AudioState;
 
-/** Exits the application with proper cleanup. */
+/**
+ * Exits the application using the event-driven system.
+ *
+ * <p>Publishes ExitRequestedEvent which triggers proper cleanup through the event system before
+ * application shutdown.
+ */
 @Singleton
 public class ExitAction extends BaseAction {
-    private static final Logger logger = LoggerFactory.getLogger(ExitAction.class);
 
-    private final AudioState audioState;
     private final EventDispatchBus eventBus;
 
     @Inject
-    public ExitAction(AudioState audioState, EventDispatchBus eventBus) {
+    public ExitAction(EventDispatchBus eventBus) {
         super("Exit", "Exit the application");
-        this.audioState = audioState;
         this.eventBus = eventBus;
     }
 
     @Override
     protected void performAction(ActionEvent e) {
-        // Stop any playing audio
-        if (audioState.audioOpen()) {
-            try {
-                audioState.stop();
-            } catch (Exception ex) {
-                // Log the error but don't prevent exit
-                logger.warn("Error stopping audio during exit: {}", ex.getMessage());
-            }
-        }
-
-        // Fire exit requested event - UI will handle confirmation dialog
         eventBus.publish(new ExitRequestedEvent());
     }
 
     @Override
     public void update() {
-        // Exit action is always enabled
         setEnabled(true);
     }
 }
