@@ -13,8 +13,8 @@ import actions.OpenWordpoolAction;
 import actions.PlayPauseAction;
 import actions.PreferencesAction;
 import actions.ReplayLast200MillisAction;
-import actions.ReplayLastPositionAction;
-import actions.ReturnToLastPositionAction;
+// import actions.ReplayLastPositionAction;
+// import actions.ReturnToLastPositionAction;
 import actions.StopAction;
 import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
@@ -64,8 +64,8 @@ public class AppMenuBar extends JMenuBar {
     private final PlayPauseAction playPauseAction;
     private final StopAction stopAction;
     private final ReplayLast200MillisAction replayLast200MillisAction;
-    private final ReturnToLastPositionAction returnToLastPositionAction;
-    private final ReplayLastPositionAction replayLastPositionAction;
+    // private final ReturnToLastPositionAction returnToLastPositionAction;
+    // private final ReplayLastPositionAction replayLastPositionAction;
     private final DoneAction doneAction;
     private final AboutAction aboutAction;
     private final TipsMessageAction tipsMessageAction;
@@ -96,8 +96,8 @@ public class AppMenuBar extends JMenuBar {
             PlayPauseAction playPauseAction,
             StopAction stopAction,
             ReplayLast200MillisAction replayLast200MillisAction,
-            ReturnToLastPositionAction returnToLastPositionAction,
-            ReplayLastPositionAction replayLastPositionAction,
+            // ReturnToLastPositionAction returnToLastPositionAction,
+            // ReplayLastPositionAction replayLastPositionAction,
             DoneAction doneAction,
             AboutAction aboutAction,
             TipsMessageAction tipsMessageAction,
@@ -121,8 +121,8 @@ public class AppMenuBar extends JMenuBar {
         this.playPauseAction = playPauseAction;
         this.stopAction = stopAction;
         this.replayLast200MillisAction = replayLast200MillisAction;
-        this.returnToLastPositionAction = returnToLastPositionAction;
-        this.replayLastPositionAction = replayLastPositionAction;
+        // this.returnToLastPositionAction = returnToLastPositionAction;
+        // this.replayLastPositionAction = replayLastPositionAction;
         this.doneAction = doneAction;
         this.aboutAction = aboutAction;
         this.tipsMessageAction = tipsMessageAction;
@@ -182,8 +182,8 @@ public class AppMenuBar extends JMenuBar {
 
         JMenuItem jmiStop = new JMenuItem(stopAction);
         JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
-        JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
-        JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
+        // JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
+        // JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
         JMenu jmSeek = new JMenu("Seek");
 
@@ -222,8 +222,8 @@ public class AppMenuBar extends JMenuBar {
         jmAudio.add(jmiPlayPause);
         jmAudio.add(jmiStop);
         jmAudio.add(jmiReplay);
-        jmAudio.add(jmiLastPos);
-        jmAudio.add(jmiReplayLast);
+        // jmAudio.add(jmiLastPos);
+        // jmAudio.add(jmiReplayLast);
         jmAudio.add(jmSeek);
         add(jmAudio);
     }
@@ -288,8 +288,8 @@ public class AppMenuBar extends JMenuBar {
             instance.playPauseAction.update();
             instance.stopAction.update();
             // instance.replayLast200MillisAction.update(); // Disabled
-            instance.returnToLastPositionAction.update();
-            instance.replayLastPositionAction.update();
+            // instance.returnToLastPositionAction.update();
+            // instance.replayLastPositionAction.update();
             instance.aboutAction.update();
             instance.preferencesAction.update();
             instance.editShortcutsAction.update();

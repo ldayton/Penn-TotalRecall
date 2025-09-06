@@ -202,13 +202,14 @@ public class GuiceBootstrap {
         //         globalInjector.getInstance(actions.ReplayLast200MillisAction.class);
         // actionsManager.registerAction(replayLast200MillisAction);
 
-        var returnToLastPositionAction =
-                globalInjector.getInstance(actions.ReturnToLastPositionAction.class);
-        actionsManager.registerAction(returnToLastPositionAction);
+        // Position history actions disabled - need to implement position tracking first
+        // var returnToLastPositionAction =
+        //         globalInjector.getInstance(actions.ReturnToLastPositionAction.class);
+        // actionsManager.registerAction(returnToLastPositionAction);
 
-        var replayLastPositionAction =
-                globalInjector.getInstance(actions.ReplayLastPositionAction.class);
-        actionsManager.registerAction(replayLastPositionAction);
+        // var replayLastPositionAction =
+        //         globalInjector.getInstance(actions.ReplayLastPositionAction.class);
+        // actionsManager.registerAction(replayLastPositionAction);
 
         var doneAction = globalInjector.getInstance(actions.DoneAction.class);
         actionsManager.registerAction(doneAction);
