@@ -8,18 +8,15 @@ import w2.TimeRange;
  */
 public class WaveformViewport {
 
-    private static final int DEFAULT_PIXELS_PER_SECOND = 100;
+    private static final int DEFAULT_PIXELS_PER_SECOND = 200; // Show ~5 seconds on a 1000px canvas
 
     private double startSeconds = 0.0;
     private int pixelsPerSecond = DEFAULT_PIXELS_PER_SECOND;
-    private int viewportWidthPixels = 800; // default
+    private int viewportWidthPixels;
 
     /** Set the viewport width in pixels. */
     public void setWidth(int pixels) {
-        // Never allow 0 width, keep default if 0 is passed
-        if (pixels > 0) {
-            this.viewportWidthPixels = pixels;
-        }
+        this.viewportWidthPixels = pixels;
     }
 
     /** Set the zoom level (pixels per second of audio). */

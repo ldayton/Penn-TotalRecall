@@ -80,11 +80,6 @@ public class GuiceBootstrap {
         painter.setDataSource(paintDataSource);
         painter.start(); // Start the repaint timer
 
-        // Set viewport size from canvas
-        var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
-        var viewport = globalInjector.getInstance(s2.WaveformViewport.class);
-        viewport.setWidth(canvas.getWidth());
-
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Register all UpdatingAction instances with ActionsManager

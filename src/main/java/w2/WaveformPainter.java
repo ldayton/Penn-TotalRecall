@@ -1,5 +1,6 @@
 package w2;
 
+import jakarta.inject.Inject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
 import lombok.NonNull;
+import s2.AudioSessionStateMachine;
 
 /**
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform
@@ -18,12 +20,15 @@ public class WaveformPainter {
 
     private static final int FPS = 30;
     private final Timer repaintTimer;
+    private final AudioSessionStateMachine stateMachine;
     private volatile WaveformViewport viewport;
     private volatile WaveformPaintingDataSource dataSource;
     private volatile boolean needsRepaint;
 
-    /** Create a painter without a viewport. Viewport must be set before painting operations. */
-    public WaveformPainter() {
+    /** Create a painter with dependency injection. */
+    @Inject
+    public WaveformPainter(AudioSessionStateMachine stateMachine) {
+        this.stateMachine = stateMachine;
         this.viewport = null;
         this.dataSource = null;
         this.needsRepaint = false;
@@ -39,7 +44,11 @@ public class WaveformPainter {
                                             (s2.WaveformPaintDataSource) dataSource;
                                     // Update viewport width in case canvas was resized
                                     paintDataSource.updateViewportWidth(viewport.getBounds().width);
-                                    paintDataSource.prepareFrame();
+
+                                    // Only prepare frame if audio is actually loaded
+                                    if (stateMachine.isAudioLoaded()) {
+                                        paintDataSource.prepareFrame();
+                                    }
                                 }
                                 viewport.repaint();
                             }
@@ -113,12 +122,32 @@ public class WaveformPainter {
         Rectangle bounds = viewport.getBounds();
         System.out.println("WaveformPainter: Bounds = " + bounds);
 
-        TimeRange timeRange = dataSource.getTimeRange();
+        // Check state to determine what to paint
+        AudioSessionStateMachine.State state = stateMachine.getCurrentState();
 
-        if (timeRange == null) {
-            // No audio loaded
-            System.out.println("WaveformPainter: No time range, painting empty state");
+        if (state == AudioSessionStateMachine.State.NO_AUDIO) {
+            System.out.println("WaveformPainter: No audio state, painting empty state");
             paintEmptyState(g, bounds);
+            return;
+        }
+
+        if (state == AudioSessionStateMachine.State.LOADING) {
+            System.out.println("WaveformPainter: Loading state, painting loading indicator");
+            paintLoadingIndicator(g, bounds);
+            return;
+        }
+
+        if (state == AudioSessionStateMachine.State.ERROR) {
+            System.out.println("WaveformPainter: Error state");
+            paintErrorMessage(g, bounds, "Audio loading failed");
+            return;
+        }
+
+        // If we're in READY, PLAYING, or PAUSED, we should have audio
+        TimeRange timeRange = dataSource.getTimeRange();
+        if (timeRange == null) {
+            // This shouldn't happen if state machine is correct
+            System.out.println("WaveformPainter: WARNING - In " + state + " but no time range");
             return;
         }
         System.out.println("WaveformPainter: Time range = " + timeRange);

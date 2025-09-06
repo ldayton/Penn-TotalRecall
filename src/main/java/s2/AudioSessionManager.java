@@ -27,7 +27,7 @@ import ui.audiofiles.AudioFile;
 @Slf4j
 public class AudioSessionManager implements PlaybackListener, WaveformSessionDataSource {
 
-    private final AudioSessionStateMachine stateManager = new AudioSessionStateMachine();
+    private final AudioSessionStateMachine stateManager;
     private final Provider<AudioEngine> audioEngineProvider;
     private final EventDispatchBus eventBus;
 
@@ -44,8 +44,10 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
     @Inject
     public AudioSessionManager(
+            @NonNull AudioSessionStateMachine stateManager,
             @NonNull Provider<AudioEngine> audioEngineProvider,
             @NonNull EventDispatchBus eventBus) {
+        this.stateManager = stateManager;
         this.audioEngineProvider = audioEngineProvider;
         this.eventBus = eventBus;
         eventBus.subscribe(this);

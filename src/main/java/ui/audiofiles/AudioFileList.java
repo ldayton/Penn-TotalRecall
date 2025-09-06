@@ -1,5 +1,6 @@
 package ui.audiofiles;
 
+import events.AppStateChangedEvent;
 import events.AudioFileListEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
@@ -12,6 +13,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -28,6 +30,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
     private final AudioState audioState;
+    private AudioFile currentAudioFile = null;
 
     /**
      * Constructs an <code>AudioFileList</code>, initializing mouse listeners, key bindings,
@@ -43,7 +46,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         setModel(model);
 
         // set the cell renderer that will display incomplete/complete AudioFiles differently
-        render = new AudioFileListCellRenderer(audioState);
+        render = new AudioFileListCellRenderer();
         setCellRenderer(render);
 
         // at this point only one audio file can be selected a time, changing to multiple selection
@@ -210,6 +213,32 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         if (e.isTemporary() == false) {
             clearSelection();
         }
+    }
+
+    @Subscribe
+    public void onAppStateChanged(AppStateChangedEvent event) {
+        if (event.isAudioLoaded() && event.getContext() instanceof File) {
+            File loadedFile = (File) event.getContext();
+            for (int i = 0; i < model.getSize(); i++) {
+                AudioFile audioFile = model.getElementAt(i);
+                if (audioFile.getAbsolutePath().equals(loadedFile.getAbsolutePath())) {
+                    currentAudioFile = audioFile;
+                    setSelectedIndex(i);
+                    ensureIndexIsVisible(i);
+                    repaint(); // Force renderer to update
+                    break;
+                }
+            }
+        } else if (event.isAudioClosed()) {
+            currentAudioFile = null;
+            clearSelection();
+            repaint(); // Force renderer to update
+        }
+    }
+
+    /** Gets the currently loaded audio file for rendering purposes. */
+    public AudioFile getCurrentAudioFile() {
+        return currentAudioFile;
     }
 
     /**

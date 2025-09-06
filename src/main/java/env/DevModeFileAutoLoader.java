@@ -1,13 +1,14 @@
 package env;
 
 import actions.OpenWordpoolAction;
-import events.AudioFileLoadRequestedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIReadyEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.audiofiles.AudioFileDisplay;
@@ -94,13 +95,46 @@ public class DevModeFileAutoLoader {
             }
         }
         if (audioFileList.getModel().getSize() > 0) {
-            var loadedFile = audioFileList.getModel().getElementAt(targetIndex);
-            // Publish event to load the audio file through the new event-driven system
-            eventBus.publish(new AudioFileLoadRequestedEvent(loadedFile));
-            logger.info(
-                    "Development mode: switched to {} ({} files listed)",
-                    loadedFile.getName(),
-                    audioFileList.getModel().getSize());
+            final int finalTargetIndex = targetIndex;
+            var loadedFile = audioFileList.getModel().getElementAt(finalTargetIndex);
+            // Select the file in the list first
+            audioFileList.setSelectedIndex(finalTargetIndex);
+            audioFileList.ensureIndexIsVisible(finalTargetIndex);
+
+            // Give the UI a moment to update after adding files
+            SwingUtilities.invokeLater(
+                    () -> {
+                        // Simulate a double-click on the selected item
+                        // This triggers the same flow as if the user double-clicked
+                        MouseEvent doubleClick =
+                                new MouseEvent(
+                                        audioFileList,
+                                        MouseEvent.MOUSE_CLICKED,
+                                        System.currentTimeMillis(),
+                                        0, // no modifiers
+                                        audioFileList.getCellBounds(
+                                                                finalTargetIndex, finalTargetIndex)
+                                                        .x
+                                                + 10, // x coordinate within the cell
+                                        audioFileList.getCellBounds(
+                                                                finalTargetIndex, finalTargetIndex)
+                                                        .y
+                                                + 5, // y coordinate within the cell
+                                        2, // click count = 2 for double-click
+                                        false, // not a popup trigger
+                                        MouseEvent.BUTTON1 // left button
+                                        );
+
+                        // Dispatch the event to all mouse listeners on the list
+                        for (var listener : audioFileList.getMouseListeners()) {
+                            listener.mouseClicked(doubleClick);
+                        }
+
+                        logger.info(
+                                "Development mode: switched to {} ({} files listed)",
+                                loadedFile.getName(),
+                                audioFileList.getModel().getSize());
+                    });
         }
 
         // Load sample wordpool file

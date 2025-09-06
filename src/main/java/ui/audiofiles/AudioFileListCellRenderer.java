@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
-import state.AudioState;
 
 /**
  * A <code>DefaultListCellRenderer</code> whose appearance is determined by whether the {@link
@@ -21,10 +20,8 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     private final Font strikethrough;
     private final Font bold;
     private final Font plain;
-    private final AudioState audioState;
 
-    public AudioFileListCellRenderer(AudioState audioState) {
-        this.audioState = audioState;
+    public AudioFileListCellRenderer() {
         plain = getFont();
         Map<TextAttribute, Object> attributes = new HashMap<>(plain.getAttributes());
         attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
@@ -42,11 +39,14 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
             setEnabled(false);
             setFont(strikethrough);
         } else {
-            if (audioState.audioOpen()) {
-                if (audioFile != null
-                        && audioFile
-                                .getAbsolutePath()
-                                .equals(audioState.getCurrentAudioFileAbsolutePath())) {
+            // Get the current file from the AudioFileList
+            AudioFileList audioFileList =
+                    (list instanceof AudioFileList) ? (AudioFileList) list : null;
+            if (audioFileList != null) {
+                AudioFile currentFile = audioFileList.getCurrentAudioFile();
+                if (currentFile != null
+                        && audioFile != null
+                        && audioFile.getAbsolutePath().equals(currentFile.getAbsolutePath())) {
                     setFont(bold);
                 } else {
                     setFont(plain);

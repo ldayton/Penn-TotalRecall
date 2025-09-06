@@ -176,7 +176,11 @@ public class AudioFileDisplay extends JScrollPane {
                 }
             }
         }
-        audioState.switchFile(file);
+        // Use the new event-driven system to load the file
+        var eventBus =
+                GuiceBootstrap.getRequiredInjectedInstance(
+                        events.EventDispatchBus.class, "EventDispatchBus");
+        eventBus.publish(new events.AudioFileLoadRequestedEvent(file));
 
         // UI updates are now handled via events
         return true;
