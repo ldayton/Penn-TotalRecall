@@ -1,69 +1,56 @@
 package actions;
 
-import events.ErrorRequestedEvent;
+import events.AppStateChangedEvent;
 import events.EventDispatchBus;
+import events.FocusRequestedEvent;
+import events.Last200PlusMoveRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
-import state.AudioState;
+import lombok.NonNull;
+import s2.AudioSessionStateMachine;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
 @Singleton
 public class Last200PlusMoveAction extends BaseAction {
-    private final AudioState audioState;
     private final EventDispatchBus eventBus;
+    private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
 
     @Inject
-    public Last200PlusMoveAction(AudioState audioState, EventDispatchBus eventBus) {
+    public Last200PlusMoveAction(EventDispatchBus eventBus) {
         super("Last200PlusMove", "Move and replay last 200ms");
-        this.audioState = audioState;
         this.eventBus = eventBus;
+        eventBus.subscribe(this);
     }
 
     @Override
     protected void performAction(ActionEvent e) {
-        if (!audioState.audioOpen()) {
-            eventBus.publish(new ErrorRequestedEvent("No audio file is open."));
-            return;
-        }
-
         // Get direction from action name
         String actionName = (String) getValue(Action.NAME);
         boolean forward = actionName.contains("Forward");
 
-        long currentFrame = audioState.getAudioProgress();
-        long shift = audioState.getCalculator().millisToFrames(200); // 200ms shift
+        eventBus.publish(new Last200PlusMoveRequestedEvent(forward));
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    }
 
-        long newFrame;
-        if (forward) {
-            newFrame = currentFrame + shift;
-        } else {
-            newFrame = currentFrame - shift;
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        currentState = event.getNewState();
+        updateActionState();
+    }
+
+    private void updateActionState() {
+        // Enable when audio is loaded and not playing
+        switch (currentState) {
+            case READY, PAUSED -> setEnabled(true);
+            default -> setEnabled(false);
         }
-
-        // Ensure we don't go out of bounds
-        if (newFrame < 0) {
-            newFrame = 0;
-        } else if (newFrame >= audioState.getCalculator().durationInFrames()) {
-            newFrame = audioState.getCalculator().durationInFrames() - 1;
-        }
-
-        // Set the new position
-        audioState.setAudioProgressAndUpdateActions(newFrame);
-
-        // Replay the last 200ms from the new position
-        long replayStartFrame = newFrame - audioState.getCalculator().millisToFrames(200);
-        if (replayStartFrame < 0) {
-            replayStartFrame = 0;
-        }
-
-        audioState.setAudioProgressAndUpdateActions(replayStartFrame);
-        audioState.play(replayStartFrame);
     }
 
     @Override
     public void update() {
-        setEnabled(audioState.audioOpen());
+        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
     }
 }

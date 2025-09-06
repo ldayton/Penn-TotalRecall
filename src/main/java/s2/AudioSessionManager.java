@@ -12,6 +12,7 @@ import events.AudioPlayPauseRequestedEvent;
 import events.AudioSeekRequestedEvent;
 import events.AudioStopRequestedEvent;
 import events.EventDispatchBus;
+import events.Last200PlusMoveRequestedEvent;
 import events.ReplayLast200MillisRequestedEvent;
 import events.Subscribe;
 import jakarta.inject.Inject;
@@ -224,6 +225,48 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             audioEngine.get().play(currentAudioHandle.get(), startFrame, endFrame);
 
             log.debug("Replaying last 200ms from frame {} to {}", startFrame, endFrame);
+        }
+    }
+
+    @Subscribe
+    public void onLast200PlusMoveRequested(@NonNull Last200PlusMoveRequestedEvent event) {
+        var state = stateManager.getCurrentState();
+
+        if ((state == AudioSessionStateMachine.State.READY
+                        || state == AudioSessionStateMachine.State.PAUSED)
+                && currentPlaybackHandle.isPresent()
+                && currentAudioHandle.isPresent()) {
+
+            // Get current position
+            long currentFrame = audioEngine.get().getPosition(currentPlaybackHandle.get());
+
+            // Calculate shift (200ms)
+            int currentSampleRate = this.sampleRate != 0 ? this.sampleRate : 44100;
+            long shiftFrames = (long) (currentSampleRate * 0.2); // 200ms shift
+
+            // Calculate new position based on direction
+            long newFrame =
+                    event.isForward() ? currentFrame + shiftFrames : currentFrame - shiftFrames;
+
+            // Ensure we don't go out of bounds
+            newFrame = Math.max(0, Math.min(newFrame, totalFrames - 1));
+
+            // Seek to the new position
+            audioEngine.get().seek(currentPlaybackHandle.get(), newFrame);
+
+            // Now replay the last 200ms from this new position
+            long replayStartFrame = Math.max(0, newFrame - shiftFrames);
+            long replayEndFrame = newFrame;
+
+            // Play the interval
+            audioEngine.get().play(currentAudioHandle.get(), replayStartFrame, replayEndFrame);
+
+            log.debug(
+                    "Moved {} to frame {} and replaying from {} to {}",
+                    event.isForward() ? "forward" : "backward",
+                    newFrame,
+                    replayStartFrame,
+                    replayEndFrame);
         }
     }
 
