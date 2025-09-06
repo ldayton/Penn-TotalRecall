@@ -54,11 +54,15 @@ public class WaveformManager {
                 }
             }
 
-            case NO_AUDIO -> {
+            case NO_AUDIO, ERROR -> {
                 // Clean up waveform resources
                 currentWaveform.ifPresent(Waveform::shutdown);
                 clearWaveform();
                 log.debug("Cleared waveform display");
+            }
+
+            case LOADING, PLAYING, PAUSED -> {
+                // No waveform changes needed for these states
             }
         }
     }

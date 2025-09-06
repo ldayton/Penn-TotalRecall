@@ -29,7 +29,6 @@ public class DevModeFileAutoLoader {
 
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
-    private final EventDispatchBus eventBus;
     private final OpenWordpoolAction openWordpoolAction;
 
     @Inject
@@ -40,7 +39,6 @@ public class DevModeFileAutoLoader {
             EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.audioFileList = audioFileList;
-        this.eventBus = eventBus;
         this.openWordpoolAction = openWordpoolAction;
         eventBus.subscribe(this);
     }

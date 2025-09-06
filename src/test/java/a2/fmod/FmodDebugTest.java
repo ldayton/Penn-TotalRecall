@@ -74,7 +74,6 @@ public class FmodDebugTest {
             // Calculate expected frames
             if (channelsRef.getValue() > 0 && bitsRef.getValue() > 0) {
                 int bytesPerFrame = channelsRef.getValue() * (bitsRef.getValue() / 8);
-                int pcmBytes = lengthRef.getValue();
                 result =
                         fmod.FMOD_Sound_GetLength(
                                 sound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCMBYTES);

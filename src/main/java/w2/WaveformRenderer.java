@@ -225,10 +225,8 @@ class WaveformRenderer {
             return CompletableFuture.completedFuture(null);
         }
 
-        long startTime = System.currentTimeMillis();
         return CompletableFuture.supplyAsync(
                 () -> {
-                    long innerStartTime = System.currentTimeMillis();
                     // Check for cancellation
                     if (Thread.currentThread().isInterrupted()) {
                         return null;
@@ -344,8 +342,6 @@ class WaveformRenderer {
                     } finally {
                         g.dispose();
                     }
-
-                    long elapsed = System.currentTimeMillis() - innerStartTime;
                     return image;
                 },
                 renderPool);

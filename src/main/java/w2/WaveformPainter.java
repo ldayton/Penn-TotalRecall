@@ -23,7 +23,6 @@ public class WaveformPainter {
     private final AudioSessionStateMachine stateMachine;
     private volatile WaveformViewport viewport;
     private volatile WaveformPaintingDataSource dataSource;
-    private volatile boolean needsRepaint;
 
     /** Create a painter with dependency injection. */
     @Inject
@@ -31,11 +30,10 @@ public class WaveformPainter {
         this.stateMachine = stateMachine;
         this.viewport = null;
         this.dataSource = null;
-        this.needsRepaint = false;
         this.repaintTimer =
                 new Timer(
                         1000 / FPS,
-                        e -> {
+                        _ -> {
                             if (viewport != null && viewport.isVisible()) {
                                 // Prepare data for next frame if we have a WaveformPaintDataSource
                                 if (dataSource != null
@@ -63,11 +61,6 @@ public class WaveformPainter {
     /** Set the data source for painting information. */
     public void setDataSource(WaveformPaintingDataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    /** Request a repaint on the next timer tick. (Currently unused - painting every frame) */
-    public void requestRepaint() {
-        needsRepaint = true;
     }
 
     /** Start the repaint timer. */
@@ -194,12 +187,9 @@ public class WaveformPainter {
             // Request a repaint when the rendering completes
             CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
             imageFuture.whenComplete(
-                    (image, ex) -> {
+                    (image, _) -> {
                         if (image != null) {
-                            System.out.println(
-                                    "WaveformPainter: Waveform rendering completed, requesting"
-                                            + " repaint");
-                            requestRepaint();
+                            System.out.println("WaveformPainter: Waveform rendering completed");
                         }
                     });
         } catch (Exception e) {

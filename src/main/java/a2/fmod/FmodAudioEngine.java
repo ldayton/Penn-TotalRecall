@@ -34,7 +34,6 @@ public class FmodAudioEngine implements AudioEngine {
 
     // Cached references for performance
     private final FmodLibrary fmod;
-    private final Pointer system;
 
     // Runtime state
     private FmodPlaybackHandle currentPlayback;
@@ -71,7 +70,6 @@ public class FmodAudioEngine implements AudioEngine {
 
             // Cache frequently used references
             this.fmod = systemManager.getFmodLibrary();
-            this.system = systemManager.getSystem();
 
             if (!systemStateManager.compareAndSetState(
                     FmodSystemStateManager.State.INITIALIZING,
@@ -413,16 +411,6 @@ public class FmodAudioEngine implements AudioEngine {
     @Override
     public void removePlaybackListener(@NonNull PlaybackListener listener) {
         listenerManager.removeListener(listener);
-    }
-
-    private long getAudioDuration(AudioHandle handle) {
-        if (!(handle instanceof FmodAudioHandle) || currentSound == null) {
-            return 0;
-        }
-        IntByReference lengthRef = new IntByReference();
-        int result =
-                fmod.FMOD_Sound_GetLength(currentSound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
-        return result == FmodConstants.FMOD_OK ? lengthRef.getValue() : 0;
     }
 
     @Override
