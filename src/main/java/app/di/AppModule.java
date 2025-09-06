@@ -6,14 +6,6 @@ import actions.ActionsFileParser;
 import actions.ActionsManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import env.AppConfig;
-import env.DevModeFileAutoLoader;
-import env.KeyboardManager;
-import env.LookAndFeelManager;
-import env.Platform;
-import env.ProgramVersion;
-import env.UpdateManager;
-import env.UserHomeProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 import ui.AppFocusTraversalPolicy;
@@ -58,17 +50,13 @@ public class AppModule extends AbstractModule {
         // Install s2 module for session management bindings
         install(new s2.Module());
 
+        // Install env module for environment and platform bindings
+        install(new env.Module());
+
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);
-        bind(AppConfig.class).in(Singleton.class);
         bind(FmodLibraryLoader.class).in(Singleton.class);
-        bind(DevModeFileAutoLoader.class).in(Singleton.class);
-        bind(KeyboardManager.class).in(Singleton.class);
-        bind(LookAndFeelManager.class).in(Singleton.class);
-        bind(Platform.class).in(Singleton.class);
         bind(PreferencesManager.class).in(Singleton.class);
-        bind(UpdateManager.class).in(Singleton.class);
-        bind(UserHomeProvider.class).in(Singleton.class);
         bind(WindowLayoutPersistence.class).in(Singleton.class);
         bind(MainFrame.class).in(Singleton.class);
         bind(AppMenuBar.class).in(Singleton.class);
@@ -87,7 +75,6 @@ public class AppModule extends AbstractModule {
         bind(AppFocusTraversalPolicy.class).in(Singleton.class);
 
         // Utility services
-        bind(ProgramVersion.class).in(Singleton.class);
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
     }
