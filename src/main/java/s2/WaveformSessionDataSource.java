@@ -35,4 +35,10 @@ public interface WaveformSessionDataSource {
 
     /** Get the sample rate of the current audio. */
     Optional<Integer> getSampleRate();
+
+    /** Get the current playback position in frames. Returns empty if not playing/paused. */
+    Optional<Long> getPlaybackPositionFrames();
+
+    /** Get the total duration in frames. Returns empty if no audio is loaded. */
+    Optional<Long> getTotalFrames();
 }

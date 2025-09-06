@@ -53,38 +53,41 @@ public class SeekAction extends BaseAction {
         int shiftMillis = getShiftAmount(actionText);
         boolean forward = isForwardDirection(actionText);
 
+        // Work directly with frames to avoid precision loss
         sessionDataSource
-                .getPlaybackPosition()
+                .getPlaybackPositionFrames()
                 .ifPresent(
-                        currentPositionSeconds -> {
+                        currentPositionFrames -> {
                             sessionDataSource
                                     .getSampleRate()
                                     .ifPresent(
                                             sampleRate -> {
                                                 sessionDataSource
-                                                        .getTotalDuration()
+                                                        .getTotalFrames()
                                                         .ifPresent(
-                                                                totalDuration -> {
-                                                                    double shiftSeconds =
-                                                                            shiftMillis / 1000.0;
-                                                                    double targetPositionSeconds =
+                                                                totalFrames -> {
+                                                                    // Calculate shift in frames
+                                                                    // directly
+                                                                    long shiftFrames =
+                                                                            (long)
+                                                                                    ((shiftMillis
+                                                                                                    / 1000.0)
+                                                                                            * sampleRate);
+                                                                    long targetFrame =
                                                                             forward
-                                                                                    ? currentPositionSeconds
-                                                                                            + shiftSeconds
-                                                                                    : currentPositionSeconds
-                                                                                            - shiftSeconds;
+                                                                                    ? currentPositionFrames
+                                                                                            + shiftFrames
+                                                                                    : currentPositionFrames
+                                                                                            - shiftFrames;
 
                                                                     // Ensure within bounds
-                                                                    double boundedPositionSeconds =
+                                                                    targetFrame =
                                                                             Math.max(
                                                                                     0,
                                                                                     Math.min(
-                                                                                            targetPositionSeconds,
-                                                                                            totalDuration));
-                                                                    long targetFrame =
-                                                                            (long)
-                                                                                    (boundedPositionSeconds
-                                                                                            * sampleRate);
+                                                                                            targetFrame,
+                                                                                            totalFrames
+                                                                                                    - 1));
 
                                                                     eventBus.publish(
                                                                             new AudioSeekRequestedEvent(

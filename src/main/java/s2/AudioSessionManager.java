@@ -387,6 +387,23 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         return sampleRate > 0 ? Optional.of(sampleRate) : Optional.empty();
     }
 
+    @Override
+    public Optional<Long> getPlaybackPositionFrames() {
+        if (currentPlaybackHandle.isEmpty()) {
+            return Optional.empty();
+        }
+        // Return the exact frame position without conversion
+        return Optional.of(currentPositionFrames);
+    }
+
+    @Override
+    public Optional<Long> getTotalFrames() {
+        if (currentAudioHandle.isEmpty() || totalFrames == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(totalFrames);
+    }
+
     /**
      * Stop playback and transition to READY state. Used when user explicitly stops playback (not
      * pause).
