@@ -16,12 +16,6 @@ import env.UpdateManager;
 import env.UserHomeProvider;
 import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
-import s2.AudioSessionManager;
-import s2.AudioSessionStateMachine;
-import s2.WaveformManager;
-import s2.WaveformPaintDataSource;
-import s2.WaveformSessionDataSource;
-import s2.WaveformViewport;
 import ui.AppFocusTraversalPolicy;
 import ui.AppMenuBar;
 import ui.ContentSplitPane;
@@ -61,13 +55,8 @@ public class AppModule extends AbstractModule {
         // Install w2 module for waveform bindings
         install(new w2.Module());
 
-        // Configure s2 package bindings
-        bind(AudioSessionManager.class).in(Singleton.class);
-        bind(AudioSessionStateMachine.class).in(Singleton.class);
-        bind(WaveformSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
-        bind(WaveformManager.class).in(Singleton.class);
-        bind(WaveformViewport.class).in(Singleton.class);
-        bind(WaveformPaintDataSource.class).in(Singleton.class);
+        // Install s2 module for session management bindings
+        install(new s2.Module());
 
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);
