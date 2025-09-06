@@ -1,13 +1,7 @@
 package app.di;
 
-import a2.fmod.FmodLibraryLoader;
 import a2.fmod.FmodModule;
-import actions.ActionsFileParser;
-import actions.ActionsManager;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import jakarta.inject.Singleton;
-import java.net.http.HttpClient;
 
 /**
  * Guice module for dependency injection configuration.
@@ -37,14 +31,7 @@ public class AppModule extends AbstractModule {
         // Install ui module for user interface bindings
         install(new ui.Module());
 
-        bind(ActionsFileParser.class);
-        bind(ActionsManager.class).in(Singleton.class);
-        bind(FmodLibraryLoader.class).in(Singleton.class);
-    }
-
-    @Provides
-    @Singleton
-    HttpClient provideHttpClient() {
-        return HttpClient.newHttpClient();
+        // Install actions module for action management bindings
+        install(new actions.Module());
     }
 }

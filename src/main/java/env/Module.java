@@ -1,7 +1,9 @@
 package env;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import java.net.http.HttpClient;
 
 /**
  * Guice module for the env (environment) package.
@@ -27,5 +29,11 @@ public class Module extends AbstractModule {
 
         // Update checking
         bind(UpdateManager.class).in(Singleton.class);
+    }
+
+    @Provides
+    @Singleton
+    HttpClient provideHttpClient() {
+        return HttpClient.newHttpClient();
     }
 }

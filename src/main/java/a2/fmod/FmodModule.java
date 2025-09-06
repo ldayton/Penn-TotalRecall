@@ -16,6 +16,9 @@ public class FmodModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // Bind library loader
+        bind(FmodLibraryLoader.class).in(Singleton.class);
+
         // Bind state managers as singletons
         bind(FmodSystemStateManager.class).in(Singleton.class);
         bind(FmodSystemManager.class).in(Singleton.class);
