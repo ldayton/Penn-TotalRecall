@@ -44,10 +44,8 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource {
         // Update playing state
         playbackTracker.setPlaying(isPlaying);
 
-        // Update real position if playing (audio callbacks provide updates)
-        if (isPlaying) {
-            playbackTracker.updateRealPosition(realPosition);
-        }
+        // Always update real position to stay in sync with AudioSessionManager
+        playbackTracker.updateRealPosition(realPosition);
 
         // Use interpolated position for smooth viewport scrolling
         double smoothPosition = playbackTracker.getInterpolatedPosition();

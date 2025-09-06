@@ -1,37 +1,54 @@
 package actions;
 
+import events.AppStateChangedEvent;
+import events.AudioStopRequestedEvent;
+import events.EventDispatchBus;
+import events.FocusRequestedEvent;
+import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
-import state.AudioState;
+import lombok.NonNull;
+import s2.AudioSessionStateMachine;
 
-/** Stops audio playback and resets position to the beginning. */
+/**
+ * Stops audio playback and resets position to the beginning using the event-driven system.
+ *
+ * <p>Publishes AudioStopRequestedEvent which is handled by AudioSessionManager to stop playback and
+ * reset position through the new audio engine.
+ */
 @Singleton
 public class StopAction extends BaseAction {
 
-    private final AudioState audioState;
+    private final EventDispatchBus eventBus;
+    private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
 
     @Inject
-    public StopAction(AudioState audioState) {
+    public StopAction(EventDispatchBus eventBus) {
         super("Stop", "Stop audio playback and reset to beginning");
-        this.audioState = audioState;
+        this.eventBus = eventBus;
+        eventBus.subscribe(this);
     }
 
     @Override
     protected void performAction(ActionEvent e) {
-        if (!audioState.audioOpen()) {
-            return;
-        }
-        audioState.stop();
-        audioState.setAudioProgressWithoutUpdatingActions(0);
+        eventBus.publish(new AudioStopRequestedEvent());
+        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    }
+
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        currentState = event.getNewState();
+        updateActionState();
+    }
+
+    private void updateActionState() {
+        // Only enabled when playing
+        setEnabled(currentState == AudioSessionStateMachine.State.PLAYING);
     }
 
     @Override
     public void update() {
-        if (audioState.audioOpen()) {
-            setEnabled(audioState.isPlaying());
-        } else {
-            setEnabled(false);
-        }
+        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
     }
 }

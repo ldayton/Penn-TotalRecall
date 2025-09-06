@@ -10,6 +10,7 @@ import events.AudioFileCloseRequestedEvent;
 import events.AudioFileLoadRequestedEvent;
 import events.AudioPlayPauseRequestedEvent;
 import events.AudioSeekRequestedEvent;
+import events.AudioStopRequestedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;
 import jakarta.inject.Inject;
@@ -184,6 +185,17 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
                                 log.debug("Seeked to frame: {}", event.getFrame());
                             });
                 });
+    }
+
+    @Subscribe
+    public void onAudioStopRequested(@NonNull AudioStopRequestedEvent event) {
+        var state = stateManager.getCurrentState();
+
+        if (state == AudioSessionStateMachine.State.PLAYING) {
+            // Stop playback and reset position to beginning
+            stopPlayback();
+            log.debug("Stopped playback and reset to beginning");
+        }
     }
 
     // PlaybackListener
