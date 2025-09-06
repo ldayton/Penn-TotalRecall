@@ -41,7 +41,6 @@ import ui.preferences.PreferencesManager;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolList;
 import ui.wordpool.WordpoolTextField;
-import w2.WaveformPainter;
 
 /**
  * Guice module for dependency injection configuration.
@@ -59,11 +58,13 @@ public class AppModule extends AbstractModule {
         // Install a2 module for audio engine bindings
         install(new a2.Module());
 
+        // Install w2 module for waveform bindings
+        install(new w2.Module());
+
         // Configure s2 package bindings
         bind(AudioSessionManager.class).in(Singleton.class);
         bind(AudioSessionStateMachine.class).in(Singleton.class);
         bind(WaveformSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
-        bind(WaveformPainter.class).in(Singleton.class);
         bind(WaveformManager.class).in(Singleton.class);
         bind(WaveformViewport.class).in(Singleton.class);
         bind(WaveformPaintDataSource.class).in(Singleton.class);
