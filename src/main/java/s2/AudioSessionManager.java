@@ -25,7 +25,7 @@ import ui.audiofiles.AudioFile;
  */
 @Singleton
 @Slf4j
-public class AudioSessionManager implements PlaybackListener, WaveformSessionSource {
+public class AudioSessionManager implements PlaybackListener, WaveformSessionDataSource {
 
     private final AudioSessionStateMachine stateManager = new AudioSessionStateMachine();
     private final Provider<AudioEngine> audioEngineProvider;

@@ -27,7 +27,23 @@ public class WaveformPainter {
         this.viewport = null;
         this.dataSource = null;
         this.needsRepaint = false;
-        this.repaintTimer = new Timer(1000 / FPS, e -> repaintIfNeeded());
+        this.repaintTimer =
+                new Timer(
+                        1000 / FPS,
+                        e -> {
+                            if (viewport != null && viewport.isVisible()) {
+                                // Prepare data for next frame if we have a WaveformPaintDataSource
+                                if (dataSource != null
+                                        && dataSource instanceof s2.WaveformPaintDataSource) {
+                                    s2.WaveformPaintDataSource paintDataSource =
+                                            (s2.WaveformPaintDataSource) dataSource;
+                                    // Update viewport width in case canvas was resized
+                                    paintDataSource.updateViewportWidth(viewport.getBounds().width);
+                                    paintDataSource.prepareFrame();
+                                }
+                                viewport.repaint();
+                            }
+                        });
     }
 
     /** Set the viewport to paint to. */
@@ -40,7 +56,7 @@ public class WaveformPainter {
         this.dataSource = dataSource;
     }
 
-    /** Request a repaint on the next timer tick. */
+    /** Request a repaint on the next timer tick. (Currently unused - painting every frame) */
     public void requestRepaint() {
         needsRepaint = true;
     }
@@ -58,13 +74,6 @@ public class WaveformPainter {
     /** Check if timer is running. */
     public boolean isRunning() {
         return repaintTimer.isRunning();
-    }
-
-    private void repaintIfNeeded() {
-        if (needsRepaint && viewport != null && viewport.isVisible()) {
-            needsRepaint = false;
-            viewport.repaint();
-        }
     }
 
     /**

@@ -22,8 +22,10 @@ import jakarta.inject.Singleton;
 import java.net.http.HttpClient;
 import s2.AudioSessionManager;
 import s2.AudioSessionStateMachine;
-import s2.WaveformSessionManager;
-import s2.WaveformSessionSource;
+import s2.WaveformManager;
+import s2.WaveformPaintDataSource;
+import s2.WaveformSessionDataSource;
+import s2.WaveformViewport;
 import state.PreferencesManager;
 import ui.AppFocusTraversalPolicy;
 import ui.AppMenuBar;
@@ -61,9 +63,11 @@ public class AppModule extends AbstractModule {
         // Configure s2 package bindings
         bind(AudioSessionManager.class).in(Singleton.class);
         bind(AudioSessionStateMachine.class).in(Singleton.class);
-        bind(WaveformSessionSource.class).to(AudioSessionManager.class).in(Singleton.class);
+        bind(WaveformSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
         bind(WaveformPainter.class).in(Singleton.class);
-        bind(WaveformSessionManager.class).in(Singleton.class);
+        bind(WaveformManager.class).in(Singleton.class);
+        bind(WaveformViewport.class).in(Singleton.class);
+        bind(WaveformPaintDataSource.class).in(Singleton.class);
 
         bind(ActionsFileParser.class);
         bind(ActionsManager.class).in(Singleton.class);

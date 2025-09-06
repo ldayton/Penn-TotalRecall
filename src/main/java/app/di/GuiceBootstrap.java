@@ -78,8 +78,17 @@ public class GuiceBootstrap {
         // Initialize DevModeFileAutoLoader (subscribes to events)
         globalInjector.getInstance(DevModeFileAutoLoader.class);
 
-        // Initialize WaveformSessionManager (sets up painter data source)
-        globalInjector.getInstance(s2.WaveformSessionManager.class);
+        // Initialize waveform components
+        globalInjector.getInstance(s2.WaveformManager.class);
+        var paintDataSource = globalInjector.getInstance(s2.WaveformPaintDataSource.class);
+        var painter = globalInjector.getInstance(w2.WaveformPainter.class);
+        painter.setDataSource(paintDataSource);
+        painter.start(); // Start the repaint timer
+
+        // Set viewport size from canvas
+        var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
+        var viewport = globalInjector.getInstance(s2.WaveformViewport.class);
+        viewport.setWidth(canvas.getWidth());
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 

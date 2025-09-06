@@ -7,7 +7,7 @@ import java.util.Optional;
  * Data source for waveform rendering from the audio session. Provides playback state and session
  * status for waveform display.
  */
-public interface WaveformSessionSource {
+public interface WaveformSessionDataSource {
 
     /** Get the current playback position in seconds. Returns empty if not playing/paused. */
     Optional<Double> getPlaybackPosition();
