@@ -75,8 +75,8 @@ public class AppMenuBar extends JMenuBar {
     private final AnnotateRegularAction annotateRegularAction;
     private final AnnotateIntrusionAction annotateIntrusionAction;
     private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    // private final actions.ZoomInAction zoomInAction; // Disabled
-    // private final actions.ZoomOutAction zoomOutAction; // Disabled
+    private final actions.ZoomInAction zoomInAction;
+    private final actions.ZoomOutAction zoomOutAction;
     private final actions.OpenAudioFileAction openAudioFileAction;
     private final actions.OpenAudioFolderAction openAudioFolderAction;
     private final actions.SeekAction seekAction;
@@ -106,8 +106,8 @@ public class AppMenuBar extends JMenuBar {
             AnnotateRegularAction annotateRegularAction,
             AnnotateIntrusionAction annotateIntrusionAction,
             actions.ToggleAnnotationsAction toggleAnnotationsAction,
-            // actions.ZoomInAction zoomInAction, // Disabled
-            // actions.ZoomOutAction zoomOutAction, // Disabled
+            actions.ZoomInAction zoomInAction,
+            actions.ZoomOutAction zoomOutAction,
             actions.OpenAudioFileAction openAudioFileAction,
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
@@ -130,8 +130,8 @@ public class AppMenuBar extends JMenuBar {
         this.annotateRegularAction = annotateRegularAction;
         this.annotateIntrusionAction = annotateIntrusionAction;
         this.toggleAnnotationsAction = toggleAnnotationsAction;
-        // this.zoomInAction = zoomInAction; // Disabled
-        // this.zoomOutAction = zoomOutAction; // Disabled
+        this.zoomInAction = zoomInAction;
+        this.zoomOutAction = zoomOutAction;
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
         this.seekAction = seekAction;
@@ -244,10 +244,10 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the View menu, which controls aspects of the waveform's appearance. */
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        // JMenuItem jmiZoomIn = new JMenuItem(zoomInAction); // Disabled
-        // JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction); // Disabled
-        // jmView.add(jmiZoomIn);
-        // jmView.add(jmiZoomOut);
+        JMenuItem jmiZoomIn = new JMenuItem(zoomInAction);
+        JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction);
+        jmView.add(jmiZoomIn);
+        jmView.add(jmiZoomOut);
         add(jmView);
     }
 

@@ -1,18 +1,50 @@
 package s2;
 
+import events.EventDispatchBus;
+import events.Subscribe;
+import events.ZoomInRequestedEvent;
+import events.ZoomOutRequestedEvent;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import lombok.NonNull;
 import w2.TimeRange;
 
 /**
  * Manages viewport position and zoom for the waveform display. Handles auto-scrolling during
  * playback and manual scrolling.
  */
+@Singleton
 public class WaveformViewport {
 
     private static final int DEFAULT_PIXELS_PER_SECOND = 200; // Show ~5 seconds on a 1000px canvas
+    private static final int MIN_PIXELS_PER_SECOND = 50;
+    private static final int MAX_PIXELS_PER_SECOND = 800;
+    private static final double ZOOM_FACTOR = 1.5;
 
     private double startSeconds = 0.0;
     private int pixelsPerSecond = DEFAULT_PIXELS_PER_SECOND;
     private int viewportWidthPixels;
+
+    @Inject
+    public WaveformViewport(@NonNull EventDispatchBus eventBus) {
+        eventBus.subscribe(this);
+    }
+
+    @Subscribe
+    public void onZoomInRequested(@NonNull ZoomInRequestedEvent event) {
+        int newZoom = (int) (pixelsPerSecond * ZOOM_FACTOR);
+        if (newZoom <= MAX_PIXELS_PER_SECOND) {
+            setZoom(newZoom);
+        }
+    }
+
+    @Subscribe
+    public void onZoomOutRequested(@NonNull ZoomOutRequestedEvent event) {
+        int newZoom = (int) (pixelsPerSecond / ZOOM_FACTOR);
+        if (newZoom >= MIN_PIXELS_PER_SECOND) {
+            setZoom(newZoom);
+        }
+    }
 
     /** Set the viewport width in pixels. */
     public void setWidth(int pixels) {
