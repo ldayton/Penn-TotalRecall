@@ -3,7 +3,6 @@ package ui;
 import actions.AboutAction;
 // import actions.AnnotateIntrusionAction;
 // import actions.AnnotateRegularAction;
-import actions.BaseAction;
 import actions.CheckUpdatesAction;
 import actions.DoneAction;
 import actions.EditShortcutsAction;
@@ -15,18 +14,17 @@ import actions.PreferencesAction;
 import actions.ReplayLast200MillisAction;
 // import actions.ReplayLastPositionAction;
 // import actions.ReturnToLastPositionAction;
-import actions.StopAction;
 import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
+import core.actions.StopAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.swing.SwingAction;
 
 /**
  * Program menu bar and trigger for updates in program's state that concern program actions.
@@ -48,8 +46,6 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class AppMenuBar extends JMenuBar {
     private static final Logger logger = LoggerFactory.getLogger(AppMenuBar.class);
-
-    private static Set<BaseAction> allActions = new HashSet<>();
 
     private static AppMenuBar instance;
 
@@ -180,7 +176,7 @@ public class AppMenuBar extends JMenuBar {
         // PlayPauseAction is now event-driven, no workaround needed
         JMenuItem jmiPlayPause = new JMenuItem(playPauseAction);
 
-        JMenuItem jmiStop = new JMenuItem(stopAction);
+        JMenuItem jmiStop = new JMenuItem(new SwingAction(stopAction));
         JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
         // JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         // JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
@@ -268,33 +264,6 @@ public class AppMenuBar extends JMenuBar {
             jmHelp.add(jmiAbout);
         }
         add(jmHelp);
-    }
-
-    /**
-     * Registere the provided <code>UpdatingAction</code> to receive updates when program state
-     * changes.
-     *
-     * <p>This method is normally called automatically by the <code>UpdatingAction</code>
-     * constructor. Actions that have already been added will not be added a second time.
-     *
-     * @param act The <code>UpdatingAction</code> that wishes to recieve updates calls
-     */
-    public static void registerAction(BaseAction act) {
-        if (allActions.add(act) == false) {
-            logger.warn("double registration of: " + act);
-        }
-    }
-
-    /**
-     * Registers all UpdatingAction instances with the ActionsManager. This method is called during
-     * initialization after all actions have been created.
-     */
-    public static void registerAllActionsWithManager() {
-        if (instance == null) {
-            throw new IllegalStateException("AppMenuBar not initialized via DI");
-        }
-        // All ADI actions are already registered with the ActionsManager during DI initialization
-        // No need to register them again here
     }
 
     /**

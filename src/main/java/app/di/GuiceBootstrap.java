@@ -10,7 +10,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.AppFocusTraversalPolicy;
-import ui.AppMenuBar;
 import ui.ContentSplitPane;
 import ui.MainFrame;
 import ui.WindowLayoutPersistence;
@@ -85,13 +84,9 @@ public class GuiceBootstrap {
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
-        // Register all UpdatingAction instances with ActionsManager
-        // This must happen after all components are created but before any UI updates
-        AppMenuBar.registerAllActionsWithManager();
-
-        // Register new actions with ActionsManager
-        // This registers the new ADI-based actions
-        registerNewActions(actionsManager);
+        // Initialize ActionRegistry which auto-registers all actions
+        // The registry is created by Guice with all actions auto-discovered and injected
+        globalInjector.getInstance(core.actions.ActionRegistry.class);
 
         return bootstrap;
     }
@@ -171,116 +166,6 @@ public class GuiceBootstrap {
                             + " first.");
         }
         return instance;
-    }
-
-    /**
-     * Registers new ADI-based actions with the ActionsManager. This method registers all the new
-     * actions that use dependency injection.
-     */
-    private static void registerNewActions(ActionsManager actionsManager) {
-        // Register new actions that have been migrated to the actions package
-        // These actions use dependency injection instead of static access
-
-        // Get instances from the injector and register them
-        var playPauseAction = globalInjector.getInstance(actions.PlayPauseAction.class);
-        actionsManager.registerAction(playPauseAction);
-
-        var stopAction = globalInjector.getInstance(actions.StopAction.class);
-        actionsManager.registerAction(stopAction);
-
-        var exitAction = globalInjector.getInstance(actions.ExitAction.class);
-        actionsManager.registerAction(exitAction);
-
-        var aboutAction = globalInjector.getInstance(actions.AboutAction.class);
-        actionsManager.registerAction(aboutAction);
-
-        var preferencesAction = globalInjector.getInstance(actions.PreferencesAction.class);
-        actionsManager.registerAction(preferencesAction);
-
-        // ReplayLast200MillisAction disabled - depends on SelectionOverlay
-        // var replayLast200MillisAction =
-        //         globalInjector.getInstance(actions.ReplayLast200MillisAction.class);
-        // actionsManager.registerAction(replayLast200MillisAction);
-
-        // Position history actions disabled - need to implement position tracking first
-        // var returnToLastPositionAction =
-        //         globalInjector.getInstance(actions.ReturnToLastPositionAction.class);
-        // actionsManager.registerAction(returnToLastPositionAction);
-
-        // var replayLastPositionAction =
-        //         globalInjector.getInstance(actions.ReplayLastPositionAction.class);
-        // actionsManager.registerAction(replayLastPositionAction);
-
-        var doneAction = globalInjector.getInstance(actions.DoneAction.class);
-        actionsManager.registerAction(doneAction);
-
-        var editShortcutsAction = globalInjector.getInstance(actions.EditShortcutsAction.class);
-        actionsManager.registerAction(editShortcutsAction);
-
-        var visitTutorialSiteAction =
-                globalInjector.getInstance(actions.VisitTutorialSiteAction.class);
-        actionsManager.registerAction(visitTutorialSiteAction);
-
-        var tipsMessageAction = globalInjector.getInstance(actions.TipsMessageAction.class);
-        actionsManager.registerAction(tipsMessageAction);
-
-        // Register CheckUpdatesAction
-        var checkUpdatesAction = globalInjector.getInstance(actions.CheckUpdatesAction.class);
-        actionsManager.registerAction(checkUpdatesAction);
-
-        // Register the newly migrated actions
-        var continueAnnotatingAction =
-                globalInjector.getInstance(actions.ContinueAnnotatingAction.class);
-        actionsManager.registerAction(continueAnnotatingAction);
-
-        // Annotation actions disabled - depends on complex UI components
-        // var deleteAnnotationAction =
-        //         globalInjector.getInstance(actions.DeleteAnnotationAction.class);
-        // actionsManager.registerAction(deleteAnnotationAction);
-
-        // var deleteSelectedAnnotationAction =
-        //         globalInjector.getInstance(actions.DeleteSelectedAnnotationAction.class);
-        // actionsManager.registerAction(deleteSelectedAnnotationAction);
-
-        // var jumpToAnnotationAction =
-        //         globalInjector.getInstance(actions.JumpToAnnotationAction.class);
-        // actionsManager.registerAction(jumpToAnnotationAction);
-
-        var openWordpoolAction = globalInjector.getInstance(actions.OpenWordpoolAction.class);
-        actionsManager.registerAction(openWordpoolAction);
-
-        // Register annotation actions
-        // var annotateAction = globalInjector.getInstance(actions.AnnotateAction.class);
-        // actionsManager.registerAction(annotateAction);
-
-        // Register remaining migrated actions
-        var openAudioFileAction = globalInjector.getInstance(actions.OpenAudioFileAction.class);
-        actionsManager.registerAction(openAudioFileAction);
-        var openAudioFolderAction = globalInjector.getInstance(actions.OpenAudioFolderAction.class);
-        actionsManager.registerAction(openAudioFolderAction);
-
-        var seekAction = globalInjector.getInstance(actions.SeekAction.class);
-        actionsManager.registerAction(seekAction);
-
-        var screenSeekForwardAction =
-                globalInjector.getInstance(actions.ScreenSeekForwardAction.class);
-        actionsManager.registerAction(screenSeekForwardAction);
-
-        var screenSeekBackwardAction =
-                globalInjector.getInstance(actions.ScreenSeekBackwardAction.class);
-        actionsManager.registerAction(screenSeekBackwardAction);
-
-        // var toggleAnnotationsAction =
-        //         globalInjector.getInstance(actions.ToggleAnnotationsAction.class);
-        // actionsManager.registerAction(toggleAnnotationsAction);
-
-        var last200PlusMoveAction = globalInjector.getInstance(actions.Last200PlusMoveAction.class);
-        actionsManager.registerAction(last200PlusMoveAction);
-
-        // var zoomInAction = globalInjector.getInstance(actions.ZoomInAction.class);
-        // actionsManager.registerAction(zoomInAction);
-        // var zoomOutAction = globalInjector.getInstance(actions.ZoomOutAction.class);
-        // actionsManager.registerAction(zoomOutAction);
     }
 
     /** Initializes and starts the GUI application. */

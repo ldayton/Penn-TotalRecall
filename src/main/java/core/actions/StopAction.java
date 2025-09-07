@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import events.AppStateChangedEvent;
 import events.AudioStopRequestedEvent;
@@ -7,7 +7,6 @@ import events.FocusRequestedEvent;
 import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
@@ -18,22 +17,39 @@ import state.AudioSessionStateMachine;
  * reset position through the new audio engine.
  */
 @Singleton
-public class StopAction extends BaseAction {
+public class StopAction implements Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+    private boolean enabled = false;
 
     @Inject
     public StopAction(EventDispatchBus eventBus) {
-        super("Stop", "Stop audio playback and reset to beginning");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
-        eventBus.publish(new AudioStopRequestedEvent());
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    public void execute() {
+        if (isEnabled()) {
+            eventBus.publish(new AudioStopRequestedEvent());
+            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Stop";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Stop audio playback and reset to beginning";
     }
 
     @Subscribe
@@ -44,6 +60,6 @@ public class StopAction extends BaseAction {
 
     private void updateActionState() {
         // Only enabled when playing
-        setEnabled(currentState == AudioSessionStateMachine.State.PLAYING);
+        enabled = (currentState == AudioSessionStateMachine.State.PLAYING);
     }
 }
