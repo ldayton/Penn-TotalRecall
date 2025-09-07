@@ -43,12 +43,12 @@ public class WaveformManager {
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        log.debug("Handling state change: {} -> {}", event.getPreviousState(), event.getNewState());
+        log.debug("Handling state change: {} -> {}", event.previousState(), event.newState());
 
-        switch (event.getNewState()) {
+        switch (event.newState()) {
             case READY -> {
                 // If transitioning from LOADING to READY, we need a waveform
-                if (event.getPreviousState() == AudioSessionStateMachine.State.LOADING) {
+                if (event.previousState() == AudioSessionStateMachine.State.LOADING) {
                     createWaveformForCurrentAudio();
                 }
             }

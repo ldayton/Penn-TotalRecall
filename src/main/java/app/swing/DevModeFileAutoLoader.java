@@ -4,7 +4,7 @@ import core.actions.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.AppConfig;
-import core.events.UIReadyEvent;
+import core.events.UiReadyEvent;
 import core.events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -49,7 +49,7 @@ public class DevModeFileAutoLoader {
     }
 
     @Subscribe
-    public void onUIReady(UIReadyEvent event) {
+    public void onUIReady(UiReadyEvent event) {
         // Only run during explicit dev runs (./gradlew runDev), not during tests
         boolean runDevFlag = Boolean.parseBoolean(System.getProperty("app.run.dev", "false"));
         if (!runDevFlag) {

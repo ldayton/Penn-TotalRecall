@@ -3,14 +3,15 @@ package ui.wordpool;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
-import core.events.FocusRequestedEvent;
+import core.events.AnnotateEvent;
+import core.events.AnnotateIntrusionEvent;
+import core.events.FocusEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -66,7 +67,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                eventBus.publish(new core.events.RegularAnnotationRequestedEvent());
+                                eventBus.publish(new AnnotateEvent());
                             }
                         });
         getActionMap()
@@ -75,8 +76,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                eventBus.publish(
-                                        new core.events.IntrusionAnnotationRequestedEvent());
+                                eventBus.publish(new AnnotateIntrusionEvent());
                             }
                         });
 
@@ -249,18 +249,18 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     }
 
     @Override
-    public void focusGained(FocusEvent e) {
+    public void focusGained(java.awt.event.FocusEvent e) {
         setSelectionStart(0);
         setSelectionEnd(0);
         setCaretPosition(getText().length());
     }
 
     @Override
-    public void focusLost(FocusEvent e) {}
+    public void focusLost(java.awt.event.FocusEvent e) {}
 
     @Subscribe
-    public void handleFocusRequestedEvent(FocusRequestedEvent event) {
-        if (event.getComponent() == FocusRequestedEvent.Component.WORDPOOL_TEXT_FIELD) {
+    public void handleFocusRequestedEvent(FocusEvent event) {
+        if (event.component() == FocusEvent.Component.WORDPOOL_TEXT_FIELD) {
             requestFocusInWindow();
         }
     }

@@ -8,12 +8,12 @@ import core.audio.PlaybackListener;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.events.AudioFileCloseRequestedEvent;
-import core.events.AudioPlayPauseRequestedEvent;
-import core.events.AudioSeekRequestedEvent;
-import core.events.AudioStopRequestedEvent;
-import core.events.Last200PlusMoveRequestedEvent;
-import core.events.ReplayLast200MillisRequestedEvent;
+import core.events.CloseAudioFileEvent;
+import core.events.PlayLast200MillisEvent;
+import core.events.PlayLast200MillisThenMoveEvent;
+import core.events.PlayPauseEvent;
+import core.events.SeekEvent;
+import core.events.SeekToStartEvent;
 import events.AudioFileLoadRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -108,7 +108,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     }
 
     @Subscribe
-    public void onAudioPlayPauseRequested(@NonNull AudioPlayPauseRequestedEvent event) {
+    public void onAudioPlayPauseRequested(@NonNull PlayPauseEvent event) {
         var state = stateManager.getCurrentState();
 
         switch (state) {
@@ -166,7 +166,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     }
 
     @Subscribe
-    public void fileclose(@NonNull AudioFileCloseRequestedEvent event) {
+    public void fileclose(@NonNull CloseAudioFileEvent event) {
         log.debug("Closing audio file");
         var fileBeingClosed = currentFile.orElse(null);
         var prevState = stateManager.getCurrentState();
@@ -178,16 +178,16 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     }
 
     @Subscribe
-    public void onAudioSeekRequested(@NonNull AudioSeekRequestedEvent event) {
+    public void onAudioSeekRequested(@NonNull SeekEvent event) {
         var state = stateManager.getCurrentState();
 
         if (currentPlaybackHandle.isPresent()) {
             // If we have a playback handle (playing or paused), just seek it
             audioEngine.ifPresent(
                     engine -> {
-                        engine.seek(currentPlaybackHandle.get(), event.getFrame());
-                        currentPositionFrames = event.getFrame(); // Update cached position
-                        log.debug("Seeked to frame: {}", event.getFrame());
+                        engine.seek(currentPlaybackHandle.get(), event.frame());
+                        currentPositionFrames = event.frame(); // Update cached position
+                        log.debug("Seeked to frame: {}", event.frame());
                     });
         } else if (state == AudioSessionStateMachine.State.READY
                 && currentAudioHandle.isPresent()) {
@@ -204,22 +204,22 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             var playback = audioEngine.get().play(currentAudioHandle.get());
             currentPlaybackHandle = Optional.of(playback);
             audioEngine.get().pause(playback);
-            audioEngine.get().seek(playback, event.getFrame());
-            currentPositionFrames = event.getFrame();
+            audioEngine.get().seek(playback, event.frame());
+            currentPositionFrames = event.frame();
 
             // Transition to PAUSED since we now have a paused playback handle
             var prevState = stateManager.getCurrentState();
             stateManager.transitionToPaused();
             eventBus.publish(
                     new AppStateChangedEvent(
-                            prevState, AudioSessionStateMachine.State.PAUSED, event.getFrame()));
+                            prevState, AudioSessionStateMachine.State.PAUSED, event.frame()));
 
-            log.debug("Created paused playback and seeked to frame: {}", event.getFrame());
+            log.debug("Created paused playback and seeked to frame: {}", event.frame());
         }
     }
 
     @Subscribe
-    public void onAudioStopRequested(@NonNull AudioStopRequestedEvent event) {
+    public void onAudioStopRequested(@NonNull SeekToStartEvent event) {
         var state = stateManager.getCurrentState();
 
         if (state == AudioSessionStateMachine.State.PLAYING) {
@@ -230,7 +230,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     }
 
     @Subscribe
-    public void onReplayLast200MillisRequested(@NonNull ReplayLast200MillisRequestedEvent event) {
+    public void onReplayLast200MillisRequested(@NonNull PlayLast200MillisEvent event) {
         var state = stateManager.getCurrentState();
 
         if ((state == AudioSessionStateMachine.State.READY
@@ -258,7 +258,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     }
 
     @Subscribe
-    public void onLast200PlusMoveRequested(@NonNull Last200PlusMoveRequestedEvent event) {
+    public void onLast200PlusMoveRequested(@NonNull PlayLast200MillisThenMoveEvent event) {
         var state = stateManager.getCurrentState();
 
         if ((state == AudioSessionStateMachine.State.READY
@@ -275,7 +275,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
             // Calculate new position based on direction
             long newFrame =
-                    event.isForward() ? currentFrame + shiftFrames : currentFrame - shiftFrames;
+                    event.forward() ? currentFrame + shiftFrames : currentFrame - shiftFrames;
 
             // Ensure we don't go out of bounds
             newFrame = Math.max(0, Math.min(newFrame, totalFrames - 1));
@@ -292,7 +292,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
             log.debug(
                     "Moved {} to frame {} and replaying from {} to {}",
-                    event.isForward() ? "forward" : "backward",
+                    event.forward() ? "forward" : "backward",
                     newFrame,
                     replayStartFrame,
                     replayEndFrame);

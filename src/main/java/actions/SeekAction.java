@@ -4,8 +4,8 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
 import core.events.AppStateChangedEvent;
-import core.events.AudioSeekRequestedEvent;
-import core.events.FocusRequestedEvent;
+import core.events.FocusEvent;
+import core.events.SeekEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -90,11 +90,11 @@ public class SeekAction extends BaseAction {
                                                                                                     - 1));
 
                                                                     eventBus.publish(
-                                                                            new AudioSeekRequestedEvent(
+                                                                            new SeekEvent(
                                                                                     targetFrame));
                                                                     eventBus.publish(
-                                                                            new FocusRequestedEvent(
-                                                                                    FocusRequestedEvent
+                                                                            new FocusEvent(
+                                                                                    FocusEvent
                                                                                             .Component
                                                                                             .MAIN_WINDOW));
                                                                 });
@@ -121,7 +121,7 @@ public class SeekAction extends BaseAction {
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

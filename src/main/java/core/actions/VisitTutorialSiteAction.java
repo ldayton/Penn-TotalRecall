@@ -2,7 +2,7 @@ package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.env.Constants;
-import core.events.OpenUrlRequestedEvent;
+import core.events.OpenUrlEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -31,7 +31,7 @@ public class VisitTutorialSiteAction extends Action {
                         + "\n"
                         + Constants.orgAffiliationName;
 
-        eventBus.publish(new OpenUrlRequestedEvent(Constants.tutorialSite, fallbackMessage));
+        eventBus.publish(new OpenUrlEvent(Constants.tutorialSite, fallbackMessage));
     }
 
     @Override

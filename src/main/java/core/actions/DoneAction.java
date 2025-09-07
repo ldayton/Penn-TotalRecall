@@ -2,9 +2,9 @@ package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.AnnotationCompleteRequestedEvent;
 import core.events.AppStateChangedEvent;
-import core.events.FocusRequestedEvent;
+import core.events.CompleteAnnotationEvent;
+import core.events.FocusEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -33,8 +33,8 @@ public class DoneAction extends Action {
     @Override
     public void execute() {
         if (isEnabled()) {
-            eventBus.publish(new AnnotationCompleteRequestedEvent());
-            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+            eventBus.publish(new CompleteAnnotationEvent());
+            eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
         }
     }
 
@@ -55,7 +55,7 @@ public class DoneAction extends Action {
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

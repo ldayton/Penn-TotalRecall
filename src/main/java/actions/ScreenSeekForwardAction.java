@@ -3,7 +3,7 @@ package actions;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.events.ScreenSeekRequestedEvent;
+import core.events.SeekScreenEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -26,12 +26,12 @@ public class ScreenSeekForwardAction extends BaseAction {
 
     @Override
     protected void performAction(ActionEvent e) {
-        eventBus.publish(new ScreenSeekRequestedEvent(ScreenSeekRequestedEvent.Direction.FORWARD));
+        eventBus.publish(new SeekScreenEvent(SeekScreenEvent.Direction.FORWARD));
     }
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

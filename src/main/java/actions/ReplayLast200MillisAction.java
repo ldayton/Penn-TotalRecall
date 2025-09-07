@@ -3,8 +3,8 @@ package actions;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.events.FocusRequestedEvent;
-import core.events.ReplayLast200MillisRequestedEvent;
+import core.events.FocusEvent;
+import core.events.PlayLast200MillisEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -36,13 +36,13 @@ public class ReplayLast200MillisAction extends BaseAction {
 
     @Override
     protected void performAction(ActionEvent e) {
-        eventBus.publish(new ReplayLast200MillisRequestedEvent());
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        eventBus.publish(new PlayLast200MillisEvent());
+        eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
     }
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

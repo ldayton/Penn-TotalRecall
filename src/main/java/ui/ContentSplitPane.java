@@ -5,8 +5,6 @@ import actions.ActionsManager;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import core.actions.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
-import core.dispatch.Subscribe;
-import core.events.LayoutUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;
@@ -88,7 +86,6 @@ public class ContentSplitPane extends JSplitPane {
         instance = this;
 
         // Subscribe to layout update events
-        eventBus.subscribe(this);
     }
 
     /**
@@ -103,17 +100,5 @@ public class ContentSplitPane extends JSplitPane {
                             + " called first.");
         }
         return instance;
-    }
-
-    @Subscribe
-    public void handleLayoutUpdateRequestedEvent(LayoutUpdateRequestedEvent event) {
-        switch (event.getType()) {
-            case ENABLE_CONTINUOUS:
-                setContinuousLayout(true);
-                break;
-            case DISABLE_CONTINUOUS:
-                setContinuousLayout(false);
-                break;
-        }
     }
 }

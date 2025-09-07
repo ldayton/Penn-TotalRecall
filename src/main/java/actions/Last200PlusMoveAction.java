@@ -3,8 +3,8 @@ package actions;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.events.FocusRequestedEvent;
-import core.events.Last200PlusMoveRequestedEvent;
+import core.events.FocusEvent;
+import core.events.PlayLast200MillisThenMoveEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -31,13 +31,13 @@ public class Last200PlusMoveAction extends BaseAction {
         String actionName = (String) getValue(Action.NAME);
         boolean forward = actionName.contains("Forward");
 
-        eventBus.publish(new Last200PlusMoveRequestedEvent(forward));
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        eventBus.publish(new PlayLast200MillisThenMoveEvent(forward));
+        eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
     }
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

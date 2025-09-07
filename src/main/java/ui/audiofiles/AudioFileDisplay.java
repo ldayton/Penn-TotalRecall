@@ -5,7 +5,7 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.env.PreferenceKeys;
-import core.events.UIUpdateRequestedEvent;
+import core.events.UiUpdateEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -200,8 +200,8 @@ public class AudioFileDisplay extends JScrollPane {
     }
 
     @Subscribe
-    public void handleUIUpdateRequestedEvent(UIUpdateRequestedEvent event) {
-        if (event.getComponent() == UIUpdateRequestedEvent.Component.AUDIO_FILE_DISPLAY) {
+    public void handleUIUpdateRequestedEvent(UiUpdateEvent event) {
+        if (event.component() == UiUpdateEvent.Component.AUDIO_FILE_DISPLAY) {
             repaint();
         }
     }

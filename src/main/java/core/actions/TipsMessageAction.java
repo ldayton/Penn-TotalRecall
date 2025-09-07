@@ -1,7 +1,7 @@
 package core.actions;
 
 import core.dispatch.EventDispatchBus;
-import core.events.InfoRequestedEvent;
+import core.events.DialogInfoEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -65,7 +65,7 @@ public class TipsMessageAction extends Action {
     @Override
     public void execute() {
         // Fire info requested event - UI will handle showing the info dialog
-        eventBus.publish(new InfoRequestedEvent(makeMessage()));
+        eventBus.publish(new DialogInfoEvent(makeMessage()));
     }
 
     @Override

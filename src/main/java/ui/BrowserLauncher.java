@@ -2,8 +2,8 @@ package ui;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.InfoRequestedEvent;
-import core.events.OpenUrlRequestedEvent;
+import core.events.DialogInfoEvent;
+import core.events.OpenUrlEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;
@@ -28,21 +28,21 @@ public class BrowserLauncher {
     }
 
     @Subscribe
-    public void onOpenUrlRequested(OpenUrlRequestedEvent event) {
+    public void onOpenUrlRequested(OpenUrlEvent event) {
         try {
             // Try to use Desktop API to launch browser
             if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI(event.getUrl()));
+                    desktop.browse(new URI(event.url()));
                     return;
                 }
             }
         } catch (Exception e) {
-            logger.error("Failed to open URL: {}", event.getUrl(), e);
+            logger.error("Failed to open URL: {}", event.url(), e);
         }
 
         // If browser launch failed, show the fallback message
-        eventBus.publish(new InfoRequestedEvent(event.getFallbackMessage()));
+        eventBus.publish(new DialogInfoEvent(event.fallbackMessage()));
     }
 }

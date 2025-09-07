@@ -3,9 +3,9 @@ package state;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
-import core.events.AnnotationCompleteRequestedEvent;
-import core.events.AudioFileCloseRequestedEvent;
-import core.events.ErrorRequestedEvent;
+import core.events.CloseAudioFileEvent;
+import core.events.CompleteAnnotationEvent;
+import core.events.DialogErrorEvent;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -33,12 +33,12 @@ public class AnnotationManager {
     }
 
     @Subscribe
-    public void onAnnotationCompleteRequested(@NonNull AnnotationCompleteRequestedEvent event) {
+    public void onAnnotationCompleteRequested(@NonNull CompleteAnnotationEvent event) {
         log.debug("Processing annotation complete request");
 
         String curFileName = sessionSource.getCurrentAudioFilePath().orElse(null);
         if (curFileName == null) {
-            eventBus.publish(new ErrorRequestedEvent("No audio file currently open."));
+            eventBus.publish(new DialogErrorEvent("No audio file currently open."));
             return;
         }
 
@@ -55,13 +55,13 @@ public class AnnotationManager {
                                     + Constants.completedAnnotationFileExtension);
             if (oFile.exists()) {
                 eventBus.publish(
-                        new ErrorRequestedEvent(
+                        new DialogErrorEvent(
                                 "Output file already exists. You should not be able to reach this"
                                         + " condition."));
                 return;
             } else {
                 if (!tmpFile.renameTo(oFile)) {
-                    eventBus.publish(new ErrorRequestedEvent("Operation failed."));
+                    eventBus.publish(new DialogErrorEvent("Operation failed."));
                     return;
                 } else {
                     try {
@@ -72,12 +72,12 @@ public class AnnotationManager {
                         log.error("Failed to update audio file done status", e1);
                     }
                     // Close the audio file using the event system
-                    eventBus.publish(new AudioFileCloseRequestedEvent());
+                    eventBus.publish(new CloseAudioFileEvent());
                     log.info("Annotation marked complete and file closed");
                 }
             }
         } else {
-            eventBus.publish(new ErrorRequestedEvent("You have not made any annotations yet."));
+            eventBus.publish(new DialogErrorEvent("You have not made any annotations yet."));
         }
     }
 

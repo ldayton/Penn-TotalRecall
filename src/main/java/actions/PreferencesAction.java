@@ -1,7 +1,7 @@
 package actions;
 
 import core.dispatch.EventDispatchBus;
-import core.events.PreferencesRequestedEvent;
+import core.events.PreferencesEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
@@ -27,6 +27,6 @@ public class PreferencesAction extends BaseAction {
     @Override
     protected void performAction(ActionEvent e) {
         // Fire preferences requested event - UI will handle opening the preferences window
-        eventBus.publish(new PreferencesRequestedEvent());
+        eventBus.publish(new PreferencesEvent());
     }
 }

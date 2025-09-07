@@ -3,7 +3,7 @@ package ui.annotations;
 import app.swing.SwingApp;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.UIUpdateRequestedEvent;
+import core.events.UiUpdateEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -118,8 +118,8 @@ public class AnnotationDisplay extends JScrollPane {
     }
 
     @Subscribe
-    public void handleUIUpdateRequestedEvent(UIUpdateRequestedEvent event) {
-        if (event.getComponent() == UIUpdateRequestedEvent.Component.ANNOTATION_DISPLAY) {
+    public void handleUIUpdateRequestedEvent(UiUpdateEvent event) {
+        if (event.component() == UiUpdateEvent.Component.ANNOTATION_DISPLAY) {
             repaint();
         }
     }

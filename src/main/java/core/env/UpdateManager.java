@@ -1,7 +1,7 @@
 package core.env;
 
 import core.dispatch.EventDispatchBus;
-import core.events.InfoRequestedEvent;
+import core.events.DialogInfoEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.net.URI;
@@ -118,11 +118,11 @@ public class UpdateManager {
                             showUpdateNotification(latest, releasesPageUrl);
                         } else {
                             eventBus.publish(
-                                    new InfoRequestedEvent("You're up to date (" + current + ")"));
+                                    new DialogInfoEvent("You're up to date (" + current + ")"));
                         }
                     } catch (Exception e) {
                         logger.warn("Manual update check failed: {}", e.getMessage());
-                        eventBus.publish(new InfoRequestedEvent("Could not check for updates."));
+                        eventBus.publish(new DialogInfoEvent("Could not check for updates."));
                     }
                 });
     }
@@ -174,7 +174,7 @@ public class UpdateManager {
                 """
                         .formatted(newVersion, releasesPageUrl);
 
-        eventBus.publish(new InfoRequestedEvent(message));
+        eventBus.publish(new DialogInfoEvent(message));
     }
 
     boolean isNewerVersion(@NonNull String current, @NonNull String latest) {

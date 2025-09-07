@@ -213,8 +213,8 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     @Subscribe
     public void onAppStateChanged(AppStateChangedEvent event) {
-        if (event.isAudioLoaded() && event.getContext() instanceof File) {
-            File loadedFile = (File) event.getContext();
+        if (event.isAudioLoaded() && event.context() instanceof File) {
+            File loadedFile = (File) event.context();
             for (int i = 0; i < model.getSize(); i++) {
                 AudioFile audioFile = model.getElementAt(i);
                 if (audioFile.getAbsolutePath().equals(loadedFile.getAbsolutePath())) {
@@ -272,15 +272,15 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     /** Handles AudioFileListEvent to remove files from the list. */
     @Subscribe
     public void handleAudioFileListEvent(AudioFileListEvent event) {
-        if (event.getType() == AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX) {
+        if (event.type() == AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX) {
             // Check if the index is valid
-            if (event.getIndex() >= 0 && event.getIndex() < model.getSize()) {
+            if (event.index() >= 0 && event.index() < model.getSize()) {
                 // Don't remove if it's the currently playing file
-                AudioFile fileToRemove = model.getElementAt(event.getIndex());
+                AudioFile fileToRemove = model.getElementAt(event.index());
                 if (currentAudioFile != null && currentAudioFile.equals(fileToRemove)) {
                     return; // Don't remove currently playing file
                 }
-                model.removeElementAt(event.getIndex());
+                model.removeElementAt(event.index());
             }
         }
     }

@@ -1,7 +1,7 @@
 package core.actions;
 
 import core.dispatch.EventDispatchBus;
-import core.events.ExitRequestedEvent;
+import core.events.ExitEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -23,7 +23,7 @@ public class ExitAction extends Action {
 
     @Override
     public void execute() {
-        eventBus.publish(new ExitRequestedEvent());
+        eventBus.publish(new ExitEvent());
     }
 
     @Override

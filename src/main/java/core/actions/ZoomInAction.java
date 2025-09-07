@@ -3,8 +3,8 @@ package core.actions;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.events.FocusRequestedEvent;
-import core.events.ZoomInRequestedEvent;
+import core.events.FocusEvent;
+import core.events.ZoomInEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -27,8 +27,8 @@ public class ZoomInAction extends Action {
     @Override
     public void execute() {
         if (isEnabled()) {
-            eventBus.publish(new ZoomInRequestedEvent());
-            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+            eventBus.publish(new ZoomInEvent());
+            eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
         }
     }
 
@@ -49,7 +49,7 @@ public class ZoomInAction extends Action {
 
     @Subscribe
     public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.getNewState();
+        currentState = event.newState();
         updateActionState();
     }
 

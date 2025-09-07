@@ -3,7 +3,7 @@ package state;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
-import core.events.ErrorRequestedEvent;
+import core.events.DialogErrorEvent;
 import core.events.WordpoolFileSelectedEvent;
 import core.util.OsPath;
 import jakarta.inject.Inject;
@@ -40,7 +40,7 @@ public class WordpoolManager {
 
     @Subscribe
     public void onWordpoolFileSelected(@NonNull WordpoolFileSelectedEvent event) {
-        switchWordpool(event.getFile());
+        switchWordpool(event.file());
     }
 
     private void switchWordpool(File file) {
@@ -75,7 +75,7 @@ public class WordpoolManager {
             }
         } catch (IOException e) {
             logger.error("Error processing wordpool file", e);
-            eventBus.publish(new ErrorRequestedEvent("Cannot process wordpool file!"));
+            eventBus.publish(new DialogErrorEvent("Cannot process wordpool file!"));
         }
     }
 }

@@ -2,7 +2,7 @@ package actions;
 
 import core.dispatch.EventDispatchBus;
 import core.env.Constants;
-import core.events.ErrorRequestedEvent;
+import core.events.DialogErrorEvent;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -96,7 +96,7 @@ public class ContinueAnnotatingAction extends BaseAction {
             }
             return;
         } else {
-            eventBus.publish(new ErrorRequestedEvent("Could not re-open file for annotation."));
+            eventBus.publish(new DialogErrorEvent("Could not re-open file for annotation."));
             return;
         }
     }

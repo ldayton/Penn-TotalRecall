@@ -6,11 +6,11 @@ import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
-import core.events.ErrorRequestedEvent;
-import core.events.ExitRequestedEvent;
-import core.events.FocusRequestedEvent;
-import core.events.InfoRequestedEvent;
-import core.events.PreferencesRequestedEvent;
+import core.events.DialogErrorEvent;
+import core.events.DialogInfoEvent;
+import core.events.ExitEvent;
+import core.events.FocusEvent;
+import core.events.PreferencesEvent;
 import events.AudioFileSwitchedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -163,7 +163,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
 
     /** Handles exit requested events, honoring the warn-on-exit preference. */
     @Subscribe
-    public void handleExitRequested(ExitRequestedEvent event) {
+    public void handleExitRequested(ExitEvent event) {
         boolean warn =
                 preferencesManager.getBoolean(
                         PreferenceKeys.WARN_ON_EXIT, PreferenceKeys.DEFAULT_WARN_ON_EXIT);
@@ -181,7 +181,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
 
     /** Handles preferences requested events by opening the preferences window. */
     @Subscribe
-    public void handlePreferencesRequested(PreferencesRequestedEvent event) {
+    public void handlePreferencesRequested(PreferencesEvent event) {
         // Get PreferencesFrame from DI and show it
         var preferencesFrame =
                 app.swing.SwingApp.getInjectedInstance(ui.preferences.PreferencesFrame.class);
@@ -192,26 +192,26 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
 
     /** Handles focus requested events by requesting focus on the main window. */
     @Subscribe
-    public void handleFocusRequested(FocusRequestedEvent event) {
+    public void handleFocusRequested(FocusEvent event) {
         requestFocus();
     }
 
     /** Handles error requested events by showing error dialogs. */
     @Subscribe
-    public void handleErrorRequested(ErrorRequestedEvent event) {
+    public void handleErrorRequested(DialogErrorEvent event) {
         var dialogService =
                 app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
-        dialogService.showError(event.getMessage());
+        dialogService.showError(event.message());
     }
 
     /** Handles info requested events by showing info dialogs. */
     @Subscribe
-    public void handleInfoRequested(InfoRequestedEvent event) {
+    public void handleInfoRequested(DialogInfoEvent event) {
         var dialogService =
                 app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
-        dialogService.showInfo(event.getMessage());
+        dialogService.showInfo(event.message());
     }
 
     /** Returns the default frame title combining app name and version. */

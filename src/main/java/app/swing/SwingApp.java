@@ -4,6 +4,7 @@ import actions.ActionsManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import core.env.UpdateManager;
+import core.events.UiReadyEvent;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -196,7 +197,7 @@ public class SwingApp {
                                     && canvas.getHeight() > 0) {
                                 // UI is ready - canvas is visible and sized
                                 ((javax.swing.Timer) e.getSource()).stop();
-                                eventBus.publish(new core.events.UIReadyEvent());
+                                eventBus.publish(new UiReadyEvent());
                                 logger.info("UI is ready - publishing UIReadyEvent");
                             }
                         });

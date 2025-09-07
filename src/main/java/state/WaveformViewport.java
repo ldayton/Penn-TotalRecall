@@ -2,10 +2,10 @@ package state;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.AudioSeekRequestedEvent;
-import core.events.ScreenSeekRequestedEvent;
-import core.events.ZoomInRequestedEvent;
-import core.events.ZoomOutRequestedEvent;
+import core.events.SeekEvent;
+import core.events.SeekScreenEvent;
+import core.events.ZoomInEvent;
+import core.events.ZoomOutEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -39,7 +39,7 @@ public class WaveformViewport {
     }
 
     @Subscribe
-    public void onZoomInRequested(@NonNull ZoomInRequestedEvent event) {
+    public void onZoomInRequested(@NonNull ZoomInEvent event) {
         int newZoom = (int) (pixelsPerSecond * ZOOM_FACTOR);
         if (newZoom <= MAX_PIXELS_PER_SECOND) {
             setZoom(newZoom);
@@ -47,7 +47,7 @@ public class WaveformViewport {
     }
 
     @Subscribe
-    public void onZoomOutRequested(@NonNull ZoomOutRequestedEvent event) {
+    public void onZoomOutRequested(@NonNull ZoomOutEvent event) {
         int newZoom = (int) (pixelsPerSecond / ZOOM_FACTOR);
         if (newZoom >= MIN_PIXELS_PER_SECOND) {
             setZoom(newZoom);
@@ -55,7 +55,7 @@ public class WaveformViewport {
     }
 
     @Subscribe
-    public void onScreenSeekRequested(@NonNull ScreenSeekRequestedEvent event) {
+    public void onScreenSeekRequested(@NonNull SeekScreenEvent event) {
         // Get current position from session data source
         sessionDataSource
                 .getPlaybackPosition()
@@ -66,8 +66,7 @@ public class WaveformViewport {
 
                             // Calculate new position based on direction
                             double targetPositionSeconds =
-                                    event.getDirection()
-                                                    == ScreenSeekRequestedEvent.Direction.FORWARD
+                                    event.direction() == SeekScreenEvent.Direction.FORWARD
                                             ? currentPositionSeconds + viewportSeconds
                                             : currentPositionSeconds - viewportSeconds;
 
@@ -96,7 +95,7 @@ public class WaveformViewport {
 
                                                                     // Publish seek event
                                                                     eventBus.publish(
-                                                                            new AudioSeekRequestedEvent(
+                                                                            new SeekEvent(
                                                                                     targetFrame));
                                                                 });
                                             });

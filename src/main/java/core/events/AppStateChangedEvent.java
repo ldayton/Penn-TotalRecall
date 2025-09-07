@@ -1,6 +1,6 @@
 package core.events;
 
-import lombok.Getter;
+import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
 /**
@@ -18,12 +18,10 @@ import state.AudioSessionStateMachine;
  *   <li>For NO_AUDIO: The file that was closed (if any)
  * </ul>
  */
-@Getter
-public class AppStateChangedEvent {
-    private final AudioSessionStateMachine.State previousState;
-    private final AudioSessionStateMachine.State newState;
-    private final Object context;
-
+public record AppStateChangedEvent(
+        @NonNull AudioSessionStateMachine.State previousState,
+        @NonNull AudioSessionStateMachine.State newState,
+        @NonNull Object context) {
     /**
      * Create a state change event with context.
      *
@@ -31,14 +29,7 @@ public class AppStateChangedEvent {
      * @param newState The new state after transition
      * @param context Optional context object with additional information
      */
-    public AppStateChangedEvent(
-            AudioSessionStateMachine.State previousState,
-            AudioSessionStateMachine.State newState,
-            Object context) {
-        this.previousState = previousState;
-        this.newState = newState;
-        this.context = context;
-    }
+    public AppStateChangedEvent {}
 
     /**
      * Create a state change event without context.
