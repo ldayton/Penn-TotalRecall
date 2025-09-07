@@ -3,7 +3,7 @@ package ui.preferences;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Windowing;
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ class PreferencesIntegrationTest {
         // Start the application (DI + UI) asynchronously
         CompletableFuture.runAsync(
                         () -> {
-                            var bootstrap = GuiceBootstrap.create();
+                            var bootstrap = SwingApp.create();
                             bootstrap.startApplication();
                         })
                 .get(10, TimeUnit.SECONDS);
@@ -32,8 +32,7 @@ class PreferencesIntegrationTest {
         // Trigger Preferences via the real menu action on the EDT
         SwingUtilities.invokeAndWait(
                 () -> {
-                    var prefsAction =
-                            GuiceBootstrap.getInjectedInstance(actions.PreferencesAction.class);
+                    var prefsAction = SwingApp.getInjectedInstance(actions.PreferencesAction.class);
                     prefsAction.actionPerformed(new java.awt.event.ActionEvent(this, 0, "prefs"));
                 });
 

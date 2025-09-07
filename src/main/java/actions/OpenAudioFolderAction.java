@@ -1,6 +1,6 @@
 package actions;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -41,7 +41,7 @@ public class OpenAudioFolderAction extends BaseAction {
         }
 
         DialogService dialogService =
-                GuiceBootstrap.getRequiredInjectedInstance(DialogService.class, "DialogService");
+                SwingApp.getRequiredInjectedInstance(DialogService.class, "DialogService");
         File selectedFile =
                 dialogService.showFileChooser(
                         "Open Audio Folder",

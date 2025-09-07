@@ -3,7 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.MacOS;
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import core.actions.ExitAction;
 import java.awt.Desktop;
 import java.awt.Taskbar;
@@ -126,7 +126,7 @@ class LookAndFeelManagerMacOSTest {
         // Simulate the Guice bootstrap process
         // This should fail because currently the system property is set AFTER Swing components are
         // created
-        GuiceBootstrap.create();
+        SwingApp.create();
 
         // Verify the system property is set correctly BEFORE any Swing components are created
         String useScreenMenuBar = System.getProperty("apple.laf.useScreenMenuBar");

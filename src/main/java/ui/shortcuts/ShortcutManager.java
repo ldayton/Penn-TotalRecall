@@ -50,7 +50,7 @@ public class ShortcutManager extends JFrame {
             List<ActionConfig> actionConfigs, ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
-                app.di.GuiceBootstrap.getInjectedInstance(PreferencesManager.class);
+                app.swing.SwingApp.getInjectedInstance(PreferencesManager.class);
         this.shortcutPreferences =
                 new ShortcutPreferences(preferencesManager, actionConfigs, listener);
         this.listener = listener;
@@ -131,7 +131,7 @@ public class ShortcutManager extends JFrame {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
                                         DialogService ds =
-                                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                                app.swing.SwingApp.getRequiredInjectedInstance(
                                                         DialogService.class, "DialogService");
                                         boolean res =
                                                 ds.showConfirm(
@@ -234,8 +234,7 @@ class ShortcutTable extends JTable {
                     var enteredShortcut =
                             Shortcut.forPlatform(
                                     KeyStroke.getKeyStroke(code, modifiers),
-                                    app.di.GuiceBootstrap.getInjectedInstance(
-                                            KeyboardManager.class));
+                                    app.swing.SwingApp.getInjectedInstance(KeyboardManager.class));
                     var rowActionConfig = shortcutTableModel.actionConfigForRow(selectedRow);
                     var newActionConfig =
                             shortcutPreferences.withShortcut(rowActionConfig, enteredShortcut);
@@ -261,7 +260,7 @@ class ShortcutTable extends JTable {
                     if (shortcut.equals(existingShortcut)) {
                         String msg = shortcut + " is already taken.";
                         DialogService ds =
-                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                app.swing.SwingApp.getRequiredInjectedInstance(
                                         DialogService.class, "DialogService");
                         ds.showError(msg);
                         return;

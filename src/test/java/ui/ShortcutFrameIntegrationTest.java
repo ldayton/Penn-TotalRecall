@@ -3,7 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Windowing;
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ class ShortcutFrameIntegrationTest {
         // Start the application (DI + UI) asynchronously
         CompletableFuture.runAsync(
                         () -> {
-                            var bootstrap = GuiceBootstrap.create();
+                            var bootstrap = SwingApp.create();
                             bootstrap.startApplication();
                         })
                 .get(10, TimeUnit.SECONDS);
@@ -32,8 +32,7 @@ class ShortcutFrameIntegrationTest {
         // Trigger EditShortcutsAction on the EDT
         SwingUtilities.invokeAndWait(
                 () -> {
-                    var action =
-                            GuiceBootstrap.getInjectedInstance(actions.EditShortcutsAction.class);
+                    var action = SwingApp.getInjectedInstance(actions.EditShortcutsAction.class);
                     action.actionPerformed(new java.awt.event.ActionEvent(this, 0, "shortcuts"));
                 });
 

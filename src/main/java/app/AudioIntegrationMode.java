@@ -74,8 +74,8 @@ public class AudioIntegrationMode {
             // Test 1: Audio engine initialization
             logger.info("Testing audio engine initialization...");
             // Initialize Guice for integration tests
-            app.di.GuiceBootstrap.create();
-            audioEngine = app.di.GuiceBootstrap.getInjectedInstance(AudioEngine.class);
+            app.swing.SwingApp.create();
+            audioEngine = app.swing.SwingApp.getInjectedInstance(AudioEngine.class);
             if (audioEngine == null) {
                 logger.error("❌ AudioEngine not available via dependency injection");
                 logger.error("Integration tests require application to be initialized with Guice");

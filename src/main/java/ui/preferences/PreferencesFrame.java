@@ -259,7 +259,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                     "One or more preferences have changed.\n"
                             + "Are you sure you want to exit and lose your changes?";
             boolean response =
-                    app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                    app.swing.SwingApp.getRequiredInjectedInstance(
                                     ui.DialogService.class, "DialogService")
                             .showConfirm(message);
             if (response) {

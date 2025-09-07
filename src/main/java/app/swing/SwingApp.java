@@ -1,7 +1,6 @@
-package app.di;
+package app.swing;
 
 import actions.ActionsManager;
-import app.DevModeFileAutoLoader;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import env.LookAndFeelManager;
@@ -15,14 +14,14 @@ import ui.MainFrame;
 import ui.WindowLayoutPersistence;
 
 /**
- * Guice-based application bootstrap.
+ * Swing-based desktop application entry point.
  *
- * <p>Handles dependency injection setup and application initialization with proper DI.
+ * <p>Handles dependency injection setup and application initialization for the Swing UI.
  */
-public class GuiceBootstrap {
+public class SwingApp {
 
     private static Injector globalInjector;
-    private static final Logger logger = LoggerFactory.getLogger(GuiceBootstrap.class);
+    private static final Logger logger = LoggerFactory.getLogger(SwingApp.class);
 
     private final WindowLayoutPersistence windowManager;
     private final UpdateManager updateManager;
@@ -32,7 +31,7 @@ public class GuiceBootstrap {
     private final AppFocusTraversalPolicy myFocusTraversalPolicy;
 
     @Inject
-    public GuiceBootstrap(
+    public SwingApp(
             WindowLayoutPersistence windowManager,
             UpdateManager updateManager,
             LookAndFeelManager lookAndFeelManager,
@@ -47,8 +46,8 @@ public class GuiceBootstrap {
         this.myFocusTraversalPolicy = myFocusTraversalPolicy;
     }
 
-    /** Creates the Guice injector and returns a bootstrapped application instance. */
-    public static GuiceBootstrap create() {
+    /** Creates the Guice injector and returns a Swing application instance. */
+    public static SwingApp create() {
         // Initialize Look and Feel BEFORE creating any Swing components
         // This is critical for Mac menu bar to work properly
         initializeLookAndFeelBeforeDI();
@@ -56,7 +55,7 @@ public class GuiceBootstrap {
         // Set FlatLaf BEFORE creating any Swing components via DI
         setFlatLafBeforeDI();
 
-        globalInjector = Guice.createInjector(new AppModule());
+        globalInjector = Guice.createInjector(new SwingModule());
 
         // Initialize action configurations immediately after injector creation
         // This ensures action names and properties are available when components are created
@@ -64,7 +63,7 @@ public class GuiceBootstrap {
         actionsManager.initialize();
 
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
-        var bootstrap = globalInjector.getInstance(GuiceBootstrap.class);
+        var bootstrap = globalInjector.getInstance(SwingApp.class);
 
         // WaveformMouseSetup disabled during refactoring
         // globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);

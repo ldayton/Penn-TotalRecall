@@ -1,6 +1,6 @@
 package ui.annotations;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIUpdateRequestedEvent;
@@ -71,7 +71,7 @@ public class AnnotationDisplay extends JScrollPane {
     }
 
     public static Annotation[] getAnnotationsInOrder() {
-        var instance = GuiceBootstrap.getInjectedInstance(AnnotationDisplay.class);
+        var instance = SwingApp.getInjectedInstance(AnnotationDisplay.class);
         if (instance == null) {
             throw new IllegalStateException("AnnotationDisplay not available via DI");
         }
@@ -82,7 +82,7 @@ public class AnnotationDisplay extends JScrollPane {
         if (ann == null) {
             throw new IllegalArgumentException("annotation/s cannot be null");
         }
-        var instance = GuiceBootstrap.getInjectedInstance(AnnotationDisplay.class);
+        var instance = SwingApp.getInjectedInstance(AnnotationDisplay.class);
         if (instance == null) {
             throw new IllegalStateException("AnnotationDisplay not available via DI");
         }
@@ -107,7 +107,7 @@ public class AnnotationDisplay extends JScrollPane {
     public static AnnotationDisplay getInstance() {
         if (instance == null) {
             throw new IllegalStateException(
-                    "AnnotationDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
+                    "AnnotationDisplay not initialized via DI. Ensure SwingApp.create() was"
                             + " called first.");
         }
         return instance;

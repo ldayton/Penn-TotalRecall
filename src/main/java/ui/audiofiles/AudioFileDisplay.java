@@ -1,6 +1,6 @@
 package ui.audiofiles;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import env.Constants;
 import env.PreferenceKeys;
 import events.EventDispatchBus;
@@ -114,7 +114,7 @@ public class AudioFileDisplay extends JScrollPane {
                     } catch (AudioFilePathException e) {
                         logger.error("Error updating audio file done status", e);
                         DialogService dialogService =
-                                GuiceBootstrap.getInjectedInstance(DialogService.class);
+                                SwingApp.getInjectedInstance(DialogService.class);
                         if (dialogService == null) {
                             throw new IllegalStateException("DialogService not available via DI");
                         }
@@ -162,8 +162,7 @@ public class AudioFileDisplay extends JScrollPane {
                                 + file
                                 + "?\nYour changes to the current file will not be lost.";
                 DialogService dialogService =
-                        GuiceBootstrap.getRequiredInjectedInstance(
-                                DialogService.class, "DialogService");
+                        SwingApp.getRequiredInjectedInstance(DialogService.class, "DialogService");
                 var result = dialogService.showConfirmWithDontShowAgain(message);
                 if (result.isDontShowAgain()) {
                     instance.preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
@@ -175,7 +174,7 @@ public class AudioFileDisplay extends JScrollPane {
         }
         // Use the new event-driven system to load the file
         var eventBus =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         events.EventDispatchBus.class, "EventDispatchBus");
         eventBus.publish(new events.AudioFileLoadRequestedEvent(file));
 

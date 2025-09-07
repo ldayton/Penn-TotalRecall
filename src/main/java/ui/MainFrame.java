@@ -174,7 +174,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         }
 
         var dialogService =
-                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
         boolean confirmed = dialogService.showConfirm("Are you sure you want to exit?");
         if (confirmed) System.exit(0);
@@ -185,7 +185,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     public void handlePreferencesRequested(PreferencesRequestedEvent event) {
         // Get PreferencesFrame from DI and show it
         var preferencesFrame =
-                app.di.GuiceBootstrap.getInjectedInstance(ui.preferences.PreferencesFrame.class);
+                app.swing.SwingApp.getInjectedInstance(ui.preferences.PreferencesFrame.class);
         if (preferencesFrame != null) {
             preferencesFrame.setVisible(true);
         }
@@ -201,7 +201,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     @Subscribe
     public void handleErrorRequested(ErrorRequestedEvent event) {
         var dialogService =
-                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
         dialogService.showError(event.getMessage());
     }
@@ -210,7 +210,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     @Subscribe
     public void handleInfoRequested(InfoRequestedEvent event) {
         var dialogService =
-                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
         dialogService.showInfo(event.getMessage());
     }

@@ -53,7 +53,7 @@ java {
 }
 
 application {
-    mainClass = 'app.Main'
+    mainClass = 'app.swing.Main'
     applicationDefaultJvmArgs = nativeAccessJvmArgs
 }
 

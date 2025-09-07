@@ -1,6 +1,6 @@
 package ui.preferences;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -57,7 +57,7 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
         group.add(trueButton);
 
         var preferencesManager =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         PreferencesManager.class, "PreferencesManager");
         if (preferencesManager.getBoolean(prefKey, defValue) == false) {
             preferencesManager.putBoolean(prefKey, false);
@@ -79,7 +79,7 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     @Override
     protected boolean save() {
         var preferencesManager =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         PreferencesManager.class, "PreferencesManager");
         if (trueButton.isSelected()) {
             lastPref = true;
@@ -123,7 +123,7 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     @Override
     protected void restoreDefault() {
         var preferencesManager =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         PreferencesManager.class, "PreferencesManager");
         preferencesManager.putBoolean(prefKey, defValue);
         if (defValue == true) {

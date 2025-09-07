@@ -1,6 +1,6 @@
 package ui.preferences;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import env.PreferenceKeys;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -53,7 +53,7 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
 
     private int getCurrentVal() {
         var preferencesManager =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         PreferencesManager.class, "PreferencesManager");
         return switch (size) {
             case SMALL_SHIFT ->
@@ -105,7 +105,7 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
 
     private void saveVal(int nVal) {
         var preferencesManager =
-                GuiceBootstrap.getRequiredInjectedInstance(
+                SwingApp.getRequiredInjectedInstance(
                         PreferencesManager.class, "PreferencesManager");
         switch (size) {
             case SMALL_SHIFT -> preferencesManager.putInt(PreferenceKeys.SMALL_SHIFT, nVal);

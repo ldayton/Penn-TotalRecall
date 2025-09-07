@@ -3,7 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Windowing;
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +41,8 @@ class LookAndFeelIntegrationTest {
                 CompletableFuture.runAsync(
                         () -> {
                             try {
-                                logger.info("Starting application via GuiceBootstrap...");
-                                var bootstrap = GuiceBootstrap.create();
+                                logger.info("Starting application via SwingApp...");
+                                var bootstrap = SwingApp.create();
 
                                 // Verify FlatLaf is set before starting the application
                                 String currentLaf = UIManager.getLookAndFeel().getClass().getName();

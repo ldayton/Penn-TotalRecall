@@ -46,7 +46,7 @@ public class OpenWordpoolAction extends BaseAction {
         File chosenFile =
                 ui.DialogService.class
                         .cast(
-                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                app.swing.SwingApp.getRequiredInjectedInstance(
                                         ui.DialogService.class, "DialogService"))
                         .showFileChooser(
                                 "Open Wordpool File",

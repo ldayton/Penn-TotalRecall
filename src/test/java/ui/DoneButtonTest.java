@@ -3,7 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.MacOS;
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +17,13 @@ class DoneButtonTest {
     @BeforeEach
     void setUp() {
         // Create the application bootstrap to ensure proper DI setup
-        GuiceBootstrap bootstrap = GuiceBootstrap.create();
+        SwingApp bootstrap = SwingApp.create();
 
         // Start the application to initialize XActionManager and update actions
         // This is necessary for the action system to work properly
         bootstrap.startApplication();
 
-        doneButton = GuiceBootstrap.getInjectedInstance(DoneButton.class);
+        doneButton = SwingApp.getInjectedInstance(DoneButton.class);
     }
 
     @Test
@@ -80,7 +80,7 @@ class DoneButtonTest {
     void actionsManagerShouldBeInitializedWithActionsXml() {
         // The ActionsManager should be initialized with actions.xml
         // Get the injected ShortcutFrame to trigger initialization
-        GuiceBootstrap.getInjectedInstance(ui.ShortcutFrame.class);
+        SwingApp.getInjectedInstance(ui.ShortcutFrame.class);
 
         // Actions are now event-driven, no need to call updateActions
 

@@ -1,6 +1,6 @@
-package app;
+package app.swing;
 
-import app.di.GuiceBootstrap;
+import app.AudioIntegrationMode;
 import java.util.Arrays;
 import javax.swing.SwingUtilities;
 
@@ -18,7 +18,7 @@ public class Main {
         } else {
             SwingUtilities.invokeLater(
                     () -> {
-                        GuiceBootstrap bootstrap = GuiceBootstrap.create();
+                        SwingApp bootstrap = SwingApp.create();
                         bootstrap.startApplication();
                     });
         }

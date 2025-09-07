@@ -1,9 +1,8 @@
-package app.di;
+package app.swing;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Windowing;
-import app.Main;
 import java.awt.Window;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;

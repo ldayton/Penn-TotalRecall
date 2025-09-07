@@ -1,6 +1,6 @@
 package ui.preferences;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class SavePreferencesAction extends AbstractAction {
                     bigMessage += "\n";
                 }
             }
-            DialogService dialogService = GuiceBootstrap.getInjectedInstance(DialogService.class);
+            DialogService dialogService = SwingApp.getInjectedInstance(DialogService.class);
             if (dialogService == null) {
                 throw new IllegalStateException("DialogService not available via DI");
             }

@@ -1,15 +1,15 @@
-package app.di;
+package app.swing;
 
 import audio.fmod.FmodModule;
 import com.google.inject.AbstractModule;
 
 /**
- * Guice module for dependency injection configuration.
+ * Guice module for Swing UI application dependency injection configuration.
  *
- * <p>Binds modern, constructor-injected classes for update checking and window management. FMOD
- * classes remain static for now to avoid complex migration.
+ * <p>Configures all bindings needed for the Swing-based desktop application, including UI
+ * components, audio system, and core services.
  */
-public class AppModule extends AbstractModule {
+public class SwingModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -27,9 +27,6 @@ public class AppModule extends AbstractModule {
 
         // Install env module for environment and platform bindings
         install(new env.Module());
-
-        // Install app module for application-level bindings
-        install(new app.Module());
 
         // Install ui module for user interface bindings
         install(new ui.Module());

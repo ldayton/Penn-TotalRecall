@@ -1,6 +1,6 @@
 package ui;
 
-import app.di.GuiceBootstrap;
+import app.swing.SwingApp;
 import java.awt.Point;
 import javax.swing.JFrame;
 
@@ -15,7 +15,7 @@ public class DialogCentering {
      *     PreferencesFrame</code>
      */
     public static Point chooseLocation(JFrame frame) {
-        MainWindowAccess windowService = GuiceBootstrap.getInjectedInstance(MainWindowAccess.class);
+        MainWindowAccess windowService = SwingApp.getInjectedInstance(MainWindowAccess.class);
         if (windowService == null) {
             throw new IllegalStateException("MainWindowAccess not available via DI");
         }

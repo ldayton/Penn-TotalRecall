@@ -1,4 +1,4 @@
-package app;
+package app.swing;
 
 import core.actions.PlayPauseAction;
 import env.AppConfig;

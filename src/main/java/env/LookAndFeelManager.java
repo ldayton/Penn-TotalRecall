@@ -63,7 +63,7 @@ public class LookAndFeelManager {
             desktop.setAboutHandler(
                     _ -> {
                         var aboutAction =
-                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                app.swing.SwingApp.getRequiredInjectedInstance(
                                         actions.AboutAction.class, "AboutAction");
                         var actionEvent =
                                 new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "about");
@@ -76,7 +76,7 @@ public class LookAndFeelManager {
             desktop.setPreferencesHandler(
                     _ -> {
                         var preferencesAction =
-                                app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                app.swing.SwingApp.getRequiredInjectedInstance(
                                         actions.PreferencesAction.class, "PreferencesAction");
                         var actionEvent =
                                 new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "preferences");
@@ -91,7 +91,7 @@ public class LookAndFeelManager {
                         try {
                             // Use the DI-managed ExitAction - fail fast if not available
                             var exitAction =
-                                    app.di.GuiceBootstrap.getRequiredInjectedInstance(
+                                    app.swing.SwingApp.getRequiredInjectedInstance(
                                             core.actions.ExitAction.class, "ExitAction");
                             exitAction.execute();
                             response.performQuit();
