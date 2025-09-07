@@ -1,7 +1,7 @@
 package core.actions;
 
 import events.AppStateChangedEvent;
-import events.AudioStopRequestedEvent;
+import events.AudioSeekRequestedEvent;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.Subscribe;
@@ -11,20 +11,19 @@ import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
 /**
- * Stops audio playback and resets position to the beginning using the event-driven system.
+ * Seeks audio playback to the beginning of the file.
  *
- * <p>Publishes AudioStopRequestedEvent which is handled by AudioSessionManager to stop playback and
- * reset position through the new audio engine.
+ * <p>Publishes AudioSeekRequestedEvent with frame 0 to reset position to the start.
  */
 @Singleton
-public class StopAction extends Action {
+public class SeekToStartAction extends Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
     private boolean enabled = false;
 
     @Inject
-    public StopAction(EventDispatchBus eventBus) {
+    public SeekToStartAction(EventDispatchBus eventBus) {
         this.eventBus = eventBus;
         eventBus.subscribe(this);
     }
@@ -32,7 +31,8 @@ public class StopAction extends Action {
     @Override
     public void execute() {
         if (isEnabled()) {
-            eventBus.publish(new AudioStopRequestedEvent());
+            // Seek to frame 0 (start of file)
+            eventBus.publish(new AudioSeekRequestedEvent(0));
             eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
         }
     }
@@ -44,12 +44,12 @@ public class StopAction extends Action {
 
     @Override
     public String getLabel() {
-        return "Stop";
+        return "Seek to Start";
     }
 
     @Override
     public String getTooltip() {
-        return "Stop audio playback and reset to beginning";
+        return "Seek to the beginning of the audio file";
     }
 
     @Subscribe
@@ -59,8 +59,11 @@ public class StopAction extends Action {
     }
 
     private void updateActionState() {
-        // Only enabled when playing
-        enabled = (currentState == AudioSessionStateMachine.State.PLAYING);
+        // Enabled when audio is loaded (any state except NO_AUDIO, LOADING, ERROR)
+        switch (currentState) {
+            case READY, PAUSED, PLAYING -> enabled = true;
+            default -> enabled = false;
+        }
         // Notify observers that state has changed
         notifyObservers();
     }

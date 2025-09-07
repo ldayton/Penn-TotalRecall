@@ -16,7 +16,7 @@ import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
 import core.actions.DoneAction;
 import core.actions.PlayPauseAction;
-import core.actions.StopAction;
+import core.actions.SeekToStartAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.swing.JMenu;
@@ -58,7 +58,7 @@ public class AppMenuBar extends JMenuBar {
     private final EditShortcutsAction editShortcutsAction;
     private final PreferencesAction preferencesAction;
     private final PlayPauseAction playPauseAction;
-    private final StopAction stopAction;
+    private final SeekToStartAction seekToStartAction;
     private final ReplayLast200MillisAction replayLast200MillisAction;
     // private final ReturnToLastPositionAction returnToLastPositionAction;
     // private final ReplayLastPositionAction replayLastPositionAction;
@@ -90,7 +90,7 @@ public class AppMenuBar extends JMenuBar {
             EditShortcutsAction editShortcutsAction,
             PreferencesAction preferencesAction,
             PlayPauseAction playPauseAction,
-            StopAction stopAction,
+            SeekToStartAction seekToStartAction,
             ReplayLast200MillisAction replayLast200MillisAction,
             // ReturnToLastPositionAction returnToLastPositionAction,
             // ReplayLastPositionAction replayLastPositionAction,
@@ -115,7 +115,7 @@ public class AppMenuBar extends JMenuBar {
         this.editShortcutsAction = editShortcutsAction;
         this.preferencesAction = preferencesAction;
         this.playPauseAction = playPauseAction;
-        this.stopAction = stopAction;
+        this.seekToStartAction = seekToStartAction;
         this.replayLast200MillisAction = replayLast200MillisAction;
         // this.returnToLastPositionAction = returnToLastPositionAction;
         // this.replayLastPositionAction = replayLastPositionAction;
@@ -176,7 +176,7 @@ public class AppMenuBar extends JMenuBar {
         // PlayPauseAction is now event-driven, no workaround needed
         JMenuItem jmiPlayPause = new JMenuItem(new SwingAction(playPauseAction));
 
-        JMenuItem jmiStop = new JMenuItem(new SwingAction(stopAction));
+        JMenuItem jmiSeekToStart = new JMenuItem(new SwingAction(seekToStartAction));
         JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
         // JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         // JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
@@ -216,7 +216,7 @@ public class AppMenuBar extends JMenuBar {
         jmSeek.add(jmiScreenBackward);
 
         jmAudio.add(jmiPlayPause);
-        jmAudio.add(jmiStop);
+        jmAudio.add(jmiSeekToStart);
         jmAudio.add(jmiReplay);
         // jmAudio.add(jmiLastPos);
         // jmAudio.add(jmiReplayLast);
