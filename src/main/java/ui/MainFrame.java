@@ -1,17 +1,17 @@
 package ui;
 
 import core.actions.ExitAction;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
+import core.events.ErrorRequestedEvent;
+import core.events.ExitRequestedEvent;
+import core.events.FocusRequestedEvent;
+import core.events.InfoRequestedEvent;
+import core.events.PreferencesRequestedEvent;
 import events.AudioFileSwitchedEvent;
-import events.ErrorRequestedEvent;
-import events.EventDispatchBus;
-import events.ExitRequestedEvent;
-import events.FocusRequestedEvent;
-import events.InfoRequestedEvent;
-import events.PreferencesRequestedEvent;
-import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;

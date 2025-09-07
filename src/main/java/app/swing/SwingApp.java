@@ -185,7 +185,7 @@ public class SwingApp {
         // Wait for UI to be fully ready before publishing UIReadyEvent
         // This ensures canvas is sized and initial paint has occurred
         var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
-        var eventBus = globalInjector.getInstance(events.EventDispatchBus.class);
+        var eventBus = globalInjector.getInstance(core.dispatch.EventDispatchBus.class);
 
         javax.swing.Timer readyTimer =
                 new javax.swing.Timer(
@@ -196,7 +196,7 @@ public class SwingApp {
                                     && canvas.getHeight() > 0) {
                                 // UI is ready - canvas is visible and sized
                                 ((javax.swing.Timer) e.getSource()).stop();
-                                eventBus.publish(new events.UIReadyEvent());
+                                eventBus.publish(new core.events.UIReadyEvent());
                                 logger.info("UI is ready - publishing UIReadyEvent");
                             }
                         });

@@ -1,12 +1,12 @@
 package state;
 
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.Constants;
+import core.events.AnnotationCompleteRequestedEvent;
+import core.events.AudioFileCloseRequestedEvent;
+import core.events.ErrorRequestedEvent;
 import core.util.OsPath;
-import events.AnnotationCompleteRequestedEvent;
-import events.AudioFileCloseRequestedEvent;
-import events.ErrorRequestedEvent;
-import events.EventDispatchBus;
-import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;

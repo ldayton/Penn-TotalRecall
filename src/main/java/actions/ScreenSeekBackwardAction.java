@@ -1,9 +1,9 @@
 package actions;
 
-import events.AppStateChangedEvent;
-import events.EventDispatchBus;
-import events.ScreenSeekRequestedEvent;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AppStateChangedEvent;
+import core.events.ScreenSeekRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

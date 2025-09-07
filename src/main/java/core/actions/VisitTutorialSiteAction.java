@@ -1,8 +1,8 @@
 package core.actions;
 
+import core.dispatch.EventDispatchBus;
 import core.env.Constants;
-import events.EventDispatchBus;
-import events.OpenUrlRequestedEvent;
+import core.events.OpenUrlRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

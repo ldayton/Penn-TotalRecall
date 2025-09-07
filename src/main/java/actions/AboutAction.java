@@ -1,10 +1,10 @@
 package actions;
 
+import core.dispatch.EventDispatchBus;
 import core.env.Constants;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
-import events.EventDispatchBus;
-import events.InfoRequestedEvent;
+import core.events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

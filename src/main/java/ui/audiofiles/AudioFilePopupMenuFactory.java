@@ -1,7 +1,7 @@
 package ui.audiofiles;
 
 import actions.ContinueAnnotatingAction;
-import events.EventDispatchBus;
+import core.dispatch.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

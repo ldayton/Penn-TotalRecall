@@ -1,7 +1,7 @@
 package core.env;
 
-import events.EventDispatchBus;
-import events.InfoRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.net.URI;

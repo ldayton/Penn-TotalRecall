@@ -1,11 +1,11 @@
 package actions;
 
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
-import events.AppStateChangedEvent;
-import events.AudioSeekRequestedEvent;
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
-import events.Subscribe;
+import core.events.AppStateChangedEvent;
+import core.events.AudioSeekRequestedEvent;
+import core.events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

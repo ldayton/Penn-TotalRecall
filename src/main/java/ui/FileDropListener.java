@@ -1,9 +1,9 @@
 package ui;
 
+import core.dispatch.EventDispatchBus;
 import core.env.Constants;
+import core.events.WordpoolFileSelectedEvent;
 import core.util.OsPath;
-import events.EventDispatchBus;
-import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.dnd.DropTargetDropEvent;

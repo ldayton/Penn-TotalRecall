@@ -1,9 +1,9 @@
 package ui;
 
-import events.EventDispatchBus;
-import events.InfoRequestedEvent;
-import events.OpenUrlRequestedEvent;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.InfoRequestedEvent;
+import core.events.OpenUrlRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;

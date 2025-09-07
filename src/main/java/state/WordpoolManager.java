@@ -1,11 +1,11 @@
 package state;
 
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.Constants;
+import core.events.ErrorRequestedEvent;
+import core.events.WordpoolFileSelectedEvent;
 import core.util.OsPath;
-import events.ErrorRequestedEvent;
-import events.EventDispatchBus;
-import events.Subscribe;
-import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;

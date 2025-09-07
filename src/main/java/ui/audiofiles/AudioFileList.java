@@ -1,9 +1,9 @@
 package ui.audiofiles;
 
-import events.AppStateChangedEvent;
-import events.AudioFileListEvent;
-import events.EventDispatchBus;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AppStateChangedEvent;
+import core.events.AudioFileListEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

@@ -1,7 +1,7 @@
 package actions;
 
-import events.EventDispatchBus;
-import events.PreferencesRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.events.PreferencesRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

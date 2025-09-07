@@ -1,10 +1,10 @@
 package actions;
 
-import events.AppStateChangedEvent;
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
-import events.Last200PlusMoveRequestedEvent;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AppStateChangedEvent;
+import core.events.FocusRequestedEvent;
+import core.events.Last200PlusMoveRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

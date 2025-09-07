@@ -1,10 +1,10 @@
 package core.actions;
 
-import events.AppStateChangedEvent;
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
-import events.Subscribe;
-import events.ZoomOutRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AppStateChangedEvent;
+import core.events.FocusRequestedEvent;
+import core.events.ZoomOutRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;

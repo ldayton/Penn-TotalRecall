@@ -1,9 +1,9 @@
 package actions;
 
+import core.dispatch.EventDispatchBus;
 import core.env.Constants;
+import core.events.ErrorRequestedEvent;
 import core.util.OsPath;
-import events.ErrorRequestedEvent;
-import events.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

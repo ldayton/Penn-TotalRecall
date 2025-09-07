@@ -1,7 +1,7 @@
 package ui.wordpool;
 
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

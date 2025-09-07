@@ -1,10 +1,10 @@
 package actions;
 
+import core.dispatch.EventDispatchBus;
 import core.env.Constants;
 import core.env.PreferenceKeys;
 import core.env.UserHomeProvider;
-import events.EventDispatchBus;
-import events.WordpoolFileSelectedEvent;
+import core.events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

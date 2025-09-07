@@ -1,11 +1,11 @@
 package app.swing;
 
 import core.actions.PlayPauseAction;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.AppConfig;
-import events.EventDispatchBus;
-import events.Subscribe;
-import events.UIReadyEvent;
-import events.WordpoolFileSelectedEvent;
+import core.events.UIReadyEvent;
+import core.events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseEvent;

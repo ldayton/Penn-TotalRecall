@@ -1,9 +1,9 @@
 package ui.wordpool;
 
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
-import events.Subscribe;
+import core.events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -66,7 +66,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                eventBus.publish(new events.RegularAnnotationRequestedEvent());
+                                eventBus.publish(new core.events.RegularAnnotationRequestedEvent());
                             }
                         });
         getActionMap()
@@ -75,7 +75,8 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                eventBus.publish(new events.IntrusionAnnotationRequestedEvent());
+                                eventBus.publish(
+                                        new core.events.IntrusionAnnotationRequestedEvent());
                             }
                         });
 

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import events.EventDispatchBus;
+import core.dispatch.EventDispatchBus;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;

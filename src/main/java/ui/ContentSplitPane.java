@@ -4,9 +4,9 @@ import actions.ActionsManager;
 // import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import core.actions.PlayPauseAction;
-import events.EventDispatchBus;
-import events.LayoutUpdateRequestedEvent;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.LayoutUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;

@@ -1,11 +1,11 @@
 package ui.audiofiles;
 
 import app.swing.SwingApp;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.env.PreferenceKeys;
-import events.EventDispatchBus;
-import events.Subscribe;
-import events.UIUpdateRequestedEvent;
+import core.events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -175,7 +175,7 @@ public class AudioFileDisplay extends JScrollPane {
         // Use the new event-driven system to load the file
         var eventBus =
                 SwingApp.getRequiredInjectedInstance(
-                        events.EventDispatchBus.class, "EventDispatchBus");
+                        core.dispatch.EventDispatchBus.class, "EventDispatchBus");
         eventBus.publish(new events.AudioFileLoadRequestedEvent(file));
 
         // UI updates are now handled via events

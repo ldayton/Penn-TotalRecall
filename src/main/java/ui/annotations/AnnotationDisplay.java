@@ -1,9 +1,9 @@
 package ui.annotations;
 
 import app.swing.SwingApp;
-import events.EventDispatchBus;
-import events.Subscribe;
-import events.UIUpdateRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.UIUpdateRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;

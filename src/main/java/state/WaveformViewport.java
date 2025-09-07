@@ -1,11 +1,11 @@
 package state;
 
-import events.AudioSeekRequestedEvent;
-import events.EventDispatchBus;
-import events.ScreenSeekRequestedEvent;
-import events.Subscribe;
-import events.ZoomInRequestedEvent;
-import events.ZoomOutRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AudioSeekRequestedEvent;
+import core.events.ScreenSeekRequestedEvent;
+import core.events.ZoomInRequestedEvent;
+import core.events.ZoomOutRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;

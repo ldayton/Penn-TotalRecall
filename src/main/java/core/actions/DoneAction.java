@@ -1,10 +1,10 @@
 package core.actions;
 
-import events.AnnotationCompleteRequestedEvent;
-import events.AppStateChangedEvent;
-import events.EventDispatchBus;
-import events.FocusRequestedEvent;
-import events.Subscribe;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AnnotationCompleteRequestedEvent;
+import core.events.AppStateChangedEvent;
+import core.events.FocusRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;

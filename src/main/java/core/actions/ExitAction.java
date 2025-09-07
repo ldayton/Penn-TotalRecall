@@ -1,7 +1,7 @@
 package core.actions;
 
-import events.EventDispatchBus;
-import events.ExitRequestedEvent;
+import core.dispatch.EventDispatchBus;
+import core.events.ExitRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

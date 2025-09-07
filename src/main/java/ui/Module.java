@@ -55,5 +55,10 @@ public class Module extends AbstractModule {
         bind(MainWindowAccess.class).in(Singleton.class);
         bind(KeyboardManager.class).in(Singleton.class);
         bind(LookAndFeelManager.class).in(Singleton.class);
+
+        // Event dispatch binding for Swing
+        bind(core.dispatch.EventDispatcher.class)
+                .to(SwingEventDispatcher.class)
+                .in(Singleton.class);
     }
 }
