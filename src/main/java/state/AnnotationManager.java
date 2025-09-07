@@ -1,5 +1,6 @@
 package state;
 
+import core.util.OsPath;
 import env.Constants;
 import events.AnnotationCompleteRequestedEvent;
 import events.AudioFileCloseRequestedEvent;
@@ -13,7 +14,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import ui.audiofiles.AudioFile;
 import ui.audiofiles.AudioFile.AudioFilePathException;
-import util.OsPath;
 
 /** Manages annotation operations including marking files complete. */
 @Singleton

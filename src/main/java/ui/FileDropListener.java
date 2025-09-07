@@ -1,5 +1,6 @@
 package ui;
 
+import core.util.OsPath;
 import env.Constants;
 import events.EventDispatchBus;
 import events.WordpoolFileSelectedEvent;
@@ -14,7 +15,6 @@ import state.WaveformSessionDataSource;
 import ui.audiofiles.AudioFileDisplay;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolFileParser;
-import util.OsPath;
 
 /**
  * A <code>FileDrop.Listener</code> that catches directories and folders dropped on <code>MainFrame

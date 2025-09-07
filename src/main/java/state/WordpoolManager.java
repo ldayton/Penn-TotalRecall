@@ -1,5 +1,6 @@
 package state;
 
+import core.util.OsPath;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolFileParser;
 import ui.wordpool.WordpoolWord;
-import util.OsPath;
 
 /** Manages wordpool loading and display. */
 @Singleton

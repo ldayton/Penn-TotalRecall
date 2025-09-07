@@ -1,5 +1,6 @@
 package ui.audiofiles;
 
+import core.util.IndexedUniqueList;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.ListModel;
@@ -7,7 +8,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import util.IndexedUniqueList;
 
 /**
  * A very simple <code>ListModel</code> that guarantees elements remain sorted and without

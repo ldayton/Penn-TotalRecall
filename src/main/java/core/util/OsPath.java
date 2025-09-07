@@ -1,4 +1,4 @@
-package util;
+package core.util;
 
 /** Collection of static methods on file system paths, a la Python's os.path */
 public class OsPath {

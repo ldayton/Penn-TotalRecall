@@ -1,5 +1,6 @@
 package actions;
 
+import core.util.OsPath;
 import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.audiofiles.AudioFile;
 import ui.audiofiles.AudioFile.AudioFilePathException;
-import util.OsPath;
 
 /** Reopens a file which was already done being annotated. */
 @Singleton

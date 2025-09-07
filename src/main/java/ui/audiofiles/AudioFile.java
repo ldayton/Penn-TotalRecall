@@ -1,12 +1,12 @@
 package ui.audiofiles;
 
+import core.util.OsPath;
 import env.Constants;
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import util.OsPath;
 
 /**
  * A <code>File</code> that represents an audio file for the purpose of representation in the <code>

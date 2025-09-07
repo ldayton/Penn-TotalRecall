@@ -1,5 +1,6 @@
 package ui.annotations;
 
+import core.util.OsPath;
 import env.Constants;
 import env.ProgramVersion;
 import java.io.BufferedReader;
@@ -18,7 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.OsPath;
 
 /** Handles manipulations of annotation files, e.g. adding and removing annotations. */
 public class AnnotationFileParser {
