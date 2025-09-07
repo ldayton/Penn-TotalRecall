@@ -76,14 +76,4 @@ public class ActionRegistry {
     public Optional<SwingAction> getSwingAction(Class<? extends Action> actionClass) {
         return Optional.ofNullable(swingAdapters.get(actionClass));
     }
-
-    /**
-     * Update the state of all Swing adapters.
-     *
-     * <p>This should be called periodically or in response to state changes to update the enabled
-     * state of all actions in the UI.
-     */
-    public void updateAllStates() {
-        swingAdapters.values().forEach(SwingAction::updateState);
-    }
 }

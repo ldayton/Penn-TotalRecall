@@ -1,6 +1,6 @@
 package app;
 
-import actions.PlayPauseAction;
+import core.actions.PlayPauseAction;
 import env.AppConfig;
 import events.EventDispatchBus;
 import events.Subscribe;
@@ -144,7 +144,7 @@ public class DevModeFileAutoLoader {
                                         200,
                                         e -> {
                                             logger.info("Development mode: auto-starting playback");
-                                            playPauseAction.actionPerformed(e);
+                                            playPauseAction.execute();
                                         });
                         autoPlayTimer.setRepeats(false);
                         autoPlayTimer.start();

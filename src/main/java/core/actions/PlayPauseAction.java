@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import events.AppStateChangedEvent;
 import events.AudioPlayPauseRequestedEvent;
@@ -7,7 +7,6 @@ import events.FocusRequestedEvent;
 import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
@@ -18,25 +17,43 @@ import state.AudioSessionStateMachine;
  * playback through the new audio engine.
  */
 @Singleton
-public class PlayPauseAction extends BaseAction {
+public class PlayPauseAction extends Action {
 
     private static final String PLAY_TEXT = "Play";
     private static final String PAUSE_TEXT = "Pause";
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+    private boolean enabled = false;
+    private String label = PLAY_TEXT;
 
     @Inject
     public PlayPauseAction(EventDispatchBus eventBus) {
-        super(PLAY_TEXT, "Play or pause audio playback");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
-        eventBus.publish(new AudioPlayPauseRequestedEvent());
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    public void execute() {
+        if (isEnabled()) {
+            eventBus.publish(new AudioPlayPauseRequestedEvent());
+            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Play or pause audio playback";
     }
 
     @Subscribe
@@ -48,17 +65,19 @@ public class PlayPauseAction extends BaseAction {
     private void updateActionState() {
         switch (currentState) {
             case NO_AUDIO, LOADING, ERROR -> {
-                putValue(NAME, PLAY_TEXT);
-                setEnabled(false);
+                label = PLAY_TEXT;
+                enabled = false;
             }
             case READY, PAUSED -> {
-                putValue(NAME, PLAY_TEXT);
-                setEnabled(true);
+                label = PLAY_TEXT;
+                enabled = true;
             }
             case PLAYING -> {
-                putValue(NAME, PAUSE_TEXT);
-                setEnabled(true);
+                label = PAUSE_TEXT;
+                enabled = true;
             }
         }
+        // Notify observers that state has changed
+        notifyObservers();
     }
 }

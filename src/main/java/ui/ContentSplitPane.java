@@ -3,7 +3,7 @@ package ui;
 import actions.ActionsManager;
 // import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
-import actions.PlayPauseAction;
+import core.actions.PlayPauseAction;
 import events.EventDispatchBus;
 import events.LayoutUpdateRequestedEvent;
 import events.Subscribe;
@@ -14,6 +14,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import ui.swing.SwingAction;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.
@@ -67,7 +68,7 @@ public class ContentSplitPane extends JSplitPane {
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
 
-        getActionMap().put("play", playPauseAction);
+        getActionMap().put("play", new SwingAction(playPauseAction));
 
         // Annotation intrusion action disabled
         // InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);

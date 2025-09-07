@@ -1,68 +1,79 @@
 package core.actions;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- * Core action interface that is UI-framework agnostic.
+ * Base class for all actions in the application.
  *
- * <p>Actions represent commands that can be executed in the application. They provide metadata for
- * UI binding but have no dependencies on Swing or any other UI framework.
+ * <p>Actions encapsulate executable behavior with observable state. UI frameworks can observe
+ * actions to update their representations when the action's state changes.
  */
-public interface Action {
-    /** Execute the action's command. */
-    void execute();
+public abstract class Action {
+    private final List<Runnable> observers = new CopyOnWriteArrayList<>();
+
+    /** Execute this action's behavior. */
+    public abstract void execute();
 
     /**
-     * Check if this action is currently enabled.
+     * Whether this action is currently enabled.
      *
      * @return true if the action can be executed
      */
-    default boolean isEnabled() {
-        return true;
-    }
+    public abstract boolean isEnabled();
 
     /**
-     * Get the display label for this action.
+     * The display label for this action.
      *
-     * @return the action's label for UI display
+     * @return the label to display in UI
      */
-    default String getLabel() {
-        // Default to simple class name without "Action" suffix
-        String name = getClass().getSimpleName();
-        return name.endsWith("Action") ? name.substring(0, name.length() - 6) : name;
-    }
+    public abstract String getLabel();
 
     /**
-     * Get the tooltip text for this action.
+     * The tooltip text for this action.
      *
-     * @return tooltip text, or empty string if none
+     * @return the tooltip text, or empty string if none
      */
-    default String getTooltip() {
+    public String getTooltip() {
         return "";
     }
 
     /**
-     * Get the keyboard shortcut for this action.
+     * The keyboard shortcut for this action.
      *
-     * @return shortcut string like "ctrl+S" or null if no shortcut
+     * @return the shortcut string (e.g., "ctrl+S"), or null if none
      */
-    default String getShortcut() {
+    public String getShortcut() {
         return null;
     }
 
     /**
-     * Get the menu category for this action.
+     * Add an observer to be notified when this action's state changes.
      *
-     * @return menu category like "File", "Edit", "Audio", or null for no menu
+     * @param observer the observer to add
      */
-    default String getMenuCategory() {
-        return null;
+    public final void addObserver(Runnable observer) {
+        if (observer != null) {
+            observers.add(observer);
+            // Immediately notify to sync initial state
+            observer.run();
+        }
     }
 
     /**
-     * Get the sort order within the menu category.
+     * Remove an observer.
      *
-     * @return sort order (lower numbers appear first)
+     * @param observer the observer to remove
      */
-    default int getMenuOrder() {
-        return 100;
+    public final void removeObserver(Runnable observer) {
+        observers.remove(observer);
+    }
+
+    /**
+     * Notify all observers that this action's state has changed. Subclasses should call this when
+     * their state changes.
+     */
+    protected final void notifyObservers() {
+        observers.forEach(Runnable::run);
     }
 }

@@ -4,18 +4,18 @@ import actions.AboutAction;
 // import actions.AnnotateIntrusionAction;
 // import actions.AnnotateRegularAction;
 import actions.CheckUpdatesAction;
-import actions.DoneAction;
 import actions.EditShortcutsAction;
 import actions.ExitAction;
 import actions.Last200PlusMoveAction;
 import actions.OpenWordpoolAction;
-import actions.PlayPauseAction;
 import actions.PreferencesAction;
 import actions.ReplayLast200MillisAction;
 // import actions.ReplayLastPositionAction;
 // import actions.ReturnToLastPositionAction;
 import actions.TipsMessageAction;
 import actions.VisitTutorialSiteAction;
+import core.actions.DoneAction;
+import core.actions.PlayPauseAction;
 import core.actions.StopAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -174,7 +174,7 @@ public class AppMenuBar extends JMenuBar {
         JMenu jmAudio = new JMenu("Controls");
 
         // PlayPauseAction is now event-driven, no workaround needed
-        JMenuItem jmiPlayPause = new JMenuItem(playPauseAction);
+        JMenuItem jmiPlayPause = new JMenuItem(new SwingAction(playPauseAction));
 
         JMenuItem jmiStop = new JMenuItem(new SwingAction(stopAction));
         JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
@@ -227,7 +227,7 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the annotation menu. */
     private void initAnnotationMenu() {
         JMenu jmAnnotation = new JMenu("Annotation");
-        JMenuItem jmiDone = new JMenuItem(doneAction);
+        JMenuItem jmiDone = new JMenuItem(new SwingAction(doneAction));
         jmAnnotation.add(jmiDone);
         // JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
         // jmiNextAnn.setText("Next Annotation");

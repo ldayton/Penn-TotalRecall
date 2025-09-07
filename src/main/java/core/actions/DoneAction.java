@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import events.AnnotationCompleteRequestedEvent;
 import events.AppStateChangedEvent;
@@ -7,7 +7,6 @@ import events.FocusRequestedEvent;
 import events.Subscribe;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
@@ -19,24 +18,39 @@ import state.AudioSessionStateMachine;
  * actual completion logic.
  */
 @Singleton
-public class DoneAction extends BaseAction {
+public class DoneAction extends Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+    private boolean enabled = false;
 
     @Inject
     public DoneAction(EventDispatchBus eventBus) {
-        super("Mark Complete", "Mark current annotation file complete");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
-        // Start disabled until we know audio is loaded
-        setEnabled(false);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
-        eventBus.publish(new AnnotationCompleteRequestedEvent());
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    public void execute() {
+        if (isEnabled()) {
+            eventBus.publish(new AnnotationCompleteRequestedEvent());
+            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Mark Complete";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Mark current annotation file complete";
     }
 
     @Subscribe
@@ -48,8 +62,10 @@ public class DoneAction extends BaseAction {
     private void updateActionState() {
         // A file can be marked done only if audio is open and not playing
         switch (currentState) {
-            case READY, PAUSED -> setEnabled(true);
-            default -> setEnabled(false);
+            case READY, PAUSED -> enabled = true;
+            default -> enabled = false;
         }
+        // Notify observers that state has changed
+        notifyObservers();
     }
 }

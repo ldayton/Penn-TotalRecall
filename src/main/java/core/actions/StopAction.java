@@ -17,7 +17,7 @@ import state.AudioSessionStateMachine;
  * reset position through the new audio engine.
  */
 @Singleton
-public class StopAction implements Action {
+public class StopAction extends Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
@@ -61,5 +61,7 @@ public class StopAction implements Action {
     private void updateActionState() {
         // Only enabled when playing
         enabled = (currentState == AudioSessionStateMachine.State.PLAYING);
+        // Notify observers that state has changed
+        notifyObservers();
     }
 }

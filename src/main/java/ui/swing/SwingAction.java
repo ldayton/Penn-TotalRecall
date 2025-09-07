@@ -9,7 +9,8 @@ import javax.swing.KeyStroke;
  * Adapter that wraps a core Action for use with Swing.
  *
  * <p>This adapter allows UI-agnostic Action implementations to be used with Swing components while
- * keeping the core action logic free of UI framework dependencies.
+ * keeping the core action logic free of UI framework dependencies. It automatically observes state
+ * changes and updates the Swing representation.
  */
 public class SwingAction extends AbstractAction {
     private final Action action;
@@ -28,6 +29,9 @@ public class SwingAction extends AbstractAction {
         if (tooltip != null && !tooltip.isEmpty()) {
             putValue(SHORT_DESCRIPTION, tooltip);
         }
+
+        // Observe state changes
+        action.addObserver(this::updateFromAction);
 
         // Parse and set keyboard shortcut if provided
         String shortcut = action.getShortcut();
@@ -58,11 +62,14 @@ public class SwingAction extends AbstractAction {
         }
     }
 
-    /** Update the enabled state from the wrapped action. */
-    public void updateState() {
+    /** Update this Swing action from the wrapped action's current state. */
+    private void updateFromAction() {
         setEnabled(action.isEnabled());
-        // Could also update label if it changes dynamically
         putValue(NAME, action.getLabel());
+        String tooltip = action.getTooltip();
+        if (tooltip != null && !tooltip.isEmpty()) {
+            putValue(SHORT_DESCRIPTION, tooltip);
+        }
     }
 
     /**
