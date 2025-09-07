@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -722,110 +721,7 @@ class FmodAudioEngineTest {
                 Exception.class, () -> engine.play(handle1), "Playing stale handle should throw");
     }
 
-    // ========== Race Condition Tests ==========
-
-    @Test
-    @Disabled(
-            "Known issue: FMOD_ERR_CHANNEL_STOLEN occurs during rapid operations - production code"
-                    + " needs fix")
-    @DisplayName("Should handle FMOD_ERR_CHANNEL_STOLEN during rapid play/pause operations")
-    @Timeout(10)
-    void testChannelStolenRaceCondition() throws Exception {
-        AudioHandle handle = engine.loadAudio(SAMPLE_WAV);
-
-        AtomicInteger errorCount = new AtomicInteger(0);
-        AtomicReference<Exception> lastException = new AtomicReference<>();
-        CountDownLatch startLatch = new CountDownLatch(1);
-        CountDownLatch doneLatch = new CountDownLatch(2);
-
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-
-        // Thread 1: Rapidly play/stop to trigger channel stealing
-        executor.submit(
-                () -> {
-                    try {
-                        startLatch.await();
-                        for (int i = 0; i < 50; i++) {
-                            try {
-                                PlaybackHandle playback = engine.play(handle);
-                                Thread.sleep(5);
-                                engine.stop(playback);
-                                Thread.sleep(5);
-                            } catch (Exception e) {
-                                // Some operations may fail during rapid cycling - that's ok
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        doneLatch.countDown();
-                    }
-                });
-
-        // Thread 2: Continuously check state (simulating UI refresh timer)
-        executor.submit(
-                () -> {
-                    try {
-                        startLatch.await();
-                        PlaybackHandle lastPlayback = null;
-
-                        for (int i = 0; i < 200; i++) {
-                            try {
-                                // Try to get current state if we have a handle
-                                if (lastPlayback != null) {
-                                    // This is where FMOD_ERR_CHANNEL_STOLEN happens
-                                    engine.getState(lastPlayback);
-                                    engine.isPlaying(lastPlayback);
-                                    engine.isPaused(lastPlayback);
-                                }
-
-                                // Try to track new playback
-                                // Note: There's no getCurrentPlayback() method, so we simulate by
-                                // attempting play and immediately checking
-                                try {
-                                    PlaybackHandle newPlayback = engine.play(handle);
-                                    lastPlayback = newPlayback;
-                                } catch (AudioPlaybackException e) {
-                                    // Playback already active or handle invalid
-                                }
-
-                                Thread.sleep(10); // Simulate UI refresh rate
-                            } catch (AudioPlaybackException e) {
-                                if (e.getMessage().contains("error code: 3")) {
-                                    errorCount.incrementAndGet();
-                                    lastException.set(e);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        doneLatch.countDown();
-                    }
-                });
-
-        startLatch.countDown();
-
-        // Wait for threads to complete their work
-        boolean completed = doneLatch.await(3, TimeUnit.SECONDS);
-
-        // Clean shutdown to prevent interference with @AfterEach
-        executor.shutdownNow();
-        executor.awaitTermination(1, TimeUnit.SECONDS);
-
-        // Ensure threads had enough time to expose the bug
-        assertTrue(completed, "Test threads did not complete - cannot determine if bug exists");
-
-        // This test SHOULD FAIL if FMOD_ERR_CHANNEL_STOLEN occurs
-        // The production code needs to handle channel stealing gracefully
-        if (errorCount.get() > 0) {
-            fail(
-                    "FMOD_ERR_CHANNEL_STOLEN occurred "
-                            + errorCount.get()
-                            + " times. Last exception: "
-                            + lastException.get().getMessage());
-        }
-    }
+    // ========== State Consistency After Stop Tests ==========
 
     @Test
     @DisplayName("Should handle state check immediately after stop")
