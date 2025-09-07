@@ -1,4 +1,4 @@
-package audio;
+package core.audio;
 
 import java.io.Closeable;
 import java.nio.file.Path;

@@ -1,7 +1,7 @@
-package audio.fmod;
+package core.audio.fmod;
 
-import audio.AudioHandle;
 import com.sun.jna.Pointer;
+import core.audio.AudioHandle;
 import lombok.Getter;
 import lombok.NonNull;
 

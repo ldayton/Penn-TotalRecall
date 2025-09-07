@@ -1,8 +1,8 @@
 package ui.annotations;
 
+import core.env.Constants;
+import core.env.ProgramVersion;
 import core.util.OsPath;
-import env.Constants;
-import env.ProgramVersion;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

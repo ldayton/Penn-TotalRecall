@@ -1,10 +1,10 @@
-package audio.fmod;
+package core.audio.fmod;
 
-import audio.*;
-import audio.exceptions.AudioEngineException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.*;
+import core.audio.exceptions.AudioEngineException;
 import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;

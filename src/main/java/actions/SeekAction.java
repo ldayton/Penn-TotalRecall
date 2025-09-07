@@ -1,6 +1,6 @@
 package actions;
 
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import events.AppStateChangedEvent;
 import events.AudioSeekRequestedEvent;
 import events.EventDispatchBus;

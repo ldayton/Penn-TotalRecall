@@ -1,4 +1,4 @@
-package env;
+package core.env;
 
 /**
  * Constants for preference keys used throughout the application.

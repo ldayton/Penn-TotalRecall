@@ -1,10 +1,9 @@
 package ui;
 
 import core.actions.ExitAction;
-import env.LookAndFeelManager;
-import env.PreferenceKeys;
-import env.ProgramName;
-import env.ProgramVersion;
+import core.env.PreferenceKeys;
+import core.env.ProgramName;
+import core.env.ProgramVersion;
 import events.AudioFileSwitchedEvent;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;

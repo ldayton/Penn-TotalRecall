@@ -1,11 +1,11 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
-import audio.fmod.FmodLibraryLoader.LibraryType;
-import env.AppConfig;
-import env.Platform;
+import core.audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
+import core.audio.fmod.FmodLibraryLoader.LibraryType;
+import core.env.AppConfig;
+import core.env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

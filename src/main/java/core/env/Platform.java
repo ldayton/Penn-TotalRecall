@@ -1,4 +1,4 @@
-package env;
+package core.env;
 
 import jakarta.inject.Singleton;
 import java.util.Locale;

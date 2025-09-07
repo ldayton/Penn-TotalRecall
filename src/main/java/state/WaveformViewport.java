@@ -121,7 +121,7 @@ public class WaveformViewport {
     /**
      * Update viewport position to follow playback with smooth scrolling. Keeps playhead centered
      * (50%) when possible, but allows it to move from 0-50% at the start and 50-100% at the end of
-     * the audio.
+     * the core.audio.
      */
     public void followPlayback(double playbackPosition, double totalDuration, boolean isPlaying) {
         if (totalDuration <= 0) {

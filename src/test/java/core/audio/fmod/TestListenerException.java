@@ -1,4 +1,4 @@
-package audio.fmod;
+package core.audio.fmod;
 
 /**
  * Exception intentionally thrown by test listeners to verify error handling. This class exists

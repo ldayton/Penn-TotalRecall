@@ -83,7 +83,7 @@ public class AppMenuBar extends JMenuBar {
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AppMenuBar(
-            env.LookAndFeelManager lookAndFeelManager,
+            ui.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
             actions.ActionsManager actionsManager,

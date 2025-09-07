@@ -3,13 +3,13 @@ package app.swing;
 import actions.ActionsManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import env.LookAndFeelManager;
-import env.UpdateManager;
+import core.env.UpdateManager;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.AppFocusTraversalPolicy;
 import ui.ContentSplitPane;
+import ui.LookAndFeelManager;
 import ui.MainFrame;
 import ui.WindowLayoutPersistence;
 
@@ -86,9 +86,10 @@ public class SwingApp {
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
-        // Initialize ActionRegistry which auto-registers all actions
-        // The registry is created by Guice with all actions auto-discovered and injected
+        // Initialize ActionRegistry and SwingActionRegistry
+        // The registries are created by Guice with all actions auto-discovered and injected
         globalInjector.getInstance(core.actions.ActionRegistry.class);
+        globalInjector.getInstance(ui.SwingActionRegistry.class);
 
         return bootstrap;
     }
@@ -110,10 +111,10 @@ public class SwingApp {
             System.setProperty("apple.awt.rendering", "quality");
             System.setProperty("apple.awt.application.appearance", "system");
             // Load app name from config since this runs before DI
-            env.AppConfig tempConfig = new env.AppConfig();
+            core.env.AppConfig tempConfig = new core.env.AppConfig();
             System.setProperty(
                     "apple.awt.application.name",
-                    tempConfig.getProperty(env.AppConfig.APP_NAME_KEY));
+                    tempConfig.getProperty(core.env.AppConfig.APP_NAME_KEY));
         }
     }
 

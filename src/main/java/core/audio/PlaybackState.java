@@ -1,4 +1,4 @@
-package audio;
+package core.audio;
 
 public enum PlaybackState {
     STOPPED,

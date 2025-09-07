@@ -1,4 +1,4 @@
-package audio;
+package core.audio;
 
 import java.io.IOException;
 import java.nio.file.Path;

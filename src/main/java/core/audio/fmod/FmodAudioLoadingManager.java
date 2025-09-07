@@ -1,15 +1,15 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
-import audio.AudioHandle;
-import audio.AudioMetadata;
-import audio.exceptions.AudioEngineException;
-import audio.exceptions.AudioLoadException;
 import com.google.inject.Inject;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
+import core.audio.exceptions.AudioEngineException;
+import core.audio.exceptions.AudioLoadException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -106,7 +106,7 @@ class FmodAudioLoadingManager {
     }
 
     /**
-     * Get metadata for the currently loaded audio. This method acquires the loadingLock for
+     * Get metadata for the currently loaded core.audio. This method acquires the loadingLock for
      * thread-safe operations.
      *
      * @return Metadata if audio is loaded, empty otherwise
@@ -138,7 +138,7 @@ class FmodAudioLoadingManager {
     }
 
     /**
-     * Check if the given handle represents the current audio.
+     * Check if the given handle represents the current core.audio.
      *
      * @param handle The handle to check
      * @return true if this is the current audio

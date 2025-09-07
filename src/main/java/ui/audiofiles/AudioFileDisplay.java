@@ -1,8 +1,8 @@
 package ui.audiofiles;
 
 import app.swing.SwingApp;
-import env.Constants;
-import env.PreferenceKeys;
+import core.env.Constants;
+import core.env.PreferenceKeys;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIUpdateRequestedEvent;

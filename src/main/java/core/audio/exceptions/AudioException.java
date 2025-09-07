@@ -1,4 +1,4 @@
-package audio.exceptions;
+package core.audio.exceptions;
 
 import lombok.NonNull;
 

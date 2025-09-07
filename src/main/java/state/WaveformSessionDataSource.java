@@ -1,6 +1,6 @@
 package state;
 
-import audio.AudioHandle;
+import core.audio.AudioHandle;
 import java.util.Optional;
 
 /**
@@ -21,7 +21,7 @@ public interface WaveformSessionDataSource {
     /** Check if currently playing. */
     boolean isPlaying();
 
-    /** Check if currently loading audio. */
+    /** Check if currently loading core.audio. */
     boolean isLoading();
 
     /** Get any error message to display. */
@@ -33,7 +33,7 @@ public interface WaveformSessionDataSource {
     /** Get the current audio file path. */
     Optional<String> getCurrentAudioFilePath();
 
-    /** Get the sample rate of the current audio. */
+    /** Get the sample rate of the current core.audio. */
     Optional<Integer> getSampleRate();
 
     /** Get the current playback position in frames. Returns empty if not playing/paused. */

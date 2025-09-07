@@ -1,9 +1,9 @@
-package audio;
+package core.audio;
 
-import audio.fmod.FmodAudioEngine;
-import audio.fmod.FmodSampleReader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import core.audio.fmod.FmodAudioEngine;
+import core.audio.fmod.FmodSampleReader;
 
 /**
  * Guice module for the a2 (audio engine) package.

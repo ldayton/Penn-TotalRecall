@@ -1,7 +1,7 @@
 package ui.preferences;
 
 import app.swing.SwingApp;
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import javax.swing.JSpinner;

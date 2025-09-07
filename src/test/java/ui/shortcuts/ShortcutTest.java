@@ -2,14 +2,14 @@ package ui.shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import env.KeyboardManager;
-import env.Platform;
+import core.env.Platform;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import ui.KeyboardManager;
 
 /**
  * Tests that verify the Shortcut class produces idiomatic platform representations.

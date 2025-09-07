@@ -1,10 +1,10 @@
-package audio.fmod;
+package core.audio.fmod;
 
-import audio.exceptions.AudioEngineException;
-import audio.exceptions.AudioLoadException;
-import audio.exceptions.AudioPlaybackException;
-import audio.exceptions.CorruptedAudioFileException;
-import audio.exceptions.UnsupportedAudioFormatException;
+import core.audio.exceptions.AudioEngineException;
+import core.audio.exceptions.AudioLoadException;
+import core.audio.exceptions.AudioPlaybackException;
+import core.audio.exceptions.CorruptedAudioFileException;
+import core.audio.exceptions.UnsupportedAudioFormatException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,12 +1,12 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
-import audio.exceptions.AudioEngineException;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.exceptions.AudioEngineException;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;

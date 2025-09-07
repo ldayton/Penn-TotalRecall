@@ -1,6 +1,6 @@
 package core.actions;
 
-import env.Constants;
+import core.env.Constants;
 import events.EventDispatchBus;
 import events.OpenUrlRequestedEvent;
 import jakarta.inject.Inject;

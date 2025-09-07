@@ -1,4 +1,4 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import annotations.Audio;
 import com.sun.jna.Pointer;
@@ -14,7 +14,8 @@ public class FmodDebugTest {
     void debugSampleMetadata() throws Exception {
         String filePath = Paths.get("packaging/samples/sample.wav").toAbsolutePath().toString();
 
-        FmodLibraryLoader loader = new FmodLibraryLoader(new env.AppConfig(), new env.Platform());
+        FmodLibraryLoader loader =
+                new FmodLibraryLoader(new core.env.AppConfig(), new core.env.Platform());
         FmodLibrary fmod = loader.loadAudioLibrary(FmodLibrary.class);
 
         // Create system

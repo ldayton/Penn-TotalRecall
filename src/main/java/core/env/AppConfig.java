@@ -1,4 +1,4 @@
-package env;
+package core.env;
 
 import com.google.common.annotations.VisibleForTesting;
 import jakarta.inject.Inject;

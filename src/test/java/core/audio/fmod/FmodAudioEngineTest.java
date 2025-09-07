@@ -1,15 +1,15 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
-import audio.AudioHandle;
-import audio.AudioMetadata;
-import audio.PlaybackHandle;
-import audio.PlaybackListener;
-import audio.PlaybackState;
-import audio.exceptions.AudioLoadException;
-import audio.exceptions.AudioPlaybackException;
+import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
+import core.audio.PlaybackHandle;
+import core.audio.PlaybackListener;
+import core.audio.PlaybackState;
+import core.audio.exceptions.AudioLoadException;
+import core.audio.exceptions.AudioPlaybackException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

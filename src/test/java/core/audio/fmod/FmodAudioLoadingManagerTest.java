@@ -1,15 +1,15 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
-import audio.AudioHandle;
-import audio.AudioMetadata;
-import audio.exceptions.AudioLoadException;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
+import core.audio.exceptions.AudioLoadException;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -145,7 +145,7 @@ class FmodAudioLoadingManagerTest {
 
     @Test
     void testLoadNonExistentFile() {
-        String nonExistent = "/does/not/exist/audio.wav";
+        String nonExistent = "/does/not/exist/core.audio.wav";
 
         AudioLoadException ex =
                 assertThrows(AudioLoadException.class, () -> loadingManager.loadAudio(nonExistent));

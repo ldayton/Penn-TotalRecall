@@ -1,12 +1,12 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
-import audio.PlaybackHandle;
-import audio.PlaybackListener;
-import audio.PlaybackState;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
+import core.audio.PlaybackHandle;
+import core.audio.PlaybackListener;
+import core.audio.PlaybackState;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;

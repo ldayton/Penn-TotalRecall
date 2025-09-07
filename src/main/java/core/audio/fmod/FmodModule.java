@@ -1,4 +1,4 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

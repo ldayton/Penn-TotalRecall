@@ -1,6 +1,6 @@
 package actions;
 
-import env.UpdateManager;
+import core.env.UpdateManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import jakarta.inject.Singleton;

@@ -1,8 +1,8 @@
 package actions;
 
-import env.Constants;
-import env.ProgramName;
-import env.ProgramVersion;
+import core.env.Constants;
+import core.env.ProgramName;
+import core.env.ProgramVersion;
 import events.EventDispatchBus;
 import events.InfoRequestedEvent;
 import jakarta.inject.Inject;

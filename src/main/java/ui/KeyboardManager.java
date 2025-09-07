@@ -1,5 +1,6 @@
-package env;
+package ui;
 
+import core.env.Platform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Toolkit;

@@ -1,7 +1,6 @@
 package ui.shortcuts;
 
 import actions.ActionsFileParser.ActionConfig;
-import env.KeyboardManager;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -34,6 +33,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import ui.DialogService;
+import ui.KeyboardManager;
 import ui.preferences.PreferencesManager;
 
 public class ShortcutManager extends JFrame {

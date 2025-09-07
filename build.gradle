@@ -555,7 +555,7 @@ tasks.register('checkCoreNoUI') {
                         lineNum++
                         // Check for ANY reference to java.awt or javax.swing
                         // This includes imports, fully qualified class names, comments, strings, etc.
-                        if (line.contains('java.awt') || line.contains('javax.swing')) {
+                        if (line.contains('java.awt') || line.contains('javax.swing') || line.contains('ui.')) {
                             violations << "${file.path}:${lineNum}: ${line.trim()}"
                         }
                     }

@@ -53,5 +53,7 @@ public class Module extends AbstractModule {
         // Utility services
         bind(DialogService.class).in(Singleton.class);
         bind(MainWindowAccess.class).in(Singleton.class);
+        bind(KeyboardManager.class).in(Singleton.class);
+        bind(LookAndFeelManager.class).in(Singleton.class);
     }
 }

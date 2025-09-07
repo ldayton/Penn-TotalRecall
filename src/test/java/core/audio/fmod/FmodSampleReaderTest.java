@@ -1,10 +1,10 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
-import audio.AudioData;
-import audio.AudioMetadata;
+import core.audio.AudioData;
+import core.audio.AudioMetadata;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +30,7 @@ class FmodSampleReaderTest {
 
     @BeforeEach
     void setUp() {
-        libraryLoader = new FmodLibraryLoader(new env.AppConfig(), new env.Platform());
+        libraryLoader = new FmodLibraryLoader(new core.env.AppConfig(), new core.env.Platform());
         reader = new FmodSampleReader(libraryLoader);
     }
 

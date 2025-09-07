@@ -1,11 +1,11 @@
-package env;
+package core.env;
 
 import java.util.List;
 
 /**
- * Central location for many kinds of constants other than those used by GUI ui.
+ * Central location for application constants.
  *
- * <p>Constants used directly by GUI components are stored in UiConstants.
+ * <p>Constants used directly by user interface components are stored in UiConstants.
  */
 public class Constants {
 

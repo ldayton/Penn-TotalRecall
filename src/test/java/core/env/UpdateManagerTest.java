@@ -1,16 +1,16 @@
-package env;
+package core.env;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import events.EventDispatchBus;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ui.DialogService;
 
 /** Tests for UpdateManager functionality. */
 class UpdateManagerTest {
@@ -21,7 +21,7 @@ class UpdateManagerTest {
         AppConfig mockConfig = mock(AppConfig.class);
         ProgramVersion mockProgramVersion = mock(ProgramVersion.class);
         HttpClient mockClient = mock(HttpClient.class);
-        DialogService mockDialogService = mock(DialogService.class);
+        EventDispatchBus mockEventDispatchBus = mock(EventDispatchBus.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.example.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://example.com");
@@ -35,7 +35,7 @@ class UpdateManagerTest {
                 .thenAnswer(_ -> CompletableFuture.completedFuture(newerResponse));
 
         UpdateManager manager =
-                new UpdateManager(mockConfig, mockProgramVersion, mockClient, mockDialogService);
+                new UpdateManager(mockConfig, mockProgramVersion, mockClient, mockEventDispatchBus);
 
         // Mock current version to be older
         UpdateManager spyManager = spy(manager);
@@ -52,13 +52,13 @@ class UpdateManagerTest {
     @DisplayName("JSON parsing with various GitHub API responses")
     void jsonParsingEdgeCases() throws Exception {
         AppConfig mockConfig = mock(AppConfig.class);
-        DialogService mockDialogService = mock(DialogService.class);
+        EventDispatchBus mockEventDispatchBus = mock(EventDispatchBus.class);
         UpdateManager manager =
                 new UpdateManager(
                         mockConfig,
                         mock(ProgramVersion.class),
                         mock(HttpClient.class),
-                        mockDialogService);
+                        mockEventDispatchBus);
 
         // Test version comparison logic directly
         // Valid formats
@@ -82,14 +82,17 @@ class UpdateManagerTest {
     void getCurrentVersionScenarios() {
         AppConfig mockConfig = mock(AppConfig.class);
         ProgramVersion mockProgramVersion = mock(ProgramVersion.class);
-        DialogService mockDialogService = mock(DialogService.class);
+        EventDispatchBus mockEventDispatchBus = mock(EventDispatchBus.class);
 
         // Configure mock to return the actual version from application.properties
         when(mockProgramVersion.toString()).thenReturn("2025.08.15");
 
         UpdateManager manager =
                 new UpdateManager(
-                        mockConfig, mockProgramVersion, mock(HttpClient.class), mockDialogService);
+                        mockConfig,
+                        mockProgramVersion,
+                        mock(HttpClient.class),
+                        mockEventDispatchBus);
 
         // When called, getCurrentVersion should return the version from ProgramVersion
         String version = manager.getCurrentVersion();
@@ -101,7 +104,7 @@ class UpdateManagerTest {
     void httpErrorScenarios() throws Exception {
         AppConfig mockConfig = mock(AppConfig.class);
         HttpClient mockClient = mock(HttpClient.class);
-        DialogService mockDialogService = mock(DialogService.class);
+        EventDispatchBus mockEventDispatchBus = mock(EventDispatchBus.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.example.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://example.com");
@@ -119,7 +122,7 @@ class UpdateManagerTest {
 
         UpdateManager manager =
                 new UpdateManager(
-                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockEventDispatchBus);
         assertDoesNotThrow(() -> manager.checkForUpdateOnStartup());
 
         // Test HTTP 404 error
@@ -132,7 +135,7 @@ class UpdateManagerTest {
 
         UpdateManager manager404 =
                 new UpdateManager(
-                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockEventDispatchBus);
         assertDoesNotThrow(() -> manager404.checkForUpdateOnStartup());
 
         // Test empty response body
@@ -144,7 +147,7 @@ class UpdateManagerTest {
 
         UpdateManager managerEmpty =
                 new UpdateManager(
-                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockEventDispatchBus);
         assertDoesNotThrow(() -> managerEmpty.checkForUpdateOnStartup());
 
         Thread.sleep(100); // Allow async operations to complete
@@ -155,14 +158,14 @@ class UpdateManagerTest {
     void configurationIntegration() {
         AppConfig mockConfig = mock(AppConfig.class);
         HttpClient mockClient = mock(HttpClient.class);
-        DialogService mockDialogService = mock(DialogService.class);
+        EventDispatchBus mockEventDispatchBus = mock(EventDispatchBus.class);
 
         when(mockConfig.getProperty("releases.api.url")).thenReturn("https://api.test.com");
         when(mockConfig.getProperty("releases.page.url")).thenReturn("https://test.com");
 
         UpdateManager manager =
                 new UpdateManager(
-                        mockConfig, mock(ProgramVersion.class), mockClient, mockDialogService);
+                        mockConfig, mock(ProgramVersion.class), mockClient, mockEventDispatchBus);
 
         assertEquals("https://api.test.com", manager.getReleasesApiUrl());
         assertEquals("https://test.com", manager.getReleasesPageUrl());

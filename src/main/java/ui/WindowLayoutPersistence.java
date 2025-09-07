@@ -1,6 +1,6 @@
 package ui;
 
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;

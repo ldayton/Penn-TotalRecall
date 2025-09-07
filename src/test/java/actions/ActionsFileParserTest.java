@@ -5,8 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import actions.ActionsFileParser.ActionConfig;
-import env.KeyboardManager;
-import env.Platform;
+import core.env.Platform;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ui.KeyboardManager;
 
 @ExtendWith(MockitoExtension.class)
 class ActionsFileParserTest {

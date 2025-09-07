@@ -1,4 +1,4 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import lombok.experimental.UtilityClass;
 

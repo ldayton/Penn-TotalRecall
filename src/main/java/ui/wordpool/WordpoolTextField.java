@@ -1,7 +1,6 @@
 package ui.wordpool;
 
-import env.KeyboardManager;
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import events.EventDispatchBus;
 import events.FocusRequestedEvent;
 import events.Subscribe;
@@ -26,6 +25,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
+import ui.KeyboardManager;
 import ui.preferences.PreferencesManager;
 
 /**

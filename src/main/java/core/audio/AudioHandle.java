@@ -1,4 +1,4 @@
-package audio;
+package core.audio;
 
 import app.annotations.ThreadSafe;
 

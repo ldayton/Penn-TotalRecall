@@ -1,6 +1,6 @@
 package ui;
 
-import env.ProgramName;
+import core.env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;

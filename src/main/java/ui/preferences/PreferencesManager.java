@@ -1,7 +1,7 @@
 package ui.preferences;
 
 import com.google.common.annotations.VisibleForTesting;
-import env.UserHomeProvider;
+import core.env.UserHomeProvider;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;

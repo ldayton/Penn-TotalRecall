@@ -1,10 +1,13 @@
-package env;
+package ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.MacOS;
 import app.swing.SwingApp;
 import core.actions.ExitAction;
+import core.env.AppConfig;
+import core.env.Platform;
+import core.env.ProgramName;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.lang.reflect.Field;

@@ -1,9 +1,9 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.PlaybackState;
-import audio.exceptions.AudioPlaybackException;
+import core.audio.PlaybackState;
+import core.audio.exceptions.AudioPlaybackException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

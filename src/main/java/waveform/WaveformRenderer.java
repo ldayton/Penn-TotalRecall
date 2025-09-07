@@ -1,6 +1,6 @@
 package waveform;
 
-import audio.SampleReader;
+import core.audio.SampleReader;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

@@ -1,11 +1,11 @@
-package audio.fmod;
+package core.audio.fmod;
 
-import audio.exceptions.AudioEngineException;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
-import env.AppConfig;
-import env.Platform;
+import core.audio.exceptions.AudioEngineException;
+import core.env.AppConfig;
+import core.env.Platform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -37,10 +37,10 @@ import org.slf4j.LoggerFactory;
  * <h3>Configuration System</h3>
  *
  * <ul>
- *   <li>audio.loading.mode: packaged|unpackaged (default: packaged)
- *   <li>audio.library.type: standard|logging (default: standard)
- *   <li>audio.library.path.{platform}: Custom library paths
- *   <li>audio.hardware.available: Hardware detection override
+ *   <li>core.audio.loading.mode: packaged|unpackaged (default: packaged)
+ *   <li>core.audio.library.type: standard|logging (default: standard)
+ *   <li>core.audio.library.path.{platform}: Custom library paths
+ *   <li>core.audio.hardware.available: Hardware detection override
  * </ul>
  *
  * <h3>Threading & Safety</h3>

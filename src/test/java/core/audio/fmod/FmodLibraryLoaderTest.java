@@ -1,11 +1,11 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
-import audio.fmod.FmodLibraryLoader.LibraryType;
-import env.AppConfig;
-import env.Platform;
+import core.audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
+import core.audio.fmod.FmodLibraryLoader.LibraryType;
+import core.env.AppConfig;
+import core.env.Platform;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +54,7 @@ class FmodLibraryLoaderTest {
         boolean available = loader.isAudioHardwareAvailable();
 
         // Expected value should match what's actually configured in the AppConfig
-        boolean expected = config.getBooleanProperty("audio.hardware.available", true);
+        boolean expected = config.getBooleanProperty("core.audio.hardware.available", true);
 
         assertEquals(
                 expected,

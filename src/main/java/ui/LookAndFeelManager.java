@@ -1,5 +1,8 @@
-package env;
+package ui;
 
+import core.env.AppConfig;
+import core.env.Platform;
+import core.env.ProgramName;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;

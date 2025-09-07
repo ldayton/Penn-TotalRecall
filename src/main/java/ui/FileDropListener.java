@@ -1,7 +1,7 @@
 package ui;
 
+import core.env.Constants;
 import core.util.OsPath;
-import env.Constants;
 import events.EventDispatchBus;
 import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;

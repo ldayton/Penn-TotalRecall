@@ -1,7 +1,7 @@
 package actions;
 
 import app.swing.SwingApp;
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;

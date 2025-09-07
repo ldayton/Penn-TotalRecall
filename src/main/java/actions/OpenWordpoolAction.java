@@ -1,8 +1,8 @@
 package actions;
 
-import env.Constants;
-import env.PreferenceKeys;
-import env.UserHomeProvider;
+import core.env.Constants;
+import core.env.PreferenceKeys;
+import core.env.UserHomeProvider;
 import events.EventDispatchBus;
 import events.WordpoolFileSelectedEvent;
 import jakarta.inject.Inject;

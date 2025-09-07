@@ -1,7 +1,7 @@
 package app.swing;
 
 import core.actions.PlayPauseAction;
-import env.AppConfig;
+import core.env.AppConfig;
 import events.EventDispatchBus;
 import events.Subscribe;
 import events.UIReadyEvent;
@@ -22,7 +22,7 @@ import ui.audiofiles.AudioFileList;
  *
  * <p>This service subscribes to UIReadyEvent and loads packaging/samples/sample.wav and
  * packaging/samples/wordpool.txt if the application is running in development mode
- * (audio.loading.mode=unpackaged) and no files are currently loaded.
+ * (core.audio.loading.mode=unpackaged) and no files are currently loaded.
  */
 @Singleton
 public class DevModeFileAutoLoader {
@@ -58,10 +58,10 @@ public class DevModeFileAutoLoader {
         }
 
         // Check if we're in development mode (unpackaged audio loading)
-        String loadingMode = appConfig.getProperty("audio.loading.mode", "packaged");
+        String loadingMode = appConfig.getProperty("core.audio.loading.mode", "packaged");
         if (!"unpackaged".equals(loadingMode)) {
             logger.debug(
-                    "Not in development mode (audio.loading.mode={}), skipping auto-load",
+                    "Not in development mode (core.audio.loading.mode={}), skipping auto-load",
                     loadingMode);
             return;
         }

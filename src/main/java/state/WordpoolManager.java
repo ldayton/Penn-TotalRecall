@@ -1,7 +1,7 @@
 package state;
 
+import core.env.Constants;
 import core.util.OsPath;
-import env.Constants;
 import events.ErrorRequestedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;

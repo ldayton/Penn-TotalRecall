@@ -1,11 +1,11 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
-import audio.AudioHandle;
-import audio.exceptions.AudioPlaybackException;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.AudioHandle;
+import core.audio.exceptions.AudioPlaybackException;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
@@ -83,8 +83,8 @@ class FmodPlaybackManager {
     }
 
     /**
-     * Starts playback of a specific range within the audio. This method acquires the playbackLock
-     * internally.
+     * Starts playback of a specific range within the core.audio. This method acquires the
+     * playbackLock internally.
      *
      * @param sound The FMOD sound pointer to play (may be preloaded or streaming)
      * @param audioHandle The audio handle for metadata

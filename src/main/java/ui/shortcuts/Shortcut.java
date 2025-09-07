@@ -2,7 +2,6 @@ package ui.shortcuts;
 
 import static java.util.stream.Collectors.joining;
 
-import env.KeyboardManager;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -10,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import javax.swing.KeyStroke;
 import lombok.NonNull;
+import ui.KeyboardManager;
 
 public class Shortcut {
     private static final Set<String> ACTION_WORDS = Set.of("typed", "pressed", "released");

@@ -1,9 +1,9 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
-import audio.AudioHandle;
 import com.google.inject.Singleton;
 import com.sun.jna.Pointer;
+import core.audio.AudioHandle;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;

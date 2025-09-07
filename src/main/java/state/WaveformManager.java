@@ -1,9 +1,9 @@
 package state;
 
-import audio.AudioEngine;
-import audio.AudioHandle;
-import audio.SampleReader;
 import com.google.inject.Provider;
+import core.audio.AudioEngine;
+import core.audio.AudioHandle;
+import core.audio.SampleReader;
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
 import events.Subscribe;

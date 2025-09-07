@@ -1,9 +1,9 @@
 package waveform;
 
-import audio.AudioEngine;
-import audio.AudioHandle;
-import audio.AudioMetadata;
-import audio.SampleReader;
+import core.audio.AudioEngine;
+import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
+import core.audio.SampleReader;
 import java.awt.Image;
 import java.util.concurrent.*;
 import lombok.NonNull;

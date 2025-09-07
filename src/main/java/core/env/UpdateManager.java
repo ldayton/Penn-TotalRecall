@@ -1,5 +1,7 @@
-package env;
+package core.env;
 
+import events.EventDispatchBus;
+import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.net.URI;
@@ -10,11 +12,9 @@ import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-import javax.swing.SwingUtilities;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.DialogService;
 
 /**
  * Manages application update checking using GitHub Releases API.
@@ -33,18 +33,18 @@ public class UpdateManager {
     private final AppConfig appConfig;
     private final ProgramVersion programVersion;
     private final HttpClient httpClient;
-    private final DialogService dialogService;
+    private final EventDispatchBus eventBus;
 
     @Inject
     public UpdateManager(
             @NonNull AppConfig appConfig,
             @NonNull ProgramVersion programVersion,
             @NonNull HttpClient httpClient,
-            @NonNull DialogService dialogService) {
+            @NonNull EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.programVersion = programVersion;
         this.httpClient = httpClient;
-        this.dialogService = dialogService;
+        this.eventBus = eventBus;
     }
 
     /**
@@ -89,8 +89,7 @@ public class UpdateManager {
                 .thenAccept(
                         newVersion -> {
                             if (newVersion != null) {
-                                SwingUtilities.invokeLater(
-                                        () -> showUpdateNotification(newVersion, releasesPageUrl));
+                                showUpdateNotification(newVersion, releasesPageUrl);
                             }
                         });
     }
@@ -116,18 +115,14 @@ public class UpdateManager {
                         String current = getCurrentVersion();
                         String latest = getLatestVersionFromGitHub(releasesApiUrl);
                         if (isNewerVersion(current, latest)) {
-                            SwingUtilities.invokeLater(
-                                    () -> showUpdateNotification(latest, releasesPageUrl));
+                            showUpdateNotification(latest, releasesPageUrl);
                         } else {
-                            SwingUtilities.invokeLater(
-                                    () ->
-                                            dialogService.showInfo(
-                                                    "You're up to date (" + current + ")"));
+                            eventBus.publish(
+                                    new InfoRequestedEvent("You're up to date (" + current + ")"));
                         }
                     } catch (Exception e) {
                         logger.warn("Manual update check failed: {}", e.getMessage());
-                        SwingUtilities.invokeLater(
-                                () -> dialogService.showInfo("Could not check for updates."));
+                        eventBus.publish(new InfoRequestedEvent("Could not check for updates."));
                     }
                 });
     }
@@ -179,10 +174,7 @@ public class UpdateManager {
                 """
                         .formatted(newVersion, releasesPageUrl);
 
-        if (dialogService == null) {
-            throw new IllegalStateException("DialogService not available via DI");
-        }
-        dialogService.showInfo(message);
+        eventBus.publish(new InfoRequestedEvent(message));
     }
 
     boolean isNewerVersion(@NonNull String current, @NonNull String latest) {

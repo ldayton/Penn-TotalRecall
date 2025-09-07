@@ -1,7 +1,7 @@
 package app.swing;
 
-import audio.fmod.FmodModule;
 import com.google.inject.AbstractModule;
+import core.audio.fmod.FmodModule;
 
 /**
  * Guice module for Swing UI application dependency injection configuration.
@@ -17,7 +17,7 @@ public class SwingModule extends AbstractModule {
         install(new FmodModule());
 
         // Install audio module for audio engine bindings
-        install(new audio.Module());
+        install(new core.audio.Module());
 
         // Install waveform module for waveform bindings
         install(new waveform.Module());
@@ -26,7 +26,7 @@ public class SwingModule extends AbstractModule {
         install(new state.Module());
 
         // Install env module for environment and platform bindings
-        install(new env.Module());
+        install(new core.env.Module());
 
         // Install ui module for user interface bindings
         install(new ui.Module());

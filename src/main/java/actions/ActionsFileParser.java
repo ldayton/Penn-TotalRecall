@@ -7,8 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import env.KeyboardManager;
-import env.Platform;
+import core.env.Platform;
 import jakarta.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +22,7 @@ import javax.swing.KeyStroke;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.KeyboardManager;
 import ui.shortcuts.Shortcut;
 
 /**

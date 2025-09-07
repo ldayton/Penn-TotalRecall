@@ -1,7 +1,6 @@
 package ui.preferences;
 
-import env.KeyboardManager;
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
@@ -24,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import ui.DialogCentering;
+import ui.KeyboardManager;
 import ui.MainFrame;
 import ui.MainWindowAccess;
 
@@ -57,7 +57,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     @Inject
     public PreferencesFrame(
             KeyboardManager keyboardManager,
-            env.LookAndFeelManager lookAndFeelManager,
+            ui.LookAndFeelManager lookAndFeelManager,
             MainWindowAccess windowService) {
         this.keyboardManager = keyboardManager;
         // Actions are constructed locally within initButtonsPanel to avoid circular DI

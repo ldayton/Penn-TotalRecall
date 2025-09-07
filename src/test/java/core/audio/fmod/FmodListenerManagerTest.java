@@ -1,15 +1,15 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
-import audio.AudioHandle;
-import audio.PlaybackHandle;
-import audio.PlaybackListener;
-import audio.PlaybackState;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.AudioHandle;
+import core.audio.PlaybackHandle;
+import core.audio.PlaybackListener;
+import core.audio.PlaybackState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

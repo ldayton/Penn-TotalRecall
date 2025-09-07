@@ -1,4 +1,4 @@
-package env;
+package core.env;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -19,10 +19,6 @@ public class Module extends AbstractModule {
         bind(Platform.class).in(Singleton.class);
         bind(ProgramVersion.class).in(Singleton.class);
         bind(UserHomeProvider.class).in(Singleton.class);
-
-        // UI environment management
-        bind(KeyboardManager.class).in(Singleton.class);
-        bind(LookAndFeelManager.class).in(Singleton.class);
 
         // Update checking
         bind(UpdateManager.class).in(Singleton.class);

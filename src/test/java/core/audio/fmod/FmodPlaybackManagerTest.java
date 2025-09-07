@@ -1,14 +1,14 @@
-package audio.fmod;
+package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
-import audio.AudioHandle;
-import audio.exceptions.AudioPlaybackException;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
+import core.audio.AudioHandle;
+import core.audio.exceptions.AudioPlaybackException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

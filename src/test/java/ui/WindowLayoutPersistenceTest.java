@@ -3,7 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import env.PreferenceKeys;
+import core.env.PreferenceKeys;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.junit.jupiter.api.BeforeEach;

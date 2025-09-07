@@ -1,8 +1,8 @@
-package audio.fmod;
+package core.audio.fmod;
 
-import audio.AudioHandle;
-import audio.PlaybackHandle;
 import com.sun.jna.Pointer;
+import core.audio.AudioHandle;
+import core.audio.PlaybackHandle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.Getter;
