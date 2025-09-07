@@ -37,10 +37,10 @@ import org.slf4j.LoggerFactory;
  * <h3>Configuration System</h3>
  *
  * <ul>
- *   <li>core.audio.loading.mode: packaged|unpackaged (default: packaged)
- *   <li>core.audio.library.type: standard|logging (default: standard)
- *   <li>core.audio.library.path.{platform}: Custom library paths
- *   <li>core.audio.hardware.available: Hardware detection override
+ *   <li>audio.loading.mode: packaged|unpackaged (default: packaged)
+ *   <li>audio.library.type: standard|logging (default: standard)
+ *   <li>audio.library.path.{platform}: Custom library paths
+ *   <li>audio.hardware.available: Hardware detection override
  * </ul>
  *
  * <h3>Threading & Safety</h3>
