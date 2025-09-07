@@ -3,6 +3,7 @@ package core.audio.fmod;
 import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.Audio;
+import annotations.AudioHardware;
 import core.audio.AudioHandle;
 import core.audio.AudioMetadata;
 import core.audio.PlaybackHandle;
@@ -192,6 +193,7 @@ class FmodAudioEngineTest {
     // ========== Playback Lifecycle Tests ==========
 
     @Test
+    @AudioHardware
     @DisplayName("Should handle complete playback lifecycle")
     @Timeout(5)
     void testFullPlaybackLifecycle() throws Exception {
