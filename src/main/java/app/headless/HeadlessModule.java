@@ -1,21 +1,34 @@
 package app.headless;
 
 import com.google.inject.AbstractModule;
+import core.audio.fmod.FmodModule;
+import core.dispatch.EventDispatcher;
 
 /**
  * Guice module for headless application dependency injection configuration.
  *
  * <p>Configures only the core bindings needed for headless operation, without any UI components.
- * Currently only supports core actions.
  */
 public class HeadlessModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // Install actions module for action management bindings
-        install(new actions.Module());
+        // Bind headless event dispatcher
+        bind(EventDispatcher.class).to(HeadlessEventDispatcher.class).asEagerSingleton();
 
-        // Note: Additional modules would be added here as more functionality
-        // becomes available in headless mode
+        // Install FMOD module for audio system dependencies
+        install(new FmodModule());
+
+        // Install audio module for audio engine bindings
+        install(new core.audio.Module());
+
+        // Install env module for environment and platform bindings
+        install(new core.env.Module());
+
+        // Note: In headless mode, we don't install:
+        // - waveform.Module (has UI dependencies)
+        // - state.Module (has UI dependencies)
+        // - ui.Module (Swing UI)
+        // - actions.Module (Swing actions)
     }
 }
