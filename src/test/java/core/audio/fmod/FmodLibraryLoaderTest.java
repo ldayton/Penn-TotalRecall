@@ -54,7 +54,7 @@ class FmodLibraryLoaderTest {
         boolean available = loader.isAudioHardwareAvailable();
 
         // Expected value should match what's actually configured in the AppConfig
-        boolean expected = config.getBooleanProperty("core.audio.hardware.available", true);
+        boolean expected = config.getBooleanProperty("audio.hardware.available", true);
 
         assertEquals(
                 expected,
