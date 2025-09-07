@@ -61,10 +61,4 @@ public class AboutAction extends BaseAction {
                 + "\n"
                 + Constants.licenseSite;
     }
-
-    /** AboutAction is always enabled. */
-    @Override
-    public void update() {
-        // Always enabled
-    }
 }

@@ -57,12 +57,11 @@ class DoneButtonTest {
     }
 
     @Test
-    @DisplayName("DoneButton should be properly configured after calling updateActions")
-    void doneButtonShouldBeProperlyConfiguredAfterUpdateActions() {
-        // Call updateActions to trigger the action system
-        AppMenuBar.updateActions();
+    @DisplayName("DoneButton should be properly configured after initialization")
+    void doneButtonShouldBeProperlyConfiguredAfterInitialization() {
+        // Actions are now event-driven and initialized automatically
 
-        // Now the button should have proper text and be disabled
+        // The button should have proper text and be disabled
         String buttonText = doneButton.getText();
         assertEquals(
                 "Mark Complete",
@@ -77,14 +76,13 @@ class DoneButtonTest {
     }
 
     @Test
-    @DisplayName("ActionsManager should be initialized with actions.xml before updateActions")
+    @DisplayName("ActionsManager should be initialized with actions.xml")
     void actionsManagerShouldBeInitializedWithActionsXml() {
         // The ActionsManager should be initialized with actions.xml
         // Get the injected ShortcutFrame to trigger initialization
         GuiceBootstrap.getInjectedInstance(ui.ShortcutFrame.class);
 
-        // Now call updateActions
-        AppMenuBar.updateActions();
+        // Actions are now event-driven, no need to call updateActions
 
         // The button should now be properly configured
         String buttonText = doneButton.getText();

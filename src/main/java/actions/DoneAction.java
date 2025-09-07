@@ -52,10 +52,4 @@ public class DoneAction extends BaseAction {
             default -> setEnabled(false);
         }
     }
-
-    /** A file can be marked done only if audio is open and not playing. */
-    @Override
-    public void update() {
-        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
-    }
 }

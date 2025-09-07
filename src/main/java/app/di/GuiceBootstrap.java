@@ -292,10 +292,6 @@ public class GuiceBootstrap {
         myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);
 
-        // Update actions after UI is created (this sets button text and enabled states)
-        // This was missing from the new DI system but present in the old Main class
-        AppMenuBar.updateActions();
-
         myFrame.setVisible(true);
 
         // Wait for UI to be fully ready before publishing UIReadyEvent

@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import ui.AppMenuBar;
 
 /**
  * Preference for the sizes of forward/backward jumps of <code>SeekActions</code> and <code>
@@ -96,13 +95,11 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     protected void restoreDefault() {
         spinner.setValue(defValue);
         saveVal(defValue);
-        AppMenuBar.updateSeekActions();
     }
 
     @Override
     protected boolean save() {
         saveVal((Integer) spinner.getValue());
-        AppMenuBar.updateSeekActions();
         return true;
     }
 

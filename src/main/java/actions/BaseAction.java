@@ -57,14 +57,4 @@ public abstract class BaseAction extends AbstractAction {
      * @param e The action event that triggered this action
      */
     protected abstract void performAction(ActionEvent e);
-
-    /**
-     * Update the action's state (enabled/disabled, text, etc.). This method is called when the
-     * application state changes.
-     *
-     * <p>Default implementation does nothing - subclasses should override as needed.
-     */
-    public void update() {
-        // Default implementation - subclasses can override
-    }
 }

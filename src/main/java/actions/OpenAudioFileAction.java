@@ -24,6 +24,7 @@ public class OpenAudioFileAction extends BaseAction {
     public OpenAudioFileAction(PreferencesManager preferencesManager) {
         super("Open Audio File", "Select audio files");
         this.preferencesManager = preferencesManager;
+        setEnabled(true);
     }
 
     /**
@@ -73,11 +74,5 @@ public class OpenAudioFileAction extends BaseAction {
                 AudioFileDisplay.addFilesIfSupported(new File[] {selectedFile});
             }
         }
-    }
-
-    /** <code>OpenAudioFileAction</code> is always enabled. */
-    @Override
-    public void update() {
-        setEnabled(true);
     }
 }

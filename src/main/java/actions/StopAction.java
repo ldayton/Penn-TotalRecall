@@ -46,9 +46,4 @@ public class StopAction extends BaseAction {
         // Only enabled when playing
         setEnabled(currentState == AudioSessionStateMachine.State.PLAYING);
     }
-
-    @Override
-    public void update() {
-        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
-    }
 }

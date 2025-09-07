@@ -29,10 +29,4 @@ public class PreferencesAction extends BaseAction {
         // Fire preferences requested event - UI will handle opening the preferences window
         eventBus.publish(new PreferencesRequestedEvent());
     }
-
-    /** PreferencesAction is always enabled. */
-    @Override
-    public void update() {
-        // Always enabled
-    }
 }

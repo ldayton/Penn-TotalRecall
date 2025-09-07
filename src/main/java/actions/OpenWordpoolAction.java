@@ -73,8 +73,4 @@ public class OpenWordpoolAction extends BaseAction {
             eventBus.publish(new WordpoolFileSelectedEvent(chosenFile));
         }
     }
-
-    /** OpenWordpoolAction is always enabled. */
-    @Override
-    public void update() {}
 }

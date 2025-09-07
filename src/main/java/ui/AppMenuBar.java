@@ -271,56 +271,6 @@ public class AppMenuBar extends JMenuBar {
     }
 
     /**
-     * Trigger for updating all actions.
-     *
-     * <p>Should be called anytime program state changes in a way that may interest the registered
-     * actions. Simple calls {@link UpdatingAction#update()} on every registered action.
-     */
-    public static void updateActions() {
-        for (BaseAction ia : allActions) {
-            ia.update();
-        }
-
-        // Also update ADI actions that extend BaseAction
-        if (instance != null) {
-            instance.doneAction.update();
-            instance.exitAction.update();
-            instance.playPauseAction.update();
-            instance.stopAction.update();
-            // instance.replayLast200MillisAction.update(); // Disabled
-            // instance.returnToLastPositionAction.update();
-            // instance.replayLastPositionAction.update();
-            instance.aboutAction.update();
-            instance.preferencesAction.update();
-            instance.editShortcutsAction.update();
-            instance.tipsMessageAction.update();
-            instance.visitTutorialSiteAction.update();
-            instance.checkUpdatesAction.update();
-            instance.last200PlusMoveAction.update();
-            instance.openWordpoolAction.update();
-            // instance.annotateRegularAction.update();
-            // instance.annotateIntrusionAction.update();
-            // instance.toggleAnnotationsAction.update();
-            // instance.zoomInAction.update();
-            // instance.zoomOutAction.update();
-            instance.openAudioFileAction.update();
-            instance.openAudioFolderAction.update();
-            instance.seekAction.update();
-            instance.screenSeekForwardAction.update();
-            instance.screenSeekBackwardAction.update();
-        }
-    }
-
-    public static void updateSeekActions() {
-        // All seek actions are now managed by the ActionsManager and don't need special handling
-        // The new ADI actions automatically get their state updated through the ActionsManager
-        if (instance != null) {
-            // Update any seek-related ADI actions if needed
-            instance.last200PlusMoveAction.update();
-        }
-    }
-
-    /**
      * Registere the provided <code>UpdatingAction</code> to receive updates when program state
      * changes.
      *

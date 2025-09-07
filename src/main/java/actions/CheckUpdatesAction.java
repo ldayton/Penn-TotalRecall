@@ -15,16 +15,12 @@ public class CheckUpdatesAction extends BaseAction {
     public CheckUpdatesAction(Provider<UpdateManager> updateManagerProvider) {
         super("Check For Updates", "Check for program updates");
         this.updateManagerProvider = updateManagerProvider;
+        setEnabled(true);
     }
 
     @Override
     protected void performAction(ActionEvent e) {
         // Manual check: show dialog even when up-to-date
         updateManagerProvider.get().checkForUpdateManually();
-    }
-
-    @Override
-    public void update() {
-        setEnabled(true);
     }
 }

@@ -21,15 +21,11 @@ public class ExitAction extends BaseAction {
     public ExitAction(EventDispatchBus eventBus) {
         super("Exit", "Exit the application");
         this.eventBus = eventBus;
+        setEnabled(true);
     }
 
     @Override
     protected void performAction(ActionEvent e) {
         eventBus.publish(new ExitRequestedEvent());
-    }
-
-    @Override
-    public void update() {
-        setEnabled(true);
     }
 }

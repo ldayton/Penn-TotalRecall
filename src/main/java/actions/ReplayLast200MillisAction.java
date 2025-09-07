@@ -57,12 +57,4 @@ public class ReplayLast200MillisAction extends BaseAction {
             setEnabled(false);
         }
     }
-
-    /**
-     * User can replay last 200 millis when audio is open, not playing, and not on the first frame.
-     */
-    @Override
-    public void update() {
-        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
-    }
 }

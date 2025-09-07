@@ -100,8 +100,4 @@ public class ContinueAnnotatingAction extends BaseAction {
             return;
         }
     }
-
-    /** A ContinueAnnotationAction is always enabled. */
-    @Override
-    public void update() {}
 }

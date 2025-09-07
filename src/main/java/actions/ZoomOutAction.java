@@ -44,10 +44,4 @@ public class ZoomOutAction extends BaseAction {
             default -> setEnabled(false);
         }
     }
-
-    /** Zooming is enabled only when audio is open and not playing. */
-    @Override
-    public void update() {
-        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
-    }
 }

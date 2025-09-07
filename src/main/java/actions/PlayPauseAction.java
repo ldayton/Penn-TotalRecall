@@ -61,9 +61,4 @@ public class PlayPauseAction extends BaseAction {
             }
         }
     }
-
-    @Override
-    public void update() {
-        // No-op - now using event-driven updates via @Subscribe to AppStateChangedEvent
-    }
 }

@@ -20,9 +20,4 @@ public class EditShortcutsAction extends BaseAction {
     protected void performAction(ActionEvent e) {
         shortcutFrame.showShortcutEditor();
     }
-
-    @Override
-    public void update() {
-        // Always enabled
-    }
 }

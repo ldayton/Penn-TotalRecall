@@ -23,6 +23,7 @@ public class OpenAudioFolderAction extends BaseAction {
     public OpenAudioFolderAction(PreferencesManager preferencesManager) {
         super("Open Audio Folder", "Select audio folder");
         this.preferencesManager = preferencesManager;
+        setEnabled(true);
     }
 
     /**
@@ -57,11 +58,5 @@ public class OpenAudioFolderAction extends BaseAction {
                 AudioFileDisplay.addFilesIfSupported(selectedFile.listFiles());
             }
         }
-    }
-
-    /** <code>OpenAudioFolderAction</code> is always enabled. */
-    @Override
-    public void update() {
-        setEnabled(true);
     }
 }

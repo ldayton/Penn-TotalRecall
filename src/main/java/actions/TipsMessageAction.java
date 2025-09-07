@@ -69,9 +69,4 @@ public class TipsMessageAction extends BaseAction {
         // Fire info requested event - UI will handle showing the info dialog
         eventBus.publish(new InfoRequestedEvent(makeMessage()));
     }
-
-    @Override
-    public void update() {
-        // Always enabled
-    }
 }

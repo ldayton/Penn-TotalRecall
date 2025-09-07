@@ -59,10 +59,4 @@ public class VisitTutorialSiteAction extends BaseAction {
                                 + "\n"
                                 + Constants.orgAffiliationName));
     }
-
-    /** VisitTutorialSiteAction is always enabled. */
-    @Override
-    public void update() {
-        // Always enabled
-    }
 }
