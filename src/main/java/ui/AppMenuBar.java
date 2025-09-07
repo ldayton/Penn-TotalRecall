@@ -5,18 +5,18 @@ import actions.AboutAction;
 // import actions.AnnotateRegularAction;
 import actions.CheckUpdatesAction;
 import actions.EditShortcutsAction;
-import actions.ExitAction;
 import actions.Last200PlusMoveAction;
 import actions.OpenWordpoolAction;
 import actions.PreferencesAction;
 import actions.ReplayLast200MillisAction;
 // import actions.ReplayLastPositionAction;
 // import actions.ReturnToLastPositionAction;
-import actions.TipsMessageAction;
-import actions.VisitTutorialSiteAction;
 import core.actions.DoneAction;
+import core.actions.ExitAction;
 import core.actions.PlayPauseAction;
 import core.actions.SeekToStartAction;
+import core.actions.TipsMessageAction;
+import core.actions.VisitTutorialSiteAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.swing.JMenu;
@@ -71,8 +71,8 @@ public class AppMenuBar extends JMenuBar {
     // private final AnnotateRegularAction annotateRegularAction;
     // private final AnnotateIntrusionAction annotateIntrusionAction;
     // private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    private final actions.ZoomInAction zoomInAction;
-    private final actions.ZoomOutAction zoomOutAction;
+    private final core.actions.ZoomInAction zoomInAction;
+    private final core.actions.ZoomOutAction zoomOutAction;
     private final actions.OpenAudioFileAction openAudioFileAction;
     private final actions.OpenAudioFolderAction openAudioFolderAction;
     private final actions.SeekAction seekAction;
@@ -103,8 +103,8 @@ public class AppMenuBar extends JMenuBar {
             // AnnotateRegularAction annotateRegularAction,
             // AnnotateIntrusionAction annotateIntrusionAction,
             // actions.ToggleAnnotationsAction toggleAnnotationsAction,
-            actions.ZoomInAction zoomInAction,
-            actions.ZoomOutAction zoomOutAction,
+            core.actions.ZoomInAction zoomInAction,
+            core.actions.ZoomOutAction zoomOutAction,
             actions.OpenAudioFileAction openAudioFileAction,
             actions.OpenAudioFolderAction openAudioFolderAction,
             actions.SeekAction seekAction,
@@ -163,7 +163,7 @@ public class AppMenuBar extends JMenuBar {
             JMenuItem jmiPreferences = new JMenuItem(preferencesAction);
             jmFile.add(jmiPreferences);
             jmFile.addSeparator();
-            JMenuItem jmiExit = new JMenuItem(exitAction);
+            JMenuItem jmiExit = new JMenuItem(new SwingAction(exitAction));
             jmFile.add(jmiExit);
         }
         add(jmFile);
@@ -241,8 +241,8 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the View menu, which controls aspects of the waveform's appearance. */
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn = new JMenuItem(zoomInAction);
-        JMenuItem jmiZoomOut = new JMenuItem(zoomOutAction);
+        JMenuItem jmiZoomIn = new JMenuItem(new SwingAction(zoomInAction));
+        JMenuItem jmiZoomOut = new JMenuItem(new SwingAction(zoomOutAction));
         jmView.add(jmiZoomIn);
         jmView.add(jmiZoomOut);
         add(jmView);
@@ -251,8 +251,8 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the help menu, only adding an about menu for non-OSX platforms. */
     private void initHelpMenu() {
         JMenu jmHelp = new JMenu("Help");
-        JMenuItem jmiVisitMemLab = new JMenuItem(visitTutorialSiteAction);
-        JMenuItem jmiKeys = new JMenuItem(tipsMessageAction);
+        JMenuItem jmiVisitMemLab = new JMenuItem(new SwingAction(visitTutorialSiteAction));
+        JMenuItem jmiKeys = new JMenuItem(new SwingAction(tipsMessageAction));
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
         // Manual update check menu item

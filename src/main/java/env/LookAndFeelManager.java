@@ -92,10 +92,8 @@ public class LookAndFeelManager {
                             // Use the DI-managed ExitAction - fail fast if not available
                             var exitAction =
                                     app.di.GuiceBootstrap.getRequiredInjectedInstance(
-                                            actions.ExitAction.class, "ExitAction");
-                            var actionEvent =
-                                    new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit");
-                            exitAction.actionPerformed(actionEvent);
+                                            core.actions.ExitAction.class, "ExitAction");
+                            exitAction.execute();
                             response.performQuit();
                         } catch (Exception ex) {
                             logger.error("Error during application quit", ex);

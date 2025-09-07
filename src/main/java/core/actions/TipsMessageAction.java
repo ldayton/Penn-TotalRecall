@@ -1,23 +1,21 @@
-package actions;
+package core.actions;
 
 import events.EventDispatchBus;
 import events.InfoRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
- * in {@link ui.AppMenuBar};
+ * in the menu bar.
  */
 @Singleton
-public class TipsMessageAction extends BaseAction {
+public class TipsMessageAction extends Action {
 
     private final EventDispatchBus eventBus;
 
     @Inject
     public TipsMessageAction(EventDispatchBus eventBus) {
-        super("Tips", "Show keyboard shortcuts and tips");
         this.eventBus = eventBus;
     }
 
@@ -65,8 +63,23 @@ public class TipsMessageAction extends BaseAction {
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
+    public void execute() {
         // Fire info requested event - UI will handle showing the info dialog
         eventBus.publish(new InfoRequestedEvent(makeMessage()));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Always enabled
+    }
+
+    @Override
+    public String getLabel() {
+        return "Tips";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Show keyboard shortcuts and tips";
     }
 }

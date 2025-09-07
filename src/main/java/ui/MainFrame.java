@@ -1,6 +1,6 @@
 package ui;
 
-import actions.ExitAction;
+import core.actions.ExitAction;
 import env.LookAndFeelManager;
 import env.PreferenceKeys;
 import env.ProgramName;
@@ -18,7 +18,6 @@ import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -65,13 +64,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
                 new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                        exitAction.actionPerformed(
-                                new ActionEvent(
-                                        this,
-                                        ActionEvent.ACTION_PERFORMED,
-                                        null,
-                                        System.currentTimeMillis(),
-                                        0));
+                        exitAction.execute();
                     }
                 });
 

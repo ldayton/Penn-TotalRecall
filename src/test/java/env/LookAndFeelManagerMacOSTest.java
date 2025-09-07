@@ -2,9 +2,9 @@ package env;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import actions.ExitAction;
 import annotations.MacOS;
 import app.di.GuiceBootstrap;
+import core.actions.ExitAction;
 import java.awt.Desktop;
 import java.awt.Taskbar;
 import java.lang.reflect.Field;

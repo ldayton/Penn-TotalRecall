@@ -3,7 +3,7 @@ package env;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import actions.ExitAction;
+import core.actions.ExitAction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

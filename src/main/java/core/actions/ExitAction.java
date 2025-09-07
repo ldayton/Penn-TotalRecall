@@ -1,10 +1,9 @@
-package actions;
+package core.actions;
 
 import events.EventDispatchBus;
 import events.ExitRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 
 /**
  * Exits the application using the event-driven system.
@@ -13,19 +12,32 @@ import java.awt.event.ActionEvent;
  * application shutdown.
  */
 @Singleton
-public class ExitAction extends BaseAction {
+public class ExitAction extends Action {
 
     private final EventDispatchBus eventBus;
 
     @Inject
     public ExitAction(EventDispatchBus eventBus) {
-        super("Exit", "Exit the application");
         this.eventBus = eventBus;
-        setEnabled(true);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
+    public void execute() {
         eventBus.publish(new ExitRequestedEvent());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Always enabled
+    }
+
+    @Override
+    public String getLabel() {
+        return "Exit";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Exit the application";
     }
 }

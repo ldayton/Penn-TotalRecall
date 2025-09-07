@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import events.AppStateChangedEvent;
 import events.EventDispatchBus;
@@ -7,28 +7,44 @@ import events.Subscribe;
 import events.ZoomInRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
 /** Zooms the waveform display in. */
 @Singleton
-public class ZoomInAction extends BaseAction {
+public class ZoomInAction extends Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+    private boolean enabled = false;
 
     @Inject
     public ZoomInAction(EventDispatchBus eventBus) {
-        super("Zoom In", "Zoom in the waveform display");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
-        eventBus.publish(new ZoomInRequestedEvent());
-        eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+    public void execute() {
+        if (isEnabled()) {
+            eventBus.publish(new ZoomInRequestedEvent());
+            eventBus.publish(new FocusRequestedEvent(FocusRequestedEvent.Component.MAIN_WINDOW));
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Zoom In";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Zoom in the waveform display";
     }
 
     @Subscribe
@@ -40,8 +56,9 @@ public class ZoomInAction extends BaseAction {
     private void updateActionState() {
         // Zooming is enabled only when audio is open and not playing
         switch (currentState) {
-            case READY, PAUSED -> setEnabled(true);
-            default -> setEnabled(false);
+            case READY, PAUSED -> enabled = true;
+            default -> enabled = false;
         }
+        notifyObservers();
     }
 }

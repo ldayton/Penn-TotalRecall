@@ -82,6 +82,9 @@ public class GuiceBootstrap {
         // Initialize annotation manager to handle annotation events
         globalInjector.getInstance(state.AnnotationManager.class);
 
+        // Initialize browser launcher to handle URL open requests
+        globalInjector.getInstance(ui.BrowserLauncher.class);
+
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 
         // Initialize ActionRegistry which auto-registers all actions
