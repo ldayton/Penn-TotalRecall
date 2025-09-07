@@ -1,32 +1,50 @@
-package actions;
+package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
+import core.events.FocusEvent;
 import core.events.SeekScreenEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 
 /** Seeks the audio position forward by one screen width. */
 @Singleton
-public class ScreenSeekForwardAction extends BaseAction {
+public class ScreenSeekForwardAction extends Action {
 
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+    private boolean enabled = false;
 
     @Inject
     public ScreenSeekForwardAction(EventDispatchBus eventBus) {
-        super("Screen Forward", "Seek forward by screen width");
         this.eventBus = eventBus;
         eventBus.subscribe(this);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
-        eventBus.publish(new SeekScreenEvent(SeekScreenEvent.Direction.FORWARD));
+    public void execute() {
+        if (isEnabled()) {
+            eventBus.publish(new SeekScreenEvent(SeekScreenEvent.Direction.FORWARD));
+            eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
+        }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Screen Forward";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Seek forward by screen width";
     }
 
     @Subscribe
@@ -36,10 +54,15 @@ public class ScreenSeekForwardAction extends BaseAction {
     }
 
     private void updateActionState() {
+        boolean oldEnabled = enabled;
         // Enable when audio is loaded but not playing
-        switch (currentState) {
-            case READY, PAUSED -> setEnabled(true);
-            default -> setEnabled(false);
+        enabled =
+                switch (currentState) {
+                    case READY, PAUSED -> true;
+                    default -> false;
+                };
+        if (oldEnabled != enabled) {
+            notifyObservers();
         }
     }
 }

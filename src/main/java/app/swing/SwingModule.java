@@ -1,7 +1,7 @@
 package app.swing;
 
 import com.google.inject.AbstractModule;
-import core.audio.fmod.FmodModule;
+import core.CoreModule;
 import core.dispatch.EventDispatcher;
 import ui.SwingEventDispatcher;
 
@@ -18,14 +18,8 @@ public class SwingModule extends AbstractModule {
         // Bind Swing event dispatcher
         bind(EventDispatcher.class).to(SwingEventDispatcher.class).asEagerSingleton();
 
-        // Install FMOD module for audio system dependencies
-        install(new FmodModule());
-
-        // Install audio module for audio engine bindings
-        install(new core.audio.Module());
-
-        // Install env module for environment and platform bindings
-        install(new core.env.Module());
+        // Install shared core module
+        install(new CoreModule());
 
         // Install waveform module for waveform bindings
         install(new waveform.Module());

@@ -1,7 +1,7 @@
 package app.headless;
 
 import com.google.inject.AbstractModule;
-import core.audio.fmod.FmodModule;
+import core.CoreModule;
 import core.dispatch.EventDispatcher;
 
 /**
@@ -16,14 +16,8 @@ public class HeadlessModule extends AbstractModule {
         // Bind headless event dispatcher
         bind(EventDispatcher.class).to(HeadlessEventDispatcher.class).asEagerSingleton();
 
-        // Install FMOD module for audio system dependencies
-        install(new FmodModule());
-
-        // Install audio module for audio engine bindings
-        install(new core.audio.Module());
-
-        // Install env module for environment and platform bindings
-        install(new core.env.Module());
+        // Install shared core module
+        install(new CoreModule());
 
         // Note: In headless mode, we don't install:
         // - waveform.Module (has UI dependencies)

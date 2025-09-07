@@ -22,6 +22,9 @@ public class Module extends AbstractModule {
 
         // Update checking
         bind(UpdateManager.class).in(Singleton.class);
+
+        // Install core actions module
+        install(new core.actions.Module());
     }
 
     @Provides
