@@ -1,4 +1,4 @@
-package waveform;
+package core.waveform;
 
 import lombok.NonNull;
 

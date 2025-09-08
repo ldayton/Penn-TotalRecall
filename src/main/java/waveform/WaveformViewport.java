@@ -1,7 +1,7 @@
 package waveform;
 
+import core.waveform.ScreenDimension;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 /**
  * Interface for a waveform display viewport. Decouples WaveformPainter from Swing-specific
@@ -17,7 +17,7 @@ public interface WaveformViewport {
      *
      * @return Current display bounds (x, y, width, height)
      */
-    Rectangle getBounds();
+    ScreenDimension getViewportBounds();
 
     /**
      * Check if the viewport is visible and should be painted.

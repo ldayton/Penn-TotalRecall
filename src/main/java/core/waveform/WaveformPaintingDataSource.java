@@ -1,4 +1,6 @@
-package waveform;
+package core.waveform;
+
+import waveform.Waveform;
 
 /**
  * Data source for waveform painting operations. Provides temporal information needed by the painter

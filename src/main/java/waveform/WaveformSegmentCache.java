@@ -1,5 +1,6 @@
 package waveform;
 
+import core.waveform.ViewportContext;
 import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.ReadWriteLock;

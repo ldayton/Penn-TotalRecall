@@ -1,12 +1,12 @@
 package ui;
 
+import core.waveform.ScreenDimension;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +54,8 @@ public class WaveformCanvas extends JComponent implements WaveformViewport {
     // WaveformViewport implementation
 
     @Override
-    public Rectangle getBounds() {
-        return new Rectangle(0, 0, getWidth(), getHeight());
+    public ScreenDimension getViewportBounds() {
+        return ScreenDimension.atOrigin(getWidth(), getHeight());
     }
 
     @Override

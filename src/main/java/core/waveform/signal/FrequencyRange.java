@@ -1,4 +1,4 @@
-package waveform.signal;
+package core.waveform.signal;
 
 /** Frequency range for bandpass filtering using normalized values (0.0 to 0.5). */
 record FrequencyRange(double minFrequency, double maxFrequency) {

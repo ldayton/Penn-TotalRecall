@@ -1,10 +1,13 @@
 package waveform;
 
+import core.waveform.ScreenDimension;
+import core.waveform.TimeRange;
+import core.waveform.ViewportContext;
+import core.waveform.WaveformPaintingDataSource;
 import jakarta.inject.Inject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -41,7 +44,8 @@ public class WaveformPainter {
                                     state.WaveformPaintDataSource paintDataSource =
                                             (state.WaveformPaintDataSource) dataSource;
                                     // Update viewport width in case canvas was resized
-                                    paintDataSource.updateViewportWidth(viewport.getBounds().width);
+                                    paintDataSource.updateViewportWidth(
+                                            viewport.getViewportBounds().width());
 
                                     // Only prepare frame if audio is actually loaded
                                     if (stateMachine.isAudioLoaded()) {
@@ -109,7 +113,7 @@ public class WaveformPainter {
             return;
         }
 
-        Rectangle bounds = viewport.getBounds();
+        ScreenDimension bounds = viewport.getViewportBounds();
 
         // Check state to determine what to paint
         AudioSessionStateMachine.State state = stateMachine.getCurrentState();
@@ -141,8 +145,8 @@ public class WaveformPainter {
                 new ViewportContext(
                         timeRange.startSeconds(),
                         timeRange.endSeconds(),
-                        bounds.width,
-                        bounds.height,
+                        bounds.width(),
+                        bounds.height(),
                         dataSource.getPixelsPerSecond(),
                         ViewportContext.ScrollDirection.FORWARD // TODO: track scroll direction
                         );
@@ -193,8 +197,8 @@ public class WaveformPainter {
      * @param waveformImage The rendered waveform image from w2
      */
     public void paintWaveform(
-            @NonNull Graphics2D g, @NonNull Rectangle bounds, @NonNull Image waveformImage) {
-        g.drawImage(waveformImage, bounds.x, bounds.y, bounds.width, bounds.height, null);
+            @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull Image waveformImage) {
+        g.drawImage(waveformImage, bounds.x(), bounds.y(), bounds.width(), bounds.height(), null);
     }
 
     /**
@@ -203,13 +207,13 @@ public class WaveformPainter {
      * @param g Graphics context
      * @param bounds Area to paint in
      */
-    public void paintLoadingIndicator(@NonNull Graphics2D g, @NonNull Rectangle bounds) {
+    public void paintLoadingIndicator(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.GRAY);
         String message = "Loading...";
         int textWidth = g.getFontMetrics().stringWidth(message);
         int textHeight = g.getFontMetrics().getHeight();
-        int x = bounds.x + (bounds.width - textWidth) / 2;
-        int y = bounds.y + (bounds.height + textHeight) / 2;
+        int x = bounds.x() + (bounds.width() - textWidth) / 2;
+        int y = bounds.y() + (bounds.height() + textHeight) / 2;
         g.drawString(message, x, y);
     }
 
@@ -221,11 +225,11 @@ public class WaveformPainter {
      * @param errorMessage The error message to display
      */
     public void paintErrorMessage(
-            @NonNull Graphics2D g, @NonNull Rectangle bounds, @NonNull String errorMessage) {
+            @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull String errorMessage) {
         g.setColor(Color.RED);
         int textHeight = g.getFontMetrics().getHeight();
-        int x = bounds.x + 10;
-        int y = bounds.y + (bounds.height + textHeight) / 2;
+        int x = bounds.x() + 10;
+        int y = bounds.y() + (bounds.height() + textHeight) / 2;
         g.drawString("Error: " + errorMessage, x, y);
     }
 
@@ -235,13 +239,13 @@ public class WaveformPainter {
      * @param g Graphics context
      * @param bounds Area to paint in
      */
-    public void paintEmptyState(@NonNull Graphics2D g, @NonNull Rectangle bounds) {
+    public void paintEmptyState(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.GRAY);
         String message = "No audio loaded";
         int textWidth = g.getFontMetrics().stringWidth(message);
         int textHeight = g.getFontMetrics().getHeight();
-        int x = bounds.x + (bounds.width - textWidth) / 2;
-        int y = bounds.y + (bounds.height + textHeight) / 2;
+        int x = bounds.x() + (bounds.width() - textWidth) / 2;
+        int y = bounds.y() + (bounds.height() + textHeight) / 2;
         g.drawString(message, x, y);
     }
 
@@ -251,8 +255,8 @@ public class WaveformPainter {
      * @param g Graphics context
      * @param bounds Area to clear
      */
-    public void clearBackground(@NonNull Graphics2D g, @NonNull Rectangle bounds) {
+    public void clearBackground(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.WHITE);
-        g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        g.fillRect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
     }
 }

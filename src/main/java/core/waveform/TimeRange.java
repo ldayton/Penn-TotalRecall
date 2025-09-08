@@ -1,4 +1,4 @@
-package waveform;
+package core.waveform;
 
 /** Time range that the session knows about. */
 public record TimeRange(double startSeconds, double endSeconds) {

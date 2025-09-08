@@ -4,6 +4,7 @@ import core.audio.AudioEngine;
 import core.audio.AudioHandle;
 import core.audio.AudioMetadata;
 import core.audio.SampleReader;
+import core.waveform.ViewportContext;
 import java.awt.Image;
 import java.util.concurrent.*;
 import lombok.NonNull;

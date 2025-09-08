@@ -1,4 +1,4 @@
-package waveform.signal;
+package core.waveform.signal;
 
 import core.audio.AudioData;
 import core.audio.SampleReader;

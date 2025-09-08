@@ -2,6 +2,7 @@ package waveform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import core.waveform.ViewportContext;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.*;

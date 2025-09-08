@@ -1,4 +1,4 @@
-package waveform.signal;
+package core.waveform.signal;
 
 /** Audio chunk with amplitude data and metadata. */
 record AudioChunkData(

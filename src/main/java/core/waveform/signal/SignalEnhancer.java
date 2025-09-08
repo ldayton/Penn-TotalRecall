@@ -1,4 +1,4 @@
-package waveform.signal;
+package core.waveform.signal;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

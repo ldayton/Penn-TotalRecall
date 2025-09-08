@@ -1,6 +1,9 @@
 package waveform;
 
 import core.audio.SampleReader;
+import core.waveform.ViewportContext;
+import core.waveform.signal.PixelScaler;
+import core.waveform.signal.WaveformProcessor;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -10,8 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import waveform.signal.PixelScaler;
-import waveform.signal.WaveformProcessor;
 
 /**
  * Priority-based waveform renderer with prefetch strategy. Fills segment cache efficiently using

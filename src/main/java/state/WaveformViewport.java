@@ -6,10 +6,10 @@ import core.events.SeekEvent;
 import core.events.SeekScreenEvent;
 import core.events.ZoomInEvent;
 import core.events.ZoomOutEvent;
+import core.waveform.TimeRange;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import waveform.TimeRange;
 
 /**
  * Manages viewport position and zoom for the waveform display. Handles auto-scrolling during
