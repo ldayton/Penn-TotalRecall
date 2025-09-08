@@ -1,6 +1,5 @@
 package app.swing;
 
-import actions.ActionsManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import core.env.UpdateManager;
@@ -13,6 +12,7 @@ import ui.ContentSplitPane;
 import ui.LookAndFeelManager;
 import ui.MainFrame;
 import ui.WindowLayoutPersistence;
+import ui.actions.ActionsManager;
 
 /**
  * Swing-based desktop application entry point.
@@ -84,6 +84,9 @@ public class SwingApp {
 
         // Initialize browser launcher to handle URL open requests
         globalInjector.getInstance(ui.BrowserLauncher.class);
+
+        // Initialize ShortcutFrame to handle shortcut edit requests
+        globalInjector.getInstance(ui.ShortcutFrame.class);
 
         // AudioState is now fully managed by DI - no need to initialize CurAudio
 

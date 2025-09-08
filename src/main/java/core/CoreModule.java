@@ -25,5 +25,8 @@ public class CoreModule extends AbstractModule {
         // Install env module for environment and platform bindings
         // This also installs core.actions.Module
         install(new core.env.Module());
+
+        // Install preferences module
+        install(new core.preferences.Module());
     }
 }

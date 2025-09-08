@@ -1,11 +1,11 @@
 package ui;
 
 import core.env.PreferenceKeys;
+import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import lombok.NonNull;
-import ui.preferences.PreferencesManager;
 
 /**
  * Manages window state persistence and restoration.

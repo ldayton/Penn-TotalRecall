@@ -1,11 +1,10 @@
-package actions;
+package ui.actions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 
-import actions.ActionsFileParser.ActionConfig;
 import core.env.Platform;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ui.KeyboardManager;
+import ui.actions.ActionsFileParser.ActionConfig;
 import ui.shortcuts.Shortcut;
 
 @ExtendWith(MockitoExtension.class)
@@ -91,7 +91,7 @@ class ActionsManagerTest {
         var actionConfigs =
                 List.of(
                         new ActionConfig(
-                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "ui.actions.ActionsManagerTest$TestableUpdatingAction",
                                 "Mark Complete",
                                 Optional.of("Mark current item as complete"),
                                 Optional.empty(),
@@ -122,7 +122,7 @@ class ActionsManagerTest {
         var actionConfigs =
                 List.of(
                         new ActionConfig(
-                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "ui.actions.ActionsManagerTest$TestableUpdatingAction",
                                 "Save",
                                 Optional.empty(),
                                 Optional.empty(),
@@ -148,7 +148,7 @@ class ActionsManagerTest {
         var actionConfigs =
                 List.of(
                         new ActionConfig(
-                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "ui.actions.ActionsManagerTest$TestableUpdatingAction",
                                 "Add Audio Files...",
                                 Optional.of("Select File or Folder"),
                                 Optional.of("TEST_VALUE"),
@@ -177,7 +177,7 @@ class ActionsManagerTest {
         var actionConfigs =
                 List.of(
                         new ActionConfig(
-                                "actions.ActionsManagerTest$TestableUpdatingAction",
+                                "ui.actions.ActionsManagerTest$TestableUpdatingAction",
                                 "Save",
                                 Optional.empty(),
                                 Optional.empty(),

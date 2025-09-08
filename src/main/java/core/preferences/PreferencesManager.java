@@ -1,4 +1,4 @@
-package ui.preferences;
+package core.preferences;
 
 import com.google.common.annotations.VisibleForTesting;
 import core.env.UserHomeProvider;

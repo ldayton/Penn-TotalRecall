@@ -7,7 +7,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Desktop;
 import java.awt.Taskbar;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -67,10 +66,8 @@ public class LookAndFeelManager {
                     _ -> {
                         var aboutAction =
                                 app.swing.SwingApp.getRequiredInjectedInstance(
-                                        actions.AboutAction.class, "AboutAction");
-                        var actionEvent =
-                                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "about");
-                        aboutAction.actionPerformed(actionEvent);
+                                        core.actions.AboutAction.class, "AboutAction");
+                        aboutAction.execute();
                     });
         }
 
@@ -80,10 +77,8 @@ public class LookAndFeelManager {
                     _ -> {
                         var preferencesAction =
                                 app.swing.SwingApp.getRequiredInjectedInstance(
-                                        actions.PreferencesAction.class, "PreferencesAction");
-                        var actionEvent =
-                                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "preferences");
-                        preferencesAction.actionPerformed(actionEvent);
+                                        core.actions.PreferencesAction.class, "PreferencesAction");
+                        preferencesAction.execute();
                     });
         }
 

@@ -1,13 +1,13 @@
 package ui.shortcuts;
 
-import actions.ActionsFileParser.ActionConfig;
+import core.preferences.PreferencesManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.preferences.PreferencesManager;
+import ui.actions.ActionsFileParser.ActionConfig;
 
 /**
  * ShortcutPreferences for managing user preferences for ActionConfig objects. This provides user

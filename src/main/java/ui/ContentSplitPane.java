@@ -1,8 +1,5 @@
 package ui;
 
-import actions.ActionsManager;
-// import actions.AnnotateIntrusionAction;
-// import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import core.actions.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
 import jakarta.inject.Inject;
@@ -12,6 +9,9 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import ui.actions.ActionsManager;
+// import actions.AnnotateIntrusionAction;
+// import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import ui.swing.SwingAction;
 
 /**

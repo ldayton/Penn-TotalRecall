@@ -1,19 +1,19 @@
 package ui;
 
-import actions.AboutAction;
+import core.actions.AboutAction;
 // import actions.AnnotateIntrusionAction;
 // import actions.AnnotateRegularAction;
-import actions.CheckUpdatesAction;
-import actions.EditShortcutsAction;
-import actions.Last200PlusMoveAction;
-import actions.OpenWordpoolAction;
-import actions.PreferencesAction;
-import actions.ReplayLast200MillisAction;
+import core.actions.CheckUpdatesAction;
+import core.actions.DoneAction;
+import core.actions.EditShortcutsAction;
+import core.actions.ExitAction;
+import core.actions.Last200PlusMoveAction;
+import core.actions.OpenWordpoolAction;
+import core.actions.PlayPauseAction;
+import core.actions.PreferencesAction;
+import core.actions.ReplayLast200MillisAction;
 // import actions.ReplayLastPositionAction;
 // import actions.ReturnToLastPositionAction;
-import core.actions.DoneAction;
-import core.actions.ExitAction;
-import core.actions.PlayPauseAction;
 import core.actions.SeekToStartAction;
 import core.actions.TipsMessageAction;
 import core.actions.VisitTutorialSiteAction;
@@ -73,9 +73,9 @@ public class AppMenuBar extends JMenuBar {
     // private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
     private final core.actions.ZoomInAction zoomInAction;
     private final core.actions.ZoomOutAction zoomOutAction;
-    private final actions.OpenAudioFileAction openAudioFileAction;
-    private final actions.OpenAudioFolderAction openAudioFolderAction;
-    private final actions.SeekAction seekAction;
+    private final core.actions.OpenAudioFileAction openAudioFileAction;
+    private final core.actions.OpenAudioFolderAction openAudioFolderAction;
+    private final core.actions.SeekActionFactory seekActionFactory;
     private final core.actions.ScreenSeekForwardAction screenSeekForwardAction;
     private final core.actions.ScreenSeekBackwardAction screenSeekBackwardAction;
 
@@ -86,7 +86,7 @@ public class AppMenuBar extends JMenuBar {
             ui.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
-            actions.ActionsManager actionsManager,
+            ui.actions.ActionsManager actionsManager,
             EditShortcutsAction editShortcutsAction,
             PreferencesAction preferencesAction,
             PlayPauseAction playPauseAction,
@@ -105,9 +105,9 @@ public class AppMenuBar extends JMenuBar {
             // actions.ToggleAnnotationsAction toggleAnnotationsAction,
             core.actions.ZoomInAction zoomInAction,
             core.actions.ZoomOutAction zoomOutAction,
-            actions.OpenAudioFileAction openAudioFileAction,
-            actions.OpenAudioFolderAction openAudioFolderAction,
-            actions.SeekAction seekAction,
+            core.actions.OpenAudioFileAction openAudioFileAction,
+            core.actions.OpenAudioFolderAction openAudioFolderAction,
+            core.actions.SeekActionFactory seekActionFactory,
             core.actions.ScreenSeekForwardAction screenSeekForwardAction,
             core.actions.ScreenSeekBackwardAction screenSeekBackwardAction) {
         this.openWordpoolAction = openWordpoolAction;
@@ -132,7 +132,7 @@ public class AppMenuBar extends JMenuBar {
         this.zoomOutAction = zoomOutAction;
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
-        this.seekAction = seekAction;
+        this.seekActionFactory = seekActionFactory;
         this.screenSeekForwardAction = screenSeekForwardAction;
         this.screenSeekBackwardAction = screenSeekBackwardAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
@@ -149,18 +149,18 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the File menu, only adding exit and preferences options for non-OSX platforms. */
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
-        JMenuItem jmiOpenWordpool = new JMenuItem(openWordpoolAction);
+        JMenuItem jmiOpenWordpool = new JMenuItem(new SwingAction(openWordpoolAction));
         jmFile.add(jmiOpenWordpool);
 
-        JMenuItem jmiOpenAudioFile = new JMenuItem(openAudioFileAction);
-        JMenuItem jmiOpenAudioFolder = new JMenuItem(openAudioFolderAction);
+        JMenuItem jmiOpenAudioFile = new JMenuItem(new SwingAction(openAudioFileAction));
+        JMenuItem jmiOpenAudioFolder = new JMenuItem(new SwingAction(openAudioFolderAction));
         jmFile.add(jmiOpenAudioFile);
         jmFile.add(jmiOpenAudioFolder);
-        JMenuItem jmiShortcuts = new JMenuItem(editShortcutsAction);
+        JMenuItem jmiShortcuts = new JMenuItem(new SwingAction(editShortcutsAction));
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {
             jmFile.addSeparator();
-            JMenuItem jmiPreferences = new JMenuItem(preferencesAction);
+            JMenuItem jmiPreferences = new JMenuItem(new SwingAction(preferencesAction));
             jmFile.add(jmiPreferences);
             jmFile.addSeparator();
             JMenuItem jmiExit = new JMenuItem(new SwingAction(exitAction));
@@ -177,28 +177,32 @@ public class AppMenuBar extends JMenuBar {
         JMenuItem jmiPlayPause = new JMenuItem(new SwingAction(playPauseAction));
 
         JMenuItem jmiSeekToStart = new JMenuItem(new SwingAction(seekToStartAction));
-        JMenuItem jmiReplay = new JMenuItem(replayLast200MillisAction);
+        JMenuItem jmiReplay = new JMenuItem(new SwingAction(replayLast200MillisAction));
         // JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         // JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
         JMenu jmSeek = new JMenu("Seek");
 
-        // Add seek actions using the unified ADI action
-        JMenuItem jmiSeekForwardSmall = new JMenuItem(seekAction);
-        jmiSeekForwardSmall.setText("Forward Small");
-        JMenuItem jmiSeekSmallBackward = new JMenuItem(seekAction);
-        jmiSeekSmallBackward.setText("Backward Small");
-        JMenuItem jmiSeekForwardMedium = new JMenuItem(seekAction);
-        jmiSeekForwardMedium.setText("Forward Medium");
-        JMenuItem jmiSeekBackwardMedium = new JMenuItem(seekAction);
-        jmiSeekBackwardMedium.setText("Backward Medium");
-        JMenuItem jmiSeekForwardLarge = new JMenuItem(seekAction);
-        jmiSeekForwardLarge.setText("Forward Large");
-        JMenuItem jmiSeekBackwardLarge = new JMenuItem(seekAction);
-        jmiSeekBackwardLarge.setText("Backward Large");
+        // Add seek actions using the factory
+        JMenuItem jmiSeekForwardSmall =
+                new JMenuItem(new SwingAction(seekActionFactory.createSeekAction("forward-small")));
+        JMenuItem jmiSeekSmallBackward =
+                new JMenuItem(
+                        new SwingAction(seekActionFactory.createSeekAction("backward-small")));
+        JMenuItem jmiSeekForwardMedium =
+                new JMenuItem(
+                        new SwingAction(seekActionFactory.createSeekAction("forward-medium")));
+        JMenuItem jmiSeekBackwardMedium =
+                new JMenuItem(
+                        new SwingAction(seekActionFactory.createSeekAction("backward-medium")));
+        JMenuItem jmiSeekForwardLarge =
+                new JMenuItem(new SwingAction(seekActionFactory.createSeekAction("forward-large")));
+        JMenuItem jmiSeekBackwardLarge =
+                new JMenuItem(
+                        new SwingAction(seekActionFactory.createSeekAction("backward-large")));
 
-        JMenuItem jmiLast200MoveRight = new JMenuItem(last200PlusMoveAction);
-        JMenuItem jmiLast200MoveLeft = new JMenuItem(last200PlusMoveAction);
+        JMenuItem jmiLast200MoveRight = new JMenuItem(new SwingAction(last200PlusMoveAction));
+        JMenuItem jmiLast200MoveLeft = new JMenuItem(new SwingAction(last200PlusMoveAction));
 
         // Add screen seek actions
         JMenuItem jmiScreenForward = new JMenuItem(new SwingAction(screenSeekForwardAction));
@@ -256,11 +260,11 @@ public class AppMenuBar extends JMenuBar {
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
         // Manual update check menu item
-        JMenuItem jmiCheckUpdates = new JMenuItem(checkUpdatesAction);
+        JMenuItem jmiCheckUpdates = new JMenuItem(new SwingAction(checkUpdatesAction));
         jmHelp.add(jmiCheckUpdates);
         if (showPreferencesInMenu) {
             jmHelp.addSeparator();
-            JMenuItem jmiAbout = new JMenuItem(aboutAction);
+            JMenuItem jmiAbout = new JMenuItem(new SwingAction(aboutAction));
             jmHelp.add(jmiAbout);
         }
         add(jmHelp);

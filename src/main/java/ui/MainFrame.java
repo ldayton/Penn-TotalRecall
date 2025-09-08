@@ -11,6 +11,7 @@ import core.events.DialogInfoEvent;
 import core.events.ExitEvent;
 import core.events.FocusEvent;
 import core.events.PreferencesEvent;
+import core.preferences.PreferencesManager;
 import events.AudioFileSwitchedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -21,7 +22,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import ui.preferences.PreferencesManager;
 import ui.wordpool.WordpoolDisplay;
 
 /**

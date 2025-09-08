@@ -2,6 +2,7 @@ package ui;
 
 import core.env.ProgramName;
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
 import java.io.File;
 import javax.swing.ImageIcon;
@@ -27,13 +28,14 @@ public class DialogService {
     /** Title of all error dialogs in the program. */
     private static final String ERROR_DIALOG_TITLE = "Error";
 
-    private final MainFrame mainFrame;
+    private final Provider<MainFrame> mainFrameProvider;
     private final ImageIcon appIcon;
     private final ProgramName programName;
 
     @Inject
-    public DialogService(@NonNull MainFrame mainFrame, @NonNull ProgramName programName) {
-        this.mainFrame = mainFrame;
+    public DialogService(
+            @NonNull Provider<MainFrame> mainFrameProvider, @NonNull ProgramName programName) {
+        this.mainFrameProvider = mainFrameProvider;
         this.programName = programName;
         this.appIcon = new ImageIcon(DialogService.class.getResource("/images/headphones48.png"));
     }
@@ -45,7 +47,11 @@ public class DialogService {
      */
     public void showError(@NonNull String message) {
         JOptionPane.showMessageDialog(
-                mainFrame, message, ERROR_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE, appIcon);
+                mainFrameProvider.get(),
+                message,
+                ERROR_DIALOG_TITLE,
+                JOptionPane.ERROR_MESSAGE,
+                appIcon);
     }
 
     /**
@@ -55,7 +61,7 @@ public class DialogService {
      */
     public void showInfo(@NonNull String message) {
         JOptionPane.showMessageDialog(
-                mainFrame,
+                mainFrameProvider.get(),
                 message,
                 programName.toString(),
                 JOptionPane.INFORMATION_MESSAGE,
@@ -71,7 +77,7 @@ public class DialogService {
     public boolean showConfirm(@NonNull String message) {
         int response =
                 JOptionPane.showConfirmDialog(
-                        mainFrame,
+                        mainFrameProvider.get(),
                         message,
                         YES_NO_DIALOG_TITLE,
                         JOptionPane.YES_NO_OPTION,
@@ -93,7 +99,7 @@ public class DialogService {
 
         int response =
                 JOptionPane.showConfirmDialog(
-                        mainFrame,
+                        mainFrameProvider.get(),
                         params,
                         YES_NO_DIALOG_TITLE,
                         JOptionPane.YES_NO_OPTION,
@@ -128,7 +134,7 @@ public class DialogService {
             jfc.setFileFilter(fileFilter);
         }
 
-        int result = jfc.showOpenDialog(mainFrame);
+        int result = jfc.showOpenDialog(mainFrameProvider.get());
 
         if (result == JFileChooser.APPROVE_OPTION) {
             return jfc.getSelectedFile();

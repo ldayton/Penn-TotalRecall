@@ -7,7 +7,6 @@ import ui.annotations.AnnotationTable;
 import ui.audiofiles.AudioFileDisplay;
 import ui.audiofiles.AudioFileList;
 import ui.preferences.PreferencesFrame;
-import ui.preferences.PreferencesManager;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolList;
 import ui.wordpool.WordpoolTextField;
@@ -21,6 +20,14 @@ public class Module extends AbstractModule {
 
     @Override
     protected void configure() {
+        // Install UI actions module
+        install(new ui.actions.Module());
+
+        // Services
+        bind(core.services.FileSelectionService.class)
+                .to(SwingFileSelectionService.class)
+                .in(Singleton.class);
+
         // Main window and frame components
         bind(MainFrame.class).in(Singleton.class);
         bind(AppMenuBar.class).in(Singleton.class);
@@ -35,7 +42,7 @@ public class Module extends AbstractModule {
 
         // Preferences
         bind(PreferencesFrame.class).in(Singleton.class);
-        bind(PreferencesManager.class).in(Singleton.class);
+        bind(ShortcutFrame.class).in(Singleton.class);
 
         // Audio file display
         bind(AudioFileDisplay.class).in(Singleton.class);

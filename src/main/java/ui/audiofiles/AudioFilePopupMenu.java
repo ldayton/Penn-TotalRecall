@@ -1,6 +1,6 @@
 package ui.audiofiles;
 
-import actions.ContinueAnnotatingAction;
+// import actions.ContinueAnnotatingAction;
 import core.dispatch.EventDispatchBus;
 import core.events.AudioFileListEvent;
 import jakarta.inject.Inject;
@@ -18,13 +18,14 @@ import javax.swing.JPopupMenu;
  */
 public class AudioFilePopupMenu extends JPopupMenu {
 
-    private final ContinueAnnotatingAction continueAnnotatingAction;
+    // private final ContinueAnnotatingAction continueAnnotatingAction;
     private final EventDispatchBus eventBus;
 
     @Inject
     public AudioFilePopupMenu(
-            ContinueAnnotatingAction continueAnnotatingAction, EventDispatchBus eventBus) {
-        this.continueAnnotatingAction = continueAnnotatingAction;
+            // ContinueAnnotatingAction continueAnnotatingAction,
+            EventDispatchBus eventBus) {
+        // this.continueAnnotatingAction = continueAnnotatingAction;
         this.eventBus = eventBus;
     }
 
@@ -47,11 +48,12 @@ public class AudioFilePopupMenu extends JPopupMenu {
         fakeTitle.setEnabled(false);
 
         // Configure the injected action for this specific file
-        continueAnnotatingAction.setAudioFile(file);
-        JMenuItem cont = new JMenuItem(continueAnnotatingAction);
-        if (file.isDone() == false) {
-            cont.setEnabled(false);
-        }
+        // continueAnnotatingAction.setAudioFile(file);
+        // JMenuItem cont = new JMenuItem(continueAnnotatingAction);
+        // Temporarily disabled - ContinueAnnotatingAction needs migration
+        // if (file.isDone() == false) {
+        //     cont.setEnabled(false);
+        // }
 
         JMenuItem del =
                 new JMenuItem(
@@ -71,7 +73,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
 
         add(fakeTitle);
         addSeparator();
-        add(cont);
+        // add(cont); // Disabled until ContinueAnnotatingAction is migrated
         add(del);
     }
 }

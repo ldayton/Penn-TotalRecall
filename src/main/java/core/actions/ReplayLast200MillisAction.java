@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
@@ -7,7 +7,6 @@ import core.events.FocusEvent;
 import core.events.PlayLast200MillisEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 import lombok.NonNull;
 import state.AudioSessionStateMachine;
 import state.WaveformSessionDataSource;
@@ -17,7 +16,7 @@ import state.WaveformSessionDataSource;
  * crossed.
  */
 @Singleton
-public class ReplayLast200MillisAction extends BaseAction {
+public class ReplayLast200MillisAction extends Action {
 
     public static final int DURATION_MS = 200;
 
@@ -28,33 +27,42 @@ public class ReplayLast200MillisAction extends BaseAction {
     @Inject
     public ReplayLast200MillisAction(
             EventDispatchBus eventBus, WaveformSessionDataSource sessionSource) {
-        super("Replay Last 200ms", "Replay the last 200 milliseconds of audio");
         this.eventBus = eventBus;
         this.sessionSource = sessionSource;
         eventBus.subscribe(this);
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
+    public void execute() {
         eventBus.publish(new PlayLast200MillisEvent());
         eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
     }
 
-    @Subscribe
-    public void onStateChanged(@NonNull AppStateChangedEvent event) {
-        currentState = event.newState();
-        updateActionState();
-    }
-
-    private void updateActionState() {
+    @Override
+    public boolean isEnabled() {
         // User can replay last 200 millis when audio is open, not playing, and not at the beginning
         if (currentState == AudioSessionStateMachine.State.READY
                 || currentState == AudioSessionStateMachine.State.PAUSED) {
             // Check if we're not at the beginning
             double position = sessionSource.getPlaybackPosition().orElse(0.0);
-            setEnabled(position > 0.2); // Enable if we're past 200ms
-        } else {
-            setEnabled(false);
+            return position > 0.2; // Enable if we're past 200ms
         }
+        return false;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Replay Last 200ms";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Replay the last 200 milliseconds of audio";
+    }
+
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        currentState = event.newState();
+        notifyObservers();
     }
 }

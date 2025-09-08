@@ -32,8 +32,9 @@ class PreferencesIntegrationTest {
         // Trigger Preferences via the real menu action on the EDT
         SwingUtilities.invokeAndWait(
                 () -> {
-                    var prefsAction = SwingApp.getInjectedInstance(actions.PreferencesAction.class);
-                    prefsAction.actionPerformed(new java.awt.event.ActionEvent(this, 0, "prefs"));
+                    var prefsAction =
+                            SwingApp.getInjectedInstance(core.actions.PreferencesAction.class);
+                    prefsAction.execute();
                 });
 
         // Verify PreferencesFrame became visible

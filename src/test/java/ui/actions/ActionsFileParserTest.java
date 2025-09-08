@@ -1,10 +1,9 @@
-package actions;
+package ui.actions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import actions.ActionsFileParser.ActionConfig;
 import core.env.Platform;
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ui.KeyboardManager;
+import ui.actions.ActionsFileParser.ActionConfig;
 
 @ExtendWith(MockitoExtension.class)
 class ActionsFileParserTest {
@@ -120,7 +120,7 @@ class ActionsFileParserTest {
                     <action class="actions.OpenAudioLocationAction"
                             name="Add Audio Files..."
                             os="Linux,Windows" />
-                    <action class="actions.AboutAction"
+                    <action class="core.actions.AboutAction"
                             name="About"
                             os="Windows,Linux" />
                 </actions>

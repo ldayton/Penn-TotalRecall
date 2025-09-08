@@ -1,4 +1,4 @@
-package actions;
+package ui.actions;
 
 import static java.util.stream.Collectors.joining;
 

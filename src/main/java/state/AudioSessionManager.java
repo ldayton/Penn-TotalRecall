@@ -12,6 +12,7 @@ import core.events.CloseAudioFileEvent;
 import core.events.PlayLast200MillisEvent;
 import core.events.PlayLast200MillisThenMoveEvent;
 import core.events.PlayPauseEvent;
+import core.events.SeekByAmountEvent;
 import core.events.SeekEvent;
 import core.events.SeekToStartEvent;
 import events.AudioFileLoadRequestedEvent;
@@ -175,6 +176,22 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         eventBus.publish(
                 new AppStateChangedEvent(
                         prevState, AudioSessionStateMachine.State.NO_AUDIO, fileBeingClosed));
+    }
+
+    @Subscribe
+    public void onSeekByAmountRequested(@NonNull SeekByAmountEvent event) {
+        // Calculate target frame based on current position and requested amount
+        long shiftFrames = (long) ((event.milliseconds() / 1000.0) * sampleRate);
+        long targetFrame =
+                event.direction() == SeekByAmountEvent.Direction.FORWARD
+                        ? currentPositionFrames + shiftFrames
+                        : currentPositionFrames - shiftFrames;
+
+        // Ensure within bounds
+        targetFrame = Math.max(0, Math.min(targetFrame, totalFrames - 1));
+
+        // Delegate to existing seek logic
+        onAudioSeekRequested(new SeekEvent(targetFrame));
     }
 
     @Subscribe

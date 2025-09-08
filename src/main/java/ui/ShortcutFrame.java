@@ -1,8 +1,11 @@
 package ui;
 
-import actions.ActionsManager;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.EditShortcutsRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import ui.actions.ActionsManager;
 import ui.shortcuts.ShortcutManager;
 
 /**
@@ -13,8 +16,9 @@ import ui.shortcuts.ShortcutManager;
 public class ShortcutFrame extends ShortcutManager {
 
     @Inject
-    public ShortcutFrame(ActionsManager actionsManager) {
+    public ShortcutFrame(ActionsManager actionsManager, EventDispatchBus eventBus) {
         super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
+        eventBus.subscribe(this);
     }
 
     private static ui.shortcuts.ShortcutPreferences.ActionConfigListener createActionConfigListener(
@@ -22,7 +26,7 @@ public class ShortcutFrame extends ShortcutManager {
         return new ui.shortcuts.ShortcutPreferences.ActionConfigListener() {
             @Override
             public void actionConfigUpdated(
-                    actions.ActionsFileParser.ActionConfig actionConfig,
+                    ui.actions.ActionsFileParser.ActionConfig actionConfig,
                     ui.shortcuts.Shortcut oldShortcut) {
                 // Update via ActionsManager using the action config
                 String id =
@@ -38,5 +42,10 @@ public class ShortcutFrame extends ShortcutManager {
     public void showShortcutEditor() {
         setLocation(ui.DialogCentering.chooseLocation(this));
         setVisible(true);
+    }
+
+    @Subscribe
+    public void handleEditShortcutsRequested(EditShortcutsRequestedEvent event) {
+        showShortcutEditor();
     }
 }

@@ -5,7 +5,9 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.env.PreferenceKeys;
+import core.events.AudioFilesSelectedEvent;
 import core.events.UiUpdateEvent;
+import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -23,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.DialogService;
 import ui.audiofiles.AudioFile.AudioFilePathException;
-import ui.preferences.PreferencesManager;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -204,5 +205,10 @@ public class AudioFileDisplay extends JScrollPane {
         if (event.component() == UiUpdateEvent.Component.AUDIO_FILE_DISPLAY) {
             repaint();
         }
+    }
+
+    @Subscribe
+    public void handleAudioFilesSelected(AudioFilesSelectedEvent event) {
+        addFilesIfSupported(event.files());
     }
 }

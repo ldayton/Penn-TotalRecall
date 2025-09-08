@@ -28,9 +28,7 @@ public class SwingModule extends AbstractModule {
         install(new state.Module());
 
         // Install ui module for user interface bindings
+        // Note: ui.Module now installs ui.actions.Module automatically
         install(new ui.Module());
-
-        // Install actions module for action management bindings
-        install(new actions.Module());
     }
 }

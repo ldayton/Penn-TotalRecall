@@ -1,6 +1,7 @@
 package ui.preferences;
 
 import app.swing.SwingApp;
+import core.preferences.PreferencesManager;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;

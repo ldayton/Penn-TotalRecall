@@ -1,20 +1,18 @@
-package actions;
+package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.events.PreferencesEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 
 /** Launches the preferences window. */
 @Singleton
-public class PreferencesAction extends BaseAction {
+public class PreferencesAction extends Action {
 
     private final EventDispatchBus eventBus;
 
     @Inject
     public PreferencesAction(EventDispatchBus eventBus) {
-        super("Preferences", "Open preferences window");
         this.eventBus = eventBus;
     }
 
@@ -25,8 +23,23 @@ public class PreferencesAction extends BaseAction {
      * created.
      */
     @Override
-    protected void performAction(ActionEvent e) {
+    public void execute() {
         // Fire preferences requested event - UI will handle opening the preferences window
         eventBus.publish(new PreferencesEvent());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Always enabled
+    }
+
+    @Override
+    public String getLabel() {
+        return "Preferences";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Open preferences window";
     }
 }

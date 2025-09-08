@@ -1,4 +1,4 @@
-package actions;
+package core.actions;
 
 import core.dispatch.EventDispatchBus;
 import core.env.Constants;
@@ -7,11 +7,10 @@ import core.env.ProgramVersion;
 import core.events.DialogInfoEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.event.ActionEvent;
 
 /** Displays information about the program to the user */
 @Singleton
-public class AboutAction extends BaseAction {
+public class AboutAction extends Action {
 
     private final EventDispatchBus eventBus;
     private final ProgramName programName;
@@ -20,18 +19,32 @@ public class AboutAction extends BaseAction {
     @Inject
     public AboutAction(
             EventDispatchBus eventBus, ProgramName programName, ProgramVersion programVersion) {
-        super("About", "Display information about the program");
         this.eventBus = eventBus;
         this.programName = programName;
         this.programVersion = programVersion;
     }
 
     @Override
-    protected void performAction(ActionEvent e) {
+    public void execute() {
         // Fire info requested event - UI will handle showing the info dialog
         eventBus.publish(
                 new DialogInfoEvent(
                         buildAboutMessage(programName.toString(), programVersion.toString())));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Always enabled
+    }
+
+    @Override
+    public String getLabel() {
+        return "About";
+    }
+
+    @Override
+    public String getTooltip() {
+        return "Display information about the program";
     }
 
     /**
@@ -42,23 +55,25 @@ public class AboutAction extends BaseAction {
      * @return the formatted about message
      */
     public static String buildAboutMessage(String appName, String appVersion) {
-        return appName
-                + " v"
-                + appVersion
-                + "\n"
-                + "Maintainer: "
-                + Constants.maintainerEmail
-                + "\n\n"
-                + "Released by:\n"
-                + Constants.orgName
-                + "\n"
-                + Constants.orgAffiliationName
-                + "\n"
-                + Constants.orgHomepage
-                + "\n\n"
-                + "License: "
-                + Constants.license
-                + "\n"
-                + Constants.licenseSite;
+        return """
+               %s v%s
+               Maintainer: %s
+
+               Released by:
+               %s
+               %s
+               %s
+
+               License: %s
+               %s"""
+                .formatted(
+                        appName,
+                        appVersion,
+                        Constants.maintainerEmail,
+                        Constants.orgName,
+                        Constants.orgAffiliationName,
+                        Constants.orgHomepage,
+                        Constants.license,
+                        Constants.licenseSite);
     }
 }

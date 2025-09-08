@@ -32,8 +32,9 @@ class ShortcutFrameIntegrationTest {
         // Trigger EditShortcutsAction on the EDT
         SwingUtilities.invokeAndWait(
                 () -> {
-                    var action = SwingApp.getInjectedInstance(actions.EditShortcutsAction.class);
-                    action.actionPerformed(new java.awt.event.ActionEvent(this, 0, "shortcuts"));
+                    var action =
+                            SwingApp.getInjectedInstance(core.actions.EditShortcutsAction.class);
+                    action.execute();
                 });
 
         // Verify ShortcutFrame became visible

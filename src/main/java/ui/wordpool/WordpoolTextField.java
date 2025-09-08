@@ -6,6 +6,7 @@ import core.env.PreferenceKeys;
 import core.events.AnnotateEvent;
 import core.events.AnnotateIntrusionEvent;
 import core.events.FocusEvent;
+import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;
@@ -27,7 +28,6 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
 import ui.KeyboardManager;
-import ui.preferences.PreferencesManager;
 
 /**
  * Custom <code>JTextField</code> for entering annotations.

@@ -1,6 +1,5 @@
 package ui;
 
-import actions.ActionsManager;
 import core.actions.Action;
 import core.actions.ActionRegistry;
 import jakarta.inject.Inject;
@@ -8,6 +7,7 @@ import jakarta.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import ui.actions.ActionsManager;
 import ui.swing.SwingAction;
 
 /**
