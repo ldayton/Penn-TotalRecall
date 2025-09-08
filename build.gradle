@@ -5,6 +5,7 @@ plugins {
     id 'com.diffplug.spotless' version '7.2.+'
     id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
     id 'org.jetbrains.qodana' version '2025.2.1'
+    id 'checkstyle'
 }
 
 group = 'edu.upenn.psych.memory'
@@ -606,5 +607,30 @@ spotless {
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
+    }
+}
+
+// Checkstyle configuration - only check main sources, not test
+checkstyle {
+    toolVersion = '10.21.0'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    
+    // Only check main sources, not test
+    sourceSets = [sourceSets.main]
+    
+    // Show violations in console
+    showViolations = true
+    
+    // Make build fail on violations
+    maxWarnings = 0
+    maxErrors = 0
+}
+
+// Configure checkstyle tasks
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.file("reports/checkstyle/${name}.html")
     }
 }

@@ -6,7 +6,11 @@ import core.audio.AudioMetadata;
 import core.audio.SampleReader;
 import core.waveform.ViewportContext;
 import java.awt.Image;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import lombok.NonNull;
 
 /**
