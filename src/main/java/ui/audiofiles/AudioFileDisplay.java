@@ -177,7 +177,7 @@ public class AudioFileDisplay extends JScrollPane {
         var eventBus =
                 SwingApp.getRequiredInjectedInstance(
                         core.dispatch.EventDispatchBus.class, "EventDispatchBus");
-        eventBus.publish(new events.AudioFileLoadRequestedEvent(file));
+        eventBus.publish(new core.events.AudioFileLoadRequestedEvent(file));
 
         // UI updates are now handled via events
         return true;

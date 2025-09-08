@@ -6,13 +6,13 @@ import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
+import core.events.AppStateChangedEvent;
 import core.events.DialogErrorEvent;
 import core.events.DialogInfoEvent;
 import core.events.ExitEvent;
 import core.events.FocusEvent;
 import core.events.PreferencesEvent;
 import core.preferences.PreferencesManager;
-import events.AudioFileSwitchedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import state.AudioSessionStateMachine;
 import ui.wordpool.WordpoolDisplay;
 
 /**
@@ -148,16 +149,20 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         return false;
     }
 
-    /** Handles audio file switched events by updating the window title and focus. */
+    /** Handles app state changes to update window title when audio files are loaded/closed. */
     @Subscribe
-    public void handleAudioFileSwitched(AudioFileSwitchedEvent event) {
-        if (event.getFile() == null) {
-            // Reset to default title and request focus
+    public void handleAppStateChanged(AppStateChangedEvent event) {
+        // Update window title when audio file is loaded or closed
+        if (event.newState() == AudioSessionStateMachine.State.READY
+                && event.previousState() == AudioSessionStateMachine.State.LOADING
+                && event.context() instanceof java.io.File file) {
+            // Audio file was just loaded - update title with filename
+            setTitle(getDefaultFrameTitle() + " - " + file.getName());
+            requestFocus();
+        } else if (event.newState() == AudioSessionStateMachine.State.NO_AUDIO) {
+            // Audio was closed - reset to default title
             setTitle(getDefaultFrameTitle());
             requestFocus();
-        } else {
-            // Set title with file path
-            setTitle(getDefaultFrameTitle() + " - " + event.getFile().getPath());
         }
     }
 

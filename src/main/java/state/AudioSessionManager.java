@@ -8,6 +8,7 @@ import core.audio.PlaybackListener;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
+import core.events.AudioFileLoadRequestedEvent;
 import core.events.CloseAudioFileEvent;
 import core.events.PlayLast200MillisEvent;
 import core.events.PlayLast200MillisThenMoveEvent;
@@ -15,13 +16,12 @@ import core.events.PlayPauseEvent;
 import core.events.SeekByAmountEvent;
 import core.events.SeekEvent;
 import core.events.SeekToStartEvent;
-import events.AudioFileLoadRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.io.File;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import ui.audiofiles.AudioFile;
 
 /**
  * Manages the current audio session: tracks state transitions, delegates to the audio engine, and
@@ -36,7 +36,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     private final EventDispatchBus eventBus;
 
     private Optional<AudioEngine> audioEngine = Optional.empty();
-    private Optional<AudioFile> currentFile = Optional.empty();
+    private Optional<File> currentFile = Optional.empty();
     private Optional<AudioHandle> currentAudioHandle = Optional.empty();
     private Optional<PlaybackHandle> currentPlaybackHandle = Optional.empty();
     private String errorMessage = null;
