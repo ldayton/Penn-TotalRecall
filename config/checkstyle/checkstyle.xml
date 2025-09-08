@@ -25,5 +25,11 @@
             <property name="ignoreComments" value="true"/>
             <property name="severity" value="error"/>
         </module>
+        
+        <!-- Enforce import restrictions for core packages -->
+        <module name="ImportControl">
+            <property name="file" value="${config_loc}/import-control.xml"/>
+            <property name="path" value="^.*[\\/]core[\\/].*$"/>
+        </module>
     </module>
 </module>

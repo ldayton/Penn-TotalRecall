@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE import-control PUBLIC
+    "-//Checkstyle//DTD ImportControl Configuration 1.4//EN"
+    "https://checkstyle.org/dtds/import_control_1_4.dtd">
+
+<import-control pkg="core" strategyOnMismatch="allowed">
+    <!-- Core packages are not allowed to import any UI packages -->
+    <disallow pkg="java.awt"/>
+    <disallow pkg="javax.swing"/>
+    <disallow pkg="ui"/>
+</import-control>

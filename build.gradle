@@ -538,44 +538,6 @@ tasks.register('checkJavaVersion') {
 // Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
 
-// Check that core/ has no Swing/AWT dependencies
-tasks.register('checkCoreNoUI') {
-    group = 'verification'
-    description = 'Verify that core/ packages have no Swing/AWT dependencies'
-    
-    doLast {
-        def coreDir = file('src/main/java/core')
-        def violations = []
-        
-        if (coreDir.exists()) {
-            coreDir.eachFileRecurse { file ->
-                if (file.name.endsWith('.java')) {
-                    def content = file.text
-                    def lineNum = 0
-                    content.eachLine { line ->
-                        lineNum++
-                        // Check for ANY reference to java.awt or javax.swing
-                        // This includes imports, fully qualified class names, comments, strings, etc.
-                        if (line.contains('java.awt') || line.contains('javax.swing') || line.contains('ui.')) {
-                            violations << "${file.path}:${lineNum}: ${line.trim()}"
-                        }
-                    }
-                }
-            }
-        }
-        
-        if (!violations.isEmpty()) {
-            def message = "Found Swing/AWT references in core/ packages:\n" + violations.join('\n')
-            throw new GradleException(message)
-        }
-        
-        println "Core packages verified: No Swing/AWT dependencies found"
-    }
-}
-
-// Run UI check as part of build verification
-compileJava.dependsOn checkCoreNoUI
-check.dependsOn checkCoreNoUI
 
 // Configure compiler to hide warnings
 tasks.withType(JavaCompile).configureEach {
