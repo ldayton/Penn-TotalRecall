@@ -2,9 +2,11 @@ package app.swing;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import core.dispatch.EventDispatchBus;
 import core.env.UpdateManager;
 import core.events.UiReadyEvent;
 import jakarta.inject.Inject;
+import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.AppFocusTraversalPolicy;
@@ -189,17 +191,17 @@ public class SwingApp {
         // Wait for UI to be fully ready before publishing UIReadyEvent
         // This ensures canvas is sized and initial paint has occurred
         var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
-        var eventBus = globalInjector.getInstance(core.dispatch.EventDispatchBus.class);
+        var eventBus = globalInjector.getInstance(EventDispatchBus.class);
 
-        javax.swing.Timer readyTimer =
-                new javax.swing.Timer(
+        Timer readyTimer =
+                new Timer(
                         100,
                         e -> {
                             if (canvas.isShowing()
                                     && canvas.getWidth() > 0
                                     && canvas.getHeight() > 0) {
                                 // UI is ready - canvas is visible and sized
-                                ((javax.swing.Timer) e.getSource()).stop();
+                                ((Timer) e.getSource()).stop();
                                 eventBus.publish(new UiReadyEvent());
                                 logger.info("UI is ready - publishing UIReadyEvent");
                             }

@@ -2,6 +2,8 @@ package ui.swing;
 
 import core.actions.Action;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
@@ -114,20 +116,20 @@ public class SwingAction extends AbstractAction {
             for (int i = 0; i < parts.length - 1; i++) {
                 String mod = parts[i].trim();
                 if (mod.equals("control") || mod.equals("ctrl")) {
-                    modifiers |= java.awt.event.InputEvent.CTRL_DOWN_MASK;
+                    modifiers |= InputEvent.CTRL_DOWN_MASK;
                 } else if (mod.equals("shift")) {
-                    modifiers |= java.awt.event.InputEvent.SHIFT_DOWN_MASK;
+                    modifiers |= InputEvent.SHIFT_DOWN_MASK;
                 } else if (mod.equals("alt")) {
-                    modifiers |= java.awt.event.InputEvent.ALT_DOWN_MASK;
+                    modifiers |= InputEvent.ALT_DOWN_MASK;
                 } else if (mod.equals("meta") || mod.equals("cmd") || mod.equals("command")) {
-                    modifiers |= java.awt.event.InputEvent.META_DOWN_MASK;
+                    modifiers |= InputEvent.META_DOWN_MASK;
                 }
             }
         }
 
         // Get the key code
         try {
-            int keyCode = java.awt.event.KeyEvent.class.getField("VK_" + key).getInt(null);
+            int keyCode = KeyEvent.class.getField("VK_" + key).getInt(null);
             return KeyStroke.getKeyStroke(keyCode, modifiers);
         } catch (Exception e) {
             return null;

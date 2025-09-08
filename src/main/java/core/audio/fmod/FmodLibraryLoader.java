@@ -9,6 +9,7 @@ import core.env.Platform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
+import java.util.Arrays;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,7 +176,7 @@ public class FmodLibraryLoader {
             logger.warn(
                     "Invalid audio loading mode '{}', defaulting to PACKAGED. Valid values: {}",
                     mode,
-                    java.util.Arrays.toString(LibraryLoadingMode.values()));
+                    Arrays.toString(LibraryLoadingMode.values()));
             return LibraryLoadingMode.PACKAGED;
         }
     }
@@ -193,7 +194,7 @@ public class FmodLibraryLoader {
             logger.warn(
                     "Invalid audio library type '{}', defaulting to STANDARD. Valid values: {}",
                     type,
-                    java.util.Arrays.toString(LibraryType.values()));
+                    Arrays.toString(LibraryType.values()));
             return LibraryType.STANDARD;
         }
     }

@@ -3,6 +3,7 @@ package app;
 import core.audio.AudioEngine;
 import core.audio.AudioHandle;
 import core.audio.PlaybackHandle;
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -64,7 +65,7 @@ public class AudioIntegrationMode {
             logger.info("=================================");
 
             // Test 0: Verify test audio file exists
-            java.io.File audioFile = new java.io.File(TEST_AUDIO_FILE);
+            File audioFile = new File(TEST_AUDIO_FILE);
             if (!audioFile.exists()) {
                 logger.error("❌ Test audio file not found: {}", audioFile.getAbsolutePath());
                 return false;

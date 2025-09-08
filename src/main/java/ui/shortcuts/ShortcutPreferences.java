@@ -4,6 +4,7 @@ import core.preferences.PreferencesManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,9 +111,7 @@ public class ShortcutPreferences {
                 originalConfig.name(),
                 originalConfig.tooltip().orElse(null),
                 originalConfig.arg().orElse(null),
-                newShortcut != null
-                        ? java.util.Optional.of(newShortcut)
-                        : java.util.Optional.empty());
+                newShortcut != null ? Optional.of(newShortcut) : Optional.empty());
     }
 
     /**

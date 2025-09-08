@@ -1,10 +1,10 @@
 package ui.wordpool;
 
 import core.dispatch.EventDispatchBus;
-import core.events.FocusEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -59,7 +59,8 @@ public class WordpoolList extends JList<WordpoolWord>
                             // automatically takes focus in this case
                         } else {
                             eventBus.publish(
-                                    new FocusEvent(FocusEvent.Component.WORDPOOL_TEXT_FIELD));
+                                    new core.events.FocusEvent(
+                                            core.events.FocusEvent.Component.WORDPOOL_TEXT_FIELD));
                         }
                     }
                 });
@@ -148,7 +149,7 @@ public class WordpoolList extends JList<WordpoolWord>
 
     /** Handler for the event that this <code>WordpoolList</code> gains focus. */
     @Override
-    public void focusGained(java.awt.event.FocusEvent e) {
+    public void focusGained(FocusEvent e) {
         int anchor = getAnchorSelectionIndex();
         if (anchor >= 0) {
             setSelectedIndex(anchor);
@@ -163,7 +164,7 @@ public class WordpoolList extends JList<WordpoolWord>
      * <p>Asks the containing <code>AudioFileDisplay</code> to stop looking focused.
      */
     @Override
-    public void focusLost(java.awt.event.FocusEvent e) {
+    public void focusLost(FocusEvent e) {
         clearSelection();
     }
 
@@ -233,7 +234,9 @@ public class WordpoolList extends JList<WordpoolWord>
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             if (getSelectedIndex() == 0) {
-                eventBus.publish(new FocusEvent(FocusEvent.Component.WORDPOOL_TEXT_FIELD));
+                eventBus.publish(
+                        new core.events.FocusEvent(
+                                core.events.FocusEvent.Component.WORDPOOL_TEXT_FIELD));
             }
         }
     }

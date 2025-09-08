@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -34,7 +35,7 @@ class WaveformRenderer {
     private static final Color WAVEFORM_SCALE_LINE = new Color(226, 224, 131);
     private static final Color WAVEFORM_SCALE_TEXT = Color.BLACK;
     private static final Color FIRST_CHANNEL_WAVEFORM = Color.BLACK;
-    private static final java.text.DecimalFormat SEC_FORMAT = new java.text.DecimalFormat("0.00s");
+    private static final DecimalFormat SEC_FORMAT = new DecimalFormat("0.00s");
     private static final RenderingHints RENDERING_HINTS =
             new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 

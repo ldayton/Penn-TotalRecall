@@ -1,6 +1,7 @@
 package core.state;
 
 import app.annotations.ThreadSafe;
+import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
@@ -277,7 +278,7 @@ public class AudioSessionStateMachine {
         throw new IllegalStateException(
                 String.format(
                         "Operation requires one of states %s but current state is %s",
-                        java.util.Arrays.toString(expected), currentState));
+                        Arrays.toString(expected), currentState));
     }
 
     /**

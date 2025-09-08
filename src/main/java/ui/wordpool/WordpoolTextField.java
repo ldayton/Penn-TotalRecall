@@ -5,7 +5,6 @@ import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
 import core.events.AnnotateEvent;
 import core.events.AnnotateIntrusionEvent;
-import core.events.FocusEvent;
 import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -13,6 +12,7 @@ import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -249,18 +249,18 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     }
 
     @Override
-    public void focusGained(java.awt.event.FocusEvent e) {
+    public void focusGained(FocusEvent e) {
         setSelectionStart(0);
         setSelectionEnd(0);
         setCaretPosition(getText().length());
     }
 
     @Override
-    public void focusLost(java.awt.event.FocusEvent e) {}
+    public void focusLost(FocusEvent e) {}
 
     @Subscribe
-    public void handleFocusRequestedEvent(FocusEvent event) {
-        if (event.component() == FocusEvent.Component.WORDPOOL_TEXT_FIELD) {
+    public void handleFocusRequestedEvent(core.events.FocusEvent event) {
+        if (event.component() == core.events.FocusEvent.Component.WORDPOOL_TEXT_FIELD) {
             requestFocusInWindow();
         }
     }

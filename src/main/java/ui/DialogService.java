@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import lombok.NonNull;
 
 /**
@@ -125,7 +126,7 @@ public class DialogService {
             @NonNull String title,
             @NonNull String initialDirectory,
             int selectionMode,
-            javax.swing.filechooser.FileFilter fileFilter) {
+            FileFilter fileFilter) {
         JFileChooser jfc = new JFileChooser(initialDirectory);
         jfc.setDialogTitle(title);
         jfc.setFileSelectionMode(selectionMode);

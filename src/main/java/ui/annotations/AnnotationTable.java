@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
@@ -112,7 +113,7 @@ public class AnnotationTable extends JTable implements FocusListener {
     @Override
     public boolean getScrollableTracksViewportHeight() {
         Component parent = getParent();
-        if (parent instanceof javax.swing.JViewport) {
+        if (parent instanceof JViewport) {
             return parent.getHeight() > getPreferredSize().height;
         }
         return false;

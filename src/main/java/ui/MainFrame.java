@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import javax.swing.JFrame;
 import ui.wordpool.WordpoolDisplay;
 
@@ -155,7 +156,7 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         // Update window title when audio file is loaded or closed
         if (event.newState() == AudioSessionStateMachine.State.READY
                 && event.previousState() == AudioSessionStateMachine.State.LOADING
-                && event.context() instanceof java.io.File file) {
+                && event.context() instanceof File file) {
             // Audio file was just loaded - update title with filename
             setTitle(getDefaultFrameTitle() + " - " + file.getName());
             requestFocus();

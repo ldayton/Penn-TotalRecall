@@ -12,5 +12,18 @@
         <module name="AvoidStarImport">
             <property name="severity" value="error"/>
         </module>
+        
+        <!-- Ban inline fully qualified names (prefer imports) -->
+        <!-- This uses TreeWalker's Regexp check which properly ignores comments -->
+        <!-- The pattern looks for fully qualified class names -->
+        <!-- It matches patterns like: java.awt.Color, javax.swing.JButton, java.util.Arrays -->
+        <!-- Excludes import/package statements and tries to avoid string literals -->
+        <module name="Regexp">
+            <property name="format" value="^(?!import |package )(?!.*&quot;.*\b(java|javax)\.).*\b(java|javax|com\.sun|org\.(slf4j|junit|mockito))\.\w+\.[A-Z]\w+\b"/>
+            <property name="message" value="Avoid fully qualified class names; use imports instead"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="severity" value="error"/>
+        </module>
     </module>
 </module>

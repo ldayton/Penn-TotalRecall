@@ -2,6 +2,7 @@ package core.audio.fmod;
 
 import app.annotations.ThreadSafe;
 import core.audio.exceptions.AudioEngineException;
+import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +115,7 @@ class FmodSystemStateManager {
         throw new AudioEngineException(
                 String.format(
                         "Operation requires one of states %s but current state is %s",
-                        java.util.Arrays.toString(expected), currentState));
+                        Arrays.toString(expected), currentState));
     }
 
     /** Validate that a state transition is legal. */

@@ -2,6 +2,8 @@ package ui;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import lombok.NonNull;
 
@@ -56,7 +58,7 @@ public class MainWindowAccess {
      *
      * @return The window location
      */
-    public java.awt.Point getLocationOnScreen() {
+    public Point getLocationOnScreen() {
         return mainFrame.getLocationOnScreen();
     }
 
@@ -83,7 +85,7 @@ public class MainWindowAccess {
      *
      * @return The window size
      */
-    public java.awt.Dimension getSize() {
+    public Dimension getSize() {
         return mainFrame.getSize();
     }
 }

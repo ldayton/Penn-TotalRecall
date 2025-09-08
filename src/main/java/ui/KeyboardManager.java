@@ -3,6 +3,7 @@ package ui;
 import core.env.Platform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.util.List;
@@ -216,7 +217,7 @@ public class KeyboardManager {
     private int computeMenuKey() {
         try {
             // Try to get the platform-specific menu key
-            if (java.awt.GraphicsEnvironment.isHeadless()) {
+            if (GraphicsEnvironment.isHeadless()) {
                 // In headless environment, return platform-appropriate default
                 return switch (platform.detect()) {
                     case MACOS -> InputEvent.META_DOWN_MASK;
