@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -8,6 +8,7 @@ import java.awt.FocusTraversalPolicy;
 import java.awt.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.DoneButton;
 import ui.annotations.AnnotationTable;
 import ui.audiofiles.AudioFileList;
 import ui.wordpool.WordpoolList;

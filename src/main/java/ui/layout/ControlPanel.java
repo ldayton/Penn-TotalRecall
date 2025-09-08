@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -11,6 +11,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import ui.DoneButton;
 import ui.annotations.AnnotationDisplay;
 import ui.audiofiles.AudioFileDisplay;
 import ui.wordpool.WordpoolDisplay;

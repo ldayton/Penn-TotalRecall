@@ -1,4 +1,4 @@
-package ui;
+package ui.adapters;
 
 import core.dispatch.EventDispatcher;
 import jakarta.inject.Singleton;

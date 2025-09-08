@@ -3,7 +3,7 @@ package app.swing;
 import com.google.inject.AbstractModule;
 import core.CoreModule;
 import core.dispatch.EventDispatcher;
-import ui.SwingEventDispatcher;
+import ui.adapters.SwingEventDispatcher;
 
 /**
  * Guice module for Swing UI application dependency injection configuration.

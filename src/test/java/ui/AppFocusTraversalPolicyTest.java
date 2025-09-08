@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ui.layout.AppFocusTraversalPolicy;
 
 @DisplayName("AppFocusTraversalPolicy")
 class AppFocusTraversalPolicyTest {

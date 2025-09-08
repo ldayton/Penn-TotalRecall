@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import core.actions.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
@@ -12,7 +12,7 @@ import javax.swing.KeyStroke;
 import ui.actions.ActionsManager;
 // import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
-import ui.swing.SwingAction;
+import ui.adapters.SwingAction;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.

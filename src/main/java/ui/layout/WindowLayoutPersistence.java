@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import core.env.PreferenceKeys;
 import core.preferences.PreferencesManager;

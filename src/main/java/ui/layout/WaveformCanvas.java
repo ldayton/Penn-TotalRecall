@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import core.waveform.ScreenDimension;
 import jakarta.inject.Inject;

@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import lombok.NonNull;
+import ui.layout.MainFrame;
 
 /**
  * Service for managing all dialog operations in the application.

@@ -1,4 +1,4 @@
-package ui.swing;
+package ui.adapters;
 
 import core.actions.Action;
 import java.awt.event.ActionEvent;

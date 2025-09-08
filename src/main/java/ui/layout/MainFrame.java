@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import core.actions.ExitAction;
 import core.dispatch.EventDispatchBus;
@@ -24,6 +24,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JFrame;
+import ui.FileDrop;
+import ui.FileDropListener;
+import ui.LookAndFeelManager;
 import ui.wordpool.WordpoolDisplay;
 
 /**

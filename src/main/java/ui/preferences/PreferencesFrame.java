@@ -24,8 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import ui.DialogCentering;
 import ui.KeyboardManager;
-import ui.MainFrame;
-import ui.MainWindowAccess;
+import ui.layout.MainFrame;
+import ui.layout.MainWindowAccess;
 
 /**
  * A <code>JFrame</code> that will contain preferences choosers in a scrollable vertical column.

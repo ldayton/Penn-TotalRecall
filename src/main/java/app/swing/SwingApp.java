@@ -9,12 +9,13 @@ import jakarta.inject.Inject;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.AppFocusTraversalPolicy;
-import ui.ContentSplitPane;
 import ui.LookAndFeelManager;
-import ui.MainFrame;
-import ui.WindowLayoutPersistence;
 import ui.actions.ActionsManager;
+import ui.adapters.SwingActionRegistry;
+import ui.layout.AppFocusTraversalPolicy;
+import ui.layout.ContentSplitPane;
+import ui.layout.MainFrame;
+import ui.layout.WindowLayoutPersistence;
 
 /**
  * Swing-based desktop application entry point.
@@ -95,7 +96,7 @@ public class SwingApp {
         // Initialize ActionRegistry and SwingActionRegistry
         // The registries are created by Guice with all actions auto-discovered and injected
         globalInjector.getInstance(core.actions.ActionRegistry.class);
-        globalInjector.getInstance(ui.SwingActionRegistry.class);
+        globalInjector.getInstance(SwingActionRegistry.class);
 
         return bootstrap;
     }
@@ -190,7 +191,7 @@ public class SwingApp {
 
         // Wait for UI to be fully ready before publishing UIReadyEvent
         // This ensures canvas is sized and initial paint has occurred
-        var canvas = globalInjector.getInstance(ui.WaveformCanvas.class);
+        var canvas = globalInjector.getInstance(ui.layout.WaveformCanvas.class);
         var eventBus = globalInjector.getInstance(EventDispatchBus.class);
 
         Timer readyTimer =

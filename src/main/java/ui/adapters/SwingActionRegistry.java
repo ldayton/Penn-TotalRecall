@@ -1,4 +1,4 @@
-package ui;
+package ui.adapters;
 
 import core.actions.Action;
 import core.actions.ActionRegistry;
@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import ui.actions.ActionsManager;
-import ui.swing.SwingAction;
 
 /**
  * Registry that provides Swing adapters for core actions.

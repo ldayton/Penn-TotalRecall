@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import ui.swing.SwingAction;
+import ui.adapters.SwingAction;
 
 /** A <code>JButton</code> hooked up to a {@link core.actions.DoneAction}. */
 @Singleton

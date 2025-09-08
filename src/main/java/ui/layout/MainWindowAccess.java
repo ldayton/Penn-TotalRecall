@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

@@ -1,4 +1,4 @@
-package ui;
+package ui.layout;
 
 import core.actions.AboutAction;
 // import actions.AnnotateIntrusionAction;
@@ -24,7 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.swing.SwingAction;
+import ui.adapters.SwingAction;
 
 /**
  * Program menu bar and trigger for updates in program's state that concern program actions.

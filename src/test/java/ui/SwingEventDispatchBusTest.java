@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ui.adapters.SwingEventDispatcher;
 
 /** Tests for the Swing-based EventDispatchBus implementation. */
 class SwingEventDispatchBusTest {

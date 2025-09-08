@@ -3,6 +3,7 @@ package ui;
 import app.swing.SwingApp;
 import java.awt.Point;
 import javax.swing.JFrame;
+import ui.layout.MainWindowAccess;
 
 public class DialogCentering {
 

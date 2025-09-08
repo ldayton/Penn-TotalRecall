@@ -16,6 +16,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.actions.ActionsFileParser.ActionConfig;
+import ui.adapters.SwingAction;
 import ui.shortcuts.Shortcut;
 
 /**
@@ -120,7 +121,7 @@ public class ActionsManager {
      */
     public void registerCoreAction(core.actions.Action action) {
         // Core actions need to be wrapped in SwingAction for Swing compatibility
-        var swingAction = new ui.swing.SwingAction(action);
+        var swingAction = new SwingAction(action);
         registerAction(swingAction, null);
     }
 

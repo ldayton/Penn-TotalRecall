@@ -1,4 +1,4 @@
-package ui;
+package ui.adapters;
 
 import core.services.FileSelectionService;
 import jakarta.inject.Inject;
@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.Optional;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+import ui.DialogService;
 
 /**
  * Swing implementation of FileSelectionService. Uses JFileChooser to show file selection dialogs.
