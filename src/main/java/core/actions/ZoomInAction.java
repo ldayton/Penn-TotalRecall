@@ -5,10 +5,10 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.ZoomInEvent;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /** Zooms the waveform display in. */
 @Singleton

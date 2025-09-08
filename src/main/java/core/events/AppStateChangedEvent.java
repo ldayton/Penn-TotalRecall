@@ -1,7 +1,7 @@
 package core.events;
 
+import core.state.AudioSessionStateMachine;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /**
  * Event fired when the application state changes. This is the primary event for communicating state

@@ -5,6 +5,7 @@ import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.events.DialogErrorEvent;
 import core.events.WordpoolFileSelectedEvent;
+import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

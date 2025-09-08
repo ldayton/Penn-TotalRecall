@@ -1,5 +1,8 @@
 package state;
 
+import core.state.InterpolatedPlaybackTracker;
+import core.state.WaveformSessionDataSource;
+import core.state.WaveformViewport;
 import core.waveform.TimeRange;
 import core.waveform.WaveformPaintingDataSource;
 import jakarta.inject.Inject;

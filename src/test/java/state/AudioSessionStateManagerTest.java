@@ -2,6 +2,7 @@ package state;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import core.state.AudioSessionStateMachine;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

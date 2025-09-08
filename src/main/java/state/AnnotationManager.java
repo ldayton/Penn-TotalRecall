@@ -6,6 +6,7 @@ import core.env.Constants;
 import core.events.CloseAudioFileEvent;
 import core.events.CompleteAnnotationEvent;
 import core.events.DialogErrorEvent;
+import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

@@ -1,5 +1,6 @@
 package waveform;
 
+import core.state.AudioSessionStateMachine;
 import core.waveform.ScreenDimension;
 import core.waveform.TimeRange;
 import core.waveform.ViewportContext;
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /**
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform

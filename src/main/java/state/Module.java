@@ -2,6 +2,10 @@ package state;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import core.state.AudioSessionManager;
+import core.state.AudioSessionStateMachine;
+import core.state.WaveformSessionDataSource;
+import core.state.WaveformViewport;
 
 /**
  * Guice module for the s2 (session) package.

@@ -13,6 +13,7 @@ import core.events.ExitEvent;
 import core.events.FocusEvent;
 import core.events.PreferencesEvent;
 import core.preferences.PreferencesManager;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;
@@ -22,7 +23,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-import state.AudioSessionStateMachine;
 import ui.wordpool.WordpoolDisplay;
 
 /**

@@ -5,11 +5,11 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.PlayLast200MillisEvent;
+import core.state.AudioSessionStateMachine;
+import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
-import state.WaveformSessionDataSource;
 
 /**
  * Replays the last 200 milliseconds so the annotator can judge whether a word onset has been

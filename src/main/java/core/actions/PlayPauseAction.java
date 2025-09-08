@@ -5,10 +5,10 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.PlayPauseEvent;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /**
  * Plays or "pauses" audio using the event-driven system.

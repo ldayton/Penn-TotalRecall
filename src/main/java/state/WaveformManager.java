@@ -7,6 +7,8 @@ import core.audio.SampleReader;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
+import core.state.AudioSessionStateMachine;
+import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;

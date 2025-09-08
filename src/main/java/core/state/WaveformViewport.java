@@ -1,4 +1,4 @@
-package state;
+package core.state;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;

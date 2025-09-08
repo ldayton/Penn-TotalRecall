@@ -5,10 +5,10 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.PlayLast200MillisThenMoveEvent;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
 @Singleton

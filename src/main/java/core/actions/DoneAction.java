@@ -5,10 +5,10 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.CompleteAnnotationEvent;
 import core.events.FocusEvent;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /**
  * Marks the current annotation file complete and then switches program state to reflect that no

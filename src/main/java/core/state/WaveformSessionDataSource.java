@@ -1,4 +1,4 @@
-package state;
+package core.state;
 
 import core.audio.AudioHandle;
 import java.util.Optional;

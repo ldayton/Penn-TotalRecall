@@ -1,4 +1,4 @@
-package state;
+package core.state;
 
 import com.google.inject.Provider;
 import core.audio.AudioEngine;

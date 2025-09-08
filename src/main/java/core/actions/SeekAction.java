@@ -7,9 +7,9 @@ import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.SeekByAmountEvent;
 import core.preferences.PreferencesManager;
+import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import lombok.NonNull;
-import state.AudioSessionStateMachine;
 
 /**
  * Seeks the audio position forward or backward by a pre-defined amount. The actual frame
