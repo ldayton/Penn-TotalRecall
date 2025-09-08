@@ -38,8 +38,6 @@ import ui.KeyboardManager;
 @Singleton
 public class WordpoolTextField extends JTextField implements KeyListener, FocusListener {
 
-    private static WordpoolTextField instance;
-
     private String clipboard = "";
     private final WordpoolList wordpoolList;
 
@@ -159,9 +157,6 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
                                 getParent().requestFocusInWindow();
                             }
                         });
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     @Override
@@ -234,19 +229,6 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
 
     @Override
     public void keyTyped(KeyEvent e) {}
-
-    protected static WordpoolTextField getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "WordpoolTextField not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
-    }
-
-    public static WordpoolTextField getFocusTraversalReference() {
-        return getInstance();
-    }
 
     @Override
     public void focusGained(FocusEvent e) {

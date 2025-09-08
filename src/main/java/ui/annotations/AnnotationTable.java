@@ -27,8 +27,6 @@ import javax.swing.table.JTableHeader;
 @Singleton
 public class AnnotationTable extends JTable implements FocusListener {
 
-    private static AnnotationTable instance;
-
     private static AnnotationTableModel model;
 
     private final AnnotationTableCellRenderer render;
@@ -95,9 +93,6 @@ public class AnnotationTable extends JTable implements FocusListener {
                 .put(
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK, false),
                         "none");
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     @Override
@@ -148,23 +143,10 @@ public class AnnotationTable extends JTable implements FocusListener {
         }
     }
 
-    protected static AnnotationTable getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "AnnotationTable not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
-    }
-
-    public static AnnotationTable getFocusTraversalReference() {
-        return getInstance();
-    }
-
-    public static Annotation popSelectedAnnotation() {
-        int[] rows = instance.getSelectedRows();
+    public Annotation popSelectedAnnotation() {
+        int[] rows = this.getSelectedRows();
         if (rows.length == 1) {
-            return model.getAnnotationAt(rows[0]);
+            return getModel().getAnnotationAt(rows[0]);
         } else {
             return null;
         }

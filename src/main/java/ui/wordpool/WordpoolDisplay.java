@@ -34,15 +34,12 @@ public class WordpoolDisplay extends JPanel {
     private final WordpoolTextField wordpoolTextField;
     private final WordpoolList wordpoolList;
 
-    private static WordpoolDisplay instance;
-
     private static WordpoolScrollPane pane;
 
     /**
      * Creates a new instance of the component, initializing internal components, listeners, and
      * various aspects of appearance.
      */
-    @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public WordpoolDisplay(WordpoolTextField wordpoolTextField, WordpoolList wordpoolList) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -71,9 +68,6 @@ public class WordpoolDisplay extends JPanel {
                         field.requestFocusInWindow();
                     }
                 });
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     /**
@@ -154,20 +148,6 @@ public class WordpoolDisplay extends JPanel {
             field.setText(str);
             field.requestFocusInWindow();
         }
-    }
-
-    /**
-     * Singleton accessor
-     *
-     * @return The singleton <code>WordpoolDisplay</code>
-     */
-    public static WordpoolDisplay getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "WordpoolDisplay not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
     }
 
     public void setInputEnabled(boolean enabled) {

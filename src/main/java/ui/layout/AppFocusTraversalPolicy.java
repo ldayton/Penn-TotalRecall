@@ -1,6 +1,7 @@
 package ui.layout;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
 import java.awt.Component;
 import java.awt.Container;
@@ -47,14 +48,20 @@ public class AppFocusTraversalPolicy extends FocusTraversalPolicy {
     private final Component[] focusLoop;
 
     @Inject
-    public AppFocusTraversalPolicy(MainFrame myFrame, DoneButton doneButton) {
+    public AppFocusTraversalPolicy(
+            MainFrame myFrame,
+            DoneButton doneButton,
+            Provider<AudioFileList> audioFileListProvider,
+            Provider<WordpoolTextField> wordpoolTextFieldProvider,
+            Provider<WordpoolList> wordpoolListProvider,
+            Provider<AnnotationTable> annotationTableProvider) {
         this.focusLoop =
                 new Component[] {
                     myFrame,
-                    AudioFileList.getFocusTraversalReference(),
-                    WordpoolTextField.getFocusTraversalReference(),
-                    WordpoolList.getFocusTraversalReference(),
-                    AnnotationTable.getFocusTraversalReference(),
+                    audioFileListProvider.get(),
+                    wordpoolTextFieldProvider.get(),
+                    wordpoolListProvider.get(),
+                    annotationTableProvider.get(),
                     doneButton
                 };
     }

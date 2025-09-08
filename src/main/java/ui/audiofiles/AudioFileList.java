@@ -24,8 +24,6 @@ import javax.swing.ListSelectionModel;
 @Singleton
 public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
-    private static AudioFileList instance;
-
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
     // private final AudioState audioState;
@@ -153,9 +151,6 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
         // Subscribe to events
         eventBus.subscribe(this);
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     /**
@@ -235,38 +230,6 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     /** Gets the currently loaded audio file for rendering purposes. */
     public AudioFile getCurrentAudioFile() {
         return currentAudioFile;
-    }
-
-    /**
-     * Gets a reference to this object for use by a custom <code>FocusTraversalPolicy</code>.
-     *
-     * <p>Unfortunately this requires a break from the encapsulation strategy of <code>
-     * AudioFileDisplay</code> containing all the <code>public</code> access. Please do NOT abuse
-     * this method to access the <code>AudioFileList</code> for purposes other than those intended.
-     * Add new public features to <code>AudioFileDisplay</code> which can then use {@linkplain
-     * #getInstance()} as needed.
-     *
-     * @return {@link #getInstance()}
-     */
-    public static AudioFileList getFocusTraversalReference() {
-        return getInstance();
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * <p>Many classes in this package require access to this object, so a singleton accessor
-     * strategy is used to avoid the need to pass every class a reference to this object.
-     *
-     * @return The singleton <code>AudioFileList</code>
-     */
-    protected static AudioFileList getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "AudioFileList not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
     }
 
     /** Handles AudioFileListEvent to remove files from the list. */

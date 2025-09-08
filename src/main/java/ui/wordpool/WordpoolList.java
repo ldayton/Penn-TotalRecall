@@ -25,12 +25,9 @@ public class WordpoolList extends JList<WordpoolWord>
 
     private static WordpoolListModel model;
 
-    private static WordpoolList instance;
-
     final WordpoolListCellRenderer render;
     private final EventDispatchBus eventBus;
 
-    @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public WordpoolList(EventDispatchBus eventBus) {
         this.eventBus = eventBus;
@@ -105,9 +102,6 @@ public class WordpoolList extends JList<WordpoolWord>
                 .put(
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.SHIFT_DOWN_MASK, false),
                         "none");
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     /**
@@ -119,21 +113,6 @@ public class WordpoolList extends JList<WordpoolWord>
     @Override
     public WordpoolListModel getModel() {
         return model;
-    }
-
-    /**
-     * Gets a reference to this object for use by a custom <code>FocusTraversalPolicy</code>.
-     *
-     * <p>Unfortunately this requires a break from the encapsulation strategy of <code>
-     * WordpoolDisplay</code> containing all the <code>public</code> access. Please do NOT abuse
-     * this method to access the <code>WordpoolDisplay</code> for purposes other than those
-     * intended. Add new public features to <code>WordpoolDisplay</code> which can then use
-     * {@linkplain #getInstance()} as needed.
-     *
-     * @return {@link #getInstance()}
-     */
-    public static WordpoolList getFocusTraversalReference() {
-        return getInstance();
     }
 
     /**
@@ -179,23 +158,6 @@ public class WordpoolList extends JList<WordpoolWord>
         } else {
             return null;
         }
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * <p>Many classes in this package require access to this object, so a singleton accessor
-     * strategy is used to avoid the need to pass every class a reference to this object.
-     *
-     * @return The singleton <code>WordpoolList</code>
-     */
-    protected static WordpoolList getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "WordpoolList not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
-        }
-        return instance;
     }
 
     /**

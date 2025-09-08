@@ -21,8 +21,6 @@ public class AnnotationDisplay extends JScrollPane {
 
     private static final String title = "Annotations";
     private static final Dimension PREFERRED_SIZE = new Dimension(300, Integer.MAX_VALUE);
-
-    private static AnnotationDisplay instance;
     private static AnnotationTable table;
     private final AnnotationTable annotationTable;
 
@@ -30,7 +28,6 @@ public class AnnotationDisplay extends JScrollPane {
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
-    @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AnnotationDisplay(AnnotationTable annotationTable, EventDispatchBus eventBus) {
         this.annotationTable = annotationTable;
@@ -62,9 +59,6 @@ public class AnnotationDisplay extends JScrollPane {
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "none");
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "none");
-
-        // Set the singleton instance after full initialization
-        instance = this;
 
         // Subscribe to UI update events
         eventBus.subscribe(this);
@@ -102,15 +96,6 @@ public class AnnotationDisplay extends JScrollPane {
 
     public static void removeAllAnnotations() {
         table.getModel().removeAllElements();
-    }
-
-    public static AnnotationDisplay getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "AnnotationDisplay not initialized via DI. Ensure SwingApp.create() was"
-                            + " called first.");
-        }
-        return instance;
     }
 
     public static int getNumAnnotations() {

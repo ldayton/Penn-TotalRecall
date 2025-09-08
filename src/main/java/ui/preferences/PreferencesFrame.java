@@ -34,8 +34,6 @@ import ui.layout.MainWindowAccess;
  */
 @Singleton
 public class PreferencesFrame extends JFrame implements WindowListener {
-
-    private static PreferencesFrame instance;
     private final KeyboardManager keyboardManager;
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
@@ -128,13 +126,11 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         new AbstractAction() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                instance.windowClosing(
-                                        new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+                                PreferencesFrame.this.windowClosing(
+                                        new WindowEvent(
+                                                PreferencesFrame.this, WindowEvent.WINDOW_CLOSING));
                             }
                         });
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     /** Add all preference displays to the preferences panel. */
@@ -299,18 +295,4 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     /** empty implementation {@inheritDoc} */
     @Override
     public void windowOpened(WindowEvent e) {}
-
-    /**
-     * Singleton accessor
-     *
-     * @return The singleton <code>PreferencesFrame</code>
-     */
-    public static PreferencesFrame getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "PreferencesFrame not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
-    }
 }

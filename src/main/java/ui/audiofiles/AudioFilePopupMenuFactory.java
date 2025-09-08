@@ -3,6 +3,7 @@ package ui.audiofiles;
 // import actions.ContinueAnnotatingAction;
 import core.dispatch.EventDispatchBus;
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
 
 /**
@@ -14,13 +15,15 @@ public class AudioFilePopupMenuFactory {
 
     // private final ContinueAnnotatingAction continueAnnotatingAction;
     private final EventDispatchBus eventBus;
+    private final Provider<AudioFileList> audioFileListProvider;
 
     @Inject
     public AudioFilePopupMenuFactory(
             // ContinueAnnotatingAction continueAnnotatingAction,
-            EventDispatchBus eventBus) {
+            EventDispatchBus eventBus, Provider<AudioFileList> audioFileListProvider) {
         // this.continueAnnotatingAction = continueAnnotatingAction;
         this.eventBus = eventBus;
+        this.audioFileListProvider = audioFileListProvider;
     }
 
     /**
@@ -35,7 +38,7 @@ public class AudioFilePopupMenuFactory {
                 new AudioFilePopupMenu(/*continueAnnotatingAction,*/ eventBus);
 
         // Check if this file is the currently loaded one
-        AudioFile currentFile = AudioFileList.getInstance().getCurrentAudioFile();
+        AudioFile currentFile = audioFileListProvider.get().getCurrentAudioFile();
         boolean isCurrentFile =
                 currentFile != null && currentFile.getAbsolutePath().equals(file.getAbsolutePath());
 
