@@ -1,6 +1,7 @@
 package ui.preferences;
 
 import app.swing.SwingApp;
+import core.preferences.BadPreferenceException;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;

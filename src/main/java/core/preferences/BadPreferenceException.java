@@ -1,4 +1,4 @@
-package ui.preferences;
+package core.preferences;
 
 /** Exception thrown when an attempt is made to store in an ill-formatted or illegal preference. */
 public class BadPreferenceException extends Exception {
@@ -11,7 +11,7 @@ public class BadPreferenceException extends Exception {
      * @param prefName The name of the preference associated with this exception
      * @param message A message explaining why the preference is illegal
      */
-    protected BadPreferenceException(String prefName, String message) {
+    public BadPreferenceException(String prefName, String message) {
         super(message);
         this.prefName = prefName;
     }
@@ -21,7 +21,7 @@ public class BadPreferenceException extends Exception {
      *
      * @return The name of the preference associated with this exception
      */
-    protected String getPrefName() {
+    public String getPrefName() {
         return prefName;
     }
 }

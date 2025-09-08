@@ -1,5 +1,6 @@
 package ui.preferences;
 
+import core.preferences.BadPreferenceException;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
