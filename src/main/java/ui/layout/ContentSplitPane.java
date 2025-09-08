@@ -21,8 +21,6 @@ import ui.adapters.SwingAction;
 @Singleton
 public class ContentSplitPane extends JSplitPane {
 
-    private static ContentSplitPane instance;
-
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
@@ -81,24 +79,5 @@ public class ContentSplitPane extends JSplitPane {
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0, false), "none");
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0, false), "none");
-
-        // Set the singleton instance after full initialization
-        instance = this;
-
-        // Subscribe to layout update events
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * @return The singleton <code>ContentSplitPane</code>
-     */
-    public static ContentSplitPane getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "ContentSplitPane not initialized via DI. Ensure GuiceBootstrap.create() was"
-                            + " called first.");
-        }
-        return instance;
     }
 }

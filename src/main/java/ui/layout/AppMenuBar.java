@@ -47,8 +47,6 @@ import ui.adapters.SwingAction;
 public class AppMenuBar extends JMenuBar {
     private static final Logger logger = LoggerFactory.getLogger(AppMenuBar.class);
 
-    private static AppMenuBar instance;
-
     private static String annotator;
 
     private static boolean showPreferencesInMenu;
@@ -80,7 +78,6 @@ public class AppMenuBar extends JMenuBar {
     private final core.actions.ScreenSeekBackwardAction screenSeekBackwardAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
-    @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AppMenuBar(
             ui.LookAndFeelManager lookAndFeelManager,
@@ -141,9 +138,6 @@ public class AppMenuBar extends JMenuBar {
         initAnnotationMenu();
         initViewMenu();
         initHelpMenu();
-
-        // Set the singleton instance after full initialization
-        instance = this;
     }
 
     /** Creates the File menu, only adding exit and preferences options for non-OSX platforms. */
@@ -268,20 +262,6 @@ public class AppMenuBar extends JMenuBar {
             jmHelp.add(jmiAbout);
         }
         add(jmHelp);
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * @return The singleton <code>AppMenuBar</code>
-     */
-    public static AppMenuBar getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "AppMenuBar not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
-        }
-        return instance;
     }
 
     public static void setAnnotator(String annotator) {

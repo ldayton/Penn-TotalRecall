@@ -37,8 +37,6 @@ import ui.wordpool.WordpoolDisplay;
  */
 @Singleton
 public class MainFrame extends JFrame implements KeyEventPostProcessor {
-
-    private static MainFrame instance;
     private final PreferencesManager preferencesManager;
     private final ProgramName programName;
     private final ProgramVersion programVersion;
@@ -92,25 +90,8 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
 
         //		getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
 
-        // Set the singleton instance after full initialization
-        instance = this;
-
         // Subscribe to audio state events
         eventBus.subscribe(this);
-    }
-
-    /**
-     * Singleton accessor.
-     *
-     * @return The singleton <code>MainFrame</code>
-     */
-    public static MainFrame getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "MainFrame not initialized via DI. Ensure GuiceBootstrap.create() was called"
-                            + " first.");
-        }
-        return instance;
     }
 
     /**
