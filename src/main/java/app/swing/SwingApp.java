@@ -72,10 +72,6 @@ public class SwingApp {
         // WaveformMouseSetup disabled during refactoring
         // globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);
 
-        // Initialize DevModeFileAutoLoader (subscribes to events)
-        globalInjector.getInstance(DevModeFileAutoLoader.class);
-
-        // Initialize waveform components
         globalInjector.getInstance(state.WaveformManager.class);
         var paintDataSource = globalInjector.getInstance(state.WaveformPaintDataSource.class);
         var painter = globalInjector.getInstance(ui.waveform.WaveformPainter.class);

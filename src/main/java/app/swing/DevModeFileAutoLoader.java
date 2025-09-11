@@ -17,18 +17,12 @@ import org.slf4j.LoggerFactory;
 import ui.audiofiles.AudioFileDisplay;
 import ui.audiofiles.AudioFileList;
 
-/**
- * Automatically loads sample audio and wordpool files when running in development mode.
- *
- * <p>This service subscribes to UIReadyEvent and loads packaging/samples/sample.wav and
- * packaging/samples/wordpool.txt if the application is running in development mode
- * (audio.loading.mode=unpackaged) and no files are currently loaded.
- */
+/** Automatically loads sample audio and wordpool files when running in development mode. */
 @Singleton
 public class DevModeFileAutoLoader {
     private static final Logger logger = LoggerFactory.getLogger(DevModeFileAutoLoader.class);
-    private static final String SAMPLE_FILE_PATH = "packaging/samples/sample.wav";
-    private static final String SAMPLE_WORDPOOL_PATH = "packaging/samples/wordpool.txt";
+    private static final String SAMPLE_FILE_PATH = "src/test/resources/audio/freerecall.wav";
+    private static final String SAMPLE_WORDPOOL_PATH = "src/test/resources/audio/wordpool.txt";
 
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
@@ -50,30 +44,14 @@ public class DevModeFileAutoLoader {
 
     @Subscribe
     public void onUIReady(UiReadyEvent event) {
-        // Only run during explicit dev runs (./gradlew runDev), not during tests
-        boolean runDevFlag = Boolean.parseBoolean(System.getProperty("app.run.dev", "false"));
-        if (!runDevFlag) {
-            logger.debug("Not runDev execution (app.run.dev=false), skipping auto-load");
-            return;
-        }
-
-        // Check if we're in development mode (unpackaged audio loading)
-        String loadingMode = appConfig.getProperty("audio.loading.mode", "packaged");
-        if (!"unpackaged".equals(loadingMode)) {
-            logger.debug(
-                    "Not in development mode (audio.loading.mode={}), skipping auto-load",
-                    loadingMode);
-            return;
-        }
-
         // Check if files are already loaded
         if (audioFileList.getModel().getSize() > 0) {
             logger.debug("Audio files already loaded, skipping auto-load");
             return;
         }
 
-        // Gather all sample files from packaging/samples and add them to the list
-        File samplesDir = new File("packaging/samples");
+        // Gather all sample files from test resources and add them to the list
+        File samplesDir = new File("src/test/resources/audio");
         File[] allCandidates = samplesDir.exists() ? samplesDir.listFiles() : null;
         if (allCandidates == null || allCandidates.length == 0) {
             logger.warn("No sample files found in: {}", samplesDir.getPath());

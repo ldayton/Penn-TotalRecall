@@ -27,5 +27,10 @@ public class SwingModule extends AbstractModule {
         // Install ui module for user interface bindings
         // Note: ui.Module now installs ui.actions.Module automatically
         install(new ui.Module());
+
+        // Conditionally bind DevModeFileAutoLoader only when app.run.dev=true
+        if (Boolean.parseBoolean(System.getProperty("app.run.dev", "false"))) {
+            bind(DevModeFileAutoLoader.class).asEagerSingleton();
+        }
     }
 }

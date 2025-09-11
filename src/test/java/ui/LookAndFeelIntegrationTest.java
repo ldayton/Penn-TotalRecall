@@ -2,10 +2,8 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Windowing;
-import app.swing.SwingApp;
+import app.swing.SwingTestFixture;
 import java.awt.Window;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.JFrame;
@@ -26,8 +24,7 @@ import org.slf4j.LoggerFactory;
  * Feel remains FlatLaf throughout the test
  */
 @DisplayName("Look and Feel Integration")
-@Windowing
-class LookAndFeelIntegrationTest {
+class LookAndFeelIntegrationTest extends SwingTestFixture {
     private static final Logger logger = LoggerFactory.getLogger(LookAndFeelIntegrationTest.class);
 
     @Test
@@ -36,49 +33,18 @@ class LookAndFeelIntegrationTest {
     void fullApplicationStartupShouldUseFlatLafWithoutAquaErrors() throws Exception {
         logger.info("=== Testing full application startup with Look and Feel verification ===");
 
-        // Start application in background thread
-        CompletableFuture<Void> startupFuture =
-                CompletableFuture.runAsync(
-                        () -> {
-                            try {
-                                logger.info("Starting application via SwingApp...");
-                                var bootstrap = SwingApp.create();
-
-                                // Verify FlatLaf is set before starting the application
-                                String currentLaf = UIManager.getLookAndFeel().getClass().getName();
-                                logger.info(
-                                        "Look and Feel before startApplication: {}", currentLaf);
-                                assertTrue(
-                                        currentLaf.contains("flatlaf"),
-                                        "Should be using FlatLaf before startApplication, but got: "
-                                                + currentLaf);
-
-                                bootstrap.startApplication();
-
-                                // Verify FlatLaf is still set after starting the application
-                                currentLaf = UIManager.getLookAndFeel().getClass().getName();
-                                logger.info("Look and Feel after startApplication: {}", currentLaf);
-                                assertTrue(
-                                        currentLaf.contains("flatlaf"),
-                                        "Should be using FlatLaf after startApplication, but got: "
-                                                + currentLaf);
-
-                            } catch (Exception e) {
-                                logger.error("Application startup failed", e);
-                                throw new RuntimeException("Application startup failed", e);
-                            }
-                        });
-
-        // Wait for application to start and verify no Aqua errors
-        boolean guiStarted = waitForGuiToAppear(10);
-        assertTrue(guiStarted, "Application GUI should appear within 10 seconds");
-        logger.info("✅ Application GUI started successfully");
+        // Verify FlatLaf is set (SwingTestFixture handles bootstrap)
+        String currentLaf = UIManager.getLookAndFeel().getClass().getName();
+        logger.info("Look and Feel after startup: {}", currentLaf);
+        assertTrue(
+                currentLaf.contains("flatlaf"),
+                "Should be using FlatLaf after startup, but got: " + currentLaf);
 
         // Give the application a moment to fully initialize
         Thread.sleep(1000);
 
         // Verify application is using FlatLaf and no Aqua errors occurred
-        SwingUtilities.invokeAndWait(
+        onEdt(
                 () -> {
                     Window[] windows = Window.getWindows();
                     logger.info("Found {} windows", windows.length);
@@ -118,7 +84,7 @@ class LookAndFeelIntegrationTest {
         Thread.sleep(3000);
 
         // Trigger window activation events that cause the Aqua error
-        SwingUtilities.invokeAndWait(
+        onEdt(
                 () -> {
                     Window[] windows = Window.getWindows();
                     for (Window window : windows) {
@@ -136,22 +102,6 @@ class LookAndFeelIntegrationTest {
         // Give time for any Aqua errors to occur
         Thread.sleep(2000);
         logger.info("✅ Application appears to be running without Aqua errors");
-
-        // Shut down the application cleanly
-        logger.info("Initiating application shutdown...");
-        SwingUtilities.invokeLater(
-                () -> {
-                    Window[] windows = Window.getWindows();
-                    for (Window window : windows) {
-                        if (window.isVisible()) {
-                            window.dispose();
-                        }
-                    }
-                });
-
-        // Wait for shutdown to complete
-        startupFuture.get(5, TimeUnit.SECONDS);
-        logger.info("✅ Application shutdown completed successfully");
     }
 
     @Test
@@ -277,30 +227,5 @@ class LookAndFeelIntegrationTest {
             // Restore original exception handler
             Thread.setDefaultUncaughtExceptionHandler(originalHandler);
         }
-    }
-
-    private boolean waitForGuiToAppear(int timeoutSeconds) {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < timeoutSeconds * 1000) {
-            try {
-                SwingUtilities.invokeAndWait(
-                        () -> {
-                            // This will throw if no windows are found
-                            Window[] windows = Window.getWindows();
-                            if (windows.length == 0) {
-                                throw new RuntimeException("No windows found");
-                            }
-                        });
-                return true;
-            } catch (Exception e) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    return false;
-                }
-            }
-        }
-        return false;
     }
 }
