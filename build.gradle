@@ -344,6 +344,8 @@ tasks.register('audioTest', Test.class) {
         includeTags 'audio'
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
+        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
+        if (audioHardwareAvailable == 'false') excludeTags 'audio-hardware'
         if (project.hasProperty('excludeTags')) {
             excludeTags project.property('excludeTags').toString().split(',')
         }
