@@ -1,15 +1,16 @@
 package core.audio.fmod;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
+import com.google.inject.Inject;
 import core.audio.AudioData;
 import core.audio.AudioMetadata;
 import core.audio.AudioReadException;
 import core.audio.SampleReader;
 import core.audio.exceptions.AudioEngineException;
-import jakarta.inject.Inject;
+import core.audio.fmod.panama.FmodCore;
 import java.io.IOException;
+import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,8 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FmodSampleReader implements SampleReader {
 
-    private final FmodLibrary fmod;
-    private final Pointer system;
+    private final MemorySegment system;
     private final Map<Path, CachedAudio> cache = new ConcurrentHashMap<>();
     private volatile boolean closed = false;
 
@@ -46,24 +46,26 @@ public class FmodSampleReader implements SampleReader {
     @Inject
     public FmodSampleReader(@NonNull FmodLibraryLoader libraryLoader) {
         try {
-            // Load FMOD library
-            this.fmod = libraryLoader.loadAudioLibrary(FmodLibrary.class);
+            // Load FMOD native library and create a system using Panama
+            libraryLoader.loadNativeLibrary();
+            try (Arena arena = Arena.ofConfined()) {
+                var systemRef = arena.allocate(ValueLayout.ADDRESS);
+                int result = FmodCore.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioEngineException(
+                            "Failed to create FMOD system: " + FmodError.describe(result));
+                }
+                this.system = systemRef.get(ValueLayout.ADDRESS, 0);
 
-            // Create single FMOD system
-            PointerByReference systemRef = new PointerByReference();
-            int result = fmod.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioEngineException(
-                        "Failed to create FMOD system: " + FmodError.describe(result));
-            }
-            this.system = systemRef.getValue();
-
-            // Initialize with minimal settings since we're just loading files
-            result = fmod.FMOD_System_Init(system, 32, FmodConstants.FMOD_INIT_NORMAL, null);
-            if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_System_Release(system);
-                throw new AudioEngineException(
-                        "Failed to initialize FMOD system: " + FmodError.describe(result));
+                // Initialize with minimal settings since we're just loading files
+                result =
+                        FmodCore.FMOD_System_Init(
+                                system, 32, FmodConstants.FMOD_INIT_NORMAL, MemorySegment.NULL);
+                if (result != FmodConstants.FMOD_OK) {
+                    FmodCore.FMOD_System_Release(system);
+                    throw new AudioEngineException(
+                            "Failed to initialize FMOD system: " + FmodError.describe(result));
+                }
             }
 
             log.info("Created simple FMOD sample reader");
@@ -125,156 +127,185 @@ public class FmodSampleReader implements SampleReader {
 
         // Load the entire file into memory
         String filePath = audioFile.toAbsolutePath().toString();
-        Pointer sound = null;
+        MemorySegment sound = null;
 
         try {
             // Update system
-            fmod.FMOD_System_Update(system);
+            FmodCore.FMOD_System_Update(system);
 
             // Create sound as sample (loads entire file into memory)
             // Don't use FMOD_OPENONLY - that prevents actual data loading!
-            PointerByReference soundRef = new PointerByReference();
             int flags = FmodConstants.FMOD_CREATESAMPLE;
-
-            int result = fmod.FMOD_System_CreateSound(system, filePath, flags, null, soundRef);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to open audio file: " + FmodError.describe(result), audioFile);
+            try (Arena arena = Arena.ofConfined()) {
+                var soundRef = arena.allocate(ValueLayout.ADDRESS);
+                var path = arena.allocateFrom(filePath);
+                int result =
+                        FmodCore.FMOD_System_CreateSound(
+                                system, path, flags, MemorySegment.NULL, soundRef);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to open audio file: " + FmodError.describe(result), audioFile);
+                }
+                sound = soundRef.get(ValueLayout.ADDRESS, 0);
             }
-            sound = soundRef.getValue();
 
             // Get format info
-            IntByReference channelsRef = new IntByReference();
-            IntByReference bitsRef = new IntByReference();
-            result = fmod.FMOD_Sound_GetFormat(sound, null, null, channelsRef, bitsRef);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to get sound format: " + FmodError.describe(result), audioFile);
-            }
+            int sampleRate;
+            int channelCount;
+            int bitsPerSample;
+            long totalFrames;
+            double durationSec;
+            int result;
+            try (Arena arena = Arena.ofConfined()) {
+                var channelsRef = arena.allocate(ValueLayout.JAVA_INT);
+                var bitsRef = arena.allocate(ValueLayout.JAVA_INT);
+                result =
+                        FmodCore.FMOD_Sound_GetFormat(
+                                sound,
+                                MemorySegment.NULL,
+                                MemorySegment.NULL,
+                                channelsRef,
+                                bitsRef);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to get sound format: " + FmodError.describe(result), audioFile);
+                }
+                // Get sample rate
+                var frequencyRef = arena.allocate(ValueLayout.JAVA_FLOAT);
+                result = FmodCore.FMOD_Sound_GetDefaults(sound, frequencyRef, MemorySegment.NULL);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to get sample rate: " + FmodError.describe(result), audioFile);
+                }
+                // Get total length
+                var lengthRef = arena.allocate(ValueLayout.JAVA_INT);
+                result =
+                        FmodCore.FMOD_Sound_GetLength(
+                                sound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to get sound length: " + FmodError.describe(result), audioFile);
+                }
+                sampleRate = Math.round(frequencyRef.get(ValueLayout.JAVA_FLOAT, 0));
+                channelCount = channelsRef.get(ValueLayout.JAVA_INT, 0);
+                bitsPerSample = bitsRef.get(ValueLayout.JAVA_INT, 0);
+                int bytesPerSample = bitsPerSample / 8;
+                totalFrames = Integer.toUnsignedLong(lengthRef.get(ValueLayout.JAVA_INT, 0));
 
-            // Get sample rate
-            var frequencyRef = new com.sun.jna.ptr.FloatByReference();
-            result = fmod.FMOD_Sound_GetDefaults(sound, frequencyRef, null);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to get sample rate: " + FmodError.describe(result), audioFile);
-            }
+                // Get duration in ms
+                var msLengthRef = arena.allocate(ValueLayout.JAVA_INT);
+                result =
+                        FmodCore.FMOD_Sound_GetLength(
+                                sound, msLengthRef, FmodConstants.FMOD_TIMEUNIT_MS);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to get duration: " + FmodError.describe(result), audioFile);
+                }
+                durationSec =
+                        Integer.toUnsignedLong(msLengthRef.get(ValueLayout.JAVA_INT, 0)) / 1000.0;
 
-            // Get total length
-            IntByReference lengthRef = new IntByReference();
-            result = fmod.FMOD_Sound_GetLength(sound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to get sound length: " + FmodError.describe(result), audioFile);
-            }
+                // Lock entire sound to read all data at once
+                int totalBytes = (int) (totalFrames * channelCount * bytesPerSample);
+                var ptr1Ref = arena.allocate(ValueLayout.ADDRESS);
+                var ptr2Ref = arena.allocate(ValueLayout.ADDRESS);
+                var len1Ref = arena.allocate(ValueLayout.JAVA_INT);
+                var len2Ref = arena.allocate(ValueLayout.JAVA_INT);
 
-            int sampleRate = Math.round(frequencyRef.getValue());
-            int channelCount = channelsRef.getValue();
-            int bitsPerSample = bitsRef.getValue();
-            int bytesPerSample = bitsPerSample / 8;
-            long totalFrames = lengthRef.getValue();
-
-            // Get duration in ms
-            IntByReference msLengthRef = new IntByReference();
-            result = fmod.FMOD_Sound_GetLength(sound, msLengthRef, FmodConstants.FMOD_TIMEUNIT_MS);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to get duration: " + FmodError.describe(result), audioFile);
-            }
-
-            // Lock entire sound to read all data at once
-            PointerByReference ptr1Ref = new PointerByReference();
-            PointerByReference ptr2Ref = new PointerByReference();
-            IntByReference len1Ref = new IntByReference();
-            IntByReference len2Ref = new IntByReference();
-
-            int totalBytes = (int) (totalFrames * channelCount * bytesPerSample);
-
-            result = fmod.FMOD_Sound_Lock(sound, 0, totalBytes, ptr1Ref, ptr2Ref, len1Ref, len2Ref);
-            if (result != FmodConstants.FMOD_OK) {
-                throw new AudioReadException(
-                        "Failed to lock sound data: " + FmodError.describe(result), audioFile);
-            }
-
-            try {
-                // Read all PCM data
-                int totalBytesRead = len1Ref.getValue() + len2Ref.getValue();
-                byte[] buffer = new byte[totalBytesRead];
-
-                if (len1Ref.getValue() > 0 && ptr1Ref.getValue() != null) {
-                    ptr1Ref.getValue().read(0, buffer, 0, len1Ref.getValue());
+                result =
+                        FmodCore.FMOD_Sound_Lock(
+                                sound, 0, totalBytes, ptr1Ref, ptr2Ref, len1Ref, len2Ref);
+                if (result != FmodConstants.FMOD_OK) {
+                    throw new AudioReadException(
+                            "Failed to lock sound data: " + FmodError.describe(result), audioFile);
                 }
 
-                if (len2Ref.getValue() > 0 && ptr2Ref.getValue() != null) {
-                    ptr2Ref.getValue().read(0, buffer, len1Ref.getValue(), len2Ref.getValue());
-                }
+                int len1 = 0;
+                int len2 = 0;
+                MemorySegment p1 = MemorySegment.NULL;
+                MemorySegment p2 = MemorySegment.NULL;
+                try {
+                    // Read all PCM data
+                    len1 = len1Ref.get(ValueLayout.JAVA_INT, 0);
+                    len2 = len2Ref.get(ValueLayout.JAVA_INT, 0);
+                    int totalBytesRead = len1 + len2;
+                    byte[] buffer = new byte[totalBytesRead];
 
-                // Debug: Check raw byte data
-                boolean hasNonZero = false;
-                for (int i = 0; i < Math.min(1000, buffer.length); i++) {
-                    if (buffer[i] != 0) {
-                        hasNonZero = true;
-                        break;
+                    p1 = ptr1Ref.get(ValueLayout.ADDRESS, 0);
+                    p2 = ptr2Ref.get(ValueLayout.ADDRESS, 0);
+                    if (len1 > 0 && p1 != null) {
+                        var seg1 = p1.reinterpret(len1);
+                        seg1.asByteBuffer().get(buffer, 0, len1);
                     }
+
+                    if (len2 > 0 && p2 != null) {
+                        var seg2 = p2.reinterpret(len2);
+                        seg2.asByteBuffer().get(buffer, len1, len2);
+                    }
+
+                    // Debug: Check raw byte data
+                    boolean hasNonZero = false;
+                    for (int i = 0; i < Math.min(1000, buffer.length); i++) {
+                        if (buffer[i] != 0) {
+                            hasNonZero = true;
+                            break;
+                        }
+                    }
+                    log.debug(
+                            "Raw PCM bytes: {} total, has non-zero data: {}",
+                            totalBytesRead,
+                            hasNonZero);
+
+                    // Convert to normalized doubles
+                    int totalSamples = totalBytesRead / bytesPerSample;
+                    double[] samples = new double[totalSamples];
+                    convertToDouble(buffer, samples, bitsPerSample, totalSamples);
+
+                    // Create metadata
+                    String formatStr =
+                            String.format(
+                                    "%d Hz, %d bit, %s",
+                                    sampleRate,
+                                    bitsPerSample,
+                                    channelCount == 1 ? "Mono" : "Stereo");
+
+                    AudioMetadata metadata =
+                            new AudioMetadata(
+                                    sampleRate,
+                                    channelCount,
+                                    bitsPerSample,
+                                    formatStr,
+                                    totalFrames,
+                                    durationSec);
+
+                    // Debug: Check if samples have actual data
+                    double maxSample = 0;
+                    for (double s : samples) {
+                        if (Math.abs(s) > maxSample) maxSample = Math.abs(s);
+                    }
+
+                    // Cache and return
+                    cached = new CachedAudio(samples, metadata);
+                    cache.put(audioFile, cached);
+
+                    log.debug(
+                            "Loaded and cached {} ({} frames, {} MB, max amplitude: {})",
+                            audioFile.getFileName(),
+                            totalFrames,
+                            String.format("%.2f", totalBytesRead / 1_000_000.0),
+                            maxSample);
+
+                    return cached;
+
+                } finally {
+                    // Unlock the sound
+                    FmodCore.FMOD_Sound_Unlock(sound, p1, p2, len1, len2);
                 }
-                log.debug(
-                        "Raw PCM bytes: {} total, has non-zero data: {}",
-                        totalBytesRead,
-                        hasNonZero);
-
-                // Convert to normalized doubles
-                int totalSamples = totalBytesRead / bytesPerSample;
-                double[] samples = new double[totalSamples];
-                convertToDouble(buffer, samples, bitsPerSample, totalSamples);
-
-                // Create metadata
-                String formatStr =
-                        String.format(
-                                "%d Hz, %d bit, %s",
-                                sampleRate, bitsPerSample, channelCount == 1 ? "Mono" : "Stereo");
-
-                AudioMetadata metadata =
-                        new AudioMetadata(
-                                sampleRate,
-                                channelCount,
-                                bitsPerSample,
-                                formatStr,
-                                totalFrames,
-                                msLengthRef.getValue() / 1000.0);
-
-                // Debug: Check if samples have actual data
-                double maxSample = 0;
-                for (double s : samples) {
-                    if (Math.abs(s) > maxSample) maxSample = Math.abs(s);
-                }
-
-                // Cache and return
-                cached = new CachedAudio(samples, metadata);
-                cache.put(audioFile, cached);
-
-                log.debug(
-                        "Loaded and cached {} ({} frames, {} MB, max amplitude: {})",
-                        audioFile.getFileName(),
-                        totalFrames,
-                        String.format("%.2f", totalBytesRead / 1_000_000.0),
-                        maxSample);
-
-                return cached;
-
-            } finally {
-                // Unlock the sound
-                fmod.FMOD_Sound_Unlock(
-                        sound,
-                        ptr1Ref.getValue(),
-                        ptr2Ref.getValue(),
-                        len1Ref.getValue(),
-                        len2Ref.getValue());
-            }
+            } // end Arena scope for format/lock/read
 
         } finally {
             // Release the sound object
             if (sound != null) {
-                fmod.FMOD_Sound_Release(sound);
+                FmodCore.FMOD_Sound_Release(sound);
             }
         }
     }
@@ -354,7 +385,7 @@ public class FmodSampleReader implements SampleReader {
 
         // Release FMOD system
         if (system != null) {
-            fmod.FMOD_System_Release(system);
+            FmodCore.FMOD_System_Release(system);
             log.info("Released FMOD system");
         }
     }

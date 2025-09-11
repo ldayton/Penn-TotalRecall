@@ -21,9 +21,6 @@ public class SwingModule extends AbstractModule {
         // Install shared core module
         install(new CoreModule());
 
-        // Install waveform module for waveform bindings
-        install(new waveform.Module());
-
         // Install state module for session management bindings
         install(new state.Module());
 

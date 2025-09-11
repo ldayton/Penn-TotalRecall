@@ -2,8 +2,8 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
 import core.audio.exceptions.AudioEngineException;
+import core.env.Platform;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -19,14 +20,21 @@ import org.junit.jupiter.api.Timeout;
  * Integration tests for FmodSystemManager. Tests the FMOD system lifecycle including
  * initialization, configuration, and shutdown.
  */
-@Audio
+@Tag("audio")
 class FmodSystemManagerTest {
 
     private FmodSystemManager manager;
 
     @BeforeEach
     void setUp() {
-        manager = new FmodSystemManager();
+        manager =
+                new FmodSystemManager(
+                        new FmodLibraryLoader(
+                                new FmodProperties(
+                                        "unpackaged",
+                                        "standard",
+                                        FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                                new Platform()));
     }
 
     @AfterEach
@@ -40,7 +48,6 @@ class FmodSystemManagerTest {
     @DisplayName("Initial state should be uninitialized")
     void testInitialState() {
         assertFalse(manager.isInitialized());
-        assertNull(manager.getFmodLibrary());
         assertNull(manager.getSystem());
         assertEquals("", manager.getVersionInfo());
         assertEquals("", manager.getBufferInfo());
@@ -52,7 +59,6 @@ class FmodSystemManagerTest {
     void testInitialization() {
         assertDoesNotThrow(() -> manager.initialize());
         assertTrue(manager.isInitialized());
-        assertNotNull(manager.getFmodLibrary());
         assertNotNull(manager.getSystem());
     }
 
@@ -134,7 +140,6 @@ class FmodSystemManagerTest {
         manager.shutdown();
 
         assertFalse(manager.isInitialized());
-        assertNull(manager.getFmodLibrary());
         assertNull(manager.getSystem());
     }
 

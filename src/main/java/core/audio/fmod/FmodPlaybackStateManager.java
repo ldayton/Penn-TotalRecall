@@ -1,6 +1,6 @@
 package core.audio.fmod;
 
-import app.annotations.ThreadSafe;
+import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.PlaybackState;
 import core.audio.exceptions.AudioPlaybackException;
 import java.util.concurrent.locks.ReentrantLock;

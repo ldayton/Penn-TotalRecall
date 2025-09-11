@@ -1,8 +1,6 @@
 package core.audio.fmod;
 
-import app.annotations.ThreadSafe;
-import com.google.inject.Singleton;
-import com.sun.jna.Pointer;
+import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.AudioHandle;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.NonNull;
@@ -13,11 +11,8 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p>This class ensures that only handles from the current generation are valid, providing atomic
  * invalidation of all previous handles when a new audio file is loaded.
- *
- * <p>Thread-safe: All operations are atomic and thread-safe.
  */
 @ThreadSafe
-@Singleton
 @Slf4j
 class FmodHandleLifecycleManager {
 
@@ -36,7 +31,8 @@ class FmodHandleLifecycleManager {
      * @return A new valid audio handle
      */
     @NonNull
-    FmodAudioHandle createHandle(@NonNull Pointer sound, @NonNull String filePath) {
+    FmodAudioHandle createHandle(
+            @NonNull java.lang.foreign.MemorySegment sound, @NonNull String filePath) {
         // Increment generation to invalidate all previous handles
         long generation = currentGeneration.incrementAndGet();
         long id = nextHandleId.getAndIncrement();

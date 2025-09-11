@@ -1,17 +1,16 @@
 package core.audio.fmod;
 
-import app.annotations.ThreadSafe;
-import com.google.inject.Inject;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.FloatByReference;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
+import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.AudioHandle;
 import core.audio.AudioMetadata;
 import core.audio.exceptions.AudioEngineException;
 import core.audio.exceptions.AudioLoadException;
+import core.audio.fmod.panama.FmodCore;
 import java.io.File;
 import java.io.IOException;
+import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
@@ -27,10 +26,9 @@ class FmodAudioLoadingManager {
 
     // Immutable record to hold current audio state atomically
     private record CurrentAudio(
-            @NonNull FmodAudioHandle handle, @NonNull Pointer sound, @NonNull String path) {}
+            @NonNull FmodAudioHandle handle, @NonNull MemorySegment sound, @NonNull String path) {}
 
-    private final FmodLibrary fmod;
-    private final Pointer system;
+    private final MemorySegment system;
     private final FmodSystemStateManager stateManager;
     private final FmodHandleLifecycleManager lifecycleManager;
     private final ReentrantLock loadingLock = new ReentrantLock();
@@ -38,13 +36,10 @@ class FmodAudioLoadingManager {
     // Current loaded audio (single-audio paradigm) - guarded by loadingLock
     private volatile Optional<CurrentAudio> current = Optional.empty();
 
-    @Inject
     FmodAudioLoadingManager(
-            @NonNull FmodLibrary fmod,
-            @NonNull Pointer system,
+            @NonNull MemorySegment system,
             @NonNull FmodSystemStateManager stateManager,
             @NonNull FmodHandleLifecycleManager lifecycleManager) {
-        this.fmod = fmod;
         this.system = system;
         this.stateManager = stateManager;
         this.lifecycleManager = lifecycleManager;
@@ -72,7 +67,7 @@ class FmodAudioLoadingManager {
             }
 
             // Create new sound BEFORE releasing old one (to ensure we always have valid audio)
-            Pointer newSound;
+            MemorySegment newSound;
             try {
                 newSound = createSound(canonicalPath);
             } catch (AudioLoadException e) {
@@ -82,7 +77,7 @@ class FmodAudioLoadingManager {
 
             // Only release previous audio after successfully creating new one
             if (existing.isPresent()) {
-                int result = fmod.FMOD_Sound_Release(existing.get().sound());
+                int result = FmodCore.FMOD_Sound_Release(existing.get().sound());
                 if (result != FmodConstants.FMOD_OK
                         && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                     log.warn(
@@ -152,7 +147,7 @@ class FmodAudioLoadingManager {
      *
      * @return Current sound if loaded, empty otherwise
      */
-    Optional<Pointer> getCurrentSound() {
+    Optional<MemorySegment> getCurrentSound() {
         return current.map(CurrentAudio::sound);
     }
 
@@ -174,7 +169,7 @@ class FmodAudioLoadingManager {
         try {
             current.ifPresent(
                     audio -> {
-                        int result = fmod.FMOD_Sound_Release(audio.sound());
+                        int result = FmodCore.FMOD_Sound_Release(audio.sound());
                         if (result != FmodConstants.FMOD_OK
                                 && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                             log.warn(
@@ -220,7 +215,7 @@ class FmodAudioLoadingManager {
     /**
      * Create an FMOD sound from a file. This method must be called while holding the loadingLock.
      */
-    private Pointer createSound(@NonNull String canonicalPath) throws AudioLoadException {
+    private MemorySegment createSound(@NonNull String canonicalPath) throws AudioLoadException {
         // Check we're in the right state
         try {
             stateManager.checkState(FmodSystemStateManager.State.INITIALIZED);
@@ -232,25 +227,24 @@ class FmodAudioLoadingManager {
         int flags = FmodConstants.FMOD_DEFAULT | FmodConstants.FMOD_ACCURATETIME;
 
         // Create the sound
-        PointerByReference soundRef = new PointerByReference();
-        int result =
-                fmod.FMOD_System_CreateSound(
-                        system,
-                        canonicalPath,
-                        flags,
-                        null, // No extended info
-                        soundRef);
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment soundRef = arena.allocate(ValueLayout.ADDRESS);
+            MemorySegment path = arena.allocateFrom(canonicalPath);
+            int result =
+                    FmodCore.FMOD_System_CreateSound(
+                            system, path, flags, MemorySegment.NULL, soundRef);
 
-        if (result != FmodConstants.FMOD_OK) {
-            throw FmodError.toLoadException(result, canonicalPath);
+            if (result != FmodConstants.FMOD_OK) {
+                throw FmodError.toLoadException(result, canonicalPath);
+            }
+
+            MemorySegment sound = soundRef.get(ValueLayout.ADDRESS, 0);
+            if (sound == null) {
+                throw new AudioLoadException("FMOD returned null sound for: " + canonicalPath);
+            }
+
+            return sound;
         }
-
-        Pointer sound = soundRef.getValue();
-        if (sound == null) {
-            throw new AudioLoadException("FMOD returned null sound for: " + canonicalPath);
-        }
-
-        return sound;
     }
 
     // Error mapping centralized in FmodError
@@ -259,65 +253,72 @@ class FmodAudioLoadingManager {
      * Extract metadata from an FMOD sound. This method must be called while holding the
      * loadingLock.
      */
-    private AudioMetadata extractMetadata(@NonNull Pointer sound) throws AudioLoadException {
+    private AudioMetadata extractMetadata(@NonNull MemorySegment sound) throws AudioLoadException {
         // Get sound format info
-        IntByReference typeRef = new IntByReference(); // File type (WAV, MP3, etc.)
-        IntByReference formatRef =
-                new IntByReference(); // Sample format (PCM16, FLOAT, etc.) - not used
-        IntByReference channelsRef = new IntByReference(); // Number of channels
-        IntByReference bitsRef = new IntByReference(); // Bits per sample
+        try (Arena arena = Arena.ofConfined()) {
+            var typeRef = arena.allocate(ValueLayout.JAVA_INT); // File type (WAV, MP3, etc.)
+            var formatRef = arena.allocate(ValueLayout.JAVA_INT); // Sample format (not used)
+            var channelsRef = arena.allocate(ValueLayout.JAVA_INT); // Number of channels
+            var bitsRef = arena.allocate(ValueLayout.JAVA_INT); // Bits per sample
 
-        int result = fmod.FMOD_Sound_GetFormat(sound, typeRef, formatRef, channelsRef, bitsRef);
+            int result =
+                    FmodCore.FMOD_Sound_GetFormat(sound, typeRef, formatRef, channelsRef, bitsRef);
 
-        if (result != FmodConstants.FMOD_OK) {
-            throw new AudioLoadException(
-                    "Failed to extract audio format metadata (error code: " + result + ")");
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioLoadException(
+                        "Failed to extract audio format metadata (error code: " + result + ")");
+            }
+
+            // Get length in milliseconds
+            var lengthMsRef = arena.allocate(ValueLayout.JAVA_INT);
+            result =
+                    FmodCore.FMOD_Sound_GetLength(
+                            sound, lengthMsRef, FmodConstants.FMOD_TIMEUNIT_MS);
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioLoadException(
+                        "Failed to get audio duration (error code: " + result + ")");
+            }
+
+            // Get the actual sample rate from the sound
+            var frequencyRef = arena.allocate(ValueLayout.JAVA_FLOAT);
+            var priorityRef = arena.allocate(ValueLayout.JAVA_INT); // Not used
+            result = FmodCore.FMOD_Sound_GetDefaults(sound, frequencyRef, priorityRef);
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioLoadException(
+                        "Failed to get sample rate (error code: " + result + ")");
+            }
+
+            // Get total samples for precise duration
+            var lengthSamplesRef = arena.allocate(ValueLayout.JAVA_INT);
+            result =
+                    FmodCore.FMOD_Sound_GetLength(
+                            sound, lengthSamplesRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+
+            if (result != FmodConstants.FMOD_OK) {
+                throw new AudioLoadException(
+                        "Failed to get total samples (error code: " + result + ")");
+            }
+
+            long totalSamples =
+                    Integer.toUnsignedLong(lengthSamplesRef.get(ValueLayout.JAVA_INT, 0));
+            int sampleRate = Math.round(frequencyRef.get(ValueLayout.JAVA_FLOAT, 0));
+
+            // Map sound type to format string
+            String format = mapSoundTypeToFormat(typeRef.get(ValueLayout.JAVA_INT, 0));
+
+            // Calculate precise duration from samples
+            double durationSeconds = totalSamples / (double) sampleRate;
+
+            return new AudioMetadata(
+                    sampleRate,
+                    channelsRef.get(ValueLayout.JAVA_INT, 0),
+                    bitsRef.get(ValueLayout.JAVA_INT, 0),
+                    format,
+                    totalSamples,
+                    durationSeconds);
         }
-
-        // Get length in milliseconds
-        IntByReference lengthMsRef = new IntByReference();
-        result = fmod.FMOD_Sound_GetLength(sound, lengthMsRef, FmodConstants.FMOD_TIMEUNIT_MS);
-
-        if (result != FmodConstants.FMOD_OK) {
-            throw new AudioLoadException(
-                    "Failed to get audio duration (error code: " + result + ")");
-        }
-
-        // Get the actual sample rate from the sound
-        FloatByReference frequencyRef = new FloatByReference();
-        IntByReference priorityRef = new IntByReference(); // Not used
-        result = fmod.FMOD_Sound_GetDefaults(sound, frequencyRef, priorityRef);
-
-        if (result != FmodConstants.FMOD_OK) {
-            throw new AudioLoadException("Failed to get sample rate (error code: " + result + ")");
-        }
-
-        // Get total samples for precise duration
-        IntByReference lengthSamplesRef = new IntByReference();
-        result =
-                fmod.FMOD_Sound_GetLength(sound, lengthSamplesRef, FmodConstants.FMOD_TIMEUNIT_PCM);
-
-        if (result != FmodConstants.FMOD_OK) {
-            throw new AudioLoadException(
-                    "Failed to get total samples (error code: " + result + ")");
-        }
-
-        long totalSamples = Integer.toUnsignedLong(lengthSamplesRef.getValue());
-        int sampleRate = Math.round(frequencyRef.getValue());
-
-        // Map sound type to format string
-        String format = mapSoundTypeToFormat(typeRef.getValue());
-
-        // Calculate precise duration from samples
-        double durationSeconds = totalSamples / (double) sampleRate;
-
-        return new AudioMetadata(
-                sampleRate,
-                channelsRef.getValue(),
-                bitsRef.getValue(),
-                format,
-                totalSamples,
-                durationSeconds);
     }
 
     /** Map FMOD sound type to human-readable format string. */

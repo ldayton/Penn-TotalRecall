@@ -1,12 +1,13 @@
 package core.audio.fmod;
 
-import app.annotations.ThreadSafe;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.FloatByReference;
-import com.sun.jna.ptr.IntByReference;
+import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
+import core.audio.fmod.panama.FmodCore;
+import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
@@ -39,8 +40,7 @@ class FmodListenerManager {
     private static final long DEFAULT_PROGRESS_INTERVAL_MS = 100;
 
     private final long progressIntervalMs;
-    private final FmodLibrary fmod;
-    private final Pointer system; // For latency calculations
+    private final MemorySegment system; // For latency calculations
     private ScheduledExecutorService progressTimer;
 
     // Current monitoring state
@@ -57,8 +57,8 @@ class FmodListenerManager {
      * @param fmod The FMOD library interface for position queries
      * @param system The FMOD system pointer for latency calculations (can be null)
      */
-    FmodListenerManager(@NonNull FmodLibrary fmod, Pointer system) {
-        this(fmod, system, DEFAULT_PROGRESS_INTERVAL_MS);
+    FmodListenerManager(@NonNull MemorySegment system) {
+        this(system, DEFAULT_PROGRESS_INTERVAL_MS);
     }
 
     /**
@@ -68,8 +68,7 @@ class FmodListenerManager {
      * @param system The FMOD system pointer for latency calculations (can be null)
      * @param progressIntervalMs Interval between progress updates in milliseconds
      */
-    FmodListenerManager(@NonNull FmodLibrary fmod, Pointer system, long progressIntervalMs) {
-        this.fmod = fmod;
+    FmodListenerManager(@NonNull MemorySegment system, long progressIntervalMs) {
         this.system = system;
         this.progressIntervalMs = progressIntervalMs;
     }
@@ -274,22 +273,22 @@ class FmodListenerManager {
             return;
         }
 
-        try {
-            // Query current position from FMOD
-            IntByReference positionRef = new IntByReference();
+        // Query current position from FMOD
+        try (Arena arena = Arena.ofConfined()) {
+            var positionRef = arena.allocate(ValueLayout.JAVA_INT);
             int result =
-                    fmod.FMOD_Channel_GetPosition(
+                    FmodCore.FMOD_Channel_GetPosition(
                             handle.getChannel(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
 
             if (result == FmodConstants.FMOD_OK) {
                 // Get the raw decoded position
-                long decodedPosition = positionRef.getValue();
+                long decodedPosition = positionRef.get(ValueLayout.JAVA_INT, 0);
 
                 // Apply latency compensation if system is available
                 long hearingPosition = decodedPosition;
                 if (system != null && handle.getAudioHandle() instanceof FmodAudioHandle) {
                     FmodAudioHandle fmodAudioHandle = (FmodAudioHandle) handle.getAudioHandle();
-                    Pointer sound = fmodAudioHandle.getSound();
+                    MemorySegment sound = fmodAudioHandle.getSound();
                     if (sound != null) {
                         hearingPosition =
                                 calculateHearingPosition(
@@ -325,79 +324,83 @@ class FmodListenerManager {
      * @param startFrame The start frame for relative calculations
      * @return The latency-compensated hearing position (absolute)
      */
-    private long calculateHearingPosition(long decodedPosition, Pointer sound, long startFrame) {
+    private long calculateHearingPosition(
+            long decodedPosition, MemorySegment sound, long startFrame) {
         // Calculate relative position from start frame
         long relDecoded = decodedPosition - startFrame;
         if (relDecoded < 0) relDecoded = 0;
 
         // Get DSP buffer configuration for latency calculation
-        IntByReference bufferLengthRef = new IntByReference();
-        IntByReference numBuffersRef = new IntByReference();
-        int result = fmod.FMOD_System_GetDSPBufferSize(system, bufferLengthRef, numBuffersRef);
-        if (result != FmodConstants.FMOD_OK) {
-            // Can't calculate latency, return absolute position
-            return decodedPosition;
-        }
-
-        // Get output sample rate
-        IntByReference outputRateRef = new IntByReference();
-        IntByReference speakerModeRef = new IntByReference();
-        IntByReference rawSpeakerRef = new IntByReference();
-        result =
-                fmod.FMOD_System_GetSoftwareFormat(
-                        system, outputRateRef, speakerModeRef, rawSpeakerRef);
-        if (result != FmodConstants.FMOD_OK) {
-            // Can't get output rate, return absolute position
-            return decodedPosition;
-        }
-
-        // Get source sample rate from the sound
-        int sourceRate = 48000; // Default if we can't get it
-        try {
-            FloatByReference frequency = new FloatByReference();
-            IntByReference priority = new IntByReference();
-            result = fmod.FMOD_Sound_GetDefaults(sound, frequency, priority);
-            if (result == FmodConstants.FMOD_OK) {
-                float freq = frequency.getValue();
-                if (freq > 0) {
-                    sourceRate = (int) freq;
-                }
+        try (Arena arena = Arena.ofConfined()) {
+            var bufferLengthRef = arena.allocate(ValueLayout.JAVA_INT);
+            var numBuffersRef = arena.allocate(ValueLayout.JAVA_INT);
+            int result =
+                    FmodCore.FMOD_System_GetDSPBufferSize(system, bufferLengthRef, numBuffersRef);
+            if (result != FmodConstants.FMOD_OK) {
+                // Can't calculate latency, return absolute position
+                return decodedPosition;
             }
-        } catch (Exception e) {
-            // Use default
+
+            // Get output sample rate
+            var outputRateRef = arena.allocate(ValueLayout.JAVA_INT);
+            var speakerModeRef = arena.allocate(ValueLayout.JAVA_INT);
+            var rawSpeakerRef = arena.allocate(ValueLayout.JAVA_INT);
+            result =
+                    FmodCore.FMOD_System_GetSoftwareFormat(
+                            system, outputRateRef, speakerModeRef, rawSpeakerRef);
+            if (result != FmodConstants.FMOD_OK) {
+                // Can't get output rate, return absolute position
+                return decodedPosition;
+            }
+
+            // Get source sample rate from the sound
+            int sourceRate = 48000; // Default if we can't get it
+            try {
+                var frequency = arena.allocate(ValueLayout.JAVA_FLOAT);
+                var priority = arena.allocate(ValueLayout.JAVA_INT);
+                result = FmodCore.FMOD_Sound_GetDefaults(sound, frequency, priority);
+                if (result == FmodConstants.FMOD_OK) {
+                    float freq = frequency.get(ValueLayout.JAVA_FLOAT, 0);
+                    if (freq > 0) {
+                        sourceRate = (int) freq;
+                    }
+                }
+            } catch (Exception e) {
+                // Use default
+            }
+
+            int bufferLength = Math.max(0, bufferLengthRef.get(ValueLayout.JAVA_INT, 0));
+            int numBuffers = Math.max(0, numBuffersRef.get(ValueLayout.JAVA_INT, 0));
+            int outputRate = Math.max(0, outputRateRef.get(ValueLayout.JAVA_INT, 0));
+
+            if (bufferLength == 0 || numBuffers == 0 || outputRate == 0) {
+                return decodedPosition;
+            }
+
+            // Estimate mixer lead: buffers ahead of output plus half-buffer mix-ahead
+            // This matches FmodCore's calculation exactly
+            long leadFramesOutput =
+                    (long) bufferLength * Math.max(0, numBuffers - 1) + bufferLength / 2L;
+
+            // Convert output lead (output frames) to source frames using rates
+            long leadFramesSource = leadFramesOutput;
+            if (outputRate != sourceRate) {
+                // Convert with rounding to nearest
+                leadFramesSource =
+                        Math.round((leadFramesOutput * (double) sourceRate) / (double) outputRate);
+            }
+
+            // Clamp compensation to not exceed decoded position relative to start
+            if (leadFramesSource > relDecoded) {
+                leadFramesSource = relDecoded;
+            }
+
+            // Calculate audible position relative to start
+            long audibleRel = relDecoded - leadFramesSource;
+
+            // Return absolute hearing position
+            return startFrame + audibleRel;
         }
-
-        int bufferLength = Math.max(0, bufferLengthRef.getValue());
-        int numBuffers = Math.max(0, numBuffersRef.getValue());
-        int outputRate = Math.max(0, outputRateRef.getValue());
-
-        if (bufferLength == 0 || numBuffers == 0 || outputRate == 0) {
-            return decodedPosition;
-        }
-
-        // Estimate mixer lead: buffers ahead of output plus half-buffer mix-ahead
-        // This matches FmodCore's calculation exactly
-        long leadFramesOutput =
-                (long) bufferLength * Math.max(0, numBuffers - 1) + bufferLength / 2L;
-
-        // Convert output lead (output frames) to source frames using rates
-        long leadFramesSource = leadFramesOutput;
-        if (outputRate != sourceRate) {
-            // Convert with rounding to nearest
-            leadFramesSource =
-                    Math.round((leadFramesOutput * (double) sourceRate) / (double) outputRate);
-        }
-
-        // Clamp compensation to not exceed decoded position relative to start
-        if (leadFramesSource > relDecoded) {
-            leadFramesSource = relDecoded;
-        }
-
-        // Calculate audible position relative to start
-        long audibleRel = relDecoded - leadFramesSource;
-
-        // Return absolute hearing position
-        return startFrame + audibleRel;
     }
 
     /** Handle playback stopping - notify and clean up. */

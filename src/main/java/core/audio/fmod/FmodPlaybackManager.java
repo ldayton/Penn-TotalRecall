@@ -1,11 +1,12 @@
 package core.audio.fmod;
 
-import app.annotations.ThreadSafe;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
+import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.AudioHandle;
 import core.audio.exceptions.AudioPlaybackException;
+import core.audio.fmod.panama.FmodCore;
+import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
@@ -20,17 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 @ThreadSafe
 class FmodPlaybackManager {
 
-    private final FmodLibrary fmod;
-    private final Pointer system;
+    private final MemorySegment system;
 
     private final ReentrantLock playbackLock = new ReentrantLock();
 
     // Current playback tracking
     private Optional<FmodPlaybackHandle> currentPlayback = Optional.empty();
-    private Optional<Pointer> currentChannel = Optional.empty();
+    private Optional<MemorySegment> currentChannel = Optional.empty();
 
-    FmodPlaybackManager(@NonNull FmodLibrary fmod, @NonNull Pointer system) {
-        this.fmod = fmod;
+    FmodPlaybackManager(@NonNull MemorySegment system) {
         this.system = system;
     }
 
@@ -42,7 +41,7 @@ class FmodPlaybackManager {
      * @return A playback handle for controlling the playback
      * @throws AudioPlaybackException if playback cannot be started
      */
-    FmodPlaybackHandle play(@NonNull Pointer sound, @NonNull AudioHandle audioHandle)
+    FmodPlaybackHandle play(@NonNull MemorySegment sound, @NonNull AudioHandle audioHandle)
             throws AudioPlaybackException {
         playbackLock.lock();
         try {
@@ -52,31 +51,35 @@ class FmodPlaybackManager {
             }
 
             // Play the sound - start paused so we can get the channel handle first
-            PointerByReference channelRef = new PointerByReference();
-            int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
+            try (Arena arena = Arena.ofConfined()) {
+                var channelRef = arena.allocate(ValueLayout.ADDRESS);
+                int result =
+                        FmodCore.FMOD_System_PlaySound(
+                                system, sound, MemorySegment.NULL, 1, channelRef);
 
-            if (result != FmodConstants.FMOD_OK) {
-                throw FmodError.toPlaybackException(result, "play sound");
+                if (result != FmodConstants.FMOD_OK) {
+                    throw FmodError.toPlaybackException(result, "play sound");
+                }
+
+                MemorySegment channel = channelRef.get(ValueLayout.ADDRESS, 0);
+
+                // Now unpause to start playback
+                result = FmodCore.FMOD_Channel_SetPaused(channel, 0);
+                if (result != FmodConstants.FMOD_OK) {
+                    // Clean up the channel if we can't start it
+                    FmodCore.FMOD_Channel_Stop(channel);
+                    throw FmodError.toPlaybackException(result, "start playback");
+                }
+
+                // Create and track playback handle
+                FmodPlaybackHandle playbackHandle =
+                        new FmodPlaybackHandle(audioHandle, channel, 0, Long.MAX_VALUE);
+
+                currentPlayback = Optional.of(playbackHandle);
+                currentChannel = Optional.of(channel);
+
+                return playbackHandle;
             }
-
-            Pointer channel = channelRef.getValue();
-
-            // Now unpause to start playback
-            result = fmod.FMOD_Channel_SetPaused(channel, false);
-            if (result != FmodConstants.FMOD_OK) {
-                // Clean up the channel if we can't start it
-                fmod.FMOD_Channel_Stop(channel);
-                throw FmodError.toPlaybackException(result, "start playback");
-            }
-
-            // Create and track playback handle
-            FmodPlaybackHandle playbackHandle =
-                    new FmodPlaybackHandle(audioHandle, channel, 0, Long.MAX_VALUE);
-
-            currentPlayback = Optional.of(playbackHandle);
-            currentChannel = Optional.of(channel);
-
-            return playbackHandle;
         } finally {
             playbackLock.unlock();
         }
@@ -95,7 +98,7 @@ class FmodPlaybackManager {
      * @throws AudioPlaybackException if playback cannot be started
      */
     FmodPlaybackHandle playRange(
-            @NonNull Pointer sound,
+            @NonNull MemorySegment sound,
             @NonNull AudioHandle audioHandle,
             long startFrame,
             long endFrame,
@@ -109,41 +112,45 @@ class FmodPlaybackManager {
             }
 
             // Play the sound - start paused so we can set position first
-            PointerByReference channelRef = new PointerByReference();
-            int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
+            try (Arena arena = Arena.ofConfined()) {
+                var channelRef = arena.allocate(ValueLayout.ADDRESS);
+                int result =
+                        FmodCore.FMOD_System_PlaySound(
+                                system, sound, MemorySegment.NULL, 1, channelRef);
 
-            if (result != FmodConstants.FMOD_OK) {
-                throw FmodError.toPlaybackException(result, "play sound");
-            }
-
-            Pointer channel = channelRef.getValue();
-
-            // Set position if needed (for streaming sounds)
-            if (needsPositioning && startFrame > 0) {
-                result =
-                        fmod.FMOD_Channel_SetPosition(
-                                channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
                 if (result != FmodConstants.FMOD_OK) {
-                    fmod.FMOD_Channel_Stop(channel);
-                    throw FmodError.toPlaybackException(result, "set position");
+                    throw FmodError.toPlaybackException(result, "play sound");
                 }
+
+                MemorySegment channel = channelRef.get(ValueLayout.ADDRESS, 0);
+
+                // Set position if needed (for streaming sounds)
+                if (needsPositioning && startFrame > 0) {
+                    result =
+                            FmodCore.FMOD_Channel_SetPosition(
+                                    channel, (int) startFrame, FmodConstants.FMOD_TIMEUNIT_PCM);
+                    if (result != FmodConstants.FMOD_OK) {
+                        FmodCore.FMOD_Channel_Stop(channel);
+                        throw FmodError.toPlaybackException(result, "set position");
+                    }
+                }
+
+                // Now unpause to start playback
+                result = FmodCore.FMOD_Channel_SetPaused(channel, 0);
+                if (result != FmodConstants.FMOD_OK) {
+                    FmodCore.FMOD_Channel_Stop(channel);
+                    throw FmodError.toPlaybackException(result, "start playback");
+                }
+
+                // Create and track playback handle
+                FmodPlaybackHandle playbackHandle =
+                        new FmodPlaybackHandle(audioHandle, channel, startFrame, endFrame);
+
+                currentPlayback = Optional.of(playbackHandle);
+                currentChannel = Optional.of(channel);
+
+                return playbackHandle;
             }
-
-            // Now unpause to start playback
-            result = fmod.FMOD_Channel_SetPaused(channel, false);
-            if (result != FmodConstants.FMOD_OK) {
-                fmod.FMOD_Channel_Stop(channel);
-                throw FmodError.toPlaybackException(result, "start playback");
-            }
-
-            // Create and track playback handle
-            FmodPlaybackHandle playbackHandle =
-                    new FmodPlaybackHandle(audioHandle, channel, startFrame, endFrame);
-
-            currentPlayback = Optional.of(playbackHandle);
-            currentChannel = Optional.of(channel);
-
-            return playbackHandle;
         } finally {
             playbackLock.unlock();
         }
@@ -161,7 +168,7 @@ class FmodPlaybackManager {
                 throw new AudioPlaybackException("No active playback to pause");
             }
 
-            int result = fmod.FMOD_Channel_SetPaused(currentChannel.get(), true);
+            int result = FmodCore.FMOD_Channel_SetPaused(currentChannel.get(), 1);
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
@@ -190,7 +197,7 @@ class FmodPlaybackManager {
                 throw new AudioPlaybackException("No active playback to resume");
             }
 
-            int result = fmod.FMOD_Channel_SetPaused(currentChannel.get(), false);
+            int result = FmodCore.FMOD_Channel_SetPaused(currentChannel.get(), 0);
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
             if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
@@ -240,7 +247,7 @@ class FmodPlaybackManager {
             }
 
             int result =
-                    fmod.FMOD_Channel_SetPosition(
+                    FmodCore.FMOD_Channel_SetPosition(
                             currentChannel.get(), (int) frame, FmodConstants.FMOD_TIMEUNIT_PCM);
 
             // FMOD_ERR_INVALID_HANDLE means channel already stopped
@@ -278,23 +285,25 @@ class FmodPlaybackManager {
                 return 0;
             }
 
-            IntByReference positionRef = new IntByReference();
-            int result =
-                    fmod.FMOD_Channel_GetPosition(
-                            currentChannel.get(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+            try (Arena arena = Arena.ofConfined()) {
+                var positionRef = arena.allocate(ValueLayout.JAVA_INT);
+                int result =
+                        FmodCore.FMOD_Channel_GetPosition(
+                                currentChannel.get(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
 
-            // If channel is invalid, clean up and return 0
-            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                cleanupCurrentPlayback();
-                return 0;
+                // If channel is invalid, clean up and return 0
+                if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                    cleanupCurrentPlayback();
+                    return 0;
+                }
+
+                if (result != FmodConstants.FMOD_OK) {
+                    log.warn("Failed to get position: {}", FmodError.describe(result));
+                    return 0;
+                }
+
+                return positionRef.get(ValueLayout.JAVA_INT, 0);
             }
-
-            if (result != FmodConstants.FMOD_OK) {
-                log.warn("Failed to get position: {}", FmodError.describe(result));
-                return 0;
-            }
-
-            return positionRef.getValue();
         } finally {
             playbackLock.unlock();
         }
@@ -313,18 +322,20 @@ class FmodPlaybackManager {
             }
 
             // Check if channel is still playing
-            IntByReference isPlayingRef = new IntByReference();
-            int result = fmod.FMOD_Channel_IsPlaying(currentChannel.get(), isPlayingRef);
+            try (Arena arena = Arena.ofConfined()) {
+                var isPlayingRef = arena.allocate(ValueLayout.JAVA_INT);
+                int result = FmodCore.FMOD_Channel_IsPlaying(currentChannel.get(), isPlayingRef);
 
-            // FMOD_ERR_INVALID_HANDLE means channel already stopped
-            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE
-                    || (result == FmodConstants.FMOD_OK && isPlayingRef.getValue() == 0)) {
+                // FMOD_ERR_INVALID_HANDLE means channel already stopped
+                if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE
+                        || (result == FmodConstants.FMOD_OK
+                                && isPlayingRef.get(ValueLayout.JAVA_INT, 0) == 0)) {
 
-                // Channel has finished
-                cleanupCurrentPlayback();
-                return true;
+                    // Channel has finished
+                    cleanupCurrentPlayback();
+                    return true;
+                }
             }
-
             return false;
         } finally {
             playbackLock.unlock();
@@ -364,7 +375,7 @@ class FmodPlaybackManager {
         // Stop the FMOD channel if it exists
         currentChannel.ifPresent(
                 channel -> {
-                    int result = fmod.FMOD_Channel_Stop(channel);
+                    int result = FmodCore.FMOD_Channel_Stop(channel);
                     if (result != FmodConstants.FMOD_OK) {
                         log.warn("Failed to stop channel during cleanup: error code {}", result);
                     }

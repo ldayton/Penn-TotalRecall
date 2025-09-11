@@ -1,13 +1,8 @@
 package core.audio.fmod;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
+import com.google.inject.Inject;
 import core.audio.exceptions.AudioEngineException;
-import core.env.AppConfig;
 import core.env.Platform;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import java.io.File;
 import java.util.Arrays;
 import lombok.NonNull;
@@ -41,7 +36,6 @@ import org.slf4j.LoggerFactory;
  *   <li>audio.loading.mode: packaged|unpackaged (default: packaged)
  *   <li>audio.library.type: standard|logging (default: standard)
  *   <li>audio.library.path.{platform}: Custom library paths
- *   <li>audio.hardware.available: Hardware detection override
  * </ul>
  *
  * <h3>Threading & Safety</h3>
@@ -62,7 +56,6 @@ import org.slf4j.LoggerFactory;
  *   <li>Custom paths: Override default locations via configuration
  * </ul>
  */
-@Singleton
 public class FmodLibraryLoader {
 
     /**
@@ -99,69 +92,40 @@ public class FmodLibraryLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(FmodLibraryLoader.class);
 
-    // Configuration keys for audio system settings
-    private static final String LOADING_MODE_KEY = "audio.loading.mode";
-    private static final String LIBRARY_TYPE_KEY = "audio.library.type";
-    private static final String LIBRARY_PATH_MACOS_KEY = "audio.library.path.macos";
-    private static final String LIBRARY_PATH_LINUX_KEY = "audio.library.path.linux";
-    private static final String LIBRARY_PATH_WINDOWS_KEY = "audio.library.path.windows";
-    private static final String AUDIO_HARDWARE_AVAILABLE_KEY = "audio.hardware.available";
-
-    private final AppConfig config;
-    private final Platform platform;
-
     // Thread safety for library loading
     private final Object loadLock = new Object();
 
+    private final FmodProperties properties;
+    private final Platform platform;
+
     @Inject
-    public FmodLibraryLoader(@NonNull AppConfig config, @NonNull Platform platform) {
-        this.config = config;
+    public FmodLibraryLoader(FmodProperties properties, Platform platform) {
+        this.properties = properties;
         this.platform = platform;
     }
 
     /**
-     * Loads the audio library using configured loading mode and library type.
-     *
-     * @param interfaceClass The JNA interface class to load
-     * @return The loaded library instance
-     * @throws AudioEngineException if library cannot be loaded
+     * Loads the native FMOD library into the process using System.load/System.loadLibrary based on
+     * configured mode.
      */
-    public <T extends Library> T loadAudioLibrary(@NonNull Class<T> interfaceClass) {
+    public void loadNativeLibrary() {
         synchronized (loadLock) {
             try {
                 LibraryLoadingMode mode = getLoadingMode();
                 LibraryType libraryType = getLibraryType();
 
-                logger.debug(
-                        "Loading audio library: mode={}, type={}, platform={}",
-                        mode,
-                        libraryType,
-                        platform.detect());
-
-                return mode == LibraryLoadingMode.UNPACKAGED
-                        ? loadUnpackaged(interfaceClass, libraryType)
-                        : loadPackaged(interfaceClass, libraryType);
+                if (mode == LibraryLoadingMode.UNPACKAGED) {
+                    loadUnpackaged(libraryType);
+                } else {
+                    loadPackaged(libraryType);
+                }
             } catch (Exception e) {
                 throw new AudioEngineException("Failed to load audio library", e);
             }
         }
     }
 
-    /**
-     * Determines whether audio hardware is available for testing.
-     *
-     * <p>This controls audio output mode configuration:
-     *
-     * <ul>
-     *   <li>true (default) - Use hardware audio output
-     *   <li>false - Use silent mode for headless CI testing
-     * </ul>
-     *
-     * @return true if audio hardware is available, false for headless environments
-     */
-    public boolean isAudioHardwareAvailable() {
-        return Boolean.parseBoolean(config.getProperty(AUDIO_HARDWARE_AVAILABLE_KEY, "true"));
-    }
+    // Hardware availability concept removed; audio assumed available.
 
     /**
      * Gets the audio library loading mode.
@@ -169,7 +133,7 @@ public class FmodLibraryLoader {
      * @return the loading mode, defaults to PACKAGED if not configured
      */
     public LibraryLoadingMode getLoadingMode() {
-        String mode = config.getProperty(LOADING_MODE_KEY, "packaged");
+        String mode = properties.loadingMode();
         try {
             return LibraryLoadingMode.valueOf(mode.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -187,7 +151,7 @@ public class FmodLibraryLoader {
      * @return the library type, defaults to STANDARD if not configured
      */
     public LibraryType getLibraryType() {
-        String type = config.getProperty(LIBRARY_TYPE_KEY, "standard");
+        String type = properties.libraryType();
         try {
             return LibraryType.valueOf(type.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -205,14 +169,9 @@ public class FmodLibraryLoader {
      * @param platformType the target platform
      * @return the library path, or null if not configured
      */
-    public String getLibraryPath(@NonNull Platform.PlatformType platformType) {
-        var key =
-                switch (platformType) {
-                    case MACOS -> LIBRARY_PATH_MACOS_KEY;
-                    case LINUX -> LIBRARY_PATH_LINUX_KEY;
-                    case WINDOWS -> LIBRARY_PATH_WINDOWS_KEY;
-                };
-        return config.getProperty(key);
+    public String getLibraryPath() {
+        // macOS only
+        return properties.libraryPathMacos();
     }
 
     /**
@@ -222,11 +181,8 @@ public class FmodLibraryLoader {
      * @return the filename for the audio library on the current platform
      */
     public String getLibraryFilename(@NonNull LibraryType libraryType) {
-        return switch (platform.detect()) {
-            case MACOS -> libraryType == LibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
-            case LINUX -> libraryType == LibraryType.LOGGING ? "libfmodL.so" : "libfmod.so";
-            case WINDOWS -> libraryType == LibraryType.LOGGING ? "fmodL.dll" : "fmod.dll";
-        };
+        // macOS only
+        return libraryType == LibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
     }
 
     /**
@@ -237,15 +193,15 @@ public class FmodLibraryLoader {
      * @return the relative path to the audio library in development mode
      */
     public String getLibraryDevelopmentPath(@NonNull LibraryType libraryType) {
-        var platformDir =
-                switch (platform.detect()) {
-                    case MACOS -> "macos";
-                    case LINUX -> "linux";
-                    case WINDOWS -> "windows";
-                };
         var filename = getLibraryFilename(libraryType);
-        // Note: Currently hardcoded to FMOD resources - implementation detail
-        return "src/main/resources/fmod/" + platformDir + "/" + filename;
+        var base = properties.libraryPathMacos();
+        if (base == null || base.isBlank()) {
+            base = "src/main/resources/fmod/macos"; // fallback for safety; should not happen
+        }
+        if (base.endsWith("/") || base.endsWith("\\")) {
+            return base + filename;
+        }
+        return base + "/" + filename;
     }
 
     /**
@@ -255,31 +211,43 @@ public class FmodLibraryLoader {
      * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T extends Library> T loadUnpackaged(
-            @NonNull Class<T> interfaceClass, @NonNull LibraryType libraryType) {
-        var customResult = tryCustomPath(interfaceClass);
-        if (customResult != null) {
-            return customResult;
-        }
-        return loadFromDevelopmentPath(interfaceClass, libraryType);
+    private void loadUnpackaged(@NonNull LibraryType libraryType) {
+        if (tryCustomPath(libraryType)) return;
+        loadFromDevelopmentPath(libraryType);
     }
 
-    private <T extends Library> T tryCustomPath(@NonNull Class<T> interfaceClass) {
-        var customPath = getLibraryPath(platform.detect());
-        if (customPath == null) return null;
+    private boolean tryCustomPath(@NonNull LibraryType libraryType) {
+        var customPath = getLibraryPath();
+        if (customPath == null) return false;
 
         var customFile = new File(customPath);
         if (customFile.exists()) {
+            if (customFile.isDirectory()) {
+                var filename = getLibraryFilename(libraryType);
+                var resolved = new File(customFile, filename);
+                if (!resolved.exists()) {
+                    logger.warn(
+                            "Custom directory provided but library not found: {}",
+                            resolved.getAbsolutePath());
+                    return false;
+                }
+                logger.debug(
+                        "Loading audio library from custom directory: {} -> {}",
+                        customPath,
+                        resolved.getAbsolutePath());
+                System.load(resolved.getAbsolutePath());
+                return true;
+            }
             logger.debug("Loading audio library from custom path: {}", customPath);
-            return loadLibraryFromAbsolutePath(customFile.getAbsolutePath(), interfaceClass);
+            System.load(customFile.getAbsolutePath());
+            return true;
         } else {
             logger.warn("Custom audio library path not found: {}", customPath);
-            return null;
+            return false;
         }
     }
 
-    private <T extends Library> T loadFromDevelopmentPath(
-            @NonNull Class<T> interfaceClass, @NonNull LibraryType libraryType) {
+    private void loadFromDevelopmentPath(@NonNull LibraryType libraryType) {
         var projectDir = System.getProperty("user.dir");
         var relativePath = getLibraryDevelopmentPath(libraryType);
         var fullPath = projectDir + "/" + relativePath;
@@ -290,14 +258,14 @@ public class FmodLibraryLoader {
                     "Audio library not found at: "
                             + fullPath
                             + " (platform="
-                            + platform.detect()
+                            + "macos"
                             + ", type="
                             + libraryType
                             + ")");
         }
 
         logger.debug("Loading audio library from unpackaged path: {}", fullPath);
-        return loadLibraryFromAbsolutePath(libraryFile.getAbsolutePath(), interfaceClass);
+        System.load(libraryFile.getAbsolutePath());
     }
 
     /**
@@ -307,32 +275,35 @@ public class FmodLibraryLoader {
      * @param libraryType The library type (standard or logging)
      * @return The loaded library instance
      */
-    private <T extends Library> T loadPackaged(
-            @NonNull Class<T> interfaceClass, @NonNull LibraryType libraryType) {
-        // For packaged mode, we use the system library name without path
-        // The exact library depends on the platform and type
-        String libraryName = getSystemLibraryName(libraryType);
+    private void loadPackaged(@NonNull LibraryType libraryType) {
+        if (platform.detect() == Platform.PlatformType.MACOS) {
+            // For macOS app bundles, must load from the Frameworks directory
+            String appPath = System.getProperty("java.home");
+            if (appPath == null || !appPath.contains(".app/Contents")) {
+                throw new UnsatisfiedLinkError("Not running from macOS app bundle");
+            }
 
-        logger.debug("Loading audio library from system library path: {}", libraryName);
-        return Native.load(libraryName, interfaceClass);
-    }
+            // Navigate from java.home to Frameworks directory
+            // java.home is typically .app/Contents/runtime/Contents/Home
+            File javaHome = new File(appPath);
+            File contentsDir = javaHome.getParentFile().getParentFile().getParentFile();
+            File frameworksDir = new File(contentsDir, "Frameworks");
+            File libraryFile = new File(frameworksDir, getLibraryFilename(libraryType));
 
-    /**
-     * Loads a native library from an absolute file path using modern JNA API.
-     *
-     * @param absolutePath The absolute path to the library file
-     * @param interfaceClass The JNA interface class to load
-     * @return The loaded library instance
-     */
-    private <T extends Library> T loadLibraryFromAbsolutePath(
-            @NonNull String absolutePath, @NonNull Class<T> interfaceClass) {
-        var file = new File(absolutePath);
-        var fileName = file.getName();
+            if (!libraryFile.exists()) {
+                throw new UnsatisfiedLinkError(
+                        "FMOD library not found in app bundle: " + libraryFile.getAbsolutePath());
+            }
 
-        var libraryName = fileName.replaceAll("^lib", "").replaceAll("\\.(so|dll|dylib)$", "");
-
-        NativeLibrary.addSearchPath(libraryName, file.getParent());
-        return Native.load(libraryName, interfaceClass);
+            logger.debug(
+                    "Loading audio library from app bundle: {}", libraryFile.getAbsolutePath());
+            System.load(libraryFile.getAbsolutePath());
+        } else {
+            // For non-macOS packaged mode, use standard system library loading
+            String libraryName = getSystemLibraryName(libraryType);
+            logger.debug("Loading audio library from system library path: {}", libraryName);
+            System.loadLibrary(libraryName);
+        }
     }
 
     /**

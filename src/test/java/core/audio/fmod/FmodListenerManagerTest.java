@@ -2,14 +2,13 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
+import core.env.Platform;
+import java.lang.foreign.MemorySegment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -34,8 +34,8 @@ import org.junit.jupiter.api.Timeout;
  * components to verify correct behavior for progress monitoring, state changes, and completion
  * detection.
  */
-@Audio
 @Slf4j
+@Tag("audio")
 class FmodListenerManagerTest {
 
     private FmodListenerManager listenerManager;
@@ -45,27 +45,30 @@ class FmodListenerManagerTest {
     private FmodSystemStateManager stateManager;
     private FmodHandleLifecycleManager lifecycleManager;
 
-    private FmodLibrary fmod;
-    private Pointer system;
+    private MemorySegment system;
 
-    private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
+    private static final String SAMPLE_WAV = "src/test/resources/audio/freerecall.wav";
     private static final long TEST_PROGRESS_INTERVAL_MS = 50; // Fast interval for testing
 
     @BeforeEach
     void setUp() {
         // Initialize real FMOD components
         stateManager = new FmodSystemStateManager();
-        systemManager = new FmodSystemManager();
+        systemManager =
+                new FmodSystemManager(
+                        new FmodLibraryLoader(
+                                new FmodProperties(
+                                        "unpackaged", "standard", "src/main/resources/fmod/macos"),
+                                new Platform()));
         lifecycleManager = new FmodHandleLifecycleManager();
 
         systemManager.initialize();
-        fmod = systemManager.getFmodLibrary();
         system = systemManager.getSystem();
 
         // Create managers
-        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
-        playbackManager = new FmodPlaybackManager(fmod, system);
-        listenerManager = new FmodListenerManager(fmod, system, TEST_PROGRESS_INTERVAL_MS);
+        loadingManager = new FmodAudioLoadingManager(system, stateManager, lifecycleManager);
+        playbackManager = new FmodPlaybackManager(system);
+        listenerManager = new FmodListenerManager(system, TEST_PROGRESS_INTERVAL_MS);
 
         // Set state to initialized
         stateManager.compareAndSetState(
@@ -149,7 +152,7 @@ class FmodListenerManagerTest {
     void testProgressMonitoring() throws Exception {
         // Load audio and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         assertNotNull(sound);
 
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
@@ -194,7 +197,7 @@ class FmodListenerManagerTest {
     void testMonitoringWithoutListeners() throws Exception {
         // Load audio and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Start monitoring without any listeners
@@ -238,7 +241,7 @@ class FmodListenerManagerTest {
 
         // Create a mock playback handle
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Notify state changes
@@ -275,21 +278,12 @@ class FmodListenerManagerTest {
     void testPlaybackCompletion() throws Exception {
         // Load a short audio file
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
 
-        // Create a range playback that will complete quickly
-        PointerByReference channelRef = new PointerByReference();
-        int result = fmod.FMOD_System_PlaySound(system, sound, null, true, channelRef);
-        assertEquals(FmodConstants.FMOD_OK, result);
-
-        Pointer channel = channelRef.getValue();
-
-        // Set to play only first 1000 frames
-        result = fmod.FMOD_Channel_SetPosition(channel, 0, FmodConstants.FMOD_TIMEUNIT_PCM);
-        assertEquals(FmodConstants.FMOD_OK, result);
-
-        // Create playback handle with end frame
-        FmodPlaybackHandle playbackHandle = new FmodPlaybackHandle(audioHandle, channel, 0, 1000);
+        // Create a range playback that will complete quickly using high-level API
+        long endFrames = 1000;
+        FmodPlaybackHandle playbackHandle =
+                playbackManager.playRange(sound, audioHandle, 0, endFrames, true);
 
         // Add listener
         TestListener listener = new TestListener("Completion");
@@ -298,9 +292,7 @@ class FmodListenerManagerTest {
         // Start monitoring
         listenerManager.startMonitoring(playbackHandle, 1000);
 
-        // Start playback
-        result = fmod.FMOD_Channel_SetPaused(channel, false);
-        assertEquals(FmodConstants.FMOD_OK, result);
+        // Playback already started by playRange
 
         // Wait for completion
         boolean completed = listener.waitForCompletion(3, TimeUnit.SECONDS);
@@ -321,7 +313,7 @@ class FmodListenerManagerTest {
     void testCompletionOnChannelInvalid() throws Exception {
         // Load audio and create playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Add listener and start monitoring
@@ -332,8 +324,8 @@ class FmodListenerManagerTest {
         // Wait for some progress
         listener.waitForProgressUpdates(2, 1, TimeUnit.SECONDS);
 
-        // Stop the channel directly (simulating invalid handle)
-        fmod.FMOD_Channel_Stop(playbackHandle.getChannel());
+        // Stop the channel via playback manager (simulating invalid handle for monitor)
+        playbackManager.stop();
 
         // Should detect and notify completion
         boolean completed = listener.waitForCompletion(1, TimeUnit.SECONDS);
@@ -356,7 +348,7 @@ class FmodListenerManagerTest {
 
         // Start playback for notifications
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
 
@@ -482,7 +474,7 @@ class FmodListenerManagerTest {
 
         // Create playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Send notifications - bad listener should not prevent good listener from receiving
@@ -512,7 +504,7 @@ class FmodListenerManagerTest {
 
         // Start monitoring
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
 
@@ -546,7 +538,7 @@ class FmodListenerManagerTest {
         listenerManager.addListener(listener);
 
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         long totalFrames = getAudioFrameCount(sound);
 
         // Rapid start/stop cycles
@@ -571,7 +563,7 @@ class FmodListenerManagerTest {
 
         // Load and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Start monitoring
@@ -612,7 +604,7 @@ class FmodListenerManagerTest {
         listenerManager.addListener(listener);
 
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
@@ -635,10 +627,9 @@ class FmodListenerManagerTest {
 
     // ========== Helper Methods ==========
 
-    private long getAudioFrameCount(Pointer sound) {
-        IntByReference lengthRef = new IntByReference();
-        int result = fmod.FMOD_Sound_GetLength(sound, lengthRef, FmodConstants.FMOD_TIMEUNIT_PCM);
-        return result == FmodConstants.FMOD_OK ? lengthRef.getValue() : 0;
+    private long getAudioFrameCount(MemorySegment sound) {
+        // Use the high-level loading manager to extract metadata instead of direct FMOD calls
+        return loadingManager.getCurrentMetadata().map(AudioMetadata::frameCount).orElse(0L);
     }
 
     // ========== Test Listener Implementation ==========

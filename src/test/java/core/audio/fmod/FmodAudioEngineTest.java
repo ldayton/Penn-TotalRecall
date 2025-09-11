@@ -2,8 +2,6 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
-import annotations.AudioHardware;
 import core.audio.AudioHandle;
 import core.audio.AudioMetadata;
 import core.audio.PlaybackHandle;
@@ -11,6 +9,7 @@ import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
 import core.audio.exceptions.AudioLoadException;
 import core.audio.exceptions.AudioPlaybackException;
+import core.env.Platform;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -34,8 +34,8 @@ import org.junit.jupiter.api.Timeout;
  * Integration tests for FmodAudioEngine. Tests the orchestration of all FMOD components together
  * without mocks to verify real behavior and catch integration-specific bugs.
  */
-@Audio
 @Slf4j
+@Tag("audio")
 class FmodAudioEngineTest {
 
     private FmodAudioEngine engine;
@@ -46,15 +46,22 @@ class FmodAudioEngineTest {
     private FmodSystemStateManager stateManager;
     private FmodHandleLifecycleManager lifecycleManager;
 
-    private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
-    private static final String SWEEP_WAV = "packaging/samples/sweep.wav";
+    private static final String SAMPLE_WAV = "src/test/resources/audio/freerecall.wav";
+    private static final String SWEEP_WAV = "src/test/resources/audio/sweep.wav";
     private static final int PROGRESS_INTERVAL_MS = 50;
 
     @BeforeEach
     void setUp() {
         // Create all real components - no mocks
         stateManager = new FmodSystemStateManager();
-        systemManager = new FmodSystemManager();
+        systemManager =
+                new FmodSystemManager(
+                        new FmodLibraryLoader(
+                                new FmodProperties(
+                                        "unpackaged",
+                                        "standard",
+                                        FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                                new Platform()));
         lifecycleManager = new FmodHandleLifecycleManager();
 
         // Initialize the system manager first to load FMOD
@@ -62,17 +69,9 @@ class FmodAudioEngineTest {
 
         loadingManager =
                 new FmodAudioLoadingManager(
-                        systemManager.getFmodLibrary(),
-                        systemManager.getSystem(),
-                        stateManager,
-                        lifecycleManager);
-        playbackManager =
-                new FmodPlaybackManager(systemManager.getFmodLibrary(), systemManager.getSystem());
-        listenerManager =
-                new FmodListenerManager(
-                        systemManager.getFmodLibrary(),
-                        systemManager.getSystem(),
-                        PROGRESS_INTERVAL_MS);
+                        systemManager.getSystem(), stateManager, lifecycleManager);
+        playbackManager = new FmodPlaybackManager(systemManager.getSystem());
+        listenerManager = new FmodListenerManager(systemManager.getSystem(), PROGRESS_INTERVAL_MS);
 
         // Create the engine with real components
         engine =
@@ -193,7 +192,6 @@ class FmodAudioEngineTest {
     // ========== Playback Lifecycle Tests ==========
 
     @Test
-    @AudioHardware
     @DisplayName("Should handle complete playback lifecycle")
     @Timeout(5)
     void testFullPlaybackLifecycle() throws Exception {

@@ -4,17 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import core.audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
 import core.audio.fmod.FmodLibraryLoader.LibraryType;
-import core.env.AppConfig;
 import core.env.Platform;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /** Tests for FMOD configuration and cross-platform support in Environment and AppConfig. */
+@Tag("audio")
 class FmodConfigurationTest {
 
-    private final Platform platform = new Platform();
-    private final AppConfig config = new AppConfig();
-    private final FmodLibraryLoader audioManager = new FmodLibraryLoader(config, platform);
+    private final FmodLibraryLoader audioManager =
+            new FmodLibraryLoader(
+                    new FmodProperties(
+                            "unpackaged", "standard", FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                    new Platform());
 
     @Test
     @DisplayName("FmodLibraryLoader provides correct FMOD library filenames for each platform")
@@ -58,19 +61,10 @@ class FmodConfigurationTest {
         assertNotNull(loggingPath);
         assertNotEquals(standardPath, loggingPath);
 
-        // Paths should contain platform directory
-        Platform.PlatformType platformType = platform.detect();
-        String expectedPlatformDir =
-                switch (platformType) {
-                    case MACOS -> "macos";
-                    case LINUX -> "linux";
-                    case WINDOWS -> "windows";
-                };
-
+        String expectedPlatformDir = "macos";
         assertTrue(standardPath.contains(expectedPlatformDir));
         assertTrue(loggingPath.contains(expectedPlatformDir));
 
-        // Logging path should contain 'L'
         assertTrue(loggingPath.contains("L"));
         assertFalse(standardPath.contains("L"));
     }

@@ -8,4 +8,9 @@
     <disallow pkg="java.awt"/>
     <disallow pkg="javax.swing"/>
     <disallow pkg="ui"/>
+    
+    <!-- Exception: core.waveform package is allowed to import java.awt -->
+    <subpackage name="waveform">
+        <allow pkg="java.awt"/>
+    </subpackage>
 </import-control>

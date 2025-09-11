@@ -2,27 +2,28 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
 import core.audio.AudioData;
 import core.audio.AudioMetadata;
+import core.env.Platform;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
 
 /** Tests for FmodSimpleSampleReader that loads entire files into memory. */
-@Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("audio")
 class FmodSampleReaderTest {
 
     private FmodSampleReader reader;
     private FmodLibraryLoader libraryLoader;
 
     // Test audio files
-    private static final Path SAMPLE_WAV = Paths.get("packaging/samples/sample.wav");
-    private static final Path SWEEP_WAV = Paths.get("packaging/samples/sweep.wav");
+    private static final Path SAMPLE_WAV = Paths.get("src/test/resources/audio/freerecall.wav");
+    private static final Path SWEEP_WAV = Paths.get("src/test/resources/audio/sweep.wav");
 
-    // Known properties of sample.wav (mono, 44100Hz, 16-bit)
+    // Known properties of freerecall.wav (mono, 44100Hz, 16-bit)
     private static final int SAMPLE_WAV_RATE = 44100;
     private static final int SAMPLE_WAV_CHANNELS = 1;
     private static final int SAMPLE_WAV_BITS = 16;
@@ -30,7 +31,13 @@ class FmodSampleReaderTest {
 
     @BeforeEach
     void setUp() {
-        libraryLoader = new FmodLibraryLoader(new core.env.AppConfig(), new core.env.Platform());
+        libraryLoader =
+                new FmodLibraryLoader(
+                        new FmodProperties(
+                                "unpackaged",
+                                "standard",
+                                FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                        new Platform());
         reader = new FmodSampleReader(libraryLoader);
     }
 

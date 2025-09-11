@@ -78,7 +78,7 @@ public class SwingApp {
         // Initialize waveform components
         globalInjector.getInstance(state.WaveformManager.class);
         var paintDataSource = globalInjector.getInstance(state.WaveformPaintDataSource.class);
-        var painter = globalInjector.getInstance(waveform.WaveformPainter.class);
+        var painter = globalInjector.getInstance(ui.waveform.WaveformPainter.class);
         painter.setDataSource(paintDataSource);
         painter.start(); // Start the repaint timer
 

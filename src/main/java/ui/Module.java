@@ -17,6 +17,7 @@ import ui.layout.MainWindowAccess;
 import ui.layout.WaveformCanvas;
 import ui.layout.WindowLayoutPersistence;
 import ui.preferences.PreferencesFrame;
+import ui.waveform.WaveformPainter;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolList;
 import ui.wordpool.WordpoolTextField;
@@ -53,6 +54,9 @@ public class Module extends AbstractModule {
         // Preferences
         bind(PreferencesFrame.class).in(Singleton.class);
         bind(ShortcutFrame.class).in(Singleton.class);
+
+        // Waveform
+        bind(WaveformPainter.class).in(Singleton.class);
 
         // Audio file display
         bind(AudioFileDisplay.class).in(Singleton.class);

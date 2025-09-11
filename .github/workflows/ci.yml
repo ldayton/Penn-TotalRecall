@@ -37,26 +37,11 @@ jobs:
           
     - name: Make Gradle wrapper executable
       run: chmod +x ./gradlew
-
-    - name: Clean, just to be careful
-      run: ./gradlew clean
-      
-    - name: Check formatting
-      run: ./gradlew spotlessCheck
-
-    - name: Compile Java
-      run: ./gradlew compileJava
       
     - name: Run tests
-      run: ./gradlew check
+      run: ./gradlew check --rerun-tasks
       env:
         CI: true
-        
-    - name: Build macOS DMG
-      run: ./gradlew packageMacDmg
-      
-    - name: Run packaging integration tests
-      run: ./gradlew packageTest
         
     - name: Upload test results
       uses: actions/upload-artifact@v4

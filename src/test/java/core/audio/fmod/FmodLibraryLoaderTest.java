@@ -4,21 +4,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import core.audio.fmod.FmodLibraryLoader.LibraryLoadingMode;
 import core.audio.fmod.FmodLibraryLoader.LibraryType;
-import core.env.AppConfig;
 import core.env.Platform;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /** Tests for FmodLibraryLoader functionality and dependency injection. */
+@Tag("audio")
 class FmodLibraryLoaderTest {
-
-    private final Platform platform = new Platform();
-    private final AppConfig config = new AppConfig();
 
     @Test
     @DisplayName("FmodLibraryLoader provides correct FMOD loading mode from configuration")
     void testFmodLoadingModeFromConfiguration() {
-        FmodLibraryLoader loader = new FmodLibraryLoader(config, platform);
+        FmodLibraryLoader loader =
+                new FmodLibraryLoader(
+                        new FmodProperties(
+                                "unpackaged",
+                                "standard",
+                                FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                        new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration
         LibraryLoadingMode mode = loader.getLoadingMode();
@@ -33,33 +37,23 @@ class FmodLibraryLoaderTest {
     @Test
     @DisplayName("FmodLibraryLoader provides correct FMOD library type from configuration")
     void testLibraryTypeFromConfiguration() {
-        FmodLibraryLoader loader = new FmodLibraryLoader(config, platform);
+        FmodLibraryLoader loader =
+                new FmodLibraryLoader(
+                        new FmodProperties(
+                                "unpackaged",
+                                "standard",
+                                FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                        new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration
         LibraryType type = loader.getLibraryType();
 
         // In test environment, should be LOGGING (set via system property)
         assertEquals(
-                LibraryType.LOGGING,
+                LibraryType.STANDARD,
                 type,
-                "FmodLibraryLoader should return LOGGING in test environment");
+                "FmodLibraryLoader should return STANDARD in test environment");
     }
 
-    @Test
-    @DisplayName("FmodLibraryLoader correctly detects audio hardware availability")
-    void testAudioHardwareAvailability() {
-        FmodLibraryLoader loader = new FmodLibraryLoader(config, platform);
-
-        // Test that FmodLibraryLoader correctly reads configuration
-        boolean available = loader.isAudioHardwareAvailable();
-
-        // Expected value should match what's actually configured in the AppConfig
-        boolean expected = config.getBooleanProperty("audio.hardware.available", true);
-
-        assertEquals(
-                expected,
-                available,
-                "FmodLibraryLoader should return the configured audio hardware availability"
-                        + " value");
-    }
+    // Hardware availability concept removed; no test needed.
 }

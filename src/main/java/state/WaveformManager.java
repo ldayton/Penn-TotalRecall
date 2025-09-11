@@ -9,12 +9,12 @@ import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.state.AudioSessionStateMachine;
 import core.state.WaveformSessionDataSource;
+import core.waveform.Waveform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import waveform.Waveform;
 
 /**
  * Manages waveform instance lifecycle. Creates and destroys waveform instances when audio is loaded

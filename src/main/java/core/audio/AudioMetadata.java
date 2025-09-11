@@ -1,6 +1,6 @@
 package core.audio;
 
-import app.annotations.ThreadSafe;
+import com.google.errorprone.annotations.ThreadSafe;
 
 @ThreadSafe
 public record AudioMetadata(

@@ -1,6 +1,6 @@
 package core.state;
 
-import app.annotations.ThreadSafe;
+import com.google.errorprone.annotations.ThreadSafe;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;

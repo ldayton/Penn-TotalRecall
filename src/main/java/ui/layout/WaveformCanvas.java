@@ -1,6 +1,7 @@
 package ui.layout;
 
 import core.waveform.ScreenDimension;
+import core.waveform.WaveformViewport;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Color;
@@ -10,8 +11,7 @@ import java.awt.Graphics2D;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
-import waveform.WaveformPainter;
-import waveform.WaveformViewport;
+import ui.waveform.WaveformPainter;
 
 /**
  * A clean canvas for waveform rendering. Unlike WaveformDisplay, this component has no internal

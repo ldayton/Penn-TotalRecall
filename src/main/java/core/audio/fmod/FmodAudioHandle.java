@@ -1,7 +1,7 @@
 package core.audio.fmod;
 
-import com.sun.jna.Pointer;
 import core.audio.AudioHandle;
+import java.lang.foreign.MemorySegment;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -10,14 +10,14 @@ class FmodAudioHandle implements AudioHandle {
 
     @Getter private final long id;
     @Getter private final long generation;
-    private final Pointer sound;
+    private final MemorySegment sound;
     @Getter @NonNull private final String filePath;
     private final FmodHandleLifecycleManager lifecycleManager;
 
     FmodAudioHandle(
             long id,
             long generation,
-            @NonNull Pointer sound,
+            @NonNull MemorySegment sound,
             @NonNull String filePath,
             @NonNull FmodHandleLifecycleManager lifecycleManager) {
         this.id = id;
@@ -27,7 +27,7 @@ class FmodAudioHandle implements AudioHandle {
         this.lifecycleManager = lifecycleManager;
     }
 
-    Pointer getSound() {
+    MemorySegment getSound() {
         return sound;
     }
 

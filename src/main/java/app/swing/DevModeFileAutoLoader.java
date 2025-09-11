@@ -142,7 +142,7 @@ public class DevModeFileAutoLoader {
                         Timer autoPlayTimer =
                                 new Timer(
                                         200,
-                                        e -> {
+                                        _ -> {
                                             logger.info("Development mode: auto-starting playback");
                                             playPauseAction.execute();
                                         });

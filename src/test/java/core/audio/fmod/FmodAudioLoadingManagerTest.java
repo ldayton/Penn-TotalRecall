@@ -2,15 +2,12 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 import core.audio.AudioHandle;
 import core.audio.AudioMetadata;
 import core.audio.exceptions.AudioLoadException;
+import core.env.Platform;
 import java.io.File;
+import java.lang.foreign.MemorySegment;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -26,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Timeout;
@@ -35,12 +33,11 @@ import org.junit.jupiter.api.io.TempDir;
  * High-value tests for FmodAudioLoadingManager focusing on concurrency, resource management, and
  * error handling.
  */
-@Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("audio")
 class FmodAudioLoadingManagerTest {
 
-    private FmodLibrary fmod;
-    private Pointer system;
+    private MemorySegment system;
     private FmodSystemStateManager stateManager;
     private FmodHandleLifecycleManager lifecycleManager;
     private FmodAudioLoadingManager loadingManager;
@@ -48,25 +45,22 @@ class FmodAudioLoadingManagerTest {
     @TempDir Path tempDir;
 
     // Test audio files
-    private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
-    private static final String SWEEP_WAV = "packaging/samples/sweep.wav";
+    private static final String SAMPLE_WAV = "src/test/resources/audio/freerecall.wav";
+    private static final String SWEEP_WAV = "src/test/resources/audio/sweep.wav";
 
     @BeforeAll
     void setUpFmod() {
-        // Load FMOD library
-        String resourcePath = getClass().getResource("/fmod/macos").getPath();
-        NativeLibrary.addSearchPath("fmod", resourcePath);
-        fmod = Native.load("fmod", FmodLibrary.class);
-
-        // Create FMOD system
-        PointerByReference systemRef = new PointerByReference();
-        int result = fmod.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
-        assertEquals(FmodConstants.FMOD_OK, result, "Failed to create FMOD system");
-        system = systemRef.getValue();
-
-        // Initialize FMOD system
-        result = fmod.FMOD_System_Init(system, 32, FmodConstants.FMOD_INIT_NORMAL, null);
-        assertEquals(FmodConstants.FMOD_OK, result, "Failed to initialize FMOD system");
+        // Initialize system via high-level manager
+        FmodSystemManager sm =
+                new FmodSystemManager(
+                        new FmodLibraryLoader(
+                                new FmodProperties(
+                                        "unpackaged",
+                                        "standard",
+                                        FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                                new Platform()));
+        sm.initialize();
+        system = sm.getSystem();
 
         // Create state manager and set to INITIALIZED
         stateManager = new FmodSystemStateManager();
@@ -87,14 +81,12 @@ class FmodAudioLoadingManagerTest {
         }
         // Create fresh loading manager for each test
         lifecycleManager = new FmodHandleLifecycleManager();
-        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
+        loadingManager = new FmodAudioLoadingManager(system, stateManager, lifecycleManager);
     }
 
     @AfterAll
     void tearDownFmod() {
-        if (system != null && fmod != null) {
-            fmod.FMOD_System_Release(system);
-        }
+        // System released by SystemManager in other tests; nothing to do here
     }
 
     // ========== Core Loading Behavior Tests ==========
@@ -138,7 +130,7 @@ class FmodAudioLoadingManagerTest {
         assertEquals(handle1.getId(), handle2.getId());
 
         // Test with different path representation
-        String altPath = "./packaging/samples/sample.wav";
+        String altPath = "./src/test/resources/audio/freerecall.wav";
         AudioHandle handle3 = loadingManager.loadAudio(altPath);
         assertSame(handle1, handle3);
     }
@@ -177,7 +169,7 @@ class FmodAudioLoadingManagerTest {
         Optional<AudioMetadata> metadata = loadingManager.getCurrentMetadata();
         assertFalse(metadata.isPresent());
 
-        // Load sample.wav and verify metadata
+        // Load freerecall.wav and verify metadata
         loadingManager.loadAudio(SAMPLE_WAV);
         metadata = loadingManager.getCurrentMetadata();
         assertTrue(metadata.isPresent());
@@ -309,7 +301,10 @@ class FmodAudioLoadingManagerTest {
                             // Verify handle matches the file we requested
                             assertTrue(
                                     handle.getFilePath()
-                                            .contains(index % 2 == 0 ? "sample.wav" : "sweep.wav"));
+                                            .contains(
+                                                    index % 2 == 0
+                                                            ? "freerecall.wav"
+                                                            : "sweep.wav"));
 
                             successCount.incrementAndGet();
                         } catch (Exception e) {
@@ -419,7 +414,7 @@ class FmodAudioLoadingManagerTest {
 
     @Test
     void testLoadDirectoryFails() {
-        String dirPath = "packaging/samples";
+        String dirPath = "src/test/resources/audio";
 
         AudioLoadException ex =
                 assertThrows(AudioLoadException.class, () -> loadingManager.loadAudio(dirPath));

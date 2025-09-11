@@ -4,11 +4,11 @@ import core.state.InterpolatedPlaybackTracker;
 import core.state.WaveformSessionDataSource;
 import core.state.WaveformViewport;
 import core.waveform.TimeRange;
+import core.waveform.Waveform;
 import core.waveform.WaveformPaintingDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
-import waveform.Waveform;
 
 /**
  * Aggregates data needed for waveform painting. Coordinates between WaveformManager,

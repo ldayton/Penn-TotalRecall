@@ -18,7 +18,6 @@ import ui.actions.ActionsManager;
 @Singleton
 public class SwingActionRegistry {
     private final Map<Class<? extends Action>, SwingAction> swingAdapters = new HashMap<>();
-    private final ActionRegistry actionRegistry;
 
     /**
      * Create the Swing registry and register all actions with ActionsManager.
@@ -28,7 +27,6 @@ public class SwingActionRegistry {
      */
     @Inject
     public SwingActionRegistry(ActionRegistry actionRegistry, ActionsManager actionsManager) {
-        this.actionRegistry = actionRegistry;
 
         // Create Swing adapters for all actions
         for (Action action : actionRegistry.getAllActions()) {

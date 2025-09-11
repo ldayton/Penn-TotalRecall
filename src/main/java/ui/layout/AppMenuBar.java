@@ -22,8 +22,7 @@ import jakarta.inject.Singleton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ui.adapters.SwingAction;
 
 /**
@@ -44,8 +43,8 @@ import ui.adapters.SwingAction;
  * <p>See the the behaviors class for more information.
  */
 @Singleton
+@Slf4j
 public class AppMenuBar extends JMenuBar {
-    private static final Logger logger = LoggerFactory.getLogger(AppMenuBar.class);
 
     private static String annotator;
 

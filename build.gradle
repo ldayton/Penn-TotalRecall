@@ -3,18 +3,16 @@ plugins {
     id 'application'
     id 'distribution'
     id 'com.diffplug.spotless' version '7.2.+'
-    id 'com.github.ben-manes.versions' version '0.52.+'  // Dependency update checker
+    id 'com.github.ben-manes.versions' version '0.52.+'
     id 'org.jetbrains.qodana' version '2025.2.1'
     id 'checkstyle'
 }
 
 group = 'edu.upenn.psych.memory'
 
-// Load application properties
 def appProps = loadAppProperties()
 version = appProps.getProperty('app.version')
 
-// Project configuration
 ext {
     javaVersion = JavaVersion.VERSION_24
     programProperName = appProps.getProperty('app.name')
@@ -29,11 +27,9 @@ ext {
         '-Dswing.aatext=true', 
         '-Dawt.useSystemAAFontSettings=on'
     ]
-    // Single source of truth for CI detection
     isCI = System.getenv('CI') == 'true'
-    // Dependency versions (centralized)
+
     flatlafVersion = '3.6.+'
-    jnaVersion = '5.17.+'
     jacksonXmlVersion = '2.20.+'
     maryttsSignalprocVersion = '5.2.+'
     slf4jVersion = '2.0.+'
@@ -63,7 +59,6 @@ repositories {
 }
 
 dependencies {
-    implementation "net.java.dev.jna:jna:${jnaVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonXmlVersion}"
     implementation("de.dfki.mary:marytts-signalproc:${maryttsSignalprocVersion}") {
         exclude group: 'gov.nist.math', module: 'Jampack'
@@ -80,6 +75,7 @@ dependencies {
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
     
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "com.google.errorprone:error_prone_annotations:2.26.+"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     
     testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
@@ -87,17 +83,12 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
     testImplementation "com.github.romankh3:image-comparison:${imageComparisonVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "com.google.errorprone:error_prone_annotations:2.26.+"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}"
     
 }
 
-// Using standard Gradle layout:
-// src/main/java - main source
-// src/main/resources - main resources  
-// src/test/java - test source
-
-// Configure JAR manifest
 jar {
     archiveFileName = "${programExtensionlessFilename}.jar"
     manifest {
@@ -111,7 +102,6 @@ jar {
         )
     }
     
-    // Include only JAR dependencies in the fat JAR (exclude native files)
     from {
         configurations.runtimeClasspath
             .filter { it.isDirectory() || it.name.endsWith('.jar') }
@@ -121,26 +111,19 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-// Clean task
 clean {
     delete 'classes', 'dist'
 }
 
-// Create minimal Java runtime with jlink
 tasks.register('createCustomRuntime') {
     group = 'packaging'
     description = 'Create minimal Java runtime using jlink'
-    
     def customRuntimeDirProvider = layout.buildDirectory.dir("custom-runtime")
-    
     doLast {
         def customRuntimeDir = customRuntimeDirProvider.get().asFile
-        
-        // Delete existing runtime if it exists
         if (customRuntimeDir.exists()) {
             customRuntimeDir.deleteDir()
         }
-        
         providers.exec {
             commandLine('jlink',
                 '--add-modules', 'java.base,java.desktop,java.prefs,java.net.http,java.naming',
@@ -150,43 +133,30 @@ tasks.register('createCustomRuntime') {
                 '--compress=2',
                 '--output', customRuntimeDir.absolutePath)
         }.result.get()
-        
         println "Custom runtime created at ${customRuntimeDir}"
     }
 }
-
-// MacOS-only packaging
 
 tasks.register('packageMacApp') {
     group = 'packaging'
     description = 'Create Mac .app bundle using jpackage'
     dependsOn jar, createCustomRuntime
-    
     def appDirProvider = layout.buildDirectory.dir("packaging/mac")
     def customRuntimeDirProvider = layout.buildDirectory.dir("custom-runtime")
-    
     doLast {
         def jarFile = jar.archiveFile.get().asFile
         def appDir = appDirProvider.get().asFile
-        
-        // Clean existing app bundle
         def appBundle = new File(appDir, "${programProperName}.app")
         if (appBundle.exists()) {
             appBundle.deleteDir()
         }
-        
         appDir.mkdirs()
-        
-        // Copy JAR to input directory  
         def inputDir = layout.buildDirectory.dir("jpackage-input").get().asFile
         inputDir.mkdirs()
-        
         copy {
             from jarFile
             into inputDir
         }
-        
-        // Use jpackage
         providers.exec {
             commandLine('jpackage',
                 '--input', inputDir,
@@ -203,8 +173,6 @@ tasks.register('packageMacApp') {
                 '--runtime-image', customRuntimeDirProvider.get().asFile.absolutePath,
                 '--java-options', nativeAccessJvmArgs.join(' '))
         }.result.get()
-        
-        // Copy FMOD libraries to the correct location in app bundle
         def createdAppBundle = file("${appDir}/${programProperName}.app")
         def frameworksDir = file("${createdAppBundle}/Contents/Frameworks")
         frameworksDir.mkdirs()
@@ -213,47 +181,33 @@ tasks.register('packageMacApp') {
             into frameworksDir
             include '*.dylib'
         }
-
-        // Copy FlatLaf native libraries (.dylib) into the app bundle Frameworks directory
         def flatlafArm = configurations.runtimeClasspath
             .filter { it.name.endsWith('.dylib') && it.name.contains('flatlaf') && it.name.contains('macos-arm64') }
         def flatlafX64 = configurations.runtimeClasspath
             .filter { it.name.endsWith('.dylib') && it.name.contains('flatlaf') && it.name.contains('macos-x86_64') }
-
         if (flatlafArm.isEmpty() || flatlafX64.isEmpty()) {
             throw new GradleException("FlatLaf macOS native libraries not found on runtimeClasspath (require both arm64 and x86_64)")
         }
-
         copy {
             from(flatlafArm + flatlafX64)
             into frameworksDir
         }
-        
         println "Mac .app created in ${appDir}"
     }
 }
 
-// DMG packaging - pure Gradle/Java approach  
 tasks.register('packageMacDmg') {
     group = 'packaging'
     description = 'Create Mac .dmg installer from existing .app bundle'
-    dependsOn packageMacApp  // Use the .app created by packageMacApp
-    
+    dependsOn packageMacApp
     def dmgDirProvider = layout.buildDirectory.dir("packaging/mac")
-    
     doLast {
         def dmgDir = dmgDirProvider.get().asFile
         def appBundle = new File(dmgDir, "${programProperName}.app")
-        
-        // Verify .app bundle exists
         if (!appBundle.exists()) {
             throw new GradleException("App bundle not found: ${appBundle.absolutePath}")
         }
-        
-        // Clean any existing DMG files
         dmgDir.listFiles().findAll { it.name.endsWith('.dmg') }.each { it.delete() }
-        
-        // Create DMG from existing .app bundle using jpackage
         providers.exec {
             commandLine('jpackage',
                 '--app-image', appBundle.absolutePath,
@@ -269,7 +223,6 @@ tasks.register('packageMacDmg') {
                 '--type', 'dmg',
                 '--verbose')
         }.result.get()
-        
         def generatedDmg = file("${dmgDir}/${programProperName}-${version}.dmg")
         if (generatedDmg.exists()) {
             def dmgSize = String.format("%.1f MB", generatedDmg.length() / (1024 * 1024))
@@ -283,8 +236,6 @@ tasks.register('packageMacDmg') {
     }
 }
 
-
-// Distribution configuration
 distributions {
     main {
         distributionBaseName = programExtensionlessFilename
@@ -295,7 +246,6 @@ distributions {
     }
 }
 
-// Helper function to load application properties for build configuration
 def loadAppProperties() {
     def configFile = file("src/main/resources/application.properties")
     if (configFile.exists()) {
@@ -307,7 +257,6 @@ def loadAppProperties() {
     }
 }
 
-// Helper function to load environment-specific config and apply to task
 def loadEnvironmentConfig(task, String env) {
     def configFile = file("src/main/resources/${env}.properties")
     if (configFile.exists()) {
@@ -322,210 +271,135 @@ def loadEnvironmentConfig(task, String env) {
     }
 }
 
-// Apply per-Test-task isolated Java Preferences namespace to avoid user prefs leakage
 tasks.withType(Test).configureEach {
     systemProperty 'prefs.namespace', 
         "/edu/upenn/psych/memory/penntotalrecall/test/" + java.util.UUID.randomUUID().toString()
 }
 
-// Test configuration
 test {
-    // CI detection: single source of truth
     def isCI = project.ext.isCI
-    
-    // Enable native access for JNA and FlatLAF
     jvmArgs = nativeAccessJvmArgs
-    
-    // Enable detailed test output
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         showStandardStreams = true
     }
-    
-    // Load configuration properties to determine test behavior
     def configProps = new Properties()
-    
-    // Always load development configuration as baseline
     def devConfigFile = file("src/main/resources/development.properties")
     if (devConfigFile.exists()) {
         devConfigFile.withInputStream { configProps.load(it) }
     }
-    
-    // In CI environments, override with CI-specific settings
     if (isCI) {
         def ciConfigFile = file("src/main/resources/ci.properties")
         if (ciConfigFile.exists()) {
             ciConfigFile.withInputStream { configProps.load(it) }
         }
     }
-    
-    useJUnitPlatform {
-        // Always skip packaging tests here (they run in `packageTest`)
-        excludeTags 'packaging'
 
-        // Single source of truth from loaded config (development.properties, plus ci.properties on CI)
+    useJUnitPlatform {
+        excludeTags 'packaging'
         def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
         if (audioHardwareAvailable == 'false') excludeTags 'audio-hardware'
-
         def windowingAvailable = configProps.getProperty('windowing.system.available')
         if (windowingAvailable == 'false') excludeTags 'windowing'
-
-        // Always run FMOD-tagged tests in an isolated task (see audioTest)
         excludeTags 'audio'
-
-        // Only run mac-specific tests on macOS
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
     }
     
-    // Also apply these properties to the test task for runtime use
     loadEnvironmentConfig(test, 'development')
     if (isCI) {
         loadEnvironmentConfig(test, 'ci')
     }
 
-    // Suppress expected FMOD format error logs from tests that probe invalid files
     systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
-    // Disable waveform prefetch during tests to avoid background FMOD contention
     systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
-
-    // Forward ad-hoc test.* system properties to the test JVM
-    // Example: -Dtest.visualHoldMs=2000
     System.getProperties().each { k, v ->
         if (k instanceof String && k.startsWith('test.')) {
             systemProperty k, v
         }
     }
-
-    // Do not chain audioTest here; see 'check' wiring below
 }
 
-// FMOD (audio) tests: run sequentially with one JVM per class for isolation
 tasks.register('audioTest', Test.class) {
     group = 'verification'
     description = 'Run FMOD engine tests in isolated JVMs (one per class)'
     dependsOn testClasses
-
-    // Single JVM per class, no parallel forks
     maxParallelForks = 1
     forkEvery = 1
-
-    // Use same sources and classpath
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-
-    // Native access for JNA/FlatLaf
     jvmArgs = nativeAccessJvmArgs
-    
-    // Enable detailed test output with INFO level logging
     testLogging {
         events "passed", "skipped", "failed"
         showStandardStreams = true
         info.events = ["passed", "skipped", "failed"]
         info.exceptionFormat = "full"
     }
-
-    // Detect CI from top-level flag
     def isCI = project.ext.isCI
-
-    // Load env config into this test JVM
     loadEnvironmentConfig(delegate, 'development')
     if (isCI) {
         loadEnvironmentConfig(delegate, 'ci')
     }
-
-    // Include only engine-tagged tests
     useJUnitPlatform {
         includeTags 'audio'
-        // macOS-only tests on mac
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
-        // Allow excluding additional tags via property: -PexcludeTags=windowing
         if (project.hasProperty('excludeTags')) {
             excludeTags project.property('excludeTags').toString().split(',')
         }
     }
-
-    // Stability switches
-    systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
     systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
-
-    // Forward -Dtest.*
     System.getProperties().each { k, v ->
         if (k instanceof String && k.startsWith('test.')) systemProperty k, v
     }
 }
 
-// Run audio tests as part of the verification lifecycle, not after every 'test' invocation
 tasks.named('audioTest') {
     mustRunAfter tasks.named('test')
 }
+
 tasks.named('check') {
     dependsOn tasks.named('audioTest')
+    dependsOn tasks.named('packageTest')
 }
 
-// Packaging integration tests - requires built artifacts
 tasks.register('packageTest', Test.class) {
     group = 'verification'
     description = 'Run packaging integration tests that require built application artifacts'
     dependsOn packageMacApp, testClasses
-    
-    // Use the same test sources as the regular test task
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
-    
-    // Disable caching - always run these integration tests
     outputs.upToDateWhen { false }
-    
-    // CI detection: single source of truth
     def isCI = project.ext.isCI
-    
-    // Enable native access for JNA and FlatLAF (same as test task)
     jvmArgs = nativeAccessJvmArgs
-    
-    // Enable detailed test output (same as test task)
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         showStandardStreams = true
     }
-    
-    // Load configuration properties (same logic as test task)
     def configProps = new Properties()
-    
-    // Always load development configuration as baseline
     def devConfigFile = file("src/main/resources/development.properties")
     if (devConfigFile.exists()) {
         devConfigFile.withInputStream { configProps.load(it) }
     }
-    
-    // In CI environments, override with CI-specific settings
     if (isCI) {
         def ciConfigFile = file("src/main/resources/ci.properties")
         if (ciConfigFile.exists()) {
             ciConfigFile.withInputStream { configProps.load(it) }
         }
     }
-    
     useJUnitPlatform {
-        // Only run packaging tests
         includeTags 'packaging'
     }
-    
-    // Apply configuration properties as system properties (same as test task)
     configProps.each { key, value ->
         systemProperty key, value
     }
-    
-    // Load environment-specific configuration in CI (same as test task)
     if (isCI) {
         loadEnvironmentConfig(packageTest, 'ci')
     }
 }
 
-
-// Version compatibility check
 tasks.register('checkJavaVersion') {
-    def requiredJavaVersion = javaVersion // Capture at configuration time
+    def requiredJavaVersion = javaVersion
     doLast {
         def currentJavaVersion = JavaVersion.current()
         if (currentJavaVersion < requiredJavaVersion) {
@@ -535,36 +409,27 @@ tasks.register('checkJavaVersion') {
     }
 }
 
-// Make version check run before compilation
 compileJava.dependsOn checkJavaVersion
 
-
-// Configure compiler to hide warnings
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:none']
 }
 
-// Development task - run with FMOD in unpackaged mode
 tasks.register('runDev', JavaExec) {
     group = 'application'
     description = 'Run application in development mode with unpackaged FMOD loading'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = application.mainClass
     jvmArgs = nativeAccessJvmArgs
-    
-    // Load development configuration
     loadEnvironmentConfig(runDev, 'development')
-
-    // Flag this execution as an explicit developer run (used by DevModeFileAutoLoader)
     systemProperty 'app.run.dev', 'true'
-    // Set macOS application name for menu bar display
     systemProperty 'apple.awt.application.name', appProps.getProperty('app.name')
 }
 
-// Spotless code formatting configuration
 spotless {
     java {
         target 'src/**/*.java'
+        targetExclude 'src/main/java/audio/fmod/panama/**'
         googleJavaFormat(googleJavaFormatVersion).aosp().reflowLongStrings()
         removeUnusedImports()
         trimTrailingWhitespace()
@@ -576,23 +441,49 @@ spotless {
 checkstyle {
     toolVersion = '10.21.0'
     configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
-    
-    // Only check main sources, not test
     sourceSets = [sourceSets.main]
-    
-    // Show violations in console
     showViolations = true
-    
-    // Make build fail on violations
     maxWarnings = 0
     maxErrors = 0
 }
 
-// Configure checkstyle tasks
 tasks.withType(Checkstyle).configureEach {
+    exclude '**/audio/fmod/panama/**'
     reports {
         xml.required = false
         html.required = true
         html.outputLocation = layout.buildDirectory.file("reports/checkstyle/${name}.html")
+    }
+}
+
+tasks.register('jextractFmod', Exec) {
+    group = 'codegen'
+    description = 'Generate Java Panama bindings for FMOD using jextract'
+    inputs.file('src/main/resources/fmod/macos/fmod.h')
+    inputs.files(fileTree('src/main/resources/fmod/macos') { include '*.h' })
+    outputs.dir('src/main/java/core/audio/fmod/panama')
+    doFirst {
+        def defaultJextract = "${System.getProperty('user.home')}/jextract-22/bin/jextract"
+        def jextractPath = (project.findProperty('jextractBin')
+                ?: System.getenv('JEXTRACT_BIN')
+                ?: defaultJextract).toString()
+        def bin = file(jextractPath)
+        if (!bin.exists() || !bin.canExecute()) {
+            throw new GradleException("jextract not found or not executable at: ${jextractPath}. Set -PjextractBin=... or env JEXTRACT_BIN.")
+        }
+        file('src/main/java').mkdirs()
+        // Ensure libclang from Command Line Tools is visible on macOS
+        environment 'DYLD_LIBRARY_PATH', [
+            '/Library/Developer/CommandLineTools/usr/lib',
+            System.getenv('DYLD_LIBRARY_PATH')
+        ].findAll { it && it.trim() }.join(File.pathSeparator)
+
+        commandLine jextractPath,
+                '-t', 'core.audio.fmod.panama',
+                '--header-class-name', 'FmodCore',
+                '-I', 'src/main/resources/fmod/macos',
+                '-l', 'fmod',
+                '--output', file('src/main/java').absolutePath,
+                'src/main/resources/fmod/macos/fmod.h'
     }
 }

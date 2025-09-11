@@ -2,13 +2,10 @@ package core.audio.fmod;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import annotations.Audio;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 import core.audio.AudioHandle;
 import core.audio.exceptions.AudioPlaybackException;
+import core.env.Platform;
+import java.lang.foreign.MemorySegment;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.Timeout;
@@ -27,13 +25,12 @@ import org.junit.jupiter.api.Timeout;
  * Integration tests for FmodPlaybackManager. Tests the playback management logic with real FMOD
  * operations.
  */
-@Audio
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
+@Tag("audio")
 class FmodPlaybackManagerTest {
 
-    private FmodLibrary fmod;
-    private Pointer system;
+    private MemorySegment system;
     private FmodPlaybackManager playbackManager;
 
     // For loading test sounds
@@ -42,25 +39,22 @@ class FmodPlaybackManagerTest {
     private FmodAudioLoadingManager loadingManager;
 
     // Test audio files
-    private static final String SAMPLE_WAV = "packaging/samples/sample.wav";
-    private static final String SWEEP_WAV = "packaging/samples/sweep.wav";
+    private static final String SAMPLE_WAV = "src/test/resources/audio/freerecall.wav";
+    private static final String SWEEP_WAV = "src/test/resources/audio/sweep.wav";
 
     @BeforeAll
     void setUpFmod() {
-        // Load FMOD library
-        String resourcePath = getClass().getResource("/fmod/macos").getPath();
-        NativeLibrary.addSearchPath("fmod", resourcePath);
-        fmod = Native.load("fmod", FmodLibrary.class);
-
-        // Create FMOD system
-        PointerByReference systemRef = new PointerByReference();
-        int result = fmod.FMOD_System_Create(systemRef, FmodConstants.FMOD_VERSION);
-        assertEquals(FmodConstants.FMOD_OK, result, "Failed to create FMOD system");
-        system = systemRef.getValue();
-
-        // Initialize FMOD system
-        result = fmod.FMOD_System_Init(system, 32, FmodConstants.FMOD_INIT_NORMAL, null);
-        assertEquals(FmodConstants.FMOD_OK, result, "Failed to initialize FMOD system");
+        // Initialize system via high-level manager
+        FmodSystemManager sm =
+                new FmodSystemManager(
+                        new FmodLibraryLoader(
+                                new FmodProperties(
+                                        "unpackaged",
+                                        "standard",
+                                        FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                                new Platform()));
+        sm.initialize();
+        system = sm.getSystem();
 
         // Create state manager for loading manager
         stateManager = new FmodSystemStateManager();
@@ -77,9 +71,9 @@ class FmodPlaybackManagerTest {
     @BeforeEach
     void createManagers() {
         // Create fresh managers for each test
-        playbackManager = new FmodPlaybackManager(fmod, system);
+        playbackManager = new FmodPlaybackManager(system);
         lifecycleManager = new FmodHandleLifecycleManager();
-        loadingManager = new FmodAudioLoadingManager(fmod, system, stateManager, lifecycleManager);
+        loadingManager = new FmodAudioLoadingManager(system, stateManager, lifecycleManager);
     }
 
     @AfterAll
@@ -87,13 +81,11 @@ class FmodPlaybackManagerTest {
         if (loadingManager != null) {
             loadingManager.releaseAll();
         }
-        if (system != null && fmod != null) {
-            fmod.FMOD_System_Release(system);
-        }
+        // System released by SystemManager in other tests; nothing to do here
     }
 
     // Helper method to load and get sound
-    private Pointer loadSound(String filePath) throws Exception {
+    private MemorySegment loadSound(String filePath) throws Exception {
         loadingManager.loadAudio(filePath);
         return loadingManager
                 .getCurrentSound()
@@ -105,7 +97,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testPlayFullAudio() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, handle);
 
@@ -130,7 +122,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testPlayStopPlay() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         // First play
         FmodPlaybackHandle handle1 = playbackManager.play(sound, handle);
@@ -160,7 +152,7 @@ class FmodPlaybackManagerTest {
         log.warn("=== EXPECTED WARNING FOLLOWS - Testing channel cleanup on multiple plays ===");
         // Load first sound
         AudioHandle handle1 = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound1 = loadSound(SAMPLE_WAV);
+        MemorySegment sound1 = loadSound(SAMPLE_WAV);
 
         // Play first sound
         FmodPlaybackHandle playback1 = playbackManager.play(sound1, handle1);
@@ -169,7 +161,7 @@ class FmodPlaybackManagerTest {
 
         // Load and play second sound - should stop first
         AudioHandle handle2 = loadingManager.loadAudio(SWEEP_WAV);
-        Pointer sound2 = loadSound(SWEEP_WAV);
+        MemorySegment sound2 = loadSound(SWEEP_WAV);
 
         FmodPlaybackHandle playback2 = playbackManager.play(sound2, handle2);
         assertTrue(playback2.isActive());
@@ -185,7 +177,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testPauseResume() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
         Thread.sleep(100);
@@ -215,7 +207,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testSeekDuringPlayback() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
 
@@ -254,7 +246,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testPlayRange() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         long startFrame = 22050; // 0.5 seconds
         long endFrame = 66150; // 1.5 seconds
@@ -279,7 +271,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testGetPositionDuringPlayback() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
 
@@ -301,7 +293,7 @@ class FmodPlaybackManagerTest {
         // Note: This requires creating a sound with limited duration
         // For now, we'll test the mechanism works
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
         assertFalse(playbackManager.checkPlaybackFinished());
@@ -319,7 +311,7 @@ class FmodPlaybackManagerTest {
         assertFalse(playbackManager.hasActivePlayback());
 
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
         assertTrue(playbackManager.hasActivePlayback());
@@ -336,7 +328,7 @@ class FmodPlaybackManagerTest {
         assertFalse(playbackManager.getCurrentPlayback().isPresent());
 
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, handle);
 
@@ -350,7 +342,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testStopCleansUpResources() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, handle);
         assertTrue(playbackHandle.isActive());
@@ -377,7 +369,7 @@ class FmodPlaybackManagerTest {
 
         // Start and stop playback
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
         playbackManager.stop();
@@ -392,7 +384,7 @@ class FmodPlaybackManagerTest {
     @Timeout(5)
     void testConcurrentPositionQueries() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         playbackManager.play(sound, handle);
 
@@ -428,7 +420,7 @@ class FmodPlaybackManagerTest {
     @Timeout(5)
     void testRapidPlayStopCycles() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         for (int i = 0; i < 20; i++) {
             FmodPlaybackHandle playbackHandle = playbackManager.play(sound, handle);
@@ -445,7 +437,7 @@ class FmodPlaybackManagerTest {
     @Test
     void testPlaybackHandleInvalidation() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         // Create multiple handles by playing multiple times
         FmodPlaybackHandle handle1 = playbackManager.play(sound, handle);
@@ -472,7 +464,7 @@ class FmodPlaybackManagerTest {
     @Timeout(5)
     void testConcurrentPlayRequests() throws Exception {
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
-        Pointer sound = loadSound(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
         CountDownLatch startLatch = new CountDownLatch(1);
