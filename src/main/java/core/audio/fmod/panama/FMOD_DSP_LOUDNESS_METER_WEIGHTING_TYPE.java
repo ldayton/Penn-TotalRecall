@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE { float channelweight[32]; } }
  */
 public class FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE {
@@ -34,24 +36,40 @@ public class FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE {
     private static final SequenceLayout channelweight$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("channelweight"));
 
-    /** Layout for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static final SequenceLayout channelweight$layout() {
         return channelweight$LAYOUT;
     }
 
     private static final long channelweight$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static final long channelweight$offset() {
         return channelweight$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static MemorySegment channelweight(MemorySegment struct) {
         return struct.asSlice(channelweight$OFFSET, channelweight$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static void channelweight(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(
                 fieldValue, 0L, struct, channelweight$OFFSET, channelweight$LAYOUT.byteSize());
@@ -59,7 +77,11 @@ public class FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE {
 
     private static long[] channelweight$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static long[] channelweight$dimensions() {
         return channelweight$DIMS;
     }
@@ -67,12 +89,20 @@ public class FMOD_DSP_LOUDNESS_METER_WEIGHTING_TYPE {
     private static final VarHandle channelweight$ELEM_HANDLE =
             channelweight$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static float channelweight(MemorySegment struct, long index0) {
         return (float) channelweight$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float channelweight[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float channelweight[32] }
+     */
     public static void channelweight(MemorySegment struct, long index0, float fieldValue) {
         channelweight$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }

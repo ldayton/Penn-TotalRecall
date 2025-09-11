@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_LOUDNESS_METER_INFO_TYPE { float momentaryloudness; float
  * shorttermloudness; float integratedloudness; float loudness10thpercentile; float
  * loudness95thpercentile; float loudnesshistogram[66]; float maxtruepeak; float
@@ -44,24 +46,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat momentaryloudness$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("momentaryloudness"));
 
-    /** Layout for field: {@snippet lang=c : float momentaryloudness } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float momentaryloudness }
+     */
     public static final OfFloat momentaryloudness$layout() {
         return momentaryloudness$LAYOUT;
     }
 
     private static final long momentaryloudness$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float momentaryloudness } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float momentaryloudness }
+     */
     public static final long momentaryloudness$offset() {
         return momentaryloudness$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float momentaryloudness } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float momentaryloudness }
+     */
     public static float momentaryloudness(MemorySegment struct) {
         return struct.get(momentaryloudness$LAYOUT, momentaryloudness$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float momentaryloudness } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float momentaryloudness }
+     */
     public static void momentaryloudness(MemorySegment struct, float fieldValue) {
         struct.set(momentaryloudness$LAYOUT, momentaryloudness$OFFSET, fieldValue);
     }
@@ -69,24 +87,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat shorttermloudness$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("shorttermloudness"));
 
-    /** Layout for field: {@snippet lang=c : float shorttermloudness } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float shorttermloudness }
+     */
     public static final OfFloat shorttermloudness$layout() {
         return shorttermloudness$LAYOUT;
     }
 
     private static final long shorttermloudness$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float shorttermloudness } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float shorttermloudness }
+     */
     public static final long shorttermloudness$offset() {
         return shorttermloudness$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float shorttermloudness } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float shorttermloudness }
+     */
     public static float shorttermloudness(MemorySegment struct) {
         return struct.get(shorttermloudness$LAYOUT, shorttermloudness$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float shorttermloudness } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float shorttermloudness }
+     */
     public static void shorttermloudness(MemorySegment struct, float fieldValue) {
         struct.set(shorttermloudness$LAYOUT, shorttermloudness$OFFSET, fieldValue);
     }
@@ -94,24 +128,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat integratedloudness$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("integratedloudness"));
 
-    /** Layout for field: {@snippet lang=c : float integratedloudness } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float integratedloudness }
+     */
     public static final OfFloat integratedloudness$layout() {
         return integratedloudness$LAYOUT;
     }
 
     private static final long integratedloudness$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float integratedloudness } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float integratedloudness }
+     */
     public static final long integratedloudness$offset() {
         return integratedloudness$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float integratedloudness } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float integratedloudness }
+     */
     public static float integratedloudness(MemorySegment struct) {
         return struct.get(integratedloudness$LAYOUT, integratedloudness$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float integratedloudness } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float integratedloudness }
+     */
     public static void integratedloudness(MemorySegment struct, float fieldValue) {
         struct.set(integratedloudness$LAYOUT, integratedloudness$OFFSET, fieldValue);
     }
@@ -119,24 +169,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat loudness10thpercentile$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("loudness10thpercentile"));
 
-    /** Layout for field: {@snippet lang=c : float loudness10thpercentile } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float loudness10thpercentile }
+     */
     public static final OfFloat loudness10thpercentile$layout() {
         return loudness10thpercentile$LAYOUT;
     }
 
     private static final long loudness10thpercentile$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : float loudness10thpercentile } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float loudness10thpercentile }
+     */
     public static final long loudness10thpercentile$offset() {
         return loudness10thpercentile$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float loudness10thpercentile } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float loudness10thpercentile }
+     */
     public static float loudness10thpercentile(MemorySegment struct) {
         return struct.get(loudness10thpercentile$LAYOUT, loudness10thpercentile$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float loudness10thpercentile } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float loudness10thpercentile }
+     */
     public static void loudness10thpercentile(MemorySegment struct, float fieldValue) {
         struct.set(loudness10thpercentile$LAYOUT, loudness10thpercentile$OFFSET, fieldValue);
     }
@@ -144,24 +210,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat loudness95thpercentile$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("loudness95thpercentile"));
 
-    /** Layout for field: {@snippet lang=c : float loudness95thpercentile } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float loudness95thpercentile }
+     */
     public static final OfFloat loudness95thpercentile$layout() {
         return loudness95thpercentile$LAYOUT;
     }
 
     private static final long loudness95thpercentile$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : float loudness95thpercentile } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float loudness95thpercentile }
+     */
     public static final long loudness95thpercentile$offset() {
         return loudness95thpercentile$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float loudness95thpercentile } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float loudness95thpercentile }
+     */
     public static float loudness95thpercentile(MemorySegment struct) {
         return struct.get(loudness95thpercentile$LAYOUT, loudness95thpercentile$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float loudness95thpercentile } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float loudness95thpercentile }
+     */
     public static void loudness95thpercentile(MemorySegment struct, float fieldValue) {
         struct.set(loudness95thpercentile$LAYOUT, loudness95thpercentile$OFFSET, fieldValue);
     }
@@ -169,24 +251,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final SequenceLayout loudnesshistogram$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("loudnesshistogram"));
 
-    /** Layout for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static final SequenceLayout loudnesshistogram$layout() {
         return loudnesshistogram$LAYOUT;
     }
 
     private static final long loudnesshistogram$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static final long loudnesshistogram$offset() {
         return loudnesshistogram$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static MemorySegment loudnesshistogram(MemorySegment struct) {
         return struct.asSlice(loudnesshistogram$OFFSET, loudnesshistogram$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static void loudnesshistogram(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(
                 fieldValue,
@@ -198,7 +296,11 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
 
     private static long[] loudnesshistogram$DIMS = {66};
 
-    /** Dimensions for array field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static long[] loudnesshistogram$dimensions() {
         return loudnesshistogram$DIMS;
     }
@@ -206,12 +308,20 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final VarHandle loudnesshistogram$ELEM_HANDLE =
             loudnesshistogram$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static float loudnesshistogram(MemorySegment struct, long index0) {
         return (float) loudnesshistogram$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float loudnesshistogram[66] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float loudnesshistogram[66] }
+     */
     public static void loudnesshistogram(MemorySegment struct, long index0, float fieldValue) {
         loudnesshistogram$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
@@ -219,24 +329,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat maxtruepeak$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("maxtruepeak"));
 
-    /** Layout for field: {@snippet lang=c : float maxtruepeak } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float maxtruepeak }
+     */
     public static final OfFloat maxtruepeak$layout() {
         return maxtruepeak$LAYOUT;
     }
 
     private static final long maxtruepeak$OFFSET = 284;
 
-    /** Offset for field: {@snippet lang=c : float maxtruepeak } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float maxtruepeak }
+     */
     public static final long maxtruepeak$offset() {
         return maxtruepeak$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float maxtruepeak } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float maxtruepeak }
+     */
     public static float maxtruepeak(MemorySegment struct) {
         return struct.get(maxtruepeak$LAYOUT, maxtruepeak$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float maxtruepeak } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float maxtruepeak }
+     */
     public static void maxtruepeak(MemorySegment struct, float fieldValue) {
         struct.set(maxtruepeak$LAYOUT, maxtruepeak$OFFSET, fieldValue);
     }
@@ -244,24 +370,40 @@ public class FMOD_DSP_LOUDNESS_METER_INFO_TYPE {
     private static final OfFloat maxmomentaryloudness$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("maxmomentaryloudness"));
 
-    /** Layout for field: {@snippet lang=c : float maxmomentaryloudness } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float maxmomentaryloudness }
+     */
     public static final OfFloat maxmomentaryloudness$layout() {
         return maxmomentaryloudness$LAYOUT;
     }
 
     private static final long maxmomentaryloudness$OFFSET = 288;
 
-    /** Offset for field: {@snippet lang=c : float maxmomentaryloudness } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float maxmomentaryloudness }
+     */
     public static final long maxmomentaryloudness$offset() {
         return maxmomentaryloudness$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float maxmomentaryloudness } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float maxmomentaryloudness }
+     */
     public static float maxmomentaryloudness(MemorySegment struct) {
         return struct.get(maxmomentaryloudness$LAYOUT, maxmomentaryloudness$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float maxmomentaryloudness } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float maxmomentaryloudness }
+     */
     public static void maxmomentaryloudness(MemorySegment struct, float fieldValue) {
         struct.set(maxmomentaryloudness$LAYOUT, maxmomentaryloudness$OFFSET, fieldValue);
     }

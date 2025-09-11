@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_BUFFER_ARRAY { int numbuffers; int *buffernumchannels;
  * FMOD_CHANNELMASK *bufferchannelmask; float **buffers; FMOD_SPEAKERMODE speakermode; } }
  */
@@ -40,24 +42,40 @@ public class FMOD_DSP_BUFFER_ARRAY {
     private static final OfInt numbuffers$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numbuffers"));
 
-    /** Layout for field: {@snippet lang=c : int numbuffers } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numbuffers }
+     */
     public static final OfInt numbuffers$layout() {
         return numbuffers$LAYOUT;
     }
 
     private static final long numbuffers$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int numbuffers } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numbuffers }
+     */
     public static final long numbuffers$offset() {
         return numbuffers$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numbuffers } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numbuffers }
+     */
     public static int numbuffers(MemorySegment struct) {
         return struct.get(numbuffers$LAYOUT, numbuffers$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numbuffers } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numbuffers }
+     */
     public static void numbuffers(MemorySegment struct, int fieldValue) {
         struct.set(numbuffers$LAYOUT, numbuffers$OFFSET, fieldValue);
     }
@@ -65,24 +83,40 @@ public class FMOD_DSP_BUFFER_ARRAY {
     private static final AddressLayout buffernumchannels$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("buffernumchannels"));
 
-    /** Layout for field: {@snippet lang=c : int *buffernumchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int *buffernumchannels }
+     */
     public static final AddressLayout buffernumchannels$layout() {
         return buffernumchannels$LAYOUT;
     }
 
     private static final long buffernumchannels$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : int *buffernumchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int *buffernumchannels }
+     */
     public static final long buffernumchannels$offset() {
         return buffernumchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int *buffernumchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int *buffernumchannels }
+     */
     public static MemorySegment buffernumchannels(MemorySegment struct) {
         return struct.get(buffernumchannels$LAYOUT, buffernumchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int *buffernumchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int *buffernumchannels }
+     */
     public static void buffernumchannels(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(buffernumchannels$LAYOUT, buffernumchannels$OFFSET, fieldValue);
     }
@@ -90,24 +124,40 @@ public class FMOD_DSP_BUFFER_ARRAY {
     private static final AddressLayout bufferchannelmask$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("bufferchannelmask"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask }
+     */
     public static final AddressLayout bufferchannelmask$layout() {
         return bufferchannelmask$LAYOUT;
     }
 
     private static final long bufferchannelmask$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask }
+     */
     public static final long bufferchannelmask$offset() {
         return bufferchannelmask$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask }
+     */
     public static MemorySegment bufferchannelmask(MemorySegment struct) {
         return struct.get(bufferchannelmask$LAYOUT, bufferchannelmask$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK *bufferchannelmask }
+     */
     public static void bufferchannelmask(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(bufferchannelmask$LAYOUT, bufferchannelmask$OFFSET, fieldValue);
     }
@@ -115,24 +165,40 @@ public class FMOD_DSP_BUFFER_ARRAY {
     private static final AddressLayout buffers$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("buffers"));
 
-    /** Layout for field: {@snippet lang=c : float **buffers } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float **buffers }
+     */
     public static final AddressLayout buffers$layout() {
         return buffers$LAYOUT;
     }
 
     private static final long buffers$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : float **buffers } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float **buffers }
+     */
     public static final long buffers$offset() {
         return buffers$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float **buffers } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float **buffers }
+     */
     public static MemorySegment buffers(MemorySegment struct) {
         return struct.get(buffers$LAYOUT, buffers$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float **buffers } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float **buffers }
+     */
     public static void buffers(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(buffers$LAYOUT, buffers$OFFSET, fieldValue);
     }
@@ -140,24 +206,40 @@ public class FMOD_DSP_BUFFER_ARRAY {
     private static final OfInt speakermode$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("speakermode"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SPEAKERMODE speakermode } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE speakermode }
+     */
     public static final OfInt speakermode$layout() {
         return speakermode$LAYOUT;
     }
 
     private static final long speakermode$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SPEAKERMODE speakermode } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE speakermode }
+     */
     public static final long speakermode$offset() {
         return speakermode$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SPEAKERMODE speakermode } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE speakermode }
+     */
     public static int speakermode(MemorySegment struct) {
         return struct.get(speakermode$LAYOUT, speakermode$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SPEAKERMODE speakermode } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE speakermode }
+     */
     public static void speakermode(MemorySegment struct, int fieldValue) {
         struct.set(speakermode$LAYOUT, speakermode$OFFSET, fieldValue);
     }

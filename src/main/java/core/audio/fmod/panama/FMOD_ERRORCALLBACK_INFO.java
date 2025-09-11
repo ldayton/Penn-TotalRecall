@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_ERRORCALLBACK_INFO { FMOD_RESULT result;
  * FMOD_ERRORCALLBACK_INSTANCETYPE instancetype; void *instance; const char *functionname; const
  * char *functionparams; } }
@@ -38,24 +40,40 @@ public class FMOD_ERRORCALLBACK_INFO {
 
     private static final OfInt result$LAYOUT = (OfInt) $LAYOUT.select(groupElement("result"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_RESULT result } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_RESULT result }
+     */
     public static final OfInt result$layout() {
         return result$LAYOUT;
     }
 
     private static final long result$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_RESULT result } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_RESULT result }
+     */
     public static final long result$offset() {
         return result$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_RESULT result } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_RESULT result }
+     */
     public static int result(MemorySegment struct) {
         return struct.get(result$LAYOUT, result$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_RESULT result } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_RESULT result }
+     */
     public static void result(MemorySegment struct, int fieldValue) {
         struct.set(result$LAYOUT, result$OFFSET, fieldValue);
     }
@@ -63,24 +81,40 @@ public class FMOD_ERRORCALLBACK_INFO {
     private static final OfInt instancetype$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("instancetype"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype }
+     */
     public static final OfInt instancetype$layout() {
         return instancetype$LAYOUT;
     }
 
     private static final long instancetype$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype }
+     */
     public static final long instancetype$offset() {
         return instancetype$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype }
+     */
     public static int instancetype(MemorySegment struct) {
         return struct.get(instancetype$LAYOUT, instancetype$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_ERRORCALLBACK_INSTANCETYPE instancetype }
+     */
     public static void instancetype(MemorySegment struct, int fieldValue) {
         struct.set(instancetype$LAYOUT, instancetype$OFFSET, fieldValue);
     }
@@ -88,24 +122,40 @@ public class FMOD_ERRORCALLBACK_INFO {
     private static final AddressLayout instance$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("instance"));
 
-    /** Layout for field: {@snippet lang=c : void *instance } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static final AddressLayout instance$layout() {
         return instance$LAYOUT;
     }
 
     private static final long instance$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : void *instance } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static final long instance$offset() {
         return instance$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *instance } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static MemorySegment instance(MemorySegment struct) {
         return struct.get(instance$LAYOUT, instance$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *instance } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static void instance(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(instance$LAYOUT, instance$OFFSET, fieldValue);
     }
@@ -113,24 +163,40 @@ public class FMOD_ERRORCALLBACK_INFO {
     private static final AddressLayout functionname$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("functionname"));
 
-    /** Layout for field: {@snippet lang=c : const char *functionname } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *functionname }
+     */
     public static final AddressLayout functionname$layout() {
         return functionname$LAYOUT;
     }
 
     private static final long functionname$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : const char *functionname } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *functionname }
+     */
     public static final long functionname$offset() {
         return functionname$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *functionname } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *functionname }
+     */
     public static MemorySegment functionname(MemorySegment struct) {
         return struct.get(functionname$LAYOUT, functionname$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *functionname } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *functionname }
+     */
     public static void functionname(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(functionname$LAYOUT, functionname$OFFSET, fieldValue);
     }
@@ -138,24 +204,40 @@ public class FMOD_ERRORCALLBACK_INFO {
     private static final AddressLayout functionparams$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("functionparams"));
 
-    /** Layout for field: {@snippet lang=c : const char *functionparams } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *functionparams }
+     */
     public static final AddressLayout functionparams$layout() {
         return functionparams$LAYOUT;
     }
 
     private static final long functionparams$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : const char *functionparams } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *functionparams }
+     */
     public static final long functionparams$offset() {
         return functionparams$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *functionparams } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *functionparams }
+     */
     public static MemorySegment functionparams(MemorySegment struct) {
         return struct.get(functionparams$LAYOUT, functionparams$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *functionparams } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *functionparams }
+     */
     public static void functionparams(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(functionparams$LAYOUT, functionparams$OFFSET, fieldValue);
     }

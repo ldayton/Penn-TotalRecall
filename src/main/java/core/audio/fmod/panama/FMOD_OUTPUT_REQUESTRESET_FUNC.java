@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_OUTPUT_REQUESTRESET_FUNC)(FMOD_OUTPUT_STATE *) }
  */
 public class FMOD_OUTPUT_REQUESTRESET_FUNC {

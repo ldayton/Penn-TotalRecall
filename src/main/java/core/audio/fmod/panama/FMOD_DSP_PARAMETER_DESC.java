@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC { FMOD_DSP_PARAMETER_TYPE type; char name[16];
  * char label[16]; const char *description; union { FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc;
  * FMOD_DSP_PARAMETER_DESC_INT intdesc; FMOD_DSP_PARAMETER_DESC_BOOL booldesc;
@@ -53,24 +55,40 @@ public class FMOD_DSP_PARAMETER_DESC {
 
     private static final OfInt type$LAYOUT = (OfInt) $LAYOUT.select(groupElement("type"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type }
+     */
     public static final OfInt type$layout() {
         return type$LAYOUT;
     }
 
     private static final long type$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type }
+     */
     public static final long type$offset() {
         return type$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type }
+     */
     public static int type(MemorySegment struct) {
         return struct.get(type$LAYOUT, type$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_TYPE type }
+     */
     public static void type(MemorySegment struct, int fieldValue) {
         struct.set(type$LAYOUT, type$OFFSET, fieldValue);
     }
@@ -78,43 +96,71 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final SequenceLayout name$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("name"));
 
-    /** Layout for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static final SequenceLayout name$layout() {
         return name$LAYOUT;
     }
 
     private static final long name$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static final long name$offset() {
         return name$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static MemorySegment name(MemorySegment struct) {
         return struct.asSlice(name$OFFSET, name$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static void name(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, name$OFFSET, name$LAYOUT.byteSize());
     }
 
     private static long[] name$DIMS = {16};
 
-    /** Dimensions for array field: {@snippet lang=c : char name[16] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static long[] name$dimensions() {
         return name$DIMS;
     }
 
     private static final VarHandle name$ELEM_HANDLE = name$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static byte name(MemorySegment struct, long index0) {
         return (byte) name$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : char name[16] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : char name[16] }
+     */
     public static void name(MemorySegment struct, long index0, byte fieldValue) {
         name$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
@@ -122,43 +168,71 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final SequenceLayout label$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("label"));
 
-    /** Layout for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static final SequenceLayout label$layout() {
         return label$LAYOUT;
     }
 
     private static final long label$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static final long label$offset() {
         return label$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static MemorySegment label(MemorySegment struct) {
         return struct.asSlice(label$OFFSET, label$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static void label(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, label$OFFSET, label$LAYOUT.byteSize());
     }
 
     private static long[] label$DIMS = {16};
 
-    /** Dimensions for array field: {@snippet lang=c : char label[16] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static long[] label$dimensions() {
         return label$DIMS;
     }
 
     private static final VarHandle label$ELEM_HANDLE = label$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static byte label(MemorySegment struct, long index0) {
         return (byte) label$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : char label[16] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : char label[16] }
+     */
     public static void label(MemorySegment struct, long index0, byte fieldValue) {
         label$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
@@ -166,24 +240,40 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final AddressLayout description$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("description"));
 
-    /** Layout for field: {@snippet lang=c : const char *description } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *description }
+     */
     public static final AddressLayout description$layout() {
         return description$LAYOUT;
     }
 
     private static final long description$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : const char *description } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *description }
+     */
     public static final long description$offset() {
         return description$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *description } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *description }
+     */
     public static MemorySegment description(MemorySegment struct) {
         return struct.get(description$LAYOUT, description$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *description } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *description }
+     */
     public static void description(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(description$LAYOUT, description$OFFSET, fieldValue);
     }
@@ -191,24 +281,40 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final GroupLayout floatdesc$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("$anon$183:5"), groupElement("floatdesc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc }
+     */
     public static final GroupLayout floatdesc$layout() {
         return floatdesc$LAYOUT;
     }
 
     private static final long floatdesc$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc }
+     */
     public static final long floatdesc$offset() {
         return floatdesc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc }
+     */
     public static MemorySegment floatdesc(MemorySegment struct) {
         return struct.asSlice(floatdesc$OFFSET, floatdesc$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_FLOAT floatdesc }
+     */
     public static void floatdesc(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, floatdesc$OFFSET, floatdesc$LAYOUT.byteSize());
     }
@@ -216,24 +322,40 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final GroupLayout intdesc$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("$anon$183:5"), groupElement("intdesc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc }
+     */
     public static final GroupLayout intdesc$layout() {
         return intdesc$LAYOUT;
     }
 
     private static final long intdesc$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc }
+     */
     public static final long intdesc$offset() {
         return intdesc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc }
+     */
     public static MemorySegment intdesc(MemorySegment struct) {
         return struct.asSlice(intdesc$OFFSET, intdesc$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_INT intdesc }
+     */
     public static void intdesc(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, intdesc$OFFSET, intdesc$LAYOUT.byteSize());
     }
@@ -241,24 +363,40 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final GroupLayout booldesc$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("$anon$183:5"), groupElement("booldesc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc }
+     */
     public static final GroupLayout booldesc$layout() {
         return booldesc$LAYOUT;
     }
 
     private static final long booldesc$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc }
+     */
     public static final long booldesc$offset() {
         return booldesc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc }
+     */
     public static MemorySegment booldesc(MemorySegment struct) {
         return struct.asSlice(booldesc$OFFSET, booldesc$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_BOOL booldesc }
+     */
     public static void booldesc(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, booldesc$OFFSET, booldesc$LAYOUT.byteSize());
     }
@@ -266,24 +404,40 @@ public class FMOD_DSP_PARAMETER_DESC {
     private static final GroupLayout datadesc$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("$anon$183:5"), groupElement("datadesc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc }
+     */
     public static final GroupLayout datadesc$layout() {
         return datadesc$LAYOUT;
     }
 
     private static final long datadesc$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc }
+     */
     public static final long datadesc$offset() {
         return datadesc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc }
+     */
     public static MemorySegment datadesc(MemorySegment struct) {
         return struct.asSlice(datadesc$OFFSET, datadesc$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC_DATA datadesc }
+     */
     public static void datadesc(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, datadesc$OFFSET, datadesc$LAYOUT.byteSize());
     }

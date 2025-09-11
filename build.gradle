@@ -41,7 +41,7 @@ ext {
     mockitoVersion = '5.19.+'
     imageComparisonVersion = '4.4.+'
     junitPlatformLauncherVersion = '1.10.+'
-    googleJavaFormatVersion = '1.22.0'
+    googleJavaFormatVersion = '1.25.1'
 }
 
 java {

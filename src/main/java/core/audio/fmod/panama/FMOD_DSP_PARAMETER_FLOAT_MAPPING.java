@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_FLOAT_MAPPING {
  * FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type; FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
  * piecewiselinearmapping; } }
@@ -38,24 +40,40 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING {
 
     private static final OfInt type$LAYOUT = (OfInt) $LAYOUT.select(groupElement("type"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type }
+     */
     public static final OfInt type$layout() {
         return type$LAYOUT;
     }
 
     private static final long type$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type }
+     */
     public static final long type$offset() {
         return type$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type }
+     */
     public static int type(MemorySegment struct) {
         return struct.get(type$LAYOUT, type$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE type }
+     */
     public static void type(MemorySegment struct, int fieldValue) {
         struct.set(type$LAYOUT, type$OFFSET, fieldValue);
     }
@@ -64,7 +82,9 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING {
             (GroupLayout) $LAYOUT.select(groupElement("piecewiselinearmapping"));
 
     /**
-     * Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
      * piecewiselinearmapping }
      */
     public static final GroupLayout piecewiselinearmapping$layout() {
@@ -74,7 +94,9 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING {
     private static final long piecewiselinearmapping$OFFSET = 8;
 
     /**
-     * Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
      * piecewiselinearmapping }
      */
     public static final long piecewiselinearmapping$offset() {
@@ -82,7 +104,9 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING {
     }
 
     /**
-     * Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
      * piecewiselinearmapping }
      */
     public static MemorySegment piecewiselinearmapping(MemorySegment struct) {
@@ -91,7 +115,9 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING {
     }
 
     /**
-     * Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR
      * piecewiselinearmapping }
      */
     public static void piecewiselinearmapping(MemorySegment struct, MemorySegment fieldValue) {

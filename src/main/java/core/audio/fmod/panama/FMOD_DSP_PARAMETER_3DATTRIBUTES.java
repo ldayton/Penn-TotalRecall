@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_3DATTRIBUTES { FMOD_3D_ATTRIBUTES relative;
  * FMOD_3D_ATTRIBUTES absolute; } }
  */
@@ -35,24 +37,40 @@ public class FMOD_DSP_PARAMETER_3DATTRIBUTES {
     private static final GroupLayout relative$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("relative"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES relative } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES relative }
+     */
     public static final GroupLayout relative$layout() {
         return relative$LAYOUT;
     }
 
     private static final long relative$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES relative } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES relative }
+     */
     public static final long relative$offset() {
         return relative$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES relative } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES relative }
+     */
     public static MemorySegment relative(MemorySegment struct) {
         return struct.asSlice(relative$OFFSET, relative$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES relative } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES relative }
+     */
     public static void relative(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, relative$OFFSET, relative$LAYOUT.byteSize());
     }
@@ -60,24 +78,40 @@ public class FMOD_DSP_PARAMETER_3DATTRIBUTES {
     private static final GroupLayout absolute$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("absolute"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute }
+     */
     public static final GroupLayout absolute$layout() {
         return absolute$LAYOUT;
     }
 
     private static final long absolute$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute }
+     */
     public static final long absolute$offset() {
         return absolute$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute }
+     */
     public static MemorySegment absolute(MemorySegment struct) {
         return struct.asSlice(absolute$OFFSET, absolute$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_3D_ATTRIBUTES absolute }
+     */
     public static void absolute(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, absolute$OFFSET, absolute$LAYOUT.byteSize());
     }

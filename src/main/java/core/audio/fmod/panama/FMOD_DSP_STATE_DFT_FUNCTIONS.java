@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_STATE_DFT_FUNCTIONS { FMOD_DSP_DFT_FFTREAL_FUNC fftreal;
  * FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal; } }
  */
@@ -35,24 +37,40 @@ public class FMOD_DSP_STATE_DFT_FUNCTIONS {
     private static final AddressLayout fftreal$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fftreal"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal }
+     */
     public static final AddressLayout fftreal$layout() {
         return fftreal$LAYOUT;
     }
 
     private static final long fftreal$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal }
+     */
     public static final long fftreal$offset() {
         return fftreal$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal }
+     */
     public static MemorySegment fftreal(MemorySegment struct) {
         return struct.get(fftreal$LAYOUT, fftreal$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_FFTREAL_FUNC fftreal }
+     */
     public static void fftreal(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fftreal$LAYOUT, fftreal$OFFSET, fieldValue);
     }
@@ -60,24 +78,40 @@ public class FMOD_DSP_STATE_DFT_FUNCTIONS {
     private static final AddressLayout inversefftreal$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("inversefftreal"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal }
+     */
     public static final AddressLayout inversefftreal$layout() {
         return inversefftreal$LAYOUT;
     }
 
     private static final long inversefftreal$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal }
+     */
     public static final long inversefftreal$offset() {
         return inversefftreal$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal }
+     */
     public static MemorySegment inversefftreal(MemorySegment struct) {
         return struct.get(inversefftreal$LAYOUT, inversefftreal$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_DFT_IFFTREAL_FUNC inversefftreal }
+     */
     public static void inversefftreal(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(inversefftreal$LAYOUT, inversefftreal$OFFSET, fieldValue);
     }

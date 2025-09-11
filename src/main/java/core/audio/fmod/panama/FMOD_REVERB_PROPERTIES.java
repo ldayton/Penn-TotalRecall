@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_REVERB_PROPERTIES { float DecayTime; float EarlyDelay; float
  * LateDelay; float HFReference; float HFDecayRatio; float Diffusion; float Density; float
  * LowShelfFrequency; float LowShelfGain; float HighCut; float EarlyLateMix; float WetLevel; } }
@@ -46,24 +48,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat DecayTime$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("DecayTime"));
 
-    /** Layout for field: {@snippet lang=c : float DecayTime } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float DecayTime }
+     */
     public static final OfFloat DecayTime$layout() {
         return DecayTime$LAYOUT;
     }
 
     private static final long DecayTime$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float DecayTime } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float DecayTime }
+     */
     public static final long DecayTime$offset() {
         return DecayTime$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float DecayTime } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float DecayTime }
+     */
     public static float DecayTime(MemorySegment struct) {
         return struct.get(DecayTime$LAYOUT, DecayTime$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float DecayTime } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float DecayTime }
+     */
     public static void DecayTime(MemorySegment struct, float fieldValue) {
         struct.set(DecayTime$LAYOUT, DecayTime$OFFSET, fieldValue);
     }
@@ -71,24 +89,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat EarlyDelay$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("EarlyDelay"));
 
-    /** Layout for field: {@snippet lang=c : float EarlyDelay } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float EarlyDelay }
+     */
     public static final OfFloat EarlyDelay$layout() {
         return EarlyDelay$LAYOUT;
     }
 
     private static final long EarlyDelay$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float EarlyDelay } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float EarlyDelay }
+     */
     public static final long EarlyDelay$offset() {
         return EarlyDelay$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float EarlyDelay } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float EarlyDelay }
+     */
     public static float EarlyDelay(MemorySegment struct) {
         return struct.get(EarlyDelay$LAYOUT, EarlyDelay$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float EarlyDelay } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float EarlyDelay }
+     */
     public static void EarlyDelay(MemorySegment struct, float fieldValue) {
         struct.set(EarlyDelay$LAYOUT, EarlyDelay$OFFSET, fieldValue);
     }
@@ -96,24 +130,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat LateDelay$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("LateDelay"));
 
-    /** Layout for field: {@snippet lang=c : float LateDelay } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float LateDelay }
+     */
     public static final OfFloat LateDelay$layout() {
         return LateDelay$LAYOUT;
     }
 
     private static final long LateDelay$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float LateDelay } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float LateDelay }
+     */
     public static final long LateDelay$offset() {
         return LateDelay$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float LateDelay } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float LateDelay }
+     */
     public static float LateDelay(MemorySegment struct) {
         return struct.get(LateDelay$LAYOUT, LateDelay$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float LateDelay } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float LateDelay }
+     */
     public static void LateDelay(MemorySegment struct, float fieldValue) {
         struct.set(LateDelay$LAYOUT, LateDelay$OFFSET, fieldValue);
     }
@@ -121,24 +171,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat HFReference$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("HFReference"));
 
-    /** Layout for field: {@snippet lang=c : float HFReference } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float HFReference }
+     */
     public static final OfFloat HFReference$layout() {
         return HFReference$LAYOUT;
     }
 
     private static final long HFReference$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : float HFReference } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float HFReference }
+     */
     public static final long HFReference$offset() {
         return HFReference$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float HFReference } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float HFReference }
+     */
     public static float HFReference(MemorySegment struct) {
         return struct.get(HFReference$LAYOUT, HFReference$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float HFReference } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float HFReference }
+     */
     public static void HFReference(MemorySegment struct, float fieldValue) {
         struct.set(HFReference$LAYOUT, HFReference$OFFSET, fieldValue);
     }
@@ -146,24 +212,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat HFDecayRatio$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("HFDecayRatio"));
 
-    /** Layout for field: {@snippet lang=c : float HFDecayRatio } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float HFDecayRatio }
+     */
     public static final OfFloat HFDecayRatio$layout() {
         return HFDecayRatio$LAYOUT;
     }
 
     private static final long HFDecayRatio$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : float HFDecayRatio } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float HFDecayRatio }
+     */
     public static final long HFDecayRatio$offset() {
         return HFDecayRatio$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float HFDecayRatio } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float HFDecayRatio }
+     */
     public static float HFDecayRatio(MemorySegment struct) {
         return struct.get(HFDecayRatio$LAYOUT, HFDecayRatio$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float HFDecayRatio } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float HFDecayRatio }
+     */
     public static void HFDecayRatio(MemorySegment struct, float fieldValue) {
         struct.set(HFDecayRatio$LAYOUT, HFDecayRatio$OFFSET, fieldValue);
     }
@@ -171,48 +253,80 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat Diffusion$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("Diffusion"));
 
-    /** Layout for field: {@snippet lang=c : float Diffusion } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float Diffusion }
+     */
     public static final OfFloat Diffusion$layout() {
         return Diffusion$LAYOUT;
     }
 
     private static final long Diffusion$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : float Diffusion } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float Diffusion }
+     */
     public static final long Diffusion$offset() {
         return Diffusion$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float Diffusion } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float Diffusion }
+     */
     public static float Diffusion(MemorySegment struct) {
         return struct.get(Diffusion$LAYOUT, Diffusion$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float Diffusion } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float Diffusion }
+     */
     public static void Diffusion(MemorySegment struct, float fieldValue) {
         struct.set(Diffusion$LAYOUT, Diffusion$OFFSET, fieldValue);
     }
 
     private static final OfFloat Density$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("Density"));
 
-    /** Layout for field: {@snippet lang=c : float Density } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float Density }
+     */
     public static final OfFloat Density$layout() {
         return Density$LAYOUT;
     }
 
     private static final long Density$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : float Density } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float Density }
+     */
     public static final long Density$offset() {
         return Density$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float Density } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float Density }
+     */
     public static float Density(MemorySegment struct) {
         return struct.get(Density$LAYOUT, Density$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float Density } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float Density }
+     */
     public static void Density(MemorySegment struct, float fieldValue) {
         struct.set(Density$LAYOUT, Density$OFFSET, fieldValue);
     }
@@ -220,24 +334,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat LowShelfFrequency$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("LowShelfFrequency"));
 
-    /** Layout for field: {@snippet lang=c : float LowShelfFrequency } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float LowShelfFrequency }
+     */
     public static final OfFloat LowShelfFrequency$layout() {
         return LowShelfFrequency$LAYOUT;
     }
 
     private static final long LowShelfFrequency$OFFSET = 28;
 
-    /** Offset for field: {@snippet lang=c : float LowShelfFrequency } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float LowShelfFrequency }
+     */
     public static final long LowShelfFrequency$offset() {
         return LowShelfFrequency$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float LowShelfFrequency } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float LowShelfFrequency }
+     */
     public static float LowShelfFrequency(MemorySegment struct) {
         return struct.get(LowShelfFrequency$LAYOUT, LowShelfFrequency$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float LowShelfFrequency } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float LowShelfFrequency }
+     */
     public static void LowShelfFrequency(MemorySegment struct, float fieldValue) {
         struct.set(LowShelfFrequency$LAYOUT, LowShelfFrequency$OFFSET, fieldValue);
     }
@@ -245,48 +375,80 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat LowShelfGain$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("LowShelfGain"));
 
-    /** Layout for field: {@snippet lang=c : float LowShelfGain } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float LowShelfGain }
+     */
     public static final OfFloat LowShelfGain$layout() {
         return LowShelfGain$LAYOUT;
     }
 
     private static final long LowShelfGain$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : float LowShelfGain } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float LowShelfGain }
+     */
     public static final long LowShelfGain$offset() {
         return LowShelfGain$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float LowShelfGain } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float LowShelfGain }
+     */
     public static float LowShelfGain(MemorySegment struct) {
         return struct.get(LowShelfGain$LAYOUT, LowShelfGain$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float LowShelfGain } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float LowShelfGain }
+     */
     public static void LowShelfGain(MemorySegment struct, float fieldValue) {
         struct.set(LowShelfGain$LAYOUT, LowShelfGain$OFFSET, fieldValue);
     }
 
     private static final OfFloat HighCut$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("HighCut"));
 
-    /** Layout for field: {@snippet lang=c : float HighCut } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float HighCut }
+     */
     public static final OfFloat HighCut$layout() {
         return HighCut$LAYOUT;
     }
 
     private static final long HighCut$OFFSET = 36;
 
-    /** Offset for field: {@snippet lang=c : float HighCut } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float HighCut }
+     */
     public static final long HighCut$offset() {
         return HighCut$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float HighCut } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float HighCut }
+     */
     public static float HighCut(MemorySegment struct) {
         return struct.get(HighCut$LAYOUT, HighCut$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float HighCut } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float HighCut }
+     */
     public static void HighCut(MemorySegment struct, float fieldValue) {
         struct.set(HighCut$LAYOUT, HighCut$OFFSET, fieldValue);
     }
@@ -294,24 +456,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat EarlyLateMix$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("EarlyLateMix"));
 
-    /** Layout for field: {@snippet lang=c : float EarlyLateMix } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float EarlyLateMix }
+     */
     public static final OfFloat EarlyLateMix$layout() {
         return EarlyLateMix$LAYOUT;
     }
 
     private static final long EarlyLateMix$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : float EarlyLateMix } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float EarlyLateMix }
+     */
     public static final long EarlyLateMix$offset() {
         return EarlyLateMix$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float EarlyLateMix } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float EarlyLateMix }
+     */
     public static float EarlyLateMix(MemorySegment struct) {
         return struct.get(EarlyLateMix$LAYOUT, EarlyLateMix$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float EarlyLateMix } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float EarlyLateMix }
+     */
     public static void EarlyLateMix(MemorySegment struct, float fieldValue) {
         struct.set(EarlyLateMix$LAYOUT, EarlyLateMix$OFFSET, fieldValue);
     }
@@ -319,24 +497,40 @@ public class FMOD_REVERB_PROPERTIES {
     private static final OfFloat WetLevel$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("WetLevel"));
 
-    /** Layout for field: {@snippet lang=c : float WetLevel } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float WetLevel }
+     */
     public static final OfFloat WetLevel$layout() {
         return WetLevel$LAYOUT;
     }
 
     private static final long WetLevel$OFFSET = 44;
 
-    /** Offset for field: {@snippet lang=c : float WetLevel } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float WetLevel }
+     */
     public static final long WetLevel$offset() {
         return WetLevel$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float WetLevel } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float WetLevel }
+     */
     public static float WetLevel(MemorySegment struct) {
         return struct.get(WetLevel$LAYOUT, WetLevel$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float WetLevel } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float WetLevel }
+     */
     public static void WetLevel(MemorySegment struct, float fieldValue) {
         struct.set(WetLevel$LAYOUT, WetLevel$OFFSET, fieldValue);
     }

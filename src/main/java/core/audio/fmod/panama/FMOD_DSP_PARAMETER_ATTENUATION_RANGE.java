@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_DSP_PARAMETER_ATTENUATION_RANGE { float min; float max; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_DSP_PARAMETER_ATTENUATION_RANGE { float min; float max; } }
+ */
 public class FMOD_DSP_PARAMETER_ATTENUATION_RANGE {
 
     FMOD_DSP_PARAMETER_ATTENUATION_RANGE() {
@@ -30,48 +34,80 @@ public class FMOD_DSP_PARAMETER_ATTENUATION_RANGE {
 
     private static final OfFloat min$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("min"));
 
-    /** Layout for field: {@snippet lang=c : float min } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static final OfFloat min$layout() {
         return min$LAYOUT;
     }
 
     private static final long min$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float min } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static final long min$offset() {
         return min$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float min } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static float min(MemorySegment struct) {
         return struct.get(min$LAYOUT, min$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float min } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static void min(MemorySegment struct, float fieldValue) {
         struct.set(min$LAYOUT, min$OFFSET, fieldValue);
     }
 
     private static final OfFloat max$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("max"));
 
-    /** Layout for field: {@snippet lang=c : float max } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static final OfFloat max$layout() {
         return max$LAYOUT;
     }
 
     private static final long max$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float max } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static final long max$offset() {
         return max$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float max } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static float max(MemorySegment struct) {
         return struct.get(max$LAYOUT, max$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float max } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static void max(MemorySegment struct, float fieldValue) {
         struct.set(max$LAYOUT, max$OFFSET, fieldValue);
     }

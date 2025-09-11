@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC_INT { int min; int max; int defaultval;
  * FMOD_BOOL goestoinf; const char *const *valuenames; } }
  */
@@ -37,48 +39,80 @@ public class FMOD_DSP_PARAMETER_DESC_INT {
 
     private static final OfInt min$LAYOUT = (OfInt) $LAYOUT.select(groupElement("min"));
 
-    /** Layout for field: {@snippet lang=c : int min } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int min }
+     */
     public static final OfInt min$layout() {
         return min$LAYOUT;
     }
 
     private static final long min$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int min } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int min }
+     */
     public static final long min$offset() {
         return min$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int min } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int min }
+     */
     public static int min(MemorySegment struct) {
         return struct.get(min$LAYOUT, min$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int min } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int min }
+     */
     public static void min(MemorySegment struct, int fieldValue) {
         struct.set(min$LAYOUT, min$OFFSET, fieldValue);
     }
 
     private static final OfInt max$LAYOUT = (OfInt) $LAYOUT.select(groupElement("max"));
 
-    /** Layout for field: {@snippet lang=c : int max } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int max }
+     */
     public static final OfInt max$layout() {
         return max$LAYOUT;
     }
 
     private static final long max$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : int max } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int max }
+     */
     public static final long max$offset() {
         return max$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int max } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int max }
+     */
     public static int max(MemorySegment struct) {
         return struct.get(max$LAYOUT, max$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int max } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int max }
+     */
     public static void max(MemorySegment struct, int fieldValue) {
         struct.set(max$LAYOUT, max$OFFSET, fieldValue);
     }
@@ -86,48 +120,80 @@ public class FMOD_DSP_PARAMETER_DESC_INT {
     private static final OfInt defaultval$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("defaultval"));
 
-    /** Layout for field: {@snippet lang=c : int defaultval } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int defaultval }
+     */
     public static final OfInt defaultval$layout() {
         return defaultval$LAYOUT;
     }
 
     private static final long defaultval$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : int defaultval } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int defaultval }
+     */
     public static final long defaultval$offset() {
         return defaultval$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int defaultval } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int defaultval }
+     */
     public static int defaultval(MemorySegment struct) {
         return struct.get(defaultval$LAYOUT, defaultval$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int defaultval } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int defaultval }
+     */
     public static void defaultval(MemorySegment struct, int fieldValue) {
         struct.set(defaultval$LAYOUT, defaultval$OFFSET, fieldValue);
     }
 
     private static final OfInt goestoinf$LAYOUT = (OfInt) $LAYOUT.select(groupElement("goestoinf"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_BOOL goestoinf } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL goestoinf }
+     */
     public static final OfInt goestoinf$layout() {
         return goestoinf$LAYOUT;
     }
 
     private static final long goestoinf$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : FMOD_BOOL goestoinf } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL goestoinf }
+     */
     public static final long goestoinf$offset() {
         return goestoinf$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_BOOL goestoinf } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL goestoinf }
+     */
     public static int goestoinf(MemorySegment struct) {
         return struct.get(goestoinf$LAYOUT, goestoinf$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_BOOL goestoinf } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL goestoinf }
+     */
     public static void goestoinf(MemorySegment struct, int fieldValue) {
         struct.set(goestoinf$LAYOUT, goestoinf$OFFSET, fieldValue);
     }
@@ -135,24 +201,40 @@ public class FMOD_DSP_PARAMETER_DESC_INT {
     private static final AddressLayout valuenames$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("valuenames"));
 
-    /** Layout for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static final AddressLayout valuenames$layout() {
         return valuenames$LAYOUT;
     }
 
     private static final long valuenames$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static final long valuenames$offset() {
         return valuenames$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static MemorySegment valuenames(MemorySegment struct) {
         return struct.get(valuenames$LAYOUT, valuenames$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static void valuenames(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(valuenames$LAYOUT, valuenames$OFFSET, fieldValue);
     }

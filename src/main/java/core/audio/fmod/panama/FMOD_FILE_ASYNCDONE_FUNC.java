@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef void (*FMOD_FILE_ASYNCDONE_FUNC)(FMOD_ASYNCREADINFO *, FMOD_RESULT) }
  */
 public class FMOD_FILE_ASYNCDONE_FUNC {

@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_OVERALLGAIN { float linear_gain; float
  * linear_gain_additive; } }
  */
@@ -35,24 +37,40 @@ public class FMOD_DSP_PARAMETER_OVERALLGAIN {
     private static final OfFloat linear_gain$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("linear_gain"));
 
-    /** Layout for field: {@snippet lang=c : float linear_gain } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float linear_gain }
+     */
     public static final OfFloat linear_gain$layout() {
         return linear_gain$LAYOUT;
     }
 
     private static final long linear_gain$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float linear_gain } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float linear_gain }
+     */
     public static final long linear_gain$offset() {
         return linear_gain$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float linear_gain } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float linear_gain }
+     */
     public static float linear_gain(MemorySegment struct) {
         return struct.get(linear_gain$LAYOUT, linear_gain$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float linear_gain } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float linear_gain }
+     */
     public static void linear_gain(MemorySegment struct, float fieldValue) {
         struct.set(linear_gain$LAYOUT, linear_gain$OFFSET, fieldValue);
     }
@@ -60,24 +78,40 @@ public class FMOD_DSP_PARAMETER_OVERALLGAIN {
     private static final OfFloat linear_gain_additive$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("linear_gain_additive"));
 
-    /** Layout for field: {@snippet lang=c : float linear_gain_additive } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float linear_gain_additive }
+     */
     public static final OfFloat linear_gain_additive$layout() {
         return linear_gain_additive$LAYOUT;
     }
 
     private static final long linear_gain_additive$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float linear_gain_additive } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float linear_gain_additive }
+     */
     public static final long linear_gain_additive$offset() {
         return linear_gain_additive$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float linear_gain_additive } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float linear_gain_additive }
+     */
     public static float linear_gain_additive(MemorySegment struct) {
         return struct.get(linear_gain_additive$LAYOUT, linear_gain_additive$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float linear_gain_additive } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float linear_gain_additive }
+     */
     public static void linear_gain_additive(MemorySegment struct, float fieldValue) {
         struct.set(linear_gain_additive$LAYOUT, linear_gain_additive$OFFSET, fieldValue);
     }

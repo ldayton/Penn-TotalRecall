@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_STATE_PAN_FUNCTIONS { FMOD_DSP_PAN_SUMMONOMATRIX_FUNC
  * summonomatrix; FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix;
  * FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix; FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
@@ -42,24 +44,40 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final AddressLayout summonomatrix$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("summonomatrix"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix }
+     */
     public static final AddressLayout summonomatrix$layout() {
         return summonomatrix$LAYOUT;
     }
 
     private static final long summonomatrix$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix }
+     */
     public static final long summonomatrix$offset() {
         return summonomatrix$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix }
+     */
     public static MemorySegment summonomatrix(MemorySegment struct) {
         return struct.get(summonomatrix$LAYOUT, summonomatrix$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOMATRIX_FUNC summonomatrix }
+     */
     public static void summonomatrix(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(summonomatrix$LAYOUT, summonomatrix$OFFSET, fieldValue);
     }
@@ -67,24 +85,40 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final AddressLayout sumstereomatrix$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("sumstereomatrix"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix }
+     */
     public static final AddressLayout sumstereomatrix$layout() {
         return sumstereomatrix$LAYOUT;
     }
 
     private static final long sumstereomatrix$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix }
+     */
     public static final long sumstereomatrix$offset() {
         return sumstereomatrix$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix }
+     */
     public static MemorySegment sumstereomatrix(MemorySegment struct) {
         return struct.get(sumstereomatrix$LAYOUT, sumstereomatrix$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC sumstereomatrix }
+     */
     public static void sumstereomatrix(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sumstereomatrix$LAYOUT, sumstereomatrix$OFFSET, fieldValue);
     }
@@ -93,7 +127,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
             (AddressLayout) $LAYOUT.select(groupElement("sumsurroundmatrix"));
 
     /**
-     * Layout for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
      */
     public static final AddressLayout sumsurroundmatrix$layout() {
         return sumsurroundmatrix$LAYOUT;
@@ -102,21 +138,27 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final long sumsurroundmatrix$OFFSET = 16;
 
     /**
-     * Offset for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
      */
     public static final long sumsurroundmatrix$offset() {
         return sumsurroundmatrix$OFFSET;
     }
 
     /**
-     * Getter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
      */
     public static MemorySegment sumsurroundmatrix(MemorySegment struct) {
         return struct.get(sumsurroundmatrix$LAYOUT, sumsurroundmatrix$OFFSET);
     }
 
     /**
-     * Setter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSURROUNDMATRIX_FUNC sumsurroundmatrix }
      */
     public static void sumsurroundmatrix(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sumsurroundmatrix$LAYOUT, sumsurroundmatrix$OFFSET, fieldValue);
@@ -126,7 +168,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
             (AddressLayout) $LAYOUT.select(groupElement("summonotosurroundmatrix"));
 
     /**
-     * Layout for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
      * summonotosurroundmatrix }
      */
     public static final AddressLayout summonotosurroundmatrix$layout() {
@@ -136,7 +180,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final long summonotosurroundmatrix$OFFSET = 24;
 
     /**
-     * Offset for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
      * summonotosurroundmatrix }
      */
     public static final long summonotosurroundmatrix$offset() {
@@ -144,7 +190,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     }
 
     /**
-     * Getter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
      * summonotosurroundmatrix }
      */
     public static MemorySegment summonotosurroundmatrix(MemorySegment struct) {
@@ -152,7 +200,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     }
 
     /**
-     * Setter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMMONOTOSURROUNDMATRIX_FUNC
      * summonotosurroundmatrix }
      */
     public static void summonotosurroundmatrix(MemorySegment struct, MemorySegment fieldValue) {
@@ -163,7 +213,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
             (AddressLayout) $LAYOUT.select(groupElement("sumstereotosurroundmatrix"));
 
     /**
-     * Layout for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
      * sumstereotosurroundmatrix }
      */
     public static final AddressLayout sumstereotosurroundmatrix$layout() {
@@ -173,7 +225,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final long sumstereotosurroundmatrix$OFFSET = 32;
 
     /**
-     * Offset for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
      * sumstereotosurroundmatrix }
      */
     public static final long sumstereotosurroundmatrix$offset() {
@@ -181,7 +235,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     }
 
     /**
-     * Getter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
      * sumstereotosurroundmatrix }
      */
     public static MemorySegment sumstereotosurroundmatrix(MemorySegment struct) {
@@ -189,7 +245,9 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     }
 
     /**
-     * Setter for field: {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_SUMSTEREOTOSURROUNDMATRIX_FUNC
      * sumstereotosurroundmatrix }
      */
     public static void sumstereotosurroundmatrix(MemorySegment struct, MemorySegment fieldValue) {
@@ -199,24 +257,40 @@ public class FMOD_DSP_STATE_PAN_FUNCTIONS {
     private static final AddressLayout getrolloffgain$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("getrolloffgain"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain }
+     */
     public static final AddressLayout getrolloffgain$layout() {
         return getrolloffgain$LAYOUT;
     }
 
     private static final long getrolloffgain$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain }
+     */
     public static final long getrolloffgain$offset() {
         return getrolloffgain$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain }
+     */
     public static MemorySegment getrolloffgain(MemorySegment struct) {
         return struct.get(getrolloffgain$LAYOUT, getrolloffgain$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PAN_GETROLLOFFGAIN_FUNC getrolloffgain }
+     */
     public static void getrolloffgain(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(getrolloffgain$LAYOUT, getrolloffgain$OFFSET, fieldValue);
     }

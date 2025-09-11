@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC_FLOAT { float min; float max; float defaultval;
  * FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping; } }
  */
@@ -37,48 +39,80 @@ public class FMOD_DSP_PARAMETER_DESC_FLOAT {
 
     private static final OfFloat min$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("min"));
 
-    /** Layout for field: {@snippet lang=c : float min } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static final OfFloat min$layout() {
         return min$LAYOUT;
     }
 
     private static final long min$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float min } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static final long min$offset() {
         return min$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float min } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static float min(MemorySegment struct) {
         return struct.get(min$LAYOUT, min$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float min } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float min }
+     */
     public static void min(MemorySegment struct, float fieldValue) {
         struct.set(min$LAYOUT, min$OFFSET, fieldValue);
     }
 
     private static final OfFloat max$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("max"));
 
-    /** Layout for field: {@snippet lang=c : float max } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static final OfFloat max$layout() {
         return max$LAYOUT;
     }
 
     private static final long max$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float max } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static final long max$offset() {
         return max$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float max } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static float max(MemorySegment struct) {
         return struct.get(max$LAYOUT, max$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float max } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float max }
+     */
     public static void max(MemorySegment struct, float fieldValue) {
         struct.set(max$LAYOUT, max$OFFSET, fieldValue);
     }
@@ -86,24 +120,40 @@ public class FMOD_DSP_PARAMETER_DESC_FLOAT {
     private static final OfFloat defaultval$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("defaultval"));
 
-    /** Layout for field: {@snippet lang=c : float defaultval } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float defaultval }
+     */
     public static final OfFloat defaultval$layout() {
         return defaultval$LAYOUT;
     }
 
     private static final long defaultval$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float defaultval } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float defaultval }
+     */
     public static final long defaultval$offset() {
         return defaultval$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float defaultval } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float defaultval }
+     */
     public static float defaultval(MemorySegment struct) {
         return struct.get(defaultval$LAYOUT, defaultval$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float defaultval } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float defaultval }
+     */
     public static void defaultval(MemorySegment struct, float fieldValue) {
         struct.set(defaultval$LAYOUT, defaultval$OFFSET, fieldValue);
     }
@@ -111,24 +161,40 @@ public class FMOD_DSP_PARAMETER_DESC_FLOAT {
     private static final GroupLayout mapping$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("mapping"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping }
+     */
     public static final GroupLayout mapping$layout() {
         return mapping$LAYOUT;
     }
 
     private static final long mapping$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping }
+     */
     public static final long mapping$offset() {
         return mapping$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping }
+     */
     public static MemorySegment mapping(MemorySegment struct) {
         return struct.asSlice(mapping$OFFSET, mapping$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_FLOAT_MAPPING mapping }
+     */
     public static void mapping(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, mapping$OFFSET, mapping$LAYOUT.byteSize());
     }

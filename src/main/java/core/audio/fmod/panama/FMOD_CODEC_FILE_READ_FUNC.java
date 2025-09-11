@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_CODEC_FILE_READ_FUNC)(FMOD_CODEC_STATE *, void *,
  * unsigned int, unsigned int *) }
  */

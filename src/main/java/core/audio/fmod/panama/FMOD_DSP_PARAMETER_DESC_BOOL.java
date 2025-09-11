@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC_BOOL { FMOD_BOOL defaultval; const char *const
  * *valuenames; } }
  */
@@ -36,24 +38,40 @@ public class FMOD_DSP_PARAMETER_DESC_BOOL {
     private static final OfInt defaultval$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("defaultval"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_BOOL defaultval } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL defaultval }
+     */
     public static final OfInt defaultval$layout() {
         return defaultval$LAYOUT;
     }
 
     private static final long defaultval$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_BOOL defaultval } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL defaultval }
+     */
     public static final long defaultval$offset() {
         return defaultval$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_BOOL defaultval } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL defaultval }
+     */
     public static int defaultval(MemorySegment struct) {
         return struct.get(defaultval$LAYOUT, defaultval$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_BOOL defaultval } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL defaultval }
+     */
     public static void defaultval(MemorySegment struct, int fieldValue) {
         struct.set(defaultval$LAYOUT, defaultval$OFFSET, fieldValue);
     }
@@ -61,24 +79,40 @@ public class FMOD_DSP_PARAMETER_DESC_BOOL {
     private static final AddressLayout valuenames$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("valuenames"));
 
-    /** Layout for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static final AddressLayout valuenames$layout() {
         return valuenames$LAYOUT;
     }
 
     private static final long valuenames$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static final long valuenames$offset() {
         return valuenames$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static MemorySegment valuenames(MemorySegment struct) {
         return struct.get(valuenames$LAYOUT, valuenames$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *const *valuenames } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *const *valuenames }
+     */
     public static void valuenames(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(valuenames$LAYOUT, valuenames$OFFSET, fieldValue);
     }

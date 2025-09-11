@@ -111,7 +111,7 @@ public class KeyboardManager {
             case "shift" -> "shift";
             case "ctrl" -> "ctrl";
             case "command" -> "meta"; // Explicit command for Mac
-                // Key names (non-modifiers) - pass through uppercase
+            // Key names (non-modifiers) - pass through uppercase
             default -> xmlKeyname.toUpperCase();
         };
     }

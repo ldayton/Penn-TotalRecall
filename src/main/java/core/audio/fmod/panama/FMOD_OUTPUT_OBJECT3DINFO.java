@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_OUTPUT_OBJECT3DINFO { float *buffer; unsigned int bufferlength;
  * FMOD_VECTOR position; float gain; float spread; float priority; } }
  */
@@ -40,24 +42,40 @@ public class FMOD_OUTPUT_OBJECT3DINFO {
     private static final AddressLayout buffer$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("buffer"));
 
-    /** Layout for field: {@snippet lang=c : float *buffer } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float *buffer }
+     */
     public static final AddressLayout buffer$layout() {
         return buffer$LAYOUT;
     }
 
     private static final long buffer$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float *buffer } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float *buffer }
+     */
     public static final long buffer$offset() {
         return buffer$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float *buffer } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float *buffer }
+     */
     public static MemorySegment buffer(MemorySegment struct) {
         return struct.get(buffer$LAYOUT, buffer$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float *buffer } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float *buffer }
+     */
     public static void buffer(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(buffer$LAYOUT, buffer$OFFSET, fieldValue);
     }
@@ -65,24 +83,40 @@ public class FMOD_OUTPUT_OBJECT3DINFO {
     private static final OfInt bufferlength$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("bufferlength"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int bufferlength } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int bufferlength }
+     */
     public static final OfInt bufferlength$layout() {
         return bufferlength$LAYOUT;
     }
 
     private static final long bufferlength$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : unsigned int bufferlength } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int bufferlength }
+     */
     public static final long bufferlength$offset() {
         return bufferlength$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int bufferlength } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int bufferlength }
+     */
     public static int bufferlength(MemorySegment struct) {
         return struct.get(bufferlength$LAYOUT, bufferlength$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int bufferlength } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int bufferlength }
+     */
     public static void bufferlength(MemorySegment struct, int fieldValue) {
         struct.set(bufferlength$LAYOUT, bufferlength$OFFSET, fieldValue);
     }
@@ -90,72 +124,120 @@ public class FMOD_OUTPUT_OBJECT3DINFO {
     private static final GroupLayout position$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("position"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static final GroupLayout position$layout() {
         return position$LAYOUT;
     }
 
     private static final long position$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static final long position$offset() {
         return position$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static MemorySegment position(MemorySegment struct) {
         return struct.asSlice(position$OFFSET, position$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static void position(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, position$OFFSET, position$LAYOUT.byteSize());
     }
 
     private static final OfFloat gain$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("gain"));
 
-    /** Layout for field: {@snippet lang=c : float gain } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float gain }
+     */
     public static final OfFloat gain$layout() {
         return gain$LAYOUT;
     }
 
     private static final long gain$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : float gain } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float gain }
+     */
     public static final long gain$offset() {
         return gain$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float gain } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float gain }
+     */
     public static float gain(MemorySegment struct) {
         return struct.get(gain$LAYOUT, gain$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float gain } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float gain }
+     */
     public static void gain(MemorySegment struct, float fieldValue) {
         struct.set(gain$LAYOUT, gain$OFFSET, fieldValue);
     }
 
     private static final OfFloat spread$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("spread"));
 
-    /** Layout for field: {@snippet lang=c : float spread } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float spread }
+     */
     public static final OfFloat spread$layout() {
         return spread$LAYOUT;
     }
 
     private static final long spread$OFFSET = 28;
 
-    /** Offset for field: {@snippet lang=c : float spread } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float spread }
+     */
     public static final long spread$offset() {
         return spread$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float spread } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float spread }
+     */
     public static float spread(MemorySegment struct) {
         return struct.get(spread$LAYOUT, spread$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float spread } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float spread }
+     */
     public static void spread(MemorySegment struct, float fieldValue) {
         struct.set(spread$LAYOUT, spread$OFFSET, fieldValue);
     }
@@ -163,24 +245,40 @@ public class FMOD_OUTPUT_OBJECT3DINFO {
     private static final OfFloat priority$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("priority"));
 
-    /** Layout for field: {@snippet lang=c : float priority } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float priority }
+     */
     public static final OfFloat priority$layout() {
         return priority$LAYOUT;
     }
 
     private static final long priority$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : float priority } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float priority }
+     */
     public static final long priority$offset() {
         return priority$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float priority } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float priority }
+     */
     public static float priority(MemorySegment struct) {
         return struct.get(priority$LAYOUT, priority$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float priority } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float priority }
+     */
     public static void priority(MemorySegment struct, float fieldValue) {
         struct.set(priority$LAYOUT, priority$OFFSET, fieldValue);
     }

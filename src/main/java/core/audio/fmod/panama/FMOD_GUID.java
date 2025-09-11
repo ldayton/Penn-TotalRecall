@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_GUID { unsigned int Data1; unsigned short Data2; unsigned short
  * Data3; unsigned char Data4[8]; } }
  */
@@ -36,72 +38,120 @@ public class FMOD_GUID {
 
     private static final OfInt Data1$LAYOUT = (OfInt) $LAYOUT.select(groupElement("Data1"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int Data1 } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int Data1 }
+     */
     public static final OfInt Data1$layout() {
         return Data1$LAYOUT;
     }
 
     private static final long Data1$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : unsigned int Data1 } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int Data1 }
+     */
     public static final long Data1$offset() {
         return Data1$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int Data1 } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int Data1 }
+     */
     public static int Data1(MemorySegment struct) {
         return struct.get(Data1$LAYOUT, Data1$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int Data1 } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int Data1 }
+     */
     public static void Data1(MemorySegment struct, int fieldValue) {
         struct.set(Data1$LAYOUT, Data1$OFFSET, fieldValue);
     }
 
     private static final OfShort Data2$LAYOUT = (OfShort) $LAYOUT.select(groupElement("Data2"));
 
-    /** Layout for field: {@snippet lang=c : unsigned short Data2 } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned short Data2 }
+     */
     public static final OfShort Data2$layout() {
         return Data2$LAYOUT;
     }
 
     private static final long Data2$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : unsigned short Data2 } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned short Data2 }
+     */
     public static final long Data2$offset() {
         return Data2$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned short Data2 } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned short Data2 }
+     */
     public static short Data2(MemorySegment struct) {
         return struct.get(Data2$LAYOUT, Data2$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned short Data2 } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned short Data2 }
+     */
     public static void Data2(MemorySegment struct, short fieldValue) {
         struct.set(Data2$LAYOUT, Data2$OFFSET, fieldValue);
     }
 
     private static final OfShort Data3$LAYOUT = (OfShort) $LAYOUT.select(groupElement("Data3"));
 
-    /** Layout for field: {@snippet lang=c : unsigned short Data3 } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned short Data3 }
+     */
     public static final OfShort Data3$layout() {
         return Data3$LAYOUT;
     }
 
     private static final long Data3$OFFSET = 6;
 
-    /** Offset for field: {@snippet lang=c : unsigned short Data3 } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned short Data3 }
+     */
     public static final long Data3$offset() {
         return Data3$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned short Data3 } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned short Data3 }
+     */
     public static short Data3(MemorySegment struct) {
         return struct.get(Data3$LAYOUT, Data3$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned short Data3 } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned short Data3 }
+     */
     public static void Data3(MemorySegment struct, short fieldValue) {
         struct.set(Data3$LAYOUT, Data3$OFFSET, fieldValue);
     }
@@ -109,43 +159,71 @@ public class FMOD_GUID {
     private static final SequenceLayout Data4$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("Data4"));
 
-    /** Layout for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static final SequenceLayout Data4$layout() {
         return Data4$LAYOUT;
     }
 
     private static final long Data4$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static final long Data4$offset() {
         return Data4$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static MemorySegment Data4(MemorySegment struct) {
         return struct.asSlice(Data4$OFFSET, Data4$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static void Data4(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, Data4$OFFSET, Data4$LAYOUT.byteSize());
     }
 
     private static long[] Data4$DIMS = {8};
 
-    /** Dimensions for array field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static long[] Data4$dimensions() {
         return Data4$DIMS;
     }
 
     private static final VarHandle Data4$ELEM_HANDLE = Data4$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static byte Data4(MemorySegment struct, long index0) {
         return (byte) Data4$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : unsigned char Data4[8] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : unsigned char Data4[8] }
+     */
     public static void Data4(MemorySegment struct, long index0, byte fieldValue) {
         Data4$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }

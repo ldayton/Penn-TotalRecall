@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_CREATESOUNDEXINFO { int cbsize; unsigned int length; unsigned int
  * fileoffset; int numchannels; int defaultfrequency; FMOD_SOUND_FORMAT format; unsigned int
  * decodebuffersize; int initialsubsound; int numsubsounds; int *inclusionlist; int
@@ -83,48 +85,80 @@ public class FMOD_CREATESOUNDEXINFO {
 
     private static final OfInt cbsize$LAYOUT = (OfInt) $LAYOUT.select(groupElement("cbsize"));
 
-    /** Layout for field: {@snippet lang=c : int cbsize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int cbsize }
+     */
     public static final OfInt cbsize$layout() {
         return cbsize$LAYOUT;
     }
 
     private static final long cbsize$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int cbsize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int cbsize }
+     */
     public static final long cbsize$offset() {
         return cbsize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int cbsize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int cbsize }
+     */
     public static int cbsize(MemorySegment struct) {
         return struct.get(cbsize$LAYOUT, cbsize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int cbsize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int cbsize }
+     */
     public static void cbsize(MemorySegment struct, int fieldValue) {
         struct.set(cbsize$LAYOUT, cbsize$OFFSET, fieldValue);
     }
 
     private static final OfInt length$LAYOUT = (OfInt) $LAYOUT.select(groupElement("length"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static final OfInt length$layout() {
         return length$LAYOUT;
     }
 
     private static final long length$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static final long length$offset() {
         return length$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static int length(MemorySegment struct) {
         return struct.get(length$LAYOUT, length$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static void length(MemorySegment struct, int fieldValue) {
         struct.set(length$LAYOUT, length$OFFSET, fieldValue);
     }
@@ -132,24 +166,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt fileoffset$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("fileoffset"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int fileoffset } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int fileoffset }
+     */
     public static final OfInt fileoffset$layout() {
         return fileoffset$LAYOUT;
     }
 
     private static final long fileoffset$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : unsigned int fileoffset } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int fileoffset }
+     */
     public static final long fileoffset$offset() {
         return fileoffset$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int fileoffset } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int fileoffset }
+     */
     public static int fileoffset(MemorySegment struct) {
         return struct.get(fileoffset$LAYOUT, fileoffset$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int fileoffset } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int fileoffset }
+     */
     public static void fileoffset(MemorySegment struct, int fieldValue) {
         struct.set(fileoffset$LAYOUT, fileoffset$OFFSET, fieldValue);
     }
@@ -157,24 +207,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt numchannels$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numchannels"));
 
-    /** Layout for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final OfInt numchannels$layout() {
         return numchannels$LAYOUT;
     }
 
     private static final long numchannels$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final long numchannels$offset() {
         return numchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static int numchannels(MemorySegment struct) {
         return struct.get(numchannels$LAYOUT, numchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static void numchannels(MemorySegment struct, int fieldValue) {
         struct.set(numchannels$LAYOUT, numchannels$OFFSET, fieldValue);
     }
@@ -182,48 +248,80 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt defaultfrequency$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("defaultfrequency"));
 
-    /** Layout for field: {@snippet lang=c : int defaultfrequency } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int defaultfrequency }
+     */
     public static final OfInt defaultfrequency$layout() {
         return defaultfrequency$LAYOUT;
     }
 
     private static final long defaultfrequency$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : int defaultfrequency } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int defaultfrequency }
+     */
     public static final long defaultfrequency$offset() {
         return defaultfrequency$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int defaultfrequency } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int defaultfrequency }
+     */
     public static int defaultfrequency(MemorySegment struct) {
         return struct.get(defaultfrequency$LAYOUT, defaultfrequency$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int defaultfrequency } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int defaultfrequency }
+     */
     public static void defaultfrequency(MemorySegment struct, int fieldValue) {
         struct.set(defaultfrequency$LAYOUT, defaultfrequency$OFFSET, fieldValue);
     }
 
     private static final OfInt format$LAYOUT = (OfInt) $LAYOUT.select(groupElement("format"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUND_FORMAT format } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_FORMAT format }
+     */
     public static final OfInt format$layout() {
         return format$LAYOUT;
     }
 
     private static final long format$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUND_FORMAT format } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_FORMAT format }
+     */
     public static final long format$offset() {
         return format$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUND_FORMAT format } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_FORMAT format }
+     */
     public static int format(MemorySegment struct) {
         return struct.get(format$LAYOUT, format$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUND_FORMAT format } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_FORMAT format }
+     */
     public static void format(MemorySegment struct, int fieldValue) {
         struct.set(format$LAYOUT, format$OFFSET, fieldValue);
     }
@@ -231,24 +329,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt decodebuffersize$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("decodebuffersize"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int decodebuffersize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int decodebuffersize }
+     */
     public static final OfInt decodebuffersize$layout() {
         return decodebuffersize$LAYOUT;
     }
 
     private static final long decodebuffersize$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : unsigned int decodebuffersize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int decodebuffersize }
+     */
     public static final long decodebuffersize$offset() {
         return decodebuffersize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int decodebuffersize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int decodebuffersize }
+     */
     public static int decodebuffersize(MemorySegment struct) {
         return struct.get(decodebuffersize$LAYOUT, decodebuffersize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int decodebuffersize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int decodebuffersize }
+     */
     public static void decodebuffersize(MemorySegment struct, int fieldValue) {
         struct.set(decodebuffersize$LAYOUT, decodebuffersize$OFFSET, fieldValue);
     }
@@ -256,24 +370,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt initialsubsound$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("initialsubsound"));
 
-    /** Layout for field: {@snippet lang=c : int initialsubsound } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int initialsubsound }
+     */
     public static final OfInt initialsubsound$layout() {
         return initialsubsound$LAYOUT;
     }
 
     private static final long initialsubsound$OFFSET = 28;
 
-    /** Offset for field: {@snippet lang=c : int initialsubsound } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int initialsubsound }
+     */
     public static final long initialsubsound$offset() {
         return initialsubsound$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int initialsubsound } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int initialsubsound }
+     */
     public static int initialsubsound(MemorySegment struct) {
         return struct.get(initialsubsound$LAYOUT, initialsubsound$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int initialsubsound } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int initialsubsound }
+     */
     public static void initialsubsound(MemorySegment struct, int fieldValue) {
         struct.set(initialsubsound$LAYOUT, initialsubsound$OFFSET, fieldValue);
     }
@@ -281,24 +411,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt numsubsounds$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numsubsounds"));
 
-    /** Layout for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static final OfInt numsubsounds$layout() {
         return numsubsounds$LAYOUT;
     }
 
     private static final long numsubsounds$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static final long numsubsounds$offset() {
         return numsubsounds$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static int numsubsounds(MemorySegment struct) {
         return struct.get(numsubsounds$LAYOUT, numsubsounds$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static void numsubsounds(MemorySegment struct, int fieldValue) {
         struct.set(numsubsounds$LAYOUT, numsubsounds$OFFSET, fieldValue);
     }
@@ -306,24 +452,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout inclusionlist$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("inclusionlist"));
 
-    /** Layout for field: {@snippet lang=c : int *inclusionlist } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int *inclusionlist }
+     */
     public static final AddressLayout inclusionlist$layout() {
         return inclusionlist$LAYOUT;
     }
 
     private static final long inclusionlist$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : int *inclusionlist } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int *inclusionlist }
+     */
     public static final long inclusionlist$offset() {
         return inclusionlist$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int *inclusionlist } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int *inclusionlist }
+     */
     public static MemorySegment inclusionlist(MemorySegment struct) {
         return struct.get(inclusionlist$LAYOUT, inclusionlist$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int *inclusionlist } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int *inclusionlist }
+     */
     public static void inclusionlist(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(inclusionlist$LAYOUT, inclusionlist$OFFSET, fieldValue);
     }
@@ -331,24 +493,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt inclusionlistnum$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("inclusionlistnum"));
 
-    /** Layout for field: {@snippet lang=c : int inclusionlistnum } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int inclusionlistnum }
+     */
     public static final OfInt inclusionlistnum$layout() {
         return inclusionlistnum$LAYOUT;
     }
 
     private static final long inclusionlistnum$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : int inclusionlistnum } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int inclusionlistnum }
+     */
     public static final long inclusionlistnum$offset() {
         return inclusionlistnum$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int inclusionlistnum } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int inclusionlistnum }
+     */
     public static int inclusionlistnum(MemorySegment struct) {
         return struct.get(inclusionlistnum$LAYOUT, inclusionlistnum$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int inclusionlistnum } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int inclusionlistnum }
+     */
     public static void inclusionlistnum(MemorySegment struct, int fieldValue) {
         struct.set(inclusionlistnum$LAYOUT, inclusionlistnum$OFFSET, fieldValue);
     }
@@ -356,24 +534,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout pcmreadcallback$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("pcmreadcallback"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback }
+     */
     public static final AddressLayout pcmreadcallback$layout() {
         return pcmreadcallback$LAYOUT;
     }
 
     private static final long pcmreadcallback$OFFSET = 56;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback }
+     */
     public static final long pcmreadcallback$offset() {
         return pcmreadcallback$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback }
+     */
     public static MemorySegment pcmreadcallback(MemorySegment struct) {
         return struct.get(pcmreadcallback$LAYOUT, pcmreadcallback$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMREAD_CALLBACK pcmreadcallback }
+     */
     public static void pcmreadcallback(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(pcmreadcallback$LAYOUT, pcmreadcallback$OFFSET, fieldValue);
     }
@@ -381,24 +575,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout pcmsetposcallback$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("pcmsetposcallback"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback }
+     */
     public static final AddressLayout pcmsetposcallback$layout() {
         return pcmsetposcallback$LAYOUT;
     }
 
     private static final long pcmsetposcallback$OFFSET = 64;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback }
+     */
     public static final long pcmsetposcallback$offset() {
         return pcmsetposcallback$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback }
+     */
     public static MemorySegment pcmsetposcallback(MemorySegment struct) {
         return struct.get(pcmsetposcallback$LAYOUT, pcmsetposcallback$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_PCMSETPOS_CALLBACK pcmsetposcallback }
+     */
     public static void pcmsetposcallback(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(pcmsetposcallback$LAYOUT, pcmsetposcallback$OFFSET, fieldValue);
     }
@@ -406,24 +616,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout nonblockcallback$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("nonblockcallback"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback }
+     */
     public static final AddressLayout nonblockcallback$layout() {
         return nonblockcallback$LAYOUT;
     }
 
     private static final long nonblockcallback$OFFSET = 72;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback }
+     */
     public static final long nonblockcallback$offset() {
         return nonblockcallback$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback }
+     */
     public static MemorySegment nonblockcallback(MemorySegment struct) {
         return struct.get(nonblockcallback$LAYOUT, nonblockcallback$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_NONBLOCK_CALLBACK nonblockcallback }
+     */
     public static void nonblockcallback(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(nonblockcallback$LAYOUT, nonblockcallback$OFFSET, fieldValue);
     }
@@ -431,24 +657,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout dlsname$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("dlsname"));
 
-    /** Layout for field: {@snippet lang=c : const char *dlsname } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *dlsname }
+     */
     public static final AddressLayout dlsname$layout() {
         return dlsname$LAYOUT;
     }
 
     private static final long dlsname$OFFSET = 80;
 
-    /** Offset for field: {@snippet lang=c : const char *dlsname } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *dlsname }
+     */
     public static final long dlsname$offset() {
         return dlsname$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *dlsname } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *dlsname }
+     */
     public static MemorySegment dlsname(MemorySegment struct) {
         return struct.get(dlsname$LAYOUT, dlsname$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *dlsname } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *dlsname }
+     */
     public static void dlsname(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(dlsname$LAYOUT, dlsname$OFFSET, fieldValue);
     }
@@ -456,24 +698,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout encryptionkey$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("encryptionkey"));
 
-    /** Layout for field: {@snippet lang=c : const char *encryptionkey } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : const char *encryptionkey }
+     */
     public static final AddressLayout encryptionkey$layout() {
         return encryptionkey$LAYOUT;
     }
 
     private static final long encryptionkey$OFFSET = 88;
 
-    /** Offset for field: {@snippet lang=c : const char *encryptionkey } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : const char *encryptionkey }
+     */
     public static final long encryptionkey$offset() {
         return encryptionkey$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : const char *encryptionkey } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : const char *encryptionkey }
+     */
     public static MemorySegment encryptionkey(MemorySegment struct) {
         return struct.get(encryptionkey$LAYOUT, encryptionkey$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : const char *encryptionkey } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : const char *encryptionkey }
+     */
     public static void encryptionkey(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(encryptionkey$LAYOUT, encryptionkey$OFFSET, fieldValue);
     }
@@ -481,24 +739,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt maxpolyphony$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxpolyphony"));
 
-    /** Layout for field: {@snippet lang=c : int maxpolyphony } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxpolyphony }
+     */
     public static final OfInt maxpolyphony$layout() {
         return maxpolyphony$LAYOUT;
     }
 
     private static final long maxpolyphony$OFFSET = 96;
 
-    /** Offset for field: {@snippet lang=c : int maxpolyphony } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxpolyphony }
+     */
     public static final long maxpolyphony$offset() {
         return maxpolyphony$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxpolyphony } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxpolyphony }
+     */
     public static int maxpolyphony(MemorySegment struct) {
         return struct.get(maxpolyphony$LAYOUT, maxpolyphony$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxpolyphony } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxpolyphony }
+     */
     public static void maxpolyphony(MemorySegment struct, int fieldValue) {
         struct.set(maxpolyphony$LAYOUT, maxpolyphony$OFFSET, fieldValue);
     }
@@ -506,24 +780,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout userdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("userdata"));
 
-    /** Layout for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final AddressLayout userdata$layout() {
         return userdata$LAYOUT;
     }
 
     private static final long userdata$OFFSET = 104;
 
-    /** Offset for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final long userdata$offset() {
         return userdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static MemorySegment userdata(MemorySegment struct) {
         return struct.get(userdata$LAYOUT, userdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static void userdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(userdata$LAYOUT, userdata$OFFSET, fieldValue);
     }
@@ -531,24 +821,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt suggestedsoundtype$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("suggestedsoundtype"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype }
+     */
     public static final OfInt suggestedsoundtype$layout() {
         return suggestedsoundtype$LAYOUT;
     }
 
     private static final long suggestedsoundtype$OFFSET = 112;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype }
+     */
     public static final long suggestedsoundtype$offset() {
         return suggestedsoundtype$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype }
+     */
     public static int suggestedsoundtype(MemorySegment struct) {
         return struct.get(suggestedsoundtype$LAYOUT, suggestedsoundtype$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUND_TYPE suggestedsoundtype }
+     */
     public static void suggestedsoundtype(MemorySegment struct, int fieldValue) {
         struct.set(suggestedsoundtype$LAYOUT, suggestedsoundtype$OFFSET, fieldValue);
     }
@@ -556,24 +862,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuseropen$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuseropen"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen }
+     */
     public static final AddressLayout fileuseropen$layout() {
         return fileuseropen$LAYOUT;
     }
 
     private static final long fileuseropen$OFFSET = 120;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen }
+     */
     public static final long fileuseropen$offset() {
         return fileuseropen$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen }
+     */
     public static MemorySegment fileuseropen(MemorySegment struct) {
         return struct.get(fileuseropen$LAYOUT, fileuseropen$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_OPEN_CALLBACK fileuseropen }
+     */
     public static void fileuseropen(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuseropen$LAYOUT, fileuseropen$OFFSET, fieldValue);
     }
@@ -581,24 +903,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserclose$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserclose"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose }
+     */
     public static final AddressLayout fileuserclose$layout() {
         return fileuserclose$LAYOUT;
     }
 
     private static final long fileuserclose$OFFSET = 128;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose }
+     */
     public static final long fileuserclose$offset() {
         return fileuserclose$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose }
+     */
     public static MemorySegment fileuserclose(MemorySegment struct) {
         return struct.get(fileuserclose$LAYOUT, fileuserclose$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_CLOSE_CALLBACK fileuserclose }
+     */
     public static void fileuserclose(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserclose$LAYOUT, fileuserclose$OFFSET, fieldValue);
     }
@@ -606,24 +944,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserread$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserread"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread }
+     */
     public static final AddressLayout fileuserread$layout() {
         return fileuserread$LAYOUT;
     }
 
     private static final long fileuserread$OFFSET = 136;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread }
+     */
     public static final long fileuserread$offset() {
         return fileuserread$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread }
+     */
     public static MemorySegment fileuserread(MemorySegment struct) {
         return struct.get(fileuserread$LAYOUT, fileuserread$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_READ_CALLBACK fileuserread }
+     */
     public static void fileuserread(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserread$LAYOUT, fileuserread$OFFSET, fieldValue);
     }
@@ -631,24 +985,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserseek$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserseek"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek }
+     */
     public static final AddressLayout fileuserseek$layout() {
         return fileuserseek$LAYOUT;
     }
 
     private static final long fileuserseek$OFFSET = 144;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek }
+     */
     public static final long fileuserseek$offset() {
         return fileuserseek$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek }
+     */
     public static MemorySegment fileuserseek(MemorySegment struct) {
         return struct.get(fileuserseek$LAYOUT, fileuserseek$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_SEEK_CALLBACK fileuserseek }
+     */
     public static void fileuserseek(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserseek$LAYOUT, fileuserseek$OFFSET, fieldValue);
     }
@@ -656,24 +1026,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserasyncread$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserasyncread"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread }
+     */
     public static final AddressLayout fileuserasyncread$layout() {
         return fileuserasyncread$LAYOUT;
     }
 
     private static final long fileuserasyncread$OFFSET = 152;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread }
+     */
     public static final long fileuserasyncread$offset() {
         return fileuserasyncread$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread }
+     */
     public static MemorySegment fileuserasyncread(MemorySegment struct) {
         return struct.get(fileuserasyncread$LAYOUT, fileuserasyncread$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCREAD_CALLBACK fileuserasyncread }
+     */
     public static void fileuserasyncread(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserasyncread$LAYOUT, fileuserasyncread$OFFSET, fieldValue);
     }
@@ -681,24 +1067,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserasynccancel$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserasynccancel"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel }
+     */
     public static final AddressLayout fileuserasynccancel$layout() {
         return fileuserasynccancel$LAYOUT;
     }
 
     private static final long fileuserasynccancel$OFFSET = 160;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel }
+     */
     public static final long fileuserasynccancel$offset() {
         return fileuserasynccancel$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel }
+     */
     public static MemorySegment fileuserasynccancel(MemorySegment struct) {
         return struct.get(fileuserasynccancel$LAYOUT, fileuserasynccancel$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCCANCEL_CALLBACK fileuserasynccancel }
+     */
     public static void fileuserasynccancel(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserasynccancel$LAYOUT, fileuserasynccancel$OFFSET, fieldValue);
     }
@@ -706,24 +1108,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fileuserdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fileuserdata"));
 
-    /** Layout for field: {@snippet lang=c : void *fileuserdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *fileuserdata }
+     */
     public static final AddressLayout fileuserdata$layout() {
         return fileuserdata$LAYOUT;
     }
 
     private static final long fileuserdata$OFFSET = 168;
 
-    /** Offset for field: {@snippet lang=c : void *fileuserdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *fileuserdata }
+     */
     public static final long fileuserdata$offset() {
         return fileuserdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *fileuserdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *fileuserdata }
+     */
     public static MemorySegment fileuserdata(MemorySegment struct) {
         return struct.get(fileuserdata$LAYOUT, fileuserdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *fileuserdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *fileuserdata }
+     */
     public static void fileuserdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fileuserdata$LAYOUT, fileuserdata$OFFSET, fieldValue);
     }
@@ -731,24 +1149,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt filebuffersize$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("filebuffersize"));
 
-    /** Layout for field: {@snippet lang=c : int filebuffersize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int filebuffersize }
+     */
     public static final OfInt filebuffersize$layout() {
         return filebuffersize$LAYOUT;
     }
 
     private static final long filebuffersize$OFFSET = 176;
 
-    /** Offset for field: {@snippet lang=c : int filebuffersize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int filebuffersize }
+     */
     public static final long filebuffersize$offset() {
         return filebuffersize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int filebuffersize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int filebuffersize }
+     */
     public static int filebuffersize(MemorySegment struct) {
         return struct.get(filebuffersize$LAYOUT, filebuffersize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int filebuffersize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int filebuffersize }
+     */
     public static void filebuffersize(MemorySegment struct, int fieldValue) {
         struct.set(filebuffersize$LAYOUT, filebuffersize$OFFSET, fieldValue);
     }
@@ -756,24 +1190,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt channelorder$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("channelorder"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CHANNELORDER channelorder } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELORDER channelorder }
+     */
     public static final OfInt channelorder$layout() {
         return channelorder$LAYOUT;
     }
 
     private static final long channelorder$OFFSET = 180;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CHANNELORDER channelorder } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELORDER channelorder }
+     */
     public static final long channelorder$offset() {
         return channelorder$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CHANNELORDER channelorder } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELORDER channelorder }
+     */
     public static int channelorder(MemorySegment struct) {
         return struct.get(channelorder$LAYOUT, channelorder$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CHANNELORDER channelorder } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELORDER channelorder }
+     */
     public static void channelorder(MemorySegment struct, int fieldValue) {
         struct.set(channelorder$LAYOUT, channelorder$OFFSET, fieldValue);
     }
@@ -781,24 +1231,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout initialsoundgroup$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("initialsoundgroup"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup }
+     */
     public static final AddressLayout initialsoundgroup$layout() {
         return initialsoundgroup$LAYOUT;
     }
 
     private static final long initialsoundgroup$OFFSET = 184;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup }
+     */
     public static final long initialsoundgroup$offset() {
         return initialsoundgroup$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup }
+     */
     public static MemorySegment initialsoundgroup(MemorySegment struct) {
         return struct.get(initialsoundgroup$LAYOUT, initialsoundgroup$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SOUNDGROUP *initialsoundgroup }
+     */
     public static void initialsoundgroup(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(initialsoundgroup$LAYOUT, initialsoundgroup$OFFSET, fieldValue);
     }
@@ -806,24 +1272,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt initialseekposition$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("initialseekposition"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int initialseekposition } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int initialseekposition }
+     */
     public static final OfInt initialseekposition$layout() {
         return initialseekposition$LAYOUT;
     }
 
     private static final long initialseekposition$OFFSET = 192;
 
-    /** Offset for field: {@snippet lang=c : unsigned int initialseekposition } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int initialseekposition }
+     */
     public static final long initialseekposition$offset() {
         return initialseekposition$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int initialseekposition } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int initialseekposition }
+     */
     public static int initialseekposition(MemorySegment struct) {
         return struct.get(initialseekposition$LAYOUT, initialseekposition$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int initialseekposition } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int initialseekposition }
+     */
     public static void initialseekposition(MemorySegment struct, int fieldValue) {
         struct.set(initialseekposition$LAYOUT, initialseekposition$OFFSET, fieldValue);
     }
@@ -831,24 +1313,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt initialseekpostype$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("initialseekpostype"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype }
+     */
     public static final OfInt initialseekpostype$layout() {
         return initialseekpostype$LAYOUT;
     }
 
     private static final long initialseekpostype$OFFSET = 196;
 
-    /** Offset for field: {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype }
+     */
     public static final long initialseekpostype$offset() {
         return initialseekpostype$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype }
+     */
     public static int initialseekpostype(MemorySegment struct) {
         return struct.get(initialseekpostype$LAYOUT, initialseekpostype$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_TIMEUNIT initialseekpostype }
+     */
     public static void initialseekpostype(MemorySegment struct, int fieldValue) {
         struct.set(initialseekpostype$LAYOUT, initialseekpostype$OFFSET, fieldValue);
     }
@@ -856,24 +1354,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt ignoresetfilesystem$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("ignoresetfilesystem"));
 
-    /** Layout for field: {@snippet lang=c : int ignoresetfilesystem } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int ignoresetfilesystem }
+     */
     public static final OfInt ignoresetfilesystem$layout() {
         return ignoresetfilesystem$LAYOUT;
     }
 
     private static final long ignoresetfilesystem$OFFSET = 200;
 
-    /** Offset for field: {@snippet lang=c : int ignoresetfilesystem } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int ignoresetfilesystem }
+     */
     public static final long ignoresetfilesystem$offset() {
         return ignoresetfilesystem$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int ignoresetfilesystem } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int ignoresetfilesystem }
+     */
     public static int ignoresetfilesystem(MemorySegment struct) {
         return struct.get(ignoresetfilesystem$LAYOUT, ignoresetfilesystem$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int ignoresetfilesystem } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int ignoresetfilesystem }
+     */
     public static void ignoresetfilesystem(MemorySegment struct, int fieldValue) {
         struct.set(ignoresetfilesystem$LAYOUT, ignoresetfilesystem$OFFSET, fieldValue);
     }
@@ -881,24 +1395,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt audioqueuepolicy$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("audioqueuepolicy"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int audioqueuepolicy } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int audioqueuepolicy }
+     */
     public static final OfInt audioqueuepolicy$layout() {
         return audioqueuepolicy$LAYOUT;
     }
 
     private static final long audioqueuepolicy$OFFSET = 204;
 
-    /** Offset for field: {@snippet lang=c : unsigned int audioqueuepolicy } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int audioqueuepolicy }
+     */
     public static final long audioqueuepolicy$offset() {
         return audioqueuepolicy$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int audioqueuepolicy } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int audioqueuepolicy }
+     */
     public static int audioqueuepolicy(MemorySegment struct) {
         return struct.get(audioqueuepolicy$LAYOUT, audioqueuepolicy$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int audioqueuepolicy } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int audioqueuepolicy }
+     */
     public static void audioqueuepolicy(MemorySegment struct, int fieldValue) {
         struct.set(audioqueuepolicy$LAYOUT, audioqueuepolicy$OFFSET, fieldValue);
     }
@@ -906,24 +1436,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt minmidigranularity$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("minmidigranularity"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int minmidigranularity } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int minmidigranularity }
+     */
     public static final OfInt minmidigranularity$layout() {
         return minmidigranularity$LAYOUT;
     }
 
     private static final long minmidigranularity$OFFSET = 208;
 
-    /** Offset for field: {@snippet lang=c : unsigned int minmidigranularity } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int minmidigranularity }
+     */
     public static final long minmidigranularity$offset() {
         return minmidigranularity$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int minmidigranularity } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int minmidigranularity }
+     */
     public static int minmidigranularity(MemorySegment struct) {
         return struct.get(minmidigranularity$LAYOUT, minmidigranularity$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int minmidigranularity } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int minmidigranularity }
+     */
     public static void minmidigranularity(MemorySegment struct, int fieldValue) {
         struct.set(minmidigranularity$LAYOUT, minmidigranularity$OFFSET, fieldValue);
     }
@@ -931,24 +1477,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final OfInt nonblockthreadid$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("nonblockthreadid"));
 
-    /** Layout for field: {@snippet lang=c : int nonblockthreadid } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int nonblockthreadid }
+     */
     public static final OfInt nonblockthreadid$layout() {
         return nonblockthreadid$LAYOUT;
     }
 
     private static final long nonblockthreadid$OFFSET = 212;
 
-    /** Offset for field: {@snippet lang=c : int nonblockthreadid } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int nonblockthreadid }
+     */
     public static final long nonblockthreadid$offset() {
         return nonblockthreadid$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int nonblockthreadid } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int nonblockthreadid }
+     */
     public static int nonblockthreadid(MemorySegment struct) {
         return struct.get(nonblockthreadid$LAYOUT, nonblockthreadid$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int nonblockthreadid } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int nonblockthreadid }
+     */
     public static void nonblockthreadid(MemorySegment struct, int fieldValue) {
         struct.set(nonblockthreadid$LAYOUT, nonblockthreadid$OFFSET, fieldValue);
     }
@@ -956,24 +1518,40 @@ public class FMOD_CREATESOUNDEXINFO {
     private static final AddressLayout fsbguid$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("fsbguid"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_GUID *fsbguid } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_GUID *fsbguid }
+     */
     public static final AddressLayout fsbguid$layout() {
         return fsbguid$LAYOUT;
     }
 
     private static final long fsbguid$OFFSET = 216;
 
-    /** Offset for field: {@snippet lang=c : FMOD_GUID *fsbguid } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_GUID *fsbguid }
+     */
     public static final long fsbguid$offset() {
         return fsbguid$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_GUID *fsbguid } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_GUID *fsbguid }
+     */
     public static MemorySegment fsbguid(MemorySegment struct) {
         return struct.get(fsbguid$LAYOUT, fsbguid$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_GUID *fsbguid } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_GUID *fsbguid }
+     */
     public static void fsbguid(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(fsbguid$LAYOUT, fsbguid$OFFSET, fieldValue);
     }

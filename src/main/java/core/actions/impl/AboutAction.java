@@ -58,16 +58,17 @@ public class AboutAction extends Action {
      */
     public static String buildAboutMessage(String appName, String appVersion) {
         return """
-               %s v%s
-               Maintainer: %s
+        %s v%s
+        Maintainer: %s
 
-               Released by:
-               %s
-               %s
-               %s
+        Released by:
+        %s
+        %s
+        %s
 
-               License: %s
-               %s"""
+        License: %s
+        %s\
+        """
                 .formatted(
                         appName,
                         appVersion,

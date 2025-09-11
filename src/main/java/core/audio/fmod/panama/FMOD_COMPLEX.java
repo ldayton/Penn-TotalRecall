@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_COMPLEX { float real; float imag; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_COMPLEX { float real; float imag; } }
+ */
 public class FMOD_COMPLEX {
 
     FMOD_COMPLEX() {
@@ -30,48 +34,80 @@ public class FMOD_COMPLEX {
 
     private static final OfFloat real$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("real"));
 
-    /** Layout for field: {@snippet lang=c : float real } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float real }
+     */
     public static final OfFloat real$layout() {
         return real$LAYOUT;
     }
 
     private static final long real$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float real } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float real }
+     */
     public static final long real$offset() {
         return real$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float real } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float real }
+     */
     public static float real(MemorySegment struct) {
         return struct.get(real$LAYOUT, real$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float real } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float real }
+     */
     public static void real(MemorySegment struct, float fieldValue) {
         struct.set(real$LAYOUT, real$OFFSET, fieldValue);
     }
 
     private static final OfFloat imag$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("imag"));
 
-    /** Layout for field: {@snippet lang=c : float imag } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float imag }
+     */
     public static final OfFloat imag$layout() {
         return imag$LAYOUT;
     }
 
     private static final long imag$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float imag } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float imag }
+     */
     public static final long imag$offset() {
         return imag$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float imag } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float imag }
+     */
     public static float imag(MemorySegment struct) {
         return struct.get(imag$LAYOUT, imag$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float imag } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float imag }
+     */
     public static void imag(MemorySegment struct, float fieldValue) {
         struct.set(imag$LAYOUT, imag$OFFSET, fieldValue);
     }

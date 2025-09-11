@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef void *(*FMOD_CODEC_ALLOC_FUNC)(unsigned int, unsigned int, const char
  * *, int) }
  */

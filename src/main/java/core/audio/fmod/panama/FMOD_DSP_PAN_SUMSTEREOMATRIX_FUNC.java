@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_DSP_PAN_SUMSTEREOMATRIX_FUNC)(FMOD_DSP_STATE *,
  * FMOD_SPEAKERMODE, float, float, float, int, float *) }
  */

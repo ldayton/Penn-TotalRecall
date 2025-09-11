@@ -28,7 +28,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPIndex(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPIndex(FMOD_CHANNEL
      * *channel, FMOD_DSP *dsp, int *index) }
      */
     public static FunctionDescriptor FMOD_Channel_GetDSPIndex$descriptor() {
@@ -36,7 +38,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetDSPIndex(FMOD_CHANNEL *channel, FMOD_DSP *dsp, int *index) }
      */
     public static MethodHandle FMOD_Channel_GetDSPIndex$handle() {
@@ -44,7 +48,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPIndex(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPIndex(FMOD_CHANNEL *channel,
      * FMOD_DSP *dsp, int *index) }
      */
     public static MemorySegment FMOD_Channel_GetDSPIndex$address() {
@@ -52,6 +58,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPIndex(FMOD_CHANNEL *channel, FMOD_DSP *dsp,
      * int *index) }
      */
@@ -80,7 +88,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DAttributes(FMOD_CHANNEL *channel, const FMOD_VECTOR *pos, const FMOD_VECTOR
      * *vel) }
      */
@@ -89,7 +99,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DAttributes(FMOD_CHANNEL *channel, const FMOD_VECTOR *pos, const FMOD_VECTOR
      * *vel) }
      */
@@ -98,7 +110,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DAttributes(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DAttributes(FMOD_CHANNEL
      * *channel, const FMOD_VECTOR *pos, const FMOD_VECTOR *vel) }
      */
     public static MemorySegment FMOD_Channel_Set3DAttributes$address() {
@@ -106,6 +120,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DAttributes(FMOD_CHANNEL *channel, const
      * FMOD_VECTOR *pos, const FMOD_VECTOR *vel) }
      */
@@ -134,7 +150,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DAttributes(FMOD_CHANNEL *channel, FMOD_VECTOR *pos, FMOD_VECTOR *vel) }
      */
     public static FunctionDescriptor FMOD_Channel_Get3DAttributes$descriptor() {
@@ -142,7 +160,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DAttributes(FMOD_CHANNEL *channel, FMOD_VECTOR *pos, FMOD_VECTOR *vel) }
      */
     public static MethodHandle FMOD_Channel_Get3DAttributes$handle() {
@@ -150,7 +170,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DAttributes(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DAttributes(FMOD_CHANNEL
      * *channel, FMOD_VECTOR *pos, FMOD_VECTOR *vel) }
      */
     public static MemorySegment FMOD_Channel_Get3DAttributes$address() {
@@ -158,6 +180,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DAttributes(FMOD_CHANNEL *channel,
      * FMOD_VECTOR *pos, FMOD_VECTOR *vel) }
      */
@@ -186,7 +210,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DMinMaxDistance(FMOD_CHANNEL *channel, float mindistance, float maxdistance)
      * }
      */
@@ -195,7 +221,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DMinMaxDistance(FMOD_CHANNEL *channel, float mindistance, float maxdistance)
      * }
      */
@@ -204,7 +232,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DMinMaxDistance(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DMinMaxDistance(FMOD_CHANNEL
      * *channel, float mindistance, float maxdistance) }
      */
     public static MemorySegment FMOD_Channel_Set3DMinMaxDistance$address() {
@@ -212,6 +242,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DMinMaxDistance(FMOD_CHANNEL *channel, float
      * mindistance, float maxdistance) }
      */
@@ -241,7 +273,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DMinMaxDistance(FMOD_CHANNEL *channel, float *mindistance, float
      * *maxdistance) }
      */
@@ -250,7 +284,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DMinMaxDistance(FMOD_CHANNEL *channel, float *mindistance, float
      * *maxdistance) }
      */
@@ -259,7 +295,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DMinMaxDistance(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DMinMaxDistance(FMOD_CHANNEL
      * *channel, float *mindistance, float *maxdistance) }
      */
     public static MemorySegment FMOD_Channel_Get3DMinMaxDistance$address() {
@@ -267,6 +305,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DMinMaxDistance(FMOD_CHANNEL *channel, float
      * *mindistance, float *maxdistance) }
      */
@@ -300,7 +340,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DConeSettings(FMOD_CHANNEL *channel, float insideconeangle, float
      * outsideconeangle, float outsidevolume) }
      */
@@ -309,7 +351,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DConeSettings(FMOD_CHANNEL *channel, float insideconeangle, float
      * outsideconeangle, float outsidevolume) }
      */
@@ -318,7 +362,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeSettings(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeSettings(FMOD_CHANNEL
      * *channel, float insideconeangle, float outsideconeangle, float outsidevolume) }
      */
     public static MemorySegment FMOD_Channel_Set3DConeSettings$address() {
@@ -326,6 +372,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeSettings(FMOD_CHANNEL *channel, float
      * insideconeangle, float outsideconeangle, float outsidevolume) }
      */
@@ -366,7 +414,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DConeSettings(FMOD_CHANNEL *channel, float *insideconeangle, float
      * *outsideconeangle, float *outsidevolume) }
      */
@@ -375,7 +425,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DConeSettings(FMOD_CHANNEL *channel, float *insideconeangle, float
      * *outsideconeangle, float *outsidevolume) }
      */
@@ -384,7 +436,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeSettings(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeSettings(FMOD_CHANNEL
      * *channel, float *insideconeangle, float *outsideconeangle, float *outsidevolume) }
      */
     public static MemorySegment FMOD_Channel_Get3DConeSettings$address() {
@@ -392,6 +446,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeSettings(FMOD_CHANNEL *channel, float
      * *insideconeangle, float *outsideconeangle, float *outsidevolume) }
      */
@@ -427,7 +483,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DConeOrientation(FMOD_CHANNEL *channel, FMOD_VECTOR *orientation) }
      */
     public static FunctionDescriptor FMOD_Channel_Set3DConeOrientation$descriptor() {
@@ -435,7 +493,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DConeOrientation(FMOD_CHANNEL *channel, FMOD_VECTOR *orientation) }
      */
     public static MethodHandle FMOD_Channel_Set3DConeOrientation$handle() {
@@ -443,7 +503,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeOrientation(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeOrientation(FMOD_CHANNEL
      * *channel, FMOD_VECTOR *orientation) }
      */
     public static MemorySegment FMOD_Channel_Set3DConeOrientation$address() {
@@ -451,6 +513,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DConeOrientation(FMOD_CHANNEL *channel,
      * FMOD_VECTOR *orientation) }
      */
@@ -478,7 +542,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DConeOrientation(FMOD_CHANNEL *channel, FMOD_VECTOR *orientation) }
      */
     public static FunctionDescriptor FMOD_Channel_Get3DConeOrientation$descriptor() {
@@ -486,7 +552,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DConeOrientation(FMOD_CHANNEL *channel, FMOD_VECTOR *orientation) }
      */
     public static MethodHandle FMOD_Channel_Get3DConeOrientation$handle() {
@@ -494,7 +562,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeOrientation(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeOrientation(FMOD_CHANNEL
      * *channel, FMOD_VECTOR *orientation) }
      */
     public static MemorySegment FMOD_Channel_Get3DConeOrientation$address() {
@@ -502,6 +572,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DConeOrientation(FMOD_CHANNEL *channel,
      * FMOD_VECTOR *orientation) }
      */
@@ -530,7 +602,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DCustomRolloff(FMOD_CHANNEL *channel, FMOD_VECTOR *points, int numpoints) }
      */
     public static FunctionDescriptor FMOD_Channel_Set3DCustomRolloff$descriptor() {
@@ -538,7 +612,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DCustomRolloff(FMOD_CHANNEL *channel, FMOD_VECTOR *points, int numpoints) }
      */
     public static MethodHandle FMOD_Channel_Set3DCustomRolloff$handle() {
@@ -546,7 +622,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DCustomRolloff(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DCustomRolloff(FMOD_CHANNEL
      * *channel, FMOD_VECTOR *points, int numpoints) }
      */
     public static MemorySegment FMOD_Channel_Set3DCustomRolloff$address() {
@@ -554,6 +632,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DCustomRolloff(FMOD_CHANNEL *channel,
      * FMOD_VECTOR *points, int numpoints) }
      */
@@ -582,7 +662,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DCustomRolloff(FMOD_CHANNEL *channel, FMOD_VECTOR **points, int *numpoints)
      * }
      */
@@ -591,7 +673,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DCustomRolloff(FMOD_CHANNEL *channel, FMOD_VECTOR **points, int *numpoints)
      * }
      */
@@ -600,7 +684,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DCustomRolloff(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DCustomRolloff(FMOD_CHANNEL
      * *channel, FMOD_VECTOR **points, int *numpoints) }
      */
     public static MemorySegment FMOD_Channel_Get3DCustomRolloff$address() {
@@ -608,6 +694,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DCustomRolloff(FMOD_CHANNEL *channel,
      * FMOD_VECTOR **points, int *numpoints) }
      */
@@ -636,7 +724,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DOcclusion(FMOD_CHANNEL *channel, float directocclusion, float
      * reverbocclusion) }
      */
@@ -645,7 +735,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DOcclusion(FMOD_CHANNEL *channel, float directocclusion, float
      * reverbocclusion) }
      */
@@ -654,7 +746,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DOcclusion(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DOcclusion(FMOD_CHANNEL
      * *channel, float directocclusion, float reverbocclusion) }
      */
     public static MemorySegment FMOD_Channel_Set3DOcclusion$address() {
@@ -662,6 +756,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DOcclusion(FMOD_CHANNEL *channel, float
      * directocclusion, float reverbocclusion) }
      */
@@ -691,7 +787,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DOcclusion(FMOD_CHANNEL *channel, float *directocclusion, float
      * *reverbocclusion) }
      */
@@ -700,7 +798,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DOcclusion(FMOD_CHANNEL *channel, float *directocclusion, float
      * *reverbocclusion) }
      */
@@ -709,7 +809,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DOcclusion(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DOcclusion(FMOD_CHANNEL
      * *channel, float *directocclusion, float *reverbocclusion) }
      */
     public static MemorySegment FMOD_Channel_Get3DOcclusion$address() {
@@ -717,6 +819,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DOcclusion(FMOD_CHANNEL *channel, float
      * *directocclusion, float *reverbocclusion) }
      */
@@ -744,7 +848,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DSpread(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DSpread(FMOD_CHANNEL
      * *channel, float angle) }
      */
     public static FunctionDescriptor FMOD_Channel_Set3DSpread$descriptor() {
@@ -752,7 +858,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DSpread(FMOD_CHANNEL *channel, float angle) }
      */
     public static MethodHandle FMOD_Channel_Set3DSpread$handle() {
@@ -760,7 +868,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DSpread(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DSpread(FMOD_CHANNEL *channel,
      * float angle) }
      */
     public static MemorySegment FMOD_Channel_Set3DSpread$address() {
@@ -768,6 +878,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DSpread(FMOD_CHANNEL *channel, float angle) }
      */
     public static int FMOD_Channel_Set3DSpread(MemorySegment channel, float angle) {
@@ -792,7 +904,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DSpread(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DSpread(FMOD_CHANNEL
      * *channel, float *angle) }
      */
     public static FunctionDescriptor FMOD_Channel_Get3DSpread$descriptor() {
@@ -800,7 +914,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DSpread(FMOD_CHANNEL *channel, float *angle) }
      */
     public static MethodHandle FMOD_Channel_Get3DSpread$handle() {
@@ -808,7 +924,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DSpread(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DSpread(FMOD_CHANNEL *channel,
      * float *angle) }
      */
     public static MemorySegment FMOD_Channel_Get3DSpread$address() {
@@ -816,6 +934,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DSpread(FMOD_CHANNEL *channel, float *angle)
      * }
      */
@@ -841,7 +961,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DLevel(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DLevel(FMOD_CHANNEL
      * *channel, float level) }
      */
     public static FunctionDescriptor FMOD_Channel_Set3DLevel$descriptor() {
@@ -849,7 +971,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DLevel(FMOD_CHANNEL *channel, float level) }
      */
     public static MethodHandle FMOD_Channel_Set3DLevel$handle() {
@@ -857,7 +981,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DLevel(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DLevel(FMOD_CHANNEL *channel,
      * float level) }
      */
     public static MemorySegment FMOD_Channel_Set3DLevel$address() {
@@ -865,6 +991,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DLevel(FMOD_CHANNEL *channel, float level) }
      */
     public static int FMOD_Channel_Set3DLevel(MemorySegment channel, float level) {
@@ -889,7 +1017,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DLevel(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DLevel(FMOD_CHANNEL
      * *channel, float *level) }
      */
     public static FunctionDescriptor FMOD_Channel_Get3DLevel$descriptor() {
@@ -897,7 +1027,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DLevel(FMOD_CHANNEL *channel, float *level) }
      */
     public static MethodHandle FMOD_Channel_Get3DLevel$handle() {
@@ -905,7 +1037,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DLevel(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DLevel(FMOD_CHANNEL *channel,
      * float *level) }
      */
     public static MemorySegment FMOD_Channel_Get3DLevel$address() {
@@ -913,6 +1047,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DLevel(FMOD_CHANNEL *channel, float *level) }
      */
     public static int FMOD_Channel_Get3DLevel(MemorySegment channel, MemorySegment level) {
@@ -938,7 +1074,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DDopplerLevel(FMOD_CHANNEL *channel, float level) }
      */
     public static FunctionDescriptor FMOD_Channel_Set3DDopplerLevel$descriptor() {
@@ -946,7 +1084,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DDopplerLevel(FMOD_CHANNEL *channel, float level) }
      */
     public static MethodHandle FMOD_Channel_Set3DDopplerLevel$handle() {
@@ -954,7 +1094,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDopplerLevel(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDopplerLevel(FMOD_CHANNEL
      * *channel, float level) }
      */
     public static MemorySegment FMOD_Channel_Set3DDopplerLevel$address() {
@@ -962,6 +1104,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDopplerLevel(FMOD_CHANNEL *channel, float
      * level) }
      */
@@ -988,7 +1132,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DDopplerLevel(FMOD_CHANNEL *channel, float *level) }
      */
     public static FunctionDescriptor FMOD_Channel_Get3DDopplerLevel$descriptor() {
@@ -996,7 +1142,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DDopplerLevel(FMOD_CHANNEL *channel, float *level) }
      */
     public static MethodHandle FMOD_Channel_Get3DDopplerLevel$handle() {
@@ -1004,7 +1152,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDopplerLevel(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDopplerLevel(FMOD_CHANNEL
      * *channel, float *level) }
      */
     public static MemorySegment FMOD_Channel_Get3DDopplerLevel$address() {
@@ -1012,6 +1162,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDopplerLevel(FMOD_CHANNEL *channel, float
      * *level) }
      */
@@ -1043,7 +1195,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DDistanceFilter(FMOD_CHANNEL *channel, FMOD_BOOL custom, float customLevel,
      * float centerFreq) }
      */
@@ -1052,7 +1206,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Set3DDistanceFilter(FMOD_CHANNEL *channel, FMOD_BOOL custom, float customLevel,
      * float centerFreq) }
      */
@@ -1061,7 +1217,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDistanceFilter(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDistanceFilter(FMOD_CHANNEL
      * *channel, FMOD_BOOL custom, float customLevel, float centerFreq) }
      */
     public static MemorySegment FMOD_Channel_Set3DDistanceFilter$address() {
@@ -1069,6 +1227,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Set3DDistanceFilter(FMOD_CHANNEL *channel,
      * FMOD_BOOL custom, float customLevel, float centerFreq) }
      */
@@ -1106,7 +1266,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DDistanceFilter(FMOD_CHANNEL *channel, FMOD_BOOL *custom, float
      * *customLevel, float *centerFreq) }
      */
@@ -1115,7 +1277,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_Get3DDistanceFilter(FMOD_CHANNEL *channel, FMOD_BOOL *custom, float
      * *customLevel, float *centerFreq) }
      */
@@ -1124,7 +1288,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDistanceFilter(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDistanceFilter(FMOD_CHANNEL
      * *channel, FMOD_BOOL *custom, float *customLevel, float *centerFreq) }
      */
     public static MemorySegment FMOD_Channel_Get3DDistanceFilter$address() {
@@ -1132,6 +1298,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Get3DDistanceFilter(FMOD_CHANNEL *channel,
      * FMOD_BOOL *custom, float *customLevel, float *centerFreq) }
      */
@@ -1166,7 +1334,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetUserData(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetUserData(FMOD_CHANNEL
      * *channel, void *userdata) }
      */
     public static FunctionDescriptor FMOD_Channel_SetUserData$descriptor() {
@@ -1174,7 +1344,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetUserData(FMOD_CHANNEL *channel, void *userdata) }
      */
     public static MethodHandle FMOD_Channel_SetUserData$handle() {
@@ -1182,7 +1354,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetUserData(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetUserData(FMOD_CHANNEL *channel,
      * void *userdata) }
      */
     public static MemorySegment FMOD_Channel_SetUserData$address() {
@@ -1190,6 +1364,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetUserData(FMOD_CHANNEL *channel, void
      * *userdata) }
      */
@@ -1215,7 +1391,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetUserData(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetUserData(FMOD_CHANNEL
      * *channel, void **userdata) }
      */
     public static FunctionDescriptor FMOD_Channel_GetUserData$descriptor() {
@@ -1223,7 +1401,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetUserData(FMOD_CHANNEL *channel, void **userdata) }
      */
     public static MethodHandle FMOD_Channel_GetUserData$handle() {
@@ -1231,7 +1411,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetUserData(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetUserData(FMOD_CHANNEL *channel,
      * void **userdata) }
      */
     public static MemorySegment FMOD_Channel_GetUserData$address() {
@@ -1239,6 +1421,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetUserData(FMOD_CHANNEL *channel, void
      * **userdata) }
      */
@@ -1264,7 +1448,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetFrequency(FMOD_CHANNEL *channel, float frequency) }
      */
     public static FunctionDescriptor FMOD_Channel_SetFrequency$descriptor() {
@@ -1272,7 +1458,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetFrequency(FMOD_CHANNEL *channel, float frequency) }
      */
     public static MethodHandle FMOD_Channel_SetFrequency$handle() {
@@ -1280,7 +1468,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFrequency(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFrequency(FMOD_CHANNEL *channel,
      * float frequency) }
      */
     public static MemorySegment FMOD_Channel_SetFrequency$address() {
@@ -1288,6 +1478,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFrequency(FMOD_CHANNEL *channel, float
      * frequency) }
      */
@@ -1313,7 +1505,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetFrequency(FMOD_CHANNEL *channel, float *frequency) }
      */
     public static FunctionDescriptor FMOD_Channel_GetFrequency$descriptor() {
@@ -1321,7 +1515,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetFrequency(FMOD_CHANNEL *channel, float *frequency) }
      */
     public static MethodHandle FMOD_Channel_GetFrequency$handle() {
@@ -1329,7 +1525,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFrequency(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFrequency(FMOD_CHANNEL *channel,
      * float *frequency) }
      */
     public static MemorySegment FMOD_Channel_GetFrequency$address() {
@@ -1337,6 +1535,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFrequency(FMOD_CHANNEL *channel, float
      * *frequency) }
      */
@@ -1362,7 +1562,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPriority(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPriority(FMOD_CHANNEL
      * *channel, int priority) }
      */
     public static FunctionDescriptor FMOD_Channel_SetPriority$descriptor() {
@@ -1370,7 +1572,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetPriority(FMOD_CHANNEL *channel, int priority) }
      */
     public static MethodHandle FMOD_Channel_SetPriority$handle() {
@@ -1378,7 +1582,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPriority(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPriority(FMOD_CHANNEL *channel,
      * int priority) }
      */
     public static MemorySegment FMOD_Channel_SetPriority$address() {
@@ -1386,6 +1592,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPriority(FMOD_CHANNEL *channel, int priority)
      * }
      */
@@ -1411,7 +1619,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPriority(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPriority(FMOD_CHANNEL
      * *channel, int *priority) }
      */
     public static FunctionDescriptor FMOD_Channel_GetPriority$descriptor() {
@@ -1419,7 +1629,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetPriority(FMOD_CHANNEL *channel, int *priority) }
      */
     public static MethodHandle FMOD_Channel_GetPriority$handle() {
@@ -1427,7 +1639,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPriority(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPriority(FMOD_CHANNEL *channel,
      * int *priority) }
      */
     public static MemorySegment FMOD_Channel_GetPriority$address() {
@@ -1435,6 +1649,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPriority(FMOD_CHANNEL *channel, int *priority)
      * }
      */
@@ -1461,7 +1677,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPosition(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPosition(FMOD_CHANNEL
      * *channel, unsigned int position, FMOD_TIMEUNIT postype) }
      */
     public static FunctionDescriptor FMOD_Channel_SetPosition$descriptor() {
@@ -1469,7 +1687,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetPosition(FMOD_CHANNEL *channel, unsigned int position, FMOD_TIMEUNIT postype)
      * }
      */
@@ -1478,7 +1698,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPosition(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPosition(FMOD_CHANNEL *channel,
      * unsigned int position, FMOD_TIMEUNIT postype) }
      */
     public static MemorySegment FMOD_Channel_SetPosition$address() {
@@ -1486,6 +1708,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPosition(FMOD_CHANNEL *channel, unsigned int
      * position, FMOD_TIMEUNIT postype) }
      */
@@ -1512,7 +1736,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPosition(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPosition(FMOD_CHANNEL
      * *channel, unsigned int *position, FMOD_TIMEUNIT postype) }
      */
     public static FunctionDescriptor FMOD_Channel_GetPosition$descriptor() {
@@ -1520,7 +1746,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetPosition(FMOD_CHANNEL *channel, unsigned int *position, FMOD_TIMEUNIT
      * postype) }
      */
@@ -1529,7 +1757,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPosition(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPosition(FMOD_CHANNEL *channel,
      * unsigned int *position, FMOD_TIMEUNIT postype) }
      */
     public static MemorySegment FMOD_Channel_GetPosition$address() {
@@ -1537,6 +1767,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPosition(FMOD_CHANNEL *channel, unsigned int
      * *position, FMOD_TIMEUNIT postype) }
      */
@@ -1564,7 +1796,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetChannelGroup(FMOD_CHANNEL *channel, FMOD_CHANNELGROUP *channelgroup) }
      */
     public static FunctionDescriptor FMOD_Channel_SetChannelGroup$descriptor() {
@@ -1572,7 +1806,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetChannelGroup(FMOD_CHANNEL *channel, FMOD_CHANNELGROUP *channelgroup) }
      */
     public static MethodHandle FMOD_Channel_SetChannelGroup$handle() {
@@ -1580,7 +1816,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetChannelGroup(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetChannelGroup(FMOD_CHANNEL
      * *channel, FMOD_CHANNELGROUP *channelgroup) }
      */
     public static MemorySegment FMOD_Channel_SetChannelGroup$address() {
@@ -1588,6 +1826,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetChannelGroup(FMOD_CHANNEL *channel,
      * FMOD_CHANNELGROUP *channelgroup) }
      */
@@ -1615,7 +1855,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetChannelGroup(FMOD_CHANNEL *channel, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static FunctionDescriptor FMOD_Channel_GetChannelGroup$descriptor() {
@@ -1623,7 +1865,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetChannelGroup(FMOD_CHANNEL *channel, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static MethodHandle FMOD_Channel_GetChannelGroup$handle() {
@@ -1631,7 +1875,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetChannelGroup(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetChannelGroup(FMOD_CHANNEL
      * *channel, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static MemorySegment FMOD_Channel_GetChannelGroup$address() {
@@ -1639,6 +1885,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetChannelGroup(FMOD_CHANNEL *channel,
      * FMOD_CHANNELGROUP **channelgroup) }
      */
@@ -1665,7 +1913,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLoopCount(FMOD_CHANNEL *channel, int loopcount) }
      */
     public static FunctionDescriptor FMOD_Channel_SetLoopCount$descriptor() {
@@ -1673,7 +1923,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLoopCount(FMOD_CHANNEL *channel, int loopcount) }
      */
     public static MethodHandle FMOD_Channel_SetLoopCount$handle() {
@@ -1681,7 +1933,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopCount(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopCount(FMOD_CHANNEL *channel,
      * int loopcount) }
      */
     public static MemorySegment FMOD_Channel_SetLoopCount$address() {
@@ -1689,6 +1943,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopCount(FMOD_CHANNEL *channel, int
      * loopcount) }
      */
@@ -1714,7 +1970,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLoopCount(FMOD_CHANNEL *channel, int *loopcount) }
      */
     public static FunctionDescriptor FMOD_Channel_GetLoopCount$descriptor() {
@@ -1722,7 +1980,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLoopCount(FMOD_CHANNEL *channel, int *loopcount) }
      */
     public static MethodHandle FMOD_Channel_GetLoopCount$handle() {
@@ -1730,7 +1990,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopCount(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopCount(FMOD_CHANNEL *channel,
      * int *loopcount) }
      */
     public static MemorySegment FMOD_Channel_GetLoopCount$address() {
@@ -1738,6 +2000,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopCount(FMOD_CHANNEL *channel, int
      * *loopcount) }
      */
@@ -1769,7 +2033,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLoopPoints(FMOD_CHANNEL *channel, unsigned int loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1778,7 +2044,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLoopPoints(FMOD_CHANNEL *channel, unsigned int loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1787,7 +2055,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopPoints(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopPoints(FMOD_CHANNEL *channel,
      * unsigned int loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int loopend, FMOD_TIMEUNIT
      * loopendtype) }
      */
@@ -1796,6 +2066,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLoopPoints(FMOD_CHANNEL *channel, unsigned int
      * loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1834,7 +2106,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLoopPoints(FMOD_CHANNEL *channel, unsigned int *loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1843,7 +2117,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLoopPoints(FMOD_CHANNEL *channel, unsigned int *loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1852,7 +2128,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopPoints(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopPoints(FMOD_CHANNEL *channel,
      * unsigned int *loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT
      * loopendtype) }
      */
@@ -1861,6 +2139,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLoopPoints(FMOD_CHANNEL *channel, unsigned int
      * *loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -1897,7 +2177,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsVirtual(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsVirtual(FMOD_CHANNEL
      * *channel, FMOD_BOOL *isvirtual) }
      */
     public static FunctionDescriptor FMOD_Channel_IsVirtual$descriptor() {
@@ -1905,7 +2187,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_IsVirtual(FMOD_CHANNEL *channel, FMOD_BOOL *isvirtual) }
      */
     public static MethodHandle FMOD_Channel_IsVirtual$handle() {
@@ -1913,7 +2197,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsVirtual(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsVirtual(FMOD_CHANNEL *channel,
      * FMOD_BOOL *isvirtual) }
      */
     public static MemorySegment FMOD_Channel_IsVirtual$address() {
@@ -1921,6 +2207,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsVirtual(FMOD_CHANNEL *channel, FMOD_BOOL
      * *isvirtual) }
      */
@@ -1947,7 +2235,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetCurrentSound(FMOD_CHANNEL *channel, FMOD_SOUND **sound) }
      */
     public static FunctionDescriptor FMOD_Channel_GetCurrentSound$descriptor() {
@@ -1955,7 +2245,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetCurrentSound(FMOD_CHANNEL *channel, FMOD_SOUND **sound) }
      */
     public static MethodHandle FMOD_Channel_GetCurrentSound$handle() {
@@ -1963,7 +2255,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetCurrentSound(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetCurrentSound(FMOD_CHANNEL
      * *channel, FMOD_SOUND **sound) }
      */
     public static MemorySegment FMOD_Channel_GetCurrentSound$address() {
@@ -1971,6 +2265,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetCurrentSound(FMOD_CHANNEL *channel, FMOD_SOUND
      * **sound) }
      */
@@ -1996,7 +2292,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL
      * *channel, int *index) }
      */
     public static FunctionDescriptor FMOD_Channel_GetIndex$descriptor() {
@@ -2004,7 +2302,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL
      * *channel, int *index) }
      */
     public static MethodHandle FMOD_Channel_GetIndex$handle() {
@@ -2012,14 +2312,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL *channel, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL *channel, int
      * *index) }
      */
     public static MemorySegment FMOD_Channel_GetIndex$address() {
         return FMOD_Channel_GetIndex.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL *channel, int *index) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetIndex(FMOD_CHANNEL *channel, int *index) }
+     */
     public static int FMOD_Channel_GetIndex(MemorySegment channel, MemorySegment index) {
         var mh$ = FMOD_Channel_GetIndex.HANDLE;
         try {
@@ -2043,7 +2349,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetSystemObject(FMOD_CHANNELGROUP *channelgroup, FMOD_SYSTEM **system) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetSystemObject$descriptor() {
@@ -2051,7 +2359,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetSystemObject(FMOD_CHANNELGROUP *channelgroup, FMOD_SYSTEM **system) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetSystemObject$handle() {
@@ -2059,7 +2369,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetSystemObject(FMOD_CHANNELGROUP *channelgroup, FMOD_SYSTEM **system) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetSystemObject$address() {
@@ -2067,6 +2379,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetSystemObject(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_SYSTEM **system) }
      */
@@ -2093,7 +2407,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP *channelgroup) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Stop$descriptor() {
@@ -2101,7 +2417,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP *channelgroup) }
      */
     public static MethodHandle FMOD_ChannelGroup_Stop$handle() {
@@ -2109,14 +2427,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP
      * *channelgroup) }
      */
     public static MemorySegment FMOD_ChannelGroup_Stop$address() {
         return FMOD_ChannelGroup_Stop.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP *channelgroup) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Stop(FMOD_CHANNELGROUP *channelgroup) }
+     */
     public static int FMOD_ChannelGroup_Stop(MemorySegment channelgroup) {
         var mh$ = FMOD_ChannelGroup_Stop.HANDLE;
         try {
@@ -2140,7 +2464,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPaused(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetPaused$descriptor() {
@@ -2148,7 +2474,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPaused(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetPaused$handle() {
@@ -2156,7 +2484,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPaused(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPaused(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL paused) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetPaused$address() {
@@ -2164,6 +2494,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPaused(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL paused) }
      */
@@ -2190,7 +2522,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetPaused(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *paused) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetPaused$descriptor() {
@@ -2198,7 +2532,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetPaused(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *paused) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetPaused$handle() {
@@ -2206,7 +2542,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPaused(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPaused(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *paused) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetPaused$address() {
@@ -2214,6 +2552,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPaused(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL *paused) }
      */
@@ -2241,7 +2581,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetVolume(FMOD_CHANNELGROUP *channelgroup, float volume) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetVolume$descriptor() {
@@ -2249,7 +2591,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetVolume(FMOD_CHANNELGROUP *channelgroup, float volume) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetVolume$handle() {
@@ -2257,7 +2601,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolume(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolume(FMOD_CHANNELGROUP
      * *channelgroup, float volume) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetVolume$address() {
@@ -2265,6 +2611,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolume(FMOD_CHANNELGROUP *channelgroup,
      * float volume) }
      */
@@ -2291,7 +2639,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetVolume(FMOD_CHANNELGROUP *channelgroup, float *volume) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetVolume$descriptor() {
@@ -2299,7 +2649,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetVolume(FMOD_CHANNELGROUP *channelgroup, float *volume) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetVolume$handle() {
@@ -2307,7 +2659,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolume(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolume(FMOD_CHANNELGROUP
      * *channelgroup, float *volume) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetVolume$address() {
@@ -2315,6 +2669,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolume(FMOD_CHANNELGROUP *channelgroup,
      * float *volume) }
      */
@@ -2342,7 +2698,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetVolumeRamp(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL ramp) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetVolumeRamp$descriptor() {
@@ -2350,7 +2708,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetVolumeRamp(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL ramp) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetVolumeRamp$handle() {
@@ -2358,7 +2718,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolumeRamp(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolumeRamp(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL ramp) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetVolumeRamp$address() {
@@ -2366,6 +2728,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetVolumeRamp(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL ramp) }
      */
@@ -2392,7 +2756,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetVolumeRamp(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *ramp) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetVolumeRamp$descriptor() {
@@ -2400,7 +2766,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetVolumeRamp(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *ramp) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetVolumeRamp$handle() {
@@ -2408,7 +2776,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolumeRamp(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolumeRamp(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *ramp) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetVolumeRamp$address() {
@@ -2416,6 +2786,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetVolumeRamp(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *ramp) }
      */
@@ -2443,7 +2815,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetAudibility(FMOD_CHANNELGROUP *channelgroup, float *audibility) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetAudibility$descriptor() {
@@ -2451,7 +2825,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetAudibility(FMOD_CHANNELGROUP *channelgroup, float *audibility) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetAudibility$handle() {
@@ -2459,7 +2835,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetAudibility(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetAudibility(FMOD_CHANNELGROUP
      * *channelgroup, float *audibility) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetAudibility$address() {
@@ -2467,6 +2845,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetAudibility(FMOD_CHANNELGROUP
      * *channelgroup, float *audibility) }
      */
@@ -2493,7 +2873,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPitch(FMOD_CHANNELGROUP *channelgroup, float pitch) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetPitch$descriptor() {
@@ -2501,7 +2883,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPitch(FMOD_CHANNELGROUP *channelgroup, float pitch) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetPitch$handle() {
@@ -2509,7 +2893,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPitch(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPitch(FMOD_CHANNELGROUP
      * *channelgroup, float pitch) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetPitch$address() {
@@ -2517,6 +2903,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPitch(FMOD_CHANNELGROUP *channelgroup,
      * float pitch) }
      */
@@ -2542,7 +2930,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetPitch(FMOD_CHANNELGROUP *channelgroup, float *pitch) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetPitch$descriptor() {
@@ -2550,7 +2940,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetPitch(FMOD_CHANNELGROUP *channelgroup, float *pitch) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetPitch$handle() {
@@ -2558,7 +2950,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPitch(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPitch(FMOD_CHANNELGROUP
      * *channelgroup, float *pitch) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetPitch$address() {
@@ -2566,6 +2960,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetPitch(FMOD_CHANNELGROUP *channelgroup,
      * float *pitch) }
      */
@@ -2591,7 +2987,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMute(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL mute) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetMute$descriptor() {
@@ -2599,7 +2997,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMute(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL mute) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetMute$handle() {
@@ -2607,7 +3007,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMute(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMute(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL mute) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetMute$address() {
@@ -2615,6 +3017,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMute(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL mute) }
      */
@@ -2640,7 +3044,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMute(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *mute) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetMute$descriptor() {
@@ -2648,7 +3054,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMute(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *mute) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetMute$handle() {
@@ -2656,7 +3064,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMute(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMute(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *mute) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetMute$address() {
@@ -2664,6 +3074,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMute(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL *mute) }
      */
@@ -2691,7 +3103,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * wet) }
      */
@@ -2700,7 +3114,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * wet) }
      */
@@ -2709,7 +3125,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * wet) }
      */
@@ -2718,6 +3136,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetReverbProperties(FMOD_CHANNELGROUP
      * *channelgroup, int instance, float wet) }
      */
@@ -2746,7 +3166,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * *wet) }
      */
@@ -2755,7 +3177,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * *wet) }
      */
@@ -2764,7 +3188,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetReverbProperties(FMOD_CHANNELGROUP *channelgroup, int instance, float
      * *wet) }
      */
@@ -2773,6 +3199,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetReverbProperties(FMOD_CHANNELGROUP
      * *channelgroup, int instance, float *wet) }
      */
@@ -2800,7 +3228,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float gain) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetLowPassGain$descriptor() {
@@ -2808,7 +3238,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float gain) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetLowPassGain$handle() {
@@ -2816,7 +3248,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float gain) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetLowPassGain$address() {
@@ -2824,6 +3258,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetLowPassGain(FMOD_CHANNELGROUP
      * *channelgroup, float gain) }
      */
@@ -2850,7 +3286,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float *gain) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetLowPassGain$descriptor() {
@@ -2858,7 +3296,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float *gain) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetLowPassGain$handle() {
@@ -2866,7 +3306,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetLowPassGain(FMOD_CHANNELGROUP *channelgroup, float *gain) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetLowPassGain$address() {
@@ -2874,6 +3316,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetLowPassGain(FMOD_CHANNELGROUP
      * *channelgroup, float *gain) }
      */
@@ -2900,7 +3344,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMode(FMOD_CHANNELGROUP *channelgroup, FMOD_MODE mode) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetMode$descriptor() {
@@ -2908,7 +3354,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMode(FMOD_CHANNELGROUP *channelgroup, FMOD_MODE mode) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetMode$handle() {
@@ -2916,7 +3364,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMode(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMode(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_MODE mode) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetMode$address() {
@@ -2924,6 +3374,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMode(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_MODE mode) }
      */
@@ -2949,7 +3401,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMode(FMOD_CHANNELGROUP *channelgroup, FMOD_MODE *mode) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetMode$descriptor() {
@@ -2957,7 +3411,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMode(FMOD_CHANNELGROUP *channelgroup, FMOD_MODE *mode) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetMode$handle() {
@@ -2965,7 +3421,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMode(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMode(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_MODE *mode) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetMode$address() {
@@ -2973,6 +3431,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMode(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_MODE *mode) }
      */
@@ -2999,7 +3459,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetCallback(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELCONTROL_CALLBACK
      * callback) }
      */
@@ -3008,7 +3470,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetCallback(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELCONTROL_CALLBACK
      * callback) }
      */
@@ -3017,7 +3481,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetCallback(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetCallback(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetCallback$address() {
@@ -3025,6 +3491,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetCallback(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
@@ -3052,7 +3520,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_IsPlaying(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *isplaying) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_IsPlaying$descriptor() {
@@ -3060,7 +3530,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_IsPlaying(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *isplaying) }
      */
     public static MethodHandle FMOD_ChannelGroup_IsPlaying$handle() {
@@ -3068,7 +3540,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_IsPlaying(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_IsPlaying(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *isplaying) }
      */
     public static MemorySegment FMOD_ChannelGroup_IsPlaying$address() {
@@ -3076,6 +3550,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_IsPlaying(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL *isplaying) }
      */
@@ -3102,7 +3578,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPan(FMOD_CHANNELGROUP *channelgroup, float pan) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetPan$descriptor() {
@@ -3110,7 +3588,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetPan(FMOD_CHANNELGROUP *channelgroup, float pan) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetPan$handle() {
@@ -3118,7 +3598,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPan(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPan(FMOD_CHANNELGROUP
      * *channelgroup, float pan) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetPan$address() {
@@ -3126,6 +3608,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetPan(FMOD_CHANNELGROUP *channelgroup,
      * float pan) }
      */
@@ -3162,7 +3646,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsOutput(FMOD_CHANNELGROUP *channelgroup, float frontleft, float
      * frontright, float center, float lfe, float surroundleft, float surroundright, float backleft,
      * float backright) }
@@ -3172,7 +3658,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsOutput(FMOD_CHANNELGROUP *channelgroup, float frontleft, float
      * frontright, float center, float lfe, float surroundleft, float surroundright, float backleft,
      * float backright) }
@@ -3182,7 +3670,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsOutput(FMOD_CHANNELGROUP *channelgroup, float frontleft, float
      * frontright, float center, float lfe, float surroundleft, float surroundright, float backleft,
      * float backright) }
@@ -3192,6 +3682,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMixLevelsOutput(FMOD_CHANNELGROUP
      * *channelgroup, float frontleft, float frontright, float center, float lfe, float
      * surroundleft, float surroundright, float backleft, float backright) }
@@ -3249,7 +3741,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsInput(FMOD_CHANNELGROUP *channelgroup, float *levels, int
      * numlevels) }
      */
@@ -3258,7 +3752,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsInput(FMOD_CHANNELGROUP *channelgroup, float *levels, int
      * numlevels) }
      */
@@ -3267,7 +3763,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixLevelsInput(FMOD_CHANNELGROUP *channelgroup, float *levels, int
      * numlevels) }
      */
@@ -3276,6 +3774,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMixLevelsInput(FMOD_CHANNELGROUP
      * *channelgroup, float *levels, int numlevels) }
      */
@@ -3310,7 +3810,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixMatrix(FMOD_CHANNELGROUP *channelgroup, float *matrix, int
      * outchannels, int inchannels, int inchannel_hop) }
      */
@@ -3319,7 +3821,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetMixMatrix(FMOD_CHANNELGROUP *channelgroup, float *matrix, int
      * outchannels, int inchannels, int inchannel_hop) }
      */
@@ -3328,7 +3832,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMixMatrix(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMixMatrix(FMOD_CHANNELGROUP
      * *channelgroup, float *matrix, int outchannels, int inchannels, int inchannel_hop) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetMixMatrix$address() {
@@ -3336,6 +3842,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetMixMatrix(FMOD_CHANNELGROUP
      * *channelgroup, float *matrix, int outchannels, int inchannels, int inchannel_hop) }
      */
@@ -3380,7 +3888,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMixMatrix(FMOD_CHANNELGROUP *channelgroup, float *matrix, int
      * *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -3389,7 +3899,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetMixMatrix(FMOD_CHANNELGROUP *channelgroup, float *matrix, int
      * *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -3398,7 +3910,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMixMatrix(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMixMatrix(FMOD_CHANNELGROUP
      * *channelgroup, float *matrix, int *outchannels, int *inchannels, int inchannel_hop) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetMixMatrix$address() {
@@ -3406,6 +3920,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetMixMatrix(FMOD_CHANNELGROUP
      * *channelgroup, float *matrix, int *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -3445,7 +3961,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSPClock(FMOD_CHANNELGROUP *channelgroup, unsigned long long *dspclock,
      * unsigned long long *parentclock) }
      */
@@ -3454,7 +3972,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSPClock(FMOD_CHANNELGROUP *channelgroup, unsigned long long *dspclock,
      * unsigned long long *parentclock) }
      */
@@ -3463,7 +3983,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPClock(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPClock(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long *dspclock, unsigned long long *parentclock) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetDSPClock$address() {
@@ -3471,6 +3993,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPClock(FMOD_CHANNELGROUP *channelgroup,
      * unsigned long long *dspclock, unsigned long long *parentclock) }
      */
@@ -3502,7 +4026,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetDelay(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock_start, unsigned long long dspclock_end, FMOD_BOOL stopchannels) }
      */
@@ -3511,7 +4037,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetDelay(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock_start, unsigned long long dspclock_end, FMOD_BOOL stopchannels) }
      */
@@ -3520,7 +4048,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDelay(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDelay(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL
      * stopchannels) }
      */
@@ -3529,6 +4059,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDelay(FMOD_CHANNELGROUP *channelgroup,
      * unsigned long long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL stopchannels) }
      */
@@ -3565,7 +4097,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDelay(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL *stopchannels) }
      */
@@ -3574,7 +4108,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDelay(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL *stopchannels) }
      */
@@ -3583,7 +4119,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDelay(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDelay(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long *dspclock_start, unsigned long long *dspclock_end,
      * FMOD_BOOL *stopchannels) }
      */
@@ -3592,6 +4130,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDelay(FMOD_CHANNELGROUP *channelgroup,
      * unsigned long long *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL
      * *stopchannels) }
@@ -3629,7 +4169,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddFadePoint(FMOD_CHANNELGROUP *channelgroup, unsigned long long dspclock,
      * float volume) }
      */
@@ -3638,7 +4180,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddFadePoint(FMOD_CHANNELGROUP *channelgroup, unsigned long long dspclock,
      * float volume) }
      */
@@ -3647,7 +4191,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddFadePoint(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddFadePoint(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long dspclock, float volume) }
      */
     public static MemorySegment FMOD_ChannelGroup_AddFadePoint$address() {
@@ -3655,6 +4201,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddFadePoint(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long dspclock, float volume) }
      */
@@ -3683,7 +4231,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetFadePointRamp(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock, float volume) }
      */
@@ -3692,7 +4242,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetFadePointRamp(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock, float volume) }
      */
@@ -3701,7 +4253,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetFadePointRamp(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock, float volume) }
      */
@@ -3710,6 +4264,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetFadePointRamp(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long dspclock, float volume) }
      */
@@ -3741,7 +4297,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_RemoveFadePoints(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock_start, unsigned long long dspclock_end) }
      */
@@ -3750,7 +4308,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_RemoveFadePoints(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock_start, unsigned long long dspclock_end) }
      */
@@ -3759,7 +4319,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_RemoveFadePoints(FMOD_CHANNELGROUP *channelgroup, unsigned long long
      * dspclock_start, unsigned long long dspclock_end) }
      */
@@ -3768,6 +4330,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_RemoveFadePoints(FMOD_CHANNELGROUP
      * *channelgroup, unsigned long long dspclock_start, unsigned long long dspclock_end) }
      */
@@ -3804,7 +4368,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetFadePoints(FMOD_CHANNELGROUP *channelgroup, unsigned int *numpoints,
      * unsigned long long *point_dspclock, float *point_volume) }
      */
@@ -3813,7 +4379,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetFadePoints(FMOD_CHANNELGROUP *channelgroup, unsigned int *numpoints,
      * unsigned long long *point_dspclock, float *point_volume) }
      */
@@ -3822,7 +4390,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetFadePoints(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetFadePoints(FMOD_CHANNELGROUP
      * *channelgroup, unsigned int *numpoints, unsigned long long *point_dspclock, float
      * *point_volume) }
      */
@@ -3831,6 +4401,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetFadePoints(FMOD_CHANNELGROUP
      * *channelgroup, unsigned int *numpoints, unsigned long long *point_dspclock, float
      * *point_volume) }
@@ -3867,7 +4439,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSP(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_DSP **dsp) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetDSP$descriptor() {
@@ -3875,7 +4449,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSP(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_DSP **dsp) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetDSP$handle() {
@@ -3883,7 +4459,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSP(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSP(FMOD_CHANNELGROUP
      * *channelgroup, int index, FMOD_DSP **dsp) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetDSP$address() {
@@ -3891,6 +4469,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSP(FMOD_CHANNELGROUP *channelgroup, int
      * index, FMOD_DSP **dsp) }
      */
@@ -3918,7 +4498,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddDSP(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_DSP *dsp) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_AddDSP$descriptor() {
@@ -3926,7 +4508,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddDSP(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_ChannelGroup_AddDSP$handle() {
@@ -3934,7 +4518,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddDSP(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddDSP(FMOD_CHANNELGROUP
      * *channelgroup, int index, FMOD_DSP *dsp) }
      */
     public static MemorySegment FMOD_ChannelGroup_AddDSP$address() {
@@ -3942,6 +4528,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddDSP(FMOD_CHANNELGROUP *channelgroup, int
      * index, FMOD_DSP *dsp) }
      */
@@ -3969,7 +4557,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_RemoveDSP(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_RemoveDSP$descriptor() {
@@ -3977,7 +4567,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_RemoveDSP(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_ChannelGroup_RemoveDSP$handle() {
@@ -3985,7 +4577,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_RemoveDSP(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_RemoveDSP(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_DSP *dsp) }
      */
     public static MemorySegment FMOD_ChannelGroup_RemoveDSP$address() {
@@ -3993,6 +4587,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_RemoveDSP(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_DSP *dsp) }
      */
@@ -4019,7 +4615,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumDSPs(FMOD_CHANNELGROUP *channelgroup, int *numdsps) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetNumDSPs$descriptor() {
@@ -4027,7 +4625,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumDSPs(FMOD_CHANNELGROUP *channelgroup, int *numdsps) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetNumDSPs$handle() {
@@ -4035,7 +4635,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumDSPs(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumDSPs(FMOD_CHANNELGROUP
      * *channelgroup, int *numdsps) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetNumDSPs$address() {
@@ -4043,6 +4645,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumDSPs(FMOD_CHANNELGROUP *channelgroup,
      * int *numdsps) }
      */
@@ -4071,7 +4675,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetDSPIndex(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp, int index) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetDSPIndex$descriptor() {
@@ -4079,7 +4685,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetDSPIndex(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp, int index) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetDSPIndex$handle() {
@@ -4087,7 +4695,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDSPIndex(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDSPIndex(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_DSP *dsp, int index) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetDSPIndex$address() {
@@ -4095,6 +4705,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetDSPIndex(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_DSP *dsp, int index) }
      */
@@ -4123,7 +4735,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSPIndex(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp, int *index) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetDSPIndex$descriptor() {
@@ -4131,7 +4745,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetDSPIndex(FMOD_CHANNELGROUP *channelgroup, FMOD_DSP *dsp, int *index) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetDSPIndex$handle() {
@@ -4139,7 +4755,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPIndex(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPIndex(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_DSP *dsp, int *index) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetDSPIndex$address() {
@@ -4147,6 +4765,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetDSPIndex(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_DSP *dsp, int *index) }
      */
@@ -4175,7 +4795,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DAttributes(FMOD_CHANNELGROUP *channelgroup, const FMOD_VECTOR *pos,
      * const FMOD_VECTOR *vel) }
      */
@@ -4184,7 +4806,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DAttributes(FMOD_CHANNELGROUP *channelgroup, const FMOD_VECTOR *pos,
      * const FMOD_VECTOR *vel) }
      */
@@ -4193,7 +4817,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DAttributes(FMOD_CHANNELGROUP *channelgroup, const FMOD_VECTOR *pos,
      * const FMOD_VECTOR *vel) }
      */
@@ -4202,6 +4828,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DAttributes(FMOD_CHANNELGROUP
      * *channelgroup, const FMOD_VECTOR *pos, const FMOD_VECTOR *vel) }
      */
@@ -4230,7 +4858,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DAttributes(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *pos,
      * FMOD_VECTOR *vel) }
      */
@@ -4239,7 +4869,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DAttributes(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *pos,
      * FMOD_VECTOR *vel) }
      */
@@ -4248,7 +4880,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DAttributes(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *pos,
      * FMOD_VECTOR *vel) }
      */
@@ -4257,6 +4891,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DAttributes(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_VECTOR *pos, FMOD_VECTOR *vel) }
      */
@@ -4285,7 +4921,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float mindistance,
      * float maxdistance) }
      */
@@ -4294,7 +4932,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float mindistance,
      * float maxdistance) }
      */
@@ -4303,7 +4943,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float mindistance,
      * float maxdistance) }
      */
@@ -4312,6 +4954,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DMinMaxDistance(FMOD_CHANNELGROUP
      * *channelgroup, float mindistance, float maxdistance) }
      */
@@ -4344,7 +4988,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float *mindistance,
      * float *maxdistance) }
      */
@@ -4353,7 +4999,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float *mindistance,
      * float *maxdistance) }
      */
@@ -4362,7 +5010,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DMinMaxDistance(FMOD_CHANNELGROUP *channelgroup, float *mindistance,
      * float *maxdistance) }
      */
@@ -4371,6 +5021,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DMinMaxDistance(FMOD_CHANNELGROUP
      * *channelgroup, float *mindistance, float *maxdistance) }
      */
@@ -4407,7 +5059,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float insideconeangle,
      * float outsideconeangle, float outsidevolume) }
      */
@@ -4416,7 +5070,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float insideconeangle,
      * float outsideconeangle, float outsidevolume) }
      */
@@ -4425,7 +5081,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float insideconeangle,
      * float outsideconeangle, float outsidevolume) }
      */
@@ -4434,6 +5092,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DConeSettings(FMOD_CHANNELGROUP
      * *channelgroup, float insideconeangle, float outsideconeangle, float outsidevolume) }
      */
@@ -4475,7 +5135,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float *insideconeangle,
      * float *outsideconeangle, float *outsidevolume) }
      */
@@ -4484,7 +5146,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float *insideconeangle,
      * float *outsideconeangle, float *outsidevolume) }
      */
@@ -4493,7 +5157,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeSettings(FMOD_CHANNELGROUP *channelgroup, float *insideconeangle,
      * float *outsideconeangle, float *outsidevolume) }
      */
@@ -4502,6 +5168,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DConeSettings(FMOD_CHANNELGROUP
      * *channelgroup, float *insideconeangle, float *outsideconeangle, float *outsidevolume) }
      */
@@ -4538,7 +5206,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4547,7 +5217,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4556,7 +5228,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4565,6 +5239,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DConeOrientation(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_VECTOR *orientation) }
      */
@@ -4592,7 +5268,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4601,7 +5279,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4610,7 +5290,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DConeOrientation(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR
      * *orientation) }
      */
@@ -4619,6 +5301,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DConeOrientation(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_VECTOR *orientation) }
      */
@@ -4647,7 +5331,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *points,
      * int numpoints) }
      */
@@ -4656,7 +5342,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *points,
      * int numpoints) }
      */
@@ -4665,7 +5353,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR *points,
      * int numpoints) }
      */
@@ -4674,6 +5364,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DCustomRolloff(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_VECTOR *points, int numpoints) }
      */
@@ -4703,7 +5395,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR **points,
      * int *numpoints) }
      */
@@ -4712,7 +5406,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR **points,
      * int *numpoints) }
      */
@@ -4721,7 +5417,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DCustomRolloff(FMOD_CHANNELGROUP *channelgroup, FMOD_VECTOR **points,
      * int *numpoints) }
      */
@@ -4730,6 +5428,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DCustomRolloff(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_VECTOR **points, int *numpoints) }
      */
@@ -4759,7 +5459,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float directocclusion,
      * float reverbocclusion) }
      */
@@ -4768,7 +5470,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float directocclusion,
      * float reverbocclusion) }
      */
@@ -4777,7 +5481,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float directocclusion,
      * float reverbocclusion) }
      */
@@ -4786,6 +5492,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DOcclusion(FMOD_CHANNELGROUP
      * *channelgroup, float directocclusion, float reverbocclusion) }
      */
@@ -4818,7 +5526,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float *directocclusion,
      * float *reverbocclusion) }
      */
@@ -4827,7 +5537,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float *directocclusion,
      * float *reverbocclusion) }
      */
@@ -4836,7 +5548,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DOcclusion(FMOD_CHANNELGROUP *channelgroup, float *directocclusion,
      * float *reverbocclusion) }
      */
@@ -4845,6 +5559,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DOcclusion(FMOD_CHANNELGROUP
      * *channelgroup, float *directocclusion, float *reverbocclusion) }
      */
@@ -4878,7 +5594,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DSpread(FMOD_CHANNELGROUP *channelgroup, float angle) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Set3DSpread$descriptor() {
@@ -4886,7 +5604,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DSpread(FMOD_CHANNELGROUP *channelgroup, float angle) }
      */
     public static MethodHandle FMOD_ChannelGroup_Set3DSpread$handle() {
@@ -4894,7 +5614,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DSpread(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DSpread(FMOD_CHANNELGROUP
      * *channelgroup, float angle) }
      */
     public static MemorySegment FMOD_ChannelGroup_Set3DSpread$address() {
@@ -4902,6 +5624,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DSpread(FMOD_CHANNELGROUP *channelgroup,
      * float angle) }
      */
@@ -4928,7 +5652,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DSpread(FMOD_CHANNELGROUP *channelgroup, float *angle) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Get3DSpread$descriptor() {
@@ -4936,7 +5662,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DSpread(FMOD_CHANNELGROUP *channelgroup, float *angle) }
      */
     public static MethodHandle FMOD_ChannelGroup_Get3DSpread$handle() {
@@ -4944,7 +5672,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DSpread(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DSpread(FMOD_CHANNELGROUP
      * *channelgroup, float *angle) }
      */
     public static MemorySegment FMOD_ChannelGroup_Get3DSpread$address() {
@@ -4952,6 +5682,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DSpread(FMOD_CHANNELGROUP *channelgroup,
      * float *angle) }
      */
@@ -4979,7 +5711,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DLevel(FMOD_CHANNELGROUP *channelgroup, float level) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Set3DLevel$descriptor() {
@@ -4987,7 +5721,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DLevel(FMOD_CHANNELGROUP *channelgroup, float level) }
      */
     public static MethodHandle FMOD_ChannelGroup_Set3DLevel$handle() {
@@ -4995,7 +5731,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DLevel(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DLevel(FMOD_CHANNELGROUP
      * *channelgroup, float level) }
      */
     public static MemorySegment FMOD_ChannelGroup_Set3DLevel$address() {
@@ -5003,6 +5741,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DLevel(FMOD_CHANNELGROUP *channelgroup,
      * float level) }
      */
@@ -5029,7 +5769,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DLevel(FMOD_CHANNELGROUP *channelgroup, float *level) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Get3DLevel$descriptor() {
@@ -5037,7 +5779,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DLevel(FMOD_CHANNELGROUP *channelgroup, float *level) }
      */
     public static MethodHandle FMOD_ChannelGroup_Get3DLevel$handle() {
@@ -5045,7 +5789,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DLevel(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DLevel(FMOD_CHANNELGROUP
      * *channelgroup, float *level) }
      */
     public static MemorySegment FMOD_ChannelGroup_Get3DLevel$address() {
@@ -5053,6 +5799,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DLevel(FMOD_CHANNELGROUP *channelgroup,
      * float *level) }
      */
@@ -5080,7 +5828,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float level) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Set3DDopplerLevel$descriptor() {
@@ -5088,7 +5838,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float level) }
      */
     public static MethodHandle FMOD_ChannelGroup_Set3DDopplerLevel$handle() {
@@ -5096,7 +5848,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float level) }
      */
     public static MemorySegment FMOD_ChannelGroup_Set3DDopplerLevel$address() {
@@ -5104,6 +5858,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DDopplerLevel(FMOD_CHANNELGROUP
      * *channelgroup, float level) }
      */
@@ -5130,7 +5886,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float *level) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Get3DDopplerLevel$descriptor() {
@@ -5138,7 +5896,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float *level) }
      */
     public static MethodHandle FMOD_ChannelGroup_Get3DDopplerLevel$handle() {
@@ -5146,7 +5906,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDopplerLevel(FMOD_CHANNELGROUP *channelgroup, float *level) }
      */
     public static MemorySegment FMOD_ChannelGroup_Get3DDopplerLevel$address() {
@@ -5154,6 +5916,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DDopplerLevel(FMOD_CHANNELGROUP
      * *channelgroup, float *level) }
      */
@@ -5186,7 +5950,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL custom,
      * float customLevel, float centerFreq) }
      */
@@ -5195,7 +5961,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL custom,
      * float customLevel, float centerFreq) }
      */
@@ -5204,7 +5972,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Set3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL custom,
      * float customLevel, float centerFreq) }
      */
@@ -5213,6 +5983,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Set3DDistanceFilter(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL custom, float customLevel, float centerFreq) }
      */
@@ -5250,7 +6022,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *custom,
      * float *customLevel, float *centerFreq) }
      */
@@ -5259,7 +6033,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *custom,
      * float *customLevel, float *centerFreq) }
      */
@@ -5268,7 +6044,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Get3DDistanceFilter(FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL *custom,
      * float *customLevel, float *centerFreq) }
      */
@@ -5277,6 +6055,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Get3DDistanceFilter(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_BOOL *custom, float *customLevel, float *centerFreq) }
      */
@@ -5312,7 +6092,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetUserData(FMOD_CHANNELGROUP *channelgroup, void *userdata) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_SetUserData$descriptor() {
@@ -5320,7 +6102,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_SetUserData(FMOD_CHANNELGROUP *channelgroup, void *userdata) }
      */
     public static MethodHandle FMOD_ChannelGroup_SetUserData$handle() {
@@ -5328,7 +6112,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetUserData(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetUserData(FMOD_CHANNELGROUP
      * *channelgroup, void *userdata) }
      */
     public static MemorySegment FMOD_ChannelGroup_SetUserData$address() {
@@ -5336,6 +6122,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_SetUserData(FMOD_CHANNELGROUP *channelgroup,
      * void *userdata) }
      */
@@ -5363,7 +6151,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetUserData(FMOD_CHANNELGROUP *channelgroup, void **userdata) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetUserData$descriptor() {
@@ -5371,7 +6161,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetUserData(FMOD_CHANNELGROUP *channelgroup, void **userdata) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetUserData$handle() {
@@ -5379,7 +6171,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetUserData(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetUserData(FMOD_CHANNELGROUP
      * *channelgroup, void **userdata) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetUserData$address() {
@@ -5387,6 +6181,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetUserData(FMOD_CHANNELGROUP *channelgroup,
      * void **userdata) }
      */
@@ -5413,7 +6209,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Release(FMOD_CHANNELGROUP *channelgroup) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_Release$descriptor() {
@@ -5421,7 +6219,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_Release(FMOD_CHANNELGROUP *channelgroup) }
      */
     public static MethodHandle FMOD_ChannelGroup_Release$handle() {
@@ -5429,7 +6229,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Release(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Release(FMOD_CHANNELGROUP
      * *channelgroup) }
      */
     public static MemorySegment FMOD_ChannelGroup_Release$address() {
@@ -5437,6 +6239,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_Release(FMOD_CHANNELGROUP *channelgroup) }
      */
     public static int FMOD_ChannelGroup_Release(MemorySegment channelgroup) {
@@ -5466,7 +6270,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddGroup(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELGROUP *group,
      * FMOD_BOOL propagatedspclock, FMOD_DSPCONNECTION **connection) }
      */
@@ -5475,7 +6281,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_AddGroup(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELGROUP *group,
      * FMOD_BOOL propagatedspclock, FMOD_DSPCONNECTION **connection) }
      */
@@ -5484,7 +6292,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddGroup(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddGroup(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_CHANNELGROUP *group, FMOD_BOOL propagatedspclock, FMOD_DSPCONNECTION
      * **connection) }
      */
@@ -5493,6 +6303,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_AddGroup(FMOD_CHANNELGROUP *channelgroup,
      * FMOD_CHANNELGROUP *group, FMOD_BOOL propagatedspclock, FMOD_DSPCONNECTION **connection) }
      */
@@ -5528,7 +6340,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumGroups(FMOD_CHANNELGROUP *channelgroup, int *numgroups) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetNumGroups$descriptor() {
@@ -5536,7 +6350,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumGroups(FMOD_CHANNELGROUP *channelgroup, int *numgroups) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetNumGroups$handle() {
@@ -5544,7 +6360,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumGroups(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumGroups(FMOD_CHANNELGROUP
      * *channelgroup, int *numgroups) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetNumGroups$address() {
@@ -5552,6 +6370,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumGroups(FMOD_CHANNELGROUP
      * *channelgroup, int *numgroups) }
      */
@@ -5579,7 +6399,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetGroup(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_CHANNELGROUP
      * **group) }
      */
@@ -5588,7 +6410,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetGroup(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_CHANNELGROUP
      * **group) }
      */
@@ -5597,7 +6421,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetGroup(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetGroup(FMOD_CHANNELGROUP
      * *channelgroup, int index, FMOD_CHANNELGROUP **group) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetGroup$address() {
@@ -5605,6 +6431,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetGroup(FMOD_CHANNELGROUP *channelgroup,
      * int index, FMOD_CHANNELGROUP **group) }
      */
@@ -5632,7 +6460,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetParentGroup(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELGROUP **group)
      * }
      */
@@ -5641,7 +6471,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetParentGroup(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELGROUP **group)
      * }
      */
@@ -5650,7 +6482,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetParentGroup(FMOD_CHANNELGROUP *channelgroup, FMOD_CHANNELGROUP **group)
      * }
      */
@@ -5659,6 +6493,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetParentGroup(FMOD_CHANNELGROUP
      * *channelgroup, FMOD_CHANNELGROUP **group) }
      */
@@ -5686,7 +6522,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetName(FMOD_CHANNELGROUP *channelgroup, char *name, int namelen) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetName$descriptor() {
@@ -5694,7 +6532,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetName(FMOD_CHANNELGROUP *channelgroup, char *name, int namelen) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetName$handle() {
@@ -5702,7 +6542,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetName(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetName(FMOD_CHANNELGROUP
      * *channelgroup, char *name, int namelen) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetName$address() {
@@ -5710,6 +6552,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetName(FMOD_CHANNELGROUP *channelgroup,
      * char *name, int namelen) }
      */
@@ -5737,7 +6581,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumChannels(FMOD_CHANNELGROUP *channelgroup, int *numchannels) }
      */
     public static FunctionDescriptor FMOD_ChannelGroup_GetNumChannels$descriptor() {
@@ -5745,7 +6591,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumChannels(FMOD_CHANNELGROUP *channelgroup, int *numchannels) }
      */
     public static MethodHandle FMOD_ChannelGroup_GetNumChannels$handle() {
@@ -5753,7 +6601,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetNumChannels(FMOD_CHANNELGROUP *channelgroup, int *numchannels) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetNumChannels$address() {
@@ -5761,6 +6611,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetNumChannels(FMOD_CHANNELGROUP
      * *channelgroup, int *numchannels) }
      */
@@ -5789,7 +6641,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetChannel(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_CHANNEL
      * **channel) }
      */
@@ -5798,7 +6652,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_ChannelGroup_GetChannel(FMOD_CHANNELGROUP *channelgroup, int index, FMOD_CHANNEL
      * **channel) }
      */
@@ -5807,7 +6663,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetChannel(FMOD_CHANNELGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetChannel(FMOD_CHANNELGROUP
      * *channelgroup, int index, FMOD_CHANNEL **channel) }
      */
     public static MemorySegment FMOD_ChannelGroup_GetChannel$address() {
@@ -5815,6 +6673,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_ChannelGroup_GetChannel(FMOD_CHANNELGROUP *channelgroup,
      * int index, FMOD_CHANNEL **channel) }
      */
@@ -5841,7 +6701,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_Release(FMOD_SOUNDGROUP *soundgroup) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_Release$descriptor() {
@@ -5849,7 +6711,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_Release(FMOD_SOUNDGROUP *soundgroup) }
      */
     public static MethodHandle FMOD_SoundGroup_Release$handle() {
@@ -5857,14 +6721,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Release(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Release(FMOD_SOUNDGROUP
      * *soundgroup) }
      */
     public static MemorySegment FMOD_SoundGroup_Release$address() {
         return FMOD_SoundGroup_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Release(FMOD_SOUNDGROUP *soundgroup) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Release(FMOD_SOUNDGROUP *soundgroup) }
+     */
     public static int FMOD_SoundGroup_Release(MemorySegment soundgroup) {
         var mh$ = FMOD_SoundGroup_Release.HANDLE;
         try {
@@ -5888,7 +6758,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetSystemObject(FMOD_SOUNDGROUP *soundgroup, FMOD_SYSTEM **system) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetSystemObject$descriptor() {
@@ -5896,7 +6768,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetSystemObject(FMOD_SOUNDGROUP *soundgroup, FMOD_SYSTEM **system) }
      */
     public static MethodHandle FMOD_SoundGroup_GetSystemObject$handle() {
@@ -5904,7 +6778,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSystemObject(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSystemObject(FMOD_SOUNDGROUP
      * *soundgroup, FMOD_SYSTEM **system) }
      */
     public static MemorySegment FMOD_SoundGroup_GetSystemObject$address() {
@@ -5912,6 +6788,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSystemObject(FMOD_SOUNDGROUP *soundgroup,
      * FMOD_SYSTEM **system) }
      */
@@ -5939,7 +6817,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int maxaudible) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_SetMaxAudible$descriptor() {
@@ -5947,7 +6827,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int maxaudible) }
      */
     public static MethodHandle FMOD_SoundGroup_SetMaxAudible$handle() {
@@ -5955,7 +6837,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMaxAudible(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMaxAudible(FMOD_SOUNDGROUP
      * *soundgroup, int maxaudible) }
      */
     public static MemorySegment FMOD_SoundGroup_SetMaxAudible$address() {
@@ -5963,6 +6847,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int
      * maxaudible) }
      */
@@ -5989,7 +6875,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int *maxaudible) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetMaxAudible$descriptor() {
@@ -5997,7 +6885,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int *maxaudible) }
      */
     public static MethodHandle FMOD_SoundGroup_GetMaxAudible$handle() {
@@ -6005,7 +6895,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMaxAudible(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMaxAudible(FMOD_SOUNDGROUP
      * *soundgroup, int *maxaudible) }
      */
     public static MemorySegment FMOD_SoundGroup_GetMaxAudible$address() {
@@ -6013,6 +6905,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMaxAudible(FMOD_SOUNDGROUP *soundgroup, int
      * *maxaudible) }
      */
@@ -6040,7 +6934,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * behavior) }
      */
@@ -6049,7 +6945,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * behavior) }
      */
@@ -6058,7 +6956,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * behavior) }
      */
@@ -6067,6 +6967,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMaxAudibleBehavior(FMOD_SOUNDGROUP
      * *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR behavior) }
      */
@@ -6094,7 +6996,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * *behavior) }
      */
@@ -6103,7 +7007,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * *behavior) }
      */
@@ -6112,7 +7018,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMaxAudibleBehavior(FMOD_SOUNDGROUP *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR
      * *behavior) }
      */
@@ -6121,6 +7029,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMaxAudibleBehavior(FMOD_SOUNDGROUP
      * *soundgroup, FMOD_SOUNDGROUP_BEHAVIOR *behavior) }
      */
@@ -6148,7 +7058,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup, float speed) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_SetMuteFadeSpeed$descriptor() {
@@ -6156,7 +7068,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup, float speed) }
      */
     public static MethodHandle FMOD_SoundGroup_SetMuteFadeSpeed$handle() {
@@ -6164,7 +7078,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMuteFadeSpeed(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMuteFadeSpeed(FMOD_SOUNDGROUP
      * *soundgroup, float speed) }
      */
     public static MemorySegment FMOD_SoundGroup_SetMuteFadeSpeed$address() {
@@ -6172,6 +7088,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup,
      * float speed) }
      */
@@ -6198,7 +7116,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup, float *speed) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetMuteFadeSpeed$descriptor() {
@@ -6206,7 +7126,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup, float *speed) }
      */
     public static MethodHandle FMOD_SoundGroup_GetMuteFadeSpeed$handle() {
@@ -6214,7 +7136,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMuteFadeSpeed(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMuteFadeSpeed(FMOD_SOUNDGROUP
      * *soundgroup, float *speed) }
      */
     public static MemorySegment FMOD_SoundGroup_GetMuteFadeSpeed$address() {
@@ -6222,6 +7146,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetMuteFadeSpeed(FMOD_SOUNDGROUP *soundgroup,
      * float *speed) }
      */
@@ -6248,7 +7174,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetVolume(FMOD_SOUNDGROUP *soundgroup, float volume) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_SetVolume$descriptor() {
@@ -6256,7 +7184,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetVolume(FMOD_SOUNDGROUP *soundgroup, float volume) }
      */
     public static MethodHandle FMOD_SoundGroup_SetVolume$handle() {
@@ -6264,7 +7194,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetVolume(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetVolume(FMOD_SOUNDGROUP
      * *soundgroup, float volume) }
      */
     public static MemorySegment FMOD_SoundGroup_SetVolume$address() {
@@ -6272,6 +7204,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetVolume(FMOD_SOUNDGROUP *soundgroup, float
      * volume) }
      */
@@ -6297,7 +7231,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetVolume(FMOD_SOUNDGROUP *soundgroup, float *volume) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetVolume$descriptor() {
@@ -6305,7 +7241,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetVolume(FMOD_SOUNDGROUP *soundgroup, float *volume) }
      */
     public static MethodHandle FMOD_SoundGroup_GetVolume$handle() {
@@ -6313,7 +7251,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetVolume(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetVolume(FMOD_SOUNDGROUP
      * *soundgroup, float *volume) }
      */
     public static MemorySegment FMOD_SoundGroup_GetVolume$address() {
@@ -6321,6 +7261,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetVolume(FMOD_SOUNDGROUP *soundgroup, float
      * *volume) }
      */
@@ -6346,7 +7288,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP
      * *soundgroup) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_Stop$descriptor() {
@@ -6354,7 +7298,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP *soundgroup) }
      */
     public static MethodHandle FMOD_SoundGroup_Stop$handle() {
@@ -6362,14 +7308,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP *soundgroup)
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP *soundgroup)
      * }
      */
     public static MemorySegment FMOD_SoundGroup_Stop$address() {
         return FMOD_SoundGroup_Stop.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP *soundgroup) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_Stop(FMOD_SOUNDGROUP *soundgroup) }
+     */
     public static int FMOD_SoundGroup_Stop(MemorySegment soundgroup) {
         var mh$ = FMOD_SoundGroup_Stop.HANDLE;
         try {
@@ -6393,7 +7345,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetName(FMOD_SOUNDGROUP *soundgroup, char *name, int namelen) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetName$descriptor() {
@@ -6401,7 +7355,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetName(FMOD_SOUNDGROUP *soundgroup, char *name, int namelen) }
      */
     public static MethodHandle FMOD_SoundGroup_GetName$handle() {
@@ -6409,7 +7365,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetName(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetName(FMOD_SOUNDGROUP
      * *soundgroup, char *name, int namelen) }
      */
     public static MemorySegment FMOD_SoundGroup_GetName$address() {
@@ -6417,6 +7375,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetName(FMOD_SOUNDGROUP *soundgroup, char
      * *name, int namelen) }
      */
@@ -6444,7 +7404,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetNumSounds(FMOD_SOUNDGROUP *soundgroup, int *numsounds) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetNumSounds$descriptor() {
@@ -6452,7 +7414,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetNumSounds(FMOD_SOUNDGROUP *soundgroup, int *numsounds) }
      */
     public static MethodHandle FMOD_SoundGroup_GetNumSounds$handle() {
@@ -6460,7 +7424,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumSounds(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumSounds(FMOD_SOUNDGROUP
      * *soundgroup, int *numsounds) }
      */
     public static MemorySegment FMOD_SoundGroup_GetNumSounds$address() {
@@ -6468,6 +7434,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumSounds(FMOD_SOUNDGROUP *soundgroup, int
      * *numsounds) }
      */
@@ -6495,7 +7463,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetSound(FMOD_SOUNDGROUP *soundgroup, int index, FMOD_SOUND **sound) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetSound$descriptor() {
@@ -6503,7 +7473,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetSound(FMOD_SOUNDGROUP *soundgroup, int index, FMOD_SOUND **sound) }
      */
     public static MethodHandle FMOD_SoundGroup_GetSound$handle() {
@@ -6511,7 +7483,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSound(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSound(FMOD_SOUNDGROUP
      * *soundgroup, int index, FMOD_SOUND **sound) }
      */
     public static MemorySegment FMOD_SoundGroup_GetSound$address() {
@@ -6519,6 +7493,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetSound(FMOD_SOUNDGROUP *soundgroup, int
      * index, FMOD_SOUND **sound) }
      */
@@ -6546,7 +7522,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetNumPlaying(FMOD_SOUNDGROUP *soundgroup, int *numplaying) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetNumPlaying$descriptor() {
@@ -6554,7 +7532,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetNumPlaying(FMOD_SOUNDGROUP *soundgroup, int *numplaying) }
      */
     public static MethodHandle FMOD_SoundGroup_GetNumPlaying$handle() {
@@ -6562,7 +7542,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumPlaying(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumPlaying(FMOD_SOUNDGROUP
      * *soundgroup, int *numplaying) }
      */
     public static MemorySegment FMOD_SoundGroup_GetNumPlaying$address() {
@@ -6570,6 +7552,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetNumPlaying(FMOD_SOUNDGROUP *soundgroup, int
      * *numplaying) }
      */
@@ -6597,7 +7581,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetUserData(FMOD_SOUNDGROUP *soundgroup, void *userdata) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_SetUserData$descriptor() {
@@ -6605,7 +7591,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_SetUserData(FMOD_SOUNDGROUP *soundgroup, void *userdata) }
      */
     public static MethodHandle FMOD_SoundGroup_SetUserData$handle() {
@@ -6613,7 +7601,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetUserData(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetUserData(FMOD_SOUNDGROUP
      * *soundgroup, void *userdata) }
      */
     public static MemorySegment FMOD_SoundGroup_SetUserData$address() {
@@ -6621,6 +7611,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_SetUserData(FMOD_SOUNDGROUP *soundgroup, void
      * *userdata) }
      */
@@ -6648,7 +7640,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetUserData(FMOD_SOUNDGROUP *soundgroup, void **userdata) }
      */
     public static FunctionDescriptor FMOD_SoundGroup_GetUserData$descriptor() {
@@ -6656,7 +7650,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_SoundGroup_GetUserData(FMOD_SOUNDGROUP *soundgroup, void **userdata) }
      */
     public static MethodHandle FMOD_SoundGroup_GetUserData$handle() {
@@ -6664,7 +7660,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetUserData(FMOD_SOUNDGROUP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetUserData(FMOD_SOUNDGROUP
      * *soundgroup, void **userdata) }
      */
     public static MemorySegment FMOD_SoundGroup_GetUserData$address() {
@@ -6672,6 +7670,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_SoundGroup_GetUserData(FMOD_SOUNDGROUP *soundgroup, void
      * **userdata) }
      */
@@ -6697,24 +7697,38 @@ public class FmodCore extends FmodCore_1 {
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
     }
 
-    /** Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) } */
+    /**
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) }
+     */
     public static FunctionDescriptor FMOD_DSP_Release$descriptor() {
         return FMOD_DSP_Release.DESC;
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) }
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_DSP_Release$handle() {
         return FMOD_DSP_Release.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) }
+     */
     public static MemorySegment FMOD_DSP_Release$address() {
         return FMOD_DSP_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Release(FMOD_DSP *dsp) }
+     */
     public static int FMOD_DSP_Release(MemorySegment dsp) {
         var mh$ = FMOD_DSP_Release.HANDLE;
         try {
@@ -6737,7 +7751,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP
      * *dsp, FMOD_SYSTEM **system) }
      */
     public static FunctionDescriptor FMOD_DSP_GetSystemObject$descriptor() {
@@ -6745,7 +7761,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP
      * *dsp, FMOD_SYSTEM **system) }
      */
     public static MethodHandle FMOD_DSP_GetSystemObject$handle() {
@@ -6753,7 +7771,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP *dsp,
      * FMOD_SYSTEM **system) }
      */
     public static MemorySegment FMOD_DSP_GetSystemObject$address() {
@@ -6761,6 +7781,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetSystemObject(FMOD_DSP *dsp, FMOD_SYSTEM **system)
      * }
      */
@@ -6791,7 +7813,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp,
      * FMOD_DSP *input, FMOD_DSPCONNECTION **connection, FMOD_DSPCONNECTION_TYPE type) }
      */
     public static FunctionDescriptor FMOD_DSP_AddInput$descriptor() {
@@ -6799,7 +7823,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp,
      * FMOD_DSP *input, FMOD_DSPCONNECTION **connection, FMOD_DSPCONNECTION_TYPE type) }
      */
     public static MethodHandle FMOD_DSP_AddInput$handle() {
@@ -6807,7 +7833,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp, FMOD_DSP *input,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp, FMOD_DSP *input,
      * FMOD_DSPCONNECTION **connection, FMOD_DSPCONNECTION_TYPE type) }
      */
     public static MemorySegment FMOD_DSP_AddInput$address() {
@@ -6815,6 +7843,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_AddInput(FMOD_DSP *dsp, FMOD_DSP *input,
      * FMOD_DSPCONNECTION **connection, FMOD_DSPCONNECTION_TYPE type) }
      */
@@ -6842,7 +7872,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP
      * *dsp, FMOD_DSP *target, FMOD_DSPCONNECTION *connection) }
      */
     public static FunctionDescriptor FMOD_DSP_DisconnectFrom$descriptor() {
@@ -6850,7 +7882,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP
      * *dsp, FMOD_DSP *target, FMOD_DSPCONNECTION *connection) }
      */
     public static MethodHandle FMOD_DSP_DisconnectFrom$handle() {
@@ -6858,7 +7892,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP *dsp, FMOD_DSP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP *dsp, FMOD_DSP
      * *target, FMOD_DSPCONNECTION *connection) }
      */
     public static MemorySegment FMOD_DSP_DisconnectFrom$address() {
@@ -6866,6 +7902,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectFrom(FMOD_DSP *dsp, FMOD_DSP *target,
      * FMOD_DSPCONNECTION *connection) }
      */
@@ -6893,7 +7931,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP *dsp,
      * FMOD_BOOL inputs, FMOD_BOOL outputs) }
      */
     public static FunctionDescriptor FMOD_DSP_DisconnectAll$descriptor() {
@@ -6901,7 +7941,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP
      * *dsp, FMOD_BOOL inputs, FMOD_BOOL outputs) }
      */
     public static MethodHandle FMOD_DSP_DisconnectAll$handle() {
@@ -6909,7 +7951,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP *dsp, FMOD_BOOL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP *dsp, FMOD_BOOL
      * inputs, FMOD_BOOL outputs) }
      */
     public static MemorySegment FMOD_DSP_DisconnectAll$address() {
@@ -6917,6 +7961,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_DisconnectAll(FMOD_DSP *dsp, FMOD_BOOL inputs,
      * FMOD_BOOL outputs) }
      */
@@ -6942,7 +7988,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp,
      * int *numinputs) }
      */
     public static FunctionDescriptor FMOD_DSP_GetNumInputs$descriptor() {
@@ -6950,7 +7998,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP
      * *dsp, int *numinputs) }
      */
     public static MethodHandle FMOD_DSP_GetNumInputs$handle() {
@@ -6958,14 +8008,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp, int
      * *numinputs) }
      */
     public static MemorySegment FMOD_DSP_GetNumInputs$address() {
         return FMOD_DSP_GetNumInputs.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp, int *numinputs) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumInputs(FMOD_DSP *dsp, int *numinputs) }
+     */
     public static int FMOD_DSP_GetNumInputs(MemorySegment dsp, MemorySegment numinputs) {
         var mh$ = FMOD_DSP_GetNumInputs.HANDLE;
         try {
@@ -6988,7 +8044,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp,
      * int *numoutputs) }
      */
     public static FunctionDescriptor FMOD_DSP_GetNumOutputs$descriptor() {
@@ -6996,7 +8054,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP
      * *dsp, int *numoutputs) }
      */
     public static MethodHandle FMOD_DSP_GetNumOutputs$handle() {
@@ -7004,14 +8064,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp, int
      * *numoutputs) }
      */
     public static MemorySegment FMOD_DSP_GetNumOutputs$address() {
         return FMOD_DSP_GetNumOutputs.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp, int *numoutputs) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumOutputs(FMOD_DSP *dsp, int *numoutputs) }
+     */
     public static int FMOD_DSP_GetNumOutputs(MemorySegment dsp, MemorySegment numoutputs) {
         var mh$ = FMOD_DSP_GetNumOutputs.HANDLE;
         try {
@@ -7039,7 +8105,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp, int
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp, int
      * index, FMOD_DSP **input, FMOD_DSPCONNECTION **inputconnection) }
      */
     public static FunctionDescriptor FMOD_DSP_GetInput$descriptor() {
@@ -7047,7 +8115,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp,
      * int index, FMOD_DSP **input, FMOD_DSPCONNECTION **inputconnection) }
      */
     public static MethodHandle FMOD_DSP_GetInput$handle() {
@@ -7055,7 +8125,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp, int index,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp, int index,
      * FMOD_DSP **input, FMOD_DSPCONNECTION **inputconnection) }
      */
     public static MemorySegment FMOD_DSP_GetInput$address() {
@@ -7063,6 +8135,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInput(FMOD_DSP *dsp, int index, FMOD_DSP **input,
      * FMOD_DSPCONNECTION **inputconnection) }
      */
@@ -7094,7 +8168,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp, int
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp, int
      * index, FMOD_DSP **output, FMOD_DSPCONNECTION **outputconnection) }
      */
     public static FunctionDescriptor FMOD_DSP_GetOutput$descriptor() {
@@ -7102,7 +8178,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp,
      * int index, FMOD_DSP **output, FMOD_DSPCONNECTION **outputconnection) }
      */
     public static MethodHandle FMOD_DSP_GetOutput$handle() {
@@ -7110,7 +8188,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp, int index,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp, int index,
      * FMOD_DSP **output, FMOD_DSPCONNECTION **outputconnection) }
      */
     public static MemorySegment FMOD_DSP_GetOutput$address() {
@@ -7118,6 +8198,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutput(FMOD_DSP *dsp, int index, FMOD_DSP
      * **output, FMOD_DSPCONNECTION **outputconnection) }
      */
@@ -7144,7 +8226,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp,
      * FMOD_BOOL active) }
      */
     public static FunctionDescriptor FMOD_DSP_SetActive$descriptor() {
@@ -7152,7 +8236,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp,
      * FMOD_BOOL active) }
      */
     public static MethodHandle FMOD_DSP_SetActive$handle() {
@@ -7160,14 +8246,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp, FMOD_BOOL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp, FMOD_BOOL
      * active) }
      */
     public static MemorySegment FMOD_DSP_SetActive$address() {
         return FMOD_DSP_SetActive.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp, FMOD_BOOL active) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetActive(FMOD_DSP *dsp, FMOD_BOOL active) }
+     */
     public static int FMOD_DSP_SetActive(MemorySegment dsp, int active) {
         var mh$ = FMOD_DSP_SetActive.HANDLE;
         try {
@@ -7190,7 +8282,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp,
      * FMOD_BOOL *active) }
      */
     public static FunctionDescriptor FMOD_DSP_GetActive$descriptor() {
@@ -7198,7 +8292,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp,
      * FMOD_BOOL *active) }
      */
     public static MethodHandle FMOD_DSP_GetActive$handle() {
@@ -7206,14 +8302,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp, FMOD_BOOL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp, FMOD_BOOL
      * *active) }
      */
     public static MemorySegment FMOD_DSP_GetActive$address() {
         return FMOD_DSP_GetActive.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp, FMOD_BOOL *active) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetActive(FMOD_DSP *dsp, FMOD_BOOL *active) }
+     */
     public static int FMOD_DSP_GetActive(MemorySegment dsp, MemorySegment active) {
         var mh$ = FMOD_DSP_GetActive.HANDLE;
         try {
@@ -7236,7 +8338,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp,
      * FMOD_BOOL bypass) }
      */
     public static FunctionDescriptor FMOD_DSP_SetBypass$descriptor() {
@@ -7244,7 +8348,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp,
      * FMOD_BOOL bypass) }
      */
     public static MethodHandle FMOD_DSP_SetBypass$handle() {
@@ -7252,14 +8358,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp, FMOD_BOOL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp, FMOD_BOOL
      * bypass) }
      */
     public static MemorySegment FMOD_DSP_SetBypass$address() {
         return FMOD_DSP_SetBypass.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp, FMOD_BOOL bypass) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetBypass(FMOD_DSP *dsp, FMOD_BOOL bypass) }
+     */
     public static int FMOD_DSP_SetBypass(MemorySegment dsp, int bypass) {
         var mh$ = FMOD_DSP_SetBypass.HANDLE;
         try {
@@ -7282,7 +8394,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp,
      * FMOD_BOOL *bypass) }
      */
     public static FunctionDescriptor FMOD_DSP_GetBypass$descriptor() {
@@ -7290,7 +8404,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp,
      * FMOD_BOOL *bypass) }
      */
     public static MethodHandle FMOD_DSP_GetBypass$handle() {
@@ -7298,14 +8414,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp, FMOD_BOOL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp, FMOD_BOOL
      * *bypass) }
      */
     public static MemorySegment FMOD_DSP_GetBypass$address() {
         return FMOD_DSP_GetBypass.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp, FMOD_BOOL *bypass) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetBypass(FMOD_DSP *dsp, FMOD_BOOL *bypass) }
+     */
     public static int FMOD_DSP_GetBypass(MemorySegment dsp, MemorySegment bypass) {
         var mh$ = FMOD_DSP_GetBypass.HANDLE;
         try {
@@ -7333,7 +8455,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP *dsp,
      * float prewet, float postwet, float dry) }
      */
     public static FunctionDescriptor FMOD_DSP_SetWetDryMix$descriptor() {
@@ -7341,7 +8465,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP
      * *dsp, float prewet, float postwet, float dry) }
      */
     public static MethodHandle FMOD_DSP_SetWetDryMix$handle() {
@@ -7349,7 +8475,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP *dsp, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP *dsp, float
      * prewet, float postwet, float dry) }
      */
     public static MemorySegment FMOD_DSP_SetWetDryMix$address() {
@@ -7357,6 +8485,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetWetDryMix(FMOD_DSP *dsp, float prewet, float
      * postwet, float dry) }
      */
@@ -7388,7 +8518,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP *dsp,
      * float *prewet, float *postwet, float *dry) }
      */
     public static FunctionDescriptor FMOD_DSP_GetWetDryMix$descriptor() {
@@ -7396,7 +8528,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP
      * *dsp, float *prewet, float *postwet, float *dry) }
      */
     public static MethodHandle FMOD_DSP_GetWetDryMix$handle() {
@@ -7404,7 +8538,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP *dsp, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP *dsp, float
      * *prewet, float *postwet, float *dry) }
      */
     public static MemorySegment FMOD_DSP_GetWetDryMix$address() {
@@ -7412,6 +8548,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetWetDryMix(FMOD_DSP *dsp, float *prewet, float
      * *postwet, float *dry) }
      */
@@ -7443,7 +8581,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP
      * *dsp, FMOD_CHANNELMASK channelmask, int numchannels, FMOD_SPEAKERMODE source_speakermode) }
      */
     public static FunctionDescriptor FMOD_DSP_SetChannelFormat$descriptor() {
@@ -7451,7 +8591,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP
      * *dsp, FMOD_CHANNELMASK channelmask, int numchannels, FMOD_SPEAKERMODE source_speakermode) }
      */
     public static MethodHandle FMOD_DSP_SetChannelFormat$handle() {
@@ -7459,7 +8601,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP *dsp,
      * FMOD_CHANNELMASK channelmask, int numchannels, FMOD_SPEAKERMODE source_speakermode) }
      */
     public static MemorySegment FMOD_DSP_SetChannelFormat$address() {
@@ -7467,6 +8611,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetChannelFormat(FMOD_DSP *dsp, FMOD_CHANNELMASK
      * channelmask, int numchannels, FMOD_SPEAKERMODE source_speakermode) }
      */
@@ -7503,7 +8649,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP
      * *dsp, FMOD_CHANNELMASK *channelmask, int *numchannels, FMOD_SPEAKERMODE *source_speakermode)
      * }
      */
@@ -7512,7 +8660,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP
      * *dsp, FMOD_CHANNELMASK *channelmask, int *numchannels, FMOD_SPEAKERMODE *source_speakermode)
      * }
      */
@@ -7521,7 +8671,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP *dsp,
      * FMOD_CHANNELMASK *channelmask, int *numchannels, FMOD_SPEAKERMODE *source_speakermode) }
      */
     public static MemorySegment FMOD_DSP_GetChannelFormat$address() {
@@ -7529,6 +8681,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetChannelFormat(FMOD_DSP *dsp, FMOD_CHANNELMASK
      * *channelmask, int *numchannels, FMOD_SPEAKERMODE *source_speakermode) }
      */
@@ -7572,7 +8726,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetOutputChannelFormat(FMOD_DSP *dsp, FMOD_CHANNELMASK inmask, int inchannels,
      * FMOD_SPEAKERMODE inspeakermode, FMOD_CHANNELMASK *outmask, int *outchannels, FMOD_SPEAKERMODE
      * *outspeakermode) }
@@ -7582,7 +8738,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetOutputChannelFormat(FMOD_DSP *dsp, FMOD_CHANNELMASK inmask, int inchannels,
      * FMOD_SPEAKERMODE inspeakermode, FMOD_CHANNELMASK *outmask, int *outchannels, FMOD_SPEAKERMODE
      * *outspeakermode) }
@@ -7592,7 +8750,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutputChannelFormat(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutputChannelFormat(FMOD_DSP *dsp,
      * FMOD_CHANNELMASK inmask, int inchannels, FMOD_SPEAKERMODE inspeakermode, FMOD_CHANNELMASK
      * *outmask, int *outchannels, FMOD_SPEAKERMODE *outspeakermode) }
      */
@@ -7601,6 +8761,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetOutputChannelFormat(FMOD_DSP *dsp,
      * FMOD_CHANNELMASK inmask, int inchannels, FMOD_SPEAKERMODE inspeakermode, FMOD_CHANNELMASK
      * *outmask, int *outchannels, FMOD_SPEAKERMODE *outspeakermode) }
@@ -7649,24 +8811,38 @@ public class FmodCore extends FmodCore_1 {
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
     }
 
-    /** Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) } */
+    /**
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) }
+     */
     public static FunctionDescriptor FMOD_DSP_Reset$descriptor() {
         return FMOD_DSP_Reset.DESC;
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) }
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_DSP_Reset$handle() {
         return FMOD_DSP_Reset.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) }
+     */
     public static MemorySegment FMOD_DSP_Reset$address() {
         return FMOD_DSP_Reset.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_Reset(FMOD_DSP *dsp) }
+     */
     public static int FMOD_DSP_Reset(MemorySegment dsp) {
         var mh$ = FMOD_DSP_Reset.HANDLE;
         try {
@@ -7689,7 +8865,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP *dsp,
      * FMOD_DSP_CALLBACK callback) }
      */
     public static FunctionDescriptor FMOD_DSP_SetCallback$descriptor() {
@@ -7697,7 +8875,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP
      * *dsp, FMOD_DSP_CALLBACK callback) }
      */
     public static MethodHandle FMOD_DSP_SetCallback$handle() {
@@ -7705,7 +8885,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP *dsp,
      * FMOD_DSP_CALLBACK callback) }
      */
     public static MemorySegment FMOD_DSP_SetCallback$address() {
@@ -7713,6 +8895,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetCallback(FMOD_DSP *dsp, FMOD_DSP_CALLBACK
      * callback) }
      */
@@ -7739,7 +8923,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterFloat(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterFloat(FMOD_DSP
      * *dsp, int index, float value) }
      */
     public static FunctionDescriptor FMOD_DSP_SetParameterFloat$descriptor() {
@@ -7747,7 +8933,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_SetParameterFloat(FMOD_DSP *dsp, int index, float value) }
      */
     public static MethodHandle FMOD_DSP_SetParameterFloat$handle() {
@@ -7755,7 +8943,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterFloat(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterFloat(FMOD_DSP *dsp, int
      * index, float value) }
      */
     public static MemorySegment FMOD_DSP_SetParameterFloat$address() {
@@ -7763,6 +8953,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterFloat(FMOD_DSP *dsp, int index, float
      * value) }
      */
@@ -7789,7 +8981,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP
      * *dsp, int index, int value) }
      */
     public static FunctionDescriptor FMOD_DSP_SetParameterInt$descriptor() {
@@ -7797,7 +8991,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP
      * *dsp, int index, int value) }
      */
     public static MethodHandle FMOD_DSP_SetParameterInt$handle() {
@@ -7805,7 +9001,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP *dsp, int
      * index, int value) }
      */
     public static MemorySegment FMOD_DSP_SetParameterInt$address() {
@@ -7813,6 +9011,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterInt(FMOD_DSP *dsp, int index, int value)
      * }
      */
@@ -7839,7 +9039,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP
      * *dsp, int index, FMOD_BOOL value) }
      */
     public static FunctionDescriptor FMOD_DSP_SetParameterBool$descriptor() {
@@ -7847,7 +9049,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP
      * *dsp, int index, FMOD_BOOL value) }
      */
     public static MethodHandle FMOD_DSP_SetParameterBool$handle() {
@@ -7855,7 +9059,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP *dsp, int
      * index, FMOD_BOOL value) }
      */
     public static MemorySegment FMOD_DSP_SetParameterBool$address() {
@@ -7863,6 +9069,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterBool(FMOD_DSP *dsp, int index, FMOD_BOOL
      * value) }
      */
@@ -7893,7 +9101,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP
      * *dsp, int index, void *data, unsigned int length) }
      */
     public static FunctionDescriptor FMOD_DSP_SetParameterData$descriptor() {
@@ -7901,7 +9111,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP
      * *dsp, int index, void *data, unsigned int length) }
      */
     public static MethodHandle FMOD_DSP_SetParameterData$handle() {
@@ -7909,7 +9121,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP *dsp, int
      * index, void *data, unsigned int length) }
      */
     public static MemorySegment FMOD_DSP_SetParameterData$address() {
@@ -7917,6 +9131,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetParameterData(FMOD_DSP *dsp, int index, void
      * *data, unsigned int length) }
      */
@@ -7949,7 +9165,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterFloat(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterFloat(FMOD_DSP
      * *dsp, int index, float *value, char *valuestr, int valuestrlen) }
      */
     public static FunctionDescriptor FMOD_DSP_GetParameterFloat$descriptor() {
@@ -7957,7 +9175,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetParameterFloat(FMOD_DSP *dsp, int index, float *value, char *valuestr, int
      * valuestrlen) }
      */
@@ -7966,7 +9186,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterFloat(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterFloat(FMOD_DSP *dsp, int
      * index, float *value, char *valuestr, int valuestrlen) }
      */
     public static MemorySegment FMOD_DSP_GetParameterFloat$address() {
@@ -7974,6 +9196,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterFloat(FMOD_DSP *dsp, int index, float
      * *value, char *valuestr, int valuestrlen) }
      */
@@ -8011,7 +9235,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP
      * *dsp, int index, int *value, char *valuestr, int valuestrlen) }
      */
     public static FunctionDescriptor FMOD_DSP_GetParameterInt$descriptor() {
@@ -8019,7 +9245,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP
      * *dsp, int index, int *value, char *valuestr, int valuestrlen) }
      */
     public static MethodHandle FMOD_DSP_GetParameterInt$handle() {
@@ -8027,7 +9255,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP *dsp, int
      * index, int *value, char *valuestr, int valuestrlen) }
      */
     public static MemorySegment FMOD_DSP_GetParameterInt$address() {
@@ -8035,6 +9265,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInt(FMOD_DSP *dsp, int index, int *value,
      * char *valuestr, int valuestrlen) }
      */
@@ -8071,7 +9303,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP
      * *dsp, int index, FMOD_BOOL *value, char *valuestr, int valuestrlen) }
      */
     public static FunctionDescriptor FMOD_DSP_GetParameterBool$descriptor() {
@@ -8079,7 +9313,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP
      * *dsp, int index, FMOD_BOOL *value, char *valuestr, int valuestrlen) }
      */
     public static MethodHandle FMOD_DSP_GetParameterBool$handle() {
@@ -8087,7 +9323,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP *dsp, int
      * index, FMOD_BOOL *value, char *valuestr, int valuestrlen) }
      */
     public static MemorySegment FMOD_DSP_GetParameterBool$address() {
@@ -8095,6 +9333,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterBool(FMOD_DSP *dsp, int index, FMOD_BOOL
      * *value, char *valuestr, int valuestrlen) }
      */
@@ -8133,7 +9373,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP
      * *dsp, int index, void **data, unsigned int *length, char *valuestr, int valuestrlen) }
      */
     public static FunctionDescriptor FMOD_DSP_GetParameterData$descriptor() {
@@ -8141,7 +9383,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP
      * *dsp, int index, void **data, unsigned int *length, char *valuestr, int valuestrlen) }
      */
     public static MethodHandle FMOD_DSP_GetParameterData$handle() {
@@ -8149,7 +9393,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP *dsp, int
      * index, void **data, unsigned int *length, char *valuestr, int valuestrlen) }
      */
     public static MemorySegment FMOD_DSP_GetParameterData$address() {
@@ -8157,6 +9403,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterData(FMOD_DSP *dsp, int index, void
      * **data, unsigned int *length, char *valuestr, int valuestrlen) }
      */
@@ -8195,7 +9443,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP
      * *dsp, int *numparams) }
      */
     public static FunctionDescriptor FMOD_DSP_GetNumParameters$descriptor() {
@@ -8203,7 +9453,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP
      * *dsp, int *numparams) }
      */
     public static MethodHandle FMOD_DSP_GetNumParameters$handle() {
@@ -8211,14 +9463,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP *dsp, int
      * *numparams) }
      */
     public static MemorySegment FMOD_DSP_GetNumParameters$address() {
         return FMOD_DSP_GetNumParameters.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP *dsp, int *numparams) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetNumParameters(FMOD_DSP *dsp, int *numparams) }
+     */
     public static int FMOD_DSP_GetNumParameters(MemorySegment dsp, MemorySegment numparams) {
         var mh$ = FMOD_DSP_GetNumParameters.HANDLE;
         try {
@@ -8242,7 +9500,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP
      * *dsp, int index, FMOD_DSP_PARAMETER_DESC **desc) }
      */
     public static FunctionDescriptor FMOD_DSP_GetParameterInfo$descriptor() {
@@ -8250,7 +9510,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP
      * *dsp, int index, FMOD_DSP_PARAMETER_DESC **desc) }
      */
     public static MethodHandle FMOD_DSP_GetParameterInfo$handle() {
@@ -8258,7 +9520,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP *dsp, int
      * index, FMOD_DSP_PARAMETER_DESC **desc) }
      */
     public static MemorySegment FMOD_DSP_GetParameterInfo$address() {
@@ -8266,6 +9530,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetParameterInfo(FMOD_DSP *dsp, int index,
      * FMOD_DSP_PARAMETER_DESC **desc) }
      */
@@ -8293,7 +9559,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetDataParameterIndex(FMOD_DSP *dsp, int datatype, int *index) }
      */
     public static FunctionDescriptor FMOD_DSP_GetDataParameterIndex$descriptor() {
@@ -8301,7 +9569,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetDataParameterIndex(FMOD_DSP *dsp, int datatype, int *index) }
      */
     public static MethodHandle FMOD_DSP_GetDataParameterIndex$handle() {
@@ -8309,7 +9579,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetDataParameterIndex(FMOD_DSP *dsp, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetDataParameterIndex(FMOD_DSP *dsp, int
      * datatype, int *index) }
      */
     public static MemorySegment FMOD_DSP_GetDataParameterIndex$address() {
@@ -8317,6 +9589,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetDataParameterIndex(FMOD_DSP *dsp, int datatype,
      * int *index) }
      */
@@ -8344,7 +9618,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP
      * *dsp, void *hwnd, FMOD_BOOL show) }
      */
     public static FunctionDescriptor FMOD_DSP_ShowConfigDialog$descriptor() {
@@ -8352,7 +9628,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP
      * *dsp, void *hwnd, FMOD_BOOL show) }
      */
     public static MethodHandle FMOD_DSP_ShowConfigDialog$handle() {
@@ -8360,7 +9638,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP *dsp, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP *dsp, void
      * *hwnd, FMOD_BOOL show) }
      */
     public static MemorySegment FMOD_DSP_ShowConfigDialog$address() {
@@ -8368,6 +9648,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_ShowConfigDialog(FMOD_DSP *dsp, void *hwnd, FMOD_BOOL
      * show) }
      */
@@ -8400,7 +9682,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp, char
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp, char
      * *name, unsigned int *version, int *channels, int *configwidth, int *configheight) }
      */
     public static FunctionDescriptor FMOD_DSP_GetInfo$descriptor() {
@@ -8408,7 +9692,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp,
      * char *name, unsigned int *version, int *channels, int *configwidth, int *configheight) }
      */
     public static MethodHandle FMOD_DSP_GetInfo$handle() {
@@ -8416,7 +9702,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp, char *name,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp, char *name,
      * unsigned int *version, int *channels, int *configwidth, int *configheight) }
      */
     public static MemorySegment FMOD_DSP_GetInfo$address() {
@@ -8424,6 +9712,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetInfo(FMOD_DSP *dsp, char *name, unsigned int
      * *version, int *channels, int *configwidth, int *configheight) }
      */
@@ -8462,7 +9752,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp,
      * FMOD_DSP_TYPE *type) }
      */
     public static FunctionDescriptor FMOD_DSP_GetType$descriptor() {
@@ -8470,7 +9762,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp,
      * FMOD_DSP_TYPE *type) }
      */
     public static MethodHandle FMOD_DSP_GetType$handle() {
@@ -8478,14 +9772,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp, FMOD_DSP_TYPE
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp, FMOD_DSP_TYPE
      * *type) }
      */
     public static MemorySegment FMOD_DSP_GetType$address() {
         return FMOD_DSP_GetType.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp, FMOD_DSP_TYPE *type) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetType(FMOD_DSP *dsp, FMOD_DSP_TYPE *type) }
+     */
     public static int FMOD_DSP_GetType(MemorySegment dsp, MemorySegment type) {
         var mh$ = FMOD_DSP_GetType.HANDLE;
         try {
@@ -8508,7 +9808,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp,
      * FMOD_BOOL *idle) }
      */
     public static FunctionDescriptor FMOD_DSP_GetIdle$descriptor() {
@@ -8516,7 +9818,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp,
      * FMOD_BOOL *idle) }
      */
     public static MethodHandle FMOD_DSP_GetIdle$handle() {
@@ -8524,14 +9828,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp, FMOD_BOOL *idle)
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp, FMOD_BOOL *idle)
      * }
      */
     public static MemorySegment FMOD_DSP_GetIdle$address() {
         return FMOD_DSP_GetIdle.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp, FMOD_BOOL *idle) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetIdle(FMOD_DSP *dsp, FMOD_BOOL *idle) }
+     */
     public static int FMOD_DSP_GetIdle(MemorySegment dsp, MemorySegment idle) {
         var mh$ = FMOD_DSP_GetIdle.HANDLE;
         try {
@@ -8554,7 +9864,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp,
      * void *userdata) }
      */
     public static FunctionDescriptor FMOD_DSP_SetUserData$descriptor() {
@@ -8562,7 +9874,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP
      * *dsp, void *userdata) }
      */
     public static MethodHandle FMOD_DSP_SetUserData$handle() {
@@ -8570,14 +9884,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp, void
      * *userdata) }
      */
     public static MemorySegment FMOD_DSP_SetUserData$address() {
         return FMOD_DSP_SetUserData.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp, void *userdata) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetUserData(FMOD_DSP *dsp, void *userdata) }
+     */
     public static int FMOD_DSP_SetUserData(MemorySegment dsp, MemorySegment userdata) {
         var mh$ = FMOD_DSP_SetUserData.HANDLE;
         try {
@@ -8600,7 +9920,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp,
      * void **userdata) }
      */
     public static FunctionDescriptor FMOD_DSP_GetUserData$descriptor() {
@@ -8608,7 +9930,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP
      * *dsp, void **userdata) }
      */
     public static MethodHandle FMOD_DSP_GetUserData$handle() {
@@ -8616,14 +9940,20 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp, void
      * **userdata) }
      */
     public static MemorySegment FMOD_DSP_GetUserData$address() {
         return FMOD_DSP_GetUserData.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp, void **userdata) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetUserData(FMOD_DSP *dsp, void **userdata) }
+     */
     public static int FMOD_DSP_GetUserData(MemorySegment dsp, MemorySegment userdata) {
         var mh$ = FMOD_DSP_GetUserData.HANDLE;
         try {
@@ -8648,7 +9978,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetMeteringEnabled(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetMeteringEnabled(FMOD_DSP
      * *dsp, FMOD_BOOL inputEnabled, FMOD_BOOL outputEnabled) }
      */
     public static FunctionDescriptor FMOD_DSP_SetMeteringEnabled$descriptor() {
@@ -8656,7 +9988,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_SetMeteringEnabled(FMOD_DSP *dsp, FMOD_BOOL inputEnabled, FMOD_BOOL outputEnabled) }
      */
     public static MethodHandle FMOD_DSP_SetMeteringEnabled$handle() {
@@ -8664,7 +9998,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetMeteringEnabled(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetMeteringEnabled(FMOD_DSP *dsp,
      * FMOD_BOOL inputEnabled, FMOD_BOOL outputEnabled) }
      */
     public static MemorySegment FMOD_DSP_SetMeteringEnabled$address() {
@@ -8672,6 +10008,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_SetMeteringEnabled(FMOD_DSP *dsp, FMOD_BOOL
      * inputEnabled, FMOD_BOOL outputEnabled) }
      */
@@ -8700,7 +10038,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringEnabled(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringEnabled(FMOD_DSP
      * *dsp, FMOD_BOOL *inputEnabled, FMOD_BOOL *outputEnabled) }
      */
     public static FunctionDescriptor FMOD_DSP_GetMeteringEnabled$descriptor() {
@@ -8708,7 +10048,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSP_GetMeteringEnabled(FMOD_DSP *dsp, FMOD_BOOL *inputEnabled, FMOD_BOOL *outputEnabled)
      * }
      */
@@ -8717,7 +10059,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringEnabled(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringEnabled(FMOD_DSP *dsp,
      * FMOD_BOOL *inputEnabled, FMOD_BOOL *outputEnabled) }
      */
     public static MemorySegment FMOD_DSP_GetMeteringEnabled$address() {
@@ -8725,6 +10069,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringEnabled(FMOD_DSP *dsp, FMOD_BOOL
      * *inputEnabled, FMOD_BOOL *outputEnabled) }
      */
@@ -8752,7 +10098,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP
      * *dsp, FMOD_DSP_METERING_INFO *inputInfo, FMOD_DSP_METERING_INFO *outputInfo) }
      */
     public static FunctionDescriptor FMOD_DSP_GetMeteringInfo$descriptor() {
@@ -8760,7 +10108,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP
      * *dsp, FMOD_DSP_METERING_INFO *inputInfo, FMOD_DSP_METERING_INFO *outputInfo) }
      */
     public static MethodHandle FMOD_DSP_GetMeteringInfo$handle() {
@@ -8768,7 +10118,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP *dsp,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP *dsp,
      * FMOD_DSP_METERING_INFO *inputInfo, FMOD_DSP_METERING_INFO *outputInfo) }
      */
     public static MemorySegment FMOD_DSP_GetMeteringInfo$address() {
@@ -8776,6 +10128,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetMeteringInfo(FMOD_DSP *dsp, FMOD_DSP_METERING_INFO
      * *inputInfo, FMOD_DSP_METERING_INFO *outputInfo) }
      */
@@ -8803,7 +10157,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP *dsp,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP *dsp,
      * unsigned int *exclusive, unsigned int *inclusive) }
      */
     public static FunctionDescriptor FMOD_DSP_GetCPUUsage$descriptor() {
@@ -8811,7 +10167,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP
      * *dsp, unsigned int *exclusive, unsigned int *inclusive) }
      */
     public static MethodHandle FMOD_DSP_GetCPUUsage$handle() {
@@ -8819,7 +10177,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP *dsp, unsigned int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP *dsp, unsigned int
      * *exclusive, unsigned int *inclusive) }
      */
     public static MemorySegment FMOD_DSP_GetCPUUsage$address() {
@@ -8827,6 +10187,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSP_GetCPUUsage(FMOD_DSP *dsp, unsigned int *exclusive,
      * unsigned int *inclusive) }
      */
@@ -8854,7 +10216,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetInput(FMOD_DSPCONNECTION *dspconnection, FMOD_DSP **input) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_GetInput$descriptor() {
@@ -8862,7 +10226,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetInput(FMOD_DSPCONNECTION *dspconnection, FMOD_DSP **input) }
      */
     public static MethodHandle FMOD_DSPConnection_GetInput$handle() {
@@ -8870,7 +10236,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetInput(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetInput(FMOD_DSPCONNECTION
      * *dspconnection, FMOD_DSP **input) }
      */
     public static MemorySegment FMOD_DSPConnection_GetInput$address() {
@@ -8878,6 +10246,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetInput(FMOD_DSPCONNECTION *dspconnection,
      * FMOD_DSP **input) }
      */
@@ -8905,7 +10275,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetOutput(FMOD_DSPCONNECTION *dspconnection, FMOD_DSP **output) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_GetOutput$descriptor() {
@@ -8913,7 +10285,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetOutput(FMOD_DSPCONNECTION *dspconnection, FMOD_DSP **output) }
      */
     public static MethodHandle FMOD_DSPConnection_GetOutput$handle() {
@@ -8921,7 +10295,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetOutput(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetOutput(FMOD_DSPCONNECTION
      * *dspconnection, FMOD_DSP **output) }
      */
     public static MemorySegment FMOD_DSPConnection_GetOutput$address() {
@@ -8929,6 +10305,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetOutput(FMOD_DSPCONNECTION
      * *dspconnection, FMOD_DSP **output) }
      */
@@ -8955,7 +10333,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetMix(FMOD_DSPCONNECTION *dspconnection, float volume) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_SetMix$descriptor() {
@@ -8963,7 +10343,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetMix(FMOD_DSPCONNECTION *dspconnection, float volume) }
      */
     public static MethodHandle FMOD_DSPConnection_SetMix$handle() {
@@ -8971,7 +10353,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetMix(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetMix(FMOD_DSPCONNECTION
      * *dspconnection, float volume) }
      */
     public static MemorySegment FMOD_DSPConnection_SetMix$address() {
@@ -8979,6 +10363,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetMix(FMOD_DSPCONNECTION *dspconnection,
      * float volume) }
      */
@@ -9004,7 +10390,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetMix(FMOD_DSPCONNECTION *dspconnection, float *volume) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_GetMix$descriptor() {
@@ -9012,7 +10400,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetMix(FMOD_DSPCONNECTION *dspconnection, float *volume) }
      */
     public static MethodHandle FMOD_DSPConnection_GetMix$handle() {
@@ -9020,7 +10410,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetMix(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetMix(FMOD_DSPCONNECTION
      * *dspconnection, float *volume) }
      */
     public static MemorySegment FMOD_DSPConnection_GetMix$address() {
@@ -9028,6 +10420,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetMix(FMOD_DSPCONNECTION *dspconnection,
      * float *volume) }
      */
@@ -9060,7 +10454,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * outchannels, int inchannels, int inchannel_hop) }
      */
@@ -9069,7 +10465,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * outchannels, int inchannels, int inchannel_hop) }
      */
@@ -9078,7 +10476,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * outchannels, int inchannels, int inchannel_hop) }
      */
@@ -9087,6 +10487,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetMixMatrix(FMOD_DSPCONNECTION
      * *dspconnection, float *matrix, int outchannels, int inchannels, int inchannel_hop) }
      */
@@ -9131,7 +10533,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -9140,7 +10544,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -9149,7 +10555,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetMixMatrix(FMOD_DSPCONNECTION *dspconnection, float *matrix, int
      * *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -9158,6 +10566,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetMixMatrix(FMOD_DSPCONNECTION
      * *dspconnection, float *matrix, int *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -9195,7 +10605,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetType(FMOD_DSPCONNECTION *dspconnection, FMOD_DSPCONNECTION_TYPE *type)
      * }
      */
@@ -9204,7 +10616,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetType(FMOD_DSPCONNECTION *dspconnection, FMOD_DSPCONNECTION_TYPE *type)
      * }
      */
@@ -9213,7 +10627,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetType(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetType(FMOD_DSPCONNECTION
      * *dspconnection, FMOD_DSPCONNECTION_TYPE *type) }
      */
     public static MemorySegment FMOD_DSPConnection_GetType$address() {
@@ -9221,6 +10637,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetType(FMOD_DSPCONNECTION *dspconnection,
      * FMOD_DSPCONNECTION_TYPE *type) }
      */
@@ -9247,7 +10665,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetUserData(FMOD_DSPCONNECTION *dspconnection, void *userdata) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_SetUserData$descriptor() {
@@ -9255,7 +10675,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_SetUserData(FMOD_DSPCONNECTION *dspconnection, void *userdata) }
      */
     public static MethodHandle FMOD_DSPConnection_SetUserData$handle() {
@@ -9263,7 +10685,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetUserData(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetUserData(FMOD_DSPCONNECTION
      * *dspconnection, void *userdata) }
      */
     public static MemorySegment FMOD_DSPConnection_SetUserData$address() {
@@ -9271,6 +10695,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_SetUserData(FMOD_DSPCONNECTION
      * *dspconnection, void *userdata) }
      */
@@ -9298,7 +10724,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetUserData(FMOD_DSPCONNECTION *dspconnection, void **userdata) }
      */
     public static FunctionDescriptor FMOD_DSPConnection_GetUserData$descriptor() {
@@ -9306,7 +10734,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_DSPConnection_GetUserData(FMOD_DSPCONNECTION *dspconnection, void **userdata) }
      */
     public static MethodHandle FMOD_DSPConnection_GetUserData$handle() {
@@ -9314,7 +10744,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetUserData(FMOD_DSPCONNECTION
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetUserData(FMOD_DSPCONNECTION
      * *dspconnection, void **userdata) }
      */
     public static MemorySegment FMOD_DSPConnection_GetUserData$address() {
@@ -9322,6 +10754,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_DSPConnection_GetUserData(FMOD_DSPCONNECTION
      * *dspconnection, void **userdata) }
      */
@@ -9348,7 +10782,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY
      * *geometry) }
      */
     public static FunctionDescriptor FMOD_Geometry_Release$descriptor() {
@@ -9356,7 +10792,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_Release(FMOD_GEOMETRY *geometry) }
      */
     public static MethodHandle FMOD_Geometry_Release$handle() {
@@ -9364,13 +10802,19 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY *geometry) }
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY *geometry) }
      */
     public static MemorySegment FMOD_Geometry_Release$address() {
         return FMOD_Geometry_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY *geometry) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Release(FMOD_GEOMETRY *geometry) }
+     */
     public static int FMOD_Geometry_Release(MemorySegment geometry) {
         var mh$ = FMOD_Geometry_Release.HANDLE;
         try {
@@ -9401,7 +10845,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_AddPolygon(FMOD_GEOMETRY *geometry, float directocclusion, float
      * reverbocclusion, FMOD_BOOL doublesided, int numvertices, const FMOD_VECTOR *vertices, int
      * *polygonindex) }
@@ -9411,7 +10857,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_AddPolygon(FMOD_GEOMETRY *geometry, float directocclusion, float
      * reverbocclusion, FMOD_BOOL doublesided, int numvertices, const FMOD_VECTOR *vertices, int
      * *polygonindex) }
@@ -9421,7 +10869,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_AddPolygon(FMOD_GEOMETRY *geometry,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_AddPolygon(FMOD_GEOMETRY *geometry,
      * float directocclusion, float reverbocclusion, FMOD_BOOL doublesided, int numvertices, const
      * FMOD_VECTOR *vertices, int *polygonindex) }
      */
@@ -9430,6 +10880,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_AddPolygon(FMOD_GEOMETRY *geometry, float
      * directocclusion, float reverbocclusion, FMOD_BOOL doublesided, int numvertices, const
      * FMOD_VECTOR *vertices, int *polygonindex) }
@@ -9480,7 +10932,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetNumPolygons(FMOD_GEOMETRY *geometry, int *numpolygons) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetNumPolygons$descriptor() {
@@ -9488,7 +10942,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetNumPolygons(FMOD_GEOMETRY *geometry, int *numpolygons) }
      */
     public static MethodHandle FMOD_Geometry_GetNumPolygons$handle() {
@@ -9496,7 +10952,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetNumPolygons(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetNumPolygons(FMOD_GEOMETRY
      * *geometry, int *numpolygons) }
      */
     public static MemorySegment FMOD_Geometry_GetNumPolygons$address() {
@@ -9504,6 +10962,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetNumPolygons(FMOD_GEOMETRY *geometry, int
      * *numpolygons) }
      */
@@ -9532,7 +10992,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetMaxPolygons(FMOD_GEOMETRY *geometry, int *maxpolygons, int *maxvertices) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetMaxPolygons$descriptor() {
@@ -9540,7 +11002,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetMaxPolygons(FMOD_GEOMETRY *geometry, int *maxpolygons, int *maxvertices) }
      */
     public static MethodHandle FMOD_Geometry_GetMaxPolygons$handle() {
@@ -9548,7 +11012,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetMaxPolygons(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetMaxPolygons(FMOD_GEOMETRY
      * *geometry, int *maxpolygons, int *maxvertices) }
      */
     public static MemorySegment FMOD_Geometry_GetMaxPolygons$address() {
@@ -9556,6 +11022,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetMaxPolygons(FMOD_GEOMETRY *geometry, int
      * *maxpolygons, int *maxvertices) }
      */
@@ -9584,7 +11052,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonNumVertices(FMOD_GEOMETRY *geometry, int index, int *numvertices) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetPolygonNumVertices$descriptor() {
@@ -9592,7 +11062,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonNumVertices(FMOD_GEOMETRY *geometry, int index, int *numvertices) }
      */
     public static MethodHandle FMOD_Geometry_GetPolygonNumVertices$handle() {
@@ -9600,7 +11072,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonNumVertices(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonNumVertices(FMOD_GEOMETRY
      * *geometry, int index, int *numvertices) }
      */
     public static MemorySegment FMOD_Geometry_GetPolygonNumVertices$address() {
@@ -9608,6 +11082,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonNumVertices(FMOD_GEOMETRY *geometry,
      * int index, int *numvertices) }
      */
@@ -9640,7 +11116,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPolygonVertex(FMOD_GEOMETRY *geometry, int index, int vertexindex, const
      * FMOD_VECTOR *vertex) }
      */
@@ -9649,7 +11127,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPolygonVertex(FMOD_GEOMETRY *geometry, int index, int vertexindex, const
      * FMOD_VECTOR *vertex) }
      */
@@ -9658,7 +11138,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonVertex(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonVertex(FMOD_GEOMETRY
      * *geometry, int index, int vertexindex, const FMOD_VECTOR *vertex) }
      */
     public static MemorySegment FMOD_Geometry_SetPolygonVertex$address() {
@@ -9666,6 +11148,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonVertex(FMOD_GEOMETRY *geometry, int
      * index, int vertexindex, const FMOD_VECTOR *vertex) }
      */
@@ -9699,7 +11183,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonVertex(FMOD_GEOMETRY *geometry, int index, int vertexindex,
      * FMOD_VECTOR *vertex) }
      */
@@ -9708,7 +11194,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonVertex(FMOD_GEOMETRY *geometry, int index, int vertexindex,
      * FMOD_VECTOR *vertex) }
      */
@@ -9717,7 +11205,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonVertex(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonVertex(FMOD_GEOMETRY
      * *geometry, int index, int vertexindex, FMOD_VECTOR *vertex) }
      */
     public static MemorySegment FMOD_Geometry_GetPolygonVertex$address() {
@@ -9725,6 +11215,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonVertex(FMOD_GEOMETRY *geometry, int
      * index, int vertexindex, FMOD_VECTOR *vertex) }
      */
@@ -9759,7 +11251,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPolygonAttributes(FMOD_GEOMETRY *geometry, int index, float directocclusion,
      * float reverbocclusion, FMOD_BOOL doublesided) }
      */
@@ -9768,7 +11262,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPolygonAttributes(FMOD_GEOMETRY *geometry, int index, float directocclusion,
      * float reverbocclusion, FMOD_BOOL doublesided) }
      */
@@ -9777,7 +11273,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonAttributes(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonAttributes(FMOD_GEOMETRY
      * *geometry, int index, float directocclusion, float reverbocclusion, FMOD_BOOL doublesided) }
      */
     public static MemorySegment FMOD_Geometry_SetPolygonAttributes$address() {
@@ -9785,6 +11283,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPolygonAttributes(FMOD_GEOMETRY *geometry,
      * int index, float directocclusion, float reverbocclusion, FMOD_BOOL doublesided) }
      */
@@ -9829,7 +11329,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonAttributes(FMOD_GEOMETRY *geometry, int index, float
      * *directocclusion, float *reverbocclusion, FMOD_BOOL *doublesided) }
      */
@@ -9838,7 +11340,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPolygonAttributes(FMOD_GEOMETRY *geometry, int index, float
      * *directocclusion, float *reverbocclusion, FMOD_BOOL *doublesided) }
      */
@@ -9847,7 +11351,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonAttributes(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonAttributes(FMOD_GEOMETRY
      * *geometry, int index, float *directocclusion, float *reverbocclusion, FMOD_BOOL *doublesided)
      * }
      */
@@ -9856,6 +11362,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPolygonAttributes(FMOD_GEOMETRY *geometry,
      * int index, float *directocclusion, float *reverbocclusion, FMOD_BOOL *doublesided) }
      */
@@ -9893,7 +11401,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetActive(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetActive(FMOD_GEOMETRY
      * *geometry, FMOD_BOOL active) }
      */
     public static FunctionDescriptor FMOD_Geometry_SetActive$descriptor() {
@@ -9901,7 +11411,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetActive(FMOD_GEOMETRY *geometry, FMOD_BOOL active) }
      */
     public static MethodHandle FMOD_Geometry_SetActive$handle() {
@@ -9909,7 +11421,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetActive(FMOD_GEOMETRY *geometry,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetActive(FMOD_GEOMETRY *geometry,
      * FMOD_BOOL active) }
      */
     public static MemorySegment FMOD_Geometry_SetActive$address() {
@@ -9917,6 +11431,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetActive(FMOD_GEOMETRY *geometry, FMOD_BOOL
      * active) }
      */
@@ -9942,7 +11458,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetActive(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetActive(FMOD_GEOMETRY
      * *geometry, FMOD_BOOL *active) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetActive$descriptor() {
@@ -9950,7 +11468,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetActive(FMOD_GEOMETRY *geometry, FMOD_BOOL *active) }
      */
     public static MethodHandle FMOD_Geometry_GetActive$handle() {
@@ -9958,7 +11478,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetActive(FMOD_GEOMETRY *geometry,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetActive(FMOD_GEOMETRY *geometry,
      * FMOD_BOOL *active) }
      */
     public static MemorySegment FMOD_Geometry_GetActive$address() {
@@ -9966,6 +11488,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetActive(FMOD_GEOMETRY *geometry, FMOD_BOOL
      * *active) }
      */
@@ -9992,7 +11516,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetRotation(FMOD_GEOMETRY *geometry, const FMOD_VECTOR *forward, const
      * FMOD_VECTOR *up) }
      */
@@ -10001,7 +11527,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetRotation(FMOD_GEOMETRY *geometry, const FMOD_VECTOR *forward, const
      * FMOD_VECTOR *up) }
      */
@@ -10010,7 +11538,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetRotation(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetRotation(FMOD_GEOMETRY
      * *geometry, const FMOD_VECTOR *forward, const FMOD_VECTOR *up) }
      */
     public static MemorySegment FMOD_Geometry_SetRotation$address() {
@@ -10018,6 +11548,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetRotation(FMOD_GEOMETRY *geometry, const
      * FMOD_VECTOR *forward, const FMOD_VECTOR *up) }
      */
@@ -10045,7 +11577,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetRotation(FMOD_GEOMETRY *geometry, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetRotation$descriptor() {
@@ -10053,7 +11587,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetRotation(FMOD_GEOMETRY *geometry, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
     public static MethodHandle FMOD_Geometry_GetRotation$handle() {
@@ -10061,7 +11597,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetRotation(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetRotation(FMOD_GEOMETRY
      * *geometry, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
     public static MemorySegment FMOD_Geometry_GetRotation$address() {
@@ -10069,6 +11607,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetRotation(FMOD_GEOMETRY *geometry, FMOD_VECTOR
      * *forward, FMOD_VECTOR *up) }
      */
@@ -10095,7 +11635,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPosition(FMOD_GEOMETRY *geometry, const FMOD_VECTOR *position) }
      */
     public static FunctionDescriptor FMOD_Geometry_SetPosition$descriptor() {
@@ -10103,7 +11645,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetPosition(FMOD_GEOMETRY *geometry, const FMOD_VECTOR *position) }
      */
     public static MethodHandle FMOD_Geometry_SetPosition$handle() {
@@ -10111,7 +11655,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPosition(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPosition(FMOD_GEOMETRY
      * *geometry, const FMOD_VECTOR *position) }
      */
     public static MemorySegment FMOD_Geometry_SetPosition$address() {
@@ -10119,6 +11665,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetPosition(FMOD_GEOMETRY *geometry, const
      * FMOD_VECTOR *position) }
      */
@@ -10144,7 +11692,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPosition(FMOD_GEOMETRY *geometry, FMOD_VECTOR *position) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetPosition$descriptor() {
@@ -10152,7 +11702,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetPosition(FMOD_GEOMETRY *geometry, FMOD_VECTOR *position) }
      */
     public static MethodHandle FMOD_Geometry_GetPosition$handle() {
@@ -10160,7 +11712,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPosition(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPosition(FMOD_GEOMETRY
      * *geometry, FMOD_VECTOR *position) }
      */
     public static MemorySegment FMOD_Geometry_GetPosition$address() {
@@ -10168,6 +11722,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetPosition(FMOD_GEOMETRY *geometry, FMOD_VECTOR
      * *position) }
      */
@@ -10193,7 +11749,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetScale(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetScale(FMOD_GEOMETRY
      * *geometry, const FMOD_VECTOR *scale) }
      */
     public static FunctionDescriptor FMOD_Geometry_SetScale$descriptor() {
@@ -10201,7 +11759,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetScale(FMOD_GEOMETRY *geometry, const FMOD_VECTOR *scale) }
      */
     public static MethodHandle FMOD_Geometry_SetScale$handle() {
@@ -10209,7 +11769,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetScale(FMOD_GEOMETRY *geometry,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetScale(FMOD_GEOMETRY *geometry,
      * const FMOD_VECTOR *scale) }
      */
     public static MemorySegment FMOD_Geometry_SetScale$address() {
@@ -10217,6 +11779,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetScale(FMOD_GEOMETRY *geometry, const
      * FMOD_VECTOR *scale) }
      */
@@ -10242,7 +11806,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetScale(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetScale(FMOD_GEOMETRY
      * *geometry, FMOD_VECTOR *scale) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetScale$descriptor() {
@@ -10250,7 +11816,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetScale(FMOD_GEOMETRY *geometry, FMOD_VECTOR *scale) }
      */
     public static MethodHandle FMOD_Geometry_GetScale$handle() {
@@ -10258,7 +11826,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetScale(FMOD_GEOMETRY *geometry,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetScale(FMOD_GEOMETRY *geometry,
      * FMOD_VECTOR *scale) }
      */
     public static MemorySegment FMOD_Geometry_GetScale$address() {
@@ -10266,6 +11836,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetScale(FMOD_GEOMETRY *geometry, FMOD_VECTOR
      * *scale) }
      */
@@ -10292,7 +11864,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY
      * *geometry, void *data, int *datasize) }
      */
     public static FunctionDescriptor FMOD_Geometry_Save$descriptor() {
@@ -10300,7 +11874,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY
      * *geometry, void *data, int *datasize) }
      */
     public static MethodHandle FMOD_Geometry_Save$handle() {
@@ -10308,7 +11884,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY *geometry, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY *geometry, void
      * *data, int *datasize) }
      */
     public static MemorySegment FMOD_Geometry_Save$address() {
@@ -10316,6 +11894,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_Save(FMOD_GEOMETRY *geometry, void *data, int
      * *datasize) }
      */
@@ -10342,7 +11922,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetUserData(FMOD_GEOMETRY *geometry, void *userdata) }
      */
     public static FunctionDescriptor FMOD_Geometry_SetUserData$descriptor() {
@@ -10350,7 +11932,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_SetUserData(FMOD_GEOMETRY *geometry, void *userdata) }
      */
     public static MethodHandle FMOD_Geometry_SetUserData$handle() {
@@ -10358,7 +11942,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetUserData(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetUserData(FMOD_GEOMETRY
      * *geometry, void *userdata) }
      */
     public static MemorySegment FMOD_Geometry_SetUserData$address() {
@@ -10366,6 +11952,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_SetUserData(FMOD_GEOMETRY *geometry, void
      * *userdata) }
      */
@@ -10391,7 +11979,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetUserData(FMOD_GEOMETRY *geometry, void **userdata) }
      */
     public static FunctionDescriptor FMOD_Geometry_GetUserData$descriptor() {
@@ -10399,7 +11989,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Geometry_GetUserData(FMOD_GEOMETRY *geometry, void **userdata) }
      */
     public static MethodHandle FMOD_Geometry_GetUserData$handle() {
@@ -10407,7 +11999,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetUserData(FMOD_GEOMETRY
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetUserData(FMOD_GEOMETRY
      * *geometry, void **userdata) }
      */
     public static MemorySegment FMOD_Geometry_GetUserData$address() {
@@ -10415,6 +12009,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Geometry_GetUserData(FMOD_GEOMETRY *geometry, void
      * **userdata) }
      */
@@ -10440,7 +12036,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D
      * *reverb3d) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_Release$descriptor() {
@@ -10448,7 +12046,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_Release(FMOD_REVERB3D *reverb3d) }
      */
     public static MethodHandle FMOD_Reverb3D_Release$handle() {
@@ -10456,13 +12056,19 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D *reverb3d) }
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D *reverb3d) }
      */
     public static MemorySegment FMOD_Reverb3D_Release$address() {
         return FMOD_Reverb3D_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D *reverb3d) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Release(FMOD_REVERB3D *reverb3d) }
+     */
     public static int FMOD_Reverb3D_Release(MemorySegment reverb3d) {
         var mh$ = FMOD_Reverb3D_Release.HANDLE;
         try {
@@ -10491,7 +12097,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_Set3DAttributes(FMOD_REVERB3D *reverb3d, const FMOD_VECTOR *position, float
      * mindistance, float maxdistance) }
      */
@@ -10500,7 +12108,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_Set3DAttributes(FMOD_REVERB3D *reverb3d, const FMOD_VECTOR *position, float
      * mindistance, float maxdistance) }
      */
@@ -10509,7 +12119,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Set3DAttributes(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Set3DAttributes(FMOD_REVERB3D
      * *reverb3d, const FMOD_VECTOR *position, float mindistance, float maxdistance) }
      */
     public static MemorySegment FMOD_Reverb3D_Set3DAttributes$address() {
@@ -10517,6 +12129,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Set3DAttributes(FMOD_REVERB3D *reverb3d, const
      * FMOD_VECTOR *position, float mindistance, float maxdistance) }
      */
@@ -10554,7 +12168,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_Get3DAttributes(FMOD_REVERB3D *reverb3d, FMOD_VECTOR *position, float
      * *mindistance, float *maxdistance) }
      */
@@ -10563,7 +12179,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_Get3DAttributes(FMOD_REVERB3D *reverb3d, FMOD_VECTOR *position, float
      * *mindistance, float *maxdistance) }
      */
@@ -10572,7 +12190,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Get3DAttributes(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Get3DAttributes(FMOD_REVERB3D
      * *reverb3d, FMOD_VECTOR *position, float *mindistance, float *maxdistance) }
      */
     public static MemorySegment FMOD_Reverb3D_Get3DAttributes$address() {
@@ -10580,6 +12200,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_Get3DAttributes(FMOD_REVERB3D *reverb3d,
      * FMOD_VECTOR *position, float *mindistance, float *maxdistance) }
      */
@@ -10615,7 +12237,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_SetProperties(FMOD_REVERB3D *reverb3d, const FMOD_REVERB_PROPERTIES
      * *properties) }
      */
@@ -10624,7 +12248,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_SetProperties(FMOD_REVERB3D *reverb3d, const FMOD_REVERB_PROPERTIES
      * *properties) }
      */
@@ -10633,7 +12259,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetProperties(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetProperties(FMOD_REVERB3D
      * *reverb3d, const FMOD_REVERB_PROPERTIES *properties) }
      */
     public static MemorySegment FMOD_Reverb3D_SetProperties$address() {
@@ -10641,6 +12269,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetProperties(FMOD_REVERB3D *reverb3d, const
      * FMOD_REVERB_PROPERTIES *properties) }
      */
@@ -10668,7 +12298,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_GetProperties(FMOD_REVERB3D *reverb3d, FMOD_REVERB_PROPERTIES *properties) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_GetProperties$descriptor() {
@@ -10676,7 +12308,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_GetProperties(FMOD_REVERB3D *reverb3d, FMOD_REVERB_PROPERTIES *properties) }
      */
     public static MethodHandle FMOD_Reverb3D_GetProperties$handle() {
@@ -10684,7 +12318,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetProperties(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetProperties(FMOD_REVERB3D
      * *reverb3d, FMOD_REVERB_PROPERTIES *properties) }
      */
     public static MemorySegment FMOD_Reverb3D_GetProperties$address() {
@@ -10692,6 +12328,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetProperties(FMOD_REVERB3D *reverb3d,
      * FMOD_REVERB_PROPERTIES *properties) }
      */
@@ -10718,7 +12356,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetActive(FMOD_REVERB3D
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetActive(FMOD_REVERB3D
      * *reverb3d, FMOD_BOOL active) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_SetActive$descriptor() {
@@ -10726,7 +12366,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_SetActive(FMOD_REVERB3D *reverb3d, FMOD_BOOL active) }
      */
     public static MethodHandle FMOD_Reverb3D_SetActive$handle() {
@@ -10734,7 +12376,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetActive(FMOD_REVERB3D *reverb3d,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetActive(FMOD_REVERB3D *reverb3d,
      * FMOD_BOOL active) }
      */
     public static MemorySegment FMOD_Reverb3D_SetActive$address() {
@@ -10742,6 +12386,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetActive(FMOD_REVERB3D *reverb3d, FMOD_BOOL
      * active) }
      */
@@ -10767,7 +12413,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetActive(FMOD_REVERB3D
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetActive(FMOD_REVERB3D
      * *reverb3d, FMOD_BOOL *active) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_GetActive$descriptor() {
@@ -10775,7 +12423,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_GetActive(FMOD_REVERB3D *reverb3d, FMOD_BOOL *active) }
      */
     public static MethodHandle FMOD_Reverb3D_GetActive$handle() {
@@ -10783,7 +12433,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetActive(FMOD_REVERB3D *reverb3d,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetActive(FMOD_REVERB3D *reverb3d,
      * FMOD_BOOL *active) }
      */
     public static MemorySegment FMOD_Reverb3D_GetActive$address() {
@@ -10791,6 +12443,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetActive(FMOD_REVERB3D *reverb3d, FMOD_BOOL
      * *active) }
      */
@@ -10816,7 +12470,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_SetUserData(FMOD_REVERB3D *reverb3d, void *userdata) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_SetUserData$descriptor() {
@@ -10824,7 +12480,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_SetUserData(FMOD_REVERB3D *reverb3d, void *userdata) }
      */
     public static MethodHandle FMOD_Reverb3D_SetUserData$handle() {
@@ -10832,7 +12490,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetUserData(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetUserData(FMOD_REVERB3D
      * *reverb3d, void *userdata) }
      */
     public static MemorySegment FMOD_Reverb3D_SetUserData$address() {
@@ -10840,6 +12500,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_SetUserData(FMOD_REVERB3D *reverb3d, void
      * *userdata) }
      */
@@ -10865,7 +12527,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_GetUserData(FMOD_REVERB3D *reverb3d, void **userdata) }
      */
     public static FunctionDescriptor FMOD_Reverb3D_GetUserData$descriptor() {
@@ -10873,7 +12537,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Reverb3D_GetUserData(FMOD_REVERB3D *reverb3d, void **userdata) }
      */
     public static MethodHandle FMOD_Reverb3D_GetUserData$handle() {
@@ -10881,7 +12547,9 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetUserData(FMOD_REVERB3D
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetUserData(FMOD_REVERB3D
      * *reverb3d, void **userdata) }
      */
     public static MemorySegment FMOD_Reverb3D_GetUserData$address() {
@@ -10889,6 +12557,8 @@ public class FmodCore extends FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Reverb3D_GetUserData(FMOD_REVERB3D *reverb3d, void
      * **userdata) }
      */
@@ -10906,567 +12576,891 @@ public class FmodCore extends FmodCore_1 {
 
     private static final int FMOD_MEMORY_ALL = (int) 4294967295L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_ALL 4294967295 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_ALL 4294967295 }
+     */
     public static int FMOD_MEMORY_ALL() {
         return FMOD_MEMORY_ALL;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_ALL = (int) 4294967295L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_ALL 4294967295 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_ALL 4294967295 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_ALL() {
         return FMOD_SYSTEM_CALLBACK_ALL;
     }
 
     private static final int FMOD_VIRTUAL_PLAYFROMSTART = (int) 2147483648L;
 
-    /** {@snippet lang=c : #define FMOD_VIRTUAL_PLAYFROMSTART 2147483648 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_VIRTUAL_PLAYFROMSTART 2147483648 }
+     */
     public static int FMOD_VIRTUAL_PLAYFROMSTART() {
         return FMOD_VIRTUAL_PLAYFROMSTART;
     }
 
     private static final int FMOD_CHANNELMASK_MONO = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_MONO 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_MONO 1 }
+     */
     public static int FMOD_CHANNELMASK_MONO() {
         return FMOD_CHANNELMASK_MONO;
     }
 
     private static final int FMOD_CHANNELMASK_STEREO = (int) 3L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_STEREO 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_STEREO 3 }
+     */
     public static int FMOD_CHANNELMASK_STEREO() {
         return FMOD_CHANNELMASK_STEREO;
     }
 
     private static final int FMOD_CHANNELMASK_LRC = (int) 7L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_LRC 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_LRC 7 }
+     */
     public static int FMOD_CHANNELMASK_LRC() {
         return FMOD_CHANNELMASK_LRC;
     }
 
     private static final int FMOD_CHANNELMASK_QUAD = (int) 51L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_QUAD 51 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_QUAD 51 }
+     */
     public static int FMOD_CHANNELMASK_QUAD() {
         return FMOD_CHANNELMASK_QUAD;
     }
 
     private static final int FMOD_CHANNELMASK_SURROUND = (int) 55L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND 55 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND 55 }
+     */
     public static int FMOD_CHANNELMASK_SURROUND() {
         return FMOD_CHANNELMASK_SURROUND;
     }
 
     private static final int FMOD_CHANNELMASK_5POINT1 = (int) 63L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_5POINT1 63 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_5POINT1 63 }
+     */
     public static int FMOD_CHANNELMASK_5POINT1() {
         return FMOD_CHANNELMASK_5POINT1;
     }
 
     private static final int FMOD_CHANNELMASK_5POINT1_REARS = (int) 207L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_5POINT1_REARS 207 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_5POINT1_REARS 207 }
+     */
     public static int FMOD_CHANNELMASK_5POINT1_REARS() {
         return FMOD_CHANNELMASK_5POINT1_REARS;
     }
 
     private static final int FMOD_CHANNELMASK_7POINT0 = (int) 247L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_7POINT0 247 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_7POINT0 247 }
+     */
     public static int FMOD_CHANNELMASK_7POINT0() {
         return FMOD_CHANNELMASK_7POINT0;
     }
 
     private static final int FMOD_CHANNELMASK_7POINT1 = (int) 255L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_7POINT1 255 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_7POINT1 255 }
+     */
     public static int FMOD_CHANNELMASK_7POINT1() {
         return FMOD_CHANNELMASK_7POINT1;
     }
 
     private static final long FMOD_PORT_INDEX_NONE = -1L;
 
-    /** {@snippet lang=c : #define FMOD_PORT_INDEX_NONE -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_PORT_INDEX_NONE -1 }
+     */
     public static long FMOD_PORT_INDEX_NONE() {
         return FMOD_PORT_INDEX_NONE;
     }
 
     private static final int FMOD_THREAD_PRIORITY_PLATFORM_MIN = (int) -32768L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PLATFORM_MIN -32768 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PLATFORM_MIN -32768 }
+     */
     public static int FMOD_THREAD_PRIORITY_PLATFORM_MIN() {
         return FMOD_THREAD_PRIORITY_PLATFORM_MIN;
     }
 
     private static final int FMOD_THREAD_PRIORITY_PLATFORM_MAX = (int) 32768L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PLATFORM_MAX 32768 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PLATFORM_MAX 32768 }
+     */
     public static int FMOD_THREAD_PRIORITY_PLATFORM_MAX() {
         return FMOD_THREAD_PRIORITY_PLATFORM_MAX;
     }
 
     private static final int FMOD_THREAD_PRIORITY_DEFAULT = (int) -32769L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_DEFAULT -32769 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_DEFAULT -32769 }
+     */
     public static int FMOD_THREAD_PRIORITY_DEFAULT() {
         return FMOD_THREAD_PRIORITY_DEFAULT;
     }
 
     private static final int FMOD_THREAD_PRIORITY_LOW = (int) -32770L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_LOW -32770 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_LOW -32770 }
+     */
     public static int FMOD_THREAD_PRIORITY_LOW() {
         return FMOD_THREAD_PRIORITY_LOW;
     }
 
     private static final int FMOD_THREAD_PRIORITY_MEDIUM = (int) -32771L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_MEDIUM -32771 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_MEDIUM -32771 }
+     */
     public static int FMOD_THREAD_PRIORITY_MEDIUM() {
         return FMOD_THREAD_PRIORITY_MEDIUM;
     }
 
     private static final int FMOD_THREAD_PRIORITY_HIGH = (int) -32772L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_HIGH -32772 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_HIGH -32772 }
+     */
     public static int FMOD_THREAD_PRIORITY_HIGH() {
         return FMOD_THREAD_PRIORITY_HIGH;
     }
 
     private static final int FMOD_THREAD_PRIORITY_VERY_HIGH = (int) -32773L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_VERY_HIGH -32773 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_VERY_HIGH -32773 }
+     */
     public static int FMOD_THREAD_PRIORITY_VERY_HIGH() {
         return FMOD_THREAD_PRIORITY_VERY_HIGH;
     }
 
     private static final int FMOD_THREAD_PRIORITY_EXTREME = (int) -32774L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_EXTREME -32774 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_EXTREME -32774 }
+     */
     public static int FMOD_THREAD_PRIORITY_EXTREME() {
         return FMOD_THREAD_PRIORITY_EXTREME;
     }
 
     private static final int FMOD_THREAD_PRIORITY_CRITICAL = (int) -32775L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CRITICAL -32775 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CRITICAL -32775 }
+     */
     public static int FMOD_THREAD_PRIORITY_CRITICAL() {
         return FMOD_THREAD_PRIORITY_CRITICAL;
     }
 
     private static final int FMOD_THREAD_PRIORITY_MIXER = (int) -32774L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_MIXER -32774 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_MIXER -32774 }
+     */
     public static int FMOD_THREAD_PRIORITY_MIXER() {
         return FMOD_THREAD_PRIORITY_MIXER;
     }
 
     private static final int FMOD_THREAD_PRIORITY_FEEDER = (int) -32775L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_FEEDER -32775 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_FEEDER -32775 }
+     */
     public static int FMOD_THREAD_PRIORITY_FEEDER() {
         return FMOD_THREAD_PRIORITY_FEEDER;
     }
 
     private static final int FMOD_THREAD_PRIORITY_STREAM = (int) -32773L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STREAM -32773 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STREAM -32773 }
+     */
     public static int FMOD_THREAD_PRIORITY_STREAM() {
         return FMOD_THREAD_PRIORITY_STREAM;
     }
 
     private static final int FMOD_THREAD_PRIORITY_FILE = (int) -32772L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_FILE -32772 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_FILE -32772 }
+     */
     public static int FMOD_THREAD_PRIORITY_FILE() {
         return FMOD_THREAD_PRIORITY_FILE;
     }
 
     private static final int FMOD_THREAD_PRIORITY_NONBLOCKING = (int) -32772L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_NONBLOCKING -32772 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_NONBLOCKING -32772 }
+     */
     public static int FMOD_THREAD_PRIORITY_NONBLOCKING() {
         return FMOD_THREAD_PRIORITY_NONBLOCKING;
     }
 
     private static final int FMOD_THREAD_PRIORITY_RECORD = (int) -32772L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_RECORD -32772 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_RECORD -32772 }
+     */
     public static int FMOD_THREAD_PRIORITY_RECORD() {
         return FMOD_THREAD_PRIORITY_RECORD;
     }
 
     private static final int FMOD_THREAD_PRIORITY_GEOMETRY = (int) -32770L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_GEOMETRY -32770 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_GEOMETRY -32770 }
+     */
     public static int FMOD_THREAD_PRIORITY_GEOMETRY() {
         return FMOD_THREAD_PRIORITY_GEOMETRY;
     }
 
     private static final int FMOD_THREAD_PRIORITY_PROFILER = (int) -32771L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PROFILER -32771 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_PROFILER -32771 }
+     */
     public static int FMOD_THREAD_PRIORITY_PROFILER() {
         return FMOD_THREAD_PRIORITY_PROFILER;
     }
 
     private static final int FMOD_THREAD_PRIORITY_STUDIO_UPDATE = (int) -32771L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_UPDATE -32771 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_UPDATE -32771 }
+     */
     public static int FMOD_THREAD_PRIORITY_STUDIO_UPDATE() {
         return FMOD_THREAD_PRIORITY_STUDIO_UPDATE;
     }
 
     private static final int FMOD_THREAD_PRIORITY_STUDIO_LOAD_BANK = (int) -32771L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_LOAD_BANK -32771 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_LOAD_BANK -32771 }
+     */
     public static int FMOD_THREAD_PRIORITY_STUDIO_LOAD_BANK() {
         return FMOD_THREAD_PRIORITY_STUDIO_LOAD_BANK;
     }
 
     private static final int FMOD_THREAD_PRIORITY_STUDIO_LOAD_SAMPLE = (int) -32771L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_LOAD_SAMPLE -32771 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_STUDIO_LOAD_SAMPLE -32771 }
+     */
     public static int FMOD_THREAD_PRIORITY_STUDIO_LOAD_SAMPLE() {
         return FMOD_THREAD_PRIORITY_STUDIO_LOAD_SAMPLE;
     }
 
     private static final int FMOD_THREAD_PRIORITY_CONVOLUTION1 = (int) -32773L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CONVOLUTION1 -32773 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CONVOLUTION1 -32773 }
+     */
     public static int FMOD_THREAD_PRIORITY_CONVOLUTION1() {
         return FMOD_THREAD_PRIORITY_CONVOLUTION1;
     }
 
     private static final int FMOD_THREAD_PRIORITY_CONVOLUTION2 = (int) -32773L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CONVOLUTION2 -32773 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_PRIORITY_CONVOLUTION2 -32773 }
+     */
     public static int FMOD_THREAD_PRIORITY_CONVOLUTION2() {
         return FMOD_THREAD_PRIORITY_CONVOLUTION2;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_MIXER = (int) 81920L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_MIXER 81920 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_MIXER 81920 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_MIXER() {
         return FMOD_THREAD_STACK_SIZE_MIXER;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_FEEDER = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_FEEDER 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_FEEDER 16384 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_FEEDER() {
         return FMOD_THREAD_STACK_SIZE_FEEDER;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_STREAM = (int) 98304L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STREAM 98304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STREAM 98304 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_STREAM() {
         return FMOD_THREAD_STACK_SIZE_STREAM;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_FILE = (int) 65536L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_FILE 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_FILE 65536 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_FILE() {
         return FMOD_THREAD_STACK_SIZE_FILE;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_NONBLOCKING = (int) 114688L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_NONBLOCKING 114688 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_NONBLOCKING 114688 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_NONBLOCKING() {
         return FMOD_THREAD_STACK_SIZE_NONBLOCKING;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_RECORD = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_RECORD 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_RECORD 16384 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_RECORD() {
         return FMOD_THREAD_STACK_SIZE_RECORD;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_GEOMETRY = (int) 49152L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_GEOMETRY 49152 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_GEOMETRY 49152 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_GEOMETRY() {
         return FMOD_THREAD_STACK_SIZE_GEOMETRY;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_PROFILER = (int) 131072L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_PROFILER 131072 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_PROFILER 131072 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_PROFILER() {
         return FMOD_THREAD_STACK_SIZE_PROFILER;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_STUDIO_UPDATE = (int) 98304L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_UPDATE 98304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_UPDATE 98304 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_STUDIO_UPDATE() {
         return FMOD_THREAD_STACK_SIZE_STUDIO_UPDATE;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_BANK = (int) 98304L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_BANK 98304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_BANK 98304 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_BANK() {
         return FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_BANK;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_SAMPLE = (int) 98304L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_SAMPLE 98304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_SAMPLE 98304 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_SAMPLE() {
         return FMOD_THREAD_STACK_SIZE_STUDIO_LOAD_SAMPLE;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_CONVOLUTION1 = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_CONVOLUTION1 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_CONVOLUTION1 16384 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_CONVOLUTION1() {
         return FMOD_THREAD_STACK_SIZE_CONVOLUTION1;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_CONVOLUTION2 = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_CONVOLUTION2 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_CONVOLUTION2 16384 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_CONVOLUTION2() {
         return FMOD_THREAD_STACK_SIZE_CONVOLUTION2;
     }
 
     private static final long FMOD_THREAD_AFFINITY_GROUP_DEFAULT = 4611686018427387904L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_DEFAULT 4611686018427387904 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_DEFAULT 4611686018427387904 }
+     */
     public static long FMOD_THREAD_AFFINITY_GROUP_DEFAULT() {
         return FMOD_THREAD_AFFINITY_GROUP_DEFAULT;
     }
 
     private static final long FMOD_THREAD_AFFINITY_GROUP_A = 4611686018427387905L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_A 4611686018427387905 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_A 4611686018427387905 }
+     */
     public static long FMOD_THREAD_AFFINITY_GROUP_A() {
         return FMOD_THREAD_AFFINITY_GROUP_A;
     }
 
     private static final long FMOD_THREAD_AFFINITY_GROUP_B = 4611686018427387906L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_B 4611686018427387906 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_B 4611686018427387906 }
+     */
     public static long FMOD_THREAD_AFFINITY_GROUP_B() {
         return FMOD_THREAD_AFFINITY_GROUP_B;
     }
 
     private static final long FMOD_THREAD_AFFINITY_GROUP_C = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_C 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GROUP_C 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_GROUP_C() {
         return FMOD_THREAD_AFFINITY_GROUP_C;
     }
 
     private static final long FMOD_THREAD_AFFINITY_MIXER = 4611686018427387905L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_MIXER 4611686018427387905 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_MIXER 4611686018427387905 }
+     */
     public static long FMOD_THREAD_AFFINITY_MIXER() {
         return FMOD_THREAD_AFFINITY_MIXER;
     }
 
     private static final long FMOD_THREAD_AFFINITY_FEEDER = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_FEEDER 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_FEEDER 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_FEEDER() {
         return FMOD_THREAD_AFFINITY_FEEDER;
     }
 
     private static final long FMOD_THREAD_AFFINITY_STREAM = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STREAM 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STREAM 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_STREAM() {
         return FMOD_THREAD_AFFINITY_STREAM;
     }
 
     private static final long FMOD_THREAD_AFFINITY_FILE = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_FILE 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_FILE 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_FILE() {
         return FMOD_THREAD_AFFINITY_FILE;
     }
 
     private static final long FMOD_THREAD_AFFINITY_NONBLOCKING = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_NONBLOCKING 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_NONBLOCKING 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_NONBLOCKING() {
         return FMOD_THREAD_AFFINITY_NONBLOCKING;
     }
 
     private static final long FMOD_THREAD_AFFINITY_RECORD = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_RECORD 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_RECORD 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_RECORD() {
         return FMOD_THREAD_AFFINITY_RECORD;
     }
 
     private static final long FMOD_THREAD_AFFINITY_GEOMETRY = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GEOMETRY 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_GEOMETRY 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_GEOMETRY() {
         return FMOD_THREAD_AFFINITY_GEOMETRY;
     }
 
     private static final long FMOD_THREAD_AFFINITY_PROFILER = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_PROFILER 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_PROFILER 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_PROFILER() {
         return FMOD_THREAD_AFFINITY_PROFILER;
     }
 
     private static final long FMOD_THREAD_AFFINITY_STUDIO_UPDATE = 4611686018427387906L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_UPDATE 4611686018427387906 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_UPDATE 4611686018427387906 }
+     */
     public static long FMOD_THREAD_AFFINITY_STUDIO_UPDATE() {
         return FMOD_THREAD_AFFINITY_STUDIO_UPDATE;
     }
 
     private static final long FMOD_THREAD_AFFINITY_STUDIO_LOAD_BANK = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_LOAD_BANK 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_LOAD_BANK 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_STUDIO_LOAD_BANK() {
         return FMOD_THREAD_AFFINITY_STUDIO_LOAD_BANK;
     }
 
     private static final long FMOD_THREAD_AFFINITY_STUDIO_LOAD_SAMPLE = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_LOAD_SAMPLE 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_STUDIO_LOAD_SAMPLE 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_STUDIO_LOAD_SAMPLE() {
         return FMOD_THREAD_AFFINITY_STUDIO_LOAD_SAMPLE;
     }
 
     private static final long FMOD_THREAD_AFFINITY_CONVOLUTION1 = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CONVOLUTION1 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CONVOLUTION1 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_CONVOLUTION1() {
         return FMOD_THREAD_AFFINITY_CONVOLUTION1;
     }
 
     private static final long FMOD_THREAD_AFFINITY_CONVOLUTION2 = 4611686018427387907L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CONVOLUTION2 4611686018427387907 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CONVOLUTION2 4611686018427387907 }
+     */
     public static long FMOD_THREAD_AFFINITY_CONVOLUTION2() {
         return FMOD_THREAD_AFFINITY_CONVOLUTION2;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_0 = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_0 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_0 1 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_0() {
         return FMOD_THREAD_AFFINITY_CORE_0;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_1 = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_1 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_1 2 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_1() {
         return FMOD_THREAD_AFFINITY_CORE_1;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_2 = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_2 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_2 4 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_2() {
         return FMOD_THREAD_AFFINITY_CORE_2;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_3 = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_3 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_3 8 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_3() {
         return FMOD_THREAD_AFFINITY_CORE_3;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_4 = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_4 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_4 16 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_4() {
         return FMOD_THREAD_AFFINITY_CORE_4;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_5 = (int) 32L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_5 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_5 32 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_5() {
         return FMOD_THREAD_AFFINITY_CORE_5;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_6 = (int) 64L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_6 64 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_6 64 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_6() {
         return FMOD_THREAD_AFFINITY_CORE_6;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_7 = (int) 128L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_7 128 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_7 128 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_7() {
         return FMOD_THREAD_AFFINITY_CORE_7;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_8 = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_8 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_8 256 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_8() {
         return FMOD_THREAD_AFFINITY_CORE_8;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_9 = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_9 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_9 512 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_9() {
         return FMOD_THREAD_AFFINITY_CORE_9;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_10 = (int) 1024L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_10 1024 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_10 1024 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_10() {
         return FMOD_THREAD_AFFINITY_CORE_10;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_11 = (int) 2048L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_11 2048 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_11 2048 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_11() {
         return FMOD_THREAD_AFFINITY_CORE_11;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_12 = (int) 4096L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_12 4096 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_12 4096 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_12() {
         return FMOD_THREAD_AFFINITY_CORE_12;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_13 = (int) 8192L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_13 8192 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_13 8192 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_13() {
         return FMOD_THREAD_AFFINITY_CORE_13;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_14 = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_14 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_14 16384 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_14() {
         return FMOD_THREAD_AFFINITY_CORE_14;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_15 = (int) 32768L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_15 32768 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_15 32768 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_15() {
         return FMOD_THREAD_AFFINITY_CORE_15;
     }

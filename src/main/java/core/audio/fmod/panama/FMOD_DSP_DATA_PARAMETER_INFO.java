@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_DATA_PARAMETER_INFO { void *data; unsigned int length; int
  * index; } }
  */
@@ -36,72 +38,120 @@ public class FMOD_DSP_DATA_PARAMETER_INFO {
     private static final AddressLayout data$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("data"));
 
-    /** Layout for field: {@snippet lang=c : void *data } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static final AddressLayout data$layout() {
         return data$LAYOUT;
     }
 
     private static final long data$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : void *data } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static final long data$offset() {
         return data$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *data } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static MemorySegment data(MemorySegment struct) {
         return struct.get(data$LAYOUT, data$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *data } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static void data(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(data$LAYOUT, data$OFFSET, fieldValue);
     }
 
     private static final OfInt length$LAYOUT = (OfInt) $LAYOUT.select(groupElement("length"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static final OfInt length$layout() {
         return length$LAYOUT;
     }
 
     private static final long length$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static final long length$offset() {
         return length$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static int length(MemorySegment struct) {
         return struct.get(length$LAYOUT, length$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int length } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int length }
+     */
     public static void length(MemorySegment struct, int fieldValue) {
         struct.set(length$LAYOUT, length$OFFSET, fieldValue);
     }
 
     private static final OfInt index$LAYOUT = (OfInt) $LAYOUT.select(groupElement("index"));
 
-    /** Layout for field: {@snippet lang=c : int index } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int index }
+     */
     public static final OfInt index$layout() {
         return index$LAYOUT;
     }
 
     private static final long index$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : int index } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int index }
+     */
     public static final long index$offset() {
         return index$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int index } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int index }
+     */
     public static int index(MemorySegment struct) {
         return struct.get(index$LAYOUT, index$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int index } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int index }
+     */
     public static void index(MemorySegment struct, int fieldValue) {
         struct.set(index$LAYOUT, index$OFFSET, fieldValue);
     }

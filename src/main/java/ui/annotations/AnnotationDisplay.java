@@ -1,6 +1,7 @@
 package ui.annotations;
 
 import app.swing.SwingApp;
+import core.annotations.Annotation;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.UiUpdateEvent;

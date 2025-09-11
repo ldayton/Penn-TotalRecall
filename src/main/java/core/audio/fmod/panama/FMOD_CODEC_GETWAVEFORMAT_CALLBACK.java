@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_CODEC_GETWAVEFORMAT_CALLBACK)(FMOD_CODEC_STATE *,
  * int, FMOD_CODEC_WAVEFORMAT *) }
  */

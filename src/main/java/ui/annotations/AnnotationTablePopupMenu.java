@@ -1,6 +1,7 @@
 package ui.annotations;
 
 // import actions.DeleteAnnotationAction;
+import core.annotations.Annotation;
 import jakarta.inject.Inject;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;

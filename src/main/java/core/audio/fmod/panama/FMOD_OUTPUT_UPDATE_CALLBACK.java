@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : typedef FMOD_RESULT (*FMOD_OUTPUT_UPDATE_CALLBACK)(FMOD_OUTPUT_STATE *) } */
+/**
+ *
+ *
+ * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_OUTPUT_UPDATE_CALLBACK)(FMOD_OUTPUT_STATE *) }
+ */
 public class FMOD_OUTPUT_UPDATE_CALLBACK {
 
     FMOD_OUTPUT_UPDATE_CALLBACK() {

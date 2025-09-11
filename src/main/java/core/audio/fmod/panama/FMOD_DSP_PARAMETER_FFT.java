@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_FFT { int length; int numchannels; float
  * *spectrum[32]; } }
  */
@@ -36,24 +38,40 @@ public class FMOD_DSP_PARAMETER_FFT {
 
     private static final OfInt length$LAYOUT = (OfInt) $LAYOUT.select(groupElement("length"));
 
-    /** Layout for field: {@snippet lang=c : int length } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int length }
+     */
     public static final OfInt length$layout() {
         return length$LAYOUT;
     }
 
     private static final long length$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int length } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int length }
+     */
     public static final long length$offset() {
         return length$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int length } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int length }
+     */
     public static int length(MemorySegment struct) {
         return struct.get(length$LAYOUT, length$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int length } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int length }
+     */
     public static void length(MemorySegment struct, int fieldValue) {
         struct.set(length$LAYOUT, length$OFFSET, fieldValue);
     }
@@ -61,24 +79,40 @@ public class FMOD_DSP_PARAMETER_FFT {
     private static final OfInt numchannels$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numchannels"));
 
-    /** Layout for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final OfInt numchannels$layout() {
         return numchannels$LAYOUT;
     }
 
     private static final long numchannels$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final long numchannels$offset() {
         return numchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static int numchannels(MemorySegment struct) {
         return struct.get(numchannels$LAYOUT, numchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static void numchannels(MemorySegment struct, int fieldValue) {
         struct.set(numchannels$LAYOUT, numchannels$OFFSET, fieldValue);
     }
@@ -86,31 +120,51 @@ public class FMOD_DSP_PARAMETER_FFT {
     private static final SequenceLayout spectrum$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("spectrum"));
 
-    /** Layout for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static final SequenceLayout spectrum$layout() {
         return spectrum$LAYOUT;
     }
 
     private static final long spectrum$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static final long spectrum$offset() {
         return spectrum$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static MemorySegment spectrum(MemorySegment struct) {
         return struct.asSlice(spectrum$OFFSET, spectrum$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static void spectrum(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, spectrum$OFFSET, spectrum$LAYOUT.byteSize());
     }
 
     private static long[] spectrum$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static long[] spectrum$dimensions() {
         return spectrum$DIMS;
     }
@@ -118,12 +172,20 @@ public class FMOD_DSP_PARAMETER_FFT {
     private static final VarHandle spectrum$ELEM_HANDLE =
             spectrum$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static MemorySegment spectrum(MemorySegment struct, long index0) {
         return (MemorySegment) spectrum$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float *spectrum[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float *spectrum[32] }
+     */
     public static void spectrum(MemorySegment struct, long index0, MemorySegment fieldValue) {
         spectrum$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }

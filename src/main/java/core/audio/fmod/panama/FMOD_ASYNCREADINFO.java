@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_ASYNCREADINFO { void *handle; unsigned int offset; unsigned int
  * sizebytes; int priority; void *userdata; void *buffer; unsigned int bytesread;
  * FMOD_FILE_ASYNCDONE_FUNC done; } }
@@ -44,96 +46,160 @@ public class FMOD_ASYNCREADINFO {
     private static final AddressLayout handle$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("handle"));
 
-    /** Layout for field: {@snippet lang=c : void *handle } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *handle }
+     */
     public static final AddressLayout handle$layout() {
         return handle$LAYOUT;
     }
 
     private static final long handle$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : void *handle } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *handle }
+     */
     public static final long handle$offset() {
         return handle$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *handle } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *handle }
+     */
     public static MemorySegment handle(MemorySegment struct) {
         return struct.get(handle$LAYOUT, handle$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *handle } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *handle }
+     */
     public static void handle(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(handle$LAYOUT, handle$OFFSET, fieldValue);
     }
 
     private static final OfInt offset$LAYOUT = (OfInt) $LAYOUT.select(groupElement("offset"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int offset } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int offset }
+     */
     public static final OfInt offset$layout() {
         return offset$LAYOUT;
     }
 
     private static final long offset$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : unsigned int offset } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int offset }
+     */
     public static final long offset$offset() {
         return offset$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int offset } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int offset }
+     */
     public static int offset(MemorySegment struct) {
         return struct.get(offset$LAYOUT, offset$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int offset } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int offset }
+     */
     public static void offset(MemorySegment struct, int fieldValue) {
         struct.set(offset$LAYOUT, offset$OFFSET, fieldValue);
     }
 
     private static final OfInt sizebytes$LAYOUT = (OfInt) $LAYOUT.select(groupElement("sizebytes"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int sizebytes } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int sizebytes }
+     */
     public static final OfInt sizebytes$layout() {
         return sizebytes$LAYOUT;
     }
 
     private static final long sizebytes$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : unsigned int sizebytes } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int sizebytes }
+     */
     public static final long sizebytes$offset() {
         return sizebytes$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int sizebytes } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int sizebytes }
+     */
     public static int sizebytes(MemorySegment struct) {
         return struct.get(sizebytes$LAYOUT, sizebytes$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int sizebytes } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int sizebytes }
+     */
     public static void sizebytes(MemorySegment struct, int fieldValue) {
         struct.set(sizebytes$LAYOUT, sizebytes$OFFSET, fieldValue);
     }
 
     private static final OfInt priority$LAYOUT = (OfInt) $LAYOUT.select(groupElement("priority"));
 
-    /** Layout for field: {@snippet lang=c : int priority } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int priority }
+     */
     public static final OfInt priority$layout() {
         return priority$LAYOUT;
     }
 
     private static final long priority$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : int priority } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int priority }
+     */
     public static final long priority$offset() {
         return priority$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int priority } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int priority }
+     */
     public static int priority(MemorySegment struct) {
         return struct.get(priority$LAYOUT, priority$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int priority } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int priority }
+     */
     public static void priority(MemorySegment struct, int fieldValue) {
         struct.set(priority$LAYOUT, priority$OFFSET, fieldValue);
     }
@@ -141,24 +207,40 @@ public class FMOD_ASYNCREADINFO {
     private static final AddressLayout userdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("userdata"));
 
-    /** Layout for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final AddressLayout userdata$layout() {
         return userdata$LAYOUT;
     }
 
     private static final long userdata$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final long userdata$offset() {
         return userdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static MemorySegment userdata(MemorySegment struct) {
         return struct.get(userdata$LAYOUT, userdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static void userdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(userdata$LAYOUT, userdata$OFFSET, fieldValue);
     }
@@ -166,48 +248,80 @@ public class FMOD_ASYNCREADINFO {
     private static final AddressLayout buffer$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("buffer"));
 
-    /** Layout for field: {@snippet lang=c : void *buffer } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *buffer }
+     */
     public static final AddressLayout buffer$layout() {
         return buffer$LAYOUT;
     }
 
     private static final long buffer$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : void *buffer } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *buffer }
+     */
     public static final long buffer$offset() {
         return buffer$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *buffer } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *buffer }
+     */
     public static MemorySegment buffer(MemorySegment struct) {
         return struct.get(buffer$LAYOUT, buffer$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *buffer } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *buffer }
+     */
     public static void buffer(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(buffer$LAYOUT, buffer$OFFSET, fieldValue);
     }
 
     private static final OfInt bytesread$LAYOUT = (OfInt) $LAYOUT.select(groupElement("bytesread"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int bytesread } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int bytesread }
+     */
     public static final OfInt bytesread$layout() {
         return bytesread$LAYOUT;
     }
 
     private static final long bytesread$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : unsigned int bytesread } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int bytesread }
+     */
     public static final long bytesread$offset() {
         return bytesread$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int bytesread } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int bytesread }
+     */
     public static int bytesread(MemorySegment struct) {
         return struct.get(bytesread$LAYOUT, bytesread$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int bytesread } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int bytesread }
+     */
     public static void bytesread(MemorySegment struct, int fieldValue) {
         struct.set(bytesread$LAYOUT, bytesread$OFFSET, fieldValue);
     }
@@ -215,24 +329,40 @@ public class FMOD_ASYNCREADINFO {
     private static final AddressLayout done$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("done"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done }
+     */
     public static final AddressLayout done$layout() {
         return done$LAYOUT;
     }
 
     private static final long done$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done }
+     */
     public static final long done$offset() {
         return done$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done }
+     */
     public static MemorySegment done(MemorySegment struct) {
         return struct.get(done$LAYOUT, done$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_FILE_ASYNCDONE_FUNC done }
+     */
     public static void done(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(done$LAYOUT, done$OFFSET, fieldValue);
     }

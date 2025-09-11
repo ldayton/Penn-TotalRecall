@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_STATE { void *instance; void *plugindata; FMOD_CHANNELMASK
  * channelmask; FMOD_SPEAKERMODE source_speakermode; float *sidechaindata; int sidechainchannels;
  * FMOD_DSP_STATE_FUNCTIONS *functions; int systemobject; } }
@@ -44,24 +46,40 @@ public class FMOD_DSP_STATE {
     private static final AddressLayout instance$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("instance"));
 
-    /** Layout for field: {@snippet lang=c : void *instance } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static final AddressLayout instance$layout() {
         return instance$LAYOUT;
     }
 
     private static final long instance$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : void *instance } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static final long instance$offset() {
         return instance$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *instance } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static MemorySegment instance(MemorySegment struct) {
         return struct.get(instance$LAYOUT, instance$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *instance } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *instance }
+     */
     public static void instance(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(instance$LAYOUT, instance$OFFSET, fieldValue);
     }
@@ -69,24 +87,40 @@ public class FMOD_DSP_STATE {
     private static final AddressLayout plugindata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("plugindata"));
 
-    /** Layout for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static final AddressLayout plugindata$layout() {
         return plugindata$LAYOUT;
     }
 
     private static final long plugindata$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static final long plugindata$offset() {
         return plugindata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static MemorySegment plugindata(MemorySegment struct) {
         return struct.get(plugindata$LAYOUT, plugindata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static void plugindata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(plugindata$LAYOUT, plugindata$OFFSET, fieldValue);
     }
@@ -94,24 +128,40 @@ public class FMOD_DSP_STATE {
     private static final OfInt channelmask$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("channelmask"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CHANNELMASK channelmask } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK channelmask }
+     */
     public static final OfInt channelmask$layout() {
         return channelmask$LAYOUT;
     }
 
     private static final long channelmask$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CHANNELMASK channelmask } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK channelmask }
+     */
     public static final long channelmask$offset() {
         return channelmask$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CHANNELMASK channelmask } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK channelmask }
+     */
     public static int channelmask(MemorySegment struct) {
         return struct.get(channelmask$LAYOUT, channelmask$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CHANNELMASK channelmask } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CHANNELMASK channelmask }
+     */
     public static void channelmask(MemorySegment struct, int fieldValue) {
         struct.set(channelmask$LAYOUT, channelmask$OFFSET, fieldValue);
     }
@@ -119,24 +169,40 @@ public class FMOD_DSP_STATE {
     private static final OfInt source_speakermode$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("source_speakermode"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode }
+     */
     public static final OfInt source_speakermode$layout() {
         return source_speakermode$LAYOUT;
     }
 
     private static final long source_speakermode$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode }
+     */
     public static final long source_speakermode$offset() {
         return source_speakermode$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode }
+     */
     public static int source_speakermode(MemorySegment struct) {
         return struct.get(source_speakermode$LAYOUT, source_speakermode$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKERMODE source_speakermode }
+     */
     public static void source_speakermode(MemorySegment struct, int fieldValue) {
         struct.set(source_speakermode$LAYOUT, source_speakermode$OFFSET, fieldValue);
     }
@@ -144,24 +210,40 @@ public class FMOD_DSP_STATE {
     private static final AddressLayout sidechaindata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("sidechaindata"));
 
-    /** Layout for field: {@snippet lang=c : float *sidechaindata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float *sidechaindata }
+     */
     public static final AddressLayout sidechaindata$layout() {
         return sidechaindata$LAYOUT;
     }
 
     private static final long sidechaindata$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : float *sidechaindata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float *sidechaindata }
+     */
     public static final long sidechaindata$offset() {
         return sidechaindata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float *sidechaindata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float *sidechaindata }
+     */
     public static MemorySegment sidechaindata(MemorySegment struct) {
         return struct.get(sidechaindata$LAYOUT, sidechaindata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float *sidechaindata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float *sidechaindata }
+     */
     public static void sidechaindata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sidechaindata$LAYOUT, sidechaindata$OFFSET, fieldValue);
     }
@@ -169,24 +251,40 @@ public class FMOD_DSP_STATE {
     private static final OfInt sidechainchannels$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("sidechainchannels"));
 
-    /** Layout for field: {@snippet lang=c : int sidechainchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int sidechainchannels }
+     */
     public static final OfInt sidechainchannels$layout() {
         return sidechainchannels$LAYOUT;
     }
 
     private static final long sidechainchannels$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : int sidechainchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int sidechainchannels }
+     */
     public static final long sidechainchannels$offset() {
         return sidechainchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int sidechainchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int sidechainchannels }
+     */
     public static int sidechainchannels(MemorySegment struct) {
         return struct.get(sidechainchannels$LAYOUT, sidechainchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int sidechainchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int sidechainchannels }
+     */
     public static void sidechainchannels(MemorySegment struct, int fieldValue) {
         struct.set(sidechainchannels$LAYOUT, sidechainchannels$OFFSET, fieldValue);
     }
@@ -194,24 +292,40 @@ public class FMOD_DSP_STATE {
     private static final AddressLayout functions$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("functions"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions }
+     */
     public static final AddressLayout functions$layout() {
         return functions$LAYOUT;
     }
 
     private static final long functions$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions }
+     */
     public static final long functions$offset() {
         return functions$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions }
+     */
     public static MemorySegment functions(MemorySegment struct) {
         return struct.get(functions$LAYOUT, functions$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_STATE_FUNCTIONS *functions }
+     */
     public static void functions(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(functions$LAYOUT, functions$OFFSET, fieldValue);
     }
@@ -219,24 +333,40 @@ public class FMOD_DSP_STATE {
     private static final OfInt systemobject$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("systemobject"));
 
-    /** Layout for field: {@snippet lang=c : int systemobject } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int systemobject }
+     */
     public static final OfInt systemobject$layout() {
         return systemobject$LAYOUT;
     }
 
     private static final long systemobject$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : int systemobject } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int systemobject }
+     */
     public static final long systemobject$offset() {
         return systemobject$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int systemobject } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int systemobject }
+     */
     public static int systemobject(MemorySegment struct) {
         return struct.get(systemobject$LAYOUT, systemobject$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int systemobject } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int systemobject }
+     */
     public static void systemobject(MemorySegment struct, int fieldValue) {
         struct.set(systemobject$LAYOUT, systemobject$OFFSET, fieldValue);
     }

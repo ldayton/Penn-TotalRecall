@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR { int numpoints;
  * float *pointparamvalues; float *pointpositions; } }
  */
@@ -36,24 +38,40 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR {
 
     private static final OfInt numpoints$LAYOUT = (OfInt) $LAYOUT.select(groupElement("numpoints"));
 
-    /** Layout for field: {@snippet lang=c : int numpoints } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numpoints }
+     */
     public static final OfInt numpoints$layout() {
         return numpoints$LAYOUT;
     }
 
     private static final long numpoints$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int numpoints } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numpoints }
+     */
     public static final long numpoints$offset() {
         return numpoints$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numpoints } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numpoints }
+     */
     public static int numpoints(MemorySegment struct) {
         return struct.get(numpoints$LAYOUT, numpoints$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numpoints } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numpoints }
+     */
     public static void numpoints(MemorySegment struct, int fieldValue) {
         struct.set(numpoints$LAYOUT, numpoints$OFFSET, fieldValue);
     }
@@ -61,24 +79,40 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR {
     private static final AddressLayout pointparamvalues$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("pointparamvalues"));
 
-    /** Layout for field: {@snippet lang=c : float *pointparamvalues } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float *pointparamvalues }
+     */
     public static final AddressLayout pointparamvalues$layout() {
         return pointparamvalues$LAYOUT;
     }
 
     private static final long pointparamvalues$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float *pointparamvalues } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float *pointparamvalues }
+     */
     public static final long pointparamvalues$offset() {
         return pointparamvalues$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float *pointparamvalues } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float *pointparamvalues }
+     */
     public static MemorySegment pointparamvalues(MemorySegment struct) {
         return struct.get(pointparamvalues$LAYOUT, pointparamvalues$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float *pointparamvalues } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float *pointparamvalues }
+     */
     public static void pointparamvalues(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(pointparamvalues$LAYOUT, pointparamvalues$OFFSET, fieldValue);
     }
@@ -86,24 +120,40 @@ public class FMOD_DSP_PARAMETER_FLOAT_MAPPING_PIECEWISE_LINEAR {
     private static final AddressLayout pointpositions$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("pointpositions"));
 
-    /** Layout for field: {@snippet lang=c : float *pointpositions } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float *pointpositions }
+     */
     public static final AddressLayout pointpositions$layout() {
         return pointpositions$LAYOUT;
     }
 
     private static final long pointpositions$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : float *pointpositions } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float *pointpositions }
+     */
     public static final long pointpositions$offset() {
         return pointpositions$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float *pointpositions } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float *pointpositions }
+     */
     public static MemorySegment pointpositions(MemorySegment struct) {
         return struct.get(pointpositions$LAYOUT, pointpositions$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float *pointpositions } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float *pointpositions }
+     */
     public static void pointpositions(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(pointpositions$LAYOUT, pointpositions$OFFSET, fieldValue);
     }

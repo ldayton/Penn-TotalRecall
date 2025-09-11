@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_FILE_SEEK_CALLBACK)(void *, unsigned int, void *) }
  */
 public class FMOD_FILE_SEEK_CALLBACK {

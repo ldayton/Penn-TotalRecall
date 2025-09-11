@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_METERING_INFO { int numsamples; float peaklevel[32]; float
  * rmslevel[32]; short numchannels; } }
  */
@@ -38,24 +40,40 @@ public class FMOD_DSP_METERING_INFO {
     private static final OfInt numsamples$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numsamples"));
 
-    /** Layout for field: {@snippet lang=c : int numsamples } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numsamples }
+     */
     public static final OfInt numsamples$layout() {
         return numsamples$LAYOUT;
     }
 
     private static final long numsamples$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int numsamples } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numsamples }
+     */
     public static final long numsamples$offset() {
         return numsamples$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numsamples } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numsamples }
+     */
     public static int numsamples(MemorySegment struct) {
         return struct.get(numsamples$LAYOUT, numsamples$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numsamples } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numsamples }
+     */
     public static void numsamples(MemorySegment struct, int fieldValue) {
         struct.set(numsamples$LAYOUT, numsamples$OFFSET, fieldValue);
     }
@@ -63,31 +81,51 @@ public class FMOD_DSP_METERING_INFO {
     private static final SequenceLayout peaklevel$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("peaklevel"));
 
-    /** Layout for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static final SequenceLayout peaklevel$layout() {
         return peaklevel$LAYOUT;
     }
 
     private static final long peaklevel$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static final long peaklevel$offset() {
         return peaklevel$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static MemorySegment peaklevel(MemorySegment struct) {
         return struct.asSlice(peaklevel$OFFSET, peaklevel$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static void peaklevel(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, peaklevel$OFFSET, peaklevel$LAYOUT.byteSize());
     }
 
     private static long[] peaklevel$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static long[] peaklevel$dimensions() {
         return peaklevel$DIMS;
     }
@@ -95,12 +133,20 @@ public class FMOD_DSP_METERING_INFO {
     private static final VarHandle peaklevel$ELEM_HANDLE =
             peaklevel$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static float peaklevel(MemorySegment struct, long index0) {
         return (float) peaklevel$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float peaklevel[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float peaklevel[32] }
+     */
     public static void peaklevel(MemorySegment struct, long index0, float fieldValue) {
         peaklevel$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
@@ -108,31 +154,51 @@ public class FMOD_DSP_METERING_INFO {
     private static final SequenceLayout rmslevel$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("rmslevel"));
 
-    /** Layout for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static final SequenceLayout rmslevel$layout() {
         return rmslevel$LAYOUT;
     }
 
     private static final long rmslevel$OFFSET = 132;
 
-    /** Offset for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static final long rmslevel$offset() {
         return rmslevel$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static MemorySegment rmslevel(MemorySegment struct) {
         return struct.asSlice(rmslevel$OFFSET, rmslevel$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static void rmslevel(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, rmslevel$OFFSET, rmslevel$LAYOUT.byteSize());
     }
 
     private static long[] rmslevel$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static long[] rmslevel$dimensions() {
         return rmslevel$DIMS;
     }
@@ -140,12 +206,20 @@ public class FMOD_DSP_METERING_INFO {
     private static final VarHandle rmslevel$ELEM_HANDLE =
             rmslevel$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static float rmslevel(MemorySegment struct, long index0) {
         return (float) rmslevel$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float rmslevel[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float rmslevel[32] }
+     */
     public static void rmslevel(MemorySegment struct, long index0, float fieldValue) {
         rmslevel$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
@@ -153,24 +227,40 @@ public class FMOD_DSP_METERING_INFO {
     private static final OfShort numchannels$LAYOUT =
             (OfShort) $LAYOUT.select(groupElement("numchannels"));
 
-    /** Layout for field: {@snippet lang=c : short numchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : short numchannels }
+     */
     public static final OfShort numchannels$layout() {
         return numchannels$LAYOUT;
     }
 
     private static final long numchannels$OFFSET = 260;
 
-    /** Offset for field: {@snippet lang=c : short numchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : short numchannels }
+     */
     public static final long numchannels$offset() {
         return numchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : short numchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : short numchannels }
+     */
     public static short numchannels(MemorySegment struct) {
         return struct.get(numchannels$LAYOUT, numchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : short numchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : short numchannels }
+     */
     public static void numchannels(MemorySegment struct, short fieldValue) {
         struct.set(numchannels$LAYOUT, numchannels$OFFSET, fieldValue);
     }

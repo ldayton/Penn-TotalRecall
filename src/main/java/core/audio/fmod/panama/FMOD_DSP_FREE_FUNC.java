@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef void (*FMOD_DSP_FREE_FUNC)(void *, FMOD_MEMORY_TYPE, const char *) }
  */
 public class FMOD_DSP_FREE_FUNC {

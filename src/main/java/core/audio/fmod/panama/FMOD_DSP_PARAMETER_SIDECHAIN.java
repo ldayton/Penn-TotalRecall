@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_DSP_PARAMETER_SIDECHAIN { FMOD_BOOL sidechainenable; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_DSP_PARAMETER_SIDECHAIN { FMOD_BOOL sidechainenable; } }
+ */
 public class FMOD_DSP_PARAMETER_SIDECHAIN {
 
     FMOD_DSP_PARAMETER_SIDECHAIN() {
@@ -30,24 +34,40 @@ public class FMOD_DSP_PARAMETER_SIDECHAIN {
     private static final OfInt sidechainenable$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("sidechainenable"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_BOOL sidechainenable } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL sidechainenable }
+     */
     public static final OfInt sidechainenable$layout() {
         return sidechainenable$LAYOUT;
     }
 
     private static final long sidechainenable$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_BOOL sidechainenable } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL sidechainenable }
+     */
     public static final long sidechainenable$offset() {
         return sidechainenable$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_BOOL sidechainenable } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL sidechainenable }
+     */
     public static int sidechainenable(MemorySegment struct) {
         return struct.get(sidechainenable$LAYOUT, sidechainenable$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_BOOL sidechainenable } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL sidechainenable }
+     */
     public static void sidechainenable(MemorySegment struct, int fieldValue) {
         struct.set(sidechainenable$LAYOUT, sidechainenable$OFFSET, fieldValue);
     }

@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_PLUGINLIST { FMOD_PLUGINTYPE type; void *description; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_PLUGINLIST { FMOD_PLUGINTYPE type; void *description; } }
+ */
 public class FMOD_PLUGINLIST {
 
     FMOD_PLUGINLIST() {
@@ -32,24 +36,40 @@ public class FMOD_PLUGINLIST {
 
     private static final OfInt type$LAYOUT = (OfInt) $LAYOUT.select(groupElement("type"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_PLUGINTYPE type } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_PLUGINTYPE type }
+     */
     public static final OfInt type$layout() {
         return type$LAYOUT;
     }
 
     private static final long type$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_PLUGINTYPE type } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_PLUGINTYPE type }
+     */
     public static final long type$offset() {
         return type$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_PLUGINTYPE type } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_PLUGINTYPE type }
+     */
     public static int type(MemorySegment struct) {
         return struct.get(type$LAYOUT, type$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_PLUGINTYPE type } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_PLUGINTYPE type }
+     */
     public static void type(MemorySegment struct, int fieldValue) {
         struct.set(type$LAYOUT, type$OFFSET, fieldValue);
     }
@@ -57,24 +77,40 @@ public class FMOD_PLUGINLIST {
     private static final AddressLayout description$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("description"));
 
-    /** Layout for field: {@snippet lang=c : void *description } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *description }
+     */
     public static final AddressLayout description$layout() {
         return description$LAYOUT;
     }
 
     private static final long description$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : void *description } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *description }
+     */
     public static final long description$offset() {
         return description$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *description } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *description }
+     */
     public static MemorySegment description(MemorySegment struct) {
         return struct.get(description$LAYOUT, description$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *description } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *description }
+     */
     public static void description(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(description$LAYOUT, description$OFFSET, fieldValue);
     }

@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_DSP_GETPARAM_BOOL_CALLBACK)(FMOD_DSP_STATE *, int,
  * FMOD_BOOL *, char *) }
  */

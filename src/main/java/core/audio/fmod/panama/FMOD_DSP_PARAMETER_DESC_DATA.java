@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC_DATA { int datatype; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DESC_DATA { int datatype; } }
+ */
 public class FMOD_DSP_PARAMETER_DESC_DATA {
 
     FMOD_DSP_PARAMETER_DESC_DATA() {
@@ -29,24 +33,40 @@ public class FMOD_DSP_PARAMETER_DESC_DATA {
 
     private static final OfInt datatype$LAYOUT = (OfInt) $LAYOUT.select(groupElement("datatype"));
 
-    /** Layout for field: {@snippet lang=c : int datatype } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int datatype }
+     */
     public static final OfInt datatype$layout() {
         return datatype$LAYOUT;
     }
 
     private static final long datatype$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int datatype } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int datatype }
+     */
     public static final long datatype$offset() {
         return datatype$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int datatype } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int datatype }
+     */
     public static int datatype(MemorySegment struct) {
         return struct.get(datatype$LAYOUT, datatype$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int datatype } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int datatype }
+     */
     public static void datatype(MemorySegment struct, int fieldValue) {
         struct.set(datatype$LAYOUT, datatype$OFFSET, fieldValue);
     }

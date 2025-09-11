@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_CODEC_STATE { void *plugindata; FMOD_CODEC_WAVEFORMAT *waveformat;
  * FMOD_CODEC_STATE_FUNCTIONS *functions; int numsubsounds; } }
  */
@@ -38,24 +40,40 @@ public class FMOD_CODEC_STATE {
     private static final AddressLayout plugindata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("plugindata"));
 
-    /** Layout for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static final AddressLayout plugindata$layout() {
         return plugindata$LAYOUT;
     }
 
     private static final long plugindata$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static final long plugindata$offset() {
         return plugindata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static MemorySegment plugindata(MemorySegment struct) {
         return struct.get(plugindata$LAYOUT, plugindata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *plugindata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *plugindata }
+     */
     public static void plugindata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(plugindata$LAYOUT, plugindata$OFFSET, fieldValue);
     }
@@ -63,24 +81,40 @@ public class FMOD_CODEC_STATE {
     private static final AddressLayout waveformat$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("waveformat"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat }
+     */
     public static final AddressLayout waveformat$layout() {
         return waveformat$LAYOUT;
     }
 
     private static final long waveformat$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat }
+     */
     public static final long waveformat$offset() {
         return waveformat$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat }
+     */
     public static MemorySegment waveformat(MemorySegment struct) {
         return struct.get(waveformat$LAYOUT, waveformat$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_WAVEFORMAT *waveformat }
+     */
     public static void waveformat(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(waveformat$LAYOUT, waveformat$OFFSET, fieldValue);
     }
@@ -88,24 +122,40 @@ public class FMOD_CODEC_STATE {
     private static final AddressLayout functions$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("functions"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions }
+     */
     public static final AddressLayout functions$layout() {
         return functions$LAYOUT;
     }
 
     private static final long functions$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions }
+     */
     public static final long functions$offset() {
         return functions$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions }
+     */
     public static MemorySegment functions(MemorySegment struct) {
         return struct.get(functions$LAYOUT, functions$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_STATE_FUNCTIONS *functions }
+     */
     public static void functions(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(functions$LAYOUT, functions$OFFSET, fieldValue);
     }
@@ -113,24 +163,40 @@ public class FMOD_CODEC_STATE {
     private static final OfInt numsubsounds$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numsubsounds"));
 
-    /** Layout for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static final OfInt numsubsounds$layout() {
         return numsubsounds$LAYOUT;
     }
 
     private static final long numsubsounds$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static final long numsubsounds$offset() {
         return numsubsounds$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static int numsubsounds(MemorySegment struct) {
         return struct.get(numsubsounds$LAYOUT, numsubsounds$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numsubsounds } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numsubsounds }
+     */
     public static void numsubsounds(MemorySegment struct, int fieldValue) {
         struct.set(numsubsounds$LAYOUT, numsubsounds$OFFSET, fieldValue);
     }

@@ -1,5 +1,6 @@
 package ui.annotations;
 
+import core.annotations.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -87,13 +88,13 @@ public class AnnotationTableModel implements TableModel {
         }
         Annotation ann = sortedAnns.get(rowIndex);
         if (columnIndex == 0) {
-            return ann.getTime();
+            return ann.time();
         }
         if (columnIndex == 1) {
-            return ann.getText();
+            return ann.text();
         }
         if (columnIndex == 2) {
-            return ann.getWordNum();
+            return ann.wordNum();
         }
         throw new IllegalStateException(stateErr);
     }

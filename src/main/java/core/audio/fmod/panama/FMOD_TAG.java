@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_TAG { FMOD_TAGTYPE type; FMOD_TAGDATATYPE datatype; char *name;
  * void *data; unsigned int datalen; FMOD_BOOL updated; } }
  */
@@ -38,48 +40,80 @@ public class FMOD_TAG {
 
     private static final OfInt type$LAYOUT = (OfInt) $LAYOUT.select(groupElement("type"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_TAGTYPE type } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_TAGTYPE type }
+     */
     public static final OfInt type$layout() {
         return type$LAYOUT;
     }
 
     private static final long type$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_TAGTYPE type } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_TAGTYPE type }
+     */
     public static final long type$offset() {
         return type$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_TAGTYPE type } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_TAGTYPE type }
+     */
     public static int type(MemorySegment struct) {
         return struct.get(type$LAYOUT, type$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_TAGTYPE type } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_TAGTYPE type }
+     */
     public static void type(MemorySegment struct, int fieldValue) {
         struct.set(type$LAYOUT, type$OFFSET, fieldValue);
     }
 
     private static final OfInt datatype$LAYOUT = (OfInt) $LAYOUT.select(groupElement("datatype"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_TAGDATATYPE datatype } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_TAGDATATYPE datatype }
+     */
     public static final OfInt datatype$layout() {
         return datatype$LAYOUT;
     }
 
     private static final long datatype$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : FMOD_TAGDATATYPE datatype } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_TAGDATATYPE datatype }
+     */
     public static final long datatype$offset() {
         return datatype$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_TAGDATATYPE datatype } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_TAGDATATYPE datatype }
+     */
     public static int datatype(MemorySegment struct) {
         return struct.get(datatype$LAYOUT, datatype$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_TAGDATATYPE datatype } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_TAGDATATYPE datatype }
+     */
     public static void datatype(MemorySegment struct, int fieldValue) {
         struct.set(datatype$LAYOUT, datatype$OFFSET, fieldValue);
     }
@@ -87,24 +121,40 @@ public class FMOD_TAG {
     private static final AddressLayout name$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("name"));
 
-    /** Layout for field: {@snippet lang=c : char *name } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : char *name }
+     */
     public static final AddressLayout name$layout() {
         return name$LAYOUT;
     }
 
     private static final long name$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : char *name } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : char *name }
+     */
     public static final long name$offset() {
         return name$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : char *name } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : char *name }
+     */
     public static MemorySegment name(MemorySegment struct) {
         return struct.get(name$LAYOUT, name$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : char *name } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : char *name }
+     */
     public static void name(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(name$LAYOUT, name$OFFSET, fieldValue);
     }
@@ -112,72 +162,120 @@ public class FMOD_TAG {
     private static final AddressLayout data$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("data"));
 
-    /** Layout for field: {@snippet lang=c : void *data } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static final AddressLayout data$layout() {
         return data$LAYOUT;
     }
 
     private static final long data$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : void *data } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static final long data$offset() {
         return data$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *data } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static MemorySegment data(MemorySegment struct) {
         return struct.get(data$LAYOUT, data$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *data } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *data }
+     */
     public static void data(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(data$LAYOUT, data$OFFSET, fieldValue);
     }
 
     private static final OfInt datalen$LAYOUT = (OfInt) $LAYOUT.select(groupElement("datalen"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int datalen } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int datalen }
+     */
     public static final OfInt datalen$layout() {
         return datalen$LAYOUT;
     }
 
     private static final long datalen$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : unsigned int datalen } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int datalen }
+     */
     public static final long datalen$offset() {
         return datalen$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int datalen } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int datalen }
+     */
     public static int datalen(MemorySegment struct) {
         return struct.get(datalen$LAYOUT, datalen$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int datalen } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int datalen }
+     */
     public static void datalen(MemorySegment struct, int fieldValue) {
         struct.set(datalen$LAYOUT, datalen$OFFSET, fieldValue);
     }
 
     private static final OfInt updated$LAYOUT = (OfInt) $LAYOUT.select(groupElement("updated"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_BOOL updated } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL updated }
+     */
     public static final OfInt updated$layout() {
         return updated$LAYOUT;
     }
 
     private static final long updated$OFFSET = 28;
 
-    /** Offset for field: {@snippet lang=c : FMOD_BOOL updated } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL updated }
+     */
     public static final long updated$offset() {
         return updated$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_BOOL updated } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL updated }
+     */
     public static int updated(MemorySegment struct) {
         return struct.get(updated$LAYOUT, updated$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_BOOL updated } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_BOOL updated }
+     */
     public static void updated(MemorySegment struct, int fieldValue) {
         struct.set(updated$LAYOUT, updated$OFFSET, fieldValue);
     }

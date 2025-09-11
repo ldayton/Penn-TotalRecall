@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : typedef void (*FMOD_OUTPUT_FREE_FUNC)(void *, const char *, int) } */
+/**
+ *
+ *
+ * {@snippet lang=c : typedef void (*FMOD_OUTPUT_FREE_FUNC)(void *, const char *, int) }
+ */
 public class FMOD_OUTPUT_FREE_FUNC {
 
     FMOD_OUTPUT_FREE_FUNC() {

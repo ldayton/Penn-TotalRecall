@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_ADVANCEDSETTINGS { int cbSize; int maxMPEGCodecs; int
  * maxADPCMCodecs; int maxXMACodecs; int maxVorbisCodecs; int maxAT9Codecs; int maxFADPCMCodecs; int
  * maxOpusCodecs; int ASIONumChannels; char **ASIOChannelList; FMOD_SPEAKER *ASIOSpeakerList; float
@@ -62,24 +64,40 @@ public class FMOD_ADVANCEDSETTINGS {
 
     private static final OfInt cbSize$LAYOUT = (OfInt) $LAYOUT.select(groupElement("cbSize"));
 
-    /** Layout for field: {@snippet lang=c : int cbSize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int cbSize }
+     */
     public static final OfInt cbSize$layout() {
         return cbSize$LAYOUT;
     }
 
     private static final long cbSize$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int cbSize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int cbSize }
+     */
     public static final long cbSize$offset() {
         return cbSize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int cbSize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int cbSize }
+     */
     public static int cbSize(MemorySegment struct) {
         return struct.get(cbSize$LAYOUT, cbSize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int cbSize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int cbSize }
+     */
     public static void cbSize(MemorySegment struct, int fieldValue) {
         struct.set(cbSize$LAYOUT, cbSize$OFFSET, fieldValue);
     }
@@ -87,24 +105,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxMPEGCodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxMPEGCodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxMPEGCodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxMPEGCodecs }
+     */
     public static final OfInt maxMPEGCodecs$layout() {
         return maxMPEGCodecs$LAYOUT;
     }
 
     private static final long maxMPEGCodecs$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : int maxMPEGCodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxMPEGCodecs }
+     */
     public static final long maxMPEGCodecs$offset() {
         return maxMPEGCodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxMPEGCodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxMPEGCodecs }
+     */
     public static int maxMPEGCodecs(MemorySegment struct) {
         return struct.get(maxMPEGCodecs$LAYOUT, maxMPEGCodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxMPEGCodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxMPEGCodecs }
+     */
     public static void maxMPEGCodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxMPEGCodecs$LAYOUT, maxMPEGCodecs$OFFSET, fieldValue);
     }
@@ -112,24 +146,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxADPCMCodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxADPCMCodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxADPCMCodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxADPCMCodecs }
+     */
     public static final OfInt maxADPCMCodecs$layout() {
         return maxADPCMCodecs$LAYOUT;
     }
 
     private static final long maxADPCMCodecs$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : int maxADPCMCodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxADPCMCodecs }
+     */
     public static final long maxADPCMCodecs$offset() {
         return maxADPCMCodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxADPCMCodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxADPCMCodecs }
+     */
     public static int maxADPCMCodecs(MemorySegment struct) {
         return struct.get(maxADPCMCodecs$LAYOUT, maxADPCMCodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxADPCMCodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxADPCMCodecs }
+     */
     public static void maxADPCMCodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxADPCMCodecs$LAYOUT, maxADPCMCodecs$OFFSET, fieldValue);
     }
@@ -137,24 +187,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxXMACodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxXMACodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxXMACodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxXMACodecs }
+     */
     public static final OfInt maxXMACodecs$layout() {
         return maxXMACodecs$LAYOUT;
     }
 
     private static final long maxXMACodecs$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : int maxXMACodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxXMACodecs }
+     */
     public static final long maxXMACodecs$offset() {
         return maxXMACodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxXMACodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxXMACodecs }
+     */
     public static int maxXMACodecs(MemorySegment struct) {
         return struct.get(maxXMACodecs$LAYOUT, maxXMACodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxXMACodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxXMACodecs }
+     */
     public static void maxXMACodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxXMACodecs$LAYOUT, maxXMACodecs$OFFSET, fieldValue);
     }
@@ -162,24 +228,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxVorbisCodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxVorbisCodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxVorbisCodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxVorbisCodecs }
+     */
     public static final OfInt maxVorbisCodecs$layout() {
         return maxVorbisCodecs$LAYOUT;
     }
 
     private static final long maxVorbisCodecs$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : int maxVorbisCodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxVorbisCodecs }
+     */
     public static final long maxVorbisCodecs$offset() {
         return maxVorbisCodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxVorbisCodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxVorbisCodecs }
+     */
     public static int maxVorbisCodecs(MemorySegment struct) {
         return struct.get(maxVorbisCodecs$LAYOUT, maxVorbisCodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxVorbisCodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxVorbisCodecs }
+     */
     public static void maxVorbisCodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxVorbisCodecs$LAYOUT, maxVorbisCodecs$OFFSET, fieldValue);
     }
@@ -187,24 +269,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxAT9Codecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxAT9Codecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxAT9Codecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxAT9Codecs }
+     */
     public static final OfInt maxAT9Codecs$layout() {
         return maxAT9Codecs$LAYOUT;
     }
 
     private static final long maxAT9Codecs$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : int maxAT9Codecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxAT9Codecs }
+     */
     public static final long maxAT9Codecs$offset() {
         return maxAT9Codecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxAT9Codecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxAT9Codecs }
+     */
     public static int maxAT9Codecs(MemorySegment struct) {
         return struct.get(maxAT9Codecs$LAYOUT, maxAT9Codecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxAT9Codecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxAT9Codecs }
+     */
     public static void maxAT9Codecs(MemorySegment struct, int fieldValue) {
         struct.set(maxAT9Codecs$LAYOUT, maxAT9Codecs$OFFSET, fieldValue);
     }
@@ -212,24 +310,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxFADPCMCodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxFADPCMCodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxFADPCMCodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxFADPCMCodecs }
+     */
     public static final OfInt maxFADPCMCodecs$layout() {
         return maxFADPCMCodecs$LAYOUT;
     }
 
     private static final long maxFADPCMCodecs$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : int maxFADPCMCodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxFADPCMCodecs }
+     */
     public static final long maxFADPCMCodecs$offset() {
         return maxFADPCMCodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxFADPCMCodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxFADPCMCodecs }
+     */
     public static int maxFADPCMCodecs(MemorySegment struct) {
         return struct.get(maxFADPCMCodecs$LAYOUT, maxFADPCMCodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxFADPCMCodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxFADPCMCodecs }
+     */
     public static void maxFADPCMCodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxFADPCMCodecs$LAYOUT, maxFADPCMCodecs$OFFSET, fieldValue);
     }
@@ -237,24 +351,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxOpusCodecs$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxOpusCodecs"));
 
-    /** Layout for field: {@snippet lang=c : int maxOpusCodecs } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxOpusCodecs }
+     */
     public static final OfInt maxOpusCodecs$layout() {
         return maxOpusCodecs$LAYOUT;
     }
 
     private static final long maxOpusCodecs$OFFSET = 28;
 
-    /** Offset for field: {@snippet lang=c : int maxOpusCodecs } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxOpusCodecs }
+     */
     public static final long maxOpusCodecs$offset() {
         return maxOpusCodecs$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxOpusCodecs } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxOpusCodecs }
+     */
     public static int maxOpusCodecs(MemorySegment struct) {
         return struct.get(maxOpusCodecs$LAYOUT, maxOpusCodecs$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxOpusCodecs } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxOpusCodecs }
+     */
     public static void maxOpusCodecs(MemorySegment struct, int fieldValue) {
         struct.set(maxOpusCodecs$LAYOUT, maxOpusCodecs$OFFSET, fieldValue);
     }
@@ -262,24 +392,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt ASIONumChannels$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("ASIONumChannels"));
 
-    /** Layout for field: {@snippet lang=c : int ASIONumChannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int ASIONumChannels }
+     */
     public static final OfInt ASIONumChannels$layout() {
         return ASIONumChannels$LAYOUT;
     }
 
     private static final long ASIONumChannels$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : int ASIONumChannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int ASIONumChannels }
+     */
     public static final long ASIONumChannels$offset() {
         return ASIONumChannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int ASIONumChannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int ASIONumChannels }
+     */
     public static int ASIONumChannels(MemorySegment struct) {
         return struct.get(ASIONumChannels$LAYOUT, ASIONumChannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int ASIONumChannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int ASIONumChannels }
+     */
     public static void ASIONumChannels(MemorySegment struct, int fieldValue) {
         struct.set(ASIONumChannels$LAYOUT, ASIONumChannels$OFFSET, fieldValue);
     }
@@ -287,24 +433,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final AddressLayout ASIOChannelList$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("ASIOChannelList"));
 
-    /** Layout for field: {@snippet lang=c : char **ASIOChannelList } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : char **ASIOChannelList }
+     */
     public static final AddressLayout ASIOChannelList$layout() {
         return ASIOChannelList$LAYOUT;
     }
 
     private static final long ASIOChannelList$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : char **ASIOChannelList } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : char **ASIOChannelList }
+     */
     public static final long ASIOChannelList$offset() {
         return ASIOChannelList$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : char **ASIOChannelList } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : char **ASIOChannelList }
+     */
     public static MemorySegment ASIOChannelList(MemorySegment struct) {
         return struct.get(ASIOChannelList$LAYOUT, ASIOChannelList$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : char **ASIOChannelList } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : char **ASIOChannelList }
+     */
     public static void ASIOChannelList(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(ASIOChannelList$LAYOUT, ASIOChannelList$OFFSET, fieldValue);
     }
@@ -312,24 +474,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final AddressLayout ASIOSpeakerList$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("ASIOSpeakerList"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList }
+     */
     public static final AddressLayout ASIOSpeakerList$layout() {
         return ASIOSpeakerList$LAYOUT;
     }
 
     private static final long ASIOSpeakerList$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList }
+     */
     public static final long ASIOSpeakerList$offset() {
         return ASIOSpeakerList$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList }
+     */
     public static MemorySegment ASIOSpeakerList(MemorySegment struct) {
         return struct.get(ASIOSpeakerList$LAYOUT, ASIOSpeakerList$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_SPEAKER *ASIOSpeakerList }
+     */
     public static void ASIOSpeakerList(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(ASIOSpeakerList$LAYOUT, ASIOSpeakerList$OFFSET, fieldValue);
     }
@@ -337,24 +515,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfFloat vol0virtualvol$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("vol0virtualvol"));
 
-    /** Layout for field: {@snippet lang=c : float vol0virtualvol } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float vol0virtualvol }
+     */
     public static final OfFloat vol0virtualvol$layout() {
         return vol0virtualvol$LAYOUT;
     }
 
     private static final long vol0virtualvol$OFFSET = 56;
 
-    /** Offset for field: {@snippet lang=c : float vol0virtualvol } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float vol0virtualvol }
+     */
     public static final long vol0virtualvol$offset() {
         return vol0virtualvol$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float vol0virtualvol } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float vol0virtualvol }
+     */
     public static float vol0virtualvol(MemorySegment struct) {
         return struct.get(vol0virtualvol$LAYOUT, vol0virtualvol$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float vol0virtualvol } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float vol0virtualvol }
+     */
     public static void vol0virtualvol(MemorySegment struct, float fieldValue) {
         struct.set(vol0virtualvol$LAYOUT, vol0virtualvol$OFFSET, fieldValue);
     }
@@ -362,24 +556,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt defaultDecodeBufferSize$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("defaultDecodeBufferSize"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int defaultDecodeBufferSize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int defaultDecodeBufferSize }
+     */
     public static final OfInt defaultDecodeBufferSize$layout() {
         return defaultDecodeBufferSize$LAYOUT;
     }
 
     private static final long defaultDecodeBufferSize$OFFSET = 60;
 
-    /** Offset for field: {@snippet lang=c : unsigned int defaultDecodeBufferSize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int defaultDecodeBufferSize }
+     */
     public static final long defaultDecodeBufferSize$offset() {
         return defaultDecodeBufferSize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int defaultDecodeBufferSize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int defaultDecodeBufferSize }
+     */
     public static int defaultDecodeBufferSize(MemorySegment struct) {
         return struct.get(defaultDecodeBufferSize$LAYOUT, defaultDecodeBufferSize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int defaultDecodeBufferSize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int defaultDecodeBufferSize }
+     */
     public static void defaultDecodeBufferSize(MemorySegment struct, int fieldValue) {
         struct.set(defaultDecodeBufferSize$LAYOUT, defaultDecodeBufferSize$OFFSET, fieldValue);
     }
@@ -387,24 +597,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfShort profilePort$LAYOUT =
             (OfShort) $LAYOUT.select(groupElement("profilePort"));
 
-    /** Layout for field: {@snippet lang=c : unsigned short profilePort } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned short profilePort }
+     */
     public static final OfShort profilePort$layout() {
         return profilePort$LAYOUT;
     }
 
     private static final long profilePort$OFFSET = 64;
 
-    /** Offset for field: {@snippet lang=c : unsigned short profilePort } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned short profilePort }
+     */
     public static final long profilePort$offset() {
         return profilePort$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned short profilePort } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned short profilePort }
+     */
     public static short profilePort(MemorySegment struct) {
         return struct.get(profilePort$LAYOUT, profilePort$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned short profilePort } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned short profilePort }
+     */
     public static void profilePort(MemorySegment struct, short fieldValue) {
         struct.set(profilePort$LAYOUT, profilePort$OFFSET, fieldValue);
     }
@@ -412,24 +638,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt geometryMaxFadeTime$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("geometryMaxFadeTime"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int geometryMaxFadeTime } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int geometryMaxFadeTime }
+     */
     public static final OfInt geometryMaxFadeTime$layout() {
         return geometryMaxFadeTime$LAYOUT;
     }
 
     private static final long geometryMaxFadeTime$OFFSET = 68;
 
-    /** Offset for field: {@snippet lang=c : unsigned int geometryMaxFadeTime } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int geometryMaxFadeTime }
+     */
     public static final long geometryMaxFadeTime$offset() {
         return geometryMaxFadeTime$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int geometryMaxFadeTime } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int geometryMaxFadeTime }
+     */
     public static int geometryMaxFadeTime(MemorySegment struct) {
         return struct.get(geometryMaxFadeTime$LAYOUT, geometryMaxFadeTime$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int geometryMaxFadeTime } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int geometryMaxFadeTime }
+     */
     public static void geometryMaxFadeTime(MemorySegment struct, int fieldValue) {
         struct.set(geometryMaxFadeTime$LAYOUT, geometryMaxFadeTime$OFFSET, fieldValue);
     }
@@ -437,24 +679,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfFloat distanceFilterCenterFreq$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("distanceFilterCenterFreq"));
 
-    /** Layout for field: {@snippet lang=c : float distanceFilterCenterFreq } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float distanceFilterCenterFreq }
+     */
     public static final OfFloat distanceFilterCenterFreq$layout() {
         return distanceFilterCenterFreq$LAYOUT;
     }
 
     private static final long distanceFilterCenterFreq$OFFSET = 72;
 
-    /** Offset for field: {@snippet lang=c : float distanceFilterCenterFreq } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float distanceFilterCenterFreq }
+     */
     public static final long distanceFilterCenterFreq$offset() {
         return distanceFilterCenterFreq$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float distanceFilterCenterFreq } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float distanceFilterCenterFreq }
+     */
     public static float distanceFilterCenterFreq(MemorySegment struct) {
         return struct.get(distanceFilterCenterFreq$LAYOUT, distanceFilterCenterFreq$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float distanceFilterCenterFreq } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float distanceFilterCenterFreq }
+     */
     public static void distanceFilterCenterFreq(MemorySegment struct, float fieldValue) {
         struct.set(distanceFilterCenterFreq$LAYOUT, distanceFilterCenterFreq$OFFSET, fieldValue);
     }
@@ -462,24 +720,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt reverb3Dinstance$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("reverb3Dinstance"));
 
-    /** Layout for field: {@snippet lang=c : int reverb3Dinstance } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int reverb3Dinstance }
+     */
     public static final OfInt reverb3Dinstance$layout() {
         return reverb3Dinstance$LAYOUT;
     }
 
     private static final long reverb3Dinstance$OFFSET = 76;
 
-    /** Offset for field: {@snippet lang=c : int reverb3Dinstance } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int reverb3Dinstance }
+     */
     public static final long reverb3Dinstance$offset() {
         return reverb3Dinstance$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int reverb3Dinstance } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int reverb3Dinstance }
+     */
     public static int reverb3Dinstance(MemorySegment struct) {
         return struct.get(reverb3Dinstance$LAYOUT, reverb3Dinstance$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int reverb3Dinstance } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int reverb3Dinstance }
+     */
     public static void reverb3Dinstance(MemorySegment struct, int fieldValue) {
         struct.set(reverb3Dinstance$LAYOUT, reverb3Dinstance$OFFSET, fieldValue);
     }
@@ -487,24 +761,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt DSPBufferPoolSize$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("DSPBufferPoolSize"));
 
-    /** Layout for field: {@snippet lang=c : int DSPBufferPoolSize } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int DSPBufferPoolSize }
+     */
     public static final OfInt DSPBufferPoolSize$layout() {
         return DSPBufferPoolSize$LAYOUT;
     }
 
     private static final long DSPBufferPoolSize$OFFSET = 80;
 
-    /** Offset for field: {@snippet lang=c : int DSPBufferPoolSize } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int DSPBufferPoolSize }
+     */
     public static final long DSPBufferPoolSize$offset() {
         return DSPBufferPoolSize$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int DSPBufferPoolSize } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int DSPBufferPoolSize }
+     */
     public static int DSPBufferPoolSize(MemorySegment struct) {
         return struct.get(DSPBufferPoolSize$LAYOUT, DSPBufferPoolSize$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int DSPBufferPoolSize } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int DSPBufferPoolSize }
+     */
     public static void DSPBufferPoolSize(MemorySegment struct, int fieldValue) {
         struct.set(DSPBufferPoolSize$LAYOUT, DSPBufferPoolSize$OFFSET, fieldValue);
     }
@@ -512,24 +802,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt resamplerMethod$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("resamplerMethod"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod }
+     */
     public static final OfInt resamplerMethod$layout() {
         return resamplerMethod$LAYOUT;
     }
 
     private static final long resamplerMethod$OFFSET = 84;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod }
+     */
     public static final long resamplerMethod$offset() {
         return resamplerMethod$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod }
+     */
     public static int resamplerMethod(MemorySegment struct) {
         return struct.get(resamplerMethod$LAYOUT, resamplerMethod$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESAMPLER resamplerMethod }
+     */
     public static void resamplerMethod(MemorySegment struct, int fieldValue) {
         struct.set(resamplerMethod$LAYOUT, resamplerMethod$OFFSET, fieldValue);
     }
@@ -537,24 +843,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt randomSeed$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("randomSeed"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int randomSeed } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int randomSeed }
+     */
     public static final OfInt randomSeed$layout() {
         return randomSeed$LAYOUT;
     }
 
     private static final long randomSeed$OFFSET = 88;
 
-    /** Offset for field: {@snippet lang=c : unsigned int randomSeed } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int randomSeed }
+     */
     public static final long randomSeed$offset() {
         return randomSeed$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int randomSeed } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int randomSeed }
+     */
     public static int randomSeed(MemorySegment struct) {
         return struct.get(randomSeed$LAYOUT, randomSeed$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int randomSeed } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int randomSeed }
+     */
     public static void randomSeed(MemorySegment struct, int fieldValue) {
         struct.set(randomSeed$LAYOUT, randomSeed$OFFSET, fieldValue);
     }
@@ -562,24 +884,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxConvolutionThreads$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxConvolutionThreads"));
 
-    /** Layout for field: {@snippet lang=c : int maxConvolutionThreads } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxConvolutionThreads }
+     */
     public static final OfInt maxConvolutionThreads$layout() {
         return maxConvolutionThreads$LAYOUT;
     }
 
     private static final long maxConvolutionThreads$OFFSET = 92;
 
-    /** Offset for field: {@snippet lang=c : int maxConvolutionThreads } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxConvolutionThreads }
+     */
     public static final long maxConvolutionThreads$offset() {
         return maxConvolutionThreads$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxConvolutionThreads } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxConvolutionThreads }
+     */
     public static int maxConvolutionThreads(MemorySegment struct) {
         return struct.get(maxConvolutionThreads$LAYOUT, maxConvolutionThreads$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxConvolutionThreads } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxConvolutionThreads }
+     */
     public static void maxConvolutionThreads(MemorySegment struct, int fieldValue) {
         struct.set(maxConvolutionThreads$LAYOUT, maxConvolutionThreads$OFFSET, fieldValue);
     }
@@ -587,24 +925,40 @@ public class FMOD_ADVANCEDSETTINGS {
     private static final OfInt maxSpatialObjects$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("maxSpatialObjects"));
 
-    /** Layout for field: {@snippet lang=c : int maxSpatialObjects } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int maxSpatialObjects }
+     */
     public static final OfInt maxSpatialObjects$layout() {
         return maxSpatialObjects$LAYOUT;
     }
 
     private static final long maxSpatialObjects$OFFSET = 96;
 
-    /** Offset for field: {@snippet lang=c : int maxSpatialObjects } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int maxSpatialObjects }
+     */
     public static final long maxSpatialObjects$offset() {
         return maxSpatialObjects$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int maxSpatialObjects } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int maxSpatialObjects }
+     */
     public static int maxSpatialObjects(MemorySegment struct) {
         return struct.get(maxSpatialObjects$LAYOUT, maxSpatialObjects$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int maxSpatialObjects } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int maxSpatialObjects }
+     */
     public static void maxSpatialObjects(MemorySegment struct, int fieldValue) {
         struct.set(maxSpatialObjects$LAYOUT, maxSpatialObjects$OFFSET, fieldValue);
     }

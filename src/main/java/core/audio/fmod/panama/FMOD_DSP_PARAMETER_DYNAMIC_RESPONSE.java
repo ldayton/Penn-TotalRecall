@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_PARAMETER_DYNAMIC_RESPONSE { int numchannels; float rms[32]; }
  * }
  */
@@ -35,24 +37,40 @@ public class FMOD_DSP_PARAMETER_DYNAMIC_RESPONSE {
     private static final OfInt numchannels$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numchannels"));
 
-    /** Layout for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final OfInt numchannels$layout() {
         return numchannels$LAYOUT;
     }
 
     private static final long numchannels$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static final long numchannels$offset() {
         return numchannels$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static int numchannels(MemorySegment struct) {
         return struct.get(numchannels$LAYOUT, numchannels$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numchannels } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numchannels }
+     */
     public static void numchannels(MemorySegment struct, int fieldValue) {
         struct.set(numchannels$LAYOUT, numchannels$OFFSET, fieldValue);
     }
@@ -60,43 +78,71 @@ public class FMOD_DSP_PARAMETER_DYNAMIC_RESPONSE {
     private static final SequenceLayout rms$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("rms"));
 
-    /** Layout for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static final SequenceLayout rms$layout() {
         return rms$LAYOUT;
     }
 
     private static final long rms$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static final long rms$offset() {
         return rms$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static MemorySegment rms(MemorySegment struct) {
         return struct.asSlice(rms$OFFSET, rms$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static void rms(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, rms$OFFSET, rms$LAYOUT.byteSize());
     }
 
     private static long[] rms$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static long[] rms$dimensions() {
         return rms$DIMS;
     }
 
     private static final VarHandle rms$ELEM_HANDLE = rms$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static float rms(MemorySegment struct, long index0) {
         return (float) rms$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : float rms[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : float rms[32] }
+     */
     public static void rms(MemorySegment struct, long index0, float fieldValue) {
         rms$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }

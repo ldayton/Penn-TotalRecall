@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_DSP_GETUSERDATA_FUNC)(FMOD_DSP_STATE *, void **) }
  */
 public class FMOD_DSP_GETUSERDATA_FUNC {

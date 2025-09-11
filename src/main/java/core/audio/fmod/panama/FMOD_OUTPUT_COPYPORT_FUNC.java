@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_OUTPUT_COPYPORT_FUNC)(FMOD_OUTPUT_STATE *, int,
  * void *, unsigned int) }
  */

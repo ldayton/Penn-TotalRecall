@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_DSP_DESCRIPTION { unsigned int pluginsdkversion; char name[32];
  * unsigned int version; int numinputbuffers; int numoutputbuffers; FMOD_DSP_CREATE_CALLBACK create;
  * FMOD_DSP_RELEASE_CALLBACK release; FMOD_DSP_RESET_CALLBACK reset; FMOD_DSP_READ_CALLBACK read;
@@ -70,24 +72,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final OfInt pluginsdkversion$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("pluginsdkversion"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int pluginsdkversion } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int pluginsdkversion }
+     */
     public static final OfInt pluginsdkversion$layout() {
         return pluginsdkversion$LAYOUT;
     }
 
     private static final long pluginsdkversion$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : unsigned int pluginsdkversion } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int pluginsdkversion }
+     */
     public static final long pluginsdkversion$offset() {
         return pluginsdkversion$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int pluginsdkversion } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int pluginsdkversion }
+     */
     public static int pluginsdkversion(MemorySegment struct) {
         return struct.get(pluginsdkversion$LAYOUT, pluginsdkversion$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int pluginsdkversion } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int pluginsdkversion }
+     */
     public static void pluginsdkversion(MemorySegment struct, int fieldValue) {
         struct.set(pluginsdkversion$LAYOUT, pluginsdkversion$OFFSET, fieldValue);
     }
@@ -95,67 +113,111 @@ public class FMOD_DSP_DESCRIPTION {
     private static final SequenceLayout name$LAYOUT =
             (SequenceLayout) $LAYOUT.select(groupElement("name"));
 
-    /** Layout for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static final SequenceLayout name$layout() {
         return name$LAYOUT;
     }
 
     private static final long name$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static final long name$offset() {
         return name$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static MemorySegment name(MemorySegment struct) {
         return struct.asSlice(name$OFFSET, name$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static void name(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, name$OFFSET, name$LAYOUT.byteSize());
     }
 
     private static long[] name$DIMS = {32};
 
-    /** Dimensions for array field: {@snippet lang=c : char name[32] } */
+    /**
+     * Dimensions for array field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static long[] name$dimensions() {
         return name$DIMS;
     }
 
     private static final VarHandle name$ELEM_HANDLE = name$LAYOUT.varHandle(sequenceElement());
 
-    /** Indexed getter for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Indexed getter for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static byte name(MemorySegment struct, long index0) {
         return (byte) name$ELEM_HANDLE.get(struct, 0L, index0);
     }
 
-    /** Indexed setter for field: {@snippet lang=c : char name[32] } */
+    /**
+     * Indexed setter for field:
+     *
+     * {@snippet lang=c : char name[32] }
+     */
     public static void name(MemorySegment struct, long index0, byte fieldValue) {
         name$ELEM_HANDLE.set(struct, 0L, index0, fieldValue);
     }
 
     private static final OfInt version$LAYOUT = (OfInt) $LAYOUT.select(groupElement("version"));
 
-    /** Layout for field: {@snippet lang=c : unsigned int version } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : unsigned int version }
+     */
     public static final OfInt version$layout() {
         return version$LAYOUT;
     }
 
     private static final long version$OFFSET = 36;
 
-    /** Offset for field: {@snippet lang=c : unsigned int version } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : unsigned int version }
+     */
     public static final long version$offset() {
         return version$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : unsigned int version } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : unsigned int version }
+     */
     public static int version(MemorySegment struct) {
         return struct.get(version$LAYOUT, version$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : unsigned int version } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : unsigned int version }
+     */
     public static void version(MemorySegment struct, int fieldValue) {
         struct.set(version$LAYOUT, version$OFFSET, fieldValue);
     }
@@ -163,24 +225,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final OfInt numinputbuffers$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numinputbuffers"));
 
-    /** Layout for field: {@snippet lang=c : int numinputbuffers } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numinputbuffers }
+     */
     public static final OfInt numinputbuffers$layout() {
         return numinputbuffers$LAYOUT;
     }
 
     private static final long numinputbuffers$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : int numinputbuffers } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numinputbuffers }
+     */
     public static final long numinputbuffers$offset() {
         return numinputbuffers$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numinputbuffers } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numinputbuffers }
+     */
     public static int numinputbuffers(MemorySegment struct) {
         return struct.get(numinputbuffers$LAYOUT, numinputbuffers$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numinputbuffers } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numinputbuffers }
+     */
     public static void numinputbuffers(MemorySegment struct, int fieldValue) {
         struct.set(numinputbuffers$LAYOUT, numinputbuffers$OFFSET, fieldValue);
     }
@@ -188,24 +266,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final OfInt numoutputbuffers$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numoutputbuffers"));
 
-    /** Layout for field: {@snippet lang=c : int numoutputbuffers } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numoutputbuffers }
+     */
     public static final OfInt numoutputbuffers$layout() {
         return numoutputbuffers$LAYOUT;
     }
 
     private static final long numoutputbuffers$OFFSET = 44;
 
-    /** Offset for field: {@snippet lang=c : int numoutputbuffers } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numoutputbuffers }
+     */
     public static final long numoutputbuffers$offset() {
         return numoutputbuffers$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numoutputbuffers } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numoutputbuffers }
+     */
     public static int numoutputbuffers(MemorySegment struct) {
         return struct.get(numoutputbuffers$LAYOUT, numoutputbuffers$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numoutputbuffers } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numoutputbuffers }
+     */
     public static void numoutputbuffers(MemorySegment struct, int fieldValue) {
         struct.set(numoutputbuffers$LAYOUT, numoutputbuffers$OFFSET, fieldValue);
     }
@@ -213,24 +307,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout create$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("create"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create }
+     */
     public static final AddressLayout create$layout() {
         return create$LAYOUT;
     }
 
     private static final long create$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create }
+     */
     public static final long create$offset() {
         return create$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create }
+     */
     public static MemorySegment create(MemorySegment struct) {
         return struct.get(create$LAYOUT, create$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_CREATE_CALLBACK create }
+     */
     public static void create(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(create$LAYOUT, create$OFFSET, fieldValue);
     }
@@ -238,24 +348,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout release$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("release"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release }
+     */
     public static final AddressLayout release$layout() {
         return release$LAYOUT;
     }
 
     private static final long release$OFFSET = 56;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release }
+     */
     public static final long release$offset() {
         return release$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release }
+     */
     public static MemorySegment release(MemorySegment struct) {
         return struct.get(release$LAYOUT, release$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RELEASE_CALLBACK release }
+     */
     public static void release(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(release$LAYOUT, release$OFFSET, fieldValue);
     }
@@ -263,24 +389,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout reset$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("reset"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset }
+     */
     public static final AddressLayout reset$layout() {
         return reset$LAYOUT;
     }
 
     private static final long reset$OFFSET = 64;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset }
+     */
     public static final long reset$offset() {
         return reset$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset }
+     */
     public static MemorySegment reset(MemorySegment struct) {
         return struct.get(reset$LAYOUT, reset$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_RESET_CALLBACK reset }
+     */
     public static void reset(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(reset$LAYOUT, reset$OFFSET, fieldValue);
     }
@@ -288,24 +430,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout read$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("read"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_READ_CALLBACK read } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_READ_CALLBACK read }
+     */
     public static final AddressLayout read$layout() {
         return read$LAYOUT;
     }
 
     private static final long read$OFFSET = 72;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_READ_CALLBACK read } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_READ_CALLBACK read }
+     */
     public static final long read$offset() {
         return read$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_READ_CALLBACK read } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_READ_CALLBACK read }
+     */
     public static MemorySegment read(MemorySegment struct) {
         return struct.get(read$LAYOUT, read$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_READ_CALLBACK read } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_READ_CALLBACK read }
+     */
     public static void read(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(read$LAYOUT, read$OFFSET, fieldValue);
     }
@@ -313,24 +471,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout process$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("process"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process }
+     */
     public static final AddressLayout process$layout() {
         return process$LAYOUT;
     }
 
     private static final long process$OFFSET = 80;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process }
+     */
     public static final long process$offset() {
         return process$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process }
+     */
     public static MemorySegment process(MemorySegment struct) {
         return struct.get(process$LAYOUT, process$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PROCESS_CALLBACK process }
+     */
     public static void process(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(process$LAYOUT, process$OFFSET, fieldValue);
     }
@@ -338,24 +512,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout setposition$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("setposition"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition }
+     */
     public static final AddressLayout setposition$layout() {
         return setposition$LAYOUT;
     }
 
     private static final long setposition$OFFSET = 88;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition }
+     */
     public static final long setposition$offset() {
         return setposition$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition }
+     */
     public static MemorySegment setposition(MemorySegment struct) {
         return struct.get(setposition$LAYOUT, setposition$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPOSITION_CALLBACK setposition }
+     */
     public static void setposition(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(setposition$LAYOUT, setposition$OFFSET, fieldValue);
     }
@@ -363,24 +553,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final OfInt numparameters$LAYOUT =
             (OfInt) $LAYOUT.select(groupElement("numparameters"));
 
-    /** Layout for field: {@snippet lang=c : int numparameters } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : int numparameters }
+     */
     public static final OfInt numparameters$layout() {
         return numparameters$LAYOUT;
     }
 
     private static final long numparameters$OFFSET = 96;
 
-    /** Offset for field: {@snippet lang=c : int numparameters } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : int numparameters }
+     */
     public static final long numparameters$offset() {
         return numparameters$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : int numparameters } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : int numparameters }
+     */
     public static int numparameters(MemorySegment struct) {
         return struct.get(numparameters$LAYOUT, numparameters$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : int numparameters } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : int numparameters }
+     */
     public static void numparameters(MemorySegment struct, int fieldValue) {
         struct.set(numparameters$LAYOUT, numparameters$OFFSET, fieldValue);
     }
@@ -388,24 +594,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout paramdesc$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("paramdesc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc }
+     */
     public static final AddressLayout paramdesc$layout() {
         return paramdesc$LAYOUT;
     }
 
     private static final long paramdesc$OFFSET = 104;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc }
+     */
     public static final long paramdesc$offset() {
         return paramdesc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc }
+     */
     public static MemorySegment paramdesc(MemorySegment struct) {
         return struct.get(paramdesc$LAYOUT, paramdesc$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_PARAMETER_DESC **paramdesc }
+     */
     public static void paramdesc(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(paramdesc$LAYOUT, paramdesc$OFFSET, fieldValue);
     }
@@ -413,24 +635,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout setparameterfloat$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("setparameterfloat"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat }
+     */
     public static final AddressLayout setparameterfloat$layout() {
         return setparameterfloat$LAYOUT;
     }
 
     private static final long setparameterfloat$OFFSET = 112;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat }
+     */
     public static final long setparameterfloat$offset() {
         return setparameterfloat$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat }
+     */
     public static MemorySegment setparameterfloat(MemorySegment struct) {
         return struct.get(setparameterfloat$LAYOUT, setparameterfloat$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_FLOAT_CALLBACK setparameterfloat }
+     */
     public static void setparameterfloat(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(setparameterfloat$LAYOUT, setparameterfloat$OFFSET, fieldValue);
     }
@@ -438,24 +676,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout setparameterint$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("setparameterint"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint }
+     */
     public static final AddressLayout setparameterint$layout() {
         return setparameterint$LAYOUT;
     }
 
     private static final long setparameterint$OFFSET = 120;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint }
+     */
     public static final long setparameterint$offset() {
         return setparameterint$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint }
+     */
     public static MemorySegment setparameterint(MemorySegment struct) {
         return struct.get(setparameterint$LAYOUT, setparameterint$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_INT_CALLBACK setparameterint }
+     */
     public static void setparameterint(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(setparameterint$LAYOUT, setparameterint$OFFSET, fieldValue);
     }
@@ -463,24 +717,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout setparameterbool$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("setparameterbool"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool }
+     */
     public static final AddressLayout setparameterbool$layout() {
         return setparameterbool$LAYOUT;
     }
 
     private static final long setparameterbool$OFFSET = 128;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool }
+     */
     public static final long setparameterbool$offset() {
         return setparameterbool$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool }
+     */
     public static MemorySegment setparameterbool(MemorySegment struct) {
         return struct.get(setparameterbool$LAYOUT, setparameterbool$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_BOOL_CALLBACK setparameterbool }
+     */
     public static void setparameterbool(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(setparameterbool$LAYOUT, setparameterbool$OFFSET, fieldValue);
     }
@@ -488,24 +758,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout setparameterdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("setparameterdata"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata }
+     */
     public static final AddressLayout setparameterdata$layout() {
         return setparameterdata$LAYOUT;
     }
 
     private static final long setparameterdata$OFFSET = 136;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata }
+     */
     public static final long setparameterdata$offset() {
         return setparameterdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata }
+     */
     public static MemorySegment setparameterdata(MemorySegment struct) {
         return struct.get(setparameterdata$LAYOUT, setparameterdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SETPARAM_DATA_CALLBACK setparameterdata }
+     */
     public static void setparameterdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(setparameterdata$LAYOUT, setparameterdata$OFFSET, fieldValue);
     }
@@ -513,24 +799,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout getparameterfloat$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("getparameterfloat"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat }
+     */
     public static final AddressLayout getparameterfloat$layout() {
         return getparameterfloat$LAYOUT;
     }
 
     private static final long getparameterfloat$OFFSET = 144;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat }
+     */
     public static final long getparameterfloat$offset() {
         return getparameterfloat$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat }
+     */
     public static MemorySegment getparameterfloat(MemorySegment struct) {
         return struct.get(getparameterfloat$LAYOUT, getparameterfloat$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_FLOAT_CALLBACK getparameterfloat }
+     */
     public static void getparameterfloat(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(getparameterfloat$LAYOUT, getparameterfloat$OFFSET, fieldValue);
     }
@@ -538,24 +840,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout getparameterint$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("getparameterint"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint }
+     */
     public static final AddressLayout getparameterint$layout() {
         return getparameterint$LAYOUT;
     }
 
     private static final long getparameterint$OFFSET = 152;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint }
+     */
     public static final long getparameterint$offset() {
         return getparameterint$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint }
+     */
     public static MemorySegment getparameterint(MemorySegment struct) {
         return struct.get(getparameterint$LAYOUT, getparameterint$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_INT_CALLBACK getparameterint }
+     */
     public static void getparameterint(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(getparameterint$LAYOUT, getparameterint$OFFSET, fieldValue);
     }
@@ -563,24 +881,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout getparameterbool$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("getparameterbool"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool }
+     */
     public static final AddressLayout getparameterbool$layout() {
         return getparameterbool$LAYOUT;
     }
 
     private static final long getparameterbool$OFFSET = 160;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool }
+     */
     public static final long getparameterbool$offset() {
         return getparameterbool$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool }
+     */
     public static MemorySegment getparameterbool(MemorySegment struct) {
         return struct.get(getparameterbool$LAYOUT, getparameterbool$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_BOOL_CALLBACK getparameterbool }
+     */
     public static void getparameterbool(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(getparameterbool$LAYOUT, getparameterbool$OFFSET, fieldValue);
     }
@@ -588,24 +922,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout getparameterdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("getparameterdata"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata }
+     */
     public static final AddressLayout getparameterdata$layout() {
         return getparameterdata$LAYOUT;
     }
 
     private static final long getparameterdata$OFFSET = 168;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata }
+     */
     public static final long getparameterdata$offset() {
         return getparameterdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata }
+     */
     public static MemorySegment getparameterdata(MemorySegment struct) {
         return struct.get(getparameterdata$LAYOUT, getparameterdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_GETPARAM_DATA_CALLBACK getparameterdata }
+     */
     public static void getparameterdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(getparameterdata$LAYOUT, getparameterdata$OFFSET, fieldValue);
     }
@@ -613,24 +963,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout shouldiprocess$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("shouldiprocess"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess }
+     */
     public static final AddressLayout shouldiprocess$layout() {
         return shouldiprocess$LAYOUT;
     }
 
     private static final long shouldiprocess$OFFSET = 176;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess }
+     */
     public static final long shouldiprocess$offset() {
         return shouldiprocess$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess }
+     */
     public static MemorySegment shouldiprocess(MemorySegment struct) {
         return struct.get(shouldiprocess$LAYOUT, shouldiprocess$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SHOULDIPROCESS_CALLBACK shouldiprocess }
+     */
     public static void shouldiprocess(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(shouldiprocess$LAYOUT, shouldiprocess$OFFSET, fieldValue);
     }
@@ -638,24 +1004,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout userdata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("userdata"));
 
-    /** Layout for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final AddressLayout userdata$layout() {
         return userdata$LAYOUT;
     }
 
     private static final long userdata$OFFSET = 184;
 
-    /** Offset for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static final long userdata$offset() {
         return userdata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static MemorySegment userdata(MemorySegment struct) {
         return struct.get(userdata$LAYOUT, userdata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : void *userdata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : void *userdata }
+     */
     public static void userdata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(userdata$LAYOUT, userdata$OFFSET, fieldValue);
     }
@@ -663,24 +1045,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout sys_register$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("sys_register"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register }
+     */
     public static final AddressLayout sys_register$layout() {
         return sys_register$LAYOUT;
     }
 
     private static final long sys_register$OFFSET = 192;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register }
+     */
     public static final long sys_register$offset() {
         return sys_register$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register }
+     */
     public static MemorySegment sys_register(MemorySegment struct) {
         return struct.get(sys_register$LAYOUT, sys_register$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_REGISTER_CALLBACK sys_register }
+     */
     public static void sys_register(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sys_register$LAYOUT, sys_register$OFFSET, fieldValue);
     }
@@ -688,24 +1086,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout sys_deregister$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("sys_deregister"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister }
+     */
     public static final AddressLayout sys_deregister$layout() {
         return sys_deregister$LAYOUT;
     }
 
     private static final long sys_deregister$OFFSET = 200;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister }
+     */
     public static final long sys_deregister$offset() {
         return sys_deregister$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister }
+     */
     public static MemorySegment sys_deregister(MemorySegment struct) {
         return struct.get(sys_deregister$LAYOUT, sys_deregister$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_DEREGISTER_CALLBACK sys_deregister }
+     */
     public static void sys_deregister(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sys_deregister$LAYOUT, sys_deregister$OFFSET, fieldValue);
     }
@@ -713,24 +1127,40 @@ public class FMOD_DSP_DESCRIPTION {
     private static final AddressLayout sys_mix$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("sys_mix"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix }
+     */
     public static final AddressLayout sys_mix$layout() {
         return sys_mix$LAYOUT;
     }
 
     private static final long sys_mix$OFFSET = 208;
 
-    /** Offset for field: {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix }
+     */
     public static final long sys_mix$offset() {
         return sys_mix$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix }
+     */
     public static MemorySegment sys_mix(MemorySegment struct) {
         return struct.get(sys_mix$LAYOUT, sys_mix$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_DSP_SYSTEM_MIX_CALLBACK sys_mix }
+     */
     public static void sys_mix(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(sys_mix$LAYOUT, sys_mix$OFFSET, fieldValue);
     }

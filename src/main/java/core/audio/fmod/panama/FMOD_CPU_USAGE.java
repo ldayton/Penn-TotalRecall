@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_CPU_USAGE { float dsp; float stream; float geometry; float update;
  * float convolution1; float convolution2; } }
  */
@@ -38,48 +40,80 @@ public class FMOD_CPU_USAGE {
 
     private static final OfFloat dsp$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("dsp"));
 
-    /** Layout for field: {@snippet lang=c : float dsp } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float dsp }
+     */
     public static final OfFloat dsp$layout() {
         return dsp$LAYOUT;
     }
 
     private static final long dsp$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float dsp } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float dsp }
+     */
     public static final long dsp$offset() {
         return dsp$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float dsp } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float dsp }
+     */
     public static float dsp(MemorySegment struct) {
         return struct.get(dsp$LAYOUT, dsp$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float dsp } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float dsp }
+     */
     public static void dsp(MemorySegment struct, float fieldValue) {
         struct.set(dsp$LAYOUT, dsp$OFFSET, fieldValue);
     }
 
     private static final OfFloat stream$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("stream"));
 
-    /** Layout for field: {@snippet lang=c : float stream } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float stream }
+     */
     public static final OfFloat stream$layout() {
         return stream$LAYOUT;
     }
 
     private static final long stream$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float stream } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float stream }
+     */
     public static final long stream$offset() {
         return stream$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float stream } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float stream }
+     */
     public static float stream(MemorySegment struct) {
         return struct.get(stream$LAYOUT, stream$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float stream } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float stream }
+     */
     public static void stream(MemorySegment struct, float fieldValue) {
         struct.set(stream$LAYOUT, stream$OFFSET, fieldValue);
     }
@@ -87,48 +121,80 @@ public class FMOD_CPU_USAGE {
     private static final OfFloat geometry$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("geometry"));
 
-    /** Layout for field: {@snippet lang=c : float geometry } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float geometry }
+     */
     public static final OfFloat geometry$layout() {
         return geometry$LAYOUT;
     }
 
     private static final long geometry$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float geometry } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float geometry }
+     */
     public static final long geometry$offset() {
         return geometry$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float geometry } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float geometry }
+     */
     public static float geometry(MemorySegment struct) {
         return struct.get(geometry$LAYOUT, geometry$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float geometry } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float geometry }
+     */
     public static void geometry(MemorySegment struct, float fieldValue) {
         struct.set(geometry$LAYOUT, geometry$OFFSET, fieldValue);
     }
 
     private static final OfFloat update$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("update"));
 
-    /** Layout for field: {@snippet lang=c : float update } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float update }
+     */
     public static final OfFloat update$layout() {
         return update$LAYOUT;
     }
 
     private static final long update$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : float update } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float update }
+     */
     public static final long update$offset() {
         return update$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float update } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float update }
+     */
     public static float update(MemorySegment struct) {
         return struct.get(update$LAYOUT, update$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float update } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float update }
+     */
     public static void update(MemorySegment struct, float fieldValue) {
         struct.set(update$LAYOUT, update$OFFSET, fieldValue);
     }
@@ -136,24 +202,40 @@ public class FMOD_CPU_USAGE {
     private static final OfFloat convolution1$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("convolution1"));
 
-    /** Layout for field: {@snippet lang=c : float convolution1 } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float convolution1 }
+     */
     public static final OfFloat convolution1$layout() {
         return convolution1$LAYOUT;
     }
 
     private static final long convolution1$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : float convolution1 } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float convolution1 }
+     */
     public static final long convolution1$offset() {
         return convolution1$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float convolution1 } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float convolution1 }
+     */
     public static float convolution1(MemorySegment struct) {
         return struct.get(convolution1$LAYOUT, convolution1$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float convolution1 } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float convolution1 }
+     */
     public static void convolution1(MemorySegment struct, float fieldValue) {
         struct.set(convolution1$LAYOUT, convolution1$OFFSET, fieldValue);
     }
@@ -161,24 +243,40 @@ public class FMOD_CPU_USAGE {
     private static final OfFloat convolution2$LAYOUT =
             (OfFloat) $LAYOUT.select(groupElement("convolution2"));
 
-    /** Layout for field: {@snippet lang=c : float convolution2 } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float convolution2 }
+     */
     public static final OfFloat convolution2$layout() {
         return convolution2$LAYOUT;
     }
 
     private static final long convolution2$OFFSET = 20;
 
-    /** Offset for field: {@snippet lang=c : float convolution2 } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float convolution2 }
+     */
     public static final long convolution2$offset() {
         return convolution2$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float convolution2 } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float convolution2 }
+     */
     public static float convolution2(MemorySegment struct) {
         return struct.get(convolution2$LAYOUT, convolution2$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float convolution2 } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float convolution2 }
+     */
     public static void convolution2(MemorySegment struct, float fieldValue) {
         struct.set(convolution2$LAYOUT, convolution2$OFFSET, fieldValue);
     }

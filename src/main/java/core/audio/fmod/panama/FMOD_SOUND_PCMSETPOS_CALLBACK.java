@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_SOUND_PCMSETPOS_CALLBACK)(FMOD_SOUND *, int,
  * unsigned int, FMOD_TIMEUNIT) }
  */

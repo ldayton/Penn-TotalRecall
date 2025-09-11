@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : typedef float (*FMOD_3D_ROLLOFF_CALLBACK)(FMOD_CHANNELCONTROL *, float) } */
+/**
+ *
+ *
+ * {@snippet lang=c : typedef float (*FMOD_3D_ROLLOFF_CALLBACK)(FMOD_CHANNELCONTROL *, float) }
+ */
 public class FMOD_3D_ROLLOFF_CALLBACK {
 
     FMOD_3D_ROLLOFF_CALLBACK() {

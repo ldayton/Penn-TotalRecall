@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_OUTPUT_INIT_CALLBACK)(FMOD_OUTPUT_STATE *, int,
  * FMOD_INITFLAGS, int *, FMOD_SPEAKERMODE *, int *, FMOD_SOUND_FORMAT *, int, int *, int *, void *)
  * }

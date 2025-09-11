@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : typedef FMOD_RESULT (*FMOD_FILE_CLOSE_CALLBACK)(void *, void *) } */
+/**
+ *
+ *
+ * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_FILE_CLOSE_CALLBACK)(void *, void *) }
+ */
 public class FMOD_FILE_CLOSE_CALLBACK {
 
     FMOD_FILE_CLOSE_CALLBACK() {

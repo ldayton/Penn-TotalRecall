@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_3D_ATTRIBUTES { FMOD_VECTOR position; FMOD_VECTOR velocity;
  * FMOD_VECTOR forward; FMOD_VECTOR up; } }
  */
@@ -37,24 +39,40 @@ public class FMOD_3D_ATTRIBUTES {
     private static final GroupLayout position$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("position"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static final GroupLayout position$layout() {
         return position$LAYOUT;
     }
 
     private static final long position$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static final long position$offset() {
         return position$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static MemorySegment position(MemorySegment struct) {
         return struct.asSlice(position$OFFSET, position$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_VECTOR position } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR position }
+     */
     public static void position(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, position$OFFSET, position$LAYOUT.byteSize());
     }
@@ -62,24 +80,40 @@ public class FMOD_3D_ATTRIBUTES {
     private static final GroupLayout velocity$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("velocity"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_VECTOR velocity } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR velocity }
+     */
     public static final GroupLayout velocity$layout() {
         return velocity$LAYOUT;
     }
 
     private static final long velocity$OFFSET = 12;
 
-    /** Offset for field: {@snippet lang=c : FMOD_VECTOR velocity } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR velocity }
+     */
     public static final long velocity$offset() {
         return velocity$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_VECTOR velocity } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR velocity }
+     */
     public static MemorySegment velocity(MemorySegment struct) {
         return struct.asSlice(velocity$OFFSET, velocity$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_VECTOR velocity } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR velocity }
+     */
     public static void velocity(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, velocity$OFFSET, velocity$LAYOUT.byteSize());
     }
@@ -87,48 +121,80 @@ public class FMOD_3D_ATTRIBUTES {
     private static final GroupLayout forward$LAYOUT =
             (GroupLayout) $LAYOUT.select(groupElement("forward"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_VECTOR forward } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR forward }
+     */
     public static final GroupLayout forward$layout() {
         return forward$LAYOUT;
     }
 
     private static final long forward$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : FMOD_VECTOR forward } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR forward }
+     */
     public static final long forward$offset() {
         return forward$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_VECTOR forward } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR forward }
+     */
     public static MemorySegment forward(MemorySegment struct) {
         return struct.asSlice(forward$OFFSET, forward$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_VECTOR forward } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR forward }
+     */
     public static void forward(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, forward$OFFSET, forward$LAYOUT.byteSize());
     }
 
     private static final GroupLayout up$LAYOUT = (GroupLayout) $LAYOUT.select(groupElement("up"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_VECTOR up } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR up }
+     */
     public static final GroupLayout up$layout() {
         return up$LAYOUT;
     }
 
     private static final long up$OFFSET = 36;
 
-    /** Offset for field: {@snippet lang=c : FMOD_VECTOR up } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR up }
+     */
     public static final long up$offset() {
         return up$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_VECTOR up } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR up }
+     */
     public static MemorySegment up(MemorySegment struct) {
         return struct.asSlice(up$OFFSET, up$LAYOUT.byteSize());
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_VECTOR up } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_VECTOR up }
+     */
     public static void up(MemorySegment struct, MemorySegment fieldValue) {
         MemorySegment.copy(fieldValue, 0L, struct, up$OFFSET, up$LAYOUT.byteSize());
     }

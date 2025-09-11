@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : struct FMOD_CODEC_STATE_FUNCTIONS { FMOD_CODEC_METADATA_FUNC metadata;
  * FMOD_CODEC_ALLOC_FUNC alloc; FMOD_CODEC_FREE_FUNC free; FMOD_CODEC_LOG_FUNC log;
  * FMOD_CODEC_FILE_READ_FUNC read; FMOD_CODEC_FILE_SEEK_FUNC seek; FMOD_CODEC_FILE_TELL_FUNC tell;
@@ -43,24 +45,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout metadata$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("metadata"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata }
+     */
     public static final AddressLayout metadata$layout() {
         return metadata$LAYOUT;
     }
 
     private static final long metadata$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata }
+     */
     public static final long metadata$offset() {
         return metadata$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata }
+     */
     public static MemorySegment metadata(MemorySegment struct) {
         return struct.get(metadata$LAYOUT, metadata$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_METADATA_FUNC metadata }
+     */
     public static void metadata(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(metadata$LAYOUT, metadata$OFFSET, fieldValue);
     }
@@ -68,24 +86,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout alloc$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("alloc"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc }
+     */
     public static final AddressLayout alloc$layout() {
         return alloc$LAYOUT;
     }
 
     private static final long alloc$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc }
+     */
     public static final long alloc$offset() {
         return alloc$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc }
+     */
     public static MemorySegment alloc(MemorySegment struct) {
         return struct.get(alloc$LAYOUT, alloc$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_ALLOC_FUNC alloc }
+     */
     public static void alloc(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(alloc$LAYOUT, alloc$OFFSET, fieldValue);
     }
@@ -93,24 +127,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout free$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("free"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_FREE_FUNC free } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FREE_FUNC free }
+     */
     public static final AddressLayout free$layout() {
         return free$LAYOUT;
     }
 
     private static final long free$OFFSET = 16;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_FREE_FUNC free } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FREE_FUNC free }
+     */
     public static final long free$offset() {
         return free$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_FREE_FUNC free } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FREE_FUNC free }
+     */
     public static MemorySegment free(MemorySegment struct) {
         return struct.get(free$LAYOUT, free$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_FREE_FUNC free } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FREE_FUNC free }
+     */
     public static void free(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(free$LAYOUT, free$OFFSET, fieldValue);
     }
@@ -118,24 +168,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout log$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("log"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_LOG_FUNC log } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_LOG_FUNC log }
+     */
     public static final AddressLayout log$layout() {
         return log$LAYOUT;
     }
 
     private static final long log$OFFSET = 24;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_LOG_FUNC log } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_LOG_FUNC log }
+     */
     public static final long log$offset() {
         return log$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_LOG_FUNC log } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_LOG_FUNC log }
+     */
     public static MemorySegment log(MemorySegment struct) {
         return struct.get(log$LAYOUT, log$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_LOG_FUNC log } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_LOG_FUNC log }
+     */
     public static void log(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(log$LAYOUT, log$OFFSET, fieldValue);
     }
@@ -143,24 +209,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout read$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("read"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read }
+     */
     public static final AddressLayout read$layout() {
         return read$LAYOUT;
     }
 
     private static final long read$OFFSET = 32;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read }
+     */
     public static final long read$offset() {
         return read$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read }
+     */
     public static MemorySegment read(MemorySegment struct) {
         return struct.get(read$LAYOUT, read$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_READ_FUNC read }
+     */
     public static void read(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(read$LAYOUT, read$OFFSET, fieldValue);
     }
@@ -168,24 +250,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout seek$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("seek"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek }
+     */
     public static final AddressLayout seek$layout() {
         return seek$LAYOUT;
     }
 
     private static final long seek$OFFSET = 40;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek }
+     */
     public static final long seek$offset() {
         return seek$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek }
+     */
     public static MemorySegment seek(MemorySegment struct) {
         return struct.get(seek$LAYOUT, seek$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SEEK_FUNC seek }
+     */
     public static void seek(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(seek$LAYOUT, seek$OFFSET, fieldValue);
     }
@@ -193,24 +291,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout tell$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("tell"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell }
+     */
     public static final AddressLayout tell$layout() {
         return tell$LAYOUT;
     }
 
     private static final long tell$OFFSET = 48;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell }
+     */
     public static final long tell$offset() {
         return tell$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell }
+     */
     public static MemorySegment tell(MemorySegment struct) {
         return struct.get(tell$LAYOUT, tell$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_TELL_FUNC tell }
+     */
     public static void tell(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(tell$LAYOUT, tell$OFFSET, fieldValue);
     }
@@ -218,24 +332,40 @@ public class FMOD_CODEC_STATE_FUNCTIONS {
     private static final AddressLayout size$LAYOUT =
             (AddressLayout) $LAYOUT.select(groupElement("size"));
 
-    /** Layout for field: {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size }
+     */
     public static final AddressLayout size$layout() {
         return size$LAYOUT;
     }
 
     private static final long size$OFFSET = 56;
 
-    /** Offset for field: {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size }
+     */
     public static final long size$offset() {
         return size$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size }
+     */
     public static MemorySegment size(MemorySegment struct) {
         return struct.get(size$LAYOUT, size$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : FMOD_CODEC_FILE_SIZE_FUNC size }
+     */
     public static void size(MemorySegment struct, MemorySegment fieldValue) {
         struct.set(size$LAYOUT, size$OFFSET, fieldValue);
     }

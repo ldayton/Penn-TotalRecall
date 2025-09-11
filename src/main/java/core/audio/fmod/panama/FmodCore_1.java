@@ -76,2356 +76,3732 @@ public class FmodCore_1 {
     public static final ValueLayout.OfLong C_LONG = ValueLayout.JAVA_LONG;
     private static final int FMOD_VERSION = (int) 131849L;
 
-    /** {@snippet lang=c : #define FMOD_VERSION 131849 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_VERSION 131849 }
+     */
     public static int FMOD_VERSION() {
         return FMOD_VERSION;
     }
 
     private static final int FMOD_BUILDNUMBER = (int) 155273L;
 
-    /** {@snippet lang=c : #define FMOD_BUILDNUMBER 155273 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_BUILDNUMBER 155273 }
+     */
     public static int FMOD_BUILDNUMBER() {
         return FMOD_BUILDNUMBER;
     }
 
     private static final int FMOD_DEBUG_LEVEL_NONE = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_LEVEL_NONE 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_LEVEL_NONE 0 }
+     */
     public static int FMOD_DEBUG_LEVEL_NONE() {
         return FMOD_DEBUG_LEVEL_NONE;
     }
 
     private static final int FMOD_DEBUG_LEVEL_ERROR = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_LEVEL_ERROR 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_LEVEL_ERROR 1 }
+     */
     public static int FMOD_DEBUG_LEVEL_ERROR() {
         return FMOD_DEBUG_LEVEL_ERROR;
     }
 
     private static final int FMOD_DEBUG_LEVEL_WARNING = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_LEVEL_WARNING 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_LEVEL_WARNING 2 }
+     */
     public static int FMOD_DEBUG_LEVEL_WARNING() {
         return FMOD_DEBUG_LEVEL_WARNING;
     }
 
     private static final int FMOD_DEBUG_LEVEL_LOG = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_LEVEL_LOG 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_LEVEL_LOG 4 }
+     */
     public static int FMOD_DEBUG_LEVEL_LOG() {
         return FMOD_DEBUG_LEVEL_LOG;
     }
 
     private static final int FMOD_DEBUG_TYPE_MEMORY = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_TYPE_MEMORY 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_TYPE_MEMORY 256 }
+     */
     public static int FMOD_DEBUG_TYPE_MEMORY() {
         return FMOD_DEBUG_TYPE_MEMORY;
     }
 
     private static final int FMOD_DEBUG_TYPE_FILE = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_TYPE_FILE 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_TYPE_FILE 512 }
+     */
     public static int FMOD_DEBUG_TYPE_FILE() {
         return FMOD_DEBUG_TYPE_FILE;
     }
 
     private static final int FMOD_DEBUG_TYPE_CODEC = (int) 1024L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_TYPE_CODEC 1024 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_TYPE_CODEC 1024 }
+     */
     public static int FMOD_DEBUG_TYPE_CODEC() {
         return FMOD_DEBUG_TYPE_CODEC;
     }
 
     private static final int FMOD_DEBUG_TYPE_TRACE = (int) 2048L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_TYPE_TRACE 2048 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_TYPE_TRACE 2048 }
+     */
     public static int FMOD_DEBUG_TYPE_TRACE() {
         return FMOD_DEBUG_TYPE_TRACE;
     }
 
     private static final int FMOD_DEBUG_TYPE_VIRTUAL = (int) 4096L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_TYPE_VIRTUAL 4096 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_TYPE_VIRTUAL 4096 }
+     */
     public static int FMOD_DEBUG_TYPE_VIRTUAL() {
         return FMOD_DEBUG_TYPE_VIRTUAL;
     }
 
     private static final int FMOD_DEBUG_DISPLAY_TIMESTAMPS = (int) 65536L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_TIMESTAMPS 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_TIMESTAMPS 65536 }
+     */
     public static int FMOD_DEBUG_DISPLAY_TIMESTAMPS() {
         return FMOD_DEBUG_DISPLAY_TIMESTAMPS;
     }
 
     private static final int FMOD_DEBUG_DISPLAY_LINENUMBERS = (int) 131072L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_LINENUMBERS 131072 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_LINENUMBERS 131072 }
+     */
     public static int FMOD_DEBUG_DISPLAY_LINENUMBERS() {
         return FMOD_DEBUG_DISPLAY_LINENUMBERS;
     }
 
     private static final int FMOD_DEBUG_DISPLAY_THREAD = (int) 262144L;
 
-    /** {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_THREAD 262144 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEBUG_DISPLAY_THREAD 262144 }
+     */
     public static int FMOD_DEBUG_DISPLAY_THREAD() {
         return FMOD_DEBUG_DISPLAY_THREAD;
     }
 
     private static final int FMOD_MEMORY_NORMAL = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_NORMAL 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_NORMAL 0 }
+     */
     public static int FMOD_MEMORY_NORMAL() {
         return FMOD_MEMORY_NORMAL;
     }
 
     private static final int FMOD_MEMORY_STREAM_FILE = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_STREAM_FILE 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_STREAM_FILE 1 }
+     */
     public static int FMOD_MEMORY_STREAM_FILE() {
         return FMOD_MEMORY_STREAM_FILE;
     }
 
     private static final int FMOD_MEMORY_STREAM_DECODE = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_STREAM_DECODE 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_STREAM_DECODE 2 }
+     */
     public static int FMOD_MEMORY_STREAM_DECODE() {
         return FMOD_MEMORY_STREAM_DECODE;
     }
 
     private static final int FMOD_MEMORY_SAMPLEDATA = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_SAMPLEDATA 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_SAMPLEDATA 4 }
+     */
     public static int FMOD_MEMORY_SAMPLEDATA() {
         return FMOD_MEMORY_SAMPLEDATA;
     }
 
     private static final int FMOD_MEMORY_DSP_BUFFER = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_DSP_BUFFER 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_DSP_BUFFER 8 }
+     */
     public static int FMOD_MEMORY_DSP_BUFFER() {
         return FMOD_MEMORY_DSP_BUFFER;
     }
 
     private static final int FMOD_MEMORY_PLUGIN = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_PLUGIN 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_PLUGIN 16 }
+     */
     public static int FMOD_MEMORY_PLUGIN() {
         return FMOD_MEMORY_PLUGIN;
     }
 
     private static final int FMOD_MEMORY_PERSISTENT = (int) 2097152L;
 
-    /** {@snippet lang=c : #define FMOD_MEMORY_PERSISTENT 2097152 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MEMORY_PERSISTENT 2097152 }
+     */
     public static int FMOD_MEMORY_PERSISTENT() {
         return FMOD_MEMORY_PERSISTENT;
     }
 
     private static final int FMOD_INIT_NORMAL = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_NORMAL 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_NORMAL 0 }
+     */
     public static int FMOD_INIT_NORMAL() {
         return FMOD_INIT_NORMAL;
     }
 
     private static final int FMOD_INIT_STREAM_FROM_UPDATE = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_STREAM_FROM_UPDATE 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_STREAM_FROM_UPDATE 1 }
+     */
     public static int FMOD_INIT_STREAM_FROM_UPDATE() {
         return FMOD_INIT_STREAM_FROM_UPDATE;
     }
 
     private static final int FMOD_INIT_MIX_FROM_UPDATE = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_MIX_FROM_UPDATE 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_MIX_FROM_UPDATE 2 }
+     */
     public static int FMOD_INIT_MIX_FROM_UPDATE() {
         return FMOD_INIT_MIX_FROM_UPDATE;
     }
 
     private static final int FMOD_INIT_3D_RIGHTHANDED = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_3D_RIGHTHANDED 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_3D_RIGHTHANDED 4 }
+     */
     public static int FMOD_INIT_3D_RIGHTHANDED() {
         return FMOD_INIT_3D_RIGHTHANDED;
     }
 
     private static final int FMOD_INIT_CLIP_OUTPUT = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_CLIP_OUTPUT 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_CLIP_OUTPUT 8 }
+     */
     public static int FMOD_INIT_CLIP_OUTPUT() {
         return FMOD_INIT_CLIP_OUTPUT;
     }
 
     private static final int FMOD_INIT_CHANNEL_LOWPASS = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_CHANNEL_LOWPASS 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_CHANNEL_LOWPASS 256 }
+     */
     public static int FMOD_INIT_CHANNEL_LOWPASS() {
         return FMOD_INIT_CHANNEL_LOWPASS;
     }
 
     private static final int FMOD_INIT_CHANNEL_DISTANCEFILTER = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_CHANNEL_DISTANCEFILTER 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_CHANNEL_DISTANCEFILTER 512 }
+     */
     public static int FMOD_INIT_CHANNEL_DISTANCEFILTER() {
         return FMOD_INIT_CHANNEL_DISTANCEFILTER;
     }
 
     private static final int FMOD_INIT_PROFILE_ENABLE = (int) 65536L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_PROFILE_ENABLE 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_PROFILE_ENABLE 65536 }
+     */
     public static int FMOD_INIT_PROFILE_ENABLE() {
         return FMOD_INIT_PROFILE_ENABLE;
     }
 
     private static final int FMOD_INIT_VOL0_BECOMES_VIRTUAL = (int) 131072L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_VOL0_BECOMES_VIRTUAL 131072 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_VOL0_BECOMES_VIRTUAL 131072 }
+     */
     public static int FMOD_INIT_VOL0_BECOMES_VIRTUAL() {
         return FMOD_INIT_VOL0_BECOMES_VIRTUAL;
     }
 
     private static final int FMOD_INIT_GEOMETRY_USECLOSEST = (int) 262144L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_GEOMETRY_USECLOSEST 262144 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_GEOMETRY_USECLOSEST 262144 }
+     */
     public static int FMOD_INIT_GEOMETRY_USECLOSEST() {
         return FMOD_INIT_GEOMETRY_USECLOSEST;
     }
 
     private static final int FMOD_INIT_PREFER_DOLBY_DOWNMIX = (int) 524288L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_PREFER_DOLBY_DOWNMIX 524288 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_PREFER_DOLBY_DOWNMIX 524288 }
+     */
     public static int FMOD_INIT_PREFER_DOLBY_DOWNMIX() {
         return FMOD_INIT_PREFER_DOLBY_DOWNMIX;
     }
 
     private static final int FMOD_INIT_THREAD_UNSAFE = (int) 1048576L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_THREAD_UNSAFE 1048576 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_THREAD_UNSAFE 1048576 }
+     */
     public static int FMOD_INIT_THREAD_UNSAFE() {
         return FMOD_INIT_THREAD_UNSAFE;
     }
 
     private static final int FMOD_INIT_PROFILE_METER_ALL = (int) 2097152L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_PROFILE_METER_ALL 2097152 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_PROFILE_METER_ALL 2097152 }
+     */
     public static int FMOD_INIT_PROFILE_METER_ALL() {
         return FMOD_INIT_PROFILE_METER_ALL;
     }
 
     private static final int FMOD_INIT_MEMORY_TRACKING = (int) 4194304L;
 
-    /** {@snippet lang=c : #define FMOD_INIT_MEMORY_TRACKING 4194304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_INIT_MEMORY_TRACKING 4194304 }
+     */
     public static int FMOD_INIT_MEMORY_TRACKING() {
         return FMOD_INIT_MEMORY_TRACKING;
     }
 
     private static final int FMOD_DRIVER_STATE_CONNECTED = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_DRIVER_STATE_CONNECTED 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DRIVER_STATE_CONNECTED 1 }
+     */
     public static int FMOD_DRIVER_STATE_CONNECTED() {
         return FMOD_DRIVER_STATE_CONNECTED;
     }
 
     private static final int FMOD_DRIVER_STATE_DEFAULT = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_DRIVER_STATE_DEFAULT 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DRIVER_STATE_DEFAULT 2 }
+     */
     public static int FMOD_DRIVER_STATE_DEFAULT() {
         return FMOD_DRIVER_STATE_DEFAULT;
     }
 
     private static final int FMOD_TIMEUNIT_MS = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_MS 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_MS 1 }
+     */
     public static int FMOD_TIMEUNIT_MS() {
         return FMOD_TIMEUNIT_MS;
     }
 
     private static final int FMOD_TIMEUNIT_PCM = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_PCM 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_PCM 2 }
+     */
     public static int FMOD_TIMEUNIT_PCM() {
         return FMOD_TIMEUNIT_PCM;
     }
 
     private static final int FMOD_TIMEUNIT_PCMBYTES = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_PCMBYTES 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_PCMBYTES 4 }
+     */
     public static int FMOD_TIMEUNIT_PCMBYTES() {
         return FMOD_TIMEUNIT_PCMBYTES;
     }
 
     private static final int FMOD_TIMEUNIT_RAWBYTES = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_RAWBYTES 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_RAWBYTES 8 }
+     */
     public static int FMOD_TIMEUNIT_RAWBYTES() {
         return FMOD_TIMEUNIT_RAWBYTES;
     }
 
     private static final int FMOD_TIMEUNIT_PCMFRACTION = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_PCMFRACTION 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_PCMFRACTION 16 }
+     */
     public static int FMOD_TIMEUNIT_PCMFRACTION() {
         return FMOD_TIMEUNIT_PCMFRACTION;
     }
 
     private static final int FMOD_TIMEUNIT_MODORDER = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_MODORDER 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_MODORDER 256 }
+     */
     public static int FMOD_TIMEUNIT_MODORDER() {
         return FMOD_TIMEUNIT_MODORDER;
     }
 
     private static final int FMOD_TIMEUNIT_MODROW = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_MODROW 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_MODROW 512 }
+     */
     public static int FMOD_TIMEUNIT_MODROW() {
         return FMOD_TIMEUNIT_MODROW;
     }
 
     private static final int FMOD_TIMEUNIT_MODPATTERN = (int) 1024L;
 
-    /** {@snippet lang=c : #define FMOD_TIMEUNIT_MODPATTERN 1024 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_TIMEUNIT_MODPATTERN 1024 }
+     */
     public static int FMOD_TIMEUNIT_MODPATTERN() {
         return FMOD_TIMEUNIT_MODPATTERN;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED 1 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED() {
         return FMOD_SYSTEM_CALLBACK_DEVICELISTCHANGED;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_DEVICELOST = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICELOST 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICELOST 2 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_DEVICELOST() {
         return FMOD_SYSTEM_CALLBACK_DEVICELOST;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_MEMORYALLOCATIONFAILED = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_MEMORYALLOCATIONFAILED 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_MEMORYALLOCATIONFAILED 4 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_MEMORYALLOCATIONFAILED() {
         return FMOD_SYSTEM_CALLBACK_MEMORYALLOCATIONFAILED;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_THREADCREATED = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_THREADCREATED 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_THREADCREATED 8 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_THREADCREATED() {
         return FMOD_SYSTEM_CALLBACK_THREADCREATED;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_BADDSPCONNECTION = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_BADDSPCONNECTION 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_BADDSPCONNECTION 16 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_BADDSPCONNECTION() {
         return FMOD_SYSTEM_CALLBACK_BADDSPCONNECTION;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_PREMIX = (int) 32L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_PREMIX 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_PREMIX 32 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_PREMIX() {
         return FMOD_SYSTEM_CALLBACK_PREMIX;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_POSTMIX = (int) 64L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_POSTMIX 64 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_POSTMIX 64 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_POSTMIX() {
         return FMOD_SYSTEM_CALLBACK_POSTMIX;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_ERROR = (int) 128L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_ERROR 128 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_ERROR 128 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_ERROR() {
         return FMOD_SYSTEM_CALLBACK_ERROR;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_THREADDESTROYED = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_THREADDESTROYED 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_THREADDESTROYED 256 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_THREADDESTROYED() {
         return FMOD_SYSTEM_CALLBACK_THREADDESTROYED;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_PREUPDATE = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_PREUPDATE 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_PREUPDATE 512 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_PREUPDATE() {
         return FMOD_SYSTEM_CALLBACK_PREUPDATE;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_POSTUPDATE = (int) 1024L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_POSTUPDATE 1024 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_POSTUPDATE 1024 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_POSTUPDATE() {
         return FMOD_SYSTEM_CALLBACK_POSTUPDATE;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_RECORDLISTCHANGED = (int) 2048L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_RECORDLISTCHANGED 2048 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_RECORDLISTCHANGED 2048 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_RECORDLISTCHANGED() {
         return FMOD_SYSTEM_CALLBACK_RECORDLISTCHANGED;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_BUFFEREDNOMIX = (int) 4096L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_BUFFEREDNOMIX 4096 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_BUFFEREDNOMIX 4096 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_BUFFEREDNOMIX() {
         return FMOD_SYSTEM_CALLBACK_BUFFEREDNOMIX;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_DEVICEREINITIALIZE = (int) 8192L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICEREINITIALIZE 8192 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_DEVICEREINITIALIZE 8192 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_DEVICEREINITIALIZE() {
         return FMOD_SYSTEM_CALLBACK_DEVICEREINITIALIZE;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_OUTPUTUNDERRUN = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_OUTPUTUNDERRUN 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_OUTPUTUNDERRUN 16384 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_OUTPUTUNDERRUN() {
         return FMOD_SYSTEM_CALLBACK_OUTPUTUNDERRUN;
     }
 
     private static final int FMOD_SYSTEM_CALLBACK_RECORDPOSITIONCHANGED = (int) 32768L;
 
-    /** {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_RECORDPOSITIONCHANGED 32768 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_SYSTEM_CALLBACK_RECORDPOSITIONCHANGED 32768 }
+     */
     public static int FMOD_SYSTEM_CALLBACK_RECORDPOSITIONCHANGED() {
         return FMOD_SYSTEM_CALLBACK_RECORDPOSITIONCHANGED;
     }
 
     private static final int FMOD_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_DEFAULT 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DEFAULT 0 }
+     */
     public static int FMOD_DEFAULT() {
         return FMOD_DEFAULT;
     }
 
     private static final int FMOD_LOOP_OFF = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_LOOP_OFF 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_LOOP_OFF 1 }
+     */
     public static int FMOD_LOOP_OFF() {
         return FMOD_LOOP_OFF;
     }
 
     private static final int FMOD_LOOP_NORMAL = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_LOOP_NORMAL 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_LOOP_NORMAL 2 }
+     */
     public static int FMOD_LOOP_NORMAL() {
         return FMOD_LOOP_NORMAL;
     }
 
     private static final int FMOD_LOOP_BIDI = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_LOOP_BIDI 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_LOOP_BIDI 4 }
+     */
     public static int FMOD_LOOP_BIDI() {
         return FMOD_LOOP_BIDI;
     }
 
     private static final int FMOD_2D = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_2D 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_2D 8 }
+     */
     public static int FMOD_2D() {
         return FMOD_2D;
     }
 
     private static final int FMOD_3D = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_3D 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D 16 }
+     */
     public static int FMOD_3D() {
         return FMOD_3D;
     }
 
     private static final int FMOD_CREATESTREAM = (int) 128L;
 
-    /** {@snippet lang=c : #define FMOD_CREATESTREAM 128 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CREATESTREAM 128 }
+     */
     public static int FMOD_CREATESTREAM() {
         return FMOD_CREATESTREAM;
     }
 
     private static final int FMOD_CREATESAMPLE = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_CREATESAMPLE 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CREATESAMPLE 256 }
+     */
     public static int FMOD_CREATESAMPLE() {
         return FMOD_CREATESAMPLE;
     }
 
     private static final int FMOD_CREATECOMPRESSEDSAMPLE = (int) 512L;
 
-    /** {@snippet lang=c : #define FMOD_CREATECOMPRESSEDSAMPLE 512 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CREATECOMPRESSEDSAMPLE 512 }
+     */
     public static int FMOD_CREATECOMPRESSEDSAMPLE() {
         return FMOD_CREATECOMPRESSEDSAMPLE;
     }
 
     private static final int FMOD_OPENUSER = (int) 1024L;
 
-    /** {@snippet lang=c : #define FMOD_OPENUSER 1024 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OPENUSER 1024 }
+     */
     public static int FMOD_OPENUSER() {
         return FMOD_OPENUSER;
     }
 
     private static final int FMOD_OPENMEMORY = (int) 2048L;
 
-    /** {@snippet lang=c : #define FMOD_OPENMEMORY 2048 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OPENMEMORY 2048 }
+     */
     public static int FMOD_OPENMEMORY() {
         return FMOD_OPENMEMORY;
     }
 
     private static final int FMOD_OPENMEMORY_POINT = (int) 268435456L;
 
-    /** {@snippet lang=c : #define FMOD_OPENMEMORY_POINT 268435456 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OPENMEMORY_POINT 268435456 }
+     */
     public static int FMOD_OPENMEMORY_POINT() {
         return FMOD_OPENMEMORY_POINT;
     }
 
     private static final int FMOD_OPENRAW = (int) 4096L;
 
-    /** {@snippet lang=c : #define FMOD_OPENRAW 4096 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OPENRAW 4096 }
+     */
     public static int FMOD_OPENRAW() {
         return FMOD_OPENRAW;
     }
 
     private static final int FMOD_OPENONLY = (int) 8192L;
 
-    /** {@snippet lang=c : #define FMOD_OPENONLY 8192 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OPENONLY 8192 }
+     */
     public static int FMOD_OPENONLY() {
         return FMOD_OPENONLY;
     }
 
     private static final int FMOD_ACCURATETIME = (int) 16384L;
 
-    /** {@snippet lang=c : #define FMOD_ACCURATETIME 16384 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_ACCURATETIME 16384 }
+     */
     public static int FMOD_ACCURATETIME() {
         return FMOD_ACCURATETIME;
     }
 
     private static final int FMOD_MPEGSEARCH = (int) 32768L;
 
-    /** {@snippet lang=c : #define FMOD_MPEGSEARCH 32768 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MPEGSEARCH 32768 }
+     */
     public static int FMOD_MPEGSEARCH() {
         return FMOD_MPEGSEARCH;
     }
 
     private static final int FMOD_NONBLOCKING = (int) 65536L;
 
-    /** {@snippet lang=c : #define FMOD_NONBLOCKING 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_NONBLOCKING 65536 }
+     */
     public static int FMOD_NONBLOCKING() {
         return FMOD_NONBLOCKING;
     }
 
     private static final int FMOD_UNIQUE = (int) 131072L;
 
-    /** {@snippet lang=c : #define FMOD_UNIQUE 131072 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_UNIQUE 131072 }
+     */
     public static int FMOD_UNIQUE() {
         return FMOD_UNIQUE;
     }
 
     private static final int FMOD_3D_HEADRELATIVE = (int) 262144L;
 
-    /** {@snippet lang=c : #define FMOD_3D_HEADRELATIVE 262144 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_HEADRELATIVE 262144 }
+     */
     public static int FMOD_3D_HEADRELATIVE() {
         return FMOD_3D_HEADRELATIVE;
     }
 
     private static final int FMOD_3D_WORLDRELATIVE = (int) 524288L;
 
-    /** {@snippet lang=c : #define FMOD_3D_WORLDRELATIVE 524288 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_WORLDRELATIVE 524288 }
+     */
     public static int FMOD_3D_WORLDRELATIVE() {
         return FMOD_3D_WORLDRELATIVE;
     }
 
     private static final int FMOD_3D_INVERSEROLLOFF = (int) 1048576L;
 
-    /** {@snippet lang=c : #define FMOD_3D_INVERSEROLLOFF 1048576 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_INVERSEROLLOFF 1048576 }
+     */
     public static int FMOD_3D_INVERSEROLLOFF() {
         return FMOD_3D_INVERSEROLLOFF;
     }
 
     private static final int FMOD_3D_LINEARROLLOFF = (int) 2097152L;
 
-    /** {@snippet lang=c : #define FMOD_3D_LINEARROLLOFF 2097152 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_LINEARROLLOFF 2097152 }
+     */
     public static int FMOD_3D_LINEARROLLOFF() {
         return FMOD_3D_LINEARROLLOFF;
     }
 
     private static final int FMOD_3D_LINEARSQUAREROLLOFF = (int) 4194304L;
 
-    /** {@snippet lang=c : #define FMOD_3D_LINEARSQUAREROLLOFF 4194304 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_LINEARSQUAREROLLOFF 4194304 }
+     */
     public static int FMOD_3D_LINEARSQUAREROLLOFF() {
         return FMOD_3D_LINEARSQUAREROLLOFF;
     }
 
     private static final int FMOD_3D_INVERSETAPEREDROLLOFF = (int) 8388608L;
 
-    /** {@snippet lang=c : #define FMOD_3D_INVERSETAPEREDROLLOFF 8388608 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_INVERSETAPEREDROLLOFF 8388608 }
+     */
     public static int FMOD_3D_INVERSETAPEREDROLLOFF() {
         return FMOD_3D_INVERSETAPEREDROLLOFF;
     }
 
     private static final int FMOD_3D_CUSTOMROLLOFF = (int) 67108864L;
 
-    /** {@snippet lang=c : #define FMOD_3D_CUSTOMROLLOFF 67108864 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_CUSTOMROLLOFF 67108864 }
+     */
     public static int FMOD_3D_CUSTOMROLLOFF() {
         return FMOD_3D_CUSTOMROLLOFF;
     }
 
     private static final int FMOD_3D_IGNOREGEOMETRY = (int) 1073741824L;
 
-    /** {@snippet lang=c : #define FMOD_3D_IGNOREGEOMETRY 1073741824 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_3D_IGNOREGEOMETRY 1073741824 }
+     */
     public static int FMOD_3D_IGNOREGEOMETRY() {
         return FMOD_3D_IGNOREGEOMETRY;
     }
 
     private static final int FMOD_IGNORETAGS = (int) 33554432L;
 
-    /** {@snippet lang=c : #define FMOD_IGNORETAGS 33554432 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_IGNORETAGS 33554432 }
+     */
     public static int FMOD_IGNORETAGS() {
         return FMOD_IGNORETAGS;
     }
 
     private static final int FMOD_LOWMEM = (int) 134217728L;
 
-    /** {@snippet lang=c : #define FMOD_LOWMEM 134217728 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_LOWMEM 134217728 }
+     */
     public static int FMOD_LOWMEM() {
         return FMOD_LOWMEM;
     }
 
     private static final int FMOD_CHANNELMASK_FRONT_LEFT = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_LEFT 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_LEFT 1 }
+     */
     public static int FMOD_CHANNELMASK_FRONT_LEFT() {
         return FMOD_CHANNELMASK_FRONT_LEFT;
     }
 
     private static final int FMOD_CHANNELMASK_FRONT_RIGHT = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_RIGHT 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_RIGHT 2 }
+     */
     public static int FMOD_CHANNELMASK_FRONT_RIGHT() {
         return FMOD_CHANNELMASK_FRONT_RIGHT;
     }
 
     private static final int FMOD_CHANNELMASK_FRONT_CENTER = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_CENTER 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_FRONT_CENTER 4 }
+     */
     public static int FMOD_CHANNELMASK_FRONT_CENTER() {
         return FMOD_CHANNELMASK_FRONT_CENTER;
     }
 
     private static final int FMOD_CHANNELMASK_LOW_FREQUENCY = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_LOW_FREQUENCY 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_LOW_FREQUENCY 8 }
+     */
     public static int FMOD_CHANNELMASK_LOW_FREQUENCY() {
         return FMOD_CHANNELMASK_LOW_FREQUENCY;
     }
 
     private static final int FMOD_CHANNELMASK_SURROUND_LEFT = (int) 16L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND_LEFT 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND_LEFT 16 }
+     */
     public static int FMOD_CHANNELMASK_SURROUND_LEFT() {
         return FMOD_CHANNELMASK_SURROUND_LEFT;
     }
 
     private static final int FMOD_CHANNELMASK_SURROUND_RIGHT = (int) 32L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND_RIGHT 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_SURROUND_RIGHT 32 }
+     */
     public static int FMOD_CHANNELMASK_SURROUND_RIGHT() {
         return FMOD_CHANNELMASK_SURROUND_RIGHT;
     }
 
     private static final int FMOD_CHANNELMASK_BACK_LEFT = (int) 64L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_LEFT 64 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_LEFT 64 }
+     */
     public static int FMOD_CHANNELMASK_BACK_LEFT() {
         return FMOD_CHANNELMASK_BACK_LEFT;
     }
 
     private static final int FMOD_CHANNELMASK_BACK_RIGHT = (int) 128L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_RIGHT 128 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_RIGHT 128 }
+     */
     public static int FMOD_CHANNELMASK_BACK_RIGHT() {
         return FMOD_CHANNELMASK_BACK_RIGHT;
     }
 
     private static final int FMOD_CHANNELMASK_BACK_CENTER = (int) 256L;
 
-    /** {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_CENTER 256 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CHANNELMASK_BACK_CENTER 256 }
+     */
     public static int FMOD_CHANNELMASK_BACK_CENTER() {
         return FMOD_CHANNELMASK_BACK_CENTER;
     }
 
     private static final int FMOD_THREAD_STACK_SIZE_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_DEFAULT 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_STACK_SIZE_DEFAULT 0 }
+     */
     public static int FMOD_THREAD_STACK_SIZE_DEFAULT() {
         return FMOD_THREAD_STACK_SIZE_DEFAULT;
     }
 
     private static final int FMOD_THREAD_AFFINITY_CORE_ALL = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_ALL 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_THREAD_AFFINITY_CORE_ALL 0 }
+     */
     public static int FMOD_THREAD_AFFINITY_CORE_ALL() {
         return FMOD_THREAD_AFFINITY_CORE_ALL;
     }
 
     private static final int FMOD_MAX_CHANNEL_WIDTH = (int) 32L;
 
-    /** {@snippet lang=c : #define FMOD_MAX_CHANNEL_WIDTH 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MAX_CHANNEL_WIDTH 32 }
+     */
     public static int FMOD_MAX_CHANNEL_WIDTH() {
         return FMOD_MAX_CHANNEL_WIDTH;
     }
 
     private static final int FMOD_MAX_SYSTEMS = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_MAX_SYSTEMS 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MAX_SYSTEMS 8 }
+     */
     public static int FMOD_MAX_SYSTEMS() {
         return FMOD_MAX_SYSTEMS;
     }
 
     private static final int FMOD_MAX_LISTENERS = (int) 8L;
 
-    /** {@snippet lang=c : #define FMOD_MAX_LISTENERS 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_MAX_LISTENERS 8 }
+     */
     public static int FMOD_MAX_LISTENERS() {
         return FMOD_MAX_LISTENERS;
     }
 
     private static final int FMOD_REVERB_MAXINSTANCES = (int) 4L;
 
-    /** {@snippet lang=c : #define FMOD_REVERB_MAXINSTANCES 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_REVERB_MAXINSTANCES 4 }
+     */
     public static int FMOD_REVERB_MAXINSTANCES() {
         return FMOD_REVERB_MAXINSTANCES;
     }
 
     private static final int FMOD_CODEC_PLUGIN_VERSION = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_CODEC_PLUGIN_VERSION 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CODEC_PLUGIN_VERSION 1 }
+     */
     public static int FMOD_CODEC_PLUGIN_VERSION() {
         return FMOD_CODEC_PLUGIN_VERSION;
     }
 
     private static final int FMOD_CODEC_SEEK_METHOD_SET = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_SET 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_SET 0 }
+     */
     public static int FMOD_CODEC_SEEK_METHOD_SET() {
         return FMOD_CODEC_SEEK_METHOD_SET;
     }
 
     private static final int FMOD_CODEC_SEEK_METHOD_CURRENT = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_CURRENT 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_CURRENT 1 }
+     */
     public static int FMOD_CODEC_SEEK_METHOD_CURRENT() {
         return FMOD_CODEC_SEEK_METHOD_CURRENT;
     }
 
     private static final int FMOD_CODEC_SEEK_METHOD_END = (int) 2L;
 
-    /** {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_END 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_CODEC_SEEK_METHOD_END 2 }
+     */
     public static int FMOD_CODEC_SEEK_METHOD_END() {
         return FMOD_CODEC_SEEK_METHOD_END;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES = (int) 66L;
 
-    /** {@snippet lang=c : #define FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES 66 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES 66 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES() {
         return FMOD_DSP_LOUDNESS_METER_HISTOGRAM_SAMPLES;
     }
 
     private static final int FMOD_PLUGIN_SDK_VERSION = (int) 110L;
 
-    /** {@snippet lang=c : #define FMOD_PLUGIN_SDK_VERSION 110 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_PLUGIN_SDK_VERSION 110 }
+     */
     public static int FMOD_PLUGIN_SDK_VERSION() {
         return FMOD_PLUGIN_SDK_VERSION;
     }
 
     private static final int FMOD_DSP_GETPARAM_VALUESTR_LENGTH = (int) 32L;
 
-    /** {@snippet lang=c : #define FMOD_DSP_GETPARAM_VALUESTR_LENGTH 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_DSP_GETPARAM_VALUESTR_LENGTH 32 }
+     */
     public static int FMOD_DSP_GETPARAM_VALUESTR_LENGTH() {
         return FMOD_DSP_GETPARAM_VALUESTR_LENGTH;
     }
 
     private static final int FMOD_OUTPUT_PLUGIN_VERSION = (int) 5L;
 
-    /** {@snippet lang=c : #define FMOD_OUTPUT_PLUGIN_VERSION 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OUTPUT_PLUGIN_VERSION 5 }
+     */
     public static int FMOD_OUTPUT_PLUGIN_VERSION() {
         return FMOD_OUTPUT_PLUGIN_VERSION;
     }
 
     private static final int FMOD_OUTPUT_METHOD_MIX_DIRECT = (int) 0L;
 
-    /** {@snippet lang=c : #define FMOD_OUTPUT_METHOD_MIX_DIRECT 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OUTPUT_METHOD_MIX_DIRECT 0 }
+     */
     public static int FMOD_OUTPUT_METHOD_MIX_DIRECT() {
         return FMOD_OUTPUT_METHOD_MIX_DIRECT;
     }
 
     private static final int FMOD_OUTPUT_METHOD_MIX_BUFFERED = (int) 1L;
 
-    /** {@snippet lang=c : #define FMOD_OUTPUT_METHOD_MIX_BUFFERED 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : #define FMOD_OUTPUT_METHOD_MIX_BUFFERED 1 }
+     */
     public static int FMOD_OUTPUT_METHOD_MIX_BUFFERED() {
         return FMOD_OUTPUT_METHOD_MIX_BUFFERED;
     }
 
-    /** {@snippet lang=c : typedef int FMOD_BOOL } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef int FMOD_BOOL }
+     */
     public static final OfInt FMOD_BOOL = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_DEBUG_FLAGS } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_DEBUG_FLAGS }
+     */
     public static final OfInt FMOD_DEBUG_FLAGS = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_MEMORY_TYPE } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_MEMORY_TYPE }
+     */
     public static final OfInt FMOD_MEMORY_TYPE = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_INITFLAGS } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_INITFLAGS }
+     */
     public static final OfInt FMOD_INITFLAGS = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_DRIVER_STATE } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_DRIVER_STATE }
+     */
     public static final OfInt FMOD_DRIVER_STATE = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_TIMEUNIT } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_TIMEUNIT }
+     */
     public static final OfInt FMOD_TIMEUNIT = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_SYSTEM_CALLBACK_TYPE } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_SYSTEM_CALLBACK_TYPE }
+     */
     public static final OfInt FMOD_SYSTEM_CALLBACK_TYPE = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_MODE } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_MODE }
+     */
     public static final OfInt FMOD_MODE = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_CHANNELMASK } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_CHANNELMASK }
+     */
     public static final OfInt FMOD_CHANNELMASK = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned long long FMOD_PORT_INDEX } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned long long FMOD_PORT_INDEX }
+     */
     public static final OfLong FMOD_PORT_INDEX = FmodCore.C_LONG_LONG;
 
-    /** {@snippet lang=c : typedef int FMOD_THREAD_PRIORITY } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef int FMOD_THREAD_PRIORITY }
+     */
     public static final OfInt FMOD_THREAD_PRIORITY = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_THREAD_STACK_SIZE } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_THREAD_STACK_SIZE }
+     */
     public static final OfInt FMOD_THREAD_STACK_SIZE = FmodCore.C_INT;
 
-    /** {@snippet lang=c : typedef long long FMOD_THREAD_AFFINITY } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef long long FMOD_THREAD_AFFINITY }
+     */
     public static final OfLong FMOD_THREAD_AFFINITY = FmodCore.C_LONG_LONG;
 
     private static final int FMOD_THREAD_TYPE_MIXER = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_MIXER = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_MIXER = 0 }
+     */
     public static int FMOD_THREAD_TYPE_MIXER() {
         return FMOD_THREAD_TYPE_MIXER;
     }
 
     private static final int FMOD_THREAD_TYPE_FEEDER = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FEEDER = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FEEDER = 1 }
+     */
     public static int FMOD_THREAD_TYPE_FEEDER() {
         return FMOD_THREAD_TYPE_FEEDER;
     }
 
     private static final int FMOD_THREAD_TYPE_STREAM = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STREAM = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STREAM = 2 }
+     */
     public static int FMOD_THREAD_TYPE_STREAM() {
         return FMOD_THREAD_TYPE_STREAM;
     }
 
     private static final int FMOD_THREAD_TYPE_FILE = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FILE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FILE = 3 }
+     */
     public static int FMOD_THREAD_TYPE_FILE() {
         return FMOD_THREAD_TYPE_FILE;
     }
 
     private static final int FMOD_THREAD_TYPE_NONBLOCKING = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_NONBLOCKING = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_NONBLOCKING = 4 }
+     */
     public static int FMOD_THREAD_TYPE_NONBLOCKING() {
         return FMOD_THREAD_TYPE_NONBLOCKING;
     }
 
     private static final int FMOD_THREAD_TYPE_RECORD = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_RECORD = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_RECORD = 5 }
+     */
     public static int FMOD_THREAD_TYPE_RECORD() {
         return FMOD_THREAD_TYPE_RECORD;
     }
 
     private static final int FMOD_THREAD_TYPE_GEOMETRY = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_GEOMETRY = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_GEOMETRY = 6 }
+     */
     public static int FMOD_THREAD_TYPE_GEOMETRY() {
         return FMOD_THREAD_TYPE_GEOMETRY;
     }
 
     private static final int FMOD_THREAD_TYPE_PROFILER = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_PROFILER = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_PROFILER = 7 }
+     */
     public static int FMOD_THREAD_TYPE_PROFILER() {
         return FMOD_THREAD_TYPE_PROFILER;
     }
 
     private static final int FMOD_THREAD_TYPE_STUDIO_UPDATE = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_UPDATE = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_UPDATE = 8 }
+     */
     public static int FMOD_THREAD_TYPE_STUDIO_UPDATE() {
         return FMOD_THREAD_TYPE_STUDIO_UPDATE;
     }
 
     private static final int FMOD_THREAD_TYPE_STUDIO_LOAD_BANK = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_LOAD_BANK = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_LOAD_BANK = 9 }
+     */
     public static int FMOD_THREAD_TYPE_STUDIO_LOAD_BANK() {
         return FMOD_THREAD_TYPE_STUDIO_LOAD_BANK;
     }
 
     private static final int FMOD_THREAD_TYPE_STUDIO_LOAD_SAMPLE = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_LOAD_SAMPLE = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_STUDIO_LOAD_SAMPLE = 10 }
+     */
     public static int FMOD_THREAD_TYPE_STUDIO_LOAD_SAMPLE() {
         return FMOD_THREAD_TYPE_STUDIO_LOAD_SAMPLE;
     }
 
     private static final int FMOD_THREAD_TYPE_CONVOLUTION1 = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_CONVOLUTION1 = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_CONVOLUTION1 = 11 }
+     */
     public static int FMOD_THREAD_TYPE_CONVOLUTION1() {
         return FMOD_THREAD_TYPE_CONVOLUTION1;
     }
 
     private static final int FMOD_THREAD_TYPE_CONVOLUTION2 = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_CONVOLUTION2 = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_CONVOLUTION2 = 12 }
+     */
     public static int FMOD_THREAD_TYPE_CONVOLUTION2() {
         return FMOD_THREAD_TYPE_CONVOLUTION2;
     }
 
     private static final int FMOD_THREAD_TYPE_MAX = (int) 13L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_MAX = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_MAX = 13 }
+     */
     public static int FMOD_THREAD_TYPE_MAX() {
         return FMOD_THREAD_TYPE_MAX;
     }
 
     private static final int FMOD_THREAD_TYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_THREAD_TYPE.FMOD_THREAD_TYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_THREAD_TYPE_FORCEINT() {
         return FMOD_THREAD_TYPE_FORCEINT;
     }
 
     private static final int FMOD_OK = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_OK = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_OK = 0 }
+     */
     public static int FMOD_OK() {
         return FMOD_OK;
     }
 
     private static final int FMOD_ERR_BADCOMMAND = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_BADCOMMAND = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_BADCOMMAND = 1 }
+     */
     public static int FMOD_ERR_BADCOMMAND() {
         return FMOD_ERR_BADCOMMAND;
     }
 
     private static final int FMOD_ERR_CHANNEL_ALLOC = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_CHANNEL_ALLOC = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_CHANNEL_ALLOC = 2 }
+     */
     public static int FMOD_ERR_CHANNEL_ALLOC() {
         return FMOD_ERR_CHANNEL_ALLOC;
     }
 
     private static final int FMOD_ERR_CHANNEL_STOLEN = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_CHANNEL_STOLEN = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_CHANNEL_STOLEN = 3 }
+     */
     public static int FMOD_ERR_CHANNEL_STOLEN() {
         return FMOD_ERR_CHANNEL_STOLEN;
     }
 
     private static final int FMOD_ERR_DMA = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DMA = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DMA = 4 }
+     */
     public static int FMOD_ERR_DMA() {
         return FMOD_ERR_DMA;
     }
 
     private static final int FMOD_ERR_DSP_CONNECTION = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_CONNECTION = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_CONNECTION = 5 }
+     */
     public static int FMOD_ERR_DSP_CONNECTION() {
         return FMOD_ERR_DSP_CONNECTION;
     }
 
     private static final int FMOD_ERR_DSP_DONTPROCESS = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_DONTPROCESS = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_DONTPROCESS = 6 }
+     */
     public static int FMOD_ERR_DSP_DONTPROCESS() {
         return FMOD_ERR_DSP_DONTPROCESS;
     }
 
     private static final int FMOD_ERR_DSP_FORMAT = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_FORMAT = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_FORMAT = 7 }
+     */
     public static int FMOD_ERR_DSP_FORMAT() {
         return FMOD_ERR_DSP_FORMAT;
     }
 
     private static final int FMOD_ERR_DSP_INUSE = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_INUSE = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_INUSE = 8 }
+     */
     public static int FMOD_ERR_DSP_INUSE() {
         return FMOD_ERR_DSP_INUSE;
     }
 
     private static final int FMOD_ERR_DSP_NOTFOUND = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_NOTFOUND = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_NOTFOUND = 9 }
+     */
     public static int FMOD_ERR_DSP_NOTFOUND() {
         return FMOD_ERR_DSP_NOTFOUND;
     }
 
     private static final int FMOD_ERR_DSP_RESERVED = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_RESERVED = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_RESERVED = 10 }
+     */
     public static int FMOD_ERR_DSP_RESERVED() {
         return FMOD_ERR_DSP_RESERVED;
     }
 
     private static final int FMOD_ERR_DSP_SILENCE = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_SILENCE = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_SILENCE = 11 }
+     */
     public static int FMOD_ERR_DSP_SILENCE() {
         return FMOD_ERR_DSP_SILENCE;
     }
 
     private static final int FMOD_ERR_DSP_TYPE = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_TYPE = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_DSP_TYPE = 12 }
+     */
     public static int FMOD_ERR_DSP_TYPE() {
         return FMOD_ERR_DSP_TYPE;
     }
 
     private static final int FMOD_ERR_FILE_BAD = (int) 13L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_BAD = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_BAD = 13 }
+     */
     public static int FMOD_ERR_FILE_BAD() {
         return FMOD_ERR_FILE_BAD;
     }
 
     private static final int FMOD_ERR_FILE_COULDNOTSEEK = (int) 14L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_COULDNOTSEEK = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_COULDNOTSEEK = 14 }
+     */
     public static int FMOD_ERR_FILE_COULDNOTSEEK() {
         return FMOD_ERR_FILE_COULDNOTSEEK;
     }
 
     private static final int FMOD_ERR_FILE_DISKEJECTED = (int) 15L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_DISKEJECTED = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_DISKEJECTED = 15 }
+     */
     public static int FMOD_ERR_FILE_DISKEJECTED() {
         return FMOD_ERR_FILE_DISKEJECTED;
     }
 
     private static final int FMOD_ERR_FILE_EOF = (int) 16L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_EOF = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_EOF = 16 }
+     */
     public static int FMOD_ERR_FILE_EOF() {
         return FMOD_ERR_FILE_EOF;
     }
 
     private static final int FMOD_ERR_FILE_ENDOFDATA = (int) 17L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_ENDOFDATA = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_ENDOFDATA = 17 }
+     */
     public static int FMOD_ERR_FILE_ENDOFDATA() {
         return FMOD_ERR_FILE_ENDOFDATA;
     }
 
     private static final int FMOD_ERR_FILE_NOTFOUND = (int) 18L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_NOTFOUND = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FILE_NOTFOUND = 18 }
+     */
     public static int FMOD_ERR_FILE_NOTFOUND() {
         return FMOD_ERR_FILE_NOTFOUND;
     }
 
     private static final int FMOD_ERR_FORMAT = (int) 19L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FORMAT = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_FORMAT = 19 }
+     */
     public static int FMOD_ERR_FORMAT() {
         return FMOD_ERR_FORMAT;
     }
 
     private static final int FMOD_ERR_HEADER_MISMATCH = (int) 20L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HEADER_MISMATCH = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HEADER_MISMATCH = 20 }
+     */
     public static int FMOD_ERR_HEADER_MISMATCH() {
         return FMOD_ERR_HEADER_MISMATCH;
     }
 
     private static final int FMOD_ERR_HTTP = (int) 21L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP = 21 }
+     */
     public static int FMOD_ERR_HTTP() {
         return FMOD_ERR_HTTP;
     }
 
     private static final int FMOD_ERR_HTTP_ACCESS = (int) 22L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_ACCESS = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_ACCESS = 22 }
+     */
     public static int FMOD_ERR_HTTP_ACCESS() {
         return FMOD_ERR_HTTP_ACCESS;
     }
 
     private static final int FMOD_ERR_HTTP_PROXY_AUTH = (int) 23L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_PROXY_AUTH = 23 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_PROXY_AUTH = 23 }
+     */
     public static int FMOD_ERR_HTTP_PROXY_AUTH() {
         return FMOD_ERR_HTTP_PROXY_AUTH;
     }
 
     private static final int FMOD_ERR_HTTP_SERVER_ERROR = (int) 24L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_SERVER_ERROR = 24 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_SERVER_ERROR = 24 }
+     */
     public static int FMOD_ERR_HTTP_SERVER_ERROR() {
         return FMOD_ERR_HTTP_SERVER_ERROR;
     }
 
     private static final int FMOD_ERR_HTTP_TIMEOUT = (int) 25L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_TIMEOUT = 25 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_HTTP_TIMEOUT = 25 }
+     */
     public static int FMOD_ERR_HTTP_TIMEOUT() {
         return FMOD_ERR_HTTP_TIMEOUT;
     }
 
     private static final int FMOD_ERR_INITIALIZATION = (int) 26L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INITIALIZATION = 26 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INITIALIZATION = 26 }
+     */
     public static int FMOD_ERR_INITIALIZATION() {
         return FMOD_ERR_INITIALIZATION;
     }
 
     private static final int FMOD_ERR_INITIALIZED = (int) 27L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INITIALIZED = 27 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INITIALIZED = 27 }
+     */
     public static int FMOD_ERR_INITIALIZED() {
         return FMOD_ERR_INITIALIZED;
     }
 
     private static final int FMOD_ERR_INTERNAL = (int) 28L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INTERNAL = 28 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INTERNAL = 28 }
+     */
     public static int FMOD_ERR_INTERNAL() {
         return FMOD_ERR_INTERNAL;
     }
 
     private static final int FMOD_ERR_INVALID_FLOAT = (int) 29L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_FLOAT = 29 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_FLOAT = 29 }
+     */
     public static int FMOD_ERR_INVALID_FLOAT() {
         return FMOD_ERR_INVALID_FLOAT;
     }
 
     private static final int FMOD_ERR_INVALID_HANDLE = (int) 30L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_HANDLE = 30 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_HANDLE = 30 }
+     */
     public static int FMOD_ERR_INVALID_HANDLE() {
         return FMOD_ERR_INVALID_HANDLE;
     }
 
     private static final int FMOD_ERR_INVALID_PARAM = (int) 31L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_PARAM = 31 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_PARAM = 31 }
+     */
     public static int FMOD_ERR_INVALID_PARAM() {
         return FMOD_ERR_INVALID_PARAM;
     }
 
     private static final int FMOD_ERR_INVALID_POSITION = (int) 32L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_POSITION = 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_POSITION = 32 }
+     */
     public static int FMOD_ERR_INVALID_POSITION() {
         return FMOD_ERR_INVALID_POSITION;
     }
 
     private static final int FMOD_ERR_INVALID_SPEAKER = (int) 33L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_SPEAKER = 33 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_SPEAKER = 33 }
+     */
     public static int FMOD_ERR_INVALID_SPEAKER() {
         return FMOD_ERR_INVALID_SPEAKER;
     }
 
     private static final int FMOD_ERR_INVALID_SYNCPOINT = (int) 34L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_SYNCPOINT = 34 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_SYNCPOINT = 34 }
+     */
     public static int FMOD_ERR_INVALID_SYNCPOINT() {
         return FMOD_ERR_INVALID_SYNCPOINT;
     }
 
     private static final int FMOD_ERR_INVALID_THREAD = (int) 35L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_THREAD = 35 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_THREAD = 35 }
+     */
     public static int FMOD_ERR_INVALID_THREAD() {
         return FMOD_ERR_INVALID_THREAD;
     }
 
     private static final int FMOD_ERR_INVALID_VECTOR = (int) 36L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_VECTOR = 36 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_VECTOR = 36 }
+     */
     public static int FMOD_ERR_INVALID_VECTOR() {
         return FMOD_ERR_INVALID_VECTOR;
     }
 
     private static final int FMOD_ERR_MAXAUDIBLE = (int) 37L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MAXAUDIBLE = 37 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MAXAUDIBLE = 37 }
+     */
     public static int FMOD_ERR_MAXAUDIBLE() {
         return FMOD_ERR_MAXAUDIBLE;
     }
 
     private static final int FMOD_ERR_MEMORY = (int) 38L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MEMORY = 38 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MEMORY = 38 }
+     */
     public static int FMOD_ERR_MEMORY() {
         return FMOD_ERR_MEMORY;
     }
 
     private static final int FMOD_ERR_MEMORY_CANTPOINT = (int) 39L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MEMORY_CANTPOINT = 39 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_MEMORY_CANTPOINT = 39 }
+     */
     public static int FMOD_ERR_MEMORY_CANTPOINT() {
         return FMOD_ERR_MEMORY_CANTPOINT;
     }
 
     private static final int FMOD_ERR_NEEDS3D = (int) 40L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NEEDS3D = 40 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NEEDS3D = 40 }
+     */
     public static int FMOD_ERR_NEEDS3D() {
         return FMOD_ERR_NEEDS3D;
     }
 
     private static final int FMOD_ERR_NEEDSHARDWARE = (int) 41L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NEEDSHARDWARE = 41 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NEEDSHARDWARE = 41 }
+     */
     public static int FMOD_ERR_NEEDSHARDWARE() {
         return FMOD_ERR_NEEDSHARDWARE;
     }
 
     private static final int FMOD_ERR_NET_CONNECT = (int) 42L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_CONNECT = 42 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_CONNECT = 42 }
+     */
     public static int FMOD_ERR_NET_CONNECT() {
         return FMOD_ERR_NET_CONNECT;
     }
 
     private static final int FMOD_ERR_NET_SOCKET_ERROR = (int) 43L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_SOCKET_ERROR = 43 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_SOCKET_ERROR = 43 }
+     */
     public static int FMOD_ERR_NET_SOCKET_ERROR() {
         return FMOD_ERR_NET_SOCKET_ERROR;
     }
 
     private static final int FMOD_ERR_NET_URL = (int) 44L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_URL = 44 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_URL = 44 }
+     */
     public static int FMOD_ERR_NET_URL() {
         return FMOD_ERR_NET_URL;
     }
 
     private static final int FMOD_ERR_NET_WOULD_BLOCK = (int) 45L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_WOULD_BLOCK = 45 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NET_WOULD_BLOCK = 45 }
+     */
     public static int FMOD_ERR_NET_WOULD_BLOCK() {
         return FMOD_ERR_NET_WOULD_BLOCK;
     }
 
     private static final int FMOD_ERR_NOTREADY = (int) 46L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NOTREADY = 46 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NOTREADY = 46 }
+     */
     public static int FMOD_ERR_NOTREADY() {
         return FMOD_ERR_NOTREADY;
     }
 
     private static final int FMOD_ERR_OUTPUT_ALLOCATED = (int) 47L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_ALLOCATED = 47 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_ALLOCATED = 47 }
+     */
     public static int FMOD_ERR_OUTPUT_ALLOCATED() {
         return FMOD_ERR_OUTPUT_ALLOCATED;
     }
 
     private static final int FMOD_ERR_OUTPUT_CREATEBUFFER = (int) 48L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_CREATEBUFFER = 48 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_CREATEBUFFER = 48 }
+     */
     public static int FMOD_ERR_OUTPUT_CREATEBUFFER() {
         return FMOD_ERR_OUTPUT_CREATEBUFFER;
     }
 
     private static final int FMOD_ERR_OUTPUT_DRIVERCALL = (int) 49L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_DRIVERCALL = 49 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_DRIVERCALL = 49 }
+     */
     public static int FMOD_ERR_OUTPUT_DRIVERCALL() {
         return FMOD_ERR_OUTPUT_DRIVERCALL;
     }
 
     private static final int FMOD_ERR_OUTPUT_FORMAT = (int) 50L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_FORMAT = 50 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_FORMAT = 50 }
+     */
     public static int FMOD_ERR_OUTPUT_FORMAT() {
         return FMOD_ERR_OUTPUT_FORMAT;
     }
 
     private static final int FMOD_ERR_OUTPUT_INIT = (int) 51L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_INIT = 51 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_INIT = 51 }
+     */
     public static int FMOD_ERR_OUTPUT_INIT() {
         return FMOD_ERR_OUTPUT_INIT;
     }
 
     private static final int FMOD_ERR_OUTPUT_NODRIVERS = (int) 52L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_NODRIVERS = 52 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_OUTPUT_NODRIVERS = 52 }
+     */
     public static int FMOD_ERR_OUTPUT_NODRIVERS() {
         return FMOD_ERR_OUTPUT_NODRIVERS;
     }
 
     private static final int FMOD_ERR_PLUGIN = (int) 53L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN = 53 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN = 53 }
+     */
     public static int FMOD_ERR_PLUGIN() {
         return FMOD_ERR_PLUGIN;
     }
 
     private static final int FMOD_ERR_PLUGIN_MISSING = (int) 54L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_MISSING = 54 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_MISSING = 54 }
+     */
     public static int FMOD_ERR_PLUGIN_MISSING() {
         return FMOD_ERR_PLUGIN_MISSING;
     }
 
     private static final int FMOD_ERR_PLUGIN_RESOURCE = (int) 55L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_RESOURCE = 55 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_RESOURCE = 55 }
+     */
     public static int FMOD_ERR_PLUGIN_RESOURCE() {
         return FMOD_ERR_PLUGIN_RESOURCE;
     }
 
     private static final int FMOD_ERR_PLUGIN_VERSION = (int) 56L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_VERSION = 56 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_PLUGIN_VERSION = 56 }
+     */
     public static int FMOD_ERR_PLUGIN_VERSION() {
         return FMOD_ERR_PLUGIN_VERSION;
     }
 
     private static final int FMOD_ERR_RECORD = (int) 57L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_RECORD = 57 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_RECORD = 57 }
+     */
     public static int FMOD_ERR_RECORD() {
         return FMOD_ERR_RECORD;
     }
 
     private static final int FMOD_ERR_REVERB_CHANNELGROUP = (int) 58L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_REVERB_CHANNELGROUP = 58 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_REVERB_CHANNELGROUP = 58 }
+     */
     public static int FMOD_ERR_REVERB_CHANNELGROUP() {
         return FMOD_ERR_REVERB_CHANNELGROUP;
     }
 
     private static final int FMOD_ERR_REVERB_INSTANCE = (int) 59L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_REVERB_INSTANCE = 59 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_REVERB_INSTANCE = 59 }
+     */
     public static int FMOD_ERR_REVERB_INSTANCE() {
         return FMOD_ERR_REVERB_INSTANCE;
     }
 
     private static final int FMOD_ERR_SUBSOUNDS = (int) 60L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUNDS = 60 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUNDS = 60 }
+     */
     public static int FMOD_ERR_SUBSOUNDS() {
         return FMOD_ERR_SUBSOUNDS;
     }
 
     private static final int FMOD_ERR_SUBSOUND_ALLOCATED = (int) 61L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUND_ALLOCATED = 61 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUND_ALLOCATED = 61 }
+     */
     public static int FMOD_ERR_SUBSOUND_ALLOCATED() {
         return FMOD_ERR_SUBSOUND_ALLOCATED;
     }
 
     private static final int FMOD_ERR_SUBSOUND_CANTMOVE = (int) 62L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUND_CANTMOVE = 62 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_SUBSOUND_CANTMOVE = 62 }
+     */
     public static int FMOD_ERR_SUBSOUND_CANTMOVE() {
         return FMOD_ERR_SUBSOUND_CANTMOVE;
     }
 
     private static final int FMOD_ERR_TAGNOTFOUND = (int) 63L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TAGNOTFOUND = 63 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TAGNOTFOUND = 63 }
+     */
     public static int FMOD_ERR_TAGNOTFOUND() {
         return FMOD_ERR_TAGNOTFOUND;
     }
 
     private static final int FMOD_ERR_TOOMANYCHANNELS = (int) 64L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TOOMANYCHANNELS = 64 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TOOMANYCHANNELS = 64 }
+     */
     public static int FMOD_ERR_TOOMANYCHANNELS() {
         return FMOD_ERR_TOOMANYCHANNELS;
     }
 
     private static final int FMOD_ERR_TRUNCATED = (int) 65L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TRUNCATED = 65 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TRUNCATED = 65 }
+     */
     public static int FMOD_ERR_TRUNCATED() {
         return FMOD_ERR_TRUNCATED;
     }
 
     private static final int FMOD_ERR_UNIMPLEMENTED = (int) 66L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNIMPLEMENTED = 66 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNIMPLEMENTED = 66 }
+     */
     public static int FMOD_ERR_UNIMPLEMENTED() {
         return FMOD_ERR_UNIMPLEMENTED;
     }
 
     private static final int FMOD_ERR_UNINITIALIZED = (int) 67L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNINITIALIZED = 67 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNINITIALIZED = 67 }
+     */
     public static int FMOD_ERR_UNINITIALIZED() {
         return FMOD_ERR_UNINITIALIZED;
     }
 
     private static final int FMOD_ERR_UNSUPPORTED = (int) 68L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNSUPPORTED = 68 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_UNSUPPORTED = 68 }
+     */
     public static int FMOD_ERR_UNSUPPORTED() {
         return FMOD_ERR_UNSUPPORTED;
     }
 
     private static final int FMOD_ERR_VERSION = (int) 69L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_VERSION = 69 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_VERSION = 69 }
+     */
     public static int FMOD_ERR_VERSION() {
         return FMOD_ERR_VERSION;
     }
 
     private static final int FMOD_ERR_EVENT_ALREADY_LOADED = (int) 70L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_ALREADY_LOADED = 70 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_ALREADY_LOADED = 70 }
+     */
     public static int FMOD_ERR_EVENT_ALREADY_LOADED() {
         return FMOD_ERR_EVENT_ALREADY_LOADED;
     }
 
     private static final int FMOD_ERR_EVENT_LIVEUPDATE_BUSY = (int) 71L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_BUSY = 71 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_BUSY = 71 }
+     */
     public static int FMOD_ERR_EVENT_LIVEUPDATE_BUSY() {
         return FMOD_ERR_EVENT_LIVEUPDATE_BUSY;
     }
 
     private static final int FMOD_ERR_EVENT_LIVEUPDATE_MISMATCH = (int) 72L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_MISMATCH = 72 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_MISMATCH = 72 }
+     */
     public static int FMOD_ERR_EVENT_LIVEUPDATE_MISMATCH() {
         return FMOD_ERR_EVENT_LIVEUPDATE_MISMATCH;
     }
 
     private static final int FMOD_ERR_EVENT_LIVEUPDATE_TIMEOUT = (int) 73L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_TIMEOUT = 73 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_LIVEUPDATE_TIMEOUT = 73 }
+     */
     public static int FMOD_ERR_EVENT_LIVEUPDATE_TIMEOUT() {
         return FMOD_ERR_EVENT_LIVEUPDATE_TIMEOUT;
     }
 
     private static final int FMOD_ERR_EVENT_NOTFOUND = (int) 74L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_NOTFOUND = 74 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_EVENT_NOTFOUND = 74 }
+     */
     public static int FMOD_ERR_EVENT_NOTFOUND() {
         return FMOD_ERR_EVENT_NOTFOUND;
     }
 
     private static final int FMOD_ERR_STUDIO_UNINITIALIZED = (int) 75L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_STUDIO_UNINITIALIZED = 75 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_STUDIO_UNINITIALIZED = 75 }
+     */
     public static int FMOD_ERR_STUDIO_UNINITIALIZED() {
         return FMOD_ERR_STUDIO_UNINITIALIZED;
     }
 
     private static final int FMOD_ERR_STUDIO_NOT_LOADED = (int) 76L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_STUDIO_NOT_LOADED = 76 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_STUDIO_NOT_LOADED = 76 }
+     */
     public static int FMOD_ERR_STUDIO_NOT_LOADED() {
         return FMOD_ERR_STUDIO_NOT_LOADED;
     }
 
     private static final int FMOD_ERR_INVALID_STRING = (int) 77L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_STRING = 77 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_INVALID_STRING = 77 }
+     */
     public static int FMOD_ERR_INVALID_STRING() {
         return FMOD_ERR_INVALID_STRING;
     }
 
     private static final int FMOD_ERR_ALREADY_LOCKED = (int) 78L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_ALREADY_LOCKED = 78 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_ALREADY_LOCKED = 78 }
+     */
     public static int FMOD_ERR_ALREADY_LOCKED() {
         return FMOD_ERR_ALREADY_LOCKED;
     }
 
     private static final int FMOD_ERR_NOT_LOCKED = (int) 79L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NOT_LOCKED = 79 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_NOT_LOCKED = 79 }
+     */
     public static int FMOD_ERR_NOT_LOCKED() {
         return FMOD_ERR_NOT_LOCKED;
     }
 
     private static final int FMOD_ERR_RECORD_DISCONNECTED = (int) 80L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_RECORD_DISCONNECTED = 80 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_RECORD_DISCONNECTED = 80 }
+     */
     public static int FMOD_ERR_RECORD_DISCONNECTED() {
         return FMOD_ERR_RECORD_DISCONNECTED;
     }
 
     private static final int FMOD_ERR_TOOMANYSAMPLES = (int) 81L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TOOMANYSAMPLES = 81 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_ERR_TOOMANYSAMPLES = 81 }
+     */
     public static int FMOD_ERR_TOOMANYSAMPLES() {
         return FMOD_ERR_TOOMANYSAMPLES;
     }
 
     private static final int FMOD_RESULT_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_RESULT.FMOD_RESULT_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_RESULT.FMOD_RESULT_FORCEINT = 65536 }
+     */
     public static int FMOD_RESULT_FORCEINT() {
         return FMOD_RESULT_FORCEINT;
     }
 
     private static final int FMOD_CHANNELCONTROL_CHANNEL = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_CHANNEL = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_CHANNEL = 0 }
+     */
     public static int FMOD_CHANNELCONTROL_CHANNEL() {
         return FMOD_CHANNELCONTROL_CHANNEL;
     }
 
     private static final int FMOD_CHANNELCONTROL_CHANNELGROUP = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_CHANNELGROUP = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_CHANNELGROUP = 1 }
+     */
     public static int FMOD_CHANNELCONTROL_CHANNELGROUP() {
         return FMOD_CHANNELCONTROL_CHANNELGROUP;
     }
 
     private static final int FMOD_CHANNELCONTROL_MAX = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_MAX = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_MAX = 2 }
+     */
     public static int FMOD_CHANNELCONTROL_MAX() {
         return FMOD_CHANNELCONTROL_MAX;
     }
 
     private static final int FMOD_CHANNELCONTROL_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_TYPE.FMOD_CHANNELCONTROL_FORCEINT = 65536 }
+     */
     public static int FMOD_CHANNELCONTROL_FORCEINT() {
         return FMOD_CHANNELCONTROL_FORCEINT;
     }
 
     private static final int FMOD_OUTPUTTYPE_AUTODETECT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUTODETECT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUTODETECT = 0 }
+     */
     public static int FMOD_OUTPUTTYPE_AUTODETECT() {
         return FMOD_OUTPUTTYPE_AUTODETECT;
     }
 
     private static final int FMOD_OUTPUTTYPE_UNKNOWN = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_UNKNOWN = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_UNKNOWN = 1 }
+     */
     public static int FMOD_OUTPUTTYPE_UNKNOWN() {
         return FMOD_OUTPUTTYPE_UNKNOWN;
     }
 
     private static final int FMOD_OUTPUTTYPE_NOSOUND = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NOSOUND = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NOSOUND = 2 }
+     */
     public static int FMOD_OUTPUTTYPE_NOSOUND() {
         return FMOD_OUTPUTTYPE_NOSOUND;
     }
 
     private static final int FMOD_OUTPUTTYPE_WAVWRITER = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WAVWRITER = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WAVWRITER = 3 }
+     */
     public static int FMOD_OUTPUTTYPE_WAVWRITER() {
         return FMOD_OUTPUTTYPE_WAVWRITER;
     }
 
     private static final int FMOD_OUTPUTTYPE_NOSOUND_NRT = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NOSOUND_NRT = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NOSOUND_NRT = 4 }
+     */
     public static int FMOD_OUTPUTTYPE_NOSOUND_NRT() {
         return FMOD_OUTPUTTYPE_NOSOUND_NRT;
     }
 
     private static final int FMOD_OUTPUTTYPE_WAVWRITER_NRT = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WAVWRITER_NRT = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WAVWRITER_NRT = 5 }
+     */
     public static int FMOD_OUTPUTTYPE_WAVWRITER_NRT() {
         return FMOD_OUTPUTTYPE_WAVWRITER_NRT;
     }
 
     private static final int FMOD_OUTPUTTYPE_WASAPI = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WASAPI = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WASAPI = 6 }
+     */
     public static int FMOD_OUTPUTTYPE_WASAPI() {
         return FMOD_OUTPUTTYPE_WASAPI;
     }
 
     private static final int FMOD_OUTPUTTYPE_ASIO = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_ASIO = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_ASIO = 7 }
+     */
     public static int FMOD_OUTPUTTYPE_ASIO() {
         return FMOD_OUTPUTTYPE_ASIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_PULSEAUDIO = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_PULSEAUDIO = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_PULSEAUDIO = 8 }
+     */
     public static int FMOD_OUTPUTTYPE_PULSEAUDIO() {
         return FMOD_OUTPUTTYPE_PULSEAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_ALSA = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_ALSA = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_ALSA = 9 }
+     */
     public static int FMOD_OUTPUTTYPE_ALSA() {
         return FMOD_OUTPUTTYPE_ALSA;
     }
 
     private static final int FMOD_OUTPUTTYPE_COREAUDIO = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_COREAUDIO = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_COREAUDIO = 10 }
+     */
     public static int FMOD_OUTPUTTYPE_COREAUDIO() {
         return FMOD_OUTPUTTYPE_COREAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_AUDIOTRACK = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOTRACK = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOTRACK = 11 }
+     */
     public static int FMOD_OUTPUTTYPE_AUDIOTRACK() {
         return FMOD_OUTPUTTYPE_AUDIOTRACK;
     }
 
     private static final int FMOD_OUTPUTTYPE_OPENSL = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_OPENSL = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_OPENSL = 12 }
+     */
     public static int FMOD_OUTPUTTYPE_OPENSL() {
         return FMOD_OUTPUTTYPE_OPENSL;
     }
 
     private static final int FMOD_OUTPUTTYPE_AUDIOOUT = (int) 13L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOOUT = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOOUT = 13 }
+     */
     public static int FMOD_OUTPUTTYPE_AUDIOOUT() {
         return FMOD_OUTPUTTYPE_AUDIOOUT;
     }
 
     private static final int FMOD_OUTPUTTYPE_AUDIO3D = (int) 14L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIO3D = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIO3D = 14 }
+     */
     public static int FMOD_OUTPUTTYPE_AUDIO3D() {
         return FMOD_OUTPUTTYPE_AUDIO3D;
     }
 
     private static final int FMOD_OUTPUTTYPE_WEBAUDIO = (int) 15L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WEBAUDIO = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WEBAUDIO = 15 }
+     */
     public static int FMOD_OUTPUTTYPE_WEBAUDIO() {
         return FMOD_OUTPUTTYPE_WEBAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_NNAUDIO = (int) 16L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NNAUDIO = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_NNAUDIO = 16 }
+     */
     public static int FMOD_OUTPUTTYPE_NNAUDIO() {
         return FMOD_OUTPUTTYPE_NNAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_WINSONIC = (int) 17L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WINSONIC = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_WINSONIC = 17 }
+     */
     public static int FMOD_OUTPUTTYPE_WINSONIC() {
         return FMOD_OUTPUTTYPE_WINSONIC;
     }
 
     private static final int FMOD_OUTPUTTYPE_AAUDIO = (int) 18L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AAUDIO = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AAUDIO = 18 }
+     */
     public static int FMOD_OUTPUTTYPE_AAUDIO() {
         return FMOD_OUTPUTTYPE_AAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_AUDIOWORKLET = (int) 19L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOWORKLET = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_AUDIOWORKLET = 19 }
+     */
     public static int FMOD_OUTPUTTYPE_AUDIOWORKLET() {
         return FMOD_OUTPUTTYPE_AUDIOWORKLET;
     }
 
     private static final int FMOD_OUTPUTTYPE_PHASE = (int) 20L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_PHASE = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_PHASE = 20 }
+     */
     public static int FMOD_OUTPUTTYPE_PHASE() {
         return FMOD_OUTPUTTYPE_PHASE;
     }
 
     private static final int FMOD_OUTPUTTYPE_OHAUDIO = (int) 21L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_OHAUDIO = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_OHAUDIO = 21 }
+     */
     public static int FMOD_OUTPUTTYPE_OHAUDIO() {
         return FMOD_OUTPUTTYPE_OHAUDIO;
     }
 
     private static final int FMOD_OUTPUTTYPE_MAX = (int) 22L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_MAX = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_MAX = 22 }
+     */
     public static int FMOD_OUTPUTTYPE_MAX() {
         return FMOD_OUTPUTTYPE_MAX;
     }
 
     private static final int FMOD_OUTPUTTYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OUTPUTTYPE.FMOD_OUTPUTTYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_OUTPUTTYPE_FORCEINT() {
         return FMOD_OUTPUTTYPE_FORCEINT;
     }
 
     private static final int FMOD_DEBUG_MODE_TTY = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_TTY = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_TTY = 0 }
+     */
     public static int FMOD_DEBUG_MODE_TTY() {
         return FMOD_DEBUG_MODE_TTY;
     }
 
     private static final int FMOD_DEBUG_MODE_FILE = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_FILE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_FILE = 1 }
+     */
     public static int FMOD_DEBUG_MODE_FILE() {
         return FMOD_DEBUG_MODE_FILE;
     }
 
     private static final int FMOD_DEBUG_MODE_CALLBACK = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_CALLBACK = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_CALLBACK = 2 }
+     */
     public static int FMOD_DEBUG_MODE_CALLBACK() {
         return FMOD_DEBUG_MODE_CALLBACK;
     }
 
     private static final int FMOD_DEBUG_MODE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DEBUG_MODE.FMOD_DEBUG_MODE_FORCEINT = 65536 }
+     */
     public static int FMOD_DEBUG_MODE_FORCEINT() {
         return FMOD_DEBUG_MODE_FORCEINT;
     }
 
     private static final int FMOD_SPEAKERMODE_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_DEFAULT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_DEFAULT = 0 }
+     */
     public static int FMOD_SPEAKERMODE_DEFAULT() {
         return FMOD_SPEAKERMODE_DEFAULT;
     }
 
     private static final int FMOD_SPEAKERMODE_RAW = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_RAW = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_RAW = 1 }
+     */
     public static int FMOD_SPEAKERMODE_RAW() {
         return FMOD_SPEAKERMODE_RAW;
     }
 
     private static final int FMOD_SPEAKERMODE_MONO = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_MONO = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_MONO = 2 }
+     */
     public static int FMOD_SPEAKERMODE_MONO() {
         return FMOD_SPEAKERMODE_MONO;
     }
 
     private static final int FMOD_SPEAKERMODE_STEREO = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_STEREO = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_STEREO = 3 }
+     */
     public static int FMOD_SPEAKERMODE_STEREO() {
         return FMOD_SPEAKERMODE_STEREO;
     }
 
     private static final int FMOD_SPEAKERMODE_QUAD = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_QUAD = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_QUAD = 4 }
+     */
     public static int FMOD_SPEAKERMODE_QUAD() {
         return FMOD_SPEAKERMODE_QUAD;
     }
 
     private static final int FMOD_SPEAKERMODE_SURROUND = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_SURROUND = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_SURROUND = 5 }
+     */
     public static int FMOD_SPEAKERMODE_SURROUND() {
         return FMOD_SPEAKERMODE_SURROUND;
     }
 
     private static final int FMOD_SPEAKERMODE_5POINT1 = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_5POINT1 = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_5POINT1 = 6 }
+     */
     public static int FMOD_SPEAKERMODE_5POINT1() {
         return FMOD_SPEAKERMODE_5POINT1;
     }
 
     private static final int FMOD_SPEAKERMODE_7POINT1 = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_7POINT1 = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_7POINT1 = 7 }
+     */
     public static int FMOD_SPEAKERMODE_7POINT1() {
         return FMOD_SPEAKERMODE_7POINT1;
     }
 
     private static final int FMOD_SPEAKERMODE_7POINT1POINT4 = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_7POINT1POINT4 = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_7POINT1POINT4 = 8 }
+     */
     public static int FMOD_SPEAKERMODE_7POINT1POINT4() {
         return FMOD_SPEAKERMODE_7POINT1POINT4;
     }
 
     private static final int FMOD_SPEAKERMODE_MAX = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_MAX = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_MAX = 9 }
+     */
     public static int FMOD_SPEAKERMODE_MAX() {
         return FMOD_SPEAKERMODE_MAX;
     }
 
     private static final int FMOD_SPEAKERMODE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKERMODE.FMOD_SPEAKERMODE_FORCEINT = 65536 }
+     */
     public static int FMOD_SPEAKERMODE_FORCEINT() {
         return FMOD_SPEAKERMODE_FORCEINT;
     }
 
     private static final int FMOD_SPEAKER_NONE = (int) -1L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_NONE = -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_NONE = -1 }
+     */
     public static int FMOD_SPEAKER_NONE() {
         return FMOD_SPEAKER_NONE;
     }
 
     private static final int FMOD_SPEAKER_FRONT_LEFT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_LEFT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_LEFT = 0 }
+     */
     public static int FMOD_SPEAKER_FRONT_LEFT() {
         return FMOD_SPEAKER_FRONT_LEFT;
     }
 
     private static final int FMOD_SPEAKER_FRONT_RIGHT = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_RIGHT = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_RIGHT = 1 }
+     */
     public static int FMOD_SPEAKER_FRONT_RIGHT() {
         return FMOD_SPEAKER_FRONT_RIGHT;
     }
 
     private static final int FMOD_SPEAKER_FRONT_CENTER = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_CENTER = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FRONT_CENTER = 2 }
+     */
     public static int FMOD_SPEAKER_FRONT_CENTER() {
         return FMOD_SPEAKER_FRONT_CENTER;
     }
 
     private static final int FMOD_SPEAKER_LOW_FREQUENCY = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_LOW_FREQUENCY = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_LOW_FREQUENCY = 3 }
+     */
     public static int FMOD_SPEAKER_LOW_FREQUENCY() {
         return FMOD_SPEAKER_LOW_FREQUENCY;
     }
 
     private static final int FMOD_SPEAKER_SURROUND_LEFT = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_SURROUND_LEFT = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_SURROUND_LEFT = 4 }
+     */
     public static int FMOD_SPEAKER_SURROUND_LEFT() {
         return FMOD_SPEAKER_SURROUND_LEFT;
     }
 
     private static final int FMOD_SPEAKER_SURROUND_RIGHT = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_SURROUND_RIGHT = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_SURROUND_RIGHT = 5 }
+     */
     public static int FMOD_SPEAKER_SURROUND_RIGHT() {
         return FMOD_SPEAKER_SURROUND_RIGHT;
     }
 
     private static final int FMOD_SPEAKER_BACK_LEFT = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_BACK_LEFT = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_BACK_LEFT = 6 }
+     */
     public static int FMOD_SPEAKER_BACK_LEFT() {
         return FMOD_SPEAKER_BACK_LEFT;
     }
 
     private static final int FMOD_SPEAKER_BACK_RIGHT = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_BACK_RIGHT = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_BACK_RIGHT = 7 }
+     */
     public static int FMOD_SPEAKER_BACK_RIGHT() {
         return FMOD_SPEAKER_BACK_RIGHT;
     }
 
     private static final int FMOD_SPEAKER_TOP_FRONT_LEFT = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_FRONT_LEFT = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_FRONT_LEFT = 8 }
+     */
     public static int FMOD_SPEAKER_TOP_FRONT_LEFT() {
         return FMOD_SPEAKER_TOP_FRONT_LEFT;
     }
 
     private static final int FMOD_SPEAKER_TOP_FRONT_RIGHT = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_FRONT_RIGHT = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_FRONT_RIGHT = 9 }
+     */
     public static int FMOD_SPEAKER_TOP_FRONT_RIGHT() {
         return FMOD_SPEAKER_TOP_FRONT_RIGHT;
     }
 
     private static final int FMOD_SPEAKER_TOP_BACK_LEFT = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_BACK_LEFT = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_BACK_LEFT = 10 }
+     */
     public static int FMOD_SPEAKER_TOP_BACK_LEFT() {
         return FMOD_SPEAKER_TOP_BACK_LEFT;
     }
 
     private static final int FMOD_SPEAKER_TOP_BACK_RIGHT = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_BACK_RIGHT = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_TOP_BACK_RIGHT = 11 }
+     */
     public static int FMOD_SPEAKER_TOP_BACK_RIGHT() {
         return FMOD_SPEAKER_TOP_BACK_RIGHT;
     }
 
     private static final int FMOD_SPEAKER_MAX = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_MAX = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_MAX = 12 }
+     */
     public static int FMOD_SPEAKER_MAX() {
         return FMOD_SPEAKER_MAX;
     }
 
     private static final int FMOD_SPEAKER_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SPEAKER.FMOD_SPEAKER_FORCEINT = 65536 }
+     */
     public static int FMOD_SPEAKER_FORCEINT() {
         return FMOD_SPEAKER_FORCEINT;
     }
 
     private static final int FMOD_CHANNELORDER_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_DEFAULT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_DEFAULT = 0 }
+     */
     public static int FMOD_CHANNELORDER_DEFAULT() {
         return FMOD_CHANNELORDER_DEFAULT;
     }
 
     private static final int FMOD_CHANNELORDER_WAVEFORMAT = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_WAVEFORMAT = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_WAVEFORMAT = 1 }
+     */
     public static int FMOD_CHANNELORDER_WAVEFORMAT() {
         return FMOD_CHANNELORDER_WAVEFORMAT;
     }
 
     private static final int FMOD_CHANNELORDER_PROTOOLS = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_PROTOOLS = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_PROTOOLS = 2 }
+     */
     public static int FMOD_CHANNELORDER_PROTOOLS() {
         return FMOD_CHANNELORDER_PROTOOLS;
     }
 
     private static final int FMOD_CHANNELORDER_ALLMONO = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALLMONO = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALLMONO = 3 }
+     */
     public static int FMOD_CHANNELORDER_ALLMONO() {
         return FMOD_CHANNELORDER_ALLMONO;
     }
 
     private static final int FMOD_CHANNELORDER_ALLSTEREO = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALLSTEREO = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALLSTEREO = 4 }
+     */
     public static int FMOD_CHANNELORDER_ALLSTEREO() {
         return FMOD_CHANNELORDER_ALLSTEREO;
     }
 
     private static final int FMOD_CHANNELORDER_ALSA = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALSA = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_ALSA = 5 }
+     */
     public static int FMOD_CHANNELORDER_ALSA() {
         return FMOD_CHANNELORDER_ALSA;
     }
 
     private static final int FMOD_CHANNELORDER_MAX = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_MAX = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_MAX = 6 }
+     */
     public static int FMOD_CHANNELORDER_MAX() {
         return FMOD_CHANNELORDER_MAX;
     }
 
     private static final int FMOD_CHANNELORDER_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELORDER.FMOD_CHANNELORDER_FORCEINT = 65536 }
+     */
     public static int FMOD_CHANNELORDER_FORCEINT() {
         return FMOD_CHANNELORDER_FORCEINT;
     }
 
     private static final int FMOD_PLUGINTYPE_OUTPUT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_OUTPUT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_OUTPUT = 0 }
+     */
     public static int FMOD_PLUGINTYPE_OUTPUT() {
         return FMOD_PLUGINTYPE_OUTPUT;
     }
 
     private static final int FMOD_PLUGINTYPE_CODEC = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_CODEC = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_CODEC = 1 }
+     */
     public static int FMOD_PLUGINTYPE_CODEC() {
         return FMOD_PLUGINTYPE_CODEC;
     }
 
     private static final int FMOD_PLUGINTYPE_DSP = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_DSP = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_DSP = 2 }
+     */
     public static int FMOD_PLUGINTYPE_DSP() {
         return FMOD_PLUGINTYPE_DSP;
     }
 
     private static final int FMOD_PLUGINTYPE_MAX = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_MAX = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_MAX = 3 }
+     */
     public static int FMOD_PLUGINTYPE_MAX() {
         return FMOD_PLUGINTYPE_MAX;
     }
 
     private static final int FMOD_PLUGINTYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PLUGINTYPE.FMOD_PLUGINTYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_PLUGINTYPE_FORCEINT() {
         return FMOD_PLUGINTYPE_FORCEINT;
     }
 
     private static final int FMOD_SOUND_TYPE_UNKNOWN = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_UNKNOWN = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_UNKNOWN = 0 }
+     */
     public static int FMOD_SOUND_TYPE_UNKNOWN() {
         return FMOD_SOUND_TYPE_UNKNOWN;
     }
 
     private static final int FMOD_SOUND_TYPE_AIFF = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AIFF = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AIFF = 1 }
+     */
     public static int FMOD_SOUND_TYPE_AIFF() {
         return FMOD_SOUND_TYPE_AIFF;
     }
 
     private static final int FMOD_SOUND_TYPE_ASF = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_ASF = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_ASF = 2 }
+     */
     public static int FMOD_SOUND_TYPE_ASF() {
         return FMOD_SOUND_TYPE_ASF;
     }
 
     private static final int FMOD_SOUND_TYPE_DLS = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_DLS = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_DLS = 3 }
+     */
     public static int FMOD_SOUND_TYPE_DLS() {
         return FMOD_SOUND_TYPE_DLS;
     }
 
     private static final int FMOD_SOUND_TYPE_FLAC = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FLAC = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FLAC = 4 }
+     */
     public static int FMOD_SOUND_TYPE_FLAC() {
         return FMOD_SOUND_TYPE_FLAC;
     }
 
     private static final int FMOD_SOUND_TYPE_FSB = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FSB = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FSB = 5 }
+     */
     public static int FMOD_SOUND_TYPE_FSB() {
         return FMOD_SOUND_TYPE_FSB;
     }
 
     private static final int FMOD_SOUND_TYPE_IT = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_IT = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_IT = 6 }
+     */
     public static int FMOD_SOUND_TYPE_IT() {
         return FMOD_SOUND_TYPE_IT;
     }
 
     private static final int FMOD_SOUND_TYPE_MIDI = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MIDI = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MIDI = 7 }
+     */
     public static int FMOD_SOUND_TYPE_MIDI() {
         return FMOD_SOUND_TYPE_MIDI;
     }
 
     private static final int FMOD_SOUND_TYPE_MOD = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MOD = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MOD = 8 }
+     */
     public static int FMOD_SOUND_TYPE_MOD() {
         return FMOD_SOUND_TYPE_MOD;
     }
 
     private static final int FMOD_SOUND_TYPE_MPEG = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MPEG = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MPEG = 9 }
+     */
     public static int FMOD_SOUND_TYPE_MPEG() {
         return FMOD_SOUND_TYPE_MPEG;
     }
 
     private static final int FMOD_SOUND_TYPE_OGGVORBIS = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_OGGVORBIS = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_OGGVORBIS = 10 }
+     */
     public static int FMOD_SOUND_TYPE_OGGVORBIS() {
         return FMOD_SOUND_TYPE_OGGVORBIS;
     }
 
     private static final int FMOD_SOUND_TYPE_PLAYLIST = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_PLAYLIST = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_PLAYLIST = 11 }
+     */
     public static int FMOD_SOUND_TYPE_PLAYLIST() {
         return FMOD_SOUND_TYPE_PLAYLIST;
     }
 
     private static final int FMOD_SOUND_TYPE_RAW = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_RAW = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_RAW = 12 }
+     */
     public static int FMOD_SOUND_TYPE_RAW() {
         return FMOD_SOUND_TYPE_RAW;
     }
 
     private static final int FMOD_SOUND_TYPE_S3M = (int) 13L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_S3M = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_S3M = 13 }
+     */
     public static int FMOD_SOUND_TYPE_S3M() {
         return FMOD_SOUND_TYPE_S3M;
     }
 
     private static final int FMOD_SOUND_TYPE_USER = (int) 14L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_USER = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_USER = 14 }
+     */
     public static int FMOD_SOUND_TYPE_USER() {
         return FMOD_SOUND_TYPE_USER;
     }
 
     private static final int FMOD_SOUND_TYPE_WAV = (int) 15L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_WAV = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_WAV = 15 }
+     */
     public static int FMOD_SOUND_TYPE_WAV() {
         return FMOD_SOUND_TYPE_WAV;
     }
 
     private static final int FMOD_SOUND_TYPE_XM = (int) 16L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_XM = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_XM = 16 }
+     */
     public static int FMOD_SOUND_TYPE_XM() {
         return FMOD_SOUND_TYPE_XM;
     }
 
     private static final int FMOD_SOUND_TYPE_XMA = (int) 17L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_XMA = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_XMA = 17 }
+     */
     public static int FMOD_SOUND_TYPE_XMA() {
         return FMOD_SOUND_TYPE_XMA;
     }
 
     private static final int FMOD_SOUND_TYPE_AUDIOQUEUE = (int) 18L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AUDIOQUEUE = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AUDIOQUEUE = 18 }
+     */
     public static int FMOD_SOUND_TYPE_AUDIOQUEUE() {
         return FMOD_SOUND_TYPE_AUDIOQUEUE;
     }
 
     private static final int FMOD_SOUND_TYPE_AT9 = (int) 19L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AT9 = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_AT9 = 19 }
+     */
     public static int FMOD_SOUND_TYPE_AT9() {
         return FMOD_SOUND_TYPE_AT9;
     }
 
     private static final int FMOD_SOUND_TYPE_VORBIS = (int) 20L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_VORBIS = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_VORBIS = 20 }
+     */
     public static int FMOD_SOUND_TYPE_VORBIS() {
         return FMOD_SOUND_TYPE_VORBIS;
     }
 
     private static final int FMOD_SOUND_TYPE_MEDIA_FOUNDATION = (int) 21L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MEDIA_FOUNDATION = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MEDIA_FOUNDATION = 21 }
+     */
     public static int FMOD_SOUND_TYPE_MEDIA_FOUNDATION() {
         return FMOD_SOUND_TYPE_MEDIA_FOUNDATION;
     }
 
     private static final int FMOD_SOUND_TYPE_MEDIACODEC = (int) 22L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MEDIACODEC = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MEDIACODEC = 22 }
+     */
     public static int FMOD_SOUND_TYPE_MEDIACODEC() {
         return FMOD_SOUND_TYPE_MEDIACODEC;
     }
 
     private static final int FMOD_SOUND_TYPE_FADPCM = (int) 23L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FADPCM = 23 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FADPCM = 23 }
+     */
     public static int FMOD_SOUND_TYPE_FADPCM() {
         return FMOD_SOUND_TYPE_FADPCM;
     }
 
     private static final int FMOD_SOUND_TYPE_OPUS = (int) 24L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_OPUS = 24 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_OPUS = 24 }
+     */
     public static int FMOD_SOUND_TYPE_OPUS() {
         return FMOD_SOUND_TYPE_OPUS;
     }
 
     private static final int FMOD_SOUND_TYPE_MAX = (int) 25L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MAX = 25 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_MAX = 25 }
+     */
     public static int FMOD_SOUND_TYPE_MAX() {
         return FMOD_SOUND_TYPE_MAX;
     }
 
     private static final int FMOD_SOUND_TYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_TYPE.FMOD_SOUND_TYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_SOUND_TYPE_FORCEINT() {
         return FMOD_SOUND_TYPE_FORCEINT;
     }
 
     private static final int FMOD_SOUND_FORMAT_NONE = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_NONE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_NONE = 0 }
+     */
     public static int FMOD_SOUND_FORMAT_NONE() {
         return FMOD_SOUND_FORMAT_NONE;
     }
 
     private static final int FMOD_SOUND_FORMAT_PCM8 = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM8 = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM8 = 1 }
+     */
     public static int FMOD_SOUND_FORMAT_PCM8() {
         return FMOD_SOUND_FORMAT_PCM8;
     }
 
     private static final int FMOD_SOUND_FORMAT_PCM16 = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM16 = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM16 = 2 }
+     */
     public static int FMOD_SOUND_FORMAT_PCM16() {
         return FMOD_SOUND_FORMAT_PCM16;
     }
 
     private static final int FMOD_SOUND_FORMAT_PCM24 = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM24 = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM24 = 3 }
+     */
     public static int FMOD_SOUND_FORMAT_PCM24() {
         return FMOD_SOUND_FORMAT_PCM24;
     }
 
     private static final int FMOD_SOUND_FORMAT_PCM32 = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM32 = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCM32 = 4 }
+     */
     public static int FMOD_SOUND_FORMAT_PCM32() {
         return FMOD_SOUND_FORMAT_PCM32;
     }
 
     private static final int FMOD_SOUND_FORMAT_PCMFLOAT = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCMFLOAT = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_PCMFLOAT = 5 }
+     */
     public static int FMOD_SOUND_FORMAT_PCMFLOAT() {
         return FMOD_SOUND_FORMAT_PCMFLOAT;
     }
 
     private static final int FMOD_SOUND_FORMAT_BITSTREAM = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_BITSTREAM = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_BITSTREAM = 6 }
+     */
     public static int FMOD_SOUND_FORMAT_BITSTREAM() {
         return FMOD_SOUND_FORMAT_BITSTREAM;
     }
 
     private static final int FMOD_SOUND_FORMAT_MAX = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_MAX = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_MAX = 7 }
+     */
     public static int FMOD_SOUND_FORMAT_MAX() {
         return FMOD_SOUND_FORMAT_MAX;
     }
 
     private static final int FMOD_SOUND_FORMAT_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUND_FORMAT.FMOD_SOUND_FORMAT_FORCEINT = 65536 }
+     */
     public static int FMOD_SOUND_FORMAT_FORCEINT() {
         return FMOD_SOUND_FORMAT_FORCEINT;
     }
 
     private static final int FMOD_OPENSTATE_READY = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_READY = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_READY = 0 }
+     */
     public static int FMOD_OPENSTATE_READY() {
         return FMOD_OPENSTATE_READY;
     }
 
     private static final int FMOD_OPENSTATE_LOADING = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_LOADING = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_LOADING = 1 }
+     */
     public static int FMOD_OPENSTATE_LOADING() {
         return FMOD_OPENSTATE_LOADING;
     }
 
     private static final int FMOD_OPENSTATE_ERROR = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_ERROR = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_ERROR = 2 }
+     */
     public static int FMOD_OPENSTATE_ERROR() {
         return FMOD_OPENSTATE_ERROR;
     }
 
     private static final int FMOD_OPENSTATE_CONNECTING = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_CONNECTING = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_CONNECTING = 3 }
+     */
     public static int FMOD_OPENSTATE_CONNECTING() {
         return FMOD_OPENSTATE_CONNECTING;
     }
 
     private static final int FMOD_OPENSTATE_BUFFERING = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_BUFFERING = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_BUFFERING = 4 }
+     */
     public static int FMOD_OPENSTATE_BUFFERING() {
         return FMOD_OPENSTATE_BUFFERING;
     }
 
     private static final int FMOD_OPENSTATE_SEEKING = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_SEEKING = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_SEEKING = 5 }
+     */
     public static int FMOD_OPENSTATE_SEEKING() {
         return FMOD_OPENSTATE_SEEKING;
     }
 
     private static final int FMOD_OPENSTATE_PLAYING = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_PLAYING = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_PLAYING = 6 }
+     */
     public static int FMOD_OPENSTATE_PLAYING() {
         return FMOD_OPENSTATE_PLAYING;
     }
 
     private static final int FMOD_OPENSTATE_SETPOSITION = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_SETPOSITION = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_SETPOSITION = 7 }
+     */
     public static int FMOD_OPENSTATE_SETPOSITION() {
         return FMOD_OPENSTATE_SETPOSITION;
     }
 
     private static final int FMOD_OPENSTATE_MAX = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_MAX = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_MAX = 8 }
+     */
     public static int FMOD_OPENSTATE_MAX() {
         return FMOD_OPENSTATE_MAX;
     }
 
     private static final int FMOD_OPENSTATE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_OPENSTATE.FMOD_OPENSTATE_FORCEINT = 65536 }
+     */
     public static int FMOD_OPENSTATE_FORCEINT() {
         return FMOD_OPENSTATE_FORCEINT;
     }
 
     private static final int FMOD_SOUNDGROUP_BEHAVIOR_FAIL = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_FAIL = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_FAIL = 0 }
+     */
     public static int FMOD_SOUNDGROUP_BEHAVIOR_FAIL() {
         return FMOD_SOUNDGROUP_BEHAVIOR_FAIL;
     }
 
     private static final int FMOD_SOUNDGROUP_BEHAVIOR_MUTE = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_MUTE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_MUTE = 1 }
+     */
     public static int FMOD_SOUNDGROUP_BEHAVIOR_MUTE() {
         return FMOD_SOUNDGROUP_BEHAVIOR_MUTE;
     }
@@ -2433,6 +3809,8 @@ public class FmodCore_1 {
     private static final int FMOD_SOUNDGROUP_BEHAVIOR_STEALLOWEST = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_STEALLOWEST = 2 }
      */
     public static int FMOD_SOUNDGROUP_BEHAVIOR_STEALLOWEST() {
@@ -2441,7 +3819,11 @@ public class FmodCore_1 {
 
     private static final int FMOD_SOUNDGROUP_BEHAVIOR_MAX = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_MAX = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_MAX = 3 }
+     */
     public static int FMOD_SOUNDGROUP_BEHAVIOR_MAX() {
         return FMOD_SOUNDGROUP_BEHAVIOR_MAX;
     }
@@ -2449,6 +3831,8 @@ public class FmodCore_1 {
     private static final int FMOD_SOUNDGROUP_BEHAVIOR_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_SOUNDGROUP_BEHAVIOR.FMOD_SOUNDGROUP_BEHAVIOR_FORCEINT = 65536 }
      */
     public static int FMOD_SOUNDGROUP_BEHAVIOR_FORCEINT() {
@@ -2458,6 +3842,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_END = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_END =
      * 0 }
      */
@@ -2468,6 +3854,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_VIRTUALVOICE = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_VIRTUALVOICE = 1 }
      */
@@ -2478,6 +3866,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_SYNCPOINT = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_SYNCPOINT = 2 }
      */
@@ -2488,6 +3878,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_OCCLUSION = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_OCCLUSION = 3 }
      */
@@ -2498,6 +3890,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_MAX = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_MAX =
      * 4 }
      */
@@ -2508,6 +3902,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_CALLBACK_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_CHANNELCONTROL_CALLBACK_TYPE.FMOD_CHANNELCONTROL_CALLBACK_FORCEINT = 65536 }
      */
@@ -2517,7 +3913,11 @@ public class FmodCore_1 {
 
     private static final int FMOD_CHANNELCONTROL_DSP_HEAD = (int) -1L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_HEAD = -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_HEAD = -1 }
+     */
     public static int FMOD_CHANNELCONTROL_DSP_HEAD() {
         return FMOD_CHANNELCONTROL_DSP_HEAD;
     }
@@ -2525,6 +3925,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_DSP_FADER = (int) -2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_FADER = -2 }
      */
     public static int FMOD_CHANNELCONTROL_DSP_FADER() {
@@ -2533,7 +3935,11 @@ public class FmodCore_1 {
 
     private static final int FMOD_CHANNELCONTROL_DSP_TAIL = (int) -3L;
 
-    /** {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_TAIL = -3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_TAIL = -3 }
+     */
     public static int FMOD_CHANNELCONTROL_DSP_TAIL() {
         return FMOD_CHANNELCONTROL_DSP_TAIL;
     }
@@ -2541,6 +3947,8 @@ public class FmodCore_1 {
     private static final int FMOD_CHANNELCONTROL_DSP_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_CHANNELCONTROL_DSP_INDEX.FMOD_CHANNELCONTROL_DSP_FORCEINT =
      * 65536 }
      */
@@ -2551,6 +3959,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_NONE = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_NONE
      * = 0 }
      */
@@ -2561,6 +3971,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_SYSTEM = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_SYSTEM = 1 }
      */
@@ -2571,6 +3983,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNEL = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNEL = 2 }
      */
@@ -2581,6 +3995,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNELGROUP = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNELGROUP = 3 }
      */
@@ -2591,6 +4007,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNELCONTROL = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_CHANNELCONTROL = 4 }
      */
@@ -2601,6 +4019,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_SOUND = (int) 5L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_SOUND
      * = 5 }
      */
@@ -2611,6 +4031,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_SOUNDGROUP = (int) 6L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_SOUNDGROUP = 6 }
      */
@@ -2621,6 +4043,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_DSP = (int) 7L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_DSP =
      * 7 }
      */
@@ -2631,6 +4055,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_DSPCONNECTION = (int) 8L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_DSPCONNECTION = 8 }
      */
@@ -2641,6 +4067,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_GEOMETRY = (int) 9L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_GEOMETRY = 9 }
      */
@@ -2651,6 +4079,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_REVERB3D = (int) 10L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_REVERB3D = 10 }
      */
@@ -2661,6 +4091,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_SYSTEM = (int) 11L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_SYSTEM = 11 }
      */
@@ -2671,6 +4103,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_EVENTDESCRIPTION = (int) 12L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_EVENTDESCRIPTION = 12
      * }
@@ -2682,6 +4116,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_EVENTINSTANCE = (int) 13L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_EVENTINSTANCE = 13 }
      */
@@ -2692,6 +4128,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_PARAMETERINSTANCE = (int) 14L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_PARAMETERINSTANCE = 14
      * }
@@ -2703,6 +4141,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_BUS = (int) 15L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_BUS = 15 }
      */
@@ -2713,6 +4153,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_VCA = (int) 16L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_VCA = 16 }
      */
@@ -2723,6 +4165,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_BANK = (int) 17L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_BANK = 17 }
      */
@@ -2733,6 +4177,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_COMMANDREPLAY = (int) 18L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_STUDIO_COMMANDREPLAY = 18 }
      */
@@ -2743,6 +4189,8 @@ public class FmodCore_1 {
     private static final int FMOD_ERRORCALLBACK_INSTANCETYPE_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_ERRORCALLBACK_INSTANCETYPE.FMOD_ERRORCALLBACK_INSTANCETYPE_FORCEINT = 65536 }
      */
@@ -2752,49 +4200,77 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_RESAMPLER_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_DEFAULT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_DEFAULT = 0 }
+     */
     public static int FMOD_DSP_RESAMPLER_DEFAULT() {
         return FMOD_DSP_RESAMPLER_DEFAULT;
     }
 
     private static final int FMOD_DSP_RESAMPLER_NOINTERP = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_NOINTERP = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_NOINTERP = 1 }
+     */
     public static int FMOD_DSP_RESAMPLER_NOINTERP() {
         return FMOD_DSP_RESAMPLER_NOINTERP;
     }
 
     private static final int FMOD_DSP_RESAMPLER_LINEAR = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_LINEAR = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_LINEAR = 2 }
+     */
     public static int FMOD_DSP_RESAMPLER_LINEAR() {
         return FMOD_DSP_RESAMPLER_LINEAR;
     }
 
     private static final int FMOD_DSP_RESAMPLER_CUBIC = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_CUBIC = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_CUBIC = 3 }
+     */
     public static int FMOD_DSP_RESAMPLER_CUBIC() {
         return FMOD_DSP_RESAMPLER_CUBIC;
     }
 
     private static final int FMOD_DSP_RESAMPLER_SPLINE = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_SPLINE = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_SPLINE = 4 }
+     */
     public static int FMOD_DSP_RESAMPLER_SPLINE() {
         return FMOD_DSP_RESAMPLER_SPLINE;
     }
 
     private static final int FMOD_DSP_RESAMPLER_MAX = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_MAX = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_MAX = 5 }
+     */
     public static int FMOD_DSP_RESAMPLER_MAX() {
         return FMOD_DSP_RESAMPLER_MAX;
     }
 
     private static final int FMOD_DSP_RESAMPLER_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_RESAMPLER.FMOD_DSP_RESAMPLER_FORCEINT = 65536 }
+     */
     public static int FMOD_DSP_RESAMPLER_FORCEINT() {
         return FMOD_DSP_RESAMPLER_FORCEINT;
     }
@@ -2802,6 +4278,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_CALLBACK_DATAPARAMETERRELEASE = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_CALLBACK_TYPE.FMOD_DSP_CALLBACK_DATAPARAMETERRELEASE = 0 }
      */
     public static int FMOD_DSP_CALLBACK_DATAPARAMETERRELEASE() {
@@ -2810,35 +4288,55 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_CALLBACK_MAX = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_CALLBACK_TYPE.FMOD_DSP_CALLBACK_MAX = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_CALLBACK_TYPE.FMOD_DSP_CALLBACK_MAX = 1 }
+     */
     public static int FMOD_DSP_CALLBACK_MAX() {
         return FMOD_DSP_CALLBACK_MAX;
     }
 
     private static final int FMOD_DSP_CALLBACK_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_CALLBACK_TYPE.FMOD_DSP_CALLBACK_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_CALLBACK_TYPE.FMOD_DSP_CALLBACK_FORCEINT = 65536 }
+     */
     public static int FMOD_DSP_CALLBACK_FORCEINT() {
         return FMOD_DSP_CALLBACK_FORCEINT;
     }
 
     private static final int FMOD_DSPCONNECTION_TYPE_STANDARD = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_STANDARD = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_STANDARD = 0 }
+     */
     public static int FMOD_DSPCONNECTION_TYPE_STANDARD() {
         return FMOD_DSPCONNECTION_TYPE_STANDARD;
     }
 
     private static final int FMOD_DSPCONNECTION_TYPE_SIDECHAIN = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_SIDECHAIN = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_SIDECHAIN = 1 }
+     */
     public static int FMOD_DSPCONNECTION_TYPE_SIDECHAIN() {
         return FMOD_DSPCONNECTION_TYPE_SIDECHAIN;
     }
 
     private static final int FMOD_DSPCONNECTION_TYPE_SEND = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_SEND = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_SEND = 2 }
+     */
     public static int FMOD_DSPCONNECTION_TYPE_SEND() {
         return FMOD_DSPCONNECTION_TYPE_SEND;
     }
@@ -2846,6 +4344,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSPCONNECTION_TYPE_SEND_SIDECHAIN = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_SEND_SIDECHAIN = 3 }
      */
     public static int FMOD_DSPCONNECTION_TYPE_SEND_SIDECHAIN() {
@@ -2855,6 +4355,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSPCONNECTION_TYPE_PREALLOCATED = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_PREALLOCATED = 4 }
      */
     public static int FMOD_DSPCONNECTION_TYPE_PREALLOCATED() {
@@ -2863,7 +4365,11 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSPCONNECTION_TYPE_MAX = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_MAX = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_MAX = 5 }
+     */
     public static int FMOD_DSPCONNECTION_TYPE_MAX() {
         return FMOD_DSPCONNECTION_TYPE_MAX;
     }
@@ -2871,6 +4377,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSPCONNECTION_TYPE_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSPCONNECTION_TYPE.FMOD_DSPCONNECTION_TYPE_FORCEINT = 65536 }
      */
     public static int FMOD_DSPCONNECTION_TYPE_FORCEINT() {
@@ -2879,850 +4387,1338 @@ public class FmodCore_1 {
 
     private static final int FMOD_TAGTYPE_UNKNOWN = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_UNKNOWN = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_UNKNOWN = 0 }
+     */
     public static int FMOD_TAGTYPE_UNKNOWN() {
         return FMOD_TAGTYPE_UNKNOWN;
     }
 
     private static final int FMOD_TAGTYPE_ID3V1 = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ID3V1 = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ID3V1 = 1 }
+     */
     public static int FMOD_TAGTYPE_ID3V1() {
         return FMOD_TAGTYPE_ID3V1;
     }
 
     private static final int FMOD_TAGTYPE_ID3V2 = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ID3V2 = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ID3V2 = 2 }
+     */
     public static int FMOD_TAGTYPE_ID3V2() {
         return FMOD_TAGTYPE_ID3V2;
     }
 
     private static final int FMOD_TAGTYPE_VORBISCOMMENT = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_VORBISCOMMENT = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_VORBISCOMMENT = 3 }
+     */
     public static int FMOD_TAGTYPE_VORBISCOMMENT() {
         return FMOD_TAGTYPE_VORBISCOMMENT;
     }
 
     private static final int FMOD_TAGTYPE_SHOUTCAST = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_SHOUTCAST = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_SHOUTCAST = 4 }
+     */
     public static int FMOD_TAGTYPE_SHOUTCAST() {
         return FMOD_TAGTYPE_SHOUTCAST;
     }
 
     private static final int FMOD_TAGTYPE_ICECAST = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ICECAST = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ICECAST = 5 }
+     */
     public static int FMOD_TAGTYPE_ICECAST() {
         return FMOD_TAGTYPE_ICECAST;
     }
 
     private static final int FMOD_TAGTYPE_ASF = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ASF = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_ASF = 6 }
+     */
     public static int FMOD_TAGTYPE_ASF() {
         return FMOD_TAGTYPE_ASF;
     }
 
     private static final int FMOD_TAGTYPE_MIDI = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_MIDI = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_MIDI = 7 }
+     */
     public static int FMOD_TAGTYPE_MIDI() {
         return FMOD_TAGTYPE_MIDI;
     }
 
     private static final int FMOD_TAGTYPE_PLAYLIST = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_PLAYLIST = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_PLAYLIST = 8 }
+     */
     public static int FMOD_TAGTYPE_PLAYLIST() {
         return FMOD_TAGTYPE_PLAYLIST;
     }
 
     private static final int FMOD_TAGTYPE_FMOD = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_FMOD = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_FMOD = 9 }
+     */
     public static int FMOD_TAGTYPE_FMOD() {
         return FMOD_TAGTYPE_FMOD;
     }
 
     private static final int FMOD_TAGTYPE_USER = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_USER = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_USER = 10 }
+     */
     public static int FMOD_TAGTYPE_USER() {
         return FMOD_TAGTYPE_USER;
     }
 
     private static final int FMOD_TAGTYPE_MAX = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_MAX = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_MAX = 11 }
+     */
     public static int FMOD_TAGTYPE_MAX() {
         return FMOD_TAGTYPE_MAX;
     }
 
     private static final int FMOD_TAGTYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGTYPE.FMOD_TAGTYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_TAGTYPE_FORCEINT() {
         return FMOD_TAGTYPE_FORCEINT;
     }
 
     private static final int FMOD_TAGDATATYPE_BINARY = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_BINARY = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_BINARY = 0 }
+     */
     public static int FMOD_TAGDATATYPE_BINARY() {
         return FMOD_TAGDATATYPE_BINARY;
     }
 
     private static final int FMOD_TAGDATATYPE_INT = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_INT = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_INT = 1 }
+     */
     public static int FMOD_TAGDATATYPE_INT() {
         return FMOD_TAGDATATYPE_INT;
     }
 
     private static final int FMOD_TAGDATATYPE_FLOAT = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_FLOAT = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_FLOAT = 2 }
+     */
     public static int FMOD_TAGDATATYPE_FLOAT() {
         return FMOD_TAGDATATYPE_FLOAT;
     }
 
     private static final int FMOD_TAGDATATYPE_STRING = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING = 3 }
+     */
     public static int FMOD_TAGDATATYPE_STRING() {
         return FMOD_TAGDATATYPE_STRING;
     }
 
     private static final int FMOD_TAGDATATYPE_STRING_UTF16 = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF16 = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF16 = 4 }
+     */
     public static int FMOD_TAGDATATYPE_STRING_UTF16() {
         return FMOD_TAGDATATYPE_STRING_UTF16;
     }
 
     private static final int FMOD_TAGDATATYPE_STRING_UTF16BE = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF16BE = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF16BE = 5 }
+     */
     public static int FMOD_TAGDATATYPE_STRING_UTF16BE() {
         return FMOD_TAGDATATYPE_STRING_UTF16BE;
     }
 
     private static final int FMOD_TAGDATATYPE_STRING_UTF8 = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF8 = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_STRING_UTF8 = 6 }
+     */
     public static int FMOD_TAGDATATYPE_STRING_UTF8() {
         return FMOD_TAGDATATYPE_STRING_UTF8;
     }
 
     private static final int FMOD_TAGDATATYPE_MAX = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_MAX = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_MAX = 7 }
+     */
     public static int FMOD_TAGDATATYPE_MAX() {
         return FMOD_TAGDATATYPE_MAX;
     }
 
     private static final int FMOD_TAGDATATYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_TAGDATATYPE.FMOD_TAGDATATYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_TAGDATATYPE_FORCEINT() {
         return FMOD_TAGDATATYPE_FORCEINT;
     }
 
     private static final int FMOD_PORT_TYPE_MUSIC = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_MUSIC = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_MUSIC = 0 }
+     */
     public static int FMOD_PORT_TYPE_MUSIC() {
         return FMOD_PORT_TYPE_MUSIC;
     }
 
     private static final int FMOD_PORT_TYPE_COPYRIGHT_MUSIC = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_COPYRIGHT_MUSIC = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_COPYRIGHT_MUSIC = 1 }
+     */
     public static int FMOD_PORT_TYPE_COPYRIGHT_MUSIC() {
         return FMOD_PORT_TYPE_COPYRIGHT_MUSIC;
     }
 
     private static final int FMOD_PORT_TYPE_VOICE = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VOICE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VOICE = 2 }
+     */
     public static int FMOD_PORT_TYPE_VOICE() {
         return FMOD_PORT_TYPE_VOICE;
     }
 
     private static final int FMOD_PORT_TYPE_CONTROLLER = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_CONTROLLER = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_CONTROLLER = 3 }
+     */
     public static int FMOD_PORT_TYPE_CONTROLLER() {
         return FMOD_PORT_TYPE_CONTROLLER;
     }
 
     private static final int FMOD_PORT_TYPE_PERSONAL = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_PERSONAL = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_PERSONAL = 4 }
+     */
     public static int FMOD_PORT_TYPE_PERSONAL() {
         return FMOD_PORT_TYPE_PERSONAL;
     }
 
     private static final int FMOD_PORT_TYPE_VIBRATION = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VIBRATION = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VIBRATION = 5 }
+     */
     public static int FMOD_PORT_TYPE_VIBRATION() {
         return FMOD_PORT_TYPE_VIBRATION;
     }
 
     private static final int FMOD_PORT_TYPE_AUX = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_AUX = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_AUX = 6 }
+     */
     public static int FMOD_PORT_TYPE_AUX() {
         return FMOD_PORT_TYPE_AUX;
     }
 
     private static final int FMOD_PORT_TYPE_PASSTHROUGH = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_PASSTHROUGH = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_PASSTHROUGH = 7 }
+     */
     public static int FMOD_PORT_TYPE_PASSTHROUGH() {
         return FMOD_PORT_TYPE_PASSTHROUGH;
     }
 
     private static final int FMOD_PORT_TYPE_VR_VIBRATION = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VR_VIBRATION = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_VR_VIBRATION = 8 }
+     */
     public static int FMOD_PORT_TYPE_VR_VIBRATION() {
         return FMOD_PORT_TYPE_VR_VIBRATION;
     }
 
     private static final int FMOD_PORT_TYPE_MAX = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_MAX = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_MAX = 9 }
+     */
     public static int FMOD_PORT_TYPE_MAX() {
         return FMOD_PORT_TYPE_MAX;
     }
 
     private static final int FMOD_PORT_TYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_PORT_TYPE.FMOD_PORT_TYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_PORT_TYPE_FORCEINT() {
         return FMOD_PORT_TYPE_FORCEINT;
     }
 
-    /** {@snippet lang=c : typedef int FMOD_CODEC_SEEK_METHOD } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef int FMOD_CODEC_SEEK_METHOD }
+     */
     public static final OfInt FMOD_CODEC_SEEK_METHOD = FmodCore.C_INT;
 
     private static final int FMOD_DSP_TYPE_UNKNOWN = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_UNKNOWN = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_UNKNOWN = 0 }
+     */
     public static int FMOD_DSP_TYPE_UNKNOWN() {
         return FMOD_DSP_TYPE_UNKNOWN;
     }
 
     private static final int FMOD_DSP_TYPE_MIXER = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MIXER = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MIXER = 1 }
+     */
     public static int FMOD_DSP_TYPE_MIXER() {
         return FMOD_DSP_TYPE_MIXER;
     }
 
     private static final int FMOD_DSP_TYPE_OSCILLATOR = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_OSCILLATOR = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_OSCILLATOR = 2 }
+     */
     public static int FMOD_DSP_TYPE_OSCILLATOR() {
         return FMOD_DSP_TYPE_OSCILLATOR;
     }
 
     private static final int FMOD_DSP_TYPE_LOWPASS = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOWPASS = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOWPASS = 3 }
+     */
     public static int FMOD_DSP_TYPE_LOWPASS() {
         return FMOD_DSP_TYPE_LOWPASS;
     }
 
     private static final int FMOD_DSP_TYPE_ITLOWPASS = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ITLOWPASS = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ITLOWPASS = 4 }
+     */
     public static int FMOD_DSP_TYPE_ITLOWPASS() {
         return FMOD_DSP_TYPE_ITLOWPASS;
     }
 
     private static final int FMOD_DSP_TYPE_HIGHPASS = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_HIGHPASS = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_HIGHPASS = 5 }
+     */
     public static int FMOD_DSP_TYPE_HIGHPASS() {
         return FMOD_DSP_TYPE_HIGHPASS;
     }
 
     private static final int FMOD_DSP_TYPE_ECHO = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ECHO = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ECHO = 6 }
+     */
     public static int FMOD_DSP_TYPE_ECHO() {
         return FMOD_DSP_TYPE_ECHO;
     }
 
     private static final int FMOD_DSP_TYPE_FADER = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FADER = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FADER = 7 }
+     */
     public static int FMOD_DSP_TYPE_FADER() {
         return FMOD_DSP_TYPE_FADER;
     }
 
     private static final int FMOD_DSP_TYPE_FLANGE = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FLANGE = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FLANGE = 8 }
+     */
     public static int FMOD_DSP_TYPE_FLANGE() {
         return FMOD_DSP_TYPE_FLANGE;
     }
 
     private static final int FMOD_DSP_TYPE_DISTORTION = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_DISTORTION = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_DISTORTION = 9 }
+     */
     public static int FMOD_DSP_TYPE_DISTORTION() {
         return FMOD_DSP_TYPE_DISTORTION;
     }
 
     private static final int FMOD_DSP_TYPE_NORMALIZE = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_NORMALIZE = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_NORMALIZE = 10 }
+     */
     public static int FMOD_DSP_TYPE_NORMALIZE() {
         return FMOD_DSP_TYPE_NORMALIZE;
     }
 
     private static final int FMOD_DSP_TYPE_LIMITER = (int) 11L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LIMITER = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LIMITER = 11 }
+     */
     public static int FMOD_DSP_TYPE_LIMITER() {
         return FMOD_DSP_TYPE_LIMITER;
     }
 
     private static final int FMOD_DSP_TYPE_PARAMEQ = (int) 12L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PARAMEQ = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PARAMEQ = 12 }
+     */
     public static int FMOD_DSP_TYPE_PARAMEQ() {
         return FMOD_DSP_TYPE_PARAMEQ;
     }
 
     private static final int FMOD_DSP_TYPE_PITCHSHIFT = (int) 13L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PITCHSHIFT = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PITCHSHIFT = 13 }
+     */
     public static int FMOD_DSP_TYPE_PITCHSHIFT() {
         return FMOD_DSP_TYPE_PITCHSHIFT;
     }
 
     private static final int FMOD_DSP_TYPE_CHORUS = (int) 14L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CHORUS = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CHORUS = 14 }
+     */
     public static int FMOD_DSP_TYPE_CHORUS() {
         return FMOD_DSP_TYPE_CHORUS;
     }
 
     private static final int FMOD_DSP_TYPE_ITECHO = (int) 15L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ITECHO = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_ITECHO = 15 }
+     */
     public static int FMOD_DSP_TYPE_ITECHO() {
         return FMOD_DSP_TYPE_ITECHO;
     }
 
     private static final int FMOD_DSP_TYPE_COMPRESSOR = (int) 16L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_COMPRESSOR = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_COMPRESSOR = 16 }
+     */
     public static int FMOD_DSP_TYPE_COMPRESSOR() {
         return FMOD_DSP_TYPE_COMPRESSOR;
     }
 
     private static final int FMOD_DSP_TYPE_SFXREVERB = (int) 17L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_SFXREVERB = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_SFXREVERB = 17 }
+     */
     public static int FMOD_DSP_TYPE_SFXREVERB() {
         return FMOD_DSP_TYPE_SFXREVERB;
     }
 
     private static final int FMOD_DSP_TYPE_LOWPASS_SIMPLE = (int) 18L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOWPASS_SIMPLE = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOWPASS_SIMPLE = 18 }
+     */
     public static int FMOD_DSP_TYPE_LOWPASS_SIMPLE() {
         return FMOD_DSP_TYPE_LOWPASS_SIMPLE;
     }
 
     private static final int FMOD_DSP_TYPE_DELAY = (int) 19L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_DELAY = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_DELAY = 19 }
+     */
     public static int FMOD_DSP_TYPE_DELAY() {
         return FMOD_DSP_TYPE_DELAY;
     }
 
     private static final int FMOD_DSP_TYPE_TREMOLO = (int) 20L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_TREMOLO = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_TREMOLO = 20 }
+     */
     public static int FMOD_DSP_TYPE_TREMOLO() {
         return FMOD_DSP_TYPE_TREMOLO;
     }
 
     private static final int FMOD_DSP_TYPE_SEND = (int) 21L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_SEND = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_SEND = 21 }
+     */
     public static int FMOD_DSP_TYPE_SEND() {
         return FMOD_DSP_TYPE_SEND;
     }
 
     private static final int FMOD_DSP_TYPE_RETURN = (int) 22L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_RETURN = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_RETURN = 22 }
+     */
     public static int FMOD_DSP_TYPE_RETURN() {
         return FMOD_DSP_TYPE_RETURN;
     }
 
     private static final int FMOD_DSP_TYPE_HIGHPASS_SIMPLE = (int) 23L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_HIGHPASS_SIMPLE = 23 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_HIGHPASS_SIMPLE = 23 }
+     */
     public static int FMOD_DSP_TYPE_HIGHPASS_SIMPLE() {
         return FMOD_DSP_TYPE_HIGHPASS_SIMPLE;
     }
 
     private static final int FMOD_DSP_TYPE_PAN = (int) 24L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PAN = 24 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_PAN = 24 }
+     */
     public static int FMOD_DSP_TYPE_PAN() {
         return FMOD_DSP_TYPE_PAN;
     }
 
     private static final int FMOD_DSP_TYPE_THREE_EQ = (int) 25L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_THREE_EQ = 25 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_THREE_EQ = 25 }
+     */
     public static int FMOD_DSP_TYPE_THREE_EQ() {
         return FMOD_DSP_TYPE_THREE_EQ;
     }
 
     private static final int FMOD_DSP_TYPE_FFT = (int) 26L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FFT = 26 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FFT = 26 }
+     */
     public static int FMOD_DSP_TYPE_FFT() {
         return FMOD_DSP_TYPE_FFT;
     }
 
     private static final int FMOD_DSP_TYPE_LOUDNESS_METER = (int) 27L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOUDNESS_METER = 27 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_LOUDNESS_METER = 27 }
+     */
     public static int FMOD_DSP_TYPE_LOUDNESS_METER() {
         return FMOD_DSP_TYPE_LOUDNESS_METER;
     }
 
     private static final int FMOD_DSP_TYPE_CONVOLUTIONREVERB = (int) 28L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CONVOLUTIONREVERB = 28 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CONVOLUTIONREVERB = 28 }
+     */
     public static int FMOD_DSP_TYPE_CONVOLUTIONREVERB() {
         return FMOD_DSP_TYPE_CONVOLUTIONREVERB;
     }
 
     private static final int FMOD_DSP_TYPE_CHANNELMIX = (int) 29L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CHANNELMIX = 29 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_CHANNELMIX = 29 }
+     */
     public static int FMOD_DSP_TYPE_CHANNELMIX() {
         return FMOD_DSP_TYPE_CHANNELMIX;
     }
 
     private static final int FMOD_DSP_TYPE_TRANSCEIVER = (int) 30L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_TRANSCEIVER = 30 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_TRANSCEIVER = 30 }
+     */
     public static int FMOD_DSP_TYPE_TRANSCEIVER() {
         return FMOD_DSP_TYPE_TRANSCEIVER;
     }
 
     private static final int FMOD_DSP_TYPE_OBJECTPAN = (int) 31L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_OBJECTPAN = 31 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_OBJECTPAN = 31 }
+     */
     public static int FMOD_DSP_TYPE_OBJECTPAN() {
         return FMOD_DSP_TYPE_OBJECTPAN;
     }
 
     private static final int FMOD_DSP_TYPE_MULTIBAND_EQ = (int) 32L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MULTIBAND_EQ = 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MULTIBAND_EQ = 32 }
+     */
     public static int FMOD_DSP_TYPE_MULTIBAND_EQ() {
         return FMOD_DSP_TYPE_MULTIBAND_EQ;
     }
 
     private static final int FMOD_DSP_TYPE_MULTIBAND_DYNAMICS = (int) 33L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MULTIBAND_DYNAMICS = 33 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MULTIBAND_DYNAMICS = 33 }
+     */
     public static int FMOD_DSP_TYPE_MULTIBAND_DYNAMICS() {
         return FMOD_DSP_TYPE_MULTIBAND_DYNAMICS;
     }
 
     private static final int FMOD_DSP_TYPE_MAX = (int) 34L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MAX = 34 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_MAX = 34 }
+     */
     public static int FMOD_DSP_TYPE_MAX() {
         return FMOD_DSP_TYPE_MAX;
     }
 
     private static final int FMOD_DSP_TYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_DSP_TYPE_FORCEINT() {
         return FMOD_DSP_TYPE_FORCEINT;
     }
 
     private static final int FMOD_DSP_OSCILLATOR_TYPE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OSCILLATOR_TYPE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OSCILLATOR_TYPE = 0 }
+     */
     public static int FMOD_DSP_OSCILLATOR_TYPE() {
         return FMOD_DSP_OSCILLATOR_TYPE;
     }
 
     private static final int FMOD_DSP_OSCILLATOR_RATE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OSCILLATOR_RATE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OSCILLATOR_RATE = 1 }
+     */
     public static int FMOD_DSP_OSCILLATOR_RATE() {
         return FMOD_DSP_OSCILLATOR_RATE;
     }
 
     private static final int FMOD_DSP_LOWPASS_CUTOFF = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_CUTOFF = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_CUTOFF = 0 }
+     */
     public static int FMOD_DSP_LOWPASS_CUTOFF() {
         return FMOD_DSP_LOWPASS_CUTOFF;
     }
 
     private static final int FMOD_DSP_LOWPASS_RESONANCE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_RESONANCE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_RESONANCE = 1 }
+     */
     public static int FMOD_DSP_LOWPASS_RESONANCE() {
         return FMOD_DSP_LOWPASS_RESONANCE;
     }
 
     private static final int FMOD_DSP_ITLOWPASS_CUTOFF = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITLOWPASS_CUTOFF = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITLOWPASS_CUTOFF = 0 }
+     */
     public static int FMOD_DSP_ITLOWPASS_CUTOFF() {
         return FMOD_DSP_ITLOWPASS_CUTOFF;
     }
 
     private static final int FMOD_DSP_ITLOWPASS_RESONANCE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITLOWPASS_RESONANCE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITLOWPASS_RESONANCE = 1 }
+     */
     public static int FMOD_DSP_ITLOWPASS_RESONANCE() {
         return FMOD_DSP_ITLOWPASS_RESONANCE;
     }
 
     private static final int FMOD_DSP_HIGHPASS_CUTOFF = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_CUTOFF = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_CUTOFF = 0 }
+     */
     public static int FMOD_DSP_HIGHPASS_CUTOFF() {
         return FMOD_DSP_HIGHPASS_CUTOFF;
     }
 
     private static final int FMOD_DSP_HIGHPASS_RESONANCE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_RESONANCE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_RESONANCE = 1 }
+     */
     public static int FMOD_DSP_HIGHPASS_RESONANCE() {
         return FMOD_DSP_HIGHPASS_RESONANCE;
     }
 
     private static final int FMOD_DSP_ECHO_DELAY = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAY = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAY = 0 }
+     */
     public static int FMOD_DSP_ECHO_DELAY() {
         return FMOD_DSP_ECHO_DELAY;
     }
 
     private static final int FMOD_DSP_ECHO_FEEDBACK = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_FEEDBACK = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_FEEDBACK = 1 }
+     */
     public static int FMOD_DSP_ECHO_FEEDBACK() {
         return FMOD_DSP_ECHO_FEEDBACK;
     }
 
     private static final int FMOD_DSP_ECHO_DRYLEVEL = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DRYLEVEL = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DRYLEVEL = 2 }
+     */
     public static int FMOD_DSP_ECHO_DRYLEVEL() {
         return FMOD_DSP_ECHO_DRYLEVEL;
     }
 
     private static final int FMOD_DSP_ECHO_WETLEVEL = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_WETLEVEL = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_WETLEVEL = 3 }
+     */
     public static int FMOD_DSP_ECHO_WETLEVEL() {
         return FMOD_DSP_ECHO_WETLEVEL;
     }
 
     private static final int FMOD_DSP_ECHO_DELAYCHANGEMODE = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE = 4 }
+     */
     public static int FMOD_DSP_ECHO_DELAYCHANGEMODE() {
         return FMOD_DSP_ECHO_DELAYCHANGEMODE;
     }
 
     private static final int FMOD_DSP_ECHO_DELAYCHANGEMODE_FADE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_FADE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_FADE = 0 }
+     */
     public static int FMOD_DSP_ECHO_DELAYCHANGEMODE_FADE() {
         return FMOD_DSP_ECHO_DELAYCHANGEMODE_FADE;
     }
 
     private static final int FMOD_DSP_ECHO_DELAYCHANGEMODE_LERP = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_LERP = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_LERP = 1 }
+     */
     public static int FMOD_DSP_ECHO_DELAYCHANGEMODE_LERP() {
         return FMOD_DSP_ECHO_DELAYCHANGEMODE_LERP;
     }
 
     private static final int FMOD_DSP_ECHO_DELAYCHANGEMODE_NONE = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_NONE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ECHO_DELAYCHANGEMODE_NONE = 2 }
+     */
     public static int FMOD_DSP_ECHO_DELAYCHANGEMODE_NONE() {
         return FMOD_DSP_ECHO_DELAYCHANGEMODE_NONE;
     }
 
     private static final int FMOD_DSP_FADER_GAIN = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_FADER.FMOD_DSP_FADER_GAIN = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_FADER.FMOD_DSP_FADER_GAIN = 0 }
+     */
     public static int FMOD_DSP_FADER_GAIN() {
         return FMOD_DSP_FADER_GAIN;
     }
 
     private static final int FMOD_DSP_FADER_OVERALL_GAIN = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_FADER.FMOD_DSP_FADER_OVERALL_GAIN = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_FADER.FMOD_DSP_FADER_OVERALL_GAIN = 1 }
+     */
     public static int FMOD_DSP_FADER_OVERALL_GAIN() {
         return FMOD_DSP_FADER_OVERALL_GAIN;
     }
 
     private static final int FMOD_DSP_FLANGE_MIX = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_MIX = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_MIX = 0 }
+     */
     public static int FMOD_DSP_FLANGE_MIX() {
         return FMOD_DSP_FLANGE_MIX;
     }
 
     private static final int FMOD_DSP_FLANGE_DEPTH = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_DEPTH = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_DEPTH = 1 }
+     */
     public static int FMOD_DSP_FLANGE_DEPTH() {
         return FMOD_DSP_FLANGE_DEPTH;
     }
 
     private static final int FMOD_DSP_FLANGE_RATE = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_RATE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FLANGE_RATE = 2 }
+     */
     public static int FMOD_DSP_FLANGE_RATE() {
         return FMOD_DSP_FLANGE_RATE;
     }
 
     private static final int FMOD_DSP_DISTORTION_LEVEL = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DISTORTION_LEVEL = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DISTORTION_LEVEL = 0 }
+     */
     public static int FMOD_DSP_DISTORTION_LEVEL() {
         return FMOD_DSP_DISTORTION_LEVEL;
     }
 
     private static final int FMOD_DSP_NORMALIZE_FADETIME = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_FADETIME = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_FADETIME = 0 }
+     */
     public static int FMOD_DSP_NORMALIZE_FADETIME() {
         return FMOD_DSP_NORMALIZE_FADETIME;
     }
 
     private static final int FMOD_DSP_NORMALIZE_THRESHOLD = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_THRESHOLD = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_THRESHOLD = 1 }
+     */
     public static int FMOD_DSP_NORMALIZE_THRESHOLD() {
         return FMOD_DSP_NORMALIZE_THRESHOLD;
     }
 
     private static final int FMOD_DSP_NORMALIZE_MAXAMP = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_MAXAMP = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_NORMALIZE_MAXAMP = 2 }
+     */
     public static int FMOD_DSP_NORMALIZE_MAXAMP() {
         return FMOD_DSP_NORMALIZE_MAXAMP;
     }
 
     private static final int FMOD_DSP_LIMITER_RELEASETIME = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_RELEASETIME = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_RELEASETIME = 0 }
+     */
     public static int FMOD_DSP_LIMITER_RELEASETIME() {
         return FMOD_DSP_LIMITER_RELEASETIME;
     }
 
     private static final int FMOD_DSP_LIMITER_CEILING = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_CEILING = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_CEILING = 1 }
+     */
     public static int FMOD_DSP_LIMITER_CEILING() {
         return FMOD_DSP_LIMITER_CEILING;
     }
 
     private static final int FMOD_DSP_LIMITER_MAXIMIZERGAIN = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_MAXIMIZERGAIN = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_MAXIMIZERGAIN = 2 }
+     */
     public static int FMOD_DSP_LIMITER_MAXIMIZERGAIN() {
         return FMOD_DSP_LIMITER_MAXIMIZERGAIN;
     }
 
     private static final int FMOD_DSP_LIMITER_MODE = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_MODE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LIMITER_MODE = 3 }
+     */
     public static int FMOD_DSP_LIMITER_MODE() {
         return FMOD_DSP_LIMITER_MODE;
     }
 
     private static final int FMOD_DSP_PARAMEQ_CENTER = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_CENTER = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_CENTER = 0 }
+     */
     public static int FMOD_DSP_PARAMEQ_CENTER() {
         return FMOD_DSP_PARAMEQ_CENTER;
     }
 
     private static final int FMOD_DSP_PARAMEQ_BANDWIDTH = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_BANDWIDTH = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_BANDWIDTH = 1 }
+     */
     public static int FMOD_DSP_PARAMEQ_BANDWIDTH() {
         return FMOD_DSP_PARAMEQ_BANDWIDTH;
     }
 
     private static final int FMOD_DSP_PARAMEQ_GAIN = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_GAIN = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMEQ_GAIN = 2 }
+     */
     public static int FMOD_DSP_PARAMEQ_GAIN() {
         return FMOD_DSP_PARAMEQ_GAIN;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_A_FILTER = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_FILTER = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_FILTER = 0 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_A_FILTER() {
         return FMOD_DSP_MULTIBAND_EQ_A_FILTER;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY = (int) 1L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY = 1 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY() {
         return FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_A_Q = (int) 2L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_Q = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_Q = 2 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_A_Q() {
         return FMOD_DSP_MULTIBAND_EQ_A_Q;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_A_GAIN = (int) 3L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_GAIN = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_A_GAIN = 3 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_A_GAIN() {
         return FMOD_DSP_MULTIBAND_EQ_A_GAIN;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_B_FILTER = (int) 4L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_FILTER = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_FILTER = 4 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_B_FILTER() {
         return FMOD_DSP_MULTIBAND_EQ_B_FILTER;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_B_FREQUENCY = (int) 5L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_FREQUENCY = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_FREQUENCY = 5 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_B_FREQUENCY() {
         return FMOD_DSP_MULTIBAND_EQ_B_FREQUENCY;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_B_Q = (int) 6L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_Q = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_Q = 6 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_B_Q() {
         return FMOD_DSP_MULTIBAND_EQ_B_Q;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_B_GAIN = (int) 7L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_GAIN = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_B_GAIN = 7 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_B_GAIN() {
         return FMOD_DSP_MULTIBAND_EQ_B_GAIN;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_C_FILTER = (int) 8L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_FILTER = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_FILTER = 8 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_C_FILTER() {
         return FMOD_DSP_MULTIBAND_EQ_C_FILTER;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_C_FREQUENCY = (int) 9L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_FREQUENCY = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_FREQUENCY = 9 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_C_FREQUENCY() {
         return FMOD_DSP_MULTIBAND_EQ_C_FREQUENCY;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_C_Q = (int) 10L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_Q = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_Q = 10 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_C_Q() {
         return FMOD_DSP_MULTIBAND_EQ_C_Q;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_C_GAIN = (int) 11L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_GAIN = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_C_GAIN = 11 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_C_GAIN() {
         return FMOD_DSP_MULTIBAND_EQ_C_GAIN;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_D_FILTER = (int) 12L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_FILTER = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_FILTER = 12 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_D_FILTER() {
         return FMOD_DSP_MULTIBAND_EQ_D_FILTER;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_D_FREQUENCY = (int) 13L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_FREQUENCY = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_FREQUENCY = 13 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_D_FREQUENCY() {
         return FMOD_DSP_MULTIBAND_EQ_D_FREQUENCY;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_D_Q = (int) 14L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_Q = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_Q = 14 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_D_Q() {
         return FMOD_DSP_MULTIBAND_EQ_D_Q;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_D_GAIN = (int) 15L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_GAIN = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_D_GAIN = 15 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_D_GAIN() {
         return FMOD_DSP_MULTIBAND_EQ_D_GAIN;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_E_FILTER = (int) 16L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_FILTER = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_FILTER = 16 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_E_FILTER() {
         return FMOD_DSP_MULTIBAND_EQ_E_FILTER;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_E_FREQUENCY = (int) 17L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_FREQUENCY = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_FREQUENCY = 17 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_E_FREQUENCY() {
         return FMOD_DSP_MULTIBAND_EQ_E_FREQUENCY;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_E_Q = (int) 18L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_Q = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_Q = 18 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_E_Q() {
         return FMOD_DSP_MULTIBAND_EQ_E_Q;
     }
 
     private static final int FMOD_DSP_MULTIBAND_EQ_E_GAIN = (int) 19L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_GAIN = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ.FMOD_DSP_MULTIBAND_EQ_E_GAIN = 19 }
+     */
     public static int FMOD_DSP_MULTIBAND_EQ_E_GAIN() {
         return FMOD_DSP_MULTIBAND_EQ_E_GAIN;
     }
@@ -3730,6 +5726,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_DISABLED = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_DISABLED = 0 }
      */
@@ -3740,6 +5738,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_12DB = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_12DB = 1 }
      */
@@ -3750,6 +5750,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_24DB = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_24DB = 2 }
      */
@@ -3760,6 +5762,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_48DB = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_48DB = 3 }
      */
@@ -3770,6 +5774,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_12DB = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_12DB = 4 }
      */
@@ -3780,6 +5786,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_24DB = (int) 5L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_24DB = 5 }
      */
@@ -3790,6 +5798,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_48DB = (int) 6L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_48DB = 6 }
      */
@@ -3800,6 +5810,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_LOWSHELF = (int) 7L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_LOWSHELF = 7 }
      */
@@ -3810,6 +5822,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHSHELF = (int) 8L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHSHELF = 8 }
      */
@@ -3820,6 +5834,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_PEAKING = (int) 9L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_PEAKING = 9 }
      */
@@ -3830,6 +5846,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_BANDPASS = (int) 10L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_BANDPASS = 10 }
      */
@@ -3840,6 +5858,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_NOTCH = (int) 11L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_NOTCH
      * = 11 }
      */
@@ -3850,6 +5870,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_ALLPASS = (int) 12L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_ALLPASS = 12 }
      */
@@ -3860,6 +5882,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_6DB = (int) 13L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_LOWPASS_6DB = 13 }
      */
@@ -3870,6 +5894,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_6DB = (int) 14L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_EQ_FILTER_TYPE.FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHPASS_6DB = 14 }
      */
@@ -3880,6 +5906,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_LOWER_FREQUENCY = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_LOWER_FREQUENCY = 0 }
      */
@@ -3890,6 +5918,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_UPPER_FREQUENCY = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_UPPER_FREQUENCY = 1 }
      */
@@ -3900,6 +5930,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_LINKED = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_LINKED = 2 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_LINKED() {
@@ -3909,6 +5941,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_USE_SIDECHAIN = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_USE_SIDECHAIN
      * = 3 }
      */
@@ -3919,6 +5953,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_MODE = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_MODE = 4 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_A_MODE() {
@@ -3928,6 +5964,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_GAIN = (int) 5L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_GAIN = 5 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_A_GAIN() {
@@ -3937,6 +5975,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_THRESHOLD = (int) 6L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_THRESHOLD =
      * 6 }
      */
@@ -3947,6 +5987,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_RATIO = (int) 7L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_RATIO = 7 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_A_RATIO() {
@@ -3956,6 +5998,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_ATTACK = (int) 8L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_ATTACK = 8
      * }
      */
@@ -3966,6 +6010,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_RELEASE = (int) 9L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_RELEASE = 9
      * }
      */
@@ -3976,6 +6022,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_GAIN_MAKEUP = (int) 10L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_GAIN_MAKEUP
      * = 10 }
      */
@@ -3986,6 +6034,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_A_RESPONSE_DATA = (int) 11L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_A_RESPONSE_DATA = 11 }
      */
@@ -3996,6 +6046,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_MODE = (int) 12L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_MODE = 12 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_B_MODE() {
@@ -4005,6 +6057,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_GAIN = (int) 13L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_GAIN = 13 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_B_GAIN() {
@@ -4014,6 +6068,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_THRESHOLD = (int) 14L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_THRESHOLD =
      * 14 }
      */
@@ -4024,6 +6080,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_RATIO = (int) 15L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_RATIO = 15
      * }
      */
@@ -4034,6 +6092,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_ATTACK = (int) 16L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_ATTACK = 16
      * }
      */
@@ -4044,6 +6104,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_RELEASE = (int) 17L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_RELEASE =
      * 17 }
      */
@@ -4054,6 +6116,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_GAIN_MAKEUP = (int) 18L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_GAIN_MAKEUP
      * = 18 }
      */
@@ -4064,6 +6128,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_B_RESPONSE_DATA = (int) 19L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_B_RESPONSE_DATA = 19 }
      */
@@ -4074,6 +6140,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_MODE = (int) 20L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_MODE = 20 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_C_MODE() {
@@ -4083,6 +6151,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_GAIN = (int) 21L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_GAIN = 21 }
      */
     public static int FMOD_DSP_MULTIBAND_DYNAMICS_C_GAIN() {
@@ -4092,6 +6162,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_THRESHOLD = (int) 22L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_THRESHOLD =
      * 22 }
      */
@@ -4102,6 +6174,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_RATIO = (int) 23L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_RATIO = 23
      * }
      */
@@ -4112,6 +6186,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_ATTACK = (int) 24L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_ATTACK = 24
      * }
      */
@@ -4122,6 +6198,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_RELEASE = (int) 25L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_RELEASE =
      * 25 }
      */
@@ -4132,6 +6210,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_GAIN_MAKEUP = (int) 26L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_GAIN_MAKEUP
      * = 26 }
      */
@@ -4142,6 +6222,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_C_RESPONSE_DATA = (int) 27L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS.FMOD_DSP_MULTIBAND_DYNAMICS_C_RESPONSE_DATA = 27 }
      */
@@ -4152,6 +6234,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_MODE_DISABLED = (int) 0L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS_MODE_TYPE.FMOD_DSP_MULTIBAND_DYNAMICS_MODE_DISABLED = 0 }
      */
@@ -4162,6 +6246,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_MODE_COMPRESS_UP = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS_MODE_TYPE.FMOD_DSP_MULTIBAND_DYNAMICS_MODE_COMPRESS_UP = 1 }
      */
@@ -4172,6 +6258,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_MODE_COMPRESS_DOWN = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS_MODE_TYPE.FMOD_DSP_MULTIBAND_DYNAMICS_MODE_COMPRESS_DOWN = 2 }
      */
@@ -4182,6 +6270,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_MODE_EXPAND_UP = (int) 3L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS_MODE_TYPE.FMOD_DSP_MULTIBAND_DYNAMICS_MODE_EXPAND_UP = 3 }
      */
@@ -4192,6 +6282,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_MULTIBAND_DYNAMICS_MODE_EXPAND_DOWN = (int) 4L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum
      * FMOD_DSP_MULTIBAND_DYNAMICS_MODE_TYPE.FMOD_DSP_MULTIBAND_DYNAMICS_MODE_EXPAND_DOWN = 4 }
      */
@@ -4201,1638 +6293,2574 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_PITCHSHIFT_PITCH = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_PITCH = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_PITCH = 0 }
+     */
     public static int FMOD_DSP_PITCHSHIFT_PITCH() {
         return FMOD_DSP_PITCHSHIFT_PITCH;
     }
 
     private static final int FMOD_DSP_PITCHSHIFT_FFTSIZE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_FFTSIZE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_FFTSIZE = 1 }
+     */
     public static int FMOD_DSP_PITCHSHIFT_FFTSIZE() {
         return FMOD_DSP_PITCHSHIFT_FFTSIZE;
     }
 
     private static final int FMOD_DSP_PITCHSHIFT_OVERLAP = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_OVERLAP = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_OVERLAP = 2 }
+     */
     public static int FMOD_DSP_PITCHSHIFT_OVERLAP() {
         return FMOD_DSP_PITCHSHIFT_OVERLAP;
     }
 
     private static final int FMOD_DSP_PITCHSHIFT_MAXCHANNELS = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_MAXCHANNELS = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PITCHSHIFT_MAXCHANNELS = 3 }
+     */
     public static int FMOD_DSP_PITCHSHIFT_MAXCHANNELS() {
         return FMOD_DSP_PITCHSHIFT_MAXCHANNELS;
     }
 
     private static final int FMOD_DSP_CHORUS_MIX = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_MIX = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_MIX = 0 }
+     */
     public static int FMOD_DSP_CHORUS_MIX() {
         return FMOD_DSP_CHORUS_MIX;
     }
 
     private static final int FMOD_DSP_CHORUS_RATE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_RATE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_RATE = 1 }
+     */
     public static int FMOD_DSP_CHORUS_RATE() {
         return FMOD_DSP_CHORUS_RATE;
     }
 
     private static final int FMOD_DSP_CHORUS_DEPTH = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_DEPTH = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHORUS_DEPTH = 2 }
+     */
     public static int FMOD_DSP_CHORUS_DEPTH() {
         return FMOD_DSP_CHORUS_DEPTH;
     }
 
     private static final int FMOD_DSP_ITECHO_WETDRYMIX = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_WETDRYMIX = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_WETDRYMIX = 0 }
+     */
     public static int FMOD_DSP_ITECHO_WETDRYMIX() {
         return FMOD_DSP_ITECHO_WETDRYMIX;
     }
 
     private static final int FMOD_DSP_ITECHO_FEEDBACK = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_FEEDBACK = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_FEEDBACK = 1 }
+     */
     public static int FMOD_DSP_ITECHO_FEEDBACK() {
         return FMOD_DSP_ITECHO_FEEDBACK;
     }
 
     private static final int FMOD_DSP_ITECHO_LEFTDELAY = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_LEFTDELAY = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_LEFTDELAY = 2 }
+     */
     public static int FMOD_DSP_ITECHO_LEFTDELAY() {
         return FMOD_DSP_ITECHO_LEFTDELAY;
     }
 
     private static final int FMOD_DSP_ITECHO_RIGHTDELAY = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_RIGHTDELAY = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_RIGHTDELAY = 3 }
+     */
     public static int FMOD_DSP_ITECHO_RIGHTDELAY() {
         return FMOD_DSP_ITECHO_RIGHTDELAY;
     }
 
     private static final int FMOD_DSP_ITECHO_PANDELAY = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_PANDELAY = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_ITECHO_PANDELAY = 4 }
+     */
     public static int FMOD_DSP_ITECHO_PANDELAY() {
         return FMOD_DSP_ITECHO_PANDELAY;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_THRESHOLD = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_THRESHOLD = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_THRESHOLD = 0 }
+     */
     public static int FMOD_DSP_COMPRESSOR_THRESHOLD() {
         return FMOD_DSP_COMPRESSOR_THRESHOLD;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_RATIO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_RATIO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_RATIO = 1 }
+     */
     public static int FMOD_DSP_COMPRESSOR_RATIO() {
         return FMOD_DSP_COMPRESSOR_RATIO;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_ATTACK = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_ATTACK = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_ATTACK = 2 }
+     */
     public static int FMOD_DSP_COMPRESSOR_ATTACK() {
         return FMOD_DSP_COMPRESSOR_ATTACK;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_RELEASE = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_RELEASE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_RELEASE = 3 }
+     */
     public static int FMOD_DSP_COMPRESSOR_RELEASE() {
         return FMOD_DSP_COMPRESSOR_RELEASE;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_GAINMAKEUP = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_GAINMAKEUP = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_GAINMAKEUP = 4 }
+     */
     public static int FMOD_DSP_COMPRESSOR_GAINMAKEUP() {
         return FMOD_DSP_COMPRESSOR_GAINMAKEUP;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_USESIDECHAIN = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_USESIDECHAIN = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_USESIDECHAIN = 5 }
+     */
     public static int FMOD_DSP_COMPRESSOR_USESIDECHAIN() {
         return FMOD_DSP_COMPRESSOR_USESIDECHAIN;
     }
 
     private static final int FMOD_DSP_COMPRESSOR_LINKED = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_LINKED = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_COMPRESSOR_LINKED = 6 }
+     */
     public static int FMOD_DSP_COMPRESSOR_LINKED() {
         return FMOD_DSP_COMPRESSOR_LINKED;
     }
 
     private static final int FMOD_DSP_SFXREVERB_DECAYTIME = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DECAYTIME = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DECAYTIME = 0 }
+     */
     public static int FMOD_DSP_SFXREVERB_DECAYTIME() {
         return FMOD_DSP_SFXREVERB_DECAYTIME;
     }
 
     private static final int FMOD_DSP_SFXREVERB_EARLYDELAY = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_EARLYDELAY = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_EARLYDELAY = 1 }
+     */
     public static int FMOD_DSP_SFXREVERB_EARLYDELAY() {
         return FMOD_DSP_SFXREVERB_EARLYDELAY;
     }
 
     private static final int FMOD_DSP_SFXREVERB_LATEDELAY = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LATEDELAY = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LATEDELAY = 2 }
+     */
     public static int FMOD_DSP_SFXREVERB_LATEDELAY() {
         return FMOD_DSP_SFXREVERB_LATEDELAY;
     }
 
     private static final int FMOD_DSP_SFXREVERB_HFREFERENCE = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HFREFERENCE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HFREFERENCE = 3 }
+     */
     public static int FMOD_DSP_SFXREVERB_HFREFERENCE() {
         return FMOD_DSP_SFXREVERB_HFREFERENCE;
     }
 
     private static final int FMOD_DSP_SFXREVERB_HFDECAYRATIO = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HFDECAYRATIO = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HFDECAYRATIO = 4 }
+     */
     public static int FMOD_DSP_SFXREVERB_HFDECAYRATIO() {
         return FMOD_DSP_SFXREVERB_HFDECAYRATIO;
     }
 
     private static final int FMOD_DSP_SFXREVERB_DIFFUSION = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DIFFUSION = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DIFFUSION = 5 }
+     */
     public static int FMOD_DSP_SFXREVERB_DIFFUSION() {
         return FMOD_DSP_SFXREVERB_DIFFUSION;
     }
 
     private static final int FMOD_DSP_SFXREVERB_DENSITY = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DENSITY = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DENSITY = 6 }
+     */
     public static int FMOD_DSP_SFXREVERB_DENSITY() {
         return FMOD_DSP_SFXREVERB_DENSITY;
     }
 
     private static final int FMOD_DSP_SFXREVERB_LOWSHELFFREQUENCY = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LOWSHELFFREQUENCY = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LOWSHELFFREQUENCY = 7 }
+     */
     public static int FMOD_DSP_SFXREVERB_LOWSHELFFREQUENCY() {
         return FMOD_DSP_SFXREVERB_LOWSHELFFREQUENCY;
     }
 
     private static final int FMOD_DSP_SFXREVERB_LOWSHELFGAIN = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LOWSHELFGAIN = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_LOWSHELFGAIN = 8 }
+     */
     public static int FMOD_DSP_SFXREVERB_LOWSHELFGAIN() {
         return FMOD_DSP_SFXREVERB_LOWSHELFGAIN;
     }
 
     private static final int FMOD_DSP_SFXREVERB_HIGHCUT = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HIGHCUT = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_HIGHCUT = 9 }
+     */
     public static int FMOD_DSP_SFXREVERB_HIGHCUT() {
         return FMOD_DSP_SFXREVERB_HIGHCUT;
     }
 
     private static final int FMOD_DSP_SFXREVERB_EARLYLATEMIX = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_EARLYLATEMIX = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_EARLYLATEMIX = 10 }
+     */
     public static int FMOD_DSP_SFXREVERB_EARLYLATEMIX() {
         return FMOD_DSP_SFXREVERB_EARLYLATEMIX;
     }
 
     private static final int FMOD_DSP_SFXREVERB_WETLEVEL = (int) 11L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_WETLEVEL = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_WETLEVEL = 11 }
+     */
     public static int FMOD_DSP_SFXREVERB_WETLEVEL() {
         return FMOD_DSP_SFXREVERB_WETLEVEL;
     }
 
     private static final int FMOD_DSP_SFXREVERB_DRYLEVEL = (int) 12L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DRYLEVEL = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SFXREVERB_DRYLEVEL = 12 }
+     */
     public static int FMOD_DSP_SFXREVERB_DRYLEVEL() {
         return FMOD_DSP_SFXREVERB_DRYLEVEL;
     }
 
     private static final int FMOD_DSP_LOWPASS_SIMPLE_CUTOFF = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_SIMPLE_CUTOFF = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOWPASS_SIMPLE_CUTOFF = 0 }
+     */
     public static int FMOD_DSP_LOWPASS_SIMPLE_CUTOFF() {
         return FMOD_DSP_LOWPASS_SIMPLE_CUTOFF;
     }
 
     private static final int FMOD_DSP_DELAY_CH0 = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH0 = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH0 = 0 }
+     */
     public static int FMOD_DSP_DELAY_CH0() {
         return FMOD_DSP_DELAY_CH0;
     }
 
     private static final int FMOD_DSP_DELAY_CH1 = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH1 = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH1 = 1 }
+     */
     public static int FMOD_DSP_DELAY_CH1() {
         return FMOD_DSP_DELAY_CH1;
     }
 
     private static final int FMOD_DSP_DELAY_CH2 = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH2 = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH2 = 2 }
+     */
     public static int FMOD_DSP_DELAY_CH2() {
         return FMOD_DSP_DELAY_CH2;
     }
 
     private static final int FMOD_DSP_DELAY_CH3 = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH3 = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH3 = 3 }
+     */
     public static int FMOD_DSP_DELAY_CH3() {
         return FMOD_DSP_DELAY_CH3;
     }
 
     private static final int FMOD_DSP_DELAY_CH4 = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH4 = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH4 = 4 }
+     */
     public static int FMOD_DSP_DELAY_CH4() {
         return FMOD_DSP_DELAY_CH4;
     }
 
     private static final int FMOD_DSP_DELAY_CH5 = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH5 = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH5 = 5 }
+     */
     public static int FMOD_DSP_DELAY_CH5() {
         return FMOD_DSP_DELAY_CH5;
     }
 
     private static final int FMOD_DSP_DELAY_CH6 = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH6 = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH6 = 6 }
+     */
     public static int FMOD_DSP_DELAY_CH6() {
         return FMOD_DSP_DELAY_CH6;
     }
 
     private static final int FMOD_DSP_DELAY_CH7 = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH7 = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH7 = 7 }
+     */
     public static int FMOD_DSP_DELAY_CH7() {
         return FMOD_DSP_DELAY_CH7;
     }
 
     private static final int FMOD_DSP_DELAY_CH8 = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH8 = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH8 = 8 }
+     */
     public static int FMOD_DSP_DELAY_CH8() {
         return FMOD_DSP_DELAY_CH8;
     }
 
     private static final int FMOD_DSP_DELAY_CH9 = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH9 = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH9 = 9 }
+     */
     public static int FMOD_DSP_DELAY_CH9() {
         return FMOD_DSP_DELAY_CH9;
     }
 
     private static final int FMOD_DSP_DELAY_CH10 = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH10 = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH10 = 10 }
+     */
     public static int FMOD_DSP_DELAY_CH10() {
         return FMOD_DSP_DELAY_CH10;
     }
 
     private static final int FMOD_DSP_DELAY_CH11 = (int) 11L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH11 = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH11 = 11 }
+     */
     public static int FMOD_DSP_DELAY_CH11() {
         return FMOD_DSP_DELAY_CH11;
     }
 
     private static final int FMOD_DSP_DELAY_CH12 = (int) 12L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH12 = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH12 = 12 }
+     */
     public static int FMOD_DSP_DELAY_CH12() {
         return FMOD_DSP_DELAY_CH12;
     }
 
     private static final int FMOD_DSP_DELAY_CH13 = (int) 13L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH13 = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH13 = 13 }
+     */
     public static int FMOD_DSP_DELAY_CH13() {
         return FMOD_DSP_DELAY_CH13;
     }
 
     private static final int FMOD_DSP_DELAY_CH14 = (int) 14L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH14 = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH14 = 14 }
+     */
     public static int FMOD_DSP_DELAY_CH14() {
         return FMOD_DSP_DELAY_CH14;
     }
 
     private static final int FMOD_DSP_DELAY_CH15 = (int) 15L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH15 = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_CH15 = 15 }
+     */
     public static int FMOD_DSP_DELAY_CH15() {
         return FMOD_DSP_DELAY_CH15;
     }
 
     private static final int FMOD_DSP_DELAY_MAXDELAY = (int) 16L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_MAXDELAY = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_DELAY_MAXDELAY = 16 }
+     */
     public static int FMOD_DSP_DELAY_MAXDELAY() {
         return FMOD_DSP_DELAY_MAXDELAY;
     }
 
     private static final int FMOD_DSP_TREMOLO_FREQUENCY = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_FREQUENCY = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_FREQUENCY = 0 }
+     */
     public static int FMOD_DSP_TREMOLO_FREQUENCY() {
         return FMOD_DSP_TREMOLO_FREQUENCY;
     }
 
     private static final int FMOD_DSP_TREMOLO_DEPTH = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_DEPTH = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_DEPTH = 1 }
+     */
     public static int FMOD_DSP_TREMOLO_DEPTH() {
         return FMOD_DSP_TREMOLO_DEPTH;
     }
 
     private static final int FMOD_DSP_TREMOLO_SHAPE = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SHAPE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SHAPE = 2 }
+     */
     public static int FMOD_DSP_TREMOLO_SHAPE() {
         return FMOD_DSP_TREMOLO_SHAPE;
     }
 
     private static final int FMOD_DSP_TREMOLO_SKEW = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SKEW = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SKEW = 3 }
+     */
     public static int FMOD_DSP_TREMOLO_SKEW() {
         return FMOD_DSP_TREMOLO_SKEW;
     }
 
     private static final int FMOD_DSP_TREMOLO_DUTY = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_DUTY = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_DUTY = 4 }
+     */
     public static int FMOD_DSP_TREMOLO_DUTY() {
         return FMOD_DSP_TREMOLO_DUTY;
     }
 
     private static final int FMOD_DSP_TREMOLO_SQUARE = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SQUARE = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SQUARE = 5 }
+     */
     public static int FMOD_DSP_TREMOLO_SQUARE() {
         return FMOD_DSP_TREMOLO_SQUARE;
     }
 
     private static final int FMOD_DSP_TREMOLO_PHASE = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_PHASE = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_PHASE = 6 }
+     */
     public static int FMOD_DSP_TREMOLO_PHASE() {
         return FMOD_DSP_TREMOLO_PHASE;
     }
 
     private static final int FMOD_DSP_TREMOLO_SPREAD = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SPREAD = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TREMOLO_SPREAD = 7 }
+     */
     public static int FMOD_DSP_TREMOLO_SPREAD() {
         return FMOD_DSP_TREMOLO_SPREAD;
     }
 
     private static final int FMOD_DSP_SEND_RETURNID = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SEND_RETURNID = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SEND_RETURNID = 0 }
+     */
     public static int FMOD_DSP_SEND_RETURNID() {
         return FMOD_DSP_SEND_RETURNID;
     }
 
     private static final int FMOD_DSP_SEND_LEVEL = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_SEND_LEVEL = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_SEND_LEVEL = 1 }
+     */
     public static int FMOD_DSP_SEND_LEVEL() {
         return FMOD_DSP_SEND_LEVEL;
     }
 
     private static final int FMOD_DSP_RETURN_ID = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_RETURN_ID = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_RETURN_ID = 0 }
+     */
     public static int FMOD_DSP_RETURN_ID() {
         return FMOD_DSP_RETURN_ID;
     }
 
     private static final int FMOD_DSP_RETURN_INPUT_SPEAKER_MODE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_RETURN_INPUT_SPEAKER_MODE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_RETURN_INPUT_SPEAKER_MODE = 1 }
+     */
     public static int FMOD_DSP_RETURN_INPUT_SPEAKER_MODE() {
         return FMOD_DSP_RETURN_INPUT_SPEAKER_MODE;
     }
 
     private static final int FMOD_DSP_HIGHPASS_SIMPLE_CUTOFF = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_SIMPLE_CUTOFF = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_HIGHPASS_SIMPLE_CUTOFF = 0 }
+     */
     public static int FMOD_DSP_HIGHPASS_SIMPLE_CUTOFF() {
         return FMOD_DSP_HIGHPASS_SIMPLE_CUTOFF;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_MODE_DISTRIBUTED = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE_DISTRIBUTED = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE_DISTRIBUTED = 0 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_MODE_DISTRIBUTED() {
         return FMOD_DSP_PAN_2D_STEREO_MODE_DISTRIBUTED;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_MODE_DISCRETE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE_DISCRETE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE_DISCRETE = 1 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_MODE_DISCRETE() {
         return FMOD_DSP_PAN_2D_STEREO_MODE_DISCRETE;
     }
 
     private static final int FMOD_DSP_PAN_MODE_MONO = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_MONO = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_MONO = 0 }
+     */
     public static int FMOD_DSP_PAN_MODE_MONO() {
         return FMOD_DSP_PAN_MODE_MONO;
     }
 
     private static final int FMOD_DSP_PAN_MODE_STEREO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_STEREO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_STEREO = 1 }
+     */
     public static int FMOD_DSP_PAN_MODE_STEREO() {
         return FMOD_DSP_PAN_MODE_STEREO;
     }
 
     private static final int FMOD_DSP_PAN_MODE_SURROUND = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_SURROUND = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE_SURROUND = 2 }
+     */
     public static int FMOD_DSP_PAN_MODE_SURROUND() {
         return FMOD_DSP_PAN_MODE_SURROUND;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF_LINEARSQUARED = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_LINEARSQUARED = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_LINEARSQUARED = 0 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF_LINEARSQUARED() {
         return FMOD_DSP_PAN_3D_ROLLOFF_LINEARSQUARED;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF_LINEAR = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_LINEAR = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_LINEAR = 1 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF_LINEAR() {
         return FMOD_DSP_PAN_3D_ROLLOFF_LINEAR;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF_INVERSE = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_INVERSE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_INVERSE = 2 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF_INVERSE() {
         return FMOD_DSP_PAN_3D_ROLLOFF_INVERSE;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF_INVERSETAPERED = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_INVERSETAPERED = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_INVERSETAPERED = 3 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF_INVERSETAPERED() {
         return FMOD_DSP_PAN_3D_ROLLOFF_INVERSETAPERED;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF_CUSTOM = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_CUSTOM = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF_CUSTOM = 4 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF_CUSTOM() {
         return FMOD_DSP_PAN_3D_ROLLOFF_CUSTOM;
     }
 
     private static final int FMOD_DSP_PAN_3D_EXTENT_MODE_AUTO = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_AUTO = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_AUTO = 0 }
+     */
     public static int FMOD_DSP_PAN_3D_EXTENT_MODE_AUTO() {
         return FMOD_DSP_PAN_3D_EXTENT_MODE_AUTO;
     }
 
     private static final int FMOD_DSP_PAN_3D_EXTENT_MODE_USER = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_USER = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_USER = 1 }
+     */
     public static int FMOD_DSP_PAN_3D_EXTENT_MODE_USER() {
         return FMOD_DSP_PAN_3D_EXTENT_MODE_USER;
     }
 
     private static final int FMOD_DSP_PAN_3D_EXTENT_MODE_OFF = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_OFF = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE_OFF = 2 }
+     */
     public static int FMOD_DSP_PAN_3D_EXTENT_MODE_OFF() {
         return FMOD_DSP_PAN_3D_EXTENT_MODE_OFF;
     }
 
     private static final int FMOD_DSP_PAN_MODE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_MODE = 0 }
+     */
     public static int FMOD_DSP_PAN_MODE() {
         return FMOD_DSP_PAN_MODE;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_POSITION = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_POSITION = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_POSITION = 1 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_POSITION() {
         return FMOD_DSP_PAN_2D_STEREO_POSITION;
     }
 
     private static final int FMOD_DSP_PAN_2D_DIRECTION = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_DIRECTION = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_DIRECTION = 2 }
+     */
     public static int FMOD_DSP_PAN_2D_DIRECTION() {
         return FMOD_DSP_PAN_2D_DIRECTION;
     }
 
     private static final int FMOD_DSP_PAN_2D_EXTENT = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_EXTENT = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_EXTENT = 3 }
+     */
     public static int FMOD_DSP_PAN_2D_EXTENT() {
         return FMOD_DSP_PAN_2D_EXTENT;
     }
 
     private static final int FMOD_DSP_PAN_2D_ROTATION = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_ROTATION = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_ROTATION = 4 }
+     */
     public static int FMOD_DSP_PAN_2D_ROTATION() {
         return FMOD_DSP_PAN_2D_ROTATION;
     }
 
     private static final int FMOD_DSP_PAN_2D_LFE_LEVEL = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_LFE_LEVEL = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_LFE_LEVEL = 5 }
+     */
     public static int FMOD_DSP_PAN_2D_LFE_LEVEL() {
         return FMOD_DSP_PAN_2D_LFE_LEVEL;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_MODE = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_MODE = 6 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_MODE() {
         return FMOD_DSP_PAN_2D_STEREO_MODE;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_SEPARATION = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_SEPARATION = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_SEPARATION = 7 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_SEPARATION() {
         return FMOD_DSP_PAN_2D_STEREO_SEPARATION;
     }
 
     private static final int FMOD_DSP_PAN_2D_STEREO_AXIS = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_AXIS = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_STEREO_AXIS = 8 }
+     */
     public static int FMOD_DSP_PAN_2D_STEREO_AXIS() {
         return FMOD_DSP_PAN_2D_STEREO_AXIS;
     }
 
     private static final int FMOD_DSP_PAN_ENABLED_SPEAKERS = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_ENABLED_SPEAKERS = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_ENABLED_SPEAKERS = 9 }
+     */
     public static int FMOD_DSP_PAN_ENABLED_SPEAKERS() {
         return FMOD_DSP_PAN_ENABLED_SPEAKERS;
     }
 
     private static final int FMOD_DSP_PAN_3D_POSITION = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_POSITION = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_POSITION = 10 }
+     */
     public static int FMOD_DSP_PAN_3D_POSITION() {
         return FMOD_DSP_PAN_3D_POSITION;
     }
 
     private static final int FMOD_DSP_PAN_3D_ROLLOFF = (int) 11L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_ROLLOFF = 11 }
+     */
     public static int FMOD_DSP_PAN_3D_ROLLOFF() {
         return FMOD_DSP_PAN_3D_ROLLOFF;
     }
 
     private static final int FMOD_DSP_PAN_3D_MIN_DISTANCE = (int) 12L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MIN_DISTANCE = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MIN_DISTANCE = 12 }
+     */
     public static int FMOD_DSP_PAN_3D_MIN_DISTANCE() {
         return FMOD_DSP_PAN_3D_MIN_DISTANCE;
     }
 
     private static final int FMOD_DSP_PAN_3D_MAX_DISTANCE = (int) 13L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MAX_DISTANCE = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MAX_DISTANCE = 13 }
+     */
     public static int FMOD_DSP_PAN_3D_MAX_DISTANCE() {
         return FMOD_DSP_PAN_3D_MAX_DISTANCE;
     }
 
     private static final int FMOD_DSP_PAN_3D_EXTENT_MODE = (int) 14L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_EXTENT_MODE = 14 }
+     */
     public static int FMOD_DSP_PAN_3D_EXTENT_MODE() {
         return FMOD_DSP_PAN_3D_EXTENT_MODE;
     }
 
     private static final int FMOD_DSP_PAN_3D_SOUND_SIZE = (int) 15L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_SOUND_SIZE = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_SOUND_SIZE = 15 }
+     */
     public static int FMOD_DSP_PAN_3D_SOUND_SIZE() {
         return FMOD_DSP_PAN_3D_SOUND_SIZE;
     }
 
     private static final int FMOD_DSP_PAN_3D_MIN_EXTENT = (int) 16L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MIN_EXTENT = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_MIN_EXTENT = 16 }
+     */
     public static int FMOD_DSP_PAN_3D_MIN_EXTENT() {
         return FMOD_DSP_PAN_3D_MIN_EXTENT;
     }
 
     private static final int FMOD_DSP_PAN_3D_PAN_BLEND = (int) 17L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_PAN_BLEND = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_3D_PAN_BLEND = 17 }
+     */
     public static int FMOD_DSP_PAN_3D_PAN_BLEND() {
         return FMOD_DSP_PAN_3D_PAN_BLEND;
     }
 
     private static final int FMOD_DSP_PAN_LFE_UPMIX_ENABLED = (int) 18L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_LFE_UPMIX_ENABLED = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_LFE_UPMIX_ENABLED = 18 }
+     */
     public static int FMOD_DSP_PAN_LFE_UPMIX_ENABLED() {
         return FMOD_DSP_PAN_LFE_UPMIX_ENABLED;
     }
 
     private static final int FMOD_DSP_PAN_OVERALL_GAIN = (int) 19L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_OVERALL_GAIN = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_OVERALL_GAIN = 19 }
+     */
     public static int FMOD_DSP_PAN_OVERALL_GAIN() {
         return FMOD_DSP_PAN_OVERALL_GAIN;
     }
 
     private static final int FMOD_DSP_PAN_SURROUND_SPEAKER_MODE = (int) 20L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_SURROUND_SPEAKER_MODE = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_SURROUND_SPEAKER_MODE = 20 }
+     */
     public static int FMOD_DSP_PAN_SURROUND_SPEAKER_MODE() {
         return FMOD_DSP_PAN_SURROUND_SPEAKER_MODE;
     }
 
     private static final int FMOD_DSP_PAN_2D_HEIGHT_BLEND = (int) 21L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_HEIGHT_BLEND = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_2D_HEIGHT_BLEND = 21 }
+     */
     public static int FMOD_DSP_PAN_2D_HEIGHT_BLEND() {
         return FMOD_DSP_PAN_2D_HEIGHT_BLEND;
     }
 
     private static final int FMOD_DSP_PAN_ATTENUATION_RANGE = (int) 22L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_ATTENUATION_RANGE = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_ATTENUATION_RANGE = 22 }
+     */
     public static int FMOD_DSP_PAN_ATTENUATION_RANGE() {
         return FMOD_DSP_PAN_ATTENUATION_RANGE;
     }
 
     private static final int FMOD_DSP_PAN_OVERRIDE_RANGE = (int) 23L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_OVERRIDE_RANGE = 23 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PAN_OVERRIDE_RANGE = 23 }
+     */
     public static int FMOD_DSP_PAN_OVERRIDE_RANGE() {
         return FMOD_DSP_PAN_OVERRIDE_RANGE;
     }
 
     private static final int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_12DB = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_12DB = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_12DB = 0 }
+     */
     public static int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_12DB() {
         return FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_12DB;
     }
 
     private static final int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_24DB = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_24DB = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_24DB = 1 }
+     */
     public static int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_24DB() {
         return FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_24DB;
     }
 
     private static final int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_48DB = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_48DB = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_48DB = 2 }
+     */
     public static int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_48DB() {
         return FMOD_DSP_THREE_EQ_CROSSOVERSLOPE_48DB;
     }
 
     private static final int FMOD_DSP_THREE_EQ_LOWGAIN = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_LOWGAIN = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_LOWGAIN = 0 }
+     */
     public static int FMOD_DSP_THREE_EQ_LOWGAIN() {
         return FMOD_DSP_THREE_EQ_LOWGAIN;
     }
 
     private static final int FMOD_DSP_THREE_EQ_MIDGAIN = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_MIDGAIN = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_MIDGAIN = 1 }
+     */
     public static int FMOD_DSP_THREE_EQ_MIDGAIN() {
         return FMOD_DSP_THREE_EQ_MIDGAIN;
     }
 
     private static final int FMOD_DSP_THREE_EQ_HIGHGAIN = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_HIGHGAIN = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_HIGHGAIN = 2 }
+     */
     public static int FMOD_DSP_THREE_EQ_HIGHGAIN() {
         return FMOD_DSP_THREE_EQ_HIGHGAIN;
     }
 
     private static final int FMOD_DSP_THREE_EQ_LOWCROSSOVER = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_LOWCROSSOVER = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_LOWCROSSOVER = 3 }
+     */
     public static int FMOD_DSP_THREE_EQ_LOWCROSSOVER() {
         return FMOD_DSP_THREE_EQ_LOWCROSSOVER;
     }
 
     private static final int FMOD_DSP_THREE_EQ_HIGHCROSSOVER = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_HIGHCROSSOVER = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_HIGHCROSSOVER = 4 }
+     */
     public static int FMOD_DSP_THREE_EQ_HIGHCROSSOVER() {
         return FMOD_DSP_THREE_EQ_HIGHCROSSOVER;
     }
 
     private static final int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_THREE_EQ_CROSSOVERSLOPE = 5 }
+     */
     public static int FMOD_DSP_THREE_EQ_CROSSOVERSLOPE() {
         return FMOD_DSP_THREE_EQ_CROSSOVERSLOPE;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_RECT = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_RECT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_RECT = 0 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_RECT() {
         return FMOD_DSP_FFT_WINDOW_RECT;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_TRIANGLE = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_TRIANGLE = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_TRIANGLE = 1 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_TRIANGLE() {
         return FMOD_DSP_FFT_WINDOW_TRIANGLE;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_HAMMING = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_HAMMING = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_HAMMING = 2 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_HAMMING() {
         return FMOD_DSP_FFT_WINDOW_HAMMING;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_HANNING = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_HANNING = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_HANNING = 3 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_HANNING() {
         return FMOD_DSP_FFT_WINDOW_HANNING;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_BLACKMAN = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_BLACKMAN = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_BLACKMAN = 4 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_BLACKMAN() {
         return FMOD_DSP_FFT_WINDOW_BLACKMAN;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW_BLACKMANHARRIS = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_BLACKMANHARRIS = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW_BLACKMANHARRIS = 5 }
+     */
     public static int FMOD_DSP_FFT_WINDOW_BLACKMANHARRIS() {
         return FMOD_DSP_FFT_WINDOW_BLACKMANHARRIS;
     }
 
     private static final int FMOD_DSP_FFT_DOWNMIX_NONE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX_NONE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX_NONE = 0 }
+     */
     public static int FMOD_DSP_FFT_DOWNMIX_NONE() {
         return FMOD_DSP_FFT_DOWNMIX_NONE;
     }
 
     private static final int FMOD_DSP_FFT_DOWNMIX_MONO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX_MONO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX_MONO = 1 }
+     */
     public static int FMOD_DSP_FFT_DOWNMIX_MONO() {
         return FMOD_DSP_FFT_DOWNMIX_MONO;
     }
 
     private static final int FMOD_DSP_FFT_WINDOWSIZE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOWSIZE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOWSIZE = 0 }
+     */
     public static int FMOD_DSP_FFT_WINDOWSIZE() {
         return FMOD_DSP_FFT_WINDOWSIZE;
     }
 
     private static final int FMOD_DSP_FFT_WINDOW = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_WINDOW = 1 }
+     */
     public static int FMOD_DSP_FFT_WINDOW() {
         return FMOD_DSP_FFT_WINDOW;
     }
 
     private static final int FMOD_DSP_FFT_BAND_START_FREQ = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_BAND_START_FREQ = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_BAND_START_FREQ = 2 }
+     */
     public static int FMOD_DSP_FFT_BAND_START_FREQ() {
         return FMOD_DSP_FFT_BAND_START_FREQ;
     }
 
     private static final int FMOD_DSP_FFT_BAND_STOP_FREQ = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_BAND_STOP_FREQ = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_BAND_STOP_FREQ = 3 }
+     */
     public static int FMOD_DSP_FFT_BAND_STOP_FREQ() {
         return FMOD_DSP_FFT_BAND_STOP_FREQ;
     }
 
     private static final int FMOD_DSP_FFT_SPECTRUMDATA = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_SPECTRUMDATA = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_SPECTRUMDATA = 4 }
+     */
     public static int FMOD_DSP_FFT_SPECTRUMDATA() {
         return FMOD_DSP_FFT_SPECTRUMDATA;
     }
 
     private static final int FMOD_DSP_FFT_RMS = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_RMS = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_RMS = 5 }
+     */
     public static int FMOD_DSP_FFT_RMS() {
         return FMOD_DSP_FFT_RMS;
     }
 
     private static final int FMOD_DSP_FFT_SPECTRAL_CENTROID = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_SPECTRAL_CENTROID = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_SPECTRAL_CENTROID = 6 }
+     */
     public static int FMOD_DSP_FFT_SPECTRAL_CENTROID() {
         return FMOD_DSP_FFT_SPECTRAL_CENTROID;
     }
 
     private static final int FMOD_DSP_FFT_IMMEDIATE_MODE = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_IMMEDIATE_MODE = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_IMMEDIATE_MODE = 7 }
+     */
     public static int FMOD_DSP_FFT_IMMEDIATE_MODE() {
         return FMOD_DSP_FFT_IMMEDIATE_MODE;
     }
 
     private static final int FMOD_DSP_FFT_DOWNMIX = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_DOWNMIX = 8 }
+     */
     public static int FMOD_DSP_FFT_DOWNMIX() {
         return FMOD_DSP_FFT_DOWNMIX;
     }
 
     private static final int FMOD_DSP_FFT_CHANNEL = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_CHANNEL = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_FFT_CHANNEL = 9 }
+     */
     public static int FMOD_DSP_FFT_CHANNEL() {
         return FMOD_DSP_FFT_CHANNEL;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE = 0 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE() {
         return FMOD_DSP_LOUDNESS_METER_STATE;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_WEIGHTING = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_WEIGHTING = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_WEIGHTING = 1 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_WEIGHTING() {
         return FMOD_DSP_LOUDNESS_METER_WEIGHTING;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_INFO = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_INFO = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_INFO = 2 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_INFO() {
         return FMOD_DSP_LOUDNESS_METER_INFO;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED = (int) -3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED = -3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED = -3 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED() {
         return FMOD_DSP_LOUDNESS_METER_STATE_RESET_INTEGRATED;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK = (int) -2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK = -2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK = -2 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK() {
         return FMOD_DSP_LOUDNESS_METER_STATE_RESET_MAXPEAK;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL = (int) -1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL = -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL = -1 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL() {
         return FMOD_DSP_LOUDNESS_METER_STATE_RESET_ALL;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE_PAUSED = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_PAUSED = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_PAUSED = 0 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE_PAUSED() {
         return FMOD_DSP_LOUDNESS_METER_STATE_PAUSED;
     }
 
     private static final int FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING = 1 }
+     */
     public static int FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING() {
         return FMOD_DSP_LOUDNESS_METER_STATE_ANALYZING;
     }
 
     private static final int FMOD_DSP_CONVOLUTION_REVERB_PARAM_IR = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_IR = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_IR = 0 }
+     */
     public static int FMOD_DSP_CONVOLUTION_REVERB_PARAM_IR() {
         return FMOD_DSP_CONVOLUTION_REVERB_PARAM_IR;
     }
 
     private static final int FMOD_DSP_CONVOLUTION_REVERB_PARAM_WET = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_WET = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_WET = 1 }
+     */
     public static int FMOD_DSP_CONVOLUTION_REVERB_PARAM_WET() {
         return FMOD_DSP_CONVOLUTION_REVERB_PARAM_WET;
     }
 
     private static final int FMOD_DSP_CONVOLUTION_REVERB_PARAM_DRY = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_DRY = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_DRY = 2 }
+     */
     public static int FMOD_DSP_CONVOLUTION_REVERB_PARAM_DRY() {
         return FMOD_DSP_CONVOLUTION_REVERB_PARAM_DRY;
     }
 
     private static final int FMOD_DSP_CONVOLUTION_REVERB_PARAM_LINKED = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_LINKED = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CONVOLUTION_REVERB_PARAM_LINKED = 3 }
+     */
     public static int FMOD_DSP_CONVOLUTION_REVERB_PARAM_LINKED() {
         return FMOD_DSP_CONVOLUTION_REVERB_PARAM_LINKED;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_DEFAULT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_DEFAULT = 0 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_DEFAULT() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_DEFAULT;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALLMONO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLMONO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLMONO = 1 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALLMONO() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALLMONO;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALLSTEREO = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLSTEREO = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLSTEREO = 2 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALLSTEREO() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALLSTEREO;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALLQUAD = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLQUAD = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLQUAD = 3 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALLQUAD() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALLQUAD;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALL5POINT1 = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL5POINT1 = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL5POINT1 = 4 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALL5POINT1() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALL5POINT1;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1 = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1 = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1 = 5 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALLLFE = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLLFE = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALLLFE = 6 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALLLFE() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALLLFE;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1POINT4 = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1POINT4 = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1POINT4 = 7 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1POINT4() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_ALL7POINT1POINT4;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUTGROUPING = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUTGROUPING = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUTGROUPING = 0 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUTGROUPING() {
         return FMOD_DSP_CHANNELMIX_OUTPUTGROUPING;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH0 = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH0 = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH0 = 1 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH0() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH0;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH1 = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH1 = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH1 = 2 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH1() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH1;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH2 = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH2 = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH2 = 3 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH2() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH2;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH3 = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH3 = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH3 = 4 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH3() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH3;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH4 = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH4 = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH4 = 5 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH4() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH4;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH5 = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH5 = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH5 = 6 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH5() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH5;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH6 = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH6 = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH6 = 7 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH6() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH6;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH7 = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH7 = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH7 = 8 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH7() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH7;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH8 = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH8 = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH8 = 9 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH8() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH8;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH9 = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH9 = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH9 = 10 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH9() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH9;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH10 = (int) 11L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH10 = 11 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH10 = 11 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH10() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH10;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH11 = (int) 12L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH11 = 12 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH11 = 12 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH11() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH11;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH12 = (int) 13L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH12 = 13 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH12 = 13 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH12() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH12;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH13 = (int) 14L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH13 = 14 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH13 = 14 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH13() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH13;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH14 = (int) 15L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH14 = 15 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH14 = 15 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH14() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH14;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH15 = (int) 16L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH15 = 16 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH15 = 16 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH15() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH15;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH16 = (int) 17L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH16 = 17 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH16 = 17 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH16() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH16;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH17 = (int) 18L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH17 = 18 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH17 = 18 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH17() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH17;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH18 = (int) 19L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH18 = 19 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH18 = 19 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH18() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH18;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH19 = (int) 20L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH19 = 20 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH19 = 20 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH19() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH19;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH20 = (int) 21L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH20 = 21 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH20 = 21 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH20() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH20;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH21 = (int) 22L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH21 = 22 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH21 = 22 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH21() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH21;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH22 = (int) 23L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH22 = 23 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH22 = 23 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH22() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH22;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH23 = (int) 24L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH23 = 24 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH23 = 24 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH23() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH23;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH24 = (int) 25L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH24 = 25 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH24 = 25 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH24() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH24;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH25 = (int) 26L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH25 = 26 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH25 = 26 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH25() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH25;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH26 = (int) 27L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH26 = 27 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH26 = 27 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH26() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH26;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH27 = (int) 28L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH27 = 28 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH27 = 28 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH27() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH27;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH28 = (int) 29L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH28 = 29 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH28 = 29 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH28() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH28;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH29 = (int) 30L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH29 = 30 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH29 = 30 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH29() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH29;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH30 = (int) 31L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH30 = 31 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH30 = 31 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH30() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH30;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_GAIN_CH31 = (int) 32L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH31 = 32 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_GAIN_CH31 = 32 }
+     */
     public static int FMOD_DSP_CHANNELMIX_GAIN_CH31() {
         return FMOD_DSP_CHANNELMIX_GAIN_CH31;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH0 = (int) 33L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH0 = 33 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH0 = 33 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH0() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH0;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH1 = (int) 34L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH1 = 34 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH1 = 34 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH1() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH1;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH2 = (int) 35L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH2 = 35 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH2 = 35 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH2() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH2;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH3 = (int) 36L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH3 = 36 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH3 = 36 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH3() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH3;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH4 = (int) 37L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH4 = 37 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH4 = 37 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH4() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH4;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH5 = (int) 38L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH5 = 38 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH5 = 38 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH5() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH5;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH6 = (int) 39L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH6 = 39 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH6 = 39 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH6() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH6;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH7 = (int) 40L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH7 = 40 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH7 = 40 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH7() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH7;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH8 = (int) 41L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH8 = 41 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH8 = 41 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH8() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH8;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH9 = (int) 42L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH9 = 42 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH9 = 42 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH9() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH9;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH10 = (int) 43L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH10 = 43 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH10 = 43 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH10() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH10;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH11 = (int) 44L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH11 = 44 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH11 = 44 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH11() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH11;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH12 = (int) 45L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH12 = 45 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH12 = 45 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH12() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH12;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH13 = (int) 46L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH13 = 46 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH13 = 46 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH13() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH13;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH14 = (int) 47L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH14 = 47 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH14 = 47 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH14() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH14;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH15 = (int) 48L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH15 = 48 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH15 = 48 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH15() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH15;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH16 = (int) 49L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH16 = 49 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH16 = 49 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH16() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH16;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH17 = (int) 50L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH17 = 50 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH17 = 50 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH17() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH17;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH18 = (int) 51L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH18 = 51 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH18 = 51 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH18() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH18;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH19 = (int) 52L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH19 = 52 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH19 = 52 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH19() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH19;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH20 = (int) 53L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH20 = 53 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH20 = 53 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH20() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH20;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH21 = (int) 54L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH21 = 54 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH21 = 54 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH21() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH21;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH22 = (int) 55L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH22 = 55 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH22 = 55 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH22() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH22;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH23 = (int) 56L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH23 = 56 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH23 = 56 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH23() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH23;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH24 = (int) 57L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH24 = 57 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH24 = 57 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH24() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH24;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH25 = (int) 58L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH25 = 58 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH25 = 58 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH25() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH25;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH26 = (int) 59L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH26 = 59 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH26 = 59 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH26() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH26;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH27 = (int) 60L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH27 = 60 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH27 = 60 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH27() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH27;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH28 = (int) 61L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH28 = 61 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH28 = 61 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH28() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH28;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH29 = (int) 62L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH29 = 62 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH29 = 62 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH29() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH29;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH30 = (int) 63L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH30 = 63 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH30 = 63 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH30() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH30;
     }
 
     private static final int FMOD_DSP_CHANNELMIX_OUTPUT_CH31 = (int) 64L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH31 = 64 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_CHANNELMIX_OUTPUT_CH31 = 64 }
+     */
     public static int FMOD_DSP_CHANNELMIX_OUTPUT_CH31() {
         return FMOD_DSP_CHANNELMIX_OUTPUT_CH31;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_AUTO = (int) -1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_AUTO = -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_AUTO = -1 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_AUTO() {
         return FMOD_DSP_TRANSCEIVER_SPEAKERMODE_AUTO;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_MONO = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_MONO = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_MONO = 0 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_MONO() {
         return FMOD_DSP_TRANSCEIVER_SPEAKERMODE_MONO;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_STEREO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_STEREO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_STEREO = 1 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_STEREO() {
         return FMOD_DSP_TRANSCEIVER_SPEAKERMODE_STEREO;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_SURROUND = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_SURROUND = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_SPEAKERMODE_SURROUND = 2 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_SPEAKERMODE_SURROUND() {
         return FMOD_DSP_TRANSCEIVER_SPEAKERMODE_SURROUND;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_TRANSMIT = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_TRANSMIT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_TRANSMIT = 0 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_TRANSMIT() {
         return FMOD_DSP_TRANSCEIVER_TRANSMIT;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_GAIN = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_GAIN = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_GAIN = 1 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_GAIN() {
         return FMOD_DSP_TRANSCEIVER_GAIN;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_CHANNEL = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_CHANNEL = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_CHANNEL = 2 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_CHANNEL() {
         return FMOD_DSP_TRANSCEIVER_CHANNEL;
     }
 
     private static final int FMOD_DSP_TRANSCEIVER_TRANSMITSPEAKERMODE = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_TRANSMITSPEAKERMODE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_TRANSCEIVER_TRANSMITSPEAKERMODE = 3 }
+     */
     public static int FMOD_DSP_TRANSCEIVER_TRANSMITSPEAKERMODE() {
         return FMOD_DSP_TRANSCEIVER_TRANSMITSPEAKERMODE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_POSITION = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_POSITION = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_POSITION = 0 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_POSITION() {
         return FMOD_DSP_OBJECTPAN_3D_POSITION;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_ROLLOFF = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_ROLLOFF = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_ROLLOFF = 1 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_ROLLOFF() {
         return FMOD_DSP_OBJECTPAN_3D_ROLLOFF;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_MIN_DISTANCE = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MIN_DISTANCE = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MIN_DISTANCE = 2 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_MIN_DISTANCE() {
         return FMOD_DSP_OBJECTPAN_3D_MIN_DISTANCE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_MAX_DISTANCE = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MAX_DISTANCE = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MAX_DISTANCE = 3 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_MAX_DISTANCE() {
         return FMOD_DSP_OBJECTPAN_3D_MAX_DISTANCE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_EXTENT_MODE = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_EXTENT_MODE = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_EXTENT_MODE = 4 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_EXTENT_MODE() {
         return FMOD_DSP_OBJECTPAN_3D_EXTENT_MODE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE = (int) 5L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE = 5 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE = 5 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE() {
         return FMOD_DSP_OBJECTPAN_3D_SOUND_SIZE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT = (int) 6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT = 6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT = 6 }
+     */
     public static int FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT() {
         return FMOD_DSP_OBJECTPAN_3D_MIN_EXTENT;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_OVERALL_GAIN = (int) 7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OVERALL_GAIN = 7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OVERALL_GAIN = 7 }
+     */
     public static int FMOD_DSP_OBJECTPAN_OVERALL_GAIN() {
         return FMOD_DSP_OBJECTPAN_OVERALL_GAIN;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_OUTPUTGAIN = (int) 8L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OUTPUTGAIN = 8 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OUTPUTGAIN = 8 }
+     */
     public static int FMOD_DSP_OBJECTPAN_OUTPUTGAIN() {
         return FMOD_DSP_OBJECTPAN_OUTPUTGAIN;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE = (int) 9L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE = 9 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE = 9 }
+     */
     public static int FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE() {
         return FMOD_DSP_OBJECTPAN_ATTENUATION_RANGE;
     }
 
     private static final int FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE = (int) 10L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE = 10 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE = 10 }
+     */
     public static int FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE() {
         return FMOD_DSP_OBJECTPAN_OVERRIDE_RANGE;
     }
 
     private static final int FMOD_DSP_PROCESS_PERFORM = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PROCESS_PERFORM = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PROCESS_PERFORM = 0 }
+     */
     public static int FMOD_DSP_PROCESS_PERFORM() {
         return FMOD_DSP_PROCESS_PERFORM;
     }
 
     private static final int FMOD_DSP_PROCESS_QUERY = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PROCESS_QUERY = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PROCESS_QUERY = 1 }
+     */
     public static int FMOD_DSP_PROCESS_QUERY() {
         return FMOD_DSP_PROCESS_QUERY;
     }
 
     private static final int FMOD_DSP_PAN_SURROUND_DEFAULT = (int) 0L;
 
-    /** {@snippet lang=c : enum FMOD_DSP_PAN_SURROUND_FLAGS.FMOD_DSP_PAN_SURROUND_DEFAULT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum FMOD_DSP_PAN_SURROUND_FLAGS.FMOD_DSP_PAN_SURROUND_DEFAULT = 0 }
+     */
     public static int FMOD_DSP_PAN_SURROUND_DEFAULT() {
         return FMOD_DSP_PAN_SURROUND_DEFAULT;
     }
@@ -5840,6 +8868,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_PAN_SURROUND_ROTATION_NOT_BIASED = (int) 1L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_PAN_SURROUND_FLAGS.FMOD_DSP_PAN_SURROUND_ROTATION_NOT_BIASED
      * = 1 }
      */
@@ -5850,6 +8880,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_PAN_SURROUND_FLAGS_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum FMOD_DSP_PAN_SURROUND_FLAGS.FMOD_DSP_PAN_SURROUND_FLAGS_FORCEINT =
      * 65536 }
      */
@@ -5859,56 +8891,88 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_PARAMETER_TYPE_FLOAT = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_FLOAT = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_FLOAT = 0 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_FLOAT() {
         return FMOD_DSP_PARAMETER_TYPE_FLOAT;
     }
 
     private static final int FMOD_DSP_PARAMETER_TYPE_INT = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_INT = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_INT = 1 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_INT() {
         return FMOD_DSP_PARAMETER_TYPE_INT;
     }
 
     private static final int FMOD_DSP_PARAMETER_TYPE_BOOL = (int) 2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_BOOL = 2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_BOOL = 2 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_BOOL() {
         return FMOD_DSP_PARAMETER_TYPE_BOOL;
     }
 
     private static final int FMOD_DSP_PARAMETER_TYPE_DATA = (int) 3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_DATA = 3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_DATA = 3 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_DATA() {
         return FMOD_DSP_PARAMETER_TYPE_DATA;
     }
 
     private static final int FMOD_DSP_PARAMETER_TYPE_MAX = (int) 4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_MAX = 4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_MAX = 4 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_MAX() {
         return FMOD_DSP_PARAMETER_TYPE_MAX;
     }
 
     private static final int FMOD_DSP_PARAMETER_TYPE_FORCEINT = (int) 65536L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_FORCEINT = 65536 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_TYPE_FORCEINT = 65536 }
+     */
     public static int FMOD_DSP_PARAMETER_TYPE_FORCEINT() {
         return FMOD_DSP_PARAMETER_TYPE_FORCEINT;
     }
 
     private static final int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_LINEAR = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_LINEAR = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_LINEAR = 0 }
+     */
     public static int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_LINEAR() {
         return FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_LINEAR;
     }
 
     private static final int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_AUTO = (int) 1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_AUTO = 1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_AUTO = 1 }
+     */
     public static int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_AUTO() {
         return FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_AUTO;
     }
@@ -5916,6 +8980,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_PIECEWISE_LINEAR = (int) 2L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_PIECEWISE_LINEAR =
      * 2 }
      */
@@ -5926,6 +8992,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_FORCEINT = (int) 65536L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_FORCEINT = 65536 }
      */
     public static int FMOD_DSP_PARAMETER_FLOAT_MAPPING_TYPE_FORCEINT() {
@@ -5934,35 +9002,55 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_USER = (int) 0L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_USER = 0 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_USER = 0 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_USER() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_USER;
     }
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN = (int) -1L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN = -1 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN = -1 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_OVERALLGAIN;
     }
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES = (int) -2L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES = -2 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES = -2 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES;
     }
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN = (int) -3L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN = -3 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN = -3 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_SIDECHAIN;
     }
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_FFT = (int) -4L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_FFT = -4 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_FFT = -4 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_FFT() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_FFT;
     }
@@ -5970,6 +9058,8 @@ public class FmodCore_1 {
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES_MULTI = (int) -5L;
 
     /**
+     *
+     *
      * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES_MULTI = -5 }
      */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_3DATTRIBUTES_MULTI() {
@@ -5978,19 +9068,31 @@ public class FmodCore_1 {
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE = (int) -6L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE = -6 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE = -6 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_ATTENUATION_RANGE;
     }
 
     private static final int FMOD_DSP_PARAMETER_DATA_TYPE_DYNAMIC_RESPONSE = (int) -7L;
 
-    /** {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_DYNAMIC_RESPONSE = -7 } */
+    /**
+     *
+     *
+     * {@snippet lang=c : enum <anonymous>.FMOD_DSP_PARAMETER_DATA_TYPE_DYNAMIC_RESPONSE = -7 }
+     */
     public static int FMOD_DSP_PARAMETER_DATA_TYPE_DYNAMIC_RESPONSE() {
         return FMOD_DSP_PARAMETER_DATA_TYPE_DYNAMIC_RESPONSE;
     }
 
-    /** {@snippet lang=c : typedef unsigned int FMOD_OUTPUT_METHOD } */
+    /**
+     *
+     *
+     * {@snippet lang=c : typedef unsigned int FMOD_OUTPUT_METHOD }
+     */
     public static final OfInt FMOD_OUTPUT_METHOD = FmodCore.C_INT;
 
     private static class FMOD_Memory_Initialize {
@@ -6010,7 +9112,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void *poolmem,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void *poolmem,
      * int poollen, FMOD_MEMORY_ALLOC_CALLBACK useralloc, FMOD_MEMORY_REALLOC_CALLBACK userrealloc,
      * FMOD_MEMORY_FREE_CALLBACK userfree, FMOD_MEMORY_TYPE memtypeflags) }
      */
@@ -6019,7 +9123,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void
      * *poolmem, int poollen, FMOD_MEMORY_ALLOC_CALLBACK useralloc, FMOD_MEMORY_REALLOC_CALLBACK
      * userrealloc, FMOD_MEMORY_FREE_CALLBACK userfree, FMOD_MEMORY_TYPE memtypeflags) }
      */
@@ -6028,7 +9134,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void *poolmem, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void *poolmem, int
      * poollen, FMOD_MEMORY_ALLOC_CALLBACK useralloc, FMOD_MEMORY_REALLOC_CALLBACK userrealloc,
      * FMOD_MEMORY_FREE_CALLBACK userfree, FMOD_MEMORY_TYPE memtypeflags) }
      */
@@ -6037,6 +9145,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Memory_Initialize(void *poolmem, int poollen,
      * FMOD_MEMORY_ALLOC_CALLBACK useralloc, FMOD_MEMORY_REALLOC_CALLBACK userrealloc,
      * FMOD_MEMORY_FREE_CALLBACK userfree, FMOD_MEMORY_TYPE memtypeflags) }
@@ -6079,7 +9189,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int
      * *currentalloced, int *maxalloced, FMOD_BOOL blocking) }
      */
     public static FunctionDescriptor FMOD_Memory_GetStats$descriptor() {
@@ -6087,7 +9199,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int
      * *currentalloced, int *maxalloced, FMOD_BOOL blocking) }
      */
     public static MethodHandle FMOD_Memory_GetStats$handle() {
@@ -6095,7 +9209,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int *currentalloced, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int *currentalloced, int
      * *maxalloced, FMOD_BOOL blocking) }
      */
     public static MemorySegment FMOD_Memory_GetStats$address() {
@@ -6103,6 +9219,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Memory_GetStats(int *currentalloced, int *maxalloced,
      * FMOD_BOOL blocking) }
      */
@@ -6134,7 +9252,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Debug_Initialize(FMOD_DEBUG_FLAGS flags, FMOD_DEBUG_MODE mode, FMOD_DEBUG_CALLBACK
      * callback, const char *filename) }
      */
@@ -6143,7 +9263,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Debug_Initialize(FMOD_DEBUG_FLAGS flags, FMOD_DEBUG_MODE mode, FMOD_DEBUG_CALLBACK
      * callback, const char *filename) }
      */
@@ -6152,7 +9274,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Debug_Initialize(FMOD_DEBUG_FLAGS flags,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Debug_Initialize(FMOD_DEBUG_FLAGS flags,
      * FMOD_DEBUG_MODE mode, FMOD_DEBUG_CALLBACK callback, const char *filename) }
      */
     public static MemorySegment FMOD_Debug_Initialize$address() {
@@ -6160,6 +9284,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Debug_Initialize(FMOD_DEBUG_FLAGS flags, FMOD_DEBUG_MODE
      * mode, FMOD_DEBUG_CALLBACK callback, const char *filename) }
      */
@@ -6185,24 +9311,38 @@ public class FmodCore_1 {
         public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(ADDR, DESC);
     }
 
-    /** Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) } */
+    /**
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) }
+     */
     public static FunctionDescriptor FMOD_File_SetDiskBusy$descriptor() {
         return FMOD_File_SetDiskBusy.DESC;
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) }
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) }
      */
     public static MethodHandle FMOD_File_SetDiskBusy$handle() {
         return FMOD_File_SetDiskBusy.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) }
+     */
     public static MemorySegment FMOD_File_SetDiskBusy$address() {
         return FMOD_File_SetDiskBusy.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_SetDiskBusy(int busy) }
+     */
     public static int FMOD_File_SetDiskBusy(int busy) {
         var mh$ = FMOD_File_SetDiskBusy.HANDLE;
         try {
@@ -6225,25 +9365,37 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
      */
     public static FunctionDescriptor FMOD_File_GetDiskBusy$descriptor() {
         return FMOD_File_GetDiskBusy.DESC;
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
      */
     public static MethodHandle FMOD_File_GetDiskBusy$handle() {
         return FMOD_File_GetDiskBusy.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
+     */
     public static MemorySegment FMOD_File_GetDiskBusy$address() {
         return FMOD_File_GetDiskBusy.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_File_GetDiskBusy(int *busy) }
+     */
     public static int FMOD_File_GetDiskBusy(MemorySegment busy) {
         var mh$ = FMOD_File_GetDiskBusy.HANDLE;
         try {
@@ -6271,7 +9423,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Thread_SetAttributes(FMOD_THREAD_TYPE type, FMOD_THREAD_AFFINITY affinity,
      * FMOD_THREAD_PRIORITY priority, FMOD_THREAD_STACK_SIZE stacksize) }
      */
@@ -6280,7 +9434,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Thread_SetAttributes(FMOD_THREAD_TYPE type, FMOD_THREAD_AFFINITY affinity,
      * FMOD_THREAD_PRIORITY priority, FMOD_THREAD_STACK_SIZE stacksize) }
      */
@@ -6289,7 +9445,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Thread_SetAttributes(FMOD_THREAD_TYPE type,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Thread_SetAttributes(FMOD_THREAD_TYPE type,
      * FMOD_THREAD_AFFINITY affinity, FMOD_THREAD_PRIORITY priority, FMOD_THREAD_STACK_SIZE
      * stacksize) }
      */
@@ -6298,6 +9456,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Thread_SetAttributes(FMOD_THREAD_TYPE type,
      * FMOD_THREAD_AFFINITY affinity, FMOD_THREAD_PRIORITY priority, FMOD_THREAD_STACK_SIZE
      * stacksize) }
@@ -6325,7 +9485,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM
      * **system, unsigned int headerversion) }
      */
     public static FunctionDescriptor FMOD_System_Create$descriptor() {
@@ -6333,7 +9495,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM
      * **system, unsigned int headerversion) }
      */
     public static MethodHandle FMOD_System_Create$handle() {
@@ -6341,7 +9505,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM **system, unsigned
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM **system, unsigned
      * int headerversion) }
      */
     public static MemorySegment FMOD_System_Create$address() {
@@ -6349,6 +9515,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Create(FMOD_SYSTEM **system, unsigned int
      * headerversion) }
      */
@@ -6374,7 +9542,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_Release$descriptor() {
@@ -6382,19 +9552,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM
      * *system) }
      */
     public static MethodHandle FMOD_System_Release$handle() {
         return FMOD_System_Release.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM *system) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM *system) }
+     */
     public static MemorySegment FMOD_System_Release$address() {
         return FMOD_System_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Release(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_Release(MemorySegment system) {
         var mh$ = FMOD_System_Release.HANDLE;
         try {
@@ -6417,7 +9597,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM
      * *system, FMOD_OUTPUTTYPE output) }
      */
     public static FunctionDescriptor FMOD_System_SetOutput$descriptor() {
@@ -6425,7 +9607,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM
      * *system, FMOD_OUTPUTTYPE output) }
      */
     public static MethodHandle FMOD_System_SetOutput$handle() {
@@ -6433,7 +9617,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM *system,
      * FMOD_OUTPUTTYPE output) }
      */
     public static MemorySegment FMOD_System_SetOutput$address() {
@@ -6441,6 +9627,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutput(FMOD_SYSTEM *system, FMOD_OUTPUTTYPE
      * output) }
      */
@@ -6466,7 +9654,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM
      * *system, FMOD_OUTPUTTYPE *output) }
      */
     public static FunctionDescriptor FMOD_System_GetOutput$descriptor() {
@@ -6474,7 +9664,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM
      * *system, FMOD_OUTPUTTYPE *output) }
      */
     public static MethodHandle FMOD_System_GetOutput$handle() {
@@ -6482,7 +9674,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM *system,
      * FMOD_OUTPUTTYPE *output) }
      */
     public static MemorySegment FMOD_System_GetOutput$address() {
@@ -6490,6 +9684,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutput(FMOD_SYSTEM *system, FMOD_OUTPUTTYPE
      * *output) }
      */
@@ -6515,7 +9711,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumDrivers(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumDrivers(FMOD_SYSTEM
      * *system, int *numdrivers) }
      */
     public static FunctionDescriptor FMOD_System_GetNumDrivers$descriptor() {
@@ -6523,7 +9721,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNumDrivers(FMOD_SYSTEM *system, int *numdrivers) }
      */
     public static MethodHandle FMOD_System_GetNumDrivers$handle() {
@@ -6531,7 +9731,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumDrivers(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumDrivers(FMOD_SYSTEM *system,
      * int *numdrivers) }
      */
     public static MemorySegment FMOD_System_GetNumDrivers$address() {
@@ -6539,6 +9741,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumDrivers(FMOD_SYSTEM *system, int
      * *numdrivers) }
      */
@@ -6573,7 +9777,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriverInfo(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriverInfo(FMOD_SYSTEM
      * *system, int id, char *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE
      * *speakermode, int *speakermodechannels) }
      */
@@ -6582,7 +9788,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDriverInfo(FMOD_SYSTEM *system, int id, char *name, int namelen, FMOD_GUID
      * *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels) }
      */
@@ -6591,7 +9799,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriverInfo(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriverInfo(FMOD_SYSTEM *system,
      * int id, char *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE
      * *speakermode, int *speakermodechannels) }
      */
@@ -6600,6 +9810,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriverInfo(FMOD_SYSTEM *system, int id, char
      * *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int
      * *speakermodechannels) }
@@ -6652,7 +9864,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM
      * *system, int driver) }
      */
     public static FunctionDescriptor FMOD_System_SetDriver$descriptor() {
@@ -6660,7 +9874,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM
      * *system, int driver) }
      */
     public static MethodHandle FMOD_System_SetDriver$handle() {
@@ -6668,14 +9884,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM *system, int
      * driver) }
      */
     public static MemorySegment FMOD_System_SetDriver$address() {
         return FMOD_System_SetDriver.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM *system, int driver) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDriver(FMOD_SYSTEM *system, int driver) }
+     */
     public static int FMOD_System_SetDriver(MemorySegment system, int driver) {
         var mh$ = FMOD_System_SetDriver.HANDLE;
         try {
@@ -6698,7 +9920,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM
      * *system, int *driver) }
      */
     public static FunctionDescriptor FMOD_System_GetDriver$descriptor() {
@@ -6706,7 +9930,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM
      * *system, int *driver) }
      */
     public static MethodHandle FMOD_System_GetDriver$handle() {
@@ -6714,14 +9940,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM *system, int
      * *driver) }
      */
     public static MemorySegment FMOD_System_GetDriver$address() {
         return FMOD_System_GetDriver.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM *system, int *driver) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDriver(FMOD_SYSTEM *system, int *driver) }
+     */
     public static int FMOD_System_GetDriver(MemorySegment system, MemorySegment driver) {
         var mh$ = FMOD_System_GetDriver.HANDLE;
         try {
@@ -6745,7 +9977,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSoftwareChannels(FMOD_SYSTEM *system, int numsoftwarechannels) }
      */
     public static FunctionDescriptor FMOD_System_SetSoftwareChannels$descriptor() {
@@ -6753,7 +9987,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSoftwareChannels(FMOD_SYSTEM *system, int numsoftwarechannels) }
      */
     public static MethodHandle FMOD_System_SetSoftwareChannels$handle() {
@@ -6761,7 +9997,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareChannels(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareChannels(FMOD_SYSTEM
      * *system, int numsoftwarechannels) }
      */
     public static MemorySegment FMOD_System_SetSoftwareChannels$address() {
@@ -6769,6 +10007,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareChannels(FMOD_SYSTEM *system, int
      * numsoftwarechannels) }
      */
@@ -6796,7 +10036,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSoftwareChannels(FMOD_SYSTEM *system, int *numsoftwarechannels) }
      */
     public static FunctionDescriptor FMOD_System_GetSoftwareChannels$descriptor() {
@@ -6804,7 +10046,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSoftwareChannels(FMOD_SYSTEM *system, int *numsoftwarechannels) }
      */
     public static MethodHandle FMOD_System_GetSoftwareChannels$handle() {
@@ -6812,7 +10056,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareChannels(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareChannels(FMOD_SYSTEM
      * *system, int *numsoftwarechannels) }
      */
     public static MemorySegment FMOD_System_GetSoftwareChannels$address() {
@@ -6820,6 +10066,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareChannels(FMOD_SYSTEM *system, int
      * *numsoftwarechannels) }
      */
@@ -6852,7 +10100,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSoftwareFormat(FMOD_SYSTEM *system, int samplerate, FMOD_SPEAKERMODE
      * speakermode, int numrawspeakers) }
      */
@@ -6861,7 +10111,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSoftwareFormat(FMOD_SYSTEM *system, int samplerate, FMOD_SPEAKERMODE
      * speakermode, int numrawspeakers) }
      */
@@ -6870,7 +10122,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareFormat(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareFormat(FMOD_SYSTEM
      * *system, int samplerate, FMOD_SPEAKERMODE speakermode, int numrawspeakers) }
      */
     public static MemorySegment FMOD_System_SetSoftwareFormat$address() {
@@ -6878,6 +10132,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSoftwareFormat(FMOD_SYSTEM *system, int
      * samplerate, FMOD_SPEAKERMODE speakermode, int numrawspeakers) }
      */
@@ -6915,7 +10171,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSoftwareFormat(FMOD_SYSTEM *system, int *samplerate, FMOD_SPEAKERMODE
      * *speakermode, int *numrawspeakers) }
      */
@@ -6924,7 +10182,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSoftwareFormat(FMOD_SYSTEM *system, int *samplerate, FMOD_SPEAKERMODE
      * *speakermode, int *numrawspeakers) }
      */
@@ -6933,7 +10193,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareFormat(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareFormat(FMOD_SYSTEM
      * *system, int *samplerate, FMOD_SPEAKERMODE *speakermode, int *numrawspeakers) }
      */
     public static MemorySegment FMOD_System_GetSoftwareFormat$address() {
@@ -6941,6 +10203,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSoftwareFormat(FMOD_SYSTEM *system, int
      * *samplerate, FMOD_SPEAKERMODE *speakermode, int *numrawspeakers) }
      */
@@ -6977,7 +10241,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetDSPBufferSize(FMOD_SYSTEM *system, unsigned int bufferlength, int numbuffers)
      * }
      */
@@ -6986,7 +10252,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetDSPBufferSize(FMOD_SYSTEM *system, unsigned int bufferlength, int numbuffers)
      * }
      */
@@ -6995,7 +10263,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetDSPBufferSize(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDSPBufferSize(FMOD_SYSTEM *system,
      * unsigned int bufferlength, int numbuffers) }
      */
     public static MemorySegment FMOD_System_SetDSPBufferSize$address() {
@@ -7003,6 +10273,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetDSPBufferSize(FMOD_SYSTEM *system, unsigned int
      * bufferlength, int numbuffers) }
      */
@@ -7031,7 +10303,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPBufferSize(FMOD_SYSTEM *system, unsigned int *bufferlength, int
      * *numbuffers) }
      */
@@ -7040,7 +10314,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPBufferSize(FMOD_SYSTEM *system, unsigned int *bufferlength, int
      * *numbuffers) }
      */
@@ -7049,7 +10325,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPBufferSize(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPBufferSize(FMOD_SYSTEM *system,
      * unsigned int *bufferlength, int *numbuffers) }
      */
     public static MemorySegment FMOD_System_GetDSPBufferSize$address() {
@@ -7057,6 +10335,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPBufferSize(FMOD_SYSTEM *system, unsigned int
      * *bufferlength, int *numbuffers) }
      */
@@ -7092,7 +10372,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetFileSystem(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetFileSystem(FMOD_SYSTEM
      * *system, FMOD_FILE_OPEN_CALLBACK useropen, FMOD_FILE_CLOSE_CALLBACK userclose,
      * FMOD_FILE_READ_CALLBACK userread, FMOD_FILE_SEEK_CALLBACK userseek,
      * FMOD_FILE_ASYNCREAD_CALLBACK userasyncread, FMOD_FILE_ASYNCCANCEL_CALLBACK userasynccancel,
@@ -7103,7 +10385,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetFileSystem(FMOD_SYSTEM *system, FMOD_FILE_OPEN_CALLBACK useropen,
      * FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK userread, FMOD_FILE_SEEK_CALLBACK
      * userseek, FMOD_FILE_ASYNCREAD_CALLBACK userasyncread, FMOD_FILE_ASYNCCANCEL_CALLBACK
@@ -7114,7 +10398,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetFileSystem(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetFileSystem(FMOD_SYSTEM *system,
      * FMOD_FILE_OPEN_CALLBACK useropen, FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK
      * userread, FMOD_FILE_SEEK_CALLBACK userseek, FMOD_FILE_ASYNCREAD_CALLBACK userasyncread,
      * FMOD_FILE_ASYNCCANCEL_CALLBACK userasynccancel, int blockalign) }
@@ -7124,6 +10410,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetFileSystem(FMOD_SYSTEM *system,
      * FMOD_FILE_OPEN_CALLBACK useropen, FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK
      * userread, FMOD_FILE_SEEK_CALLBACK userseek, FMOD_FILE_ASYNCREAD_CALLBACK userasyncread,
@@ -7184,7 +10472,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_AttachFileSystem(FMOD_SYSTEM *system, FMOD_FILE_OPEN_CALLBACK useropen,
      * FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK userread, FMOD_FILE_SEEK_CALLBACK
      * userseek) }
@@ -7194,7 +10484,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_AttachFileSystem(FMOD_SYSTEM *system, FMOD_FILE_OPEN_CALLBACK useropen,
      * FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK userread, FMOD_FILE_SEEK_CALLBACK
      * userseek) }
@@ -7204,7 +10496,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_AttachFileSystem(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_AttachFileSystem(FMOD_SYSTEM *system,
      * FMOD_FILE_OPEN_CALLBACK useropen, FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK
      * userread, FMOD_FILE_SEEK_CALLBACK userseek) }
      */
@@ -7213,6 +10507,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_AttachFileSystem(FMOD_SYSTEM *system,
      * FMOD_FILE_OPEN_CALLBACK useropen, FMOD_FILE_CLOSE_CALLBACK userclose, FMOD_FILE_READ_CALLBACK
      * userread, FMOD_FILE_SEEK_CALLBACK userseek) }
@@ -7251,7 +10547,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetAdvancedSettings(FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static FunctionDescriptor FMOD_System_SetAdvancedSettings$descriptor() {
@@ -7259,7 +10557,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetAdvancedSettings(FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static MethodHandle FMOD_System_SetAdvancedSettings$handle() {
@@ -7267,7 +10567,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetAdvancedSettings(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetAdvancedSettings(FMOD_SYSTEM
      * *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static MemorySegment FMOD_System_SetAdvancedSettings$address() {
@@ -7275,6 +10577,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetAdvancedSettings(FMOD_SYSTEM *system,
      * FMOD_ADVANCEDSETTINGS *settings) }
      */
@@ -7302,7 +10606,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetAdvancedSettings(FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static FunctionDescriptor FMOD_System_GetAdvancedSettings$descriptor() {
@@ -7310,7 +10616,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetAdvancedSettings(FMOD_SYSTEM *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static MethodHandle FMOD_System_GetAdvancedSettings$handle() {
@@ -7318,7 +10626,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetAdvancedSettings(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetAdvancedSettings(FMOD_SYSTEM
      * *system, FMOD_ADVANCEDSETTINGS *settings) }
      */
     public static MemorySegment FMOD_System_GetAdvancedSettings$address() {
@@ -7326,6 +10636,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetAdvancedSettings(FMOD_SYSTEM *system,
      * FMOD_ADVANCEDSETTINGS *settings) }
      */
@@ -7353,7 +10665,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetCallback(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetCallback(FMOD_SYSTEM
      * *system, FMOD_SYSTEM_CALLBACK callback, FMOD_SYSTEM_CALLBACK_TYPE callbackmask) }
      */
     public static FunctionDescriptor FMOD_System_SetCallback$descriptor() {
@@ -7361,7 +10675,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBACK callback,
      * FMOD_SYSTEM_CALLBACK_TYPE callbackmask) }
      */
@@ -7370,7 +10686,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetCallback(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetCallback(FMOD_SYSTEM *system,
      * FMOD_SYSTEM_CALLBACK callback, FMOD_SYSTEM_CALLBACK_TYPE callbackmask) }
      */
     public static MemorySegment FMOD_System_SetCallback$address() {
@@ -7378,6 +10696,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetCallback(FMOD_SYSTEM *system,
      * FMOD_SYSTEM_CALLBACK callback, FMOD_SYSTEM_CALLBACK_TYPE callbackmask) }
      */
@@ -7404,7 +10724,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetPluginPath(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetPluginPath(FMOD_SYSTEM
      * *system, const char *path) }
      */
     public static FunctionDescriptor FMOD_System_SetPluginPath$descriptor() {
@@ -7412,7 +10734,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetPluginPath(FMOD_SYSTEM *system, const char *path) }
      */
     public static MethodHandle FMOD_System_SetPluginPath$handle() {
@@ -7420,7 +10744,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetPluginPath(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetPluginPath(FMOD_SYSTEM *system,
      * const char *path) }
      */
     public static MemorySegment FMOD_System_SetPluginPath$address() {
@@ -7428,6 +10754,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetPluginPath(FMOD_SYSTEM *system, const char
      * *path) }
      */
@@ -7458,7 +10786,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM
      * *system, const char *filename, unsigned int *handle, unsigned int priority) }
      */
     public static FunctionDescriptor FMOD_System_LoadPlugin$descriptor() {
@@ -7466,7 +10796,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM
      * *system, const char *filename, unsigned int *handle, unsigned int priority) }
      */
     public static MethodHandle FMOD_System_LoadPlugin$handle() {
@@ -7474,7 +10806,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM *system, const
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM *system, const
      * char *filename, unsigned int *handle, unsigned int priority) }
      */
     public static MemorySegment FMOD_System_LoadPlugin$address() {
@@ -7482,6 +10816,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadPlugin(FMOD_SYSTEM *system, const char
      * *filename, unsigned int *handle, unsigned int priority) }
      */
@@ -7508,7 +10844,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_UnloadPlugin(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnloadPlugin(FMOD_SYSTEM
      * *system, unsigned int handle) }
      */
     public static FunctionDescriptor FMOD_System_UnloadPlugin$descriptor() {
@@ -7516,7 +10854,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_UnloadPlugin(FMOD_SYSTEM *system, unsigned int handle) }
      */
     public static MethodHandle FMOD_System_UnloadPlugin$handle() {
@@ -7524,7 +10864,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_UnloadPlugin(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnloadPlugin(FMOD_SYSTEM *system,
      * unsigned int handle) }
      */
     public static MemorySegment FMOD_System_UnloadPlugin$address() {
@@ -7532,6 +10874,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_UnloadPlugin(FMOD_SYSTEM *system, unsigned int
      * handle) }
      */
@@ -7559,7 +10903,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNumNestedPlugins(FMOD_SYSTEM *system, unsigned int handle, int *count) }
      */
     public static FunctionDescriptor FMOD_System_GetNumNestedPlugins$descriptor() {
@@ -7567,7 +10913,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNumNestedPlugins(FMOD_SYSTEM *system, unsigned int handle, int *count) }
      */
     public static MethodHandle FMOD_System_GetNumNestedPlugins$handle() {
@@ -7575,7 +10923,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumNestedPlugins(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumNestedPlugins(FMOD_SYSTEM
      * *system, unsigned int handle, int *count) }
      */
     public static MemorySegment FMOD_System_GetNumNestedPlugins$address() {
@@ -7583,6 +10933,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumNestedPlugins(FMOD_SYSTEM *system, unsigned
      * int handle, int *count) }
      */
@@ -7615,7 +10967,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNestedPlugin(FMOD_SYSTEM *system, unsigned int handle, int index, unsigned int
      * *nestedhandle) }
      */
@@ -7624,7 +10978,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNestedPlugin(FMOD_SYSTEM *system, unsigned int handle, int index, unsigned int
      * *nestedhandle) }
      */
@@ -7633,7 +10989,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNestedPlugin(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNestedPlugin(FMOD_SYSTEM *system,
      * unsigned int handle, int index, unsigned int *nestedhandle) }
      */
     public static MemorySegment FMOD_System_GetNestedPlugin$address() {
@@ -7641,6 +10999,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNestedPlugin(FMOD_SYSTEM *system, unsigned int
      * handle, int index, unsigned int *nestedhandle) }
      */
@@ -7668,7 +11028,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumPlugins(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumPlugins(FMOD_SYSTEM
      * *system, FMOD_PLUGINTYPE plugintype, int *numplugins) }
      */
     public static FunctionDescriptor FMOD_System_GetNumPlugins$descriptor() {
@@ -7676,7 +11038,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNumPlugins(FMOD_SYSTEM *system, FMOD_PLUGINTYPE plugintype, int *numplugins) }
      */
     public static MethodHandle FMOD_System_GetNumPlugins$handle() {
@@ -7684,7 +11048,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumPlugins(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumPlugins(FMOD_SYSTEM *system,
      * FMOD_PLUGINTYPE plugintype, int *numplugins) }
      */
     public static MemorySegment FMOD_System_GetNumPlugins$address() {
@@ -7692,6 +11058,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNumPlugins(FMOD_SYSTEM *system, FMOD_PLUGINTYPE
      * plugintype, int *numplugins) }
      */
@@ -7724,7 +11092,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetPluginHandle(FMOD_SYSTEM *system, FMOD_PLUGINTYPE plugintype, int index,
      * unsigned int *handle) }
      */
@@ -7733,7 +11103,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetPluginHandle(FMOD_SYSTEM *system, FMOD_PLUGINTYPE plugintype, int index,
      * unsigned int *handle) }
      */
@@ -7742,7 +11114,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginHandle(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginHandle(FMOD_SYSTEM *system,
      * FMOD_PLUGINTYPE plugintype, int index, unsigned int *handle) }
      */
     public static MemorySegment FMOD_System_GetPluginHandle$address() {
@@ -7750,6 +11124,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginHandle(FMOD_SYSTEM *system,
      * FMOD_PLUGINTYPE plugintype, int index, unsigned int *handle) }
      */
@@ -7783,7 +11159,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginInfo(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginInfo(FMOD_SYSTEM
      * *system, unsigned int handle, FMOD_PLUGINTYPE *plugintype, char *name, int namelen, unsigned
      * int *version) }
      */
@@ -7792,7 +11170,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetPluginInfo(FMOD_SYSTEM *system, unsigned int handle, FMOD_PLUGINTYPE
      * *plugintype, char *name, int namelen, unsigned int *version) }
      */
@@ -7801,7 +11181,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginInfo(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginInfo(FMOD_SYSTEM *system,
      * unsigned int handle, FMOD_PLUGINTYPE *plugintype, char *name, int namelen, unsigned int
      * *version) }
      */
@@ -7810,6 +11192,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetPluginInfo(FMOD_SYSTEM *system, unsigned int
      * handle, FMOD_PLUGINTYPE *plugintype, char *name, int namelen, unsigned int *version) }
      */
@@ -7849,7 +11233,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetOutputByPlugin(FMOD_SYSTEM *system, unsigned int handle) }
      */
     public static FunctionDescriptor FMOD_System_SetOutputByPlugin$descriptor() {
@@ -7857,7 +11243,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetOutputByPlugin(FMOD_SYSTEM *system, unsigned int handle) }
      */
     public static MethodHandle FMOD_System_SetOutputByPlugin$handle() {
@@ -7865,7 +11253,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutputByPlugin(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutputByPlugin(FMOD_SYSTEM
      * *system, unsigned int handle) }
      */
     public static MemorySegment FMOD_System_SetOutputByPlugin$address() {
@@ -7873,6 +11263,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetOutputByPlugin(FMOD_SYSTEM *system, unsigned
      * int handle) }
      */
@@ -7899,7 +11291,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetOutputByPlugin(FMOD_SYSTEM *system, unsigned int *handle) }
      */
     public static FunctionDescriptor FMOD_System_GetOutputByPlugin$descriptor() {
@@ -7907,7 +11301,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetOutputByPlugin(FMOD_SYSTEM *system, unsigned int *handle) }
      */
     public static MethodHandle FMOD_System_GetOutputByPlugin$handle() {
@@ -7915,7 +11311,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputByPlugin(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputByPlugin(FMOD_SYSTEM
      * *system, unsigned int *handle) }
      */
     public static MemorySegment FMOD_System_GetOutputByPlugin$address() {
@@ -7923,6 +11321,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputByPlugin(FMOD_SYSTEM *system, unsigned
      * int *handle) }
      */
@@ -7950,7 +11350,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPByPlugin(FMOD_SYSTEM *system, unsigned int handle, FMOD_DSP **dsp) }
      */
     public static FunctionDescriptor FMOD_System_CreateDSPByPlugin$descriptor() {
@@ -7958,7 +11360,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPByPlugin(FMOD_SYSTEM *system, unsigned int handle, FMOD_DSP **dsp) }
      */
     public static MethodHandle FMOD_System_CreateDSPByPlugin$handle() {
@@ -7966,7 +11370,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByPlugin(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByPlugin(FMOD_SYSTEM
      * *system, unsigned int handle, FMOD_DSP **dsp) }
      */
     public static MemorySegment FMOD_System_CreateDSPByPlugin$address() {
@@ -7974,6 +11380,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByPlugin(FMOD_SYSTEM *system, unsigned
      * int handle, FMOD_DSP **dsp) }
      */
@@ -8002,7 +11410,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPInfoByPlugin(FMOD_SYSTEM *system, unsigned int handle, const
      * FMOD_DSP_DESCRIPTION **description) }
      */
@@ -8011,7 +11421,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPInfoByPlugin(FMOD_SYSTEM *system, unsigned int handle, const
      * FMOD_DSP_DESCRIPTION **description) }
      */
@@ -8020,7 +11432,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByPlugin(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByPlugin(FMOD_SYSTEM
      * *system, unsigned int handle, const FMOD_DSP_DESCRIPTION **description) }
      */
     public static MemorySegment FMOD_System_GetDSPInfoByPlugin$address() {
@@ -8028,6 +11442,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByPlugin(FMOD_SYSTEM *system, unsigned
      * int handle, const FMOD_DSP_DESCRIPTION **description) }
      */
@@ -8059,7 +11475,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterCodec(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterCodec(FMOD_SYSTEM
      * *system, FMOD_CODEC_DESCRIPTION *description, unsigned int *handle, unsigned int priority) }
      */
     public static FunctionDescriptor FMOD_System_RegisterCodec$descriptor() {
@@ -8067,7 +11485,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_RegisterCodec(FMOD_SYSTEM *system, FMOD_CODEC_DESCRIPTION *description, unsigned
      * int *handle, unsigned int priority) }
      */
@@ -8076,7 +11496,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterCodec(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterCodec(FMOD_SYSTEM *system,
      * FMOD_CODEC_DESCRIPTION *description, unsigned int *handle, unsigned int priority) }
      */
     public static MemorySegment FMOD_System_RegisterCodec$address() {
@@ -8084,6 +11506,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterCodec(FMOD_SYSTEM *system,
      * FMOD_CODEC_DESCRIPTION *description, unsigned int *handle, unsigned int priority) }
      */
@@ -8111,7 +11535,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterDSP(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterDSP(FMOD_SYSTEM
      * *system, const FMOD_DSP_DESCRIPTION *description, unsigned int *handle) }
      */
     public static FunctionDescriptor FMOD_System_RegisterDSP$descriptor() {
@@ -8119,7 +11545,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_RegisterDSP(FMOD_SYSTEM *system, const FMOD_DSP_DESCRIPTION *description,
      * unsigned int *handle) }
      */
@@ -8128,7 +11556,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterDSP(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterDSP(FMOD_SYSTEM *system,
      * const FMOD_DSP_DESCRIPTION *description, unsigned int *handle) }
      */
     public static MemorySegment FMOD_System_RegisterDSP$address() {
@@ -8136,6 +11566,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterDSP(FMOD_SYSTEM *system, const
      * FMOD_DSP_DESCRIPTION *description, unsigned int *handle) }
      */
@@ -8163,7 +11595,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_RegisterOutput(FMOD_SYSTEM *system, const FMOD_OUTPUT_DESCRIPTION *description,
      * unsigned int *handle) }
      */
@@ -8172,7 +11606,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_RegisterOutput(FMOD_SYSTEM *system, const FMOD_OUTPUT_DESCRIPTION *description,
      * unsigned int *handle) }
      */
@@ -8181,7 +11617,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterOutput(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterOutput(FMOD_SYSTEM *system,
      * const FMOD_OUTPUT_DESCRIPTION *description, unsigned int *handle) }
      */
     public static MemorySegment FMOD_System_RegisterOutput$address() {
@@ -8189,6 +11627,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_RegisterOutput(FMOD_SYSTEM *system, const
      * FMOD_OUTPUT_DESCRIPTION *description, unsigned int *handle) }
      */
@@ -8220,7 +11660,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM *system,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM *system,
      * int maxchannels, FMOD_INITFLAGS flags, void *extradriverdata) }
      */
     public static FunctionDescriptor FMOD_System_Init$descriptor() {
@@ -8228,7 +11670,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM
      * *system, int maxchannels, FMOD_INITFLAGS flags, void *extradriverdata) }
      */
     public static MethodHandle FMOD_System_Init$handle() {
@@ -8236,7 +11680,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM *system, int
      * maxchannels, FMOD_INITFLAGS flags, void *extradriverdata) }
      */
     public static MemorySegment FMOD_System_Init$address() {
@@ -8244,6 +11690,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Init(FMOD_SYSTEM *system, int maxchannels,
      * FMOD_INITFLAGS flags, void *extradriverdata) }
      */
@@ -8270,7 +11718,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_Close$descriptor() {
@@ -8278,19 +11728,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM
      * *system) }
      */
     public static MethodHandle FMOD_System_Close$handle() {
         return FMOD_System_Close.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM *system) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM *system) }
+     */
     public static MemorySegment FMOD_System_Close$address() {
         return FMOD_System_Close.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Close(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_Close(MemorySegment system) {
         var mh$ = FMOD_System_Close.HANDLE;
         try {
@@ -8313,7 +11773,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_Update$descriptor() {
@@ -8321,19 +11783,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM
      * *system) }
      */
     public static MethodHandle FMOD_System_Update$handle() {
         return FMOD_System_Update.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM *system) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM *system) }
+     */
     public static MemorySegment FMOD_System_Update$address() {
         return FMOD_System_Update.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Update(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_Update(MemorySegment system) {
         var mh$ = FMOD_System_Update.HANDLE;
         try {
@@ -8363,7 +11835,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSpeakerPosition(FMOD_SYSTEM *system, FMOD_SPEAKER speaker, float x, float y,
      * FMOD_BOOL active) }
      */
@@ -8372,7 +11846,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetSpeakerPosition(FMOD_SYSTEM *system, FMOD_SPEAKER speaker, float x, float y,
      * FMOD_BOOL active) }
      */
@@ -8381,7 +11857,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetSpeakerPosition(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSpeakerPosition(FMOD_SYSTEM
      * *system, FMOD_SPEAKER speaker, float x, float y, FMOD_BOOL active) }
      */
     public static MemorySegment FMOD_System_SetSpeakerPosition$address() {
@@ -8389,6 +11867,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetSpeakerPosition(FMOD_SYSTEM *system,
      * FMOD_SPEAKER speaker, float x, float y, FMOD_BOOL active) }
      */
@@ -8422,7 +11902,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSpeakerPosition(FMOD_SYSTEM *system, FMOD_SPEAKER speaker, float *x, float *y,
      * FMOD_BOOL *active) }
      */
@@ -8431,7 +11913,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSpeakerPosition(FMOD_SYSTEM *system, FMOD_SPEAKER speaker, float *x, float *y,
      * FMOD_BOOL *active) }
      */
@@ -8440,7 +11924,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerPosition(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerPosition(FMOD_SYSTEM
      * *system, FMOD_SPEAKER speaker, float *x, float *y, FMOD_BOOL *active) }
      */
     public static MemorySegment FMOD_System_GetSpeakerPosition$address() {
@@ -8448,6 +11934,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerPosition(FMOD_SYSTEM *system,
      * FMOD_SPEAKER speaker, float *x, float *y, FMOD_BOOL *active) }
      */
@@ -8480,7 +11968,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetStreamBufferSize(FMOD_SYSTEM *system, unsigned int filebuffersize,
      * FMOD_TIMEUNIT filebuffersizetype) }
      */
@@ -8489,7 +11979,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetStreamBufferSize(FMOD_SYSTEM *system, unsigned int filebuffersize,
      * FMOD_TIMEUNIT filebuffersizetype) }
      */
@@ -8498,7 +11990,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetStreamBufferSize(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetStreamBufferSize(FMOD_SYSTEM
      * *system, unsigned int filebuffersize, FMOD_TIMEUNIT filebuffersizetype) }
      */
     public static MemorySegment FMOD_System_SetStreamBufferSize$address() {
@@ -8506,6 +12000,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetStreamBufferSize(FMOD_SYSTEM *system, unsigned
      * int filebuffersize, FMOD_TIMEUNIT filebuffersizetype) }
      */
@@ -8538,7 +12034,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetStreamBufferSize(FMOD_SYSTEM *system, unsigned int *filebuffersize,
      * FMOD_TIMEUNIT *filebuffersizetype) }
      */
@@ -8547,7 +12045,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetStreamBufferSize(FMOD_SYSTEM *system, unsigned int *filebuffersize,
      * FMOD_TIMEUNIT *filebuffersizetype) }
      */
@@ -8556,7 +12056,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetStreamBufferSize(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetStreamBufferSize(FMOD_SYSTEM
      * *system, unsigned int *filebuffersize, FMOD_TIMEUNIT *filebuffersizetype) }
      */
     public static MemorySegment FMOD_System_GetStreamBufferSize$address() {
@@ -8564,6 +12066,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetStreamBufferSize(FMOD_SYSTEM *system, unsigned
      * int *filebuffersize, FMOD_TIMEUNIT *filebuffersizetype) }
      */
@@ -8599,7 +12103,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DSettings(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DSettings(FMOD_SYSTEM
      * *system, float dopplerscale, float distancefactor, float rolloffscale) }
      */
     public static FunctionDescriptor FMOD_System_Set3DSettings$descriptor() {
@@ -8607,7 +12113,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DSettings(FMOD_SYSTEM *system, float dopplerscale, float distancefactor,
      * float rolloffscale) }
      */
@@ -8616,7 +12124,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DSettings(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DSettings(FMOD_SYSTEM *system,
      * float dopplerscale, float distancefactor, float rolloffscale) }
      */
     public static MemorySegment FMOD_System_Set3DSettings$address() {
@@ -8624,6 +12134,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DSettings(FMOD_SYSTEM *system, float
      * dopplerscale, float distancefactor, float rolloffscale) }
      */
@@ -8660,7 +12172,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DSettings(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DSettings(FMOD_SYSTEM
      * *system, float *dopplerscale, float *distancefactor, float *rolloffscale) }
      */
     public static FunctionDescriptor FMOD_System_Get3DSettings$descriptor() {
@@ -8668,7 +12182,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Get3DSettings(FMOD_SYSTEM *system, float *dopplerscale, float *distancefactor,
      * float *rolloffscale) }
      */
@@ -8677,7 +12193,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DSettings(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DSettings(FMOD_SYSTEM *system,
      * float *dopplerscale, float *distancefactor, float *rolloffscale) }
      */
     public static MemorySegment FMOD_System_Get3DSettings$address() {
@@ -8685,6 +12203,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DSettings(FMOD_SYSTEM *system, float
      * *dopplerscale, float *distancefactor, float *rolloffscale) }
      */
@@ -8720,7 +12240,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DNumListeners(FMOD_SYSTEM *system, int numlisteners) }
      */
     public static FunctionDescriptor FMOD_System_Set3DNumListeners$descriptor() {
@@ -8728,7 +12250,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DNumListeners(FMOD_SYSTEM *system, int numlisteners) }
      */
     public static MethodHandle FMOD_System_Set3DNumListeners$handle() {
@@ -8736,7 +12260,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DNumListeners(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DNumListeners(FMOD_SYSTEM
      * *system, int numlisteners) }
      */
     public static MemorySegment FMOD_System_Set3DNumListeners$address() {
@@ -8744,6 +12270,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DNumListeners(FMOD_SYSTEM *system, int
      * numlisteners) }
      */
@@ -8770,7 +12298,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Get3DNumListeners(FMOD_SYSTEM *system, int *numlisteners) }
      */
     public static FunctionDescriptor FMOD_System_Get3DNumListeners$descriptor() {
@@ -8778,7 +12308,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Get3DNumListeners(FMOD_SYSTEM *system, int *numlisteners) }
      */
     public static MethodHandle FMOD_System_Get3DNumListeners$handle() {
@@ -8786,7 +12318,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DNumListeners(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DNumListeners(FMOD_SYSTEM
      * *system, int *numlisteners) }
      */
     public static MemorySegment FMOD_System_Get3DNumListeners$address() {
@@ -8794,6 +12328,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DNumListeners(FMOD_SYSTEM *system, int
      * *numlisteners) }
      */
@@ -8828,7 +12364,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DListenerAttributes(FMOD_SYSTEM *system, int listener, const FMOD_VECTOR
      * *pos, const FMOD_VECTOR *vel, const FMOD_VECTOR *forward, const FMOD_VECTOR *up) }
      */
@@ -8837,7 +12375,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DListenerAttributes(FMOD_SYSTEM *system, int listener, const FMOD_VECTOR
      * *pos, const FMOD_VECTOR *vel, const FMOD_VECTOR *forward, const FMOD_VECTOR *up) }
      */
@@ -8846,7 +12386,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DListenerAttributes(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DListenerAttributes(FMOD_SYSTEM
      * *system, int listener, const FMOD_VECTOR *pos, const FMOD_VECTOR *vel, const FMOD_VECTOR
      * *forward, const FMOD_VECTOR *up) }
      */
@@ -8855,6 +12397,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DListenerAttributes(FMOD_SYSTEM *system, int
      * listener, const FMOD_VECTOR *pos, const FMOD_VECTOR *vel, const FMOD_VECTOR *forward, const
      * FMOD_VECTOR *up) }
@@ -8902,7 +12446,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Get3DListenerAttributes(FMOD_SYSTEM *system, int listener, FMOD_VECTOR *pos,
      * FMOD_VECTOR *vel, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
@@ -8911,7 +12457,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Get3DListenerAttributes(FMOD_SYSTEM *system, int listener, FMOD_VECTOR *pos,
      * FMOD_VECTOR *vel, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
@@ -8920,7 +12468,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DListenerAttributes(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DListenerAttributes(FMOD_SYSTEM
      * *system, int listener, FMOD_VECTOR *pos, FMOD_VECTOR *vel, FMOD_VECTOR *forward, FMOD_VECTOR
      * *up) }
      */
@@ -8929,6 +12479,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Get3DListenerAttributes(FMOD_SYSTEM *system, int
      * listener, FMOD_VECTOR *pos, FMOD_VECTOR *vel, FMOD_VECTOR *forward, FMOD_VECTOR *up) }
      */
@@ -8968,7 +12520,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DRolloffCallback(FMOD_SYSTEM *system, FMOD_3D_ROLLOFF_CALLBACK callback) }
      */
     public static FunctionDescriptor FMOD_System_Set3DRolloffCallback$descriptor() {
@@ -8976,7 +12530,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_Set3DRolloffCallback(FMOD_SYSTEM *system, FMOD_3D_ROLLOFF_CALLBACK callback) }
      */
     public static MethodHandle FMOD_System_Set3DRolloffCallback$handle() {
@@ -8984,7 +12540,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DRolloffCallback(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DRolloffCallback(FMOD_SYSTEM
      * *system, FMOD_3D_ROLLOFF_CALLBACK callback) }
      */
     public static MemorySegment FMOD_System_Set3DRolloffCallback$address() {
@@ -8992,6 +12550,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_Set3DRolloffCallback(FMOD_SYSTEM *system,
      * FMOD_3D_ROLLOFF_CALLBACK callback) }
      */
@@ -9018,7 +12578,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_MixerSuspend$descriptor() {
@@ -9026,7 +12588,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_MixerSuspend(FMOD_SYSTEM *system) }
      */
     public static MethodHandle FMOD_System_MixerSuspend$handle() {
@@ -9034,13 +12598,19 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM *system) }
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM *system) }
      */
     public static MemorySegment FMOD_System_MixerSuspend$address() {
         return FMOD_System_MixerSuspend.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerSuspend(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_MixerSuspend(MemorySegment system) {
         var mh$ = FMOD_System_MixerSuspend.HANDLE;
         try {
@@ -9063,7 +12633,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_MixerResume$descriptor() {
@@ -9071,7 +12643,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_MixerResume(FMOD_SYSTEM *system) }
      */
     public static MethodHandle FMOD_System_MixerResume$handle() {
@@ -9079,13 +12653,19 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM *system) }
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM *system) }
      */
     public static MemorySegment FMOD_System_MixerResume$address() {
         return FMOD_System_MixerResume.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_MixerResume(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_MixerResume(MemorySegment system) {
         var mh$ = FMOD_System_MixerResume.HANDLE;
         try {
@@ -9115,7 +12695,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDefaultMixMatrix(FMOD_SYSTEM *system, FMOD_SPEAKERMODE sourcespeakermode,
      * FMOD_SPEAKERMODE targetspeakermode, float *matrix, int matrixhop) }
      */
@@ -9124,7 +12706,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDefaultMixMatrix(FMOD_SYSTEM *system, FMOD_SPEAKERMODE sourcespeakermode,
      * FMOD_SPEAKERMODE targetspeakermode, float *matrix, int matrixhop) }
      */
@@ -9133,7 +12717,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDefaultMixMatrix(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDefaultMixMatrix(FMOD_SYSTEM
      * *system, FMOD_SPEAKERMODE sourcespeakermode, FMOD_SPEAKERMODE targetspeakermode, float
      * *matrix, int matrixhop) }
      */
@@ -9142,6 +12728,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDefaultMixMatrix(FMOD_SYSTEM *system,
      * FMOD_SPEAKERMODE sourcespeakermode, FMOD_SPEAKERMODE targetspeakermode, float *matrix, int
      * matrixhop) }
@@ -9183,7 +12771,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSpeakerModeChannels(FMOD_SYSTEM *system, FMOD_SPEAKERMODE mode, int *channels)
      * }
      */
@@ -9192,7 +12782,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetSpeakerModeChannels(FMOD_SYSTEM *system, FMOD_SPEAKERMODE mode, int *channels)
      * }
      */
@@ -9201,7 +12793,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerModeChannels(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerModeChannels(FMOD_SYSTEM
      * *system, FMOD_SPEAKERMODE mode, int *channels) }
      */
     public static MemorySegment FMOD_System_GetSpeakerModeChannels$address() {
@@ -9209,6 +12803,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetSpeakerModeChannels(FMOD_SYSTEM *system,
      * FMOD_SPEAKERMODE mode, int *channels) }
      */
@@ -9236,7 +12832,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM
      * *system, unsigned int *version, unsigned int *buildnumber) }
      */
     public static FunctionDescriptor FMOD_System_GetVersion$descriptor() {
@@ -9244,7 +12842,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM
      * *system, unsigned int *version, unsigned int *buildnumber) }
      */
     public static MethodHandle FMOD_System_GetVersion$handle() {
@@ -9252,7 +12852,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM *system,
      * unsigned int *version, unsigned int *buildnumber) }
      */
     public static MemorySegment FMOD_System_GetVersion$address() {
@@ -9260,6 +12862,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetVersion(FMOD_SYSTEM *system, unsigned int
      * *version, unsigned int *buildnumber) }
      */
@@ -9287,7 +12891,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetOutputHandle(FMOD_SYSTEM *system, void **handle) }
      */
     public static FunctionDescriptor FMOD_System_GetOutputHandle$descriptor() {
@@ -9295,7 +12901,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetOutputHandle(FMOD_SYSTEM *system, void **handle) }
      */
     public static MethodHandle FMOD_System_GetOutputHandle$handle() {
@@ -9303,7 +12911,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputHandle(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputHandle(FMOD_SYSTEM *system,
      * void **handle) }
      */
     public static MemorySegment FMOD_System_GetOutputHandle$address() {
@@ -9311,6 +12921,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetOutputHandle(FMOD_SYSTEM *system, void
      * **handle) }
      */
@@ -9338,7 +12950,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetChannelsPlaying(FMOD_SYSTEM *system, int *channels, int *realchannels) }
      */
     public static FunctionDescriptor FMOD_System_GetChannelsPlaying$descriptor() {
@@ -9346,7 +12960,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetChannelsPlaying(FMOD_SYSTEM *system, int *channels, int *realchannels) }
      */
     public static MethodHandle FMOD_System_GetChannelsPlaying$handle() {
@@ -9354,7 +12970,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannelsPlaying(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannelsPlaying(FMOD_SYSTEM
      * *system, int *channels, int *realchannels) }
      */
     public static MemorySegment FMOD_System_GetChannelsPlaying$address() {
@@ -9362,6 +12980,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannelsPlaying(FMOD_SYSTEM *system, int
      * *channels, int *realchannels) }
      */
@@ -9388,7 +13008,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetCPUUsage(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetCPUUsage(FMOD_SYSTEM
      * *system, FMOD_CPU_USAGE *usage) }
      */
     public static FunctionDescriptor FMOD_System_GetCPUUsage$descriptor() {
@@ -9396,7 +13018,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetCPUUsage(FMOD_SYSTEM *system, FMOD_CPU_USAGE *usage) }
      */
     public static MethodHandle FMOD_System_GetCPUUsage$handle() {
@@ -9404,7 +13028,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetCPUUsage(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetCPUUsage(FMOD_SYSTEM *system,
      * FMOD_CPU_USAGE *usage) }
      */
     public static MemorySegment FMOD_System_GetCPUUsage$address() {
@@ -9412,6 +13038,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetCPUUsage(FMOD_SYSTEM *system, FMOD_CPU_USAGE
      * *usage) }
      */
@@ -9442,7 +13070,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetFileUsage(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetFileUsage(FMOD_SYSTEM
      * *system, long long *sampleBytesRead, long long *streamBytesRead, long long *otherBytesRead) }
      */
     public static FunctionDescriptor FMOD_System_GetFileUsage$descriptor() {
@@ -9450,7 +13080,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetFileUsage(FMOD_SYSTEM *system, long long *sampleBytesRead, long long
      * *streamBytesRead, long long *otherBytesRead) }
      */
@@ -9459,7 +13091,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetFileUsage(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetFileUsage(FMOD_SYSTEM *system,
      * long long *sampleBytesRead, long long *streamBytesRead, long long *otherBytesRead) }
      */
     public static MemorySegment FMOD_System_GetFileUsage$address() {
@@ -9467,6 +13101,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetFileUsage(FMOD_SYSTEM *system, long long
      * *sampleBytesRead, long long *streamBytesRead, long long *otherBytesRead) }
      */
@@ -9507,7 +13143,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSound(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSound(FMOD_SYSTEM
      * *system, const char *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND
      * **sound) }
      */
@@ -9516,7 +13154,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateSound(FMOD_SYSTEM *system, const char *name_or_data, FMOD_MODE mode,
      * FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound) }
      */
@@ -9525,7 +13165,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSound(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSound(FMOD_SYSTEM *system,
      * const char *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound)
      * }
      */
@@ -9534,6 +13176,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSound(FMOD_SYSTEM *system, const char
      * *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound) }
      */
@@ -9570,7 +13214,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateStream(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateStream(FMOD_SYSTEM
      * *system, const char *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND
      * **sound) }
      */
@@ -9579,7 +13225,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateStream(FMOD_SYSTEM *system, const char *name_or_data, FMOD_MODE mode,
      * FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound) }
      */
@@ -9588,7 +13236,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateStream(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateStream(FMOD_SYSTEM *system,
      * const char *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound)
      * }
      */
@@ -9597,6 +13247,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateStream(FMOD_SYSTEM *system, const char
      * *name_or_data, FMOD_MODE mode, FMOD_CREATESOUNDEXINFO *exinfo, FMOD_SOUND **sound) }
      */
@@ -9629,7 +13281,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM
      * *system, const FMOD_DSP_DESCRIPTION *description, FMOD_DSP **dsp) }
      */
     public static FunctionDescriptor FMOD_System_CreateDSP$descriptor() {
@@ -9637,7 +13291,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM
      * *system, const FMOD_DSP_DESCRIPTION *description, FMOD_DSP **dsp) }
      */
     public static MethodHandle FMOD_System_CreateDSP$handle() {
@@ -9645,7 +13301,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM *system, const
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM *system, const
      * FMOD_DSP_DESCRIPTION *description, FMOD_DSP **dsp) }
      */
     public static MemorySegment FMOD_System_CreateDSP$address() {
@@ -9653,6 +13311,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSP(FMOD_SYSTEM *system, const
      * FMOD_DSP_DESCRIPTION *description, FMOD_DSP **dsp) }
      */
@@ -9681,7 +13341,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPByType(FMOD_SYSTEM *system, FMOD_DSP_TYPE type, FMOD_DSP **dsp) }
      */
     public static FunctionDescriptor FMOD_System_CreateDSPByType$descriptor() {
@@ -9689,7 +13351,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPByType(FMOD_SYSTEM *system, FMOD_DSP_TYPE type, FMOD_DSP **dsp) }
      */
     public static MethodHandle FMOD_System_CreateDSPByType$handle() {
@@ -9697,7 +13361,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByType(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByType(FMOD_SYSTEM *system,
      * FMOD_DSP_TYPE type, FMOD_DSP **dsp) }
      */
     public static MemorySegment FMOD_System_CreateDSPByType$address() {
@@ -9705,6 +13371,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPByType(FMOD_SYSTEM *system, FMOD_DSP_TYPE
      * type, FMOD_DSP **dsp) }
      */
@@ -9733,7 +13401,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPConnection(FMOD_SYSTEM *system, FMOD_DSPCONNECTION_TYPE type,
      * FMOD_DSPCONNECTION **connection) }
      */
@@ -9742,7 +13412,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateDSPConnection(FMOD_SYSTEM *system, FMOD_DSPCONNECTION_TYPE type,
      * FMOD_DSPCONNECTION **connection) }
      */
@@ -9751,7 +13423,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPConnection(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPConnection(FMOD_SYSTEM
      * *system, FMOD_DSPCONNECTION_TYPE type, FMOD_DSPCONNECTION **connection) }
      */
     public static MemorySegment FMOD_System_CreateDSPConnection$address() {
@@ -9759,6 +13433,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateDSPConnection(FMOD_SYSTEM *system,
      * FMOD_DSPCONNECTION_TYPE type, FMOD_DSPCONNECTION **connection) }
      */
@@ -9787,7 +13463,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateChannelGroup(FMOD_SYSTEM *system, const char *name, FMOD_CHANNELGROUP
      * **channelgroup) }
      */
@@ -9796,7 +13474,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateChannelGroup(FMOD_SYSTEM *system, const char *name, FMOD_CHANNELGROUP
      * **channelgroup) }
      */
@@ -9805,7 +13485,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateChannelGroup(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateChannelGroup(FMOD_SYSTEM
      * *system, const char *name, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static MemorySegment FMOD_System_CreateChannelGroup$address() {
@@ -9813,6 +13495,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateChannelGroup(FMOD_SYSTEM *system, const char
      * *name, FMOD_CHANNELGROUP **channelgroup) }
      */
@@ -9841,7 +13525,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateSoundGroup(FMOD_SYSTEM *system, const char *name, FMOD_SOUNDGROUP
      * **soundgroup) }
      */
@@ -9850,7 +13536,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateSoundGroup(FMOD_SYSTEM *system, const char *name, FMOD_SOUNDGROUP
      * **soundgroup) }
      */
@@ -9859,7 +13547,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSoundGroup(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSoundGroup(FMOD_SYSTEM *system,
      * const char *name, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static MemorySegment FMOD_System_CreateSoundGroup$address() {
@@ -9867,6 +13557,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateSoundGroup(FMOD_SYSTEM *system, const char
      * *name, FMOD_SOUNDGROUP **soundgroup) }
      */
@@ -9893,7 +13585,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateReverb3D(FMOD_SYSTEM *system, FMOD_REVERB3D **reverb) }
      */
     public static FunctionDescriptor FMOD_System_CreateReverb3D$descriptor() {
@@ -9901,7 +13595,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateReverb3D(FMOD_SYSTEM *system, FMOD_REVERB3D **reverb) }
      */
     public static MethodHandle FMOD_System_CreateReverb3D$handle() {
@@ -9909,7 +13605,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateReverb3D(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateReverb3D(FMOD_SYSTEM *system,
      * FMOD_REVERB3D **reverb) }
      */
     public static MemorySegment FMOD_System_CreateReverb3D$address() {
@@ -9917,6 +13615,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateReverb3D(FMOD_SYSTEM *system, FMOD_REVERB3D
      * **reverb) }
      */
@@ -9948,7 +13648,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM
      * *system, FMOD_SOUND *sound, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL
      * **channel) }
      */
@@ -9957,7 +13659,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM
      * *system, FMOD_SOUND *sound, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL
      * **channel) }
      */
@@ -9966,7 +13670,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM *system,
      * FMOD_SOUND *sound, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL **channel)
      * }
      */
@@ -9975,6 +13681,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_PlaySound(FMOD_SYSTEM *system, FMOD_SOUND *sound,
      * FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL **channel) }
      */
@@ -10012,7 +13720,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM
      * *system, FMOD_DSP *dsp, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL
      * **channel) }
      */
@@ -10021,7 +13731,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM
      * *system, FMOD_DSP *dsp, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL
      * **channel) }
      */
@@ -10030,7 +13742,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM *system, FMOD_DSP
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM *system, FMOD_DSP
      * *dsp, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL **channel) }
      */
     public static MemorySegment FMOD_System_PlayDSP$address() {
@@ -10038,6 +13752,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_PlayDSP(FMOD_SYSTEM *system, FMOD_DSP *dsp,
      * FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL paused, FMOD_CHANNEL **channel) }
      */
@@ -10069,7 +13785,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM
      * *system, int channelid, FMOD_CHANNEL **channel) }
      */
     public static FunctionDescriptor FMOD_System_GetChannel$descriptor() {
@@ -10077,7 +13795,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM
      * *system, int channelid, FMOD_CHANNEL **channel) }
      */
     public static MethodHandle FMOD_System_GetChannel$handle() {
@@ -10085,7 +13805,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM *system, int
      * channelid, FMOD_CHANNEL **channel) }
      */
     public static MemorySegment FMOD_System_GetChannel$address() {
@@ -10093,6 +13815,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetChannel(FMOD_SYSTEM *system, int channelid,
      * FMOD_CHANNEL **channel) }
      */
@@ -10121,7 +13845,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPInfoByType(FMOD_SYSTEM *system, FMOD_DSP_TYPE type, const
      * FMOD_DSP_DESCRIPTION **description) }
      */
@@ -10130,7 +13856,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetDSPInfoByType(FMOD_SYSTEM *system, FMOD_DSP_TYPE type, const
      * FMOD_DSP_DESCRIPTION **description) }
      */
@@ -10139,7 +13867,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByType(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByType(FMOD_SYSTEM *system,
      * FMOD_DSP_TYPE type, const FMOD_DSP_DESCRIPTION **description) }
      */
     public static MemorySegment FMOD_System_GetDSPInfoByType$address() {
@@ -10147,6 +13877,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetDSPInfoByType(FMOD_SYSTEM *system,
      * FMOD_DSP_TYPE type, const FMOD_DSP_DESCRIPTION **description) }
      */
@@ -10174,7 +13906,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetMasterChannelGroup(FMOD_SYSTEM *system, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static FunctionDescriptor FMOD_System_GetMasterChannelGroup$descriptor() {
@@ -10182,7 +13916,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetMasterChannelGroup(FMOD_SYSTEM *system, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static MethodHandle FMOD_System_GetMasterChannelGroup$handle() {
@@ -10190,7 +13926,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterChannelGroup(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterChannelGroup(FMOD_SYSTEM
      * *system, FMOD_CHANNELGROUP **channelgroup) }
      */
     public static MemorySegment FMOD_System_GetMasterChannelGroup$address() {
@@ -10198,6 +13936,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterChannelGroup(FMOD_SYSTEM *system,
      * FMOD_CHANNELGROUP **channelgroup) }
      */
@@ -10225,7 +13965,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetMasterSoundGroup(FMOD_SYSTEM *system, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static FunctionDescriptor FMOD_System_GetMasterSoundGroup$descriptor() {
@@ -10233,7 +13975,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetMasterSoundGroup(FMOD_SYSTEM *system, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static MethodHandle FMOD_System_GetMasterSoundGroup$handle() {
@@ -10241,7 +13985,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterSoundGroup(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterSoundGroup(FMOD_SYSTEM
      * *system, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static MemorySegment FMOD_System_GetMasterSoundGroup$address() {
@@ -10249,6 +13995,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetMasterSoundGroup(FMOD_SYSTEM *system,
      * FMOD_SOUNDGROUP **soundgroup) }
      */
@@ -10282,7 +14030,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_AttachChannelGroupToPort(FMOD_SYSTEM *system, FMOD_PORT_TYPE portType,
      * FMOD_PORT_INDEX portIndex, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL passThru) }
      */
@@ -10291,7 +14041,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_AttachChannelGroupToPort(FMOD_SYSTEM *system, FMOD_PORT_TYPE portType,
      * FMOD_PORT_INDEX portIndex, FMOD_CHANNELGROUP *channelgroup, FMOD_BOOL passThru) }
      */
@@ -10300,7 +14052,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_AttachChannelGroupToPort(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_AttachChannelGroupToPort(FMOD_SYSTEM
      * *system, FMOD_PORT_TYPE portType, FMOD_PORT_INDEX portIndex, FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL passThru) }
      */
@@ -10309,6 +14063,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_AttachChannelGroupToPort(FMOD_SYSTEM *system,
      * FMOD_PORT_TYPE portType, FMOD_PORT_INDEX portIndex, FMOD_CHANNELGROUP *channelgroup,
      * FMOD_BOOL passThru) }
@@ -10347,7 +14103,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_DetachChannelGroupFromPort(FMOD_SYSTEM *system, FMOD_CHANNELGROUP *channelgroup)
      * }
      */
@@ -10356,7 +14114,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_DetachChannelGroupFromPort(FMOD_SYSTEM *system, FMOD_CHANNELGROUP *channelgroup)
      * }
      */
@@ -10365,7 +14125,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_DetachChannelGroupFromPort(FMOD_SYSTEM *system, FMOD_CHANNELGROUP *channelgroup)
      * }
      */
@@ -10374,6 +14136,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_DetachChannelGroupFromPort(FMOD_SYSTEM *system,
      * FMOD_CHANNELGROUP *channelgroup) }
      */
@@ -10402,7 +14166,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetReverbProperties(FMOD_SYSTEM *system, int instance, const
      * FMOD_REVERB_PROPERTIES *prop) }
      */
@@ -10411,7 +14177,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetReverbProperties(FMOD_SYSTEM *system, int instance, const
      * FMOD_REVERB_PROPERTIES *prop) }
      */
@@ -10420,7 +14188,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetReverbProperties(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetReverbProperties(FMOD_SYSTEM
      * *system, int instance, const FMOD_REVERB_PROPERTIES *prop) }
      */
     public static MemorySegment FMOD_System_SetReverbProperties$address() {
@@ -10428,6 +14198,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetReverbProperties(FMOD_SYSTEM *system, int
      * instance, const FMOD_REVERB_PROPERTIES *prop) }
      */
@@ -10456,7 +14228,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetReverbProperties(FMOD_SYSTEM *system, int instance, FMOD_REVERB_PROPERTIES
      * *prop) }
      */
@@ -10465,7 +14239,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetReverbProperties(FMOD_SYSTEM *system, int instance, FMOD_REVERB_PROPERTIES
      * *prop) }
      */
@@ -10474,7 +14250,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetReverbProperties(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetReverbProperties(FMOD_SYSTEM
      * *system, int instance, FMOD_REVERB_PROPERTIES *prop) }
      */
     public static MemorySegment FMOD_System_GetReverbProperties$address() {
@@ -10482,6 +14260,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetReverbProperties(FMOD_SYSTEM *system, int
      * instance, FMOD_REVERB_PROPERTIES *prop) }
      */
@@ -10508,7 +14288,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_LockDSP$descriptor() {
@@ -10516,19 +14298,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM
      * *system) }
      */
     public static MethodHandle FMOD_System_LockDSP$handle() {
         return FMOD_System_LockDSP.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM *system) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM *system) }
+     */
     public static MemorySegment FMOD_System_LockDSP$address() {
         return FMOD_System_LockDSP.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LockDSP(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_LockDSP(MemorySegment system) {
         var mh$ = FMOD_System_LockDSP.HANDLE;
         try {
@@ -10551,7 +14343,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM
      * *system) }
      */
     public static FunctionDescriptor FMOD_System_UnlockDSP$descriptor() {
@@ -10559,19 +14353,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM
      * *system) }
      */
     public static MethodHandle FMOD_System_UnlockDSP$handle() {
         return FMOD_System_UnlockDSP.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM *system) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM *system) }
+     */
     public static MemorySegment FMOD_System_UnlockDSP$address() {
         return FMOD_System_UnlockDSP.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM *system) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_UnlockDSP(FMOD_SYSTEM *system) }
+     */
     public static int FMOD_System_UnlockDSP(MemorySegment system) {
         var mh$ = FMOD_System_UnlockDSP.HANDLE;
         try {
@@ -10596,7 +14400,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordNumDrivers(FMOD_SYSTEM *system, int *numdrivers, int *numconnected) }
      */
     public static FunctionDescriptor FMOD_System_GetRecordNumDrivers$descriptor() {
@@ -10604,7 +14410,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordNumDrivers(FMOD_SYSTEM *system, int *numdrivers, int *numconnected) }
      */
     public static MethodHandle FMOD_System_GetRecordNumDrivers$handle() {
@@ -10612,7 +14420,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordNumDrivers(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordNumDrivers(FMOD_SYSTEM
      * *system, int *numdrivers, int *numconnected) }
      */
     public static MemorySegment FMOD_System_GetRecordNumDrivers$address() {
@@ -10620,6 +14430,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordNumDrivers(FMOD_SYSTEM *system, int
      * *numdrivers, int *numconnected) }
      */
@@ -10657,7 +14469,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordDriverInfo(FMOD_SYSTEM *system, int id, char *name, int namelen,
      * FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels,
      * FMOD_DRIVER_STATE *state) }
@@ -10667,7 +14481,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordDriverInfo(FMOD_SYSTEM *system, int id, char *name, int namelen,
      * FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int *speakermodechannels,
      * FMOD_DRIVER_STATE *state) }
@@ -10677,7 +14493,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordDriverInfo(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordDriverInfo(FMOD_SYSTEM
      * *system, int id, char *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE
      * *speakermode, int *speakermodechannels, FMOD_DRIVER_STATE *state) }
      */
@@ -10686,6 +14504,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordDriverInfo(FMOD_SYSTEM *system, int id,
      * char *name, int namelen, FMOD_GUID *guid, int *systemrate, FMOD_SPEAKERMODE *speakermode, int
      * *speakermodechannels, FMOD_DRIVER_STATE *state) }
@@ -10743,7 +14563,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordPosition(FMOD_SYSTEM *system, int id, unsigned int *position) }
      */
     public static FunctionDescriptor FMOD_System_GetRecordPosition$descriptor() {
@@ -10751,7 +14573,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetRecordPosition(FMOD_SYSTEM *system, int id, unsigned int *position) }
      */
     public static MethodHandle FMOD_System_GetRecordPosition$handle() {
@@ -10759,7 +14583,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordPosition(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordPosition(FMOD_SYSTEM
      * *system, int id, unsigned int *position) }
      */
     public static MemorySegment FMOD_System_GetRecordPosition$address() {
@@ -10767,6 +14593,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetRecordPosition(FMOD_SYSTEM *system, int id,
      * unsigned int *position) }
      */
@@ -10798,7 +14626,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStart(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStart(FMOD_SYSTEM
      * *system, int id, FMOD_SOUND *sound, FMOD_BOOL loop) }
      */
     public static FunctionDescriptor FMOD_System_RecordStart$descriptor() {
@@ -10806,7 +14636,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_RecordStart(FMOD_SYSTEM *system, int id, FMOD_SOUND *sound, FMOD_BOOL loop) }
      */
     public static MethodHandle FMOD_System_RecordStart$handle() {
@@ -10814,7 +14646,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStart(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStart(FMOD_SYSTEM *system, int
      * id, FMOD_SOUND *sound, FMOD_BOOL loop) }
      */
     public static MemorySegment FMOD_System_RecordStart$address() {
@@ -10822,6 +14656,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStart(FMOD_SYSTEM *system, int id,
      * FMOD_SOUND *sound, FMOD_BOOL loop) }
      */
@@ -10848,7 +14684,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM
      * *system, int id) }
      */
     public static FunctionDescriptor FMOD_System_RecordStop$descriptor() {
@@ -10856,7 +14694,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM
      * *system, int id) }
      */
     public static MethodHandle FMOD_System_RecordStop$handle() {
@@ -10864,14 +14704,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM *system, int
      * id) }
      */
     public static MemorySegment FMOD_System_RecordStop$address() {
         return FMOD_System_RecordStop.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM *system, int id) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_RecordStop(FMOD_SYSTEM *system, int id) }
+     */
     public static int FMOD_System_RecordStop(MemorySegment system, int id) {
         var mh$ = FMOD_System_RecordStop.HANDLE;
         try {
@@ -10895,7 +14741,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_IsRecording(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_IsRecording(FMOD_SYSTEM
      * *system, int id, FMOD_BOOL *recording) }
      */
     public static FunctionDescriptor FMOD_System_IsRecording$descriptor() {
@@ -10903,7 +14751,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_IsRecording(FMOD_SYSTEM *system, int id, FMOD_BOOL *recording) }
      */
     public static MethodHandle FMOD_System_IsRecording$handle() {
@@ -10911,7 +14761,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_IsRecording(FMOD_SYSTEM *system, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_IsRecording(FMOD_SYSTEM *system, int
      * id, FMOD_BOOL *recording) }
      */
     public static MemorySegment FMOD_System_IsRecording$address() {
@@ -10919,6 +14771,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_IsRecording(FMOD_SYSTEM *system, int id, FMOD_BOOL
      * *recording) }
      */
@@ -10950,7 +14804,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateGeometry(FMOD_SYSTEM *system, int maxpolygons, int maxvertices,
      * FMOD_GEOMETRY **geometry) }
      */
@@ -10959,7 +14815,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_CreateGeometry(FMOD_SYSTEM *system, int maxpolygons, int maxvertices,
      * FMOD_GEOMETRY **geometry) }
      */
@@ -10968,7 +14826,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_CreateGeometry(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateGeometry(FMOD_SYSTEM *system,
      * int maxpolygons, int maxvertices, FMOD_GEOMETRY **geometry) }
      */
     public static MemorySegment FMOD_System_CreateGeometry$address() {
@@ -10976,6 +14836,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_CreateGeometry(FMOD_SYSTEM *system, int
      * maxpolygons, int maxvertices, FMOD_GEOMETRY **geometry) }
      */
@@ -11004,7 +14866,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetGeometrySettings(FMOD_SYSTEM *system, float maxworldsize) }
      */
     public static FunctionDescriptor FMOD_System_SetGeometrySettings$descriptor() {
@@ -11012,7 +14876,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetGeometrySettings(FMOD_SYSTEM *system, float maxworldsize) }
      */
     public static MethodHandle FMOD_System_SetGeometrySettings$handle() {
@@ -11020,7 +14886,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetGeometrySettings(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetGeometrySettings(FMOD_SYSTEM
      * *system, float maxworldsize) }
      */
     public static MemorySegment FMOD_System_SetGeometrySettings$address() {
@@ -11028,6 +14896,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetGeometrySettings(FMOD_SYSTEM *system, float
      * maxworldsize) }
      */
@@ -11054,7 +14924,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetGeometrySettings(FMOD_SYSTEM *system, float *maxworldsize) }
      */
     public static FunctionDescriptor FMOD_System_GetGeometrySettings$descriptor() {
@@ -11062,7 +14934,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetGeometrySettings(FMOD_SYSTEM *system, float *maxworldsize) }
      */
     public static MethodHandle FMOD_System_GetGeometrySettings$handle() {
@@ -11070,7 +14944,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometrySettings(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometrySettings(FMOD_SYSTEM
      * *system, float *maxworldsize) }
      */
     public static MemorySegment FMOD_System_GetGeometrySettings$address() {
@@ -11078,6 +14954,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometrySettings(FMOD_SYSTEM *system, float
      * *maxworldsize) }
      */
@@ -11109,7 +14987,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_LoadGeometry(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadGeometry(FMOD_SYSTEM
      * *system, const void *data, int datasize, FMOD_GEOMETRY **geometry) }
      */
     public static FunctionDescriptor FMOD_System_LoadGeometry$descriptor() {
@@ -11117,7 +14997,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_LoadGeometry(FMOD_SYSTEM *system, const void *data, int datasize, FMOD_GEOMETRY
      * **geometry) }
      */
@@ -11126,7 +15008,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_LoadGeometry(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadGeometry(FMOD_SYSTEM *system,
      * const void *data, int datasize, FMOD_GEOMETRY **geometry) }
      */
     public static MemorySegment FMOD_System_LoadGeometry$address() {
@@ -11134,6 +15018,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_LoadGeometry(FMOD_SYSTEM *system, const void
      * *data, int datasize, FMOD_GEOMETRY **geometry) }
      */
@@ -11167,7 +15053,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetGeometryOcclusion(FMOD_SYSTEM *system, const FMOD_VECTOR *listener, const
      * FMOD_VECTOR *source, float *direct, float *reverb) }
      */
@@ -11176,7 +15064,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetGeometryOcclusion(FMOD_SYSTEM *system, const FMOD_VECTOR *listener, const
      * FMOD_VECTOR *source, float *direct, float *reverb) }
      */
@@ -11185,7 +15075,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometryOcclusion(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometryOcclusion(FMOD_SYSTEM
      * *system, const FMOD_VECTOR *listener, const FMOD_VECTOR *source, float *direct, float
      * *reverb) }
      */
@@ -11194,6 +15086,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetGeometryOcclusion(FMOD_SYSTEM *system, const
      * FMOD_VECTOR *listener, const FMOD_VECTOR *source, float *direct, float *reverb) }
      */
@@ -11231,7 +15125,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetNetworkProxy(FMOD_SYSTEM *system, const char *proxy) }
      */
     public static FunctionDescriptor FMOD_System_SetNetworkProxy$descriptor() {
@@ -11239,7 +15135,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetNetworkProxy(FMOD_SYSTEM *system, const char *proxy) }
      */
     public static MethodHandle FMOD_System_SetNetworkProxy$handle() {
@@ -11247,7 +15145,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkProxy(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkProxy(FMOD_SYSTEM *system,
      * const char *proxy) }
      */
     public static MemorySegment FMOD_System_SetNetworkProxy$address() {
@@ -11255,6 +15155,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkProxy(FMOD_SYSTEM *system, const char
      * *proxy) }
      */
@@ -11282,7 +15184,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNetworkProxy(FMOD_SYSTEM *system, char *proxy, int proxylen) }
      */
     public static FunctionDescriptor FMOD_System_GetNetworkProxy$descriptor() {
@@ -11290,7 +15194,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNetworkProxy(FMOD_SYSTEM *system, char *proxy, int proxylen) }
      */
     public static MethodHandle FMOD_System_GetNetworkProxy$handle() {
@@ -11298,7 +15204,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkProxy(FMOD_SYSTEM *system,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkProxy(FMOD_SYSTEM *system,
      * char *proxy, int proxylen) }
      */
     public static MemorySegment FMOD_System_GetNetworkProxy$address() {
@@ -11306,6 +15214,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkProxy(FMOD_SYSTEM *system, char *proxy,
      * int proxylen) }
      */
@@ -11333,7 +15243,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetNetworkTimeout(FMOD_SYSTEM *system, int timeout) }
      */
     public static FunctionDescriptor FMOD_System_SetNetworkTimeout$descriptor() {
@@ -11341,7 +15253,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetNetworkTimeout(FMOD_SYSTEM *system, int timeout) }
      */
     public static MethodHandle FMOD_System_SetNetworkTimeout$handle() {
@@ -11349,7 +15263,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkTimeout(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkTimeout(FMOD_SYSTEM
      * *system, int timeout) }
      */
     public static MemorySegment FMOD_System_SetNetworkTimeout$address() {
@@ -11357,6 +15273,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetNetworkTimeout(FMOD_SYSTEM *system, int
      * timeout) }
      */
@@ -11383,7 +15301,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNetworkTimeout(FMOD_SYSTEM *system, int *timeout) }
      */
     public static FunctionDescriptor FMOD_System_GetNetworkTimeout$descriptor() {
@@ -11391,7 +15311,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetNetworkTimeout(FMOD_SYSTEM *system, int *timeout) }
      */
     public static MethodHandle FMOD_System_GetNetworkTimeout$handle() {
@@ -11399,7 +15321,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkTimeout(FMOD_SYSTEM
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkTimeout(FMOD_SYSTEM
      * *system, int *timeout) }
      */
     public static MemorySegment FMOD_System_GetNetworkTimeout$address() {
@@ -11407,6 +15331,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetNetworkTimeout(FMOD_SYSTEM *system, int
      * *timeout) }
      */
@@ -11432,7 +15358,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetUserData(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetUserData(FMOD_SYSTEM
      * *system, void *userdata) }
      */
     public static FunctionDescriptor FMOD_System_SetUserData$descriptor() {
@@ -11440,7 +15368,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_SetUserData(FMOD_SYSTEM *system, void *userdata) }
      */
     public static MethodHandle FMOD_System_SetUserData$handle() {
@@ -11448,7 +15378,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_SetUserData(FMOD_SYSTEM *system, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_SetUserData(FMOD_SYSTEM *system, void
      * *userdata) }
      */
     public static MemorySegment FMOD_System_SetUserData$address() {
@@ -11456,6 +15388,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_SetUserData(FMOD_SYSTEM *system, void *userdata) }
      */
     public static int FMOD_System_SetUserData(MemorySegment system, MemorySegment userdata) {
@@ -11480,7 +15414,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetUserData(FMOD_SYSTEM
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetUserData(FMOD_SYSTEM
      * *system, void **userdata) }
      */
     public static FunctionDescriptor FMOD_System_GetUserData$descriptor() {
@@ -11488,7 +15424,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_System_GetUserData(FMOD_SYSTEM *system, void **userdata) }
      */
     public static MethodHandle FMOD_System_GetUserData$handle() {
@@ -11496,7 +15434,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_System_GetUserData(FMOD_SYSTEM *system, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_System_GetUserData(FMOD_SYSTEM *system, void
      * **userdata) }
      */
     public static MemorySegment FMOD_System_GetUserData$address() {
@@ -11504,6 +15444,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_System_GetUserData(FMOD_SYSTEM *system, void **userdata)
      * }
      */
@@ -11529,7 +15471,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound)
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound)
      * }
      */
     public static FunctionDescriptor FMOD_Sound_Release$descriptor() {
@@ -11537,19 +15481,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND
      * *sound) }
      */
     public static MethodHandle FMOD_Sound_Release$handle() {
         return FMOD_Sound_Release.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound) }
+     */
     public static MemorySegment FMOD_Sound_Release$address() {
         return FMOD_Sound_Release.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Release(FMOD_SOUND *sound) }
+     */
     public static int FMOD_Sound_Release(MemorySegment sound) {
         var mh$ = FMOD_Sound_Release.HANDLE;
         try {
@@ -11572,7 +15526,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSystemObject(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSystemObject(FMOD_SOUND
      * *sound, FMOD_SYSTEM **system) }
      */
     public static FunctionDescriptor FMOD_Sound_GetSystemObject$descriptor() {
@@ -11580,7 +15536,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSystemObject(FMOD_SOUND *sound, FMOD_SYSTEM **system) }
      */
     public static MethodHandle FMOD_Sound_GetSystemObject$handle() {
@@ -11588,7 +15546,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSystemObject(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSystemObject(FMOD_SOUND *sound,
      * FMOD_SYSTEM **system) }
      */
     public static MemorySegment FMOD_Sound_GetSystemObject$address() {
@@ -11596,6 +15556,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSystemObject(FMOD_SOUND *sound, FMOD_SYSTEM
      * **system) }
      */
@@ -11629,7 +15591,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound,
      * unsigned int offset, unsigned int length, void **ptr1, void **ptr2, unsigned int *len1,
      * unsigned int *len2) }
      */
@@ -11638,7 +15602,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound,
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound,
      * unsigned int offset, unsigned int length, void **ptr1, void **ptr2, unsigned int *len1,
      * unsigned int *len2) }
      */
@@ -11647,7 +15613,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound, unsigned int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound, unsigned int
      * offset, unsigned int length, void **ptr1, void **ptr2, unsigned int *len1, unsigned int
      * *len2) }
      */
@@ -11656,6 +15624,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Lock(FMOD_SOUND *sound, unsigned int offset,
      * unsigned int length, void **ptr1, void **ptr2, unsigned int *len1, unsigned int *len2) }
      */
@@ -11694,7 +15664,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND *sound,
      * void *ptr1, void *ptr2, unsigned int len1, unsigned int len2) }
      */
     public static FunctionDescriptor FMOD_Sound_Unlock$descriptor() {
@@ -11702,7 +15674,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND
      * *sound, void *ptr1, void *ptr2, unsigned int len1, unsigned int len2) }
      */
     public static MethodHandle FMOD_Sound_Unlock$handle() {
@@ -11710,7 +15684,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND *sound, void *ptr1,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND *sound, void *ptr1,
      * void *ptr2, unsigned int len1, unsigned int len2) }
      */
     public static MemorySegment FMOD_Sound_Unlock$address() {
@@ -11718,6 +15694,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Unlock(FMOD_SOUND *sound, void *ptr1, void *ptr2,
      * unsigned int len1, unsigned int len2) }
      */
@@ -11745,7 +15723,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND
      * *sound, float frequency, int priority) }
      */
     public static FunctionDescriptor FMOD_Sound_SetDefaults$descriptor() {
@@ -11753,7 +15733,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND
      * *sound, float frequency, int priority) }
      */
     public static MethodHandle FMOD_Sound_SetDefaults$handle() {
@@ -11761,7 +15743,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND *sound, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND *sound, float
      * frequency, int priority) }
      */
     public static MemorySegment FMOD_Sound_SetDefaults$address() {
@@ -11769,6 +15753,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetDefaults(FMOD_SOUND *sound, float frequency, int
      * priority) }
      */
@@ -11795,7 +15781,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND
      * *sound, float *frequency, int *priority) }
      */
     public static FunctionDescriptor FMOD_Sound_GetDefaults$descriptor() {
@@ -11803,7 +15791,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND
      * *sound, float *frequency, int *priority) }
      */
     public static MethodHandle FMOD_Sound_GetDefaults$handle() {
@@ -11811,7 +15801,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND *sound, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND *sound, float
      * *frequency, int *priority) }
      */
     public static MemorySegment FMOD_Sound_GetDefaults$address() {
@@ -11819,6 +15811,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetDefaults(FMOD_SOUND *sound, float *frequency,
      * int *priority) }
      */
@@ -11847,7 +15841,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DMinMaxDistance(FMOD_SOUND *sound, float min, float max) }
      */
     public static FunctionDescriptor FMOD_Sound_Set3DMinMaxDistance$descriptor() {
@@ -11855,7 +15851,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DMinMaxDistance(FMOD_SOUND *sound, float min, float max) }
      */
     public static MethodHandle FMOD_Sound_Set3DMinMaxDistance$handle() {
@@ -11863,7 +15861,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DMinMaxDistance(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DMinMaxDistance(FMOD_SOUND *sound,
      * float min, float max) }
      */
     public static MemorySegment FMOD_Sound_Set3DMinMaxDistance$address() {
@@ -11871,6 +15871,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DMinMaxDistance(FMOD_SOUND *sound, float min,
      * float max) }
      */
@@ -11898,7 +15900,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DMinMaxDistance(FMOD_SOUND *sound, float *min, float *max) }
      */
     public static FunctionDescriptor FMOD_Sound_Get3DMinMaxDistance$descriptor() {
@@ -11906,7 +15910,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DMinMaxDistance(FMOD_SOUND *sound, float *min, float *max) }
      */
     public static MethodHandle FMOD_Sound_Get3DMinMaxDistance$handle() {
@@ -11914,7 +15920,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DMinMaxDistance(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DMinMaxDistance(FMOD_SOUND *sound,
      * float *min, float *max) }
      */
     public static MemorySegment FMOD_Sound_Get3DMinMaxDistance$address() {
@@ -11922,6 +15930,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DMinMaxDistance(FMOD_SOUND *sound, float *min,
      * float *max) }
      */
@@ -11954,7 +15964,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DConeSettings(FMOD_SOUND *sound, float insideconeangle, float
      * outsideconeangle, float outsidevolume) }
      */
@@ -11963,7 +15975,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DConeSettings(FMOD_SOUND *sound, float insideconeangle, float
      * outsideconeangle, float outsidevolume) }
      */
@@ -11972,7 +15986,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DConeSettings(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DConeSettings(FMOD_SOUND *sound,
      * float insideconeangle, float outsideconeangle, float outsidevolume) }
      */
     public static MemorySegment FMOD_Sound_Set3DConeSettings$address() {
@@ -11980,6 +15996,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DConeSettings(FMOD_SOUND *sound, float
      * insideconeangle, float outsideconeangle, float outsidevolume) }
      */
@@ -12020,7 +16038,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DConeSettings(FMOD_SOUND *sound, float *insideconeangle, float
      * *outsideconeangle, float *outsidevolume) }
      */
@@ -12029,7 +16049,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DConeSettings(FMOD_SOUND *sound, float *insideconeangle, float
      * *outsideconeangle, float *outsidevolume) }
      */
@@ -12038,7 +16060,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DConeSettings(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DConeSettings(FMOD_SOUND *sound,
      * float *insideconeangle, float *outsideconeangle, float *outsidevolume) }
      */
     public static MemorySegment FMOD_Sound_Get3DConeSettings$address() {
@@ -12046,6 +16070,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DConeSettings(FMOD_SOUND *sound, float
      * *insideconeangle, float *outsideconeangle, float *outsidevolume) }
      */
@@ -12082,7 +16108,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR *points, int numpoints) }
      */
     public static FunctionDescriptor FMOD_Sound_Set3DCustomRolloff$descriptor() {
@@ -12090,7 +16118,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Set3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR *points, int numpoints) }
      */
     public static MethodHandle FMOD_Sound_Set3DCustomRolloff$handle() {
@@ -12098,7 +16128,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DCustomRolloff(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DCustomRolloff(FMOD_SOUND *sound,
      * FMOD_VECTOR *points, int numpoints) }
      */
     public static MemorySegment FMOD_Sound_Set3DCustomRolloff$address() {
@@ -12106,6 +16138,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Set3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR
      * *points, int numpoints) }
      */
@@ -12134,7 +16168,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR **points, int *numpoints) }
      */
     public static FunctionDescriptor FMOD_Sound_Get3DCustomRolloff$descriptor() {
@@ -12142,7 +16178,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_Get3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR **points, int *numpoints) }
      */
     public static MethodHandle FMOD_Sound_Get3DCustomRolloff$handle() {
@@ -12150,7 +16188,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DCustomRolloff(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DCustomRolloff(FMOD_SOUND *sound,
      * FMOD_VECTOR **points, int *numpoints) }
      */
     public static MemorySegment FMOD_Sound_Get3DCustomRolloff$address() {
@@ -12158,6 +16198,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_Get3DCustomRolloff(FMOD_SOUND *sound, FMOD_VECTOR
      * **points, int *numpoints) }
      */
@@ -12185,7 +16227,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND
      * *sound, int index, FMOD_SOUND **subsound) }
      */
     public static FunctionDescriptor FMOD_Sound_GetSubSound$descriptor() {
@@ -12193,7 +16237,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND
      * *sound, int index, FMOD_SOUND **subsound) }
      */
     public static MethodHandle FMOD_Sound_GetSubSound$handle() {
@@ -12201,7 +16247,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND *sound, int
      * index, FMOD_SOUND **subsound) }
      */
     public static MemorySegment FMOD_Sound_GetSubSound$address() {
@@ -12209,6 +16257,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSound(FMOD_SOUND *sound, int index,
      * FMOD_SOUND **subsound) }
      */
@@ -12236,7 +16286,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSubSoundParent(FMOD_SOUND *sound, FMOD_SOUND **parentsound) }
      */
     public static FunctionDescriptor FMOD_Sound_GetSubSoundParent$descriptor() {
@@ -12244,7 +16296,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSubSoundParent(FMOD_SOUND *sound, FMOD_SOUND **parentsound) }
      */
     public static MethodHandle FMOD_Sound_GetSubSoundParent$handle() {
@@ -12252,7 +16306,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSoundParent(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSoundParent(FMOD_SOUND *sound,
      * FMOD_SOUND **parentsound) }
      */
     public static MemorySegment FMOD_Sound_GetSubSoundParent$address() {
@@ -12260,6 +16316,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSubSoundParent(FMOD_SOUND *sound, FMOD_SOUND
      * **parentsound) }
      */
@@ -12286,7 +16344,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND *sound,
      * char *name, int namelen) }
      */
     public static FunctionDescriptor FMOD_Sound_GetName$descriptor() {
@@ -12294,7 +16354,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND
      * *sound, char *name, int namelen) }
      */
     public static MethodHandle FMOD_Sound_GetName$handle() {
@@ -12302,7 +16364,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND *sound, char *name,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND *sound, char *name,
      * int namelen) }
      */
     public static MemorySegment FMOD_Sound_GetName$address() {
@@ -12310,6 +16374,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetName(FMOD_SOUND *sound, char *name, int namelen)
      * }
      */
@@ -12336,7 +16402,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND
      * *sound, unsigned int *length, FMOD_TIMEUNIT lengthtype) }
      */
     public static FunctionDescriptor FMOD_Sound_GetLength$descriptor() {
@@ -12344,7 +16412,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND
      * *sound, unsigned int *length, FMOD_TIMEUNIT lengthtype) }
      */
     public static MethodHandle FMOD_Sound_GetLength$handle() {
@@ -12352,7 +16422,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND *sound, unsigned
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND *sound, unsigned
      * int *length, FMOD_TIMEUNIT lengthtype) }
      */
     public static MemorySegment FMOD_Sound_GetLength$address() {
@@ -12360,6 +16432,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLength(FMOD_SOUND *sound, unsigned int *length,
      * FMOD_TIMEUNIT lengthtype) }
      */
@@ -12392,7 +16466,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND
      * *sound, FMOD_SOUND_TYPE *type, FMOD_SOUND_FORMAT *format, int *channels, int *bits) }
      */
     public static FunctionDescriptor FMOD_Sound_GetFormat$descriptor() {
@@ -12400,7 +16476,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND
      * *sound, FMOD_SOUND_TYPE *type, FMOD_SOUND_FORMAT *format, int *channels, int *bits) }
      */
     public static MethodHandle FMOD_Sound_GetFormat$handle() {
@@ -12408,7 +16486,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND *sound,
      * FMOD_SOUND_TYPE *type, FMOD_SOUND_FORMAT *format, int *channels, int *bits) }
      */
     public static MemorySegment FMOD_Sound_GetFormat$address() {
@@ -12416,6 +16496,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetFormat(FMOD_SOUND *sound, FMOD_SOUND_TYPE *type,
      * FMOD_SOUND_FORMAT *format, int *channels, int *bits) }
      */
@@ -12446,7 +16528,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSubSounds(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSubSounds(FMOD_SOUND
      * *sound, int *numsubsounds) }
      */
     public static FunctionDescriptor FMOD_Sound_GetNumSubSounds$descriptor() {
@@ -12454,7 +16538,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetNumSubSounds(FMOD_SOUND *sound, int *numsubsounds) }
      */
     public static MethodHandle FMOD_Sound_GetNumSubSounds$handle() {
@@ -12462,7 +16548,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSubSounds(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSubSounds(FMOD_SOUND *sound, int
      * *numsubsounds) }
      */
     public static MemorySegment FMOD_Sound_GetNumSubSounds$address() {
@@ -12470,6 +16558,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSubSounds(FMOD_SOUND *sound, int
      * *numsubsounds) }
      */
@@ -12496,7 +16586,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND
      * *sound, int *numtags, int *numtagsupdated) }
      */
     public static FunctionDescriptor FMOD_Sound_GetNumTags$descriptor() {
@@ -12504,7 +16596,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND
      * *sound, int *numtags, int *numtagsupdated) }
      */
     public static MethodHandle FMOD_Sound_GetNumTags$handle() {
@@ -12512,7 +16606,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND *sound, int
      * *numtags, int *numtagsupdated) }
      */
     public static MemorySegment FMOD_Sound_GetNumTags$address() {
@@ -12520,6 +16616,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumTags(FMOD_SOUND *sound, int *numtags, int
      * *numtagsupdated) }
      */
@@ -12551,7 +16649,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND *sound,
      * const char *name, int index, FMOD_TAG *tag) }
      */
     public static FunctionDescriptor FMOD_Sound_GetTag$descriptor() {
@@ -12559,7 +16659,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND
      * *sound, const char *name, int index, FMOD_TAG *tag) }
      */
     public static MethodHandle FMOD_Sound_GetTag$handle() {
@@ -12567,7 +16669,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND *sound, const char
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND *sound, const char
      * *name, int index, FMOD_TAG *tag) }
      */
     public static MemorySegment FMOD_Sound_GetTag$address() {
@@ -12575,6 +16679,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetTag(FMOD_SOUND *sound, const char *name, int
      * index, FMOD_TAG *tag) }
      */
@@ -12607,7 +16713,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND
      * *sound, FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving,
      * FMOD_BOOL *diskbusy) }
      */
@@ -12616,7 +16724,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND
      * *sound, FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving,
      * FMOD_BOOL *diskbusy) }
      */
@@ -12625,7 +16735,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND *sound,
      * FMOD_OPENSTATE *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving, FMOD_BOOL
      * *diskbusy) }
      */
@@ -12634,6 +16746,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetOpenState(FMOD_SOUND *sound, FMOD_OPENSTATE
      * *openstate, unsigned int *percentbuffered, FMOD_BOOL *starving, FMOD_BOOL *diskbusy) }
      */
@@ -12675,7 +16789,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND
      * *sound, void *buffer, unsigned int length, unsigned int *read) }
      */
     public static FunctionDescriptor FMOD_Sound_ReadData$descriptor() {
@@ -12683,7 +16799,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND
      * *sound, void *buffer, unsigned int length, unsigned int *read) }
      */
     public static MethodHandle FMOD_Sound_ReadData$handle() {
@@ -12691,7 +16809,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND *sound, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND *sound, void
      * *buffer, unsigned int length, unsigned int *read) }
      */
     public static MemorySegment FMOD_Sound_ReadData$address() {
@@ -12699,6 +16819,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_ReadData(FMOD_SOUND *sound, void *buffer, unsigned
      * int length, unsigned int *read) }
      */
@@ -12725,7 +16847,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND
      * *sound, unsigned int pcm) }
      */
     public static FunctionDescriptor FMOD_Sound_SeekData$descriptor() {
@@ -12733,7 +16857,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND
      * *sound, unsigned int pcm) }
      */
     public static MethodHandle FMOD_Sound_SeekData$handle() {
@@ -12741,14 +16867,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND *sound, unsigned
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND *sound, unsigned
      * int pcm) }
      */
     public static MemorySegment FMOD_Sound_SeekData$address() {
         return FMOD_Sound_SeekData.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND *sound, unsigned int pcm) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SeekData(FMOD_SOUND *sound, unsigned int pcm) }
+     */
     public static int FMOD_Sound_SeekData(MemorySegment sound, int pcm) {
         var mh$ = FMOD_Sound_SeekData.HANDLE;
         try {
@@ -12771,7 +16903,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetSoundGroup(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetSoundGroup(FMOD_SOUND
      * *sound, FMOD_SOUNDGROUP *soundgroup) }
      */
     public static FunctionDescriptor FMOD_Sound_SetSoundGroup$descriptor() {
@@ -12779,7 +16913,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_SetSoundGroup(FMOD_SOUND *sound, FMOD_SOUNDGROUP *soundgroup) }
      */
     public static MethodHandle FMOD_Sound_SetSoundGroup$handle() {
@@ -12787,7 +16923,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetSoundGroup(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetSoundGroup(FMOD_SOUND *sound,
      * FMOD_SOUNDGROUP *soundgroup) }
      */
     public static MemorySegment FMOD_Sound_SetSoundGroup$address() {
@@ -12795,6 +16933,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetSoundGroup(FMOD_SOUND *sound, FMOD_SOUNDGROUP
      * *soundgroup) }
      */
@@ -12820,7 +16960,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSoundGroup(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSoundGroup(FMOD_SOUND
      * *sound, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static FunctionDescriptor FMOD_Sound_GetSoundGroup$descriptor() {
@@ -12828,7 +16970,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSoundGroup(FMOD_SOUND *sound, FMOD_SOUNDGROUP **soundgroup) }
      */
     public static MethodHandle FMOD_Sound_GetSoundGroup$handle() {
@@ -12836,7 +16980,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSoundGroup(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSoundGroup(FMOD_SOUND *sound,
      * FMOD_SOUNDGROUP **soundgroup) }
      */
     public static MemorySegment FMOD_Sound_GetSoundGroup$address() {
@@ -12844,6 +16990,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSoundGroup(FMOD_SOUND *sound, FMOD_SOUNDGROUP
      * **soundgroup) }
      */
@@ -12870,7 +17018,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetNumSyncPoints(FMOD_SOUND *sound, int *numsyncpoints) }
      */
     public static FunctionDescriptor FMOD_Sound_GetNumSyncPoints$descriptor() {
@@ -12878,7 +17028,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetNumSyncPoints(FMOD_SOUND *sound, int *numsyncpoints) }
      */
     public static MethodHandle FMOD_Sound_GetNumSyncPoints$handle() {
@@ -12886,7 +17038,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSyncPoints(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSyncPoints(FMOD_SOUND *sound,
      * int *numsyncpoints) }
      */
     public static MemorySegment FMOD_Sound_GetNumSyncPoints$address() {
@@ -12894,6 +17048,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetNumSyncPoints(FMOD_SOUND *sound, int
      * *numsyncpoints) }
      */
@@ -12921,7 +17077,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND
      * *sound, int index, FMOD_SYNCPOINT **point) }
      */
     public static FunctionDescriptor FMOD_Sound_GetSyncPoint$descriptor() {
@@ -12929,7 +17087,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND
      * *sound, int index, FMOD_SYNCPOINT **point) }
      */
     public static MethodHandle FMOD_Sound_GetSyncPoint$handle() {
@@ -12937,7 +17097,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND *sound, int
      * index, FMOD_SYNCPOINT **point) }
      */
     public static MemorySegment FMOD_Sound_GetSyncPoint$address() {
@@ -12945,6 +17107,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPoint(FMOD_SOUND *sound, int index,
      * FMOD_SYNCPOINT **point) }
      */
@@ -12978,7 +17142,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSyncPointInfo(FMOD_SOUND *sound, FMOD_SYNCPOINT *point, char *name, int
      * namelen, unsigned int *offset, FMOD_TIMEUNIT offsettype) }
      */
@@ -12987,7 +17153,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetSyncPointInfo(FMOD_SOUND *sound, FMOD_SYNCPOINT *point, char *name, int
      * namelen, unsigned int *offset, FMOD_TIMEUNIT offsettype) }
      */
@@ -12996,7 +17164,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPointInfo(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPointInfo(FMOD_SOUND *sound,
      * FMOD_SYNCPOINT *point, char *name, int namelen, unsigned int *offset, FMOD_TIMEUNIT
      * offsettype) }
      */
@@ -13005,6 +17175,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetSyncPointInfo(FMOD_SOUND *sound, FMOD_SYNCPOINT
      * *point, char *name, int namelen, unsigned int *offset, FMOD_TIMEUNIT offsettype) }
      */
@@ -13049,7 +17221,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND
      * *sound, unsigned int offset, FMOD_TIMEUNIT offsettype, const char *name, FMOD_SYNCPOINT
      * **point) }
      */
@@ -13058,7 +17232,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND
      * *sound, unsigned int offset, FMOD_TIMEUNIT offsettype, const char *name, FMOD_SYNCPOINT
      * **point) }
      */
@@ -13067,7 +17243,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND *sound,
      * unsigned int offset, FMOD_TIMEUNIT offsettype, const char *name, FMOD_SYNCPOINT **point) }
      */
     public static MemorySegment FMOD_Sound_AddSyncPoint$address() {
@@ -13075,6 +17253,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_AddSyncPoint(FMOD_SOUND *sound, unsigned int
      * offset, FMOD_TIMEUNIT offsettype, const char *name, FMOD_SYNCPOINT **point) }
      */
@@ -13105,7 +17285,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_DeleteSyncPoint(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_DeleteSyncPoint(FMOD_SOUND
      * *sound, FMOD_SYNCPOINT *point) }
      */
     public static FunctionDescriptor FMOD_Sound_DeleteSyncPoint$descriptor() {
@@ -13113,7 +17295,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_DeleteSyncPoint(FMOD_SOUND *sound, FMOD_SYNCPOINT *point) }
      */
     public static MethodHandle FMOD_Sound_DeleteSyncPoint$handle() {
@@ -13121,7 +17305,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_DeleteSyncPoint(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_DeleteSyncPoint(FMOD_SOUND *sound,
      * FMOD_SYNCPOINT *point) }
      */
     public static MemorySegment FMOD_Sound_DeleteSyncPoint$address() {
@@ -13129,6 +17315,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_DeleteSyncPoint(FMOD_SOUND *sound, FMOD_SYNCPOINT
      * *point) }
      */
@@ -13154,7 +17342,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound,
      * FMOD_MODE mode) }
      */
     public static FunctionDescriptor FMOD_Sound_SetMode$descriptor() {
@@ -13162,7 +17352,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND
      * *sound, FMOD_MODE mode) }
      */
     public static MethodHandle FMOD_Sound_SetMode$handle() {
@@ -13170,14 +17362,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound, FMOD_MODE
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound, FMOD_MODE
      * mode) }
      */
     public static MemorySegment FMOD_Sound_SetMode$address() {
         return FMOD_Sound_SetMode.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound, FMOD_MODE mode) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMode(FMOD_SOUND *sound, FMOD_MODE mode) }
+     */
     public static int FMOD_Sound_SetMode(MemorySegment sound, int mode) {
         var mh$ = FMOD_Sound_SetMode.HANDLE;
         try {
@@ -13200,7 +17398,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound,
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound,
      * FMOD_MODE *mode) }
      */
     public static FunctionDescriptor FMOD_Sound_GetMode$descriptor() {
@@ -13208,7 +17408,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND
      * *sound, FMOD_MODE *mode) }
      */
     public static MethodHandle FMOD_Sound_GetMode$handle() {
@@ -13216,14 +17418,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound, FMOD_MODE
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound, FMOD_MODE
      * *mode) }
      */
     public static MemorySegment FMOD_Sound_GetMode$address() {
         return FMOD_Sound_GetMode.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound, FMOD_MODE *mode) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMode(FMOD_SOUND *sound, FMOD_MODE *mode) }
+     */
     public static int FMOD_Sound_GetMode(MemorySegment sound, MemorySegment mode) {
         var mh$ = FMOD_Sound_GetMode.HANDLE;
         try {
@@ -13246,7 +17454,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND
      * *sound, int loopcount) }
      */
     public static FunctionDescriptor FMOD_Sound_SetLoopCount$descriptor() {
@@ -13254,7 +17464,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND
      * *sound, int loopcount) }
      */
     public static MethodHandle FMOD_Sound_SetLoopCount$handle() {
@@ -13262,7 +17474,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND *sound, int
      * loopcount) }
      */
     public static MemorySegment FMOD_Sound_SetLoopCount$address() {
@@ -13270,6 +17484,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopCount(FMOD_SOUND *sound, int loopcount) }
      */
     public static int FMOD_Sound_SetLoopCount(MemorySegment sound, int loopcount) {
@@ -13294,7 +17510,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND
      * *sound, int *loopcount) }
      */
     public static FunctionDescriptor FMOD_Sound_GetLoopCount$descriptor() {
@@ -13302,7 +17520,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND
      * *sound, int *loopcount) }
      */
     public static MethodHandle FMOD_Sound_GetLoopCount$handle() {
@@ -13310,7 +17530,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND *sound, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND *sound, int
      * *loopcount) }
      */
     public static MemorySegment FMOD_Sound_GetLoopCount$address() {
@@ -13318,6 +17540,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopCount(FMOD_SOUND *sound, int *loopcount) }
      */
     public static int FMOD_Sound_GetLoopCount(MemorySegment sound, MemorySegment loopcount) {
@@ -13348,7 +17572,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopPoints(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopPoints(FMOD_SOUND
      * *sound, unsigned int loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int loopend,
      * FMOD_TIMEUNIT loopendtype) }
      */
@@ -13357,7 +17583,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_SetLoopPoints(FMOD_SOUND *sound, unsigned int loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -13366,7 +17594,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopPoints(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopPoints(FMOD_SOUND *sound,
      * unsigned int loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int loopend, FMOD_TIMEUNIT
      * loopendtype) }
      */
@@ -13375,6 +17605,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetLoopPoints(FMOD_SOUND *sound, unsigned int
      * loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -13413,7 +17645,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopPoints(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopPoints(FMOD_SOUND
      * *sound, unsigned int *loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int *loopend,
      * FMOD_TIMEUNIT loopendtype) }
      */
@@ -13422,7 +17656,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetLoopPoints(FMOD_SOUND *sound, unsigned int *loopstart, FMOD_TIMEUNIT
      * loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -13431,7 +17667,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopPoints(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopPoints(FMOD_SOUND *sound,
      * unsigned int *loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT
      * loopendtype) }
      */
@@ -13440,6 +17678,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetLoopPoints(FMOD_SOUND *sound, unsigned int
      * *loopstart, FMOD_TIMEUNIT loopstarttype, unsigned int *loopend, FMOD_TIMEUNIT loopendtype) }
      */
@@ -13477,7 +17717,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetMusicNumChannels(FMOD_SOUND *sound, int *numchannels) }
      */
     public static FunctionDescriptor FMOD_Sound_GetMusicNumChannels$descriptor() {
@@ -13485,7 +17727,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetMusicNumChannels(FMOD_SOUND *sound, int *numchannels) }
      */
     public static MethodHandle FMOD_Sound_GetMusicNumChannels$handle() {
@@ -13493,7 +17737,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicNumChannels(FMOD_SOUND *sound,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicNumChannels(FMOD_SOUND *sound,
      * int *numchannels) }
      */
     public static MemorySegment FMOD_Sound_GetMusicNumChannels$address() {
@@ -13501,6 +17747,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicNumChannels(FMOD_SOUND *sound, int
      * *numchannels) }
      */
@@ -13529,7 +17777,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_SetMusicChannelVolume(FMOD_SOUND *sound, int channel, float volume) }
      */
     public static FunctionDescriptor FMOD_Sound_SetMusicChannelVolume$descriptor() {
@@ -13537,7 +17787,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_SetMusicChannelVolume(FMOD_SOUND *sound, int channel, float volume) }
      */
     public static MethodHandle FMOD_Sound_SetMusicChannelVolume$handle() {
@@ -13545,7 +17797,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicChannelVolume(FMOD_SOUND
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicChannelVolume(FMOD_SOUND
      * *sound, int channel, float volume) }
      */
     public static MemorySegment FMOD_Sound_SetMusicChannelVolume$address() {
@@ -13553,6 +17807,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicChannelVolume(FMOD_SOUND *sound, int
      * channel, float volume) }
      */
@@ -13581,7 +17837,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetMusicChannelVolume(FMOD_SOUND *sound, int channel, float *volume) }
      */
     public static FunctionDescriptor FMOD_Sound_GetMusicChannelVolume$descriptor() {
@@ -13589,7 +17847,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetMusicChannelVolume(FMOD_SOUND *sound, int channel, float *volume) }
      */
     public static MethodHandle FMOD_Sound_GetMusicChannelVolume$handle() {
@@ -13597,7 +17857,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicChannelVolume(FMOD_SOUND
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicChannelVolume(FMOD_SOUND
      * *sound, int channel, float *volume) }
      */
     public static MemorySegment FMOD_Sound_GetMusicChannelVolume$address() {
@@ -13605,6 +17867,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicChannelVolume(FMOD_SOUND *sound, int
      * channel, float *volume) }
      */
@@ -13631,7 +17895,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND
      * *sound, float speed) }
      */
     public static FunctionDescriptor FMOD_Sound_SetMusicSpeed$descriptor() {
@@ -13639,7 +17905,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_SetMusicSpeed(FMOD_SOUND *sound, float speed) }
      */
     public static MethodHandle FMOD_Sound_SetMusicSpeed$handle() {
@@ -13647,14 +17915,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND *sound, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND *sound, float
      * speed) }
      */
     public static MemorySegment FMOD_Sound_SetMusicSpeed$address() {
         return FMOD_Sound_SetMusicSpeed.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND *sound, float speed) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetMusicSpeed(FMOD_SOUND *sound, float speed) }
+     */
     public static int FMOD_Sound_SetMusicSpeed(MemorySegment sound, float speed) {
         var mh$ = FMOD_Sound_SetMusicSpeed.HANDLE;
         try {
@@ -13677,7 +17951,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicSpeed(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicSpeed(FMOD_SOUND
      * *sound, float *speed) }
      */
     public static FunctionDescriptor FMOD_Sound_GetMusicSpeed$descriptor() {
@@ -13685,7 +17961,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Sound_GetMusicSpeed(FMOD_SOUND *sound, float *speed) }
      */
     public static MethodHandle FMOD_Sound_GetMusicSpeed$handle() {
@@ -13693,7 +17971,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicSpeed(FMOD_SOUND *sound, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicSpeed(FMOD_SOUND *sound, float
      * *speed) }
      */
     public static MemorySegment FMOD_Sound_GetMusicSpeed$address() {
@@ -13701,6 +17981,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetMusicSpeed(FMOD_SOUND *sound, float *speed) }
      */
     public static int FMOD_Sound_GetMusicSpeed(MemorySegment sound, MemorySegment speed) {
@@ -13725,7 +18007,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND
      * *sound, void *userdata) }
      */
     public static FunctionDescriptor FMOD_Sound_SetUserData$descriptor() {
@@ -13733,7 +18017,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND
      * *sound, void *userdata) }
      */
     public static MethodHandle FMOD_Sound_SetUserData$handle() {
@@ -13741,7 +18027,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND *sound, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND *sound, void
      * *userdata) }
      */
     public static MemorySegment FMOD_Sound_SetUserData$address() {
@@ -13749,6 +18037,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_SetUserData(FMOD_SOUND *sound, void *userdata) }
      */
     public static int FMOD_Sound_SetUserData(MemorySegment sound, MemorySegment userdata) {
@@ -13773,7 +18063,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND
      * *sound, void **userdata) }
      */
     public static FunctionDescriptor FMOD_Sound_GetUserData$descriptor() {
@@ -13781,7 +18073,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND
      * *sound, void **userdata) }
      */
     public static MethodHandle FMOD_Sound_GetUserData$handle() {
@@ -13789,7 +18083,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND *sound, void
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND *sound, void
      * **userdata) }
      */
     public static MemorySegment FMOD_Sound_GetUserData$address() {
@@ -13797,6 +18093,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Sound_GetUserData(FMOD_SOUND *sound, void **userdata) }
      */
     public static int FMOD_Sound_GetUserData(MemorySegment sound, MemorySegment userdata) {
@@ -13822,7 +18120,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetSystemObject(FMOD_CHANNEL *channel, FMOD_SYSTEM **system) }
      */
     public static FunctionDescriptor FMOD_Channel_GetSystemObject$descriptor() {
@@ -13830,7 +18130,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetSystemObject(FMOD_CHANNEL *channel, FMOD_SYSTEM **system) }
      */
     public static MethodHandle FMOD_Channel_GetSystemObject$handle() {
@@ -13838,7 +18140,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetSystemObject(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetSystemObject(FMOD_CHANNEL
      * *channel, FMOD_SYSTEM **system) }
      */
     public static MemorySegment FMOD_Channel_GetSystemObject$address() {
@@ -13846,6 +18150,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetSystemObject(FMOD_CHANNEL *channel,
      * FMOD_SYSTEM **system) }
      */
@@ -13871,7 +18177,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL
      * *channel) }
      */
     public static FunctionDescriptor FMOD_Channel_Stop$descriptor() {
@@ -13879,19 +18187,29 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL
      * *channel) }
      */
     public static MethodHandle FMOD_Channel_Stop$handle() {
         return FMOD_Channel_Stop.HANDLE;
     }
 
-    /** Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL *channel) } */
+    /**
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL *channel) }
+     */
     public static MemorySegment FMOD_Channel_Stop$address() {
         return FMOD_Channel_Stop.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL *channel) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_Stop(FMOD_CHANNEL *channel) }
+     */
     public static int FMOD_Channel_Stop(MemorySegment channel) {
         var mh$ = FMOD_Channel_Stop.HANDLE;
         try {
@@ -13914,7 +18232,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPaused(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPaused(FMOD_CHANNEL
      * *channel, FMOD_BOOL paused) }
      */
     public static FunctionDescriptor FMOD_Channel_SetPaused$descriptor() {
@@ -13922,7 +18242,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetPaused(FMOD_CHANNEL *channel, FMOD_BOOL paused) }
      */
     public static MethodHandle FMOD_Channel_SetPaused$handle() {
@@ -13930,7 +18252,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPaused(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPaused(FMOD_CHANNEL *channel,
      * FMOD_BOOL paused) }
      */
     public static MemorySegment FMOD_Channel_SetPaused$address() {
@@ -13938,6 +18262,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPaused(FMOD_CHANNEL *channel, FMOD_BOOL
      * paused) }
      */
@@ -13963,7 +18289,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPaused(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPaused(FMOD_CHANNEL
      * *channel, FMOD_BOOL *paused) }
      */
     public static FunctionDescriptor FMOD_Channel_GetPaused$descriptor() {
@@ -13971,7 +18299,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetPaused(FMOD_CHANNEL *channel, FMOD_BOOL *paused) }
      */
     public static MethodHandle FMOD_Channel_GetPaused$handle() {
@@ -13979,7 +18309,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPaused(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPaused(FMOD_CHANNEL *channel,
      * FMOD_BOOL *paused) }
      */
     public static MemorySegment FMOD_Channel_GetPaused$address() {
@@ -13987,6 +18319,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPaused(FMOD_CHANNEL *channel, FMOD_BOOL
      * *paused) }
      */
@@ -14012,7 +18346,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolume(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolume(FMOD_CHANNEL
      * *channel, float volume) }
      */
     public static FunctionDescriptor FMOD_Channel_SetVolume$descriptor() {
@@ -14020,7 +18356,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetVolume(FMOD_CHANNEL *channel, float volume) }
      */
     public static MethodHandle FMOD_Channel_SetVolume$handle() {
@@ -14028,7 +18366,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolume(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolume(FMOD_CHANNEL *channel,
      * float volume) }
      */
     public static MemorySegment FMOD_Channel_SetVolume$address() {
@@ -14036,6 +18376,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolume(FMOD_CHANNEL *channel, float volume) }
      */
     public static int FMOD_Channel_SetVolume(MemorySegment channel, float volume) {
@@ -14060,7 +18402,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolume(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolume(FMOD_CHANNEL
      * *channel, float *volume) }
      */
     public static FunctionDescriptor FMOD_Channel_GetVolume$descriptor() {
@@ -14068,7 +18412,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetVolume(FMOD_CHANNEL *channel, float *volume) }
      */
     public static MethodHandle FMOD_Channel_GetVolume$handle() {
@@ -14076,7 +18422,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolume(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolume(FMOD_CHANNEL *channel,
      * float *volume) }
      */
     public static MemorySegment FMOD_Channel_GetVolume$address() {
@@ -14084,6 +18432,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolume(FMOD_CHANNEL *channel, float *volume) }
      */
     public static int FMOD_Channel_GetVolume(MemorySegment channel, MemorySegment volume) {
@@ -14108,7 +18458,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL ramp) }
      */
     public static FunctionDescriptor FMOD_Channel_SetVolumeRamp$descriptor() {
@@ -14116,7 +18468,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL ramp) }
      */
     public static MethodHandle FMOD_Channel_SetVolumeRamp$handle() {
@@ -14124,7 +18478,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolumeRamp(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolumeRamp(FMOD_CHANNEL *channel,
      * FMOD_BOOL ramp) }
      */
     public static MemorySegment FMOD_Channel_SetVolumeRamp$address() {
@@ -14132,6 +18488,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL
      * ramp) }
      */
@@ -14157,7 +18515,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL *ramp) }
      */
     public static FunctionDescriptor FMOD_Channel_GetVolumeRamp$descriptor() {
@@ -14165,7 +18525,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL *ramp) }
      */
     public static MethodHandle FMOD_Channel_GetVolumeRamp$handle() {
@@ -14173,7 +18535,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolumeRamp(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolumeRamp(FMOD_CHANNEL *channel,
      * FMOD_BOOL *ramp) }
      */
     public static MemorySegment FMOD_Channel_GetVolumeRamp$address() {
@@ -14181,6 +18545,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetVolumeRamp(FMOD_CHANNEL *channel, FMOD_BOOL
      * *ramp) }
      */
@@ -14206,7 +18572,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetAudibility(FMOD_CHANNEL *channel, float *audibility) }
      */
     public static FunctionDescriptor FMOD_Channel_GetAudibility$descriptor() {
@@ -14214,7 +18582,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetAudibility(FMOD_CHANNEL *channel, float *audibility) }
      */
     public static MethodHandle FMOD_Channel_GetAudibility$handle() {
@@ -14222,7 +18592,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetAudibility(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetAudibility(FMOD_CHANNEL *channel,
      * float *audibility) }
      */
     public static MemorySegment FMOD_Channel_GetAudibility$address() {
@@ -14230,6 +18602,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetAudibility(FMOD_CHANNEL *channel, float
      * *audibility) }
      */
@@ -14255,7 +18629,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL
      * *channel, float pitch) }
      */
     public static FunctionDescriptor FMOD_Channel_SetPitch$descriptor() {
@@ -14263,7 +18639,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL
      * *channel, float pitch) }
      */
     public static MethodHandle FMOD_Channel_SetPitch$handle() {
@@ -14271,7 +18649,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL *channel,
      * float pitch) }
      */
     public static MemorySegment FMOD_Channel_SetPitch$address() {
@@ -14279,6 +18659,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPitch(FMOD_CHANNEL *channel, float pitch) }
      */
     public static int FMOD_Channel_SetPitch(MemorySegment channel, float pitch) {
@@ -14303,7 +18685,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL
      * *channel, float *pitch) }
      */
     public static FunctionDescriptor FMOD_Channel_GetPitch$descriptor() {
@@ -14311,7 +18695,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL
      * *channel, float *pitch) }
      */
     public static MethodHandle FMOD_Channel_GetPitch$handle() {
@@ -14319,7 +18705,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL *channel,
      * float *pitch) }
      */
     public static MemorySegment FMOD_Channel_GetPitch$address() {
@@ -14327,6 +18715,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetPitch(FMOD_CHANNEL *channel, float *pitch) }
      */
     public static int FMOD_Channel_GetPitch(MemorySegment channel, MemorySegment pitch) {
@@ -14351,7 +18741,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL
      * *channel, FMOD_BOOL mute) }
      */
     public static FunctionDescriptor FMOD_Channel_SetMute$descriptor() {
@@ -14359,7 +18751,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL
      * *channel, FMOD_BOOL mute) }
      */
     public static MethodHandle FMOD_Channel_SetMute$handle() {
@@ -14367,7 +18761,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL *channel,
      * FMOD_BOOL mute) }
      */
     public static MemorySegment FMOD_Channel_SetMute$address() {
@@ -14375,6 +18771,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMute(FMOD_CHANNEL *channel, FMOD_BOOL mute) }
      */
     public static int FMOD_Channel_SetMute(MemorySegment channel, int mute) {
@@ -14399,7 +18797,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL
      * *channel, FMOD_BOOL *mute) }
      */
     public static FunctionDescriptor FMOD_Channel_GetMute$descriptor() {
@@ -14407,7 +18807,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL
      * *channel, FMOD_BOOL *mute) }
      */
     public static MethodHandle FMOD_Channel_GetMute$handle() {
@@ -14415,7 +18817,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL *channel,
      * FMOD_BOOL *mute) }
      */
     public static MemorySegment FMOD_Channel_GetMute$address() {
@@ -14423,6 +18827,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMute(FMOD_CHANNEL *channel, FMOD_BOOL *mute) }
      */
     public static int FMOD_Channel_GetMute(MemorySegment channel, MemorySegment mute) {
@@ -14449,7 +18855,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetReverbProperties(FMOD_CHANNEL *channel, int instance, float wet) }
      */
     public static FunctionDescriptor FMOD_Channel_SetReverbProperties$descriptor() {
@@ -14457,7 +18865,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetReverbProperties(FMOD_CHANNEL *channel, int instance, float wet) }
      */
     public static MethodHandle FMOD_Channel_SetReverbProperties$handle() {
@@ -14465,7 +18875,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetReverbProperties(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetReverbProperties(FMOD_CHANNEL
      * *channel, int instance, float wet) }
      */
     public static MemorySegment FMOD_Channel_SetReverbProperties$address() {
@@ -14473,6 +18885,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetReverbProperties(FMOD_CHANNEL *channel, int
      * instance, float wet) }
      */
@@ -14501,7 +18915,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetReverbProperties(FMOD_CHANNEL *channel, int instance, float *wet) }
      */
     public static FunctionDescriptor FMOD_Channel_GetReverbProperties$descriptor() {
@@ -14509,7 +18925,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetReverbProperties(FMOD_CHANNEL *channel, int instance, float *wet) }
      */
     public static MethodHandle FMOD_Channel_GetReverbProperties$handle() {
@@ -14517,7 +18935,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetReverbProperties(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetReverbProperties(FMOD_CHANNEL
      * *channel, int instance, float *wet) }
      */
     public static MemorySegment FMOD_Channel_GetReverbProperties$address() {
@@ -14525,6 +18945,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetReverbProperties(FMOD_CHANNEL *channel, int
      * instance, float *wet) }
      */
@@ -14552,7 +18974,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLowPassGain(FMOD_CHANNEL *channel, float gain) }
      */
     public static FunctionDescriptor FMOD_Channel_SetLowPassGain$descriptor() {
@@ -14560,7 +18984,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetLowPassGain(FMOD_CHANNEL *channel, float gain) }
      */
     public static MethodHandle FMOD_Channel_SetLowPassGain$handle() {
@@ -14568,7 +18994,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLowPassGain(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLowPassGain(FMOD_CHANNEL
      * *channel, float gain) }
      */
     public static MemorySegment FMOD_Channel_SetLowPassGain$address() {
@@ -14576,6 +19004,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetLowPassGain(FMOD_CHANNEL *channel, float gain)
      * }
      */
@@ -14602,7 +19032,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLowPassGain(FMOD_CHANNEL *channel, float *gain) }
      */
     public static FunctionDescriptor FMOD_Channel_GetLowPassGain$descriptor() {
@@ -14610,7 +19042,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetLowPassGain(FMOD_CHANNEL *channel, float *gain) }
      */
     public static MethodHandle FMOD_Channel_GetLowPassGain$handle() {
@@ -14618,7 +19052,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLowPassGain(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLowPassGain(FMOD_CHANNEL
      * *channel, float *gain) }
      */
     public static MemorySegment FMOD_Channel_GetLowPassGain$address() {
@@ -14626,6 +19062,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetLowPassGain(FMOD_CHANNEL *channel, float
      * *gain) }
      */
@@ -14651,7 +19089,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL
      * *channel, FMOD_MODE mode) }
      */
     public static FunctionDescriptor FMOD_Channel_SetMode$descriptor() {
@@ -14659,7 +19099,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL
      * *channel, FMOD_MODE mode) }
      */
     public static MethodHandle FMOD_Channel_SetMode$handle() {
@@ -14667,7 +19109,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL *channel,
      * FMOD_MODE mode) }
      */
     public static MemorySegment FMOD_Channel_SetMode$address() {
@@ -14675,6 +19119,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMode(FMOD_CHANNEL *channel, FMOD_MODE mode) }
      */
     public static int FMOD_Channel_SetMode(MemorySegment channel, int mode) {
@@ -14699,7 +19145,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL
      * *channel, FMOD_MODE *mode) }
      */
     public static FunctionDescriptor FMOD_Channel_GetMode$descriptor() {
@@ -14707,7 +19155,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL
      * *channel, FMOD_MODE *mode) }
      */
     public static MethodHandle FMOD_Channel_GetMode$handle() {
@@ -14715,7 +19165,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL *channel,
      * FMOD_MODE *mode) }
      */
     public static MemorySegment FMOD_Channel_GetMode$address() {
@@ -14723,6 +19175,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMode(FMOD_CHANNEL *channel, FMOD_MODE *mode) }
      */
     public static int FMOD_Channel_GetMode(MemorySegment channel, MemorySegment mode) {
@@ -14747,7 +19201,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetCallback(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetCallback(FMOD_CHANNEL
      * *channel, FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
     public static FunctionDescriptor FMOD_Channel_SetCallback$descriptor() {
@@ -14755,7 +19211,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetCallback(FMOD_CHANNEL *channel, FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
     public static MethodHandle FMOD_Channel_SetCallback$handle() {
@@ -14763,7 +19221,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetCallback(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetCallback(FMOD_CHANNEL *channel,
      * FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
     public static MemorySegment FMOD_Channel_SetCallback$address() {
@@ -14771,6 +19231,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetCallback(FMOD_CHANNEL *channel,
      * FMOD_CHANNELCONTROL_CALLBACK callback) }
      */
@@ -14796,7 +19258,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsPlaying(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsPlaying(FMOD_CHANNEL
      * *channel, FMOD_BOOL *isplaying) }
      */
     public static FunctionDescriptor FMOD_Channel_IsPlaying$descriptor() {
@@ -14804,7 +19268,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_IsPlaying(FMOD_CHANNEL *channel, FMOD_BOOL *isplaying) }
      */
     public static MethodHandle FMOD_Channel_IsPlaying$handle() {
@@ -14812,7 +19278,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsPlaying(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsPlaying(FMOD_CHANNEL *channel,
      * FMOD_BOOL *isplaying) }
      */
     public static MemorySegment FMOD_Channel_IsPlaying$address() {
@@ -14820,6 +19288,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_IsPlaying(FMOD_CHANNEL *channel, FMOD_BOOL
      * *isplaying) }
      */
@@ -14845,7 +19315,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL
      * *channel, float pan) }
      */
     public static FunctionDescriptor FMOD_Channel_SetPan$descriptor() {
@@ -14853,7 +19325,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL
      * *channel, float pan) }
      */
     public static MethodHandle FMOD_Channel_SetPan$handle() {
@@ -14861,14 +19335,20 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL *channel, float
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL *channel, float
      * pan) }
      */
     public static MemorySegment FMOD_Channel_SetPan$address() {
         return FMOD_Channel_SetPan.ADDR;
     }
 
-    /** {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL *channel, float pan) } */
+    /**
+     *
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetPan(FMOD_CHANNEL *channel, float pan) }
+     */
     public static int FMOD_Channel_SetPan(MemorySegment channel, float pan) {
         var mh$ = FMOD_Channel_SetPan.HANDLE;
         try {
@@ -14902,7 +19382,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixLevelsOutput(FMOD_CHANNEL *channel, float frontleft, float frontright,
      * float center, float lfe, float surroundleft, float surroundright, float backleft, float
      * backright) }
@@ -14912,7 +19394,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixLevelsOutput(FMOD_CHANNEL *channel, float frontleft, float frontright,
      * float center, float lfe, float surroundleft, float surroundright, float backleft, float
      * backright) }
@@ -14922,7 +19406,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsOutput(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsOutput(FMOD_CHANNEL
      * *channel, float frontleft, float frontright, float center, float lfe, float surroundleft,
      * float surroundright, float backleft, float backright) }
      */
@@ -14931,6 +19417,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsOutput(FMOD_CHANNEL *channel, float
      * frontleft, float frontright, float center, float lfe, float surroundleft, float
      * surroundright, float backleft, float backright) }
@@ -14988,7 +19476,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixLevelsInput(FMOD_CHANNEL *channel, float *levels, int numlevels) }
      */
     public static FunctionDescriptor FMOD_Channel_SetMixLevelsInput$descriptor() {
@@ -14996,7 +19486,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixLevelsInput(FMOD_CHANNEL *channel, float *levels, int numlevels) }
      */
     public static MethodHandle FMOD_Channel_SetMixLevelsInput$handle() {
@@ -15004,7 +19496,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsInput(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsInput(FMOD_CHANNEL
      * *channel, float *levels, int numlevels) }
      */
     public static MemorySegment FMOD_Channel_SetMixLevelsInput$address() {
@@ -15012,6 +19506,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixLevelsInput(FMOD_CHANNEL *channel, float
      * *levels, int numlevels) }
      */
@@ -15044,7 +19540,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixMatrix(FMOD_CHANNEL *channel, float *matrix, int outchannels, int
      * inchannels, int inchannel_hop) }
      */
@@ -15053,7 +19551,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetMixMatrix(FMOD_CHANNEL *channel, float *matrix, int outchannels, int
      * inchannels, int inchannel_hop) }
      */
@@ -15062,7 +19562,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixMatrix(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixMatrix(FMOD_CHANNEL *channel,
      * float *matrix, int outchannels, int inchannels, int inchannel_hop) }
      */
     public static MemorySegment FMOD_Channel_SetMixMatrix$address() {
@@ -15070,6 +19572,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetMixMatrix(FMOD_CHANNEL *channel, float
      * *matrix, int outchannels, int inchannels, int inchannel_hop) }
      */
@@ -15112,7 +19616,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetMixMatrix(FMOD_CHANNEL *channel, float *matrix, int *outchannels, int
      * *inchannels, int inchannel_hop) }
      */
@@ -15121,7 +19627,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetMixMatrix(FMOD_CHANNEL *channel, float *matrix, int *outchannels, int
      * *inchannels, int inchannel_hop) }
      */
@@ -15130,7 +19638,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMixMatrix(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMixMatrix(FMOD_CHANNEL *channel,
      * float *matrix, int *outchannels, int *inchannels, int inchannel_hop) }
      */
     public static MemorySegment FMOD_Channel_GetMixMatrix$address() {
@@ -15138,6 +19648,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetMixMatrix(FMOD_CHANNEL *channel, float
      * *matrix, int *outchannels, int *inchannels, int inchannel_hop) }
      */
@@ -15175,7 +19687,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPClock(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPClock(FMOD_CHANNEL
      * *channel, unsigned long long *dspclock, unsigned long long *parentclock) }
      */
     public static FunctionDescriptor FMOD_Channel_GetDSPClock$descriptor() {
@@ -15183,7 +19697,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetDSPClock(FMOD_CHANNEL *channel, unsigned long long *dspclock, unsigned long
      * long *parentclock) }
      */
@@ -15192,7 +19708,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPClock(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPClock(FMOD_CHANNEL *channel,
      * unsigned long long *dspclock, unsigned long long *parentclock) }
      */
     public static MemorySegment FMOD_Channel_GetDSPClock$address() {
@@ -15200,6 +19718,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSPClock(FMOD_CHANNEL *channel, unsigned long
      * long *dspclock, unsigned long long *parentclock) }
      */
@@ -15231,7 +19751,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL
      * *channel, unsigned long long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL
      * stopchannels) }
      */
@@ -15240,7 +19762,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL
      * *channel, unsigned long long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL
      * stopchannels) }
      */
@@ -15249,7 +19773,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL *channel,
      * unsigned long long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL stopchannels) }
      */
     public static MemorySegment FMOD_Channel_SetDelay$address() {
@@ -15257,6 +19783,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDelay(FMOD_CHANNEL *channel, unsigned long
      * long dspclock_start, unsigned long long dspclock_end, FMOD_BOOL stopchannels) }
      */
@@ -15293,7 +19821,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL
      * *channel, unsigned long long *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL
      * *stopchannels) }
      */
@@ -15302,7 +19832,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL
      * *channel, unsigned long long *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL
      * *stopchannels) }
      */
@@ -15311,7 +19843,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL *channel,
      * unsigned long long *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL
      * *stopchannels) }
      */
@@ -15320,6 +19854,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDelay(FMOD_CHANNEL *channel, unsigned long
      * long *dspclock_start, unsigned long long *dspclock_end, FMOD_BOOL *stopchannels) }
      */
@@ -15355,7 +19891,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_AddFadePoint(FMOD_CHANNEL *channel, unsigned long long dspclock, float volume) }
      */
     public static FunctionDescriptor FMOD_Channel_AddFadePoint$descriptor() {
@@ -15363,7 +19901,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_AddFadePoint(FMOD_CHANNEL *channel, unsigned long long dspclock, float volume) }
      */
     public static MethodHandle FMOD_Channel_AddFadePoint$handle() {
@@ -15371,7 +19911,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddFadePoint(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddFadePoint(FMOD_CHANNEL *channel,
      * unsigned long long dspclock, float volume) }
      */
     public static MemorySegment FMOD_Channel_AddFadePoint$address() {
@@ -15379,6 +19921,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddFadePoint(FMOD_CHANNEL *channel, unsigned long
      * long dspclock, float volume) }
      */
@@ -15407,7 +19951,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetFadePointRamp(FMOD_CHANNEL *channel, unsigned long long dspclock, float
      * volume) }
      */
@@ -15416,7 +19962,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetFadePointRamp(FMOD_CHANNEL *channel, unsigned long long dspclock, float
      * volume) }
      */
@@ -15425,7 +19973,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFadePointRamp(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFadePointRamp(FMOD_CHANNEL
      * *channel, unsigned long long dspclock, float volume) }
      */
     public static MemorySegment FMOD_Channel_SetFadePointRamp$address() {
@@ -15433,6 +19983,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetFadePointRamp(FMOD_CHANNEL *channel, unsigned
      * long long dspclock, float volume) }
      */
@@ -15464,7 +20016,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_RemoveFadePoints(FMOD_CHANNEL *channel, unsigned long long dspclock_start,
      * unsigned long long dspclock_end) }
      */
@@ -15473,7 +20027,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_RemoveFadePoints(FMOD_CHANNEL *channel, unsigned long long dspclock_start,
      * unsigned long long dspclock_end) }
      */
@@ -15482,7 +20038,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveFadePoints(FMOD_CHANNEL
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveFadePoints(FMOD_CHANNEL
      * *channel, unsigned long long dspclock_start, unsigned long long dspclock_end) }
      */
     public static MemorySegment FMOD_Channel_RemoveFadePoints$address() {
@@ -15490,6 +20048,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveFadePoints(FMOD_CHANNEL *channel, unsigned
      * long long dspclock_start, unsigned long long dspclock_end) }
      */
@@ -15522,7 +20082,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetFadePoints(FMOD_CHANNEL *channel, unsigned int *numpoints, unsigned long long
      * *point_dspclock, float *point_volume) }
      */
@@ -15531,7 +20093,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetFadePoints(FMOD_CHANNEL *channel, unsigned int *numpoints, unsigned long long
      * *point_dspclock, float *point_volume) }
      */
@@ -15540,7 +20104,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFadePoints(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFadePoints(FMOD_CHANNEL *channel,
      * unsigned int *numpoints, unsigned long long *point_dspclock, float *point_volume) }
      */
     public static MemorySegment FMOD_Channel_GetFadePoints$address() {
@@ -15548,6 +20114,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetFadePoints(FMOD_CHANNEL *channel, unsigned int
      * *numpoints, unsigned long long *point_dspclock, float *point_volume) }
      */
@@ -15583,7 +20151,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL
      * *channel, int index, FMOD_DSP **dsp) }
      */
     public static FunctionDescriptor FMOD_Channel_GetDSP$descriptor() {
@@ -15591,7 +20161,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL
      * *channel, int index, FMOD_DSP **dsp) }
      */
     public static MethodHandle FMOD_Channel_GetDSP$handle() {
@@ -15599,7 +20171,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL *channel, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL *channel, int
      * index, FMOD_DSP **dsp) }
      */
     public static MemorySegment FMOD_Channel_GetDSP$address() {
@@ -15607,6 +20181,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetDSP(FMOD_CHANNEL *channel, int index, FMOD_DSP
      * **dsp) }
      */
@@ -15633,7 +20209,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL
      * *channel, int index, FMOD_DSP *dsp) }
      */
     public static FunctionDescriptor FMOD_Channel_AddDSP$descriptor() {
@@ -15641,7 +20219,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL
      * *channel, int index, FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_Channel_AddDSP$handle() {
@@ -15649,7 +20229,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL *channel, int
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL *channel, int
      * index, FMOD_DSP *dsp) }
      */
     public static MemorySegment FMOD_Channel_AddDSP$address() {
@@ -15657,6 +20239,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_AddDSP(FMOD_CHANNEL *channel, int index, FMOD_DSP
      * *dsp) }
      */
@@ -15682,7 +20266,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveDSP(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveDSP(FMOD_CHANNEL
      * *channel, FMOD_DSP *dsp) }
      */
     public static FunctionDescriptor FMOD_Channel_RemoveDSP$descriptor() {
@@ -15690,7 +20276,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_RemoveDSP(FMOD_CHANNEL *channel, FMOD_DSP *dsp) }
      */
     public static MethodHandle FMOD_Channel_RemoveDSP$handle() {
@@ -15698,7 +20286,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveDSP(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveDSP(FMOD_CHANNEL *channel,
      * FMOD_DSP *dsp) }
      */
     public static MemorySegment FMOD_Channel_RemoveDSP$address() {
@@ -15706,6 +20296,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_RemoveDSP(FMOD_CHANNEL *channel, FMOD_DSP *dsp) }
      */
     public static int FMOD_Channel_RemoveDSP(MemorySegment channel, MemorySegment dsp) {
@@ -15730,7 +20322,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetNumDSPs(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetNumDSPs(FMOD_CHANNEL
      * *channel, int *numdsps) }
      */
     public static FunctionDescriptor FMOD_Channel_GetNumDSPs$descriptor() {
@@ -15738,7 +20332,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_GetNumDSPs(FMOD_CHANNEL *channel, int *numdsps) }
      */
     public static MethodHandle FMOD_Channel_GetNumDSPs$handle() {
@@ -15746,7 +20342,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetNumDSPs(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetNumDSPs(FMOD_CHANNEL *channel,
      * int *numdsps) }
      */
     public static MemorySegment FMOD_Channel_GetNumDSPs$address() {
@@ -15754,6 +20352,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_GetNumDSPs(FMOD_CHANNEL *channel, int *numdsps) }
      */
     public static int FMOD_Channel_GetNumDSPs(MemorySegment channel, MemorySegment numdsps) {
@@ -15779,7 +20379,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Function descriptor for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDSPIndex(FMOD_CHANNEL
+     * Function descriptor for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDSPIndex(FMOD_CHANNEL
      * *channel, FMOD_DSP *dsp, int index) }
      */
     public static FunctionDescriptor FMOD_Channel_SetDSPIndex$descriptor() {
@@ -15787,7 +20389,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Downcall method handle for: {@snippet lang=c : FMOD_RESULT
+     * Downcall method handle for:
+     *
+     * {@snippet lang=c : FMOD_RESULT
      * FMOD_Channel_SetDSPIndex(FMOD_CHANNEL *channel, FMOD_DSP *dsp, int index) }
      */
     public static MethodHandle FMOD_Channel_SetDSPIndex$handle() {
@@ -15795,7 +20399,9 @@ public class FmodCore_1 {
     }
 
     /**
-     * Address for: {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDSPIndex(FMOD_CHANNEL *channel,
+     * Address for:
+     *
+     * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDSPIndex(FMOD_CHANNEL *channel,
      * FMOD_DSP *dsp, int index) }
      */
     public static MemorySegment FMOD_Channel_SetDSPIndex$address() {
@@ -15803,6 +20409,8 @@ public class FmodCore_1 {
     }
 
     /**
+     *
+     *
      * {@snippet lang=c : FMOD_RESULT FMOD_Channel_SetDSPIndex(FMOD_CHANNEL *channel, FMOD_DSP *dsp,
      * int index) }
      */

@@ -1,6 +1,7 @@
 package ui.annotations;
 
 // import actions.JumpToAnnotationAction;
+import core.annotations.Annotation;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.AWTKeyStroke;

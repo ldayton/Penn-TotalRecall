@@ -12,6 +12,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 /**
+ *
+ *
  * {@snippet lang=c : typedef FMOD_RESULT (*FMOD_CODEC_METADATA_FUNC)(FMOD_CODEC_STATE *,
  * FMOD_TAGTYPE, char *, void *, unsigned int, FMOD_TAGDATATYPE, int) }
  */

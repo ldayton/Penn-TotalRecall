@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-/** {@snippet lang=c : struct FMOD_VECTOR { float x; float y; float z; } } */
+/**
+ *
+ *
+ * {@snippet lang=c : struct FMOD_VECTOR { float x; float y; float z; } }
+ */
 public class FMOD_VECTOR {
 
     FMOD_VECTOR() {
@@ -32,72 +36,120 @@ public class FMOD_VECTOR {
 
     private static final OfFloat x$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("x"));
 
-    /** Layout for field: {@snippet lang=c : float x } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float x }
+     */
     public static final OfFloat x$layout() {
         return x$LAYOUT;
     }
 
     private static final long x$OFFSET = 0;
 
-    /** Offset for field: {@snippet lang=c : float x } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float x }
+     */
     public static final long x$offset() {
         return x$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float x } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float x }
+     */
     public static float x(MemorySegment struct) {
         return struct.get(x$LAYOUT, x$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float x } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float x }
+     */
     public static void x(MemorySegment struct, float fieldValue) {
         struct.set(x$LAYOUT, x$OFFSET, fieldValue);
     }
 
     private static final OfFloat y$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("y"));
 
-    /** Layout for field: {@snippet lang=c : float y } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float y }
+     */
     public static final OfFloat y$layout() {
         return y$LAYOUT;
     }
 
     private static final long y$OFFSET = 4;
 
-    /** Offset for field: {@snippet lang=c : float y } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float y }
+     */
     public static final long y$offset() {
         return y$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float y } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float y }
+     */
     public static float y(MemorySegment struct) {
         return struct.get(y$LAYOUT, y$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float y } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float y }
+     */
     public static void y(MemorySegment struct, float fieldValue) {
         struct.set(y$LAYOUT, y$OFFSET, fieldValue);
     }
 
     private static final OfFloat z$LAYOUT = (OfFloat) $LAYOUT.select(groupElement("z"));
 
-    /** Layout for field: {@snippet lang=c : float z } */
+    /**
+     * Layout for field:
+     *
+     * {@snippet lang=c : float z }
+     */
     public static final OfFloat z$layout() {
         return z$LAYOUT;
     }
 
     private static final long z$OFFSET = 8;
 
-    /** Offset for field: {@snippet lang=c : float z } */
+    /**
+     * Offset for field:
+     *
+     * {@snippet lang=c : float z }
+     */
     public static final long z$offset() {
         return z$OFFSET;
     }
 
-    /** Getter for field: {@snippet lang=c : float z } */
+    /**
+     * Getter for field:
+     *
+     * {@snippet lang=c : float z }
+     */
     public static float z(MemorySegment struct) {
         return struct.get(z$LAYOUT, z$OFFSET);
     }
 
-    /** Setter for field: {@snippet lang=c : float z } */
+    /**
+     * Setter for field:
+     *
+     * {@snippet lang=c : float z }
+     */
     public static void z(MemorySegment struct, float fieldValue) {
         struct.set(z$LAYOUT, z$OFFSET, fieldValue);
     }
