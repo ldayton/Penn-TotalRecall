@@ -149,9 +149,7 @@ public class WaveformPainter {
                         timeRange.endSeconds(),
                         bounds.width(),
                         bounds.height(),
-                        dataSource.getPixelsPerSecond(),
-                        ViewportContext.ScrollDirection.FORWARD // TODO: track scroll direction
-                        );
+                        dataSource.getPixelsPerSecond());
 
         // Get the waveform
         Waveform waveform = dataSource.getWaveform();

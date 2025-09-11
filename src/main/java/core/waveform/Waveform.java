@@ -47,9 +47,7 @@ public class Waveform {
                         });
 
         // Initialize with default viewport (will be updated on first render)
-        ViewportContext defaultViewport =
-                new ViewportContext(
-                        0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        ViewportContext defaultViewport = new ViewportContext(0.0, 10.0, 1000, 200, 100);
 
         this.cache = new WaveformSegmentCache(defaultViewport);
 

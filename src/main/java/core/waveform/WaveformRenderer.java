@@ -150,74 +150,38 @@ class WaveformRenderer {
         return segments;
     }
 
-    /** Add prefetch tasks based on scroll direction. */
+    /** Add symmetric prefetch tasks (no scroll direction). */
     private void addPrefetchTasks(@NonNull ViewportContext viewport) {
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
 
-        if (viewport.scrollDirection() == ViewportContext.ScrollDirection.FORWARD) {
-            // Prefetch forward (higher priority)
-            double prefetchStart = viewport.endTimeSeconds();
-            for (int i = 0; i < PREFETCH_COUNT; i++) {
-                var key =
-                        new WaveformSegmentCache.SegmentKey(
-                                prefetchStart + i * segmentDuration,
-                                viewport.pixelsPerSecond(),
-                                viewport.viewportHeightPx());
-                if (cache.get(key) == null) {
-                    CompletableFuture<Image> future = renderSegment(key);
-                    cache.put(key, future);
-                }
+        // Prefetch forward
+        double forwardStart = viewport.endTimeSeconds();
+        for (int i = 0; i < PREFETCH_COUNT; i++) {
+            var key =
+                    new WaveformSegmentCache.SegmentKey(
+                            forwardStart + i * segmentDuration,
+                            viewport.pixelsPerSecond(),
+                            viewport.viewportHeightPx());
+            if (cache.get(key) == null) {
+                CompletableFuture<Image> future = renderSegment(key);
+                cache.put(key, future);
             }
+        }
 
-            // Prefetch backward (lower priority)
-            double backStart = viewport.startTimeSeconds() - segmentDuration;
-            for (int i = 0; i < PREFETCH_COUNT / 2; i++) {
-                double segmentTime = backStart - i * segmentDuration;
-                // Don't prefetch segments before the start of the audio
-                if (segmentTime < 0) {
-                    continue;
-                }
-                var key =
-                        new WaveformSegmentCache.SegmentKey(
-                                segmentTime,
-                                viewport.pixelsPerSecond(),
-                                viewport.viewportHeightPx());
-                if (cache.get(key) == null) {
-                    CompletableFuture<Image> future = renderSegment(key);
-                    cache.put(key, future);
-                }
+        // Prefetch backward
+        double backStart = viewport.startTimeSeconds() - segmentDuration;
+        for (int i = 0; i < PREFETCH_COUNT; i++) {
+            double segmentTime = backStart - i * segmentDuration;
+            // Don't prefetch segments before the start of the audio
+            if (segmentTime < 0) {
+                continue;
             }
-        } else {
-            // Scrolling backward - reverse priorities
-            double backStart = viewport.startTimeSeconds() - segmentDuration;
-            for (int i = 0; i < PREFETCH_COUNT; i++) {
-                double segmentTime = backStart - i * segmentDuration;
-                // Don't prefetch segments before the start of the audio
-                if (segmentTime < 0) {
-                    continue;
-                }
-                var key =
-                        new WaveformSegmentCache.SegmentKey(
-                                segmentTime,
-                                viewport.pixelsPerSecond(),
-                                viewport.viewportHeightPx());
-                if (cache.get(key) == null) {
-                    CompletableFuture<Image> future = renderSegment(key);
-                    cache.put(key, future);
-                }
-            }
-
-            double forwardStart = viewport.endTimeSeconds();
-            for (int i = 0; i < PREFETCH_COUNT / 2; i++) {
-                var key =
-                        new WaveformSegmentCache.SegmentKey(
-                                forwardStart + i * segmentDuration,
-                                viewport.pixelsPerSecond(),
-                                viewport.viewportHeightPx());
-                if (cache.get(key) == null) {
-                    CompletableFuture<Image> future = renderSegment(key);
-                    cache.put(key, future);
-                }
+            var key =
+                    new WaveformSegmentCache.SegmentKey(
+                            segmentTime, viewport.pixelsPerSecond(), viewport.viewportHeightPx());
+            if (cache.get(key) == null) {
+                CompletableFuture<Image> future = renderSegment(key);
+                cache.put(key, future);
             }
         }
     }

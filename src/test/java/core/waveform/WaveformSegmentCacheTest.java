@@ -21,9 +21,7 @@ class WaveformSegmentCacheTest {
 
     @BeforeEach
     void setUp() {
-        viewport =
-                new ViewportContext(
-                        0.0, 10.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        viewport = new ViewportContext(0.0, 10.0, 1000, 200, 100);
         cache = new WaveformSegmentCache(viewport);
         mockImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
     }
@@ -110,9 +108,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change pixels per second
-        var newViewport =
-                new ViewportContext(
-                        0.0, 10.0, 1000, 200, 200, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(0.0, 10.0, 1000, 200, 200);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -125,9 +121,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change height
-        var newViewport =
-                new ViewportContext(
-                        0.0, 10.0, 1000, 400, 100, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(0.0, 10.0, 1000, 400, 100);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -145,9 +139,7 @@ class WaveformSegmentCacheTest {
         cache.put(key2, future2);
 
         // Change width only
-        var newViewport =
-                new ViewportContext(
-                        0.0, 10.0, 1600, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(0.0, 10.0, 1600, 200, 100);
         cache.updateViewport(newViewport);
 
         // Entries should be preserved
@@ -162,9 +154,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, future);
 
         // Change only position
-        var newViewport =
-                new ViewportContext(
-                        5.0, 15.0, 1000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(5.0, 15.0, 1000, 200, 100);
         cache.updateViewport(newViewport);
 
         // Entry should still exist
@@ -174,9 +164,7 @@ class WaveformSegmentCacheTest {
     @ParameterizedTest
     @ValueSource(ints = {200, 400, 800, 1600, 3200})
     void testVariousViewportWidths(int width) {
-        viewport =
-                new ViewportContext(
-                        0.0, 10.0, width, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        viewport = new ViewportContext(0.0, 10.0, width, 200, 100);
         cache = new WaveformSegmentCache(viewport);
 
         // Expected cache size = ceil(width/200) + 4
@@ -284,14 +272,7 @@ class WaveformSegmentCacheTest {
             executor.submit(
                     () -> {
                         try {
-                            var newViewport =
-                                    new ViewportContext(
-                                            0.0,
-                                            10.0,
-                                            width,
-                                            200,
-                                            100,
-                                            ViewportContext.ScrollDirection.FORWARD);
+                            var newViewport = new ViewportContext(0.0, 10.0, width, 200, 100);
                             cache.updateViewport(newViewport);
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
@@ -347,9 +328,7 @@ class WaveformSegmentCacheTest {
     @Test
     void testHeadPointerWraparound() {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
-        var smallViewport =
-                new ViewportContext(
-                        0.0, 10.0, 200, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var smallViewport = new ViewportContext(0.0, 10.0, 200, 200, 100);
         var smallCache = new WaveformSegmentCache(smallViewport); // size = 1 + 4 = 5
 
         // Fill exactly to size
@@ -378,9 +357,7 @@ class WaveformSegmentCacheTest {
         }
 
         // Shrink viewport - resize() must handle head > newSize
-        var smaller =
-                new ViewportContext(
-                        0.0, 10.0, 400, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var smaller = new ViewportContext(0.0, 10.0, 400, 200, 100);
         cache.updateViewport(smaller); // size 9 -> 6
 
         // Verify cache still functional after resize
@@ -392,9 +369,7 @@ class WaveformSegmentCacheTest {
     @Test
     void testUpdateViewportBeforeAnyPuts() {
         // Immediate viewport change - currentViewport is set, but entries array empty
-        var newViewport =
-                new ViewportContext(
-                        0.0, 10.0, 2000, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(0.0, 10.0, 2000, 200, 100);
 
         // Should not NPE even though no entries exist yet
         assertDoesNotThrow(() -> cache.updateViewport(newViewport));
@@ -521,9 +496,7 @@ class WaveformSegmentCacheTest {
     @MethodSource("resizeTestCases")
     void testResizeScenarios(int initialWidth, int newWidth, int entriesToAdd) {
         // Create initial cache
-        viewport =
-                new ViewportContext(
-                        0.0, 10.0, initialWidth, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        viewport = new ViewportContext(0.0, 10.0, initialWidth, 200, 100);
         cache = new WaveformSegmentCache(viewport);
 
         // Add entries
@@ -535,9 +508,7 @@ class WaveformSegmentCacheTest {
         }
 
         // Resize
-        var newViewport =
-                new ViewportContext(
-                        0.0, 10.0, newWidth, 200, 100, ViewportContext.ScrollDirection.FORWARD);
+        var newViewport = new ViewportContext(0.0, 10.0, newWidth, 200, 100);
         cache.updateViewport(newViewport);
 
         // Verify entries are preserved (up to new cache size)
