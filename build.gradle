@@ -278,7 +278,7 @@ tasks.withType(Test).configureEach {
 
 test {
     def isCI = project.ext.isCI
-    maxParallelForks = 3
+    maxParallelForks = Runtime.runtime.availableProcessors()
     forkEvery = 1
     jvmArgs = nativeAccessJvmArgs
     testLogging {
