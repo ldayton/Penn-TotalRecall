@@ -2,11 +2,24 @@ package ui.shortcuts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import core.env.Platform;
+import javax.swing.KeyStroke;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ui.KeyboardManager;
 
 /** Tests to ensure existing user preferences stored in UserDB continue to work. */
 class UserDBCompatibilityTest {
+
+    private KeyboardManager keyboardManager;
+
+    @BeforeEach
+    void setUp() {
+        // Create a keyboard manager for testing (using current platform)
+        Platform currentPlatform = new Platform();
+        keyboardManager = new KeyboardManager(currentPlatform);
+    }
 
     @Test
     @DisplayName("Existing internal formats from user preferences should parse correctly")
@@ -15,33 +28,41 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // Mac-style shortcuts (meta = Command)
-                    Shortcut macCommand = Shortcut.fromInternalForm("meta shift D");
+                    Shortcut macCommand = createShortcut("meta shift D");
                     assertNotNull(macCommand);
 
-                    Shortcut macControl = Shortcut.fromInternalForm("ctrl S");
+                    Shortcut macControl = createShortcut("ctrl S");
                     assertNotNull(macControl);
 
                     // PC-style shortcuts (ctrl = Control)
-                    Shortcut pcControl = Shortcut.fromInternalForm("ctrl shift D");
+                    Shortcut pcControl = createShortcut("ctrl shift D");
                     assertNotNull(pcControl);
 
-                    Shortcut pcAlt = Shortcut.fromInternalForm("alt LEFT");
+                    Shortcut pcAlt = createShortcut("alt LEFT");
                     assertNotNull(pcAlt);
 
                     // Common modifier combinations
-                    Shortcut shiftOnly = Shortcut.fromInternalForm("shift RIGHT");
+                    Shortcut shiftOnly = createShortcut("shift RIGHT");
                     assertNotNull(shiftOnly);
 
-                    Shortcut noModifier = Shortcut.fromInternalForm("F1");
+                    Shortcut noModifier = createShortcut("F1");
                     assertNotNull(noModifier);
 
                     // Special keys
-                    Shortcut delete = Shortcut.fromInternalForm("meta DELETE");
+                    Shortcut delete = createShortcut("meta DELETE");
                     assertNotNull(delete);
 
-                    Shortcut enter = Shortcut.fromInternalForm("meta shift ENTER");
+                    Shortcut enter = createShortcut("meta shift ENTER");
                     assertNotNull(enter);
                 });
+    }
+
+    private Shortcut createShortcut(String internalForm) {
+        KeyStroke stroke = KeyStroke.getKeyStroke(internalForm);
+        if (stroke == null) {
+            throw new RuntimeException("Cannot parse keystroke: " + internalForm);
+        }
+        return Shortcut.forPlatform(stroke, keyboardManager);
     }
 
     @Test
@@ -61,13 +82,13 @@ class UserDBCompatibilityTest {
 
         for (String internalForm : testInternalForms) {
             // Simulate UserDB.retrieve() → store() → retrieve() cycle
-            Shortcut original = Shortcut.fromInternalForm(internalForm);
+            Shortcut original = createShortcut(internalForm);
 
             // Simulate what UserDB.store() saves
             String storedForm = original.getInternalForm();
 
             // Simulate what UserDB.retrieve() loads
-            Shortcut restored = Shortcut.fromInternalForm(storedForm);
+            Shortcut restored = createShortcut(storedForm);
 
             assertEquals(
                     original, restored, "Round-trip failed for internal form: " + internalForm);
@@ -81,8 +102,8 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // These represent the same logical shortcut on different platforms
-                    Shortcut macStyle = Shortcut.fromInternalForm("meta S"); // Command+S on Mac
-                    Shortcut pcStyle = Shortcut.fromInternalForm("ctrl S"); // Ctrl+S on PC
+                    Shortcut macStyle = createShortcut("meta S"); // Command+S on Mac
+                    Shortcut pcStyle = createShortcut("ctrl S"); // Ctrl+S on PC
 
                     assertNotNull(macStyle);
                     assertNotNull(pcStyle);
@@ -101,15 +122,15 @@ class UserDBCompatibilityTest {
         assertDoesNotThrow(
                 () -> {
                     // Various combinations that could be stored
-                    Shortcut multiModifier = Shortcut.fromInternalForm("ctrl alt shift F");
+                    Shortcut multiModifier = createShortcut("ctrl alt shift F");
                     assertNotNull(multiModifier);
 
                     // Arrow keys with modifiers
-                    Shortcut arrows = Shortcut.fromInternalForm("meta UP");
+                    Shortcut arrows = createShortcut("meta UP");
                     assertNotNull(arrows);
 
                     // Function keys with modifiers
-                    Shortcut funcKey = Shortcut.fromInternalForm("shift F12");
+                    Shortcut funcKey = createShortcut("shift F12");
                     assertNotNull(funcKey);
                 });
     }

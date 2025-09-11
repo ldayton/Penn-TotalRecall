@@ -52,7 +52,6 @@ import org.slf4j.LoggerFactory;
  * <ul>
  *   <li>Development: Libraries loaded from src/main/resources/
  *   <li>Production: Libraries loaded from system paths or app bundle
- *   <li>CI/Testing: NOSOUND mode for headless environments
  *   <li>Custom paths: Override default locations via configuration
  * </ul>
  */

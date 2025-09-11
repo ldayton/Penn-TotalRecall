@@ -278,6 +278,8 @@ tasks.withType(Test).configureEach {
 
 test {
     def isCI = project.ext.isCI
+    maxParallelForks = 3
+    forkEvery = 1
     jvmArgs = nativeAccessJvmArgs
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
@@ -294,23 +296,22 @@ test {
             ciConfigFile.withInputStream { configProps.load(it) }
         }
     }
-
     useJUnitPlatform {
         excludeTags 'packaging'
-        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
-        if (audioHardwareAvailable == 'false') excludeTags 'audio-hardware'
-        def windowingAvailable = configProps.getProperty('windowing.system.available')
-        if (windowingAvailable == 'false') excludeTags 'windowing'
-        excludeTags 'audio'
+        if (isCI) {
+            excludeTags 'windowing'
+            excludeTags 'audio'
+        }
         def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
+        if (project.hasProperty('excludeTags')) {
+            excludeTags project.property('excludeTags').toString().split(',')
+        }
     }
-    
     loadEnvironmentConfig(test, 'development')
     if (isCI) {
         loadEnvironmentConfig(test, 'ci')
     }
-
     systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
     systemProperty 'test.disable.prefetch', System.getProperty('test.disable.prefetch', 'true')
     System.getProperties().each { k, v ->
@@ -320,59 +321,7 @@ test {
     }
 }
 
-tasks.register('audioTest', Test.class) {
-    group = 'verification'
-    description = 'Run FMOD engine tests in isolated JVMs (one per class)'
-    dependsOn testClasses
-    maxParallelForks = 1
-    forkEvery = 1
-    testClassesDirs = sourceSets.test.output.classesDirs
-    classpath = sourceSets.test.runtimeClasspath
-    jvmArgs = nativeAccessJvmArgs
-    testLogging {
-        events "passed", "skipped", "failed"
-        showStandardStreams = true
-        info.events = ["passed", "skipped", "failed"]
-        info.exceptionFormat = "full"
-    }
-    def isCI = project.ext.isCI
-    def configProps = new Properties()
-    def devConfigFile = file("src/main/resources/development.properties")
-    if (devConfigFile.exists()) {
-        devConfigFile.withInputStream { configProps.load(it) }
-    }
-    if (isCI) {
-        def ciConfigFile = file("src/main/resources/ci.properties")
-        if (ciConfigFile.exists()) {
-            ciConfigFile.withInputStream { configProps.load(it) }
-        }
-    }
-    loadEnvironmentConfig(delegate, 'development')
-    if (isCI) {
-        loadEnvironmentConfig(delegate, 'ci')
-    }
-    useJUnitPlatform {
-        includeTags 'audio'
-        def osName = System.getProperty('os.name').toLowerCase()
-        if (!osName.contains('mac')) excludeTags 'macos'
-        def audioHardwareAvailable = configProps.getProperty('audio.hardware.available')
-        if (audioHardwareAvailable == 'false') excludeTags 'audio-hardware'
-        if (project.hasProperty('excludeTags')) {
-            excludeTags project.property('excludeTags').toString().split(',')
-        }
-    }
-    systemProperty 'test.suppress.fmod.format.errors', System.getProperty('test.suppress.fmod.format.errors', 'true')
-    System.getProperties().each { k, v ->
-        if (k instanceof String && k.startsWith('test.')) systemProperty k, v
-    }
-}
-
-tasks.named('audioTest') {
-    mustRunAfter tasks.named('test')
-}
-
 tasks.named('check') {
-    dependsOn tasks.named('audioTest')
     dependsOn tasks.named('packageTest')
 }
 

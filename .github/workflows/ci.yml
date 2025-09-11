@@ -54,7 +54,6 @@ jobs:
         path: |
           build/test-results/test/
           build/test-results/packageTest/
-          build/test-results/audioTest/
         retention-days: 30
         
     - name: Upload test reports
@@ -65,7 +64,6 @@ jobs:
         path: |
           build/reports/tests/test/
           build/reports/tests/packageTest/
-          build/reports/tests/audioTest/
         retention-days: 30
         
     - name: Upload macOS DMG

@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Tag;
  * display is available. This prevents GUI-related tests from failing in environments that cannot
  * support windowing systems.
  *
- * <p>The exclusion is controlled by build configuration, similar to how @AudioHardware tests are
- * excluded when audio hardware is not available.
+ * <p>The exclusion is controlled by build configuration based on the CI environment.
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
