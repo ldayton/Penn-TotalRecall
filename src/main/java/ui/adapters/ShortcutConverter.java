@@ -49,6 +49,10 @@ public class ShortcutConverter {
                     case "enter" -> java.awt.event.KeyEvent.VK_ENTER;
                     case "escape" -> java.awt.event.KeyEvent.VK_ESCAPE;
                     case "tab" -> java.awt.event.KeyEvent.VK_TAB;
+                    case "minus" -> java.awt.event.KeyEvent.VK_MINUS;
+                    case "plus" -> java.awt.event.KeyEvent.VK_PLUS;
+                    case "equals" -> java.awt.event.KeyEvent.VK_EQUALS;
+                    case "delete" -> java.awt.event.KeyEvent.VK_DELETE;
                     default -> {
                         if (normalizedKey.length() != 1) {
                             throw new IllegalArgumentException(
