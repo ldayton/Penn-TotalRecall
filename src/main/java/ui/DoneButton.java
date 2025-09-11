@@ -1,6 +1,6 @@
 package ui;
 
-import core.actions.DoneAction;
+import core.actions.impl.DoneAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.KeyEvent;

@@ -8,7 +8,7 @@ import java.util.Optional;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.actions.ActionsFileParser.ActionConfig;
+import ui.adapters.SwingActionConfig;
 
 /**
  * ShortcutPreferences for managing user preferences for ActionConfig objects. This provides user
@@ -17,26 +17,26 @@ import ui.actions.ActionsFileParser.ActionConfig;
 public class ShortcutPreferences {
     private static final Logger logger = LoggerFactory.getLogger(ShortcutPreferences.class);
 
-    private final List<ActionConfig> defaultActionConfigs;
+    private final List<SwingActionConfig> defaultActionConfigs;
     private final ActionConfigListener listener;
     private final PreferencesManager preferencesManager;
 
     private static final String NO_SHORTCUT = "#";
 
     public interface ActionConfigListener {
-        void actionConfigUpdated(ActionConfig actionConfig, Shortcut oldShortcut);
+        void actionConfigUpdated(SwingActionConfig actionConfig, Shortcut oldShortcut);
     }
 
     public ShortcutPreferences(
             @NonNull PreferencesManager preferencesManager,
-            @NonNull List<ActionConfig> defaultActionConfigs,
+            @NonNull List<SwingActionConfig> defaultActionConfigs,
             @NonNull ActionConfigListener listener) {
         this.preferencesManager = preferencesManager;
         this.defaultActionConfigs = defaultActionConfigs;
         this.listener = listener;
     }
 
-    public void store(ActionConfig actionConfig) {
+    public void store(SwingActionConfig actionConfig) {
         String key = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
         Shortcut oldShortcut = retrieveAll().get(key);
 
@@ -67,7 +67,7 @@ public class ShortcutPreferences {
     }
 
     public void persistDefaults(boolean overwrite) {
-        for (ActionConfig actionConfig : defaultActionConfigs) {
+        for (SwingActionConfig actionConfig : defaultActionConfigs) {
             String id = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             if (overwrite || retrieve(id) == null) {
                 store(actionConfig);
@@ -77,19 +77,19 @@ public class ShortcutPreferences {
 
     public Map<String, Shortcut> retrieveAll() {
         Map<String, Shortcut> result = new HashMap<>();
-        for (ActionConfig actionConfig : defaultActionConfigs) {
+        for (SwingActionConfig actionConfig : defaultActionConfigs) {
             String id = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             result.put(id, retrieve(id));
         }
         return result;
     }
 
-    public List<ActionConfig> getDefaultActionConfigs() {
+    public List<SwingActionConfig> getDefaultActionConfigs() {
         return defaultActionConfigs;
     }
 
-    public ActionConfig findActionConfigById(String id) {
-        for (ActionConfig actionConfig : defaultActionConfigs) {
+    public SwingActionConfig findActionConfigById(String id) {
+        for (SwingActionConfig actionConfig : defaultActionConfigs) {
             String configId = makeId(actionConfig.className(), actionConfig.arg().orElse(null));
             if (configId.equals(id)) {
                 return actionConfig;
@@ -105,12 +105,11 @@ public class ShortcutPreferences {
      * @param newShortcut The new shortcut (can be null)
      * @return A new ActionConfig with the updated shortcut
      */
-    public ActionConfig withShortcut(ActionConfig originalConfig, Shortcut newShortcut) {
-        return new ActionConfig(
+    public SwingActionConfig withShortcut(SwingActionConfig originalConfig, Shortcut newShortcut) {
+        return new SwingActionConfig(
                 originalConfig.className(),
                 originalConfig.name(),
-                originalConfig.tooltip().orElse(null),
-                originalConfig.arg().orElse(null),
+                originalConfig.tooltip(),
                 newShortcut != null ? Optional.of(newShortcut) : Optional.empty());
     }
 

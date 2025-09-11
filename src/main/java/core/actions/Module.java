@@ -22,8 +22,8 @@ public class Module extends AbstractModule {
         try {
             ClassPath classPath = ClassPath.from(getClass().getClassLoader());
 
-            // Find all classes in the "core.actions" package that extend Action
-            classPath.getTopLevelClasses("core.actions").stream()
+            // Find all classes in the "core.actions.impl" package that extend Action
+            classPath.getTopLevelClasses("core.actions.impl").stream()
                     .map(ClassPath.ClassInfo::load)
                     .filter(Action.class::isAssignableFrom)
                     .filter(clazz -> !clazz.isInterface())

@@ -19,7 +19,7 @@ class PreferencesIntegrationTest extends SwingTestFixture {
         // Trigger Preferences via the real menu action on the EDT
         onEdt(
                 () -> {
-                    var prefsAction = getInstance(core.actions.PreferencesAction.class);
+                    var prefsAction = getInstance(core.actions.impl.PreferencesAction.class);
                     prefsAction.execute();
                 });
 

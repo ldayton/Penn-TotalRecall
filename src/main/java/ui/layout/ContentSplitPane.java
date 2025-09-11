@@ -1,6 +1,6 @@
 package ui.layout;
 
-import core.actions.PlayPauseAction;
+import core.actions.impl.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -9,7 +9,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
-import ui.actions.ActionsManager;
+import ui.actions.ActionManager;
 // import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
 import ui.adapters.SwingAction;
@@ -29,7 +29,7 @@ public class ContentSplitPane extends JSplitPane {
     public ContentSplitPane(
             ControlPanel controlPanel,
             WaveformCanvas waveformCanvas,
-            ActionsManager actionsManager,
+            ActionManager actionsManager,
             PlayPauseAction playPauseAction,
             // DeleteSelectedAnnotationAction deleteSelectedAnnotationAction, // Disabled
             // AnnotateIntrusionAction annotateIntrusionAction,

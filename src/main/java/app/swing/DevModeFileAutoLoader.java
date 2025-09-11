@@ -1,6 +1,6 @@
 package app.swing;
 
-import core.actions.PlayPauseAction;
+import core.actions.impl.PlayPauseAction;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.AppConfig;

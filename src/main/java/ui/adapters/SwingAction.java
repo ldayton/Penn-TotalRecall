@@ -17,41 +17,24 @@ import javax.swing.KeyStroke;
 public class SwingAction extends AbstractAction {
     private final Action action;
 
-    /**
-     * Create a SwingAction that wraps the given core Action.
-     *
-     * @param action the core action to wrap
-     */
     public SwingAction(Action action) {
         super(action.getLabel());
         this.action = action;
 
         // Set tooltip if provided
-        String tooltip = action.getTooltip();
-        if (tooltip != null && !tooltip.isEmpty()) {
-            putValue(SHORT_DESCRIPTION, tooltip);
-        }
+        action.getTooltip()
+                .ifPresent(
+                        tooltip -> {
+                            if (!tooltip.isEmpty()) {
+                                putValue(SHORT_DESCRIPTION, tooltip);
+                            }
+                        });
 
         // Observe state changes
         action.addObserver(this::updateFromAction);
 
-        // Parse and set keyboard shortcut if provided
-        String shortcut = action.getShortcut();
-        if (shortcut != null && !shortcut.isEmpty()) {
-            try {
-                KeyStroke keyStroke = parseShortcut(shortcut);
-                if (keyStroke != null) {
-                    putValue(ACCELERATOR_KEY, keyStroke);
-                }
-            } catch (Exception e) {
-                // Log but don't fail if shortcut parsing fails
-                System.err.println(
-                        "Failed to parse shortcut '"
-                                + shortcut
-                                + "' for action "
-                                + action.getClass().getSimpleName());
-            }
-        }
+        // ShortcutSpec will be handled by UI layer that knows about KeyStrokes
+        // For now, skip shortcut handling as it needs platform-specific conversion
 
         // Set initial enabled state
         setEnabled(action.isEnabled());
@@ -68,31 +51,20 @@ public class SwingAction extends AbstractAction {
     private void updateFromAction() {
         setEnabled(action.isEnabled());
         putValue(NAME, action.getLabel());
-        String tooltip = action.getTooltip();
-        if (tooltip != null && !tooltip.isEmpty()) {
-            putValue(SHORT_DESCRIPTION, tooltip);
-        }
+        action.getTooltip()
+                .ifPresent(
+                        tooltip -> {
+                            if (!tooltip.isEmpty()) {
+                                putValue(SHORT_DESCRIPTION, tooltip);
+                            }
+                        });
     }
 
-    /**
-     * Get the wrapped core action.
-     *
-     * @return the core action
-     */
     public Action getCoreAction() {
         return action;
     }
 
-    /**
-     * Parse a shortcut string like "ctrl+S" into a KeyStroke.
-     *
-     * @param shortcut the shortcut string
-     * @return the KeyStroke, or null if parsing fails
-     */
     private KeyStroke parseShortcut(String shortcut) {
-        // Simple parsing - could be enhanced
-        // Format: "ctrl+shift+S" or "cmd+S" or "alt+F4"
-
         String processed =
                 shortcut.toLowerCase()
                         .replace("cmd", "meta")

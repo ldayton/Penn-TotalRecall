@@ -1,0 +1,237 @@
+{
+  "actions": [
+    {
+      "class": "DoneAction",
+      "name": "Mark Complete",
+      "tooltip": "Mark Annotation File Complete",
+      "shortcut": {
+        "modifiers": ["menu", "shift"],
+        "key": "d"
+      }
+    },
+    {
+      "class": "OpenAudioFileAction",
+      "name": "Add Audio Files...",
+      "tooltip": "Select File or Folder",
+      "os": ["Linux", "Windows"],
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "o"
+      }
+    },
+    {
+      "class": "OpenAudioFileAction",
+      "name": "Open Audio File...",
+      "os": ["Mac OS X"],
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "o"
+      }
+    },
+    {
+      "class": "OpenAudioFolderAction",
+      "name": "Open Audio Folder...",
+      "os": ["Mac OS X"],
+      "shortcut": {
+        "modifiers": ["menu", "alt"],
+        "key": "o"
+      }
+    },
+    {
+      "class": "OpenWordpoolAction",
+      "name": "Select Wordpool...",
+      "tooltip": "Select Text File Containing Words in Audio File",
+      "shortcut": {
+        "modifiers": ["menu", "shift"],
+        "key": "o"
+      }
+    },
+    {
+      "class": "PlayPauseAction",
+      "name": "Play/Pause",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "p"
+      }
+    },
+    {
+      "class": "ReplayLast200MillisAction",
+      "name": "Replay Last 200 ms",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "z"
+      }
+    },
+    {
+      "class": "SeekToStartAction",
+      "name": "Go to Start",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "s"
+      }
+    },
+    {
+      "class": "ReturnToLastPositionAction",
+      "name": "Undo Play",
+      "tooltip": "Return to the position prior to hitting play",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "l"
+      }
+    },
+    {
+      "class": "ReplayLastPositionAction",
+      "name": "Replay",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "r"
+      }
+    },
+    {
+      "class": "SeekForwardSmallAction",
+      "name": "Forward Small Amount",
+      "shortcut": {
+        "modifiers": [],
+        "key": "right"
+      }
+    },
+    {
+      "class": "SeekBackwardSmallAction",
+      "name": "Backward Small Amount",
+      "shortcut": {
+        "modifiers": [],
+        "key": "left"
+      }
+    },
+    {
+      "class": "SeekForwardMediumAction",
+      "name": "Forward Medium Amount",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "right"
+      }
+    },
+    {
+      "class": "SeekBackwardMediumAction",
+      "name": "Backward Medium Amount",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "left"
+      }
+    },
+    {
+      "class": "SeekForwardLargeAction",
+      "name": "Forward Large Amount",
+      "shortcut": {
+        "modifiers": ["menu", "shift"],
+        "key": "right"
+      }
+    },
+    {
+      "class": "ExitAction",
+      "name": "Exit",
+      "os": ["Windows", "Linux"],
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "x"
+      }
+    },
+    {
+      "class": "SeekBackwardLargeAction",
+      "name": "Backward Large Amount",
+      "shortcut": {
+        "modifiers": ["menu", "shift"],
+        "key": "left"
+      }
+    },
+    {
+      "class": "ToggleNextAnnotationAction",
+      "name": "Toggle Next Annotation",
+      "shortcut": {
+        "modifiers": ["shift"],
+        "key": "right"
+      }
+    },
+    {
+      "class": "TogglePreviousAnnotationAction",
+      "name": "Toggle Previous Annotation",
+      "shortcut": {
+        "modifiers": ["shift"],
+        "key": "left"
+      }
+    },
+    {
+      "class": "Last200PlusMoveBackwardAction",
+      "name": "Backward Small Amount then Replay Last 200 ms",
+      "shortcut": {
+        "modifiers": ["alt"],
+        "key": "left"
+      }
+    },
+    {
+      "class": "Last200PlusMoveForwardAction",
+      "name": "Forward Small Amount then Replay Last 200 ms",
+      "shortcut": {
+        "modifiers": ["alt"],
+        "key": "right"
+      }
+    },
+    {
+      "class": "DeleteSelectedAnnotationAction",
+      "name": "Delete Selected Annotation on Waveform",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "delete"
+      }
+    },
+    {
+      "class": "AnnotateIntrusionAction",
+      "name": "Commit Annotation as Intrusion",
+      "shortcut": {
+        "modifiers": ["menu", "shift"],
+        "key": "enter"
+      }
+    },
+    {
+      "class": "ZoomInAction",
+      "name": "Zoom In",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "equals"
+      }
+    },
+    {
+      "class": "ZoomOutAction",
+      "name": "Zoom Out",
+      "shortcut": {
+        "modifiers": ["menu"],
+        "key": "minus"
+      }
+    },
+    {
+      "class": "PreferencesAction",
+      "name": "Preferences..."
+    },
+    {
+      "class": "AboutAction",
+      "name": "About",
+      "os": ["Windows", "Linux"]
+    },
+    {
+      "class": "CheckUpdatesAction",
+      "name": "Check For Updates"
+    },
+    {
+      "class": "VisitTutorialSiteAction",
+      "name": "Program Homepage"
+    },
+    {
+      "class": "EditShortcutsAction",
+      "name": "Edit Keyboard Shortcuts..."
+    },
+    {
+      "class": "TipsMessageAction",
+      "name": "View Program Tips..."
+    }
+  ]
+}

@@ -1,22 +1,22 @@
 package ui.layout;
 
-import core.actions.AboutAction;
+import core.actions.impl.AboutAction;
 // import actions.AnnotateIntrusionAction;
 // import actions.AnnotateRegularAction;
-import core.actions.CheckUpdatesAction;
-import core.actions.DoneAction;
-import core.actions.EditShortcutsAction;
-import core.actions.ExitAction;
-import core.actions.Last200PlusMoveAction;
-import core.actions.OpenWordpoolAction;
-import core.actions.PlayPauseAction;
-import core.actions.PreferencesAction;
-import core.actions.ReplayLast200MillisAction;
+import core.actions.impl.CheckUpdatesAction;
+import core.actions.impl.DoneAction;
+import core.actions.impl.EditShortcutsAction;
+import core.actions.impl.ExitAction;
+import core.actions.impl.Last200PlusMoveAction;
+import core.actions.impl.OpenWordpoolAction;
+import core.actions.impl.PlayPauseAction;
+import core.actions.impl.PreferencesAction;
+import core.actions.impl.ReplayLast200MillisAction;
 // import actions.ReplayLastPositionAction;
 // import actions.ReturnToLastPositionAction;
-import core.actions.SeekToStartAction;
-import core.actions.TipsMessageAction;
-import core.actions.VisitTutorialSiteAction;
+import core.actions.impl.SeekToStartAction;
+import core.actions.impl.TipsMessageAction;
+import core.actions.impl.VisitTutorialSiteAction;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.swing.JMenu;
@@ -68,13 +68,18 @@ public class AppMenuBar extends JMenuBar {
     // private final AnnotateRegularAction annotateRegularAction;
     // private final AnnotateIntrusionAction annotateIntrusionAction;
     // private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    private final core.actions.ZoomInAction zoomInAction;
-    private final core.actions.ZoomOutAction zoomOutAction;
-    private final core.actions.OpenAudioFileAction openAudioFileAction;
-    private final core.actions.OpenAudioFolderAction openAudioFolderAction;
-    private final core.actions.SeekActionFactory seekActionFactory;
-    private final core.actions.ScreenSeekForwardAction screenSeekForwardAction;
-    private final core.actions.ScreenSeekBackwardAction screenSeekBackwardAction;
+    private final core.actions.impl.ZoomInAction zoomInAction;
+    private final core.actions.impl.ZoomOutAction zoomOutAction;
+    private final core.actions.impl.OpenAudioFileAction openAudioFileAction;
+    private final core.actions.impl.OpenAudioFolderAction openAudioFolderAction;
+    private final core.actions.impl.SeekForwardSmallAction seekForwardSmallAction;
+    private final core.actions.impl.SeekBackwardSmallAction seekBackwardSmallAction;
+    private final core.actions.impl.SeekForwardMediumAction seekForwardMediumAction;
+    private final core.actions.impl.SeekBackwardMediumAction seekBackwardMediumAction;
+    private final core.actions.impl.SeekForwardLargeAction seekForwardLargeAction;
+    private final core.actions.impl.SeekBackwardLargeAction seekBackwardLargeAction;
+    private final core.actions.impl.ScreenSeekForwardAction screenSeekForwardAction;
+    private final core.actions.impl.ScreenSeekBackwardAction screenSeekBackwardAction;
 
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @Inject
@@ -82,7 +87,7 @@ public class AppMenuBar extends JMenuBar {
             ui.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
-            ui.actions.ActionsManager actionsManager,
+            ui.actions.ActionManager actionsManager,
             EditShortcutsAction editShortcutsAction,
             PreferencesAction preferencesAction,
             PlayPauseAction playPauseAction,
@@ -99,13 +104,18 @@ public class AppMenuBar extends JMenuBar {
             // AnnotateRegularAction annotateRegularAction,
             // AnnotateIntrusionAction annotateIntrusionAction,
             // actions.ToggleAnnotationsAction toggleAnnotationsAction,
-            core.actions.ZoomInAction zoomInAction,
-            core.actions.ZoomOutAction zoomOutAction,
-            core.actions.OpenAudioFileAction openAudioFileAction,
-            core.actions.OpenAudioFolderAction openAudioFolderAction,
-            core.actions.SeekActionFactory seekActionFactory,
-            core.actions.ScreenSeekForwardAction screenSeekForwardAction,
-            core.actions.ScreenSeekBackwardAction screenSeekBackwardAction) {
+            core.actions.impl.ZoomInAction zoomInAction,
+            core.actions.impl.ZoomOutAction zoomOutAction,
+            core.actions.impl.OpenAudioFileAction openAudioFileAction,
+            core.actions.impl.OpenAudioFolderAction openAudioFolderAction,
+            core.actions.impl.SeekForwardSmallAction seekForwardSmallAction,
+            core.actions.impl.SeekBackwardSmallAction seekBackwardSmallAction,
+            core.actions.impl.SeekForwardMediumAction seekForwardMediumAction,
+            core.actions.impl.SeekBackwardMediumAction seekBackwardMediumAction,
+            core.actions.impl.SeekForwardLargeAction seekForwardLargeAction,
+            core.actions.impl.SeekBackwardLargeAction seekBackwardLargeAction,
+            core.actions.impl.ScreenSeekForwardAction screenSeekForwardAction,
+            core.actions.impl.ScreenSeekBackwardAction screenSeekBackwardAction) {
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
         this.editShortcutsAction = editShortcutsAction;
@@ -128,7 +138,12 @@ public class AppMenuBar extends JMenuBar {
         this.zoomOutAction = zoomOutAction;
         this.openAudioFileAction = openAudioFileAction;
         this.openAudioFolderAction = openAudioFolderAction;
-        this.seekActionFactory = seekActionFactory;
+        this.seekForwardSmallAction = seekForwardSmallAction;
+        this.seekBackwardSmallAction = seekBackwardSmallAction;
+        this.seekForwardMediumAction = seekForwardMediumAction;
+        this.seekBackwardMediumAction = seekBackwardMediumAction;
+        this.seekForwardLargeAction = seekForwardLargeAction;
+        this.seekBackwardLargeAction = seekBackwardLargeAction;
         this.screenSeekForwardAction = screenSeekForwardAction;
         this.screenSeekBackwardAction = screenSeekBackwardAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
@@ -176,23 +191,13 @@ public class AppMenuBar extends JMenuBar {
 
         JMenu jmSeek = new JMenu("Seek");
 
-        // Add seek actions using the factory
-        JMenuItem jmiSeekForwardSmall =
-                new JMenuItem(new SwingAction(seekActionFactory.createSeekAction("forward-small")));
-        JMenuItem jmiSeekSmallBackward =
-                new JMenuItem(
-                        new SwingAction(seekActionFactory.createSeekAction("backward-small")));
-        JMenuItem jmiSeekForwardMedium =
-                new JMenuItem(
-                        new SwingAction(seekActionFactory.createSeekAction("forward-medium")));
-        JMenuItem jmiSeekBackwardMedium =
-                new JMenuItem(
-                        new SwingAction(seekActionFactory.createSeekAction("backward-medium")));
-        JMenuItem jmiSeekForwardLarge =
-                new JMenuItem(new SwingAction(seekActionFactory.createSeekAction("forward-large")));
-        JMenuItem jmiSeekBackwardLarge =
-                new JMenuItem(
-                        new SwingAction(seekActionFactory.createSeekAction("backward-large")));
+        // Add seek actions
+        JMenuItem jmiSeekForwardSmall = new JMenuItem(new SwingAction(seekForwardSmallAction));
+        JMenuItem jmiSeekSmallBackward = new JMenuItem(new SwingAction(seekBackwardSmallAction));
+        JMenuItem jmiSeekForwardMedium = new JMenuItem(new SwingAction(seekForwardMediumAction));
+        JMenuItem jmiSeekBackwardMedium = new JMenuItem(new SwingAction(seekBackwardMediumAction));
+        JMenuItem jmiSeekForwardLarge = new JMenuItem(new SwingAction(seekForwardLargeAction));
+        JMenuItem jmiSeekBackwardLarge = new JMenuItem(new SwingAction(seekBackwardLargeAction));
 
         JMenuItem jmiLast200MoveRight = new JMenuItem(new SwingAction(last200PlusMoveAction));
         JMenuItem jmiLast200MoveLeft = new JMenuItem(new SwingAction(last200PlusMoveAction));

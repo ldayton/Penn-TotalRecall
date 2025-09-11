@@ -19,7 +19,7 @@ class ShortcutFrameIntegrationTest extends SwingTestFixture {
         // Trigger EditShortcutsAction on the EDT
         onEdt(
                 () -> {
-                    var action = getInstance(core.actions.EditShortcutsAction.class);
+                    var action = getInstance(core.actions.impl.EditShortcutsAction.class);
                     action.execute();
                 });
 

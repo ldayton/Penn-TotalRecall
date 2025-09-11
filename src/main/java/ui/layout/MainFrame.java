@@ -1,6 +1,6 @@
 package ui.layout;
 
-import core.actions.ExitAction;
+import core.actions.impl.ExitAction;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;

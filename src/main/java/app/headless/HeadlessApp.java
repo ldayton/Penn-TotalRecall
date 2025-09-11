@@ -31,4 +31,18 @@ public class HeadlessApp {
         logger.info("Headless application started");
         // Additional headless initialization would go here
     }
+
+    /**
+     * Gets an instance from the global injector.
+     *
+     * @param clazz the class to get
+     * @return the instance from the injector
+     * @throws IllegalStateException if the injector hasn't been created yet
+     */
+    public static <T> T getInjectedInstance(Class<T> clazz) {
+        if (globalInjector == null) {
+            throw new IllegalStateException("HeadlessApp not initialized. Call create() first.");
+        }
+        return globalInjector.getInstance(clazz);
+    }
 }

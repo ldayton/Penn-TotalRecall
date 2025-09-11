@@ -10,7 +10,7 @@ import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.LookAndFeelManager;
-import ui.actions.ActionsManager;
+import ui.actions.ActionManager;
 import ui.adapters.SwingActionRegistry;
 import ui.layout.AppFocusTraversalPolicy;
 import ui.layout.ContentSplitPane;
@@ -63,7 +63,7 @@ public class SwingApp {
 
         // Initialize action configurations immediately after injector creation
         // This ensures action names and properties are available when components are created
-        var actionsManager = globalInjector.getInstance(ActionsManager.class);
+        var actionsManager = globalInjector.getInstance(ActionManager.class);
         actionsManager.initialize();
 
         // Get the bootstrap instance (this triggers creation of all DI-managed components)
@@ -179,7 +179,7 @@ public class SwingApp {
         // Initialize Look and Feel with proper DI (includes macOS handlers)
         lookAndFeelManager.initialize();
 
-        // ActionsManager already initialized during bootstrap
+        // ActionManager already initialized during bootstrap
         myFrame.setFocusTraversalPolicy(myFocusTraversalPolicy);
         windowManager.restoreWindowLayout(myFrame, mySplitPane);
 

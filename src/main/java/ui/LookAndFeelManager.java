@@ -66,7 +66,7 @@ public class LookAndFeelManager {
                     _ -> {
                         var aboutAction =
                                 app.swing.SwingApp.getRequiredInjectedInstance(
-                                        core.actions.AboutAction.class, "AboutAction");
+                                        core.actions.impl.AboutAction.class, "AboutAction");
                         aboutAction.execute();
                     });
         }
@@ -77,7 +77,8 @@ public class LookAndFeelManager {
                     _ -> {
                         var preferencesAction =
                                 app.swing.SwingApp.getRequiredInjectedInstance(
-                                        core.actions.PreferencesAction.class, "PreferencesAction");
+                                        core.actions.impl.PreferencesAction.class,
+                                        "PreferencesAction");
                         preferencesAction.execute();
                     });
         }
@@ -90,7 +91,7 @@ public class LookAndFeelManager {
                             // Use the DI-managed ExitAction - fail fast if not available
                             var exitAction =
                                     app.swing.SwingApp.getRequiredInjectedInstance(
-                                            core.actions.ExitAction.class, "ExitAction");
+                                            core.actions.impl.ExitAction.class, "ExitAction");
                             exitAction.execute();
                             response.performQuit();
                         } catch (Exception ex) {

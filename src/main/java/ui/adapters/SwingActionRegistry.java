@@ -7,7 +7,7 @@ import jakarta.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import ui.actions.ActionsManager;
+import ui.actions.ActionManager;
 
 /**
  * Registry that provides Swing adapters for core actions.
@@ -19,14 +19,8 @@ import ui.actions.ActionsManager;
 public class SwingActionRegistry {
     private final Map<Class<? extends Action>, SwingAction> swingAdapters = new HashMap<>();
 
-    /**
-     * Create the Swing registry and register all actions with ActionsManager.
-     *
-     * @param actionRegistry the core action registry
-     * @param actionsManager the legacy actions manager for shortcut registration
-     */
     @Inject
-    public SwingActionRegistry(ActionRegistry actionRegistry, ActionsManager actionsManager) {
+    public SwingActionRegistry(ActionRegistry actionRegistry, ActionManager actionsManager) {
 
         // Create Swing adapters for all actions
         for (Action action : actionRegistry.getAllActions()) {
@@ -38,12 +32,6 @@ public class SwingActionRegistry {
         }
     }
 
-    /**
-     * Get the Swing adapter for an action class.
-     *
-     * @param actionClass the action class
-     * @return the Swing adapter, or empty if not found
-     */
     public Optional<SwingAction> getSwingAction(Class<? extends Action> actionClass) {
         return Optional.ofNullable(swingAdapters.get(actionClass));
     }

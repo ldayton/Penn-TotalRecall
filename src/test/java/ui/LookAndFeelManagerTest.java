@@ -3,7 +3,7 @@ package ui;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import core.actions.ExitAction;
+import core.actions.impl.ExitAction;
 import core.env.AppConfig;
 import core.env.Platform;
 import core.env.ProgramName;

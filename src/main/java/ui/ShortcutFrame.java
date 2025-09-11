@@ -5,7 +5,8 @@ import core.dispatch.Subscribe;
 import core.events.EditShortcutsRequestedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import ui.actions.ActionsManager;
+import ui.actions.ActionManager;
+import ui.adapters.SwingActionConfig;
 import ui.shortcuts.ShortcutManager;
 
 /**
@@ -16,18 +17,17 @@ import ui.shortcuts.ShortcutManager;
 public class ShortcutFrame extends ShortcutManager {
 
     @Inject
-    public ShortcutFrame(ActionsManager actionsManager, EventDispatchBus eventBus) {
+    public ShortcutFrame(ActionManager actionsManager, EventDispatchBus eventBus) {
         super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
         eventBus.subscribe(this);
     }
 
     private static ui.shortcuts.ShortcutPreferences.ActionConfigListener createActionConfigListener(
-            ActionsManager actionsManager) {
+            ActionManager actionsManager) {
         return new ui.shortcuts.ShortcutPreferences.ActionConfigListener() {
             @Override
             public void actionConfigUpdated(
-                    ui.actions.ActionsFileParser.ActionConfig actionConfig,
-                    ui.shortcuts.Shortcut oldShortcut) {
+                    SwingActionConfig actionConfig, ui.shortcuts.Shortcut oldShortcut) {
                 // Update via ActionsManager using the action config
                 String id =
                         actionConfig.className()

@@ -34,10 +34,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import ui.DialogService;
 import ui.KeyboardManager;
-import ui.actions.ActionsFileParser.ActionConfig;
+import ui.adapters.SwingActionConfig;
 
 public class ShortcutManager extends JFrame {
-    private final List<ActionConfig> defaultActionConfigs;
+    private final List<SwingActionConfig> defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
     private final ShortcutPreferences.ActionConfigListener listener;
     private final ContentPane contentPane;
@@ -47,7 +47,8 @@ public class ShortcutManager extends JFrame {
      * constructor that used XActionParser.
      */
     public ShortcutManager(
-            List<ActionConfig> actionConfigs, ShortcutPreferences.ActionConfigListener listener) {
+            List<SwingActionConfig> actionConfigs,
+            ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = actionConfigs;
         PreferencesManager preferencesManager =
                 app.swing.SwingApp.getInjectedInstance(PreferencesManager.class);
@@ -66,10 +67,10 @@ public class ShortcutManager extends JFrame {
 
         Map<String, Shortcut> curShortMap = shortcutPreferences.retrieveAll();
         for (String id : curShortMap.keySet()) {
-            ActionConfig defaultActionConfig = shortcutPreferences.findActionConfigById(id);
+            SwingActionConfig defaultActionConfig = shortcutPreferences.findActionConfigById(id);
             if (defaultActionConfig != null) {
                 Shortcut shortOpt = curShortMap.get(id);
-                ActionConfig newActionConfig =
+                SwingActionConfig newActionConfig =
                         shortcutPreferences.withShortcut(
                                 defaultActionConfig, shortcutPreferences.retrieve(id));
                 listener.actionConfigUpdated(newActionConfig, shortOpt);
@@ -95,7 +96,7 @@ public class ShortcutManager extends JFrame {
             public Scroller() {
                 setViewportView(
                         new ShortcutTable(
-                                defaultActionConfigs.toArray(new ActionConfig[0]),
+                                defaultActionConfigs.toArray(new SwingActionConfig[0]),
                                 shortcutPreferences,
                                 listener));
 
@@ -160,14 +161,14 @@ public class ShortcutManager extends JFrame {
 }
 
 class ShortcutTable extends JTable {
-    private final ActionConfig[] defaultActionConfigs;
+    private final SwingActionConfig[] defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
 
     public ShortcutTable(
-            ActionConfig[] defaultActionConfigs,
+            SwingActionConfig[] defaultActionConfigs,
             ShortcutPreferences shortcutPreferences,
             ShortcutPreferences.ActionConfigListener listener) {
         this.defaultActionConfigs = defaultActionConfigs;
@@ -225,9 +226,9 @@ class ShortcutTable extends JTable {
             if (selectedRow >= 0) {
                 if ((code == KeyEvent.VK_BACK_SPACE || code == KeyEvent.VK_DELETE)
                         && modifiers == 0) {
-                    ActionConfig rowActionConfig =
+                    SwingActionConfig rowActionConfig =
                             shortcutTableModel.actionConfigForRow(selectedRow);
-                    ActionConfig newActionConfig =
+                    SwingActionConfig newActionConfig =
                             shortcutPreferences.withShortcut(rowActionConfig, null);
                     doSwap(newActionConfig);
                 } else if (!maskKeyCodes.contains(code)) {
@@ -250,7 +251,8 @@ class ShortcutTable extends JTable {
             }
         }
 
-        private void doSwap(ActionConfig toSwapIn) {
+        private void doSwap(SwingActionConfig toSwapIn) {
+            // SwingActionConfig already has ui.shortcuts.Shortcut
             Shortcut shortcut = toSwapIn.shortcut().orElse(null);
 
             // Check for duplicate shortcuts
@@ -277,7 +279,7 @@ class ShortcutTable extends JTable {
         private final List<String> headers = List.of("Action", "Shortcut", "Default");
         private final String noShortcutRepr = "";
 
-        public ActionConfig actionConfigForRow(int row) {
+        public SwingActionConfig actionConfigForRow(int row) {
             return defaultActionConfigs[row];
         }
 
@@ -315,7 +317,7 @@ class ShortcutTable extends JTable {
                 return null;
             }
 
-            ActionConfig defActionConfig = defaultActionConfigs[rowIndex];
+            SwingActionConfig defActionConfig = defaultActionConfigs[rowIndex];
             String key =
                     defActionConfig.className()
                             + (defActionConfig.arg().orElse(null) != null
