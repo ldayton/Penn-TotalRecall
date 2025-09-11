@@ -336,6 +336,17 @@ tasks.register('audioTest', Test.class) {
         info.exceptionFormat = "full"
     }
     def isCI = project.ext.isCI
+    def configProps = new Properties()
+    def devConfigFile = file("src/main/resources/development.properties")
+    if (devConfigFile.exists()) {
+        devConfigFile.withInputStream { configProps.load(it) }
+    }
+    if (isCI) {
+        def ciConfigFile = file("src/main/resources/ci.properties")
+        if (ciConfigFile.exists()) {
+            ciConfigFile.withInputStream { configProps.load(it) }
+        }
+    }
     loadEnvironmentConfig(delegate, 'development')
     if (isCI) {
         loadEnvironmentConfig(delegate, 'ci')
