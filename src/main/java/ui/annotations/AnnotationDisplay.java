@@ -2,8 +2,6 @@ package ui.annotations;
 
 import core.annotations.Annotation;
 import core.dispatch.EventDispatchBus;
-import core.dispatch.Subscribe;
-import core.events.UiUpdateEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Dimension;
@@ -92,12 +90,5 @@ public class AnnotationDisplay extends JScrollPane {
 
     public int getNumAnnotations() {
         return annotationTable.getModel().size();
-    }
-
-    @Subscribe
-    public void handleUIUpdateRequestedEvent(@NonNull UiUpdateEvent event) {
-        if (event.component() == UiUpdateEvent.Component.ANNOTATION_DISPLAY) {
-            repaint();
-        }
     }
 }

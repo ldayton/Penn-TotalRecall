@@ -5,7 +5,6 @@ import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.env.PreferenceKeys;
 import core.events.AudioFilesSelectedEvent;
-import core.events.UiUpdateEvent;
 import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -187,13 +186,6 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
     private static boolean extensionSupported(@NonNull String name) {
         var lowerName = name.toLowerCase(Locale.ROOT);
         return Constants.audioFormatsLowerCase.stream().anyMatch(lowerName::endsWith);
-    }
-
-    @Subscribe
-    public void handleUIUpdateRequestedEvent(@NonNull UiUpdateEvent event) {
-        if (event.component() == UiUpdateEvent.Component.AUDIO_FILE_DISPLAY) {
-            repaint();
-        }
     }
 
     @Subscribe
