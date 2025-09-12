@@ -1,5 +1,6 @@
 package ui.audiofiles;
 
+import com.google.inject.Provider;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
@@ -14,21 +15,21 @@ import lombok.NonNull;
 public class AudioFileListMouseAdapter extends MouseAdapter {
 
     private final AudioFilePopupMenuFactory popupMenuFactory;
-    private final AudioFileDisplayInterface audioFileDisplay;
+    private final Provider<AudioFileDisplayInterface> audioFileDisplayProvider;
 
     /**
      * Creates a mouse adapter that can act on the <code>AudioFileList</code> on whose behalf it is
      * listening.
      *
      * @param popupMenuFactory The factory for creating popup menus.
-     * @param audioFileDisplay The audio file display for switching files.
+     * @param audioFileDisplayProvider Provider for the audio file display for switching files.
      */
     @Inject
     public AudioFileListMouseAdapter(
             @NonNull AudioFilePopupMenuFactory popupMenuFactory,
-            @NonNull AudioFileDisplayInterface audioFileDisplay) {
+            @NonNull Provider<AudioFileDisplayInterface> audioFileDisplayProvider) {
         this.popupMenuFactory = popupMenuFactory;
-        this.audioFileDisplay = audioFileDisplay;
+        this.audioFileDisplayProvider = audioFileDisplayProvider;
     }
 
     /**
@@ -45,7 +46,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
             return; // event not on a File
         }
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-            audioFileDisplay.askToSwitchFile(file);
+            audioFileDisplayProvider.get().askToSwitchFile(file);
         }
     }
 
