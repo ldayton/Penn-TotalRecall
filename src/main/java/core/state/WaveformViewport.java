@@ -4,8 +4,7 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.SeekEvent;
 import core.events.SeekScreenEvent;
-import core.events.ZoomInEvent;
-import core.events.ZoomOutEvent;
+import core.events.ZoomEvent;
 import core.waveform.TimeRange;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -39,17 +38,16 @@ public class WaveformViewport {
     }
 
     @Subscribe
-    public void onZoomInRequested(@NonNull ZoomInEvent event) {
-        int newZoom = (int) (pixelsPerSecond * ZOOM_FACTOR);
-        if (newZoom <= MAX_PIXELS_PER_SECOND) {
-            setZoom(newZoom);
-        }
-    }
+    public void onZoomRequested(@NonNull ZoomEvent event) {
+        int newZoom =
+                event.direction() == ZoomEvent.Direction.IN
+                        ? (int) (pixelsPerSecond * ZOOM_FACTOR)
+                        : (int) (pixelsPerSecond / ZOOM_FACTOR);
 
-    @Subscribe
-    public void onZoomOutRequested(@NonNull ZoomOutEvent event) {
-        int newZoom = (int) (pixelsPerSecond / ZOOM_FACTOR);
-        if (newZoom >= MIN_PIXELS_PER_SECOND) {
+        if (event.direction() == ZoomEvent.Direction.IN && newZoom <= MAX_PIXELS_PER_SECOND) {
+            setZoom(newZoom);
+        } else if (event.direction() == ZoomEvent.Direction.OUT
+                && newZoom >= MIN_PIXELS_PER_SECOND) {
             setZoom(newZoom);
         }
     }

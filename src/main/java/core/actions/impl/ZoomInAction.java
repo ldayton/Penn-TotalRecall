@@ -5,7 +5,7 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
-import core.events.ZoomInEvent;
+import core.events.ZoomEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -28,7 +28,7 @@ public class ZoomInAction extends Action {
     @Override
     public void execute() {
         if (isEnabled()) {
-            eventBus.publish(new ZoomInEvent());
+            eventBus.publish(new ZoomEvent(ZoomEvent.Direction.IN));
             eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
         }
     }
