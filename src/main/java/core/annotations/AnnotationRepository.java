@@ -15,8 +15,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +30,13 @@ public class AnnotationRepository {
     private final ProgramVersion programVersion;
 
     @Inject
-    public AnnotationRepository(ObjectMapper mapper, ProgramVersion programVersion) {
+    public AnnotationRepository(
+            @NonNull ObjectMapper mapper, @NonNull ProgramVersion programVersion) {
         this.mapper = mapper.copy().enable(SerializationFeature.INDENT_OUTPUT);
         this.programVersion = programVersion;
     }
 
-    public List<AnnotationEntry> load(Path file) throws IOException {
+    public List<AnnotationEntry> load(@NonNull Path file) throws IOException {
         if (!Files.exists(file)) {
             throw new IOException("Annotation file does not exist: " + file);
         }
@@ -59,19 +61,20 @@ public class AnnotationRepository {
                                             : Instant.now();
 
                             return AnnotationEntry.createWithTimestamp(
-                                    ann, type, annotatorName, createdAt);
+                                    ann, type, Optional.of(annotatorName), createdAt);
                         })
                 .sorted()
                 .collect(Collectors.toList());
     }
 
-    public void save(List<AnnotationEntry> annotations, Path file) throws IOException {
-        Objects.requireNonNull(annotations, "annotations cannot be null");
-        Objects.requireNonNull(file, "file cannot be null");
+    public void save(@NonNull List<AnnotationEntry> annotations, @NonNull Path file)
+            throws IOException {
 
         // Get annotator name from first annotation or use default
         String annotatorName =
-                annotations.isEmpty() ? "Unknown" : annotations.get(0).annotatorName();
+                annotations.isEmpty()
+                        ? "Unknown"
+                        : annotations.get(0).annotatorName().orElse("Unknown");
 
         // Create metadata
         var systemInfo = new LinkedHashMap<String, String>();
@@ -104,7 +107,7 @@ public class AnnotationRepository {
         logger.debug("Saved {} annotations to {}", annotations.size(), file);
     }
 
-    public boolean hasValidHeader(Path file) throws IOException {
+    public boolean hasValidHeader(@NonNull Path file) throws IOException {
         if (!Files.exists(file) || Files.size(file) == 0) {
             return false;
         }
@@ -118,9 +121,7 @@ public class AnnotationRepository {
         }
     }
 
-    public void createFile(Path file, String annotatorName) throws IOException {
-        Objects.requireNonNull(file, "file cannot be null");
-        Objects.requireNonNull(annotatorName, "annotatorName cannot be null");
+    public void createFile(@NonNull Path file, @NonNull String annotatorName) throws IOException {
 
         if (Files.exists(file)) {
             throw new IOException("File already exists: " + file);
@@ -154,7 +155,8 @@ public class AnnotationRepository {
     }
 
     /** Writes the annotation file atomically to prevent corruption. */
-    private void writeAtomically(Path file, AnnotationFile annotationFile) throws IOException {
+    private void writeAtomically(@NonNull Path file, @NonNull AnnotationFile annotationFile)
+            throws IOException {
         // Write to temp file first
         Path tempFile = file.resolveSibling(file.getFileName() + ".tmp");
 
@@ -175,7 +177,7 @@ public class AnnotationRepository {
     }
 
     /** Determines the annotation type based on the text content. */
-    private AnnotationType determineAnnotationType(String text) {
+    private AnnotationType determineAnnotationType(@NonNull String text) {
         if (text == null || text.isEmpty()) {
             return AnnotationType.CUSTOM;
         }

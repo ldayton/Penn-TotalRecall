@@ -13,11 +13,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,35 +34,34 @@ public class AnnotationService {
     private final WaveformSessionDataSource audioState;
     private final AnnotationRepository repository;
 
-    private String currentAnnotatorName = "";
-    private Path currentFile;
+    private Optional<String> currentAnnotatorName = Optional.empty();
+    private Optional<Path> currentFile = Optional.empty();
     private boolean hasUnsavedChanges = false;
 
     @Inject
     public AnnotationService(
-            EventDispatchBus eventBus,
-            WaveformSessionDataSource audioState,
-            AnnotationRepository repository) {
+            @NonNull EventDispatchBus eventBus,
+            @NonNull WaveformSessionDataSource audioState,
+            @NonNull AnnotationRepository repository) {
         this.eventBus = eventBus;
         this.audioState = audioState;
         this.repository = repository;
     }
 
     /** Sets the current annotator name for new annotations. */
-    public void setAnnotatorName(String name) {
-        this.currentAnnotatorName = Objects.requireNonNull(name, "name cannot be null");
+    public void setAnnotatorName(@NonNull String name) {
+        this.currentAnnotatorName = Optional.of(name);
     }
 
     /** Gets the current annotator name. */
-    public String getAnnotatorName() {
+    public Optional<String> getAnnotatorName() {
         return currentAnnotatorName;
     }
 
     /** Adds a new annotation at the specified time. */
-    public AnnotationEntry addAnnotation(String text, AnnotationType type, double time) {
+    public AnnotationEntry addAnnotation(
+            @NonNull String text, @NonNull AnnotationType type, double time) {
         validateTime(time);
-        Objects.requireNonNull(text, "text cannot be null");
-        Objects.requireNonNull(type, "type cannot be null");
 
         // Determine word number based on type and text
         int wordNum = determineWordNumber(text, type);
@@ -85,7 +84,8 @@ public class AnnotationService {
     }
 
     /** Adds an annotation at the current audio position. */
-    public AnnotationEntry addAnnotationAtCurrentTime(String text, AnnotationType type) {
+    public AnnotationEntry addAnnotationAtCurrentTime(
+            @NonNull String text, @NonNull AnnotationType type) {
         if (!audioState.isAudioLoaded()) {
             throw new IllegalStateException("No audio file open");
         }
@@ -101,8 +101,7 @@ public class AnnotationService {
     }
 
     /** Deletes the specified annotation. */
-    public boolean deleteAnnotation(AnnotationEntry entry) {
-        Objects.requireNonNull(entry, "entry cannot be null");
+    public boolean deleteAnnotation(@NonNull AnnotationEntry entry) {
 
         boolean removed = annotations.remove(entry);
         if (removed) {
@@ -114,8 +113,7 @@ public class AnnotationService {
     }
 
     /** Deletes annotation by ID. */
-    public boolean deleteAnnotationById(UUID id) {
-        Objects.requireNonNull(id, "id cannot be null");
+    public boolean deleteAnnotationById(@NonNull UUID id) {
 
         return annotations.stream()
                 .filter(e -> e.id().equals(id))
@@ -125,9 +123,7 @@ public class AnnotationService {
     }
 
     /** Updates an existing annotation's text. */
-    public boolean updateAnnotation(UUID id, String newText) {
-        Objects.requireNonNull(id, "id cannot be null");
-        Objects.requireNonNull(newText, "newText cannot be null");
+    public boolean updateAnnotation(@NonNull UUID id, @NonNull String newText) {
 
         for (int i = 0; i < annotations.size(); i++) {
             var entry = annotations.get(i);
@@ -166,20 +162,18 @@ public class AnnotationService {
     }
 
     /** Gets annotation by ID. */
-    public Optional<AnnotationEntry> getAnnotationById(UUID id) {
-        Objects.requireNonNull(id, "id cannot be null");
+    public Optional<AnnotationEntry> getAnnotationById(@NonNull UUID id) {
         return annotations.stream().filter(e -> e.id().equals(id)).findFirst();
     }
 
     /** Loads annotations from a file. */
-    public void loadAnnotations(Path file) {
-        Objects.requireNonNull(file, "file cannot be null");
+    public void loadAnnotations(@NonNull Path file) {
 
         try {
             var loaded = repository.load(file);
             annotations.clear();
             annotations.addAll(loaded);
-            currentFile = file;
+            currentFile = Optional.of(file);
             hasUnsavedChanges = false;
 
             eventBus.publish(new AnnotationsLoadedEvent(loaded, file.toString()));
@@ -192,19 +186,16 @@ public class AnnotationService {
 
     /** Saves current annotations to file. */
     public void saveAnnotations() {
-        if (currentFile == null) {
-            throw new IllegalStateException("No file loaded");
-        }
-        saveAnnotationsTo(currentFile);
+        currentFile.orElseThrow(() -> new IllegalStateException("No file loaded"));
+        saveAnnotationsTo(currentFile.get());
     }
 
     /** Saves annotations to specified file. */
-    public void saveAnnotationsTo(Path file) {
-        Objects.requireNonNull(file, "file cannot be null");
+    public void saveAnnotationsTo(@NonNull Path file) {
 
         try {
             repository.save(annotations, file);
-            currentFile = file;
+            currentFile = Optional.of(file);
             hasUnsavedChanges = false;
             logger.info("Saved {} annotations to {}", annotations.size(), file);
         } catch (Exception e) {
@@ -217,7 +208,7 @@ public class AnnotationService {
     public void clearAnnotations() {
         annotations.clear();
         hasUnsavedChanges = false;
-        currentFile = null;
+        currentFile = Optional.empty();
         eventBus.publish(new AnnotationsClearedEvent());
         logger.debug("Cleared all annotations");
     }
@@ -229,7 +220,7 @@ public class AnnotationService {
 
     /** Gets the current annotation file path. */
     public Optional<Path> getCurrentFile() {
-        return Optional.ofNullable(currentFile);
+        return currentFile;
     }
 
     /** Checks if an annotation can be placed at the specified time. */
@@ -267,7 +258,7 @@ public class AnnotationService {
         }
     }
 
-    private int determineWordNumber(String text, AnnotationType type) {
+    private int determineWordNumber(@NonNull String text, @NonNull AnnotationType type) {
         // TODO: Integrate with wordpool to find matching word number
         // For now, return -1 for custom/intrusion, 0 for regular
         return switch (type) {

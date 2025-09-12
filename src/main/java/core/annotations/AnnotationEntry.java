@@ -1,36 +1,36 @@
 package core.annotations;
 
 import java.time.Instant;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.NonNull;
 
 /** Enhanced annotation with metadata and type information. */
 public record AnnotationEntry(
-        UUID id,
-        Annotation annotation,
-        AnnotationType type,
-        Instant createdAt,
-        String annotatorName)
+        @NonNull UUID id,
+        @NonNull Annotation annotation,
+        @NonNull AnnotationType type,
+        @NonNull Instant createdAt,
+        Optional<String> annotatorName)
         implements Comparable<AnnotationEntry> {
 
-    public AnnotationEntry {
-        Objects.requireNonNull(id, "id cannot be null");
-        Objects.requireNonNull(annotation, "annotation cannot be null");
-        Objects.requireNonNull(type, "type cannot be null");
-        Objects.requireNonNull(createdAt, "createdAt cannot be null");
-        Objects.requireNonNull(annotatorName, "annotatorName cannot be null");
-    }
+    public AnnotationEntry {}
 
     /** Creates a new annotation entry with generated ID and current timestamp. */
     public static AnnotationEntry create(
-            Annotation annotation, AnnotationType type, String annotatorName) {
+            @NonNull Annotation annotation,
+            @NonNull AnnotationType type,
+            Optional<String> annotatorName) {
         return new AnnotationEntry(
                 UUID.randomUUID(), annotation, type, Instant.now(), annotatorName);
     }
 
     /** Creates a new annotation entry with specific timestamp. */
     public static AnnotationEntry createWithTimestamp(
-            Annotation annotation, AnnotationType type, String annotatorName, Instant createdAt) {
+            @NonNull Annotation annotation,
+            @NonNull AnnotationType type,
+            Optional<String> annotatorName,
+            @NonNull Instant createdAt) {
         return new AnnotationEntry(UUID.randomUUID(), annotation, type, createdAt, annotatorName);
     }
 
