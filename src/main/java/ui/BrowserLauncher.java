@@ -2,7 +2,7 @@ package ui;
 
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.DialogInfoEvent;
+import core.events.DialogEvent;
 import core.events.OpenUrlEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -43,6 +43,6 @@ public class BrowserLauncher {
         }
 
         // If browser launch failed, show the fallback message
-        eventBus.publish(new DialogInfoEvent(event.fallbackMessage()));
+        eventBus.publish(new DialogEvent(event.fallbackMessage(), DialogEvent.Type.INFO));
     }
 }

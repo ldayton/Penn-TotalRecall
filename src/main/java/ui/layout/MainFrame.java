@@ -7,8 +7,7 @@ import core.env.PreferenceKeys;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
 import core.events.AppStateChangedEvent;
-import core.events.DialogErrorEvent;
-import core.events.DialogInfoEvent;
+import core.events.DialogEvent;
 import core.events.ExitEvent;
 import core.events.FocusEvent;
 import core.events.PreferencesEvent;
@@ -187,22 +186,16 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
         requestFocus();
     }
 
-    /** Handles error requested events by showing error dialogs. */
+    /** Handles dialog events by showing appropriate dialogs. */
     @Subscribe
-    public void handleErrorRequested(DialogErrorEvent event) {
+    public void handleDialogRequested(DialogEvent event) {
         var dialogService =
                 app.swing.SwingApp.getRequiredInjectedInstance(
                         ui.DialogService.class, "DialogService");
-        dialogService.showError(event.message());
-    }
-
-    /** Handles info requested events by showing info dialogs. */
-    @Subscribe
-    public void handleInfoRequested(DialogInfoEvent event) {
-        var dialogService =
-                app.swing.SwingApp.getRequiredInjectedInstance(
-                        ui.DialogService.class, "DialogService");
-        dialogService.showInfo(event.message());
+        switch (event.type()) {
+            case ERROR -> dialogService.showError(event.message());
+            case INFO -> dialogService.showInfo(event.message());
+        }
     }
 
     /** Returns the default frame title combining app name and version. */

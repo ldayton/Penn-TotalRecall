@@ -5,7 +5,7 @@ import core.dispatch.EventDispatchBus;
 import core.env.Constants;
 import core.env.ProgramName;
 import core.env.ProgramVersion;
-import core.events.DialogInfoEvent;
+import core.events.DialogEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -29,8 +29,9 @@ public class AboutAction extends Action {
     public void execute() {
         // Fire info requested event - UI will handle showing the info dialog
         eventBus.publish(
-                new DialogInfoEvent(
-                        buildAboutMessage(programName.toString(), programVersion.toString())));
+                new DialogEvent(
+                        buildAboutMessage(programName.toString(), programVersion.toString()),
+                        DialogEvent.Type.INFO));
     }
 
     @Override

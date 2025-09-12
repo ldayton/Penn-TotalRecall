@@ -6,7 +6,7 @@ import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.events.CloseAudioFileEvent;
 import core.events.CompleteAnnotationEvent;
-import core.events.DialogErrorEvent;
+import core.events.DialogEvent;
 import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
@@ -45,7 +45,8 @@ public class AnnotationManager {
 
         String curFileName = sessionSource.getCurrentAudioFilePath().orElse(null);
         if (curFileName == null) {
-            eventBus.publish(new DialogErrorEvent("No audio file currently open."));
+            eventBus.publish(
+                    new DialogEvent("No audio file currently open.", DialogEvent.Type.ERROR));
             return;
         }
 
@@ -62,13 +63,14 @@ public class AnnotationManager {
                                     + Constants.completedAnnotationFileExtension);
             if (oFile.exists()) {
                 eventBus.publish(
-                        new DialogErrorEvent(
+                        new DialogEvent(
                                 "Output file already exists. You should not be able to reach this"
-                                        + " condition."));
+                                        + " condition.",
+                                DialogEvent.Type.ERROR));
                 return;
             } else {
                 if (!tmpFile.renameTo(oFile)) {
-                    eventBus.publish(new DialogErrorEvent("Operation failed."));
+                    eventBus.publish(new DialogEvent("Operation failed.", DialogEvent.Type.ERROR));
                     return;
                 } else {
                     try {
@@ -84,7 +86,9 @@ public class AnnotationManager {
                 }
             }
         } else {
-            eventBus.publish(new DialogErrorEvent("You have not made any annotations yet."));
+            eventBus.publish(
+                    new DialogEvent(
+                            "You have not made any annotations yet.", DialogEvent.Type.ERROR));
         }
     }
 

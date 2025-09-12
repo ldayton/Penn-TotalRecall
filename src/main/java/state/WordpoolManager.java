@@ -3,7 +3,7 @@ package state;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
-import core.events.DialogErrorEvent;
+import core.events.DialogEvent;
 import core.events.WordpoolFileSelectedEvent;
 import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
@@ -76,7 +76,8 @@ public class WordpoolManager {
             }
         } catch (IOException e) {
             logger.error("Error processing wordpool file", e);
-            eventBus.publish(new DialogErrorEvent("Cannot process wordpool file!"));
+            eventBus.publish(
+                    new DialogEvent("Cannot process wordpool file!", DialogEvent.Type.ERROR));
         }
     }
 }
