@@ -40,6 +40,7 @@ public class ShortcutManager extends JFrame {
     private final List<SwingActionConfig> defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
     private final ShortcutPreferences.ActionConfigListener listener;
+    private final KeyboardManager keyboardManager;
     private final ContentPane contentPane;
 
     /**
@@ -48,13 +49,14 @@ public class ShortcutManager extends JFrame {
      */
     public ShortcutManager(
             List<SwingActionConfig> actionConfigs,
-            ShortcutPreferences.ActionConfigListener listener) {
+            ShortcutPreferences.ActionConfigListener listener,
+            PreferencesManager preferencesManager,
+            KeyboardManager keyboardManager) {
         this.defaultActionConfigs = actionConfigs;
-        PreferencesManager preferencesManager =
-                app.swing.SwingApp.getInjectedInstance(PreferencesManager.class);
         this.shortcutPreferences =
                 new ShortcutPreferences(preferencesManager, actionConfigs, listener);
         this.listener = listener;
+        this.keyboardManager = keyboardManager;
 
         shortcutPreferences.persistDefaults(false);
 
@@ -98,7 +100,8 @@ public class ShortcutManager extends JFrame {
                         new ShortcutTable(
                                 defaultActionConfigs.toArray(new SwingActionConfig[0]),
                                 shortcutPreferences,
-                                listener));
+                                listener,
+                                keyboardManager));
 
                 setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -163,6 +166,7 @@ public class ShortcutManager extends JFrame {
 class ShortcutTable extends JTable {
     private final SwingActionConfig[] defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
+    private final KeyboardManager keyboardManager;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
@@ -170,9 +174,11 @@ class ShortcutTable extends JTable {
     public ShortcutTable(
             SwingActionConfig[] defaultActionConfigs,
             ShortcutPreferences shortcutPreferences,
-            ShortcutPreferences.ActionConfigListener listener) {
+            ShortcutPreferences.ActionConfigListener listener,
+            KeyboardManager keyboardManager) {
         this.defaultActionConfigs = defaultActionConfigs;
         this.shortcutPreferences = shortcutPreferences;
+        this.keyboardManager = keyboardManager;
         this.shortcutTableModel = new ShortcutTableModel();
 
         setModel(shortcutTableModel);
@@ -234,8 +240,7 @@ class ShortcutTable extends JTable {
                 } else if (!maskKeyCodes.contains(code)) {
                     var enteredShortcut =
                             Shortcut.forPlatform(
-                                    KeyStroke.getKeyStroke(code, modifiers),
-                                    app.swing.SwingApp.getInjectedInstance(KeyboardManager.class));
+                                    KeyStroke.getKeyStroke(code, modifiers), keyboardManager);
                     var rowActionConfig = shortcutTableModel.actionConfigForRow(selectedRow);
                     var newActionConfig =
                             shortcutPreferences.withShortcut(rowActionConfig, enteredShortcut);

@@ -3,6 +3,7 @@ package ui;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.EditShortcutsRequestedEvent;
+import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import ui.actions.ActionManager;
@@ -22,8 +23,14 @@ public class ShortcutFrame extends ShortcutManager {
     public ShortcutFrame(
             ActionManager actionsManager,
             EventDispatchBus eventBus,
-            MainWindowAccess windowService) {
-        super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
+            MainWindowAccess windowService,
+            PreferencesManager preferencesManager,
+            KeyboardManager keyboardManager) {
+        super(
+                actionsManager.getAllActionConfigs(),
+                createActionConfigListener(actionsManager),
+                preferencesManager,
+                keyboardManager);
         this.windowService = windowService;
         eventBus.subscribe(this);
     }
