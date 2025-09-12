@@ -6,6 +6,7 @@ import core.events.AnnotationDeletedEvent;
 import core.events.AnnotationUpdatedEvent;
 import core.events.AnnotationsClearedEvent;
 import core.events.AnnotationsLoadedEvent;
+import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public class AnnotationService {
 
     private final List<AnnotationEntry> annotations = new CopyOnWriteArrayList<>();
     private final EventDispatchBus eventBus;
-    private final AudioStateInterface audioState;
+    private final WaveformSessionDataSource audioState;
     private final AnnotationRepository repository;
 
     private String currentAnnotatorName = "";
@@ -40,7 +41,7 @@ public class AnnotationService {
     @Inject
     public AnnotationService(
             EventDispatchBus eventBus,
-            AudioStateInterface audioState,
+            WaveformSessionDataSource audioState,
             AnnotationRepository repository) {
         this.eventBus = eventBus;
         this.audioState = audioState;
@@ -85,10 +86,17 @@ public class AnnotationService {
 
     /** Adds an annotation at the current audio position. */
     public AnnotationEntry addAnnotationAtCurrentTime(String text, AnnotationType type) {
-        if (!audioState.audioOpen()) {
+        if (!audioState.isAudioLoaded()) {
             throw new IllegalStateException("No audio file open");
         }
-        double currentTime = audioState.getCurrentTimeMillis();
+        double currentTime =
+                audioState
+                                .getPlaybackPosition()
+                                .orElseThrow(
+                                        () ->
+                                                new IllegalStateException(
+                                                        "Cannot get current playback position"))
+                        * 1000;
         return addAnnotation(text, type, currentTime);
     }
 
@@ -226,7 +234,7 @@ public class AnnotationService {
 
     /** Checks if an annotation can be placed at the specified time. */
     public boolean canAnnotateAt(double time) {
-        if (!audioState.audioOpen()) {
+        if (!audioState.isAudioLoaded()) {
             return false;
         }
         validateTime(time);
@@ -248,8 +256,10 @@ public class AnnotationService {
         if (time < 0) {
             throw new IllegalArgumentException("Time cannot be negative: " + time);
         }
-        if (audioState.audioOpen()) {
-            double duration = audioState.getDurationMillis();
+        if (audioState.isAudioLoaded()) {
+            double duration =
+                    audioState.getTotalDuration().orElse(0.0)
+                            * 1000; // Convert seconds to milliseconds
             if (time > duration) {
                 throw new IllegalArgumentException(
                         "Time exceeds audio duration: " + time + " > " + duration);
