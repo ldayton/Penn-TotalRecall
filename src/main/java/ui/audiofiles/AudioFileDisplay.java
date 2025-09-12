@@ -42,6 +42,7 @@ public class AudioFileDisplay extends JScrollPane {
 
     private static AudioFileDisplay instance;
     private final PreferencesManager preferencesManager;
+    private final DialogService dialogService;
 
     private static AudioFileList list;
 
@@ -54,8 +55,10 @@ public class AudioFileDisplay extends JScrollPane {
     public AudioFileDisplay(
             AudioFileList audioFileList,
             PreferencesManager preferencesManager,
-            EventDispatchBus eventBus) {
+            EventDispatchBus eventBus,
+            DialogService dialogService) {
         this.preferencesManager = preferencesManager;
+        this.dialogService = dialogService;
         list = audioFileList;
         getViewport().setView(list);
 
@@ -114,12 +117,10 @@ public class AudioFileDisplay extends JScrollPane {
                         af = new AudioFile(f.getAbsolutePath());
                     } catch (AudioFilePathException e) {
                         logger.error("Error updating audio file done status", e);
-                        DialogService dialogService =
-                                SwingApp.getInjectedInstance(DialogService.class);
-                        if (dialogService == null) {
-                            throw new IllegalStateException("DialogService not available via DI");
+                        // TODO: Refactor to avoid static method accessing instance field
+                        if (instance != null && instance.dialogService != null) {
+                            instance.dialogService.showError(e.getMessage());
                         }
-                        dialogService.showError(e.getMessage());
                         continue;
                     }
                     supportedFiles.add(af);
@@ -162,8 +163,12 @@ public class AudioFileDisplay extends JScrollPane {
                         "Switch to file "
                                 + file
                                 + "?\nYour changes to the current file will not be lost.";
+                // TODO: Refactor to avoid static method accessing instance field
                 DialogService dialogService =
-                        SwingApp.getRequiredInjectedInstance(DialogService.class, "DialogService");
+                        (instance != null && instance.dialogService != null)
+                                ? instance.dialogService
+                                : SwingApp.getRequiredInjectedInstance(
+                                        DialogService.class, "DialogService");
                 var result = dialogService.showConfirmWithDontShowAgain(message);
                 if (result.isDontShowAgain()) {
                     instance.preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
@@ -173,9 +178,11 @@ public class AudioFileDisplay extends JScrollPane {
                 }
             }
         }
+        // TODO: Refactor static methods to avoid SwingApp.getInjectedInstance usage
+        // This requires making these methods non-static or providing proper static accessors
         // Use the new event-driven system to load the file
         var eventBus =
-                SwingApp.getRequiredInjectedInstance(
+                app.swing.SwingApp.getRequiredInjectedInstance(
                         core.dispatch.EventDispatchBus.class, "EventDispatchBus");
         eventBus.publish(new core.events.AudioFileLoadRequestedEvent(file));
 

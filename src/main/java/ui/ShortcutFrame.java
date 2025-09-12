@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import ui.actions.ActionManager;
 import ui.adapters.SwingActionConfig;
+import ui.layout.MainWindowAccess;
 import ui.shortcuts.ShortcutManager;
 
 /**
@@ -15,10 +16,15 @@ import ui.shortcuts.ShortcutManager;
  */
 @Singleton
 public class ShortcutFrame extends ShortcutManager {
+    private final MainWindowAccess windowService;
 
     @Inject
-    public ShortcutFrame(ActionManager actionsManager, EventDispatchBus eventBus) {
+    public ShortcutFrame(
+            ActionManager actionsManager,
+            EventDispatchBus eventBus,
+            MainWindowAccess windowService) {
         super(actionsManager.getAllActionConfigs(), createActionConfigListener(actionsManager));
+        this.windowService = windowService;
         eventBus.subscribe(this);
     }
 
@@ -40,7 +46,7 @@ public class ShortcutFrame extends ShortcutManager {
     }
 
     public void showShortcutEditor() {
-        setLocation(ui.DialogCentering.chooseLocation(this));
+        setLocation(ui.DialogCentering.chooseLocation(this, windowService));
         setVisible(true);
     }
 

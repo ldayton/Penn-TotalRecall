@@ -172,7 +172,8 @@ public class MainFrame extends JFrame implements KeyEventPostProcessor {
     /** Handles preferences requested events by opening the preferences window. */
     @Subscribe
     public void handlePreferencesRequested(PreferencesEvent event) {
-        // Get PreferencesFrame from DI and show it
+        // Using Provider or lazy injection would be better here to avoid circular dependency
+        // For now, keeping the SwingApp.getInjectedInstance call
         var preferencesFrame =
                 app.swing.SwingApp.getInjectedInstance(ui.preferences.PreferencesFrame.class);
         if (preferencesFrame != null) {

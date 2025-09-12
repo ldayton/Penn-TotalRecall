@@ -37,6 +37,7 @@ import ui.layout.MainWindowAccess;
 public class PreferencesFrame extends JFrame implements WindowListener {
     private final KeyboardManager keyboardManager;
     private final DialogService dialogService;
+    private final MainWindowAccess windowService;
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
@@ -62,6 +63,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
             DialogService dialogService) {
         this.keyboardManager = keyboardManager;
         this.dialogService = dialogService;
+        this.windowService = windowService;
         // Actions are constructed locally within initButtonsPanel to avoid circular DI
 
         // force handling by the WindowListener (this.windowClosing())
@@ -215,7 +217,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     @Override
     public void setVisible(boolean visible) {
         if (visible == true) {
-            setLocation(DialogCentering.chooseLocation(this));
+            setLocation(DialogCentering.chooseLocation(this, windowService));
         }
         super.setVisible(visible);
     }

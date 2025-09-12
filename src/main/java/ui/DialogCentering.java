@@ -1,6 +1,5 @@
 package ui;
 
-import app.swing.SwingApp;
 import java.awt.Point;
 import javax.swing.JFrame;
 import ui.layout.MainWindowAccess;
@@ -15,11 +14,7 @@ public class DialogCentering {
      * @return The recommended <code>Point</code> for the top left hand point of the <code>
      *     PreferencesFrame</code>
      */
-    public static Point chooseLocation(JFrame frame) {
-        MainWindowAccess windowService = SwingApp.getInjectedInstance(MainWindowAccess.class);
-        if (windowService == null) {
-            throw new IllegalStateException("MainWindowAccess not available via DI");
-        }
+    public static Point chooseLocation(JFrame frame, MainWindowAccess windowService) {
         final Point p = windowService.getLocationOnScreen();
         final int mfX = (int) p.getX();
         final int mfY = (int) p.getY();
