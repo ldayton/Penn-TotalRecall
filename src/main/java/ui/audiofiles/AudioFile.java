@@ -3,14 +3,16 @@ package ui.audiofiles;
 import core.env.Constants;
 import core.util.OsPath;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import lombok.NonNull;
 
 /**
- * A <code>File</code> that represents an audio file for the purpose of representation in the <code>
- * AudioFileDisplay</code>.
+ * Represents an audio file for the purpose of representation in the <code>AudioFileDisplay</code>.
  *
  * <p><code>AudioFiles</code> keep track of whether they are done being annotated or not
  * ("completion status"), and provide file system sanity checks that guarantee the <code>AudioFile
@@ -26,10 +28,10 @@ import javax.swing.event.ChangeListener;
  * properly synchronized using atomic operations and thread-safe collections. Multiple threads can
  * safely access and modify AudioFile instances concurrently.
  */
-public class AudioFile extends File {
+public class AudioFile implements Comparable<AudioFile> {
 
+    private final Path path;
     private final ConcurrentHashMap<ChangeListener, Boolean> listeners;
-
     private final AtomicBoolean done;
 
     /**
@@ -44,19 +46,74 @@ public class AudioFile extends File {
      * @throws AudioFilePathException If the new file's directory contains both temporary and final
      *     annotation files
      */
-    public AudioFile(String pathname) throws AudioFilePathException {
-        super(pathname);
-        listeners = new ConcurrentHashMap<>();
-        done = new AtomicBoolean(false);
+    public AudioFile(@NonNull String pathname) throws AudioFilePathException {
+        this.path = Paths.get(pathname).toAbsolutePath();
+        this.listeners = new ConcurrentHashMap<>();
+        this.done = new AtomicBoolean(false);
         updateDoneStatus();
+    }
+
+    /**
+     * Creates a new <code>AudioFile</code> from the given File.
+     *
+     * @param file The file to be wrapped
+     * @throws AudioFilePathException If the file's directory contains both temporary and final
+     *     annotation files
+     */
+    public AudioFile(@NonNull File file) throws AudioFilePathException {
+        this(file.getAbsolutePath());
+    }
+
+    /**
+     * Gets the name of the file.
+     *
+     * @return The file name
+     */
+    public String getName() {
+        return path.getFileName().toString();
+    }
+
+    /**
+     * Gets the absolute path of the file.
+     *
+     * @return The absolute path as a string
+     */
+    public String getAbsolutePath() {
+        return path.toString();
+    }
+
+    /**
+     * Converts this AudioFile to a File object.
+     *
+     * @return A File representing the same path
+     */
+    public File toFile() {
+        return path.toFile();
+    }
+
+    /**
+     * Gets the underlying Path object.
+     *
+     * @return The path
+     */
+    public Path getPath() {
+        return path;
+    }
+
+    /**
+     * Checks if the file exists.
+     *
+     * @return true if the file exists
+     */
+    public boolean exists() {
+        return path.toFile().exists();
     }
 
     /**
      * Provide a shorter String representation of this object, for the benefit of the graphical
      * display of the object in the <code>AudioFileList</code>.
      *
-     * @return The <code>AudioFile</code>'s name, using the inherited {@link
-     *     java.io.File#getName()}.
+     * @return The <code>AudioFile</code>'s name
      */
     @Override
     public String toString() {
@@ -75,23 +132,21 @@ public class AudioFile extends File {
     /**
      * Determines how <code>AudioFiles</code> are sorted.
      *
-     * <p>The following three rules are applied, in order if precedence:
+     * <p>The following rules are applied in order:
      *
      * <OL>
-     *   <LI><code>AudioFiles</code> come before other types of <code>Objects</code>.
      *   <LI><code>AudioFiles</code> that are still incomplete come before those that are already
      *       done.
      *   <LI><code>AudioFiles</code> sort by alphabetical order.
      * </OL>
      */
     @Override
-    public int compareTo(File f) {
-        return switch (f) {
-            case AudioFile af when af.isDone() == isDone() -> toString().compareTo(af.toString());
-            case AudioFile af when isDone() -> 1;
-            case AudioFile _ -> -1;
-            case null, default -> 1;
-        };
+    public int compareTo(@NonNull AudioFile other) {
+        if (other == null) return -1;
+        if (other.isDone() == isDone()) {
+            return toString().compareTo(other.toString());
+        }
+        return isDone() ? 1 : -1;
     }
 
     /**
@@ -118,8 +173,8 @@ public class AudioFile extends File {
 
     /**
      * Sets the <code>done</code> field by finding if a temporary annotation file or a final
-     * annotation file is present in the same directory as this <code>File</code>. Informs listeners
-     * if the completion status changes.
+     * annotation file is present in the same directory as this file. Informs listeners if the
+     * completion status changes.
      *
      * <p>This method is thread-safe and can be called from multiple threads concurrently.
      *
@@ -128,18 +183,18 @@ public class AudioFile extends File {
     public void updateDoneStatus() throws AudioFilePathException {
         var savedStatus = done.get();
         var basePath = OsPath.basename(getAbsolutePath());
-        var annFile = new File(basePath + "." + Constants.completedAnnotationFileExtension);
-        var tmpFile = new File(basePath + "." + Constants.temporaryAnnotationFileExtension);
+        var annPath = Paths.get(basePath + "." + Constants.completedAnnotationFileExtension);
+        var tmpPath = Paths.get(basePath + "." + Constants.temporaryAnnotationFileExtension);
 
-        var annFileExists = annFile.exists();
-        var tmpFileExists = tmpFile.exists();
+        var annFileExists = annPath.toFile().exists();
+        var tmpFileExists = tmpPath.toFile().exists();
 
         if (annFileExists && tmpFileExists) {
             throw new AudioFilePathException(
                     "Both exist, so I don't know if I'm completed or not:\n"
-                            + annFile.getPath()
+                            + annPath
                             + "\n"
-                            + tmpFile.getPath());
+                            + tmpPath);
         }
 
         var updatedStatus = annFileExists || (!tmpFileExists && savedStatus);
@@ -160,7 +215,7 @@ public class AudioFile extends File {
      *
      * @param listen The <code>ChangeListener</code> to be added.
      */
-    public void addChangeListener(ChangeListener listen) {
+    public void addChangeListener(@NonNull ChangeListener listen) {
         listeners.put(listen, Boolean.TRUE);
     }
 
@@ -179,7 +234,7 @@ public class AudioFile extends File {
      * final annotation files for this <code>AudioFile</code>.
      */
     public static final class AudioFilePathException extends Exception {
-        private AudioFilePathException(String message) {
+        private AudioFilePathException(@NonNull String message) {
             super(message);
         }
     }

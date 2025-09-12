@@ -5,6 +5,7 @@ import core.annotations.Annotation;
 import jakarta.inject.Inject;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import lombok.NonNull;
 
 /** Popup menu launched by right clicking on annotations. */
 public class AnnotationTablePopupMenu extends JPopupMenu {
@@ -17,16 +18,19 @@ public class AnnotationTablePopupMenu extends JPopupMenu {
     }
 
     public void configureForAnnotation(
-            Annotation annToDelete, int rowIndex, AnnotationTable table, String rowRepr) {
+            @NonNull Annotation annToDelete,
+            int rowIndex,
+            @NonNull AnnotationTable table,
+            @NonNull String rowRepr) {
         removeAll(); // Clear existing items
 
-        JMenuItem fakeTitle = new JMenuItem(rowRepr + "...");
+        var fakeTitle = new JMenuItem(rowRepr + "...");
         fakeTitle.setEnabled(false);
 
         // Configure the injected action for this specific row
         // deleteAnnotationAction.setRowIndex(rowIndex);
         // JMenuItem del = new JMenuItem(deleteAnnotationAction);
-        JMenuItem del = new JMenuItem("Delete"); // Temporary placeholder
+        var del = new JMenuItem("Delete"); // Temporary placeholder
         del.setEnabled(false); // Disabled since action is not available
 
         add(fakeTitle);

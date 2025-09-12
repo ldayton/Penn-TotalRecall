@@ -4,6 +4,7 @@ package ui.annotations;
 import core.annotations.Annotation;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import lombok.NonNull;
 
 /**
  * Factory for creating AnnotationTablePopupMenu instances. This allows multiple popup menus to be
@@ -29,9 +30,11 @@ public class AnnotationTablePopupMenuFactory {
      * @return A configured AnnotationTablePopupMenu instance
      */
     public AnnotationTablePopupMenu createPopupMenu(
-            Annotation annToDelete, int rowIndex, AnnotationTable table, String rowRepr) {
-        AnnotationTablePopupMenu popupMenu =
-                new AnnotationTablePopupMenu(/* deleteAnnotationAction */ );
+            @NonNull Annotation annToDelete,
+            int rowIndex,
+            @NonNull AnnotationTable table,
+            @NonNull String rowRepr) {
+        var popupMenu = new AnnotationTablePopupMenu(/* deleteAnnotationAction */ );
         popupMenu.configureForAnnotation(annToDelete, rowIndex, table, rowRepr);
         return popupMenu;
     }

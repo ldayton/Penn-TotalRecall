@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import lombok.NonNull;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
 @Singleton
@@ -36,9 +37,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
      */
     @Inject
     public AudioFileList(
-            AudioFileListMouseAdapter mouseAdapter,
-            Provider<AudioFileDisplayInterface> audioFileDisplayProvider,
-            EventDispatchBus eventBus) {
+            @NonNull AudioFileListMouseAdapter mouseAdapter,
+            @NonNull Provider<AudioFileDisplayInterface> audioFileDisplayProvider,
+            @NonNull EventDispatchBus eventBus) {
         this.audioFileDisplayProvider = audioFileDisplayProvider;
         model = new AudioFileListModel();
         setModel(model);
@@ -73,7 +74,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                         "remove file",
                         new AbstractAction() {
                             @Override
-                            public void actionPerformed(ActionEvent e) {
+                            public void actionPerformed(@NonNull ActionEvent e) {
                                 var selectedValues = getSelectedValuesList();
                                 if (selectedValues.size() != 1) {
                                     return;
@@ -103,7 +104,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                         "switch",
                         new AbstractAction() {
                             @Override
-                            public void actionPerformed(ActionEvent e) {
+                            public void actionPerformed(@NonNull ActionEvent e) {
                                 var selectedValues = getSelectedValuesList();
                                 if (selectedValues.size() == 1) {
                                     audioFileDisplayProvider
@@ -133,7 +134,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         addMouseListener(
                 new MouseAdapter() {
                     @Override
-                    public void mousePressed(MouseEvent e) {
+                    public void mousePressed(@NonNull MouseEvent e) {
                         if (isFocusable()) {
                             // automatically takes focus in this case
                         } else {
@@ -182,7 +183,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     /** Handler for the event that this <code>AudioFileList</code> gains focus. */
     @Override
-    public void focusGained(FocusEvent e) {
+    public void focusGained(@NonNull FocusEvent e) {
         int anchor = getAnchorSelectionIndex();
         if (anchor >= 0) {
             setSelectedIndex(anchor);
@@ -193,14 +194,14 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     /** Handler for event that this <code>AudioFileList</code> loses focus. */
     @Override
-    public void focusLost(FocusEvent e) {
+    public void focusLost(@NonNull FocusEvent e) {
         if (e.isTemporary() == false) {
             clearSelection();
         }
     }
 
     @Subscribe
-    public void onAppStateChanged(AppStateChangedEvent event) {
+    public void onAppStateChanged(@NonNull AppStateChangedEvent event) {
         if (event.isAudioLoaded() && event.context() instanceof File loadedFile) {
             for (int i = 0; i < model.getSize(); i++) {
                 var audioFile = model.getElementAt(i);
@@ -226,7 +227,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     /** Handles AudioFileListEvent to remove files from the list. */
     @Subscribe
-    public void handleAudioFileListEvent(AudioFileListEvent event) {
+    public void handleAudioFileListEvent(@NonNull AudioFileListEvent event) {
         if (event.type() == AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX) {
             // Check if the index is valid
             if (event.index() >= 0 && event.index() < model.getSize()) {

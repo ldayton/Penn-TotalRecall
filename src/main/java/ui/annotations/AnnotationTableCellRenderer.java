@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import lombok.NonNull;
 
 /** The MVC "view" of a cell of the <code>AnnotationTable</code>. */
 public class AnnotationTableCellRenderer extends DefaultTableCellRenderer {
@@ -14,9 +15,14 @@ public class AnnotationTableCellRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(
-            JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            @NonNull JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
 
-        JLabel renderedLabel =
+        var renderedLabel =
                 (JLabel)
                         super.getTableCellRendererComponent(
                                 table, value, isSelected, hasFocus, row, column);
@@ -26,10 +32,14 @@ public class AnnotationTableCellRenderer extends DefaultTableCellRenderer {
 
     @Override
     protected void setValue(Object value) {
-        if (value != null) {
-            setText((value instanceof Double) ? noDecimalsFormat.format(value) : value.toString());
-        } else {
+        if (value == null) {
             setText("");
+            return;
         }
+        if (value instanceof Double d) {
+            setText(noDecimalsFormat.format(d));
+            return;
+        }
+        setText(value.toString());
     }
 }

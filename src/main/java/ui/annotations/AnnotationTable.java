@@ -11,10 +11,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BorderFactory;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JViewport;
@@ -22,7 +20,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
+import lombok.NonNull;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton
@@ -34,12 +32,12 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
-    public AnnotationTable(AnnotationTableMouseAdapter mouseAdapter
+    public AnnotationTable(@NonNull AnnotationTableMouseAdapter mouseAdapter
             // JumpToAnnotationAction jumpToAnnotationAction
             ) {
         model = new AnnotationTableModel();
         render = new AnnotationTableCellRenderer();
-        JTableHeader header = getTableHeader();
+        var header = getTableHeader();
         header.setReorderingAllowed(false);
         header.setResizingAllowed(true);
         header.setBorder(
@@ -52,7 +50,7 @@ public class AnnotationTable extends JTable implements FocusListener {
                 new DefaultTableCellRenderer() {
                     @Override
                     public Component getTableCellRendererComponent(
-                            JTable table,
+                            @NonNull JTable table,
                             Object value,
                             boolean isSelected,
                             boolean hasFocus,
@@ -69,16 +67,17 @@ public class AnnotationTable extends JTable implements FocusListener {
         //         .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "jump to annotation");
         // getActionMap().put("jump to annotation", jumpToAnnotationAction);
 
-        InputMap im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        var im = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "none");
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK), "none");
 
-        Set<AWTKeyStroke> forwardKeys = new HashSet<AWTKeyStroke>();
-        forwardKeys.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0, false));
+        Set<AWTKeyStroke> forwardKeys =
+                Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0, false));
         setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardKeys);
-        Set<AWTKeyStroke> backwardKeys = new HashSet<AWTKeyStroke>();
-        backwardKeys.add(
-                AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK, false));
+        Set<AWTKeyStroke> backwardKeys =
+                Set.of(
+                        AWTKeyStroke.getAWTKeyStroke(
+                                KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK, false));
         setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardKeys);
 
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
@@ -108,9 +107,9 @@ public class AnnotationTable extends JTable implements FocusListener {
 
     @Override
     public boolean getScrollableTracksViewportHeight() {
-        Component parent = getParent();
-        if (parent instanceof JViewport) {
-            return parent.getHeight() > getPreferredSize().height;
+        var parent = getParent();
+        if (parent instanceof JViewport viewport) {
+            return viewport.getHeight() > getPreferredSize().height;
         }
         return false;
     }
@@ -126,8 +125,8 @@ public class AnnotationTable extends JTable implements FocusListener {
     }
 
     @Override
-    public void focusGained(FocusEvent e) {
-        int anchor = getSelectionModel().getAnchorSelectionIndex();
+    public void focusGained(@NonNull FocusEvent e) {
+        var anchor = getSelectionModel().getAnchorSelectionIndex();
         if (anchor >= 0) {
             changeSelection(anchor, 0, false, false);
             changeSelection(anchor, getModel().getColumnCount(), false, true);
@@ -138,14 +137,14 @@ public class AnnotationTable extends JTable implements FocusListener {
     }
 
     @Override
-    public void focusLost(FocusEvent e) {
-        if (e.isTemporary() == false) {
+    public void focusLost(@NonNull FocusEvent e) {
+        if (!e.isTemporary()) {
             clearSelection();
         }
     }
 
     public Annotation popSelectedAnnotation() {
-        int[] rows = this.getSelectedRows();
+        var rows = this.getSelectedRows();
         if (rows.length == 1) {
             return getModel().getAnnotationAt(rows[0]);
         } else {

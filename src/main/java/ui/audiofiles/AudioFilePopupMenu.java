@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import lombok.NonNull;
 
 /**
  * <code>JPopupMenu</code> that presents user with actions for manipulating the <code>AudioFileList
@@ -24,7 +25,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
     @Inject
     public AudioFilePopupMenu(
             // ContinueAnnotatingAction continueAnnotatingAction,
-            EventDispatchBus eventBus) {
+            @NonNull EventDispatchBus eventBus) {
         // this.continueAnnotatingAction = continueAnnotatingAction;
         this.eventBus = eventBus;
     }
@@ -39,7 +40,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
      * @param index The index of <code>file</code> in its <code>AudioFileList</code>
      * @param isCurrentFile Whether this file is the currently loaded audio file
      */
-    public void configureForFile(AudioFile file, final int index, boolean isCurrentFile) {
+    public void configureForFile(@NonNull AudioFile file, final int index, boolean isCurrentFile) {
         removeAll(); // Clear existing items
 
         // most, if not all LAFs do not support JPopupMenu titles
@@ -59,7 +60,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
                 new JMenuItem(
                         new AbstractAction("Remove from List") {
                             @Override
-                            public void actionPerformed(ActionEvent e) {
+                            public void actionPerformed(@NonNull ActionEvent e) {
                                 eventBus.publish(
                                         new AudioFileListEvent(
                                                 AudioFileListEvent.Type.REMOVE_FILE_AT_INDEX,

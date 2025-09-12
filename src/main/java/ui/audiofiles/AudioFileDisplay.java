@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.DialogService;
@@ -51,10 +52,10 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      */
     @Inject
     public AudioFileDisplay(
-            AudioFileList audioFileList,
-            PreferencesManager preferencesManager,
-            EventDispatchBus eventBus,
-            DialogService dialogService) {
+            @NonNull AudioFileList audioFileList,
+            @NonNull PreferencesManager preferencesManager,
+            @NonNull EventDispatchBus eventBus,
+            @NonNull DialogService dialogService) {
         this.preferencesManager = preferencesManager;
         this.dialogService = dialogService;
         this.list = audioFileList;
@@ -103,7 +104,7 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      * @return <code>true</code> if any of the files were ultimately added
      */
     @Override
-    public boolean addFilesIfSupported(File[] files) {
+    public boolean addFilesIfSupported(@NonNull File[] files) {
         var supportedFiles =
                 Arrays.stream(files)
                         .filter(File::isFile)
@@ -139,7 +140,7 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      * @return <code>true</code> iff the file switch took place
      */
     @Override
-    public boolean askToSwitchFile(AudioFile file) {
+    public boolean askToSwitchFile(@NonNull AudioFile file) {
         if (file.isDone()) {
             return false;
         }
@@ -166,7 +167,7 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
             }
         }
         // Use the injected event bus to load the file
-        eventBus.publish(new core.events.AudioFileLoadRequestedEvent(file));
+        eventBus.publish(new core.events.AudioFileLoadRequestedEvent(file.toFile()));
 
         // UI updates are now handled via events
         return true;
@@ -180,20 +181,20 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      * @return <code>true</code> iff the the <code>name</code> parameter ends with a supported
      *     extension
      */
-    private static boolean extensionSupported(String name) {
+    private static boolean extensionSupported(@NonNull String name) {
         var lowerName = name.toLowerCase(Locale.ROOT);
         return Constants.audioFormatsLowerCase.stream().anyMatch(lowerName::endsWith);
     }
 
     @Subscribe
-    public void handleUIUpdateRequestedEvent(UiUpdateEvent event) {
+    public void handleUIUpdateRequestedEvent(@NonNull UiUpdateEvent event) {
         if (event.component() == UiUpdateEvent.Component.AUDIO_FILE_DISPLAY) {
             repaint();
         }
     }
 
     @Subscribe
-    public void handleAudioFilesSelected(AudioFilesSelectedEvent event) {
+    public void handleAudioFilesSelected(@NonNull AudioFilesSelectedEvent event) {
         addFilesIfSupported(event.files());
     }
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
+import lombok.NonNull;
 
 /**
  * A <code>DefaultListCellRenderer</code> whose appearance is determined by whether the {@link
@@ -32,7 +33,11 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     /** {@inheritDoc} */
     @Override
     public Component getListCellRendererComponent(
-            JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            @NonNull JList<?> list,
+            Object value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
         if (value instanceof AudioFile audioFile) {

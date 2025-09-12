@@ -1,6 +1,7 @@
 package ui.audiofiles;
 
 import java.io.File;
+import lombok.NonNull;
 
 /** Interface for AudioFileDisplay to break circular dependency with AudioFileList. */
 public interface AudioFileDisplayInterface {
@@ -10,7 +11,7 @@ public interface AudioFileDisplayInterface {
      * @param files Candidate files to be added
      * @return true if any of the files were ultimately added
      */
-    boolean addFilesIfSupported(File[] files);
+    boolean addFilesIfSupported(@NonNull File[] files);
 
     /**
      * Switches to the provided AudioFile after asking for user confirmation if needed.
@@ -18,5 +19,5 @@ public interface AudioFileDisplayInterface {
      * @param file The file that may be switched to
      * @return true iff the file switch took place
      */
-    boolean askToSwitchFile(AudioFile file);
+    boolean askToSwitchFile(@NonNull AudioFile file);
 }

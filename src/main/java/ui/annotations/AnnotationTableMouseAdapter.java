@@ -1,11 +1,11 @@
 package ui.annotations;
 
 // import actions.JumpToAnnotationAction;
-import core.annotations.Annotation;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import lombok.NonNull;
 
 // import state.AudioState;
 
@@ -28,7 +28,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(@NonNull MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
             // if (!audioState.isPlaying()) {
             // we are manually generating the event, so we must ourselves check the conditions
@@ -44,16 +44,16 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(@NonNull MouseEvent e) {
         evaluatePopup(e);
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(@NonNull MouseEvent e) {
         evaluatePopup(e);
     }
 
-    public void evaluatePopup(MouseEvent e) {
+    public void evaluatePopup(@NonNull MouseEvent e) {
         if (e.isPopupTrigger()) {
             AnnotationTable table = (AnnotationTable) e.getSource();
             int rIndex = table.rowAtPoint(e.getPoint());
@@ -61,15 +61,14 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
             if (rIndex < 0 || cIndex < 0) {
                 return; // event not on an entry
             }
-            String first =
+            var first =
                     AnnotationTableCellRenderer.noDecimalsFormat.format(
-                            table.getValueAt(rIndex, 0));
-            String second = table.getValueAt(rIndex, 1).toString();
-            String third = table.getValueAt(rIndex, 2).toString();
-            String rowRepr = first + " " + second + " " + third;
-            Annotation annToDelete = table.getModel().toArray()[rIndex];
-            AnnotationTablePopupMenu pop =
-                    popupMenuFactory.createPopupMenu(annToDelete, rIndex, table, rowRepr);
+                            table.getValueAt(rIndex, AnnotationColumn.TIME.index()));
+            var second = table.getValueAt(rIndex, AnnotationColumn.WORD.index()).toString();
+            var third = table.getValueAt(rIndex, AnnotationColumn.WORD_NUM.index()).toString();
+            var rowRepr = first + " " + second + " " + third;
+            var annToDelete = table.getModel().toArray()[rIndex];
+            var pop = popupMenuFactory.createPopupMenu(annToDelete, rIndex, table, rowRepr);
             pop.show(e.getComponent(), e.getX(), e.getY());
         }
     }

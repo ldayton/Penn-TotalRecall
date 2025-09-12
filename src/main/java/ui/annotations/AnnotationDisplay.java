@@ -10,10 +10,12 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import lombok.NonNull;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
@@ -28,7 +30,8 @@ public class AnnotationDisplay extends JScrollPane {
      * listeners, and various aspects of appearance.
      */
     @Inject
-    public AnnotationDisplay(AnnotationTable annotationTable, EventDispatchBus eventBus) {
+    public AnnotationDisplay(
+            @NonNull AnnotationTable annotationTable, @NonNull EventDispatchBus eventBus) {
         this.annotationTable = annotationTable;
         getViewport().setView(annotationTable);
         setPreferredSize(PREFERRED_SIZE);
@@ -43,7 +46,7 @@ public class AnnotationDisplay extends JScrollPane {
         addMouseListener(
                 new MouseAdapter() {
                     @Override
-                    public void mousePressed(MouseEvent e) {
+                    public void mousePressed(@NonNull MouseEvent e) {
                         if (annotationTable.isFocusable()) {
                             annotationTable.requestFocusInWindow();
                         } else {
@@ -66,17 +69,13 @@ public class AnnotationDisplay extends JScrollPane {
         return annotationTable.getModel().toArray();
     }
 
-    public void addAnnotation(Annotation ann) {
-        if (ann == null) {
-            throw new IllegalArgumentException("annotation/s cannot be null");
-        }
+    public void addAnnotation(@NonNull Annotation ann) {
+        Objects.requireNonNull(ann, "annotation cannot be null");
         annotationTable.getModel().addElement(ann);
     }
 
-    public void addAnnotations(Iterable<Annotation> anns) {
-        if (anns == null) {
-            throw new IllegalArgumentException("annotations cannot be null");
-        }
+    public void addAnnotations(@NonNull Iterable<Annotation> anns) {
+        Objects.requireNonNull(anns, "annotations cannot be null");
         annotationTable.getModel().addElements(anns);
     }
 
@@ -93,7 +92,7 @@ public class AnnotationDisplay extends JScrollPane {
     }
 
     @Subscribe
-    public void handleUIUpdateRequestedEvent(UiUpdateEvent event) {
+    public void handleUIUpdateRequestedEvent(@NonNull UiUpdateEvent event) {
         if (event.component() == UiUpdateEvent.Component.ANNOTATION_DISPLAY) {
             repaint();
         }

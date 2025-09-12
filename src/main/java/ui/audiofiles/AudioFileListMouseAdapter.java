@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import lombok.NonNull;
 
 /**
  * MouseListener for the AudioFileList, used for launching popup context menus, and switching audio
@@ -24,8 +25,8 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      */
     @Inject
     public AudioFileListMouseAdapter(
-            AudioFilePopupMenuFactory popupMenuFactory,
-            AudioFileDisplayInterface audioFileDisplay) {
+            @NonNull AudioFilePopupMenuFactory popupMenuFactory,
+            @NonNull AudioFileDisplayInterface audioFileDisplay) {
         this.popupMenuFactory = popupMenuFactory;
         this.audioFileDisplay = audioFileDisplay;
     }
@@ -37,7 +38,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      * @param e The <code>MouseEvent</code> provided by the action trigger
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(@NonNull MouseEvent e) {
         var list = (AudioFileList) e.getSource();
         var file = getAssociatedFile(e, list);
         if (file == null) {
@@ -55,7 +56,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      * @param e The <code>MouseEvent</code> provided by the action trigger
      */
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(@NonNull MouseEvent e) {
         evaluatePopup(e);
     }
 
@@ -66,7 +67,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      * @param e The <code>MouseEvent</code> provided by the action trigger
      */
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(@NonNull MouseEvent e) {
         evaluatePopup(e);
     }
 
@@ -76,7 +77,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      *
      * @param e the mouse event to evaluate
      */
-    public void evaluatePopup(MouseEvent e) {
+    public void evaluatePopup(@NonNull MouseEvent e) {
         if (e.isPopupTrigger()) {
             var list = (AudioFileList) e.getSource();
             var file = getAssociatedFile(e, list);
@@ -97,7 +98,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      * @return The <code>AudioFile</code> that received the mouse event, or <code>null</code> if the
      *     event was not on an <code>AudioFile</code>.
      */
-    private AudioFile getAssociatedFile(MouseEvent e, AudioFileList list) {
+    private AudioFile getAssociatedFile(@NonNull MouseEvent e, @NonNull AudioFileList list) {
         var index = list.locationToIndex(e.getPoint());
         if (index < 0) {
             return null; // event not on a File

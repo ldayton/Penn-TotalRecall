@@ -5,6 +5,7 @@ import core.dispatch.EventDispatchBus;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
+import lombok.NonNull;
 
 /**
  * Factory for creating AudioFilePopupMenu instances. This allows multiple popup menus to be created
@@ -20,7 +21,8 @@ public class AudioFilePopupMenuFactory {
     @Inject
     public AudioFilePopupMenuFactory(
             // ContinueAnnotatingAction continueAnnotatingAction,
-            EventDispatchBus eventBus, Provider<AudioFileList> audioFileListProvider) {
+            @NonNull EventDispatchBus eventBus,
+            @NonNull Provider<AudioFileList> audioFileListProvider) {
         // this.continueAnnotatingAction = continueAnnotatingAction;
         this.eventBus = eventBus;
         this.audioFileListProvider = audioFileListProvider;
@@ -33,7 +35,7 @@ public class AudioFilePopupMenuFactory {
      * @param index The index of the file in the list
      * @return A configured AudioFilePopupMenu instance
      */
-    public AudioFilePopupMenu createPopupMenu(AudioFile file, int index) {
+    public AudioFilePopupMenu createPopupMenu(@NonNull AudioFile file, int index) {
         var popupMenu = new AudioFilePopupMenu(/*continueAnnotatingAction,*/ eventBus);
 
         // Check if this file is the currently loaded one

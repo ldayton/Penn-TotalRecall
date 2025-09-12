@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import lombok.NonNull;
 
 /**
  * A very simple <code>ListModel</code> that guarantees elements remain sorted and without
@@ -69,7 +70,7 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
      *
      * @param files An iterable collection of the files to add
      */
-    public void addElements(Iterable<AudioFile> files) {
+    public void addElements(@NonNull Iterable<AudioFile> files) {
         for (AudioFile file : files) {
             file.addChangeListener(this);
             collection.add(file);
@@ -97,7 +98,7 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
      * <p>Re-sorts the data using {@link java.util.Collections#sort(List)} and requests a repaint.
      */
     @Override
-    public void stateChanged(ChangeEvent e) {
+    public void stateChanged(@NonNull ChangeEvent e) {
         collection.sort();
         var event = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size());
         listeners.forEach(ldl -> ldl.contentsChanged(event));
@@ -105,13 +106,13 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
 
     /** {@inheritDoc} */
     @Override
-    public void addListDataListener(ListDataListener l) {
+    public void addListDataListener(@NonNull ListDataListener l) {
         listeners.add(l);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void removeListDataListener(ListDataListener l) {
+    public void removeListDataListener(@NonNull ListDataListener l) {
         listeners.remove(l);
     }
 }
