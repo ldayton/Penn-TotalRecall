@@ -56,7 +56,8 @@ public class ShortcutManager extends JFrame {
             DialogService dialogService) {
         this.defaultActionConfigs = actionConfigs;
         this.shortcutPreferences =
-                new ShortcutPreferences(preferencesManager, actionConfigs, listener);
+                new ShortcutPreferences(
+                        preferencesManager, actionConfigs, listener, keyboardManager);
         this.listener = listener;
         this.keyboardManager = keyboardManager;
         this.dialogService = dialogService;

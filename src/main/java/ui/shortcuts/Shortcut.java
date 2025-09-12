@@ -109,21 +109,19 @@ public class Shortcut {
         };
     }
 
-    public static Shortcut fromInternalForm(@NonNull String internalForm) {
+    public static Shortcut fromInternalForm(
+            @NonNull String internalForm, @NonNull KeyboardManager keyboardManager) {
         KeyStroke stroke = KeyStroke.getKeyStroke(internalForm);
         if (stroke == null) {
             throw new RuntimeException("Cannot parse keystroke: " + internalForm);
         }
-        KeyboardManager keyboardManager =
-                app.swing.SwingApp.getInjectedInstance(KeyboardManager.class);
         return new Shortcut(stroke, keyboardManager);
     }
 
     public static Shortcut fromExternalForm(
             @NonNull List<String> maskKeyExternalForms,
-            @NonNull List<String> nonMaskKeyExternalForms) {
-        KeyboardManager keyboardManager =
-                app.swing.SwingApp.getInjectedInstance(KeyboardManager.class);
+            @NonNull List<String> nonMaskKeyExternalForms,
+            @NonNull KeyboardManager keyboardManager) {
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyExternalForms.stream()
@@ -143,10 +141,9 @@ public class Shortcut {
      * XML-specific conversion separate from display formatting.
      */
     public static Shortcut fromXmlForm(
-            @NonNull List<String> maskKeyXmlNames, @NonNull List<String> nonMaskKeyXmlNames) {
-
-        KeyboardManager keyboardManager =
-                app.swing.SwingApp.getInjectedInstance(KeyboardManager.class);
+            @NonNull List<String> maskKeyXmlNames,
+            @NonNull List<String> nonMaskKeyXmlNames,
+            @NonNull KeyboardManager keyboardManager) {
         String internalShortcutForm =
                 Stream.concat(
                                 maskKeyXmlNames.stream()

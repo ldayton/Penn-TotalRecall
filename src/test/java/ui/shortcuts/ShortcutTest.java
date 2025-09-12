@@ -280,7 +280,7 @@ public class ShortcutTest {
         void fromInternalFormHandlesInvalidInputGracefully() {
             assertThrows(
                     RuntimeException.class,
-                    () -> Shortcut.fromInternalForm("invalid keystroke format"));
+                    () -> Shortcut.fromInternalForm("invalid keystroke format", macKeyboard));
         }
     }
 

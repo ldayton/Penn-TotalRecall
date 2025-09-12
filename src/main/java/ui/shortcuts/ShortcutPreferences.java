@@ -8,6 +8,7 @@ import java.util.Optional;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ui.KeyboardManager;
 import ui.adapters.SwingActionConfig;
 
 /**
@@ -20,6 +21,7 @@ public class ShortcutPreferences {
     private final List<SwingActionConfig> defaultActionConfigs;
     private final ActionConfigListener listener;
     private final PreferencesManager preferencesManager;
+    private final KeyboardManager keyboardManager;
 
     private static final String NO_SHORTCUT = "#";
 
@@ -30,10 +32,12 @@ public class ShortcutPreferences {
     public ShortcutPreferences(
             @NonNull PreferencesManager preferencesManager,
             @NonNull List<SwingActionConfig> defaultActionConfigs,
-            @NonNull ActionConfigListener listener) {
+            @NonNull ActionConfigListener listener,
+            @NonNull KeyboardManager keyboardManager) {
         this.preferencesManager = preferencesManager;
         this.defaultActionConfigs = defaultActionConfigs;
         this.listener = listener;
+        this.keyboardManager = keyboardManager;
     }
 
     public void store(SwingActionConfig actionConfig) {
@@ -57,7 +61,7 @@ public class ShortcutPreferences {
         if (NO_SHORTCUT.equals(storedStr)) {
             return null;
         } else {
-            Shortcut shortcut = Shortcut.fromInternalForm(storedStr);
+            Shortcut shortcut = Shortcut.fromInternalForm(storedStr, keyboardManager);
             if (shortcut == null) {
                 logger.warn("{} won't retrieve() unparseable: {}", getClass().getName(), storedStr);
                 return null;
