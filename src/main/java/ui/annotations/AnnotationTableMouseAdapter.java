@@ -67,7 +67,7 @@ public class AnnotationTableMouseAdapter extends MouseAdapter {
             String second = table.getValueAt(rIndex, 1).toString();
             String third = table.getValueAt(rIndex, 2).toString();
             String rowRepr = first + " " + second + " " + third;
-            Annotation annToDelete = AnnotationDisplay.getAnnotationsInOrder()[rIndex];
+            Annotation annToDelete = table.getModel().toArray()[rIndex];
             AnnotationTablePopupMenu pop =
                     popupMenuFactory.createPopupMenu(annToDelete, rIndex, table, rowRepr);
             pop.show(e.getComponent(), e.getX(), e.getY());
