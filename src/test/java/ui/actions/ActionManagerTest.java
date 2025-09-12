@@ -3,11 +3,8 @@ package ui.actions;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.headless.HeadlessTestFixture;
-import core.actions.ActionRegistry;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import ui.KeyboardManager;
-import ui.adapters.ShortcutConverter;
 import ui.adapters.SwingActionConfig;
 
 /**
@@ -19,12 +16,7 @@ class ActionManagerTest extends HeadlessTestFixture {
     @Test
     void canLoadAllActionConfigsFromJson() {
         // Get dependencies from DI
-        ActionRegistry actionRegistry = getInstance(ActionRegistry.class);
-        KeyboardManager keyboardManager = getInstance(KeyboardManager.class);
-
-        // Create ActionManager with dependencies
-        ShortcutConverter converter = new ShortcutConverter(keyboardManager);
-        ActionManager actionManager = new ActionManager(actionRegistry, converter);
+        ActionManager actionManager = getInstance(ActionManager.class);
 
         // Initialize (loads actions.json)
         actionManager.initialize();

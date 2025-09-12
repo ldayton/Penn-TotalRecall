@@ -12,7 +12,7 @@ import javax.swing.KeyStroke;
 import ui.actions.ActionManager;
 // import actions.AnnotateIntrusionAction;
 // import actions.DeleteSelectedAnnotationAction; // Disabled - depends on WaveformDisplay
-import ui.adapters.SwingAction;
+import ui.adapters.SwingActionRegistry;
 
 /**
  * A custom <code>JSplitPane</code> that serves as the content pane to <code>MainFrame</code>.
@@ -30,6 +30,7 @@ public class ContentSplitPane extends JSplitPane {
             ControlPanel controlPanel,
             WaveformCanvas waveformCanvas,
             ActionManager actionsManager,
+            SwingActionRegistry swingActions,
             PlayPauseAction playPauseAction,
             // DeleteSelectedAnnotationAction deleteSelectedAnnotationAction, // Disabled
             // AnnotateIntrusionAction annotateIntrusionAction,
@@ -64,7 +65,7 @@ public class ContentSplitPane extends JSplitPane {
         getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0, false), "play");
 
-        getActionMap().put("play", new SwingAction(playPauseAction));
+        getActionMap().put("play", swingActions.get(PlayPauseAction.class));
 
         // Annotation intrusion action disabled
         // InputMap intrusionInputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);

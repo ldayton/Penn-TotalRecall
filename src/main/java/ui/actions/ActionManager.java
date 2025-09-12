@@ -17,8 +17,8 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.adapters.ShortcutConverter;
-import ui.adapters.SwingAction;
 import ui.adapters.SwingActionConfig;
+import ui.adapters.SwingActionRegistry;
 import ui.shortcuts.Shortcut;
 
 @Singleton
@@ -27,18 +27,29 @@ public class ActionManager {
 
     private final ActionRegistry actionRegistry;
     private final ShortcutConverter converter;
+    private final SwingActionRegistry swingActions;
     private final Map<String, Set<Action>> listenersMap = new HashMap<>();
     private final Map<String, List<InputMapPair>> inputMapMap = new HashMap<>();
 
     @Inject
     public ActionManager(
-            @NonNull ActionRegistry actionRegistry, @NonNull ShortcutConverter converter) {
+            @NonNull ActionRegistry actionRegistry,
+            @NonNull ShortcutConverter converter,
+            @NonNull SwingActionRegistry swingActions) {
         this.actionRegistry = actionRegistry;
         this.converter = converter;
+        this.swingActions = swingActions;
     }
 
     public void initialize() {
         actionRegistry.initialize();
+
+        // Register all SwingActions from the registry
+        for (var swingAction : swingActions.getAllSwingActions()) {
+            var coreAction = swingAction.getCoreAction();
+            String className = coreAction.getClass().getSimpleName();
+            listenersMap.computeIfAbsent(className, _ -> new HashSet<>()).add(swingAction);
+        }
     }
 
     public KeyStroke lookup(Action action, Enum<?> e) {
@@ -69,7 +80,7 @@ public class ActionManager {
     }
 
     public void registerCoreAction(core.actions.Action action) {
-        var swingAction = new SwingAction(action);
+        var swingAction = swingActions.get(action.getClass());
         String className = action.getClass().getSimpleName();
         listenersMap.computeIfAbsent(className, _ -> new HashSet<>()).add(swingAction);
         update(className, null);

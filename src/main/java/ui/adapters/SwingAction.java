@@ -1,11 +1,13 @@
 package ui.adapters;
 
 import core.actions.Action;
+import core.actions.ActionConfig;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
+import lombok.NonNull;
 
 /**
  * Adapter that wraps a core Action for use with Swing.
@@ -17,7 +19,8 @@ import javax.swing.KeyStroke;
 public class SwingAction extends AbstractAction {
     private final Action action;
 
-    public SwingAction(Action action) {
+    public SwingAction(
+            @NonNull Action action, ActionConfig config, ShortcutConverter shortcutConverter) {
         super(action.getLabel());
         this.action = action;
 
@@ -33,8 +36,13 @@ public class SwingAction extends AbstractAction {
         // Observe state changes
         action.addObserver(this::updateFromAction);
 
-        // ShortcutSpec will be handled by UI layer that knows about KeyStrokes
-        // For now, skip shortcut handling as it needs platform-specific conversion
+        // Set keyboard shortcut from config if provided
+        if (config != null && config.shortcut().isPresent() && shortcutConverter != null) {
+            KeyStroke keyStroke = shortcutConverter.toKeyStroke(config.shortcut().get());
+            if (keyStroke != null) {
+                putValue(ACCELERATOR_KEY, keyStroke);
+            }
+        }
 
         // Set initial enabled state
         setEnabled(action.isEnabled());

@@ -23,7 +23,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import lombok.extern.slf4j.Slf4j;
-import ui.adapters.SwingAction;
+import ui.adapters.SwingActionRegistry;
 
 /**
  * Program menu bar and trigger for updates in program's state that concern program actions.
@@ -49,6 +49,8 @@ public class AppMenuBar extends JMenuBar {
     private static String annotator;
 
     private static boolean showPreferencesInMenu;
+
+    private final SwingActionRegistry swingActions;
 
     private final OpenWordpoolAction openWordpoolAction;
     private final ExitAction exitAction;
@@ -84,6 +86,7 @@ public class AppMenuBar extends JMenuBar {
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @Inject
     public AppMenuBar(
+            SwingActionRegistry swingActions,
             ui.LookAndFeelManager lookAndFeelManager,
             OpenWordpoolAction openWordpoolAction,
             ExitAction exitAction,
@@ -116,6 +119,7 @@ public class AppMenuBar extends JMenuBar {
             core.actions.impl.SeekBackwardLargeAction seekBackwardLargeAction,
             core.actions.impl.ScreenSeekForwardAction screenSeekForwardAction,
             core.actions.impl.ScreenSeekBackwardAction screenSeekBackwardAction) {
+        this.swingActions = swingActions;
         this.openWordpoolAction = openWordpoolAction;
         this.exitAction = exitAction;
         this.editShortcutsAction = editShortcutsAction;
@@ -157,21 +161,23 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the File menu, only adding exit and preferences options for non-OSX platforms. */
     private void initFileMenu() {
         JMenu jmFile = new JMenu("File");
-        JMenuItem jmiOpenWordpool = new JMenuItem(new SwingAction(openWordpoolAction));
+        JMenuItem jmiOpenWordpool = new JMenuItem(swingActions.get(OpenWordpoolAction.class));
         jmFile.add(jmiOpenWordpool);
 
-        JMenuItem jmiOpenAudioFile = new JMenuItem(new SwingAction(openAudioFileAction));
-        JMenuItem jmiOpenAudioFolder = new JMenuItem(new SwingAction(openAudioFolderAction));
+        JMenuItem jmiOpenAudioFile =
+                new JMenuItem(swingActions.get(core.actions.impl.OpenAudioFileAction.class));
+        JMenuItem jmiOpenAudioFolder =
+                new JMenuItem(swingActions.get(core.actions.impl.OpenAudioFolderAction.class));
         jmFile.add(jmiOpenAudioFile);
         jmFile.add(jmiOpenAudioFolder);
-        JMenuItem jmiShortcuts = new JMenuItem(new SwingAction(editShortcutsAction));
+        JMenuItem jmiShortcuts = new JMenuItem(swingActions.get(EditShortcutsAction.class));
         jmFile.add(jmiShortcuts);
         if (showPreferencesInMenu) {
             jmFile.addSeparator();
-            JMenuItem jmiPreferences = new JMenuItem(new SwingAction(preferencesAction));
+            JMenuItem jmiPreferences = new JMenuItem(swingActions.get(PreferencesAction.class));
             jmFile.add(jmiPreferences);
             jmFile.addSeparator();
-            JMenuItem jmiExit = new JMenuItem(new SwingAction(exitAction));
+            JMenuItem jmiExit = new JMenuItem(swingActions.get(ExitAction.class));
             jmFile.add(jmiExit);
         }
         add(jmFile);
@@ -182,29 +188,38 @@ public class AppMenuBar extends JMenuBar {
         JMenu jmAudio = new JMenu("Controls");
 
         // PlayPauseAction is now event-driven, no workaround needed
-        JMenuItem jmiPlayPause = new JMenuItem(new SwingAction(playPauseAction));
+        JMenuItem jmiPlayPause = new JMenuItem(swingActions.get(PlayPauseAction.class));
 
-        JMenuItem jmiSeekToStart = new JMenuItem(new SwingAction(seekToStartAction));
-        JMenuItem jmiReplay = new JMenuItem(new SwingAction(replayLast200MillisAction));
+        JMenuItem jmiSeekToStart = new JMenuItem(swingActions.get(SeekToStartAction.class));
+        JMenuItem jmiReplay = new JMenuItem(swingActions.get(ReplayLast200MillisAction.class));
         // JMenuItem jmiLastPos = new JMenuItem(returnToLastPositionAction);
         // JMenuItem jmiReplayLast = new JMenuItem(replayLastPositionAction);
 
         JMenu jmSeek = new JMenu("Seek");
 
         // Add seek actions
-        JMenuItem jmiSeekForwardSmall = new JMenuItem(new SwingAction(seekForwardSmallAction));
-        JMenuItem jmiSeekSmallBackward = new JMenuItem(new SwingAction(seekBackwardSmallAction));
-        JMenuItem jmiSeekForwardMedium = new JMenuItem(new SwingAction(seekForwardMediumAction));
-        JMenuItem jmiSeekBackwardMedium = new JMenuItem(new SwingAction(seekBackwardMediumAction));
-        JMenuItem jmiSeekForwardLarge = new JMenuItem(new SwingAction(seekForwardLargeAction));
-        JMenuItem jmiSeekBackwardLarge = new JMenuItem(new SwingAction(seekBackwardLargeAction));
+        JMenuItem jmiSeekForwardSmall =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekForwardSmallAction.class));
+        JMenuItem jmiSeekSmallBackward =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekBackwardSmallAction.class));
+        JMenuItem jmiSeekForwardMedium =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekForwardMediumAction.class));
+        JMenuItem jmiSeekBackwardMedium =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekBackwardMediumAction.class));
+        JMenuItem jmiSeekForwardLarge =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekForwardLargeAction.class));
+        JMenuItem jmiSeekBackwardLarge =
+                new JMenuItem(swingActions.get(core.actions.impl.SeekBackwardLargeAction.class));
 
-        JMenuItem jmiLast200MoveRight = new JMenuItem(new SwingAction(last200PlusMoveAction));
-        JMenuItem jmiLast200MoveLeft = new JMenuItem(new SwingAction(last200PlusMoveAction));
+        JMenuItem jmiLast200MoveRight =
+                new JMenuItem(swingActions.get(Last200PlusMoveAction.class));
+        JMenuItem jmiLast200MoveLeft = new JMenuItem(swingActions.get(Last200PlusMoveAction.class));
 
         // Add screen seek actions
-        JMenuItem jmiScreenForward = new JMenuItem(new SwingAction(screenSeekForwardAction));
-        JMenuItem jmiScreenBackward = new JMenuItem(new SwingAction(screenSeekBackwardAction));
+        JMenuItem jmiScreenForward =
+                new JMenuItem(swingActions.get(core.actions.impl.ScreenSeekForwardAction.class));
+        JMenuItem jmiScreenBackward =
+                new JMenuItem(swingActions.get(core.actions.impl.ScreenSeekBackwardAction.class));
 
         jmSeek.add(jmiSeekForwardSmall);
         jmSeek.add(jmiSeekSmallBackward);
@@ -229,7 +244,7 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the annotation menu. */
     private void initAnnotationMenu() {
         JMenu jmAnnotation = new JMenu("Annotation");
-        JMenuItem jmiDone = new JMenuItem(new SwingAction(doneAction));
+        JMenuItem jmiDone = new JMenuItem(swingActions.get(DoneAction.class));
         jmAnnotation.add(jmiDone);
         // JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
         // jmiNextAnn.setText("Next Annotation");
@@ -243,8 +258,9 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the View menu, which controls aspects of the waveform's appearance. */
     private void initViewMenu() {
         JMenu jmView = new JMenu("View");
-        JMenuItem jmiZoomIn = new JMenuItem(new SwingAction(zoomInAction));
-        JMenuItem jmiZoomOut = new JMenuItem(new SwingAction(zoomOutAction));
+        JMenuItem jmiZoomIn = new JMenuItem(swingActions.get(core.actions.impl.ZoomInAction.class));
+        JMenuItem jmiZoomOut =
+                new JMenuItem(swingActions.get(core.actions.impl.ZoomOutAction.class));
         jmView.add(jmiZoomIn);
         jmView.add(jmiZoomOut);
         add(jmView);
@@ -253,16 +269,16 @@ public class AppMenuBar extends JMenuBar {
     /** Creates the help menu, only adding an about menu for non-OSX platforms. */
     private void initHelpMenu() {
         JMenu jmHelp = new JMenu("Help");
-        JMenuItem jmiVisitMemLab = new JMenuItem(new SwingAction(visitTutorialSiteAction));
-        JMenuItem jmiKeys = new JMenuItem(new SwingAction(tipsMessageAction));
+        JMenuItem jmiVisitMemLab = new JMenuItem(swingActions.get(VisitTutorialSiteAction.class));
+        JMenuItem jmiKeys = new JMenuItem(swingActions.get(TipsMessageAction.class));
         jmHelp.add(jmiVisitMemLab);
         jmHelp.add(jmiKeys);
         // Manual update check menu item
-        JMenuItem jmiCheckUpdates = new JMenuItem(new SwingAction(checkUpdatesAction));
+        JMenuItem jmiCheckUpdates = new JMenuItem(swingActions.get(CheckUpdatesAction.class));
         jmHelp.add(jmiCheckUpdates);
         if (showPreferencesInMenu) {
             jmHelp.addSeparator();
-            JMenuItem jmiAbout = new JMenuItem(new SwingAction(aboutAction));
+            JMenuItem jmiAbout = new JMenuItem(swingActions.get(AboutAction.class));
             jmHelp.add(jmiAbout);
         }
         add(jmHelp);
