@@ -37,15 +37,12 @@ class UpdateManagerTest {
         UpdateManager manager =
                 new UpdateManager(mockConfig, mockProgramVersion, mockClient, mockEventDispatchBus);
 
-        // Mock current version to be older
-        UpdateManager spyManager = spy(manager);
-        doReturn("2025.08.15").when(spyManager).getCurrentVersion();
-
-        assertDoesNotThrow(() -> spyManager.checkForUpdateOnStartup());
+        // Current version is already set to "2025.08.15" via mockProgramVersion
+        assertDoesNotThrow(() -> manager.checkForUpdateOnStartup());
 
         // Test case: same version - should not trigger notification
-        doReturn("2025.12.25").when(spyManager).getCurrentVersion();
-        assertDoesNotThrow(() -> spyManager.checkForUpdateOnStartup());
+        when(mockProgramVersion.toString()).thenReturn("2025.12.25");
+        assertDoesNotThrow(() -> manager.checkForUpdateOnStartup());
     }
 
     @Test
