@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
@@ -26,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.DialogService;
 import ui.audiofiles.AudioFile.AudioFilePathException;
+import ui.layout.UiStyles;
 
 /**
  * A custom interface component for displaying the available audio files to the user.
@@ -39,7 +39,8 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
     private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
     private static final String title = "Audio Files";
-    private static final Dimension PREFERRED_SIZE = new Dimension(250, Integer.MAX_VALUE);
+    private static final int INNER_PADDING_PX = 8;
+    private static final Dimension PREFERRED_SIZE = new Dimension(250, 180);
 
     private final PreferencesManager preferencesManager;
     private final DialogService dialogService;
@@ -63,9 +64,11 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
         getViewport().setView(list);
 
         setPreferredSize(PREFERRED_SIZE);
-        setMaximumSize(PREFERRED_SIZE);
+        // Allow vertical growth; keep initial width
+        setMaximumSize(new Dimension(PREFERRED_SIZE.width, Integer.MAX_VALUE));
 
-        setBorder(BorderFactory.createTitledBorder(title));
+        // Subtle rounded border with inner padding
+        setBorder(UiStyles.roundedBox(INNER_PADDING_PX));
 
         // overrides JScrollPane key bindings for the benefit of SeekAction's key bindings
         getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)

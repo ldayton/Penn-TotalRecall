@@ -11,18 +11,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import lombok.NonNull;
+import ui.layout.UiStyles;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
 public class AnnotationDisplay extends JScrollPane {
 
     private static final String title = "Annotations";
-    private static final Dimension PREFERRED_SIZE = new Dimension(300, Integer.MAX_VALUE);
+    private static final int INNER_PADDING_PX = 8;
+    private static final Dimension PREFERRED_SIZE = new Dimension(300, 180);
     private final AnnotationTable annotationTable;
 
     /**
@@ -35,9 +36,11 @@ public class AnnotationDisplay extends JScrollPane {
         this.annotationTable = annotationTable;
         getViewport().setView(annotationTable);
         setPreferredSize(PREFERRED_SIZE);
-        setMaximumSize(PREFERRED_SIZE);
+        // Allow vertical growth; keep initial width
+        setMaximumSize(new Dimension(PREFERRED_SIZE.width, Integer.MAX_VALUE));
 
-        setBorder(BorderFactory.createTitledBorder(title));
+        // Subtle rounded border with inner padding
+        setBorder(UiStyles.roundedBox(INNER_PADDING_PX));
 
         // since AnnotationDisplay is a clickable area, we must write focus handling code for the
         // event it is clicked on

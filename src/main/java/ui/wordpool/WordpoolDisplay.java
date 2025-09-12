@@ -6,10 +6,11 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import ui.layout.UiStyles;
 
 /**
  * A custom interface component for displaying wordpool and lst words to the user and a text field
@@ -28,7 +29,8 @@ import javax.swing.JTextField;
 public class WordpoolDisplay extends JPanel {
 
     private static final String title = "Wordpool";
-    private static final Dimension PREFERRED_SIZE = new Dimension(250, Integer.MAX_VALUE);
+    private static final int INNER_PADDING_PX = 8;
+    private static final Dimension PREFERRED_SIZE = new Dimension(250, 180);
 
     private static JTextField field;
     private final WordpoolTextField wordpoolTextField;
@@ -47,14 +49,17 @@ public class WordpoolDisplay extends JPanel {
         this.wordpoolList = wordpoolList;
         field = wordpoolTextField;
         pane = new WordpoolScrollPane(wordpoolList);
-
         add(field);
+        // Small vertical gap between input field and list
+        add(Box.createRigidArea(new Dimension(0, 8)));
         add(pane);
 
         setPreferredSize(PREFERRED_SIZE);
-        setMaximumSize(PREFERRED_SIZE);
+        // Allow vertical growth; keep initial width
+        setMaximumSize(new Dimension(PREFERRED_SIZE.width, Integer.MAX_VALUE));
 
-        setBorder(BorderFactory.createTitledBorder(title));
+        // Add inner padding inside the titled border for breathing room
+        setBorder(UiStyles.roundedBox(INNER_PADDING_PX));
 
         // since WordpoolDisplay is a clickable area, we must write focus handling code for the
         // event it is clicked on
