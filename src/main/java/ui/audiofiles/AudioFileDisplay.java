@@ -1,6 +1,5 @@
 package ui.audiofiles;
 
-import app.swing.SwingApp;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
@@ -34,23 +33,21 @@ import ui.audiofiles.AudioFile.AudioFilePathException;
  * internal list, model, or other components directly.
  */
 @Singleton
-public class AudioFileDisplay extends JScrollPane {
+public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInterface {
     private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
     private static final String title = "Audio Files";
     private static final Dimension PREFERRED_SIZE = new Dimension(250, Integer.MAX_VALUE);
 
-    private static AudioFileDisplay instance;
     private final PreferencesManager preferencesManager;
     private final DialogService dialogService;
-
-    private static AudioFileList list;
+    private final AudioFileList list;
+    private final EventDispatchBus eventBus;
 
     /**
      * Creates a new instance of the component, initializing internal components, key bindings,
      * listeners, and various aspects of appearance.
      */
-    @SuppressWarnings("StaticAssignmentInConstructor")
     @Inject
     public AudioFileDisplay(
             AudioFileList audioFileList,
@@ -59,7 +56,8 @@ public class AudioFileDisplay extends JScrollPane {
             DialogService dialogService) {
         this.preferencesManager = preferencesManager;
         this.dialogService = dialogService;
-        list = audioFileList;
+        this.list = audioFileList;
+        this.eventBus = eventBus;
         getViewport().setView(list);
 
         setPreferredSize(PREFERRED_SIZE);
@@ -90,9 +88,6 @@ public class AudioFileDisplay extends JScrollPane {
                     }
                 });
 
-        // Set the singleton instance after full initialization
-        instance = this;
-
         // Subscribe to UI update events
         eventBus.subscribe(this);
     }
@@ -106,7 +101,8 @@ public class AudioFileDisplay extends JScrollPane {
      * @param files Candidate files to be added to the <code>AudioFileList</code>
      * @return <code>true</code> if any of the files were ultimately added
      */
-    public static boolean addFilesIfSupported(File[] files) {
+    @Override
+    public boolean addFilesIfSupported(File[] files) {
         ArrayList<AudioFile> supportedFiles = new ArrayList<AudioFile>();
         for (File f : files) {
             if (f.isFile()) { // this also filters files that don't actually exist, filtering of
@@ -117,10 +113,7 @@ public class AudioFileDisplay extends JScrollPane {
                         af = new AudioFile(f.getAbsolutePath());
                     } catch (AudioFilePathException e) {
                         logger.error("Error updating audio file done status", e);
-                        // TODO: Refactor to avoid static method accessing instance field
-                        if (instance != null && instance.dialogService != null) {
-                            instance.dialogService.showError(e.getMessage());
-                        }
+                        dialogService.showError(e.getMessage());
                         continue;
                     }
                     supportedFiles.add(af);
@@ -145,7 +138,8 @@ public class AudioFileDisplay extends JScrollPane {
      * @param file The file that may be switched to
      * @return <code>true</code> iff the file switch took place
      */
-    protected static boolean askToSwitchFile(AudioFile file) {
+    @Override
+    public boolean askToSwitchFile(AudioFile file) {
         if (file.isDone()) {
             return false;
         }
@@ -155,7 +149,7 @@ public class AudioFileDisplay extends JScrollPane {
                 return true;
             }
             boolean shouldWarn =
-                    instance.preferencesManager.getBoolean(
+                    preferencesManager.getBoolean(
                             PreferenceKeys.WARN_FILE_SWITCH,
                             PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
@@ -163,27 +157,16 @@ public class AudioFileDisplay extends JScrollPane {
                         "Switch to file "
                                 + file
                                 + "?\nYour changes to the current file will not be lost.";
-                // TODO: Refactor to avoid static method accessing instance field
-                DialogService dialogService =
-                        (instance != null && instance.dialogService != null)
-                                ? instance.dialogService
-                                : SwingApp.getRequiredInjectedInstance(
-                                        DialogService.class, "DialogService");
                 var result = dialogService.showConfirmWithDontShowAgain(message);
                 if (result.isDontShowAgain()) {
-                    instance.preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
+                    preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
                 }
                 if (!result.isConfirmed()) {
                     return false;
                 }
             }
         }
-        // TODO: Refactor static methods to avoid SwingApp.getInjectedInstance usage
-        // This requires making these methods non-static or providing proper static accessors
-        // Use the new event-driven system to load the file
-        var eventBus =
-                app.swing.SwingApp.getRequiredInjectedInstance(
-                        core.dispatch.EventDispatchBus.class, "EventDispatchBus");
+        // Use the injected event bus to load the file
         eventBus.publish(new core.events.AudioFileLoadRequestedEvent(file));
 
         // UI updates are now handled via events

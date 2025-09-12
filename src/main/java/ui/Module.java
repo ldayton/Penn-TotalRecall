@@ -7,6 +7,7 @@ import ui.adapters.SwingFileSelectionService;
 import ui.annotations.AnnotationDisplay;
 import ui.annotations.AnnotationTable;
 import ui.audiofiles.AudioFileDisplay;
+import ui.audiofiles.AudioFileDisplayInterface;
 import ui.audiofiles.AudioFileList;
 import ui.layout.AppFocusTraversalPolicy;
 import ui.layout.AppMenuBar;
@@ -60,6 +61,7 @@ public class Module extends AbstractModule {
 
         // Audio file display
         bind(AudioFileDisplay.class).in(Singleton.class);
+        bind(AudioFileDisplayInterface.class).to(AudioFileDisplay.class);
         bind(AudioFileList.class).in(Singleton.class);
 
         // Annotation display

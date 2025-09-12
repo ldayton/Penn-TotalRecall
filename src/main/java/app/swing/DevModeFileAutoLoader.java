@@ -26,6 +26,7 @@ public class DevModeFileAutoLoader {
 
     private final AppConfig appConfig;
     private final AudioFileList audioFileList;
+    private final AudioFileDisplay audioFileDisplay;
     private final EventDispatchBus eventBus;
     private final PlayPauseAction playPauseAction;
 
@@ -33,10 +34,12 @@ public class DevModeFileAutoLoader {
     public DevModeFileAutoLoader(
             AppConfig appConfig,
             AudioFileList audioFileList,
+            AudioFileDisplay audioFileDisplay,
             PlayPauseAction playPauseAction,
             EventDispatchBus eventBus) {
         this.appConfig = appConfig;
         this.audioFileList = audioFileList;
+        this.audioFileDisplay = audioFileDisplay;
         this.eventBus = eventBus;
         this.playPauseAction = playPauseAction;
         eventBus.subscribe(this);
@@ -59,7 +62,7 @@ public class DevModeFileAutoLoader {
         }
 
         // Add all supported files in the samples directory to the list
-        boolean anyLoaded = AudioFileDisplay.addFilesIfSupported(allCandidates);
+        boolean anyLoaded = audioFileDisplay.addFilesIfSupported(allCandidates);
         if (!anyLoaded) {
             logger.warn("No supported audio files found to auto-load in development mode");
             return;

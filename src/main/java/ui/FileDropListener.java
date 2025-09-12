@@ -27,15 +27,18 @@ public class FileDropListener implements FileDrop.Listener {
     private final EventDispatchBus eventBus;
     private final WaveformSessionDataSource sessionDataSource;
     private final WordpoolDisplay wordpoolDisplay;
+    private final AudioFileDisplay audioFileDisplay;
 
     @Inject
     public FileDropListener(
             EventDispatchBus eventBus,
             WaveformSessionDataSource sessionDataSource,
-            WordpoolDisplay wordpoolDisplay) {
+            WordpoolDisplay wordpoolDisplay,
+            AudioFileDisplay audioFileDisplay) {
         this.eventBus = eventBus;
         this.sessionDataSource = sessionDataSource;
         this.wordpoolDisplay = wordpoolDisplay;
+        this.audioFileDisplay = audioFileDisplay;
     }
 
     /**
@@ -95,11 +98,11 @@ public class FileDropListener implements FileDrop.Listener {
             if (wordpoolFound == false) { // check for audio files
                 for (File f : files) {
                     if (f.isFile()) {
-                        if (AudioFileDisplay.addFilesIfSupported(new File[] {f})) {
+                        if (audioFileDisplay.addFilesIfSupported(new File[] {f})) {
                             somethingAccepted = true;
                         }
                     } else if (f.isDirectory()) {
-                        if (AudioFileDisplay.addFilesIfSupported(f.listFiles())) {
+                        if (audioFileDisplay.addFilesIfSupported(f.listFiles())) {
                             somethingAccepted = true;
                         }
                     }

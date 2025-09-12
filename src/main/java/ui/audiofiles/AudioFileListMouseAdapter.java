@@ -13,16 +13,21 @@ import java.awt.event.MouseEvent;
 public class AudioFileListMouseAdapter extends MouseAdapter {
 
     private final AudioFilePopupMenuFactory popupMenuFactory;
+    private final AudioFileDisplayInterface audioFileDisplay;
 
     /**
      * Creates a mouse adapter that can act on the <code>AudioFileList</code> on whose behalf it is
      * listening.
      *
      * @param popupMenuFactory The factory for creating popup menus.
+     * @param audioFileDisplay The audio file display for switching files.
      */
     @Inject
-    public AudioFileListMouseAdapter(AudioFilePopupMenuFactory popupMenuFactory) {
+    public AudioFileListMouseAdapter(
+            AudioFilePopupMenuFactory popupMenuFactory,
+            AudioFileDisplayInterface audioFileDisplay) {
         this.popupMenuFactory = popupMenuFactory;
+        this.audioFileDisplay = audioFileDisplay;
     }
 
     /**
@@ -39,7 +44,7 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
             return; // event not on a File
         }
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
-            AudioFileDisplay.askToSwitchFile(file);
+            audioFileDisplay.askToSwitchFile(file);
         }
     }
 

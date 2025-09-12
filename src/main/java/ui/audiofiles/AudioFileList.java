@@ -1,5 +1,6 @@
 package ui.audiofiles;
 
+import com.google.inject.Provider;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
@@ -26,7 +27,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
-    // private final AudioState audioState;
+    private final Provider<AudioFileDisplayInterface> audioFileDisplayProvider;
     private AudioFile currentAudioFile = null;
 
     /**
@@ -36,9 +37,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
     @Inject
     public AudioFileList(
             AudioFileListMouseAdapter mouseAdapter,
-            // AudioState audioState,
+            Provider<AudioFileDisplayInterface> audioFileDisplayProvider,
             EventDispatchBus eventBus) {
-        // this.audioState = audioState;
+        this.audioFileDisplayProvider = audioFileDisplayProvider;
         model = new AudioFileListModel();
         setModel(model);
 
@@ -115,7 +116,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                                 if (objs.length
                                         == 1) { // in case multiple selection mode is used in the
                                     // future
-                                    AudioFileDisplay.askToSwitchFile((AudioFile) objs[0]);
+                                    audioFileDisplayProvider
+                                            .get()
+                                            .askToSwitchFile((AudioFile) objs[0]);
                                 }
                             }
                         });
