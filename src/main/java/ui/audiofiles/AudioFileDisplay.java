@@ -14,8 +14,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -103,29 +104,28 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      */
     @Override
     public boolean addFilesIfSupported(File[] files) {
-        ArrayList<AudioFile> supportedFiles = new ArrayList<AudioFile>();
-        for (File f : files) {
-            if (f.isFile()) { // this also filters files that don't actually exist, filtering of
-                // duplicate files is handled by the AudioFileListModel
-                if (extensionSupported(f.getName())) {
-                    AudioFile af;
-                    try {
-                        af = new AudioFile(f.getAbsolutePath());
-                    } catch (AudioFilePathException e) {
-                        logger.error("Error updating audio file done status", e);
-                        dialogService.showError(e.getMessage());
-                        continue;
-                    }
-                    supportedFiles.add(af);
-                }
-            }
-        }
-        if (supportedFiles.size() > 0) {
+        var supportedFiles =
+                Arrays.stream(files)
+                        .filter(File::isFile)
+                        .filter(f -> extensionSupported(f.getName()))
+                        .map(
+                                f -> {
+                                    try {
+                                        return new AudioFile(f.getAbsolutePath());
+                                    } catch (AudioFilePathException e) {
+                                        logger.error("Error updating audio file done status", e);
+                                        dialogService.showError(e.getMessage());
+                                        return null;
+                                    }
+                                })
+                        .filter(Objects::nonNull)
+                        .toList();
+
+        if (!supportedFiles.isEmpty()) {
             list.getModel().addElements(supportedFiles);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -148,15 +148,14 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
             if (file.getAbsolutePath().equals(currentFile.getAbsolutePath())) {
                 return true;
             }
-            boolean shouldWarn =
+            var shouldWarn =
                     preferencesManager.getBoolean(
                             PreferenceKeys.WARN_FILE_SWITCH,
                             PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
             if (shouldWarn) {
-                String message =
-                        "Switch to file "
-                                + file
-                                + "?\nYour changes to the current file will not be lost.";
+                var message =
+                        "Switch to file %s?\nYour changes to the current file will not be lost."
+                                .formatted(file);
                 var result = dialogService.showConfirmWithDontShowAgain(message);
                 if (result.isDontShowAgain()) {
                     preferencesManager.putBoolean(PreferenceKeys.WARN_FILE_SWITCH, false);
@@ -182,12 +181,8 @@ public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInt
      *     extension
      */
     private static boolean extensionSupported(String name) {
-        for (String ext : Constants.audioFormatsLowerCase) {
-            if (name.toLowerCase(Locale.ROOT).endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
+        var lowerName = name.toLowerCase(Locale.ROOT);
+        return Constants.audioFormatsLowerCase.stream().anyMatch(lowerName::endsWith);
     }
 
     @Subscribe

@@ -44,7 +44,7 @@ public class AudioFilePopupMenu extends JPopupMenu {
 
         // most, if not all LAFs do not support JPopupMenu titles
         // to simulate a title we add a disabled JMenuItem
-        JMenuItem fakeTitle = new JMenuItem(file.getName() + "...");
+        var fakeTitle = new JMenuItem(file.getName() + "...");
         fakeTitle.setEnabled(false);
 
         // Configure the injected action for this specific file
@@ -55,9 +55,9 @@ public class AudioFilePopupMenu extends JPopupMenu {
         //     cont.setEnabled(false);
         // }
 
-        JMenuItem del =
+        var del =
                 new JMenuItem(
-                        new AbstractAction() {
+                        new AbstractAction("Remove from List") {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 eventBus.publish(
@@ -66,7 +66,6 @@ public class AudioFilePopupMenu extends JPopupMenu {
                                                 index));
                             }
                         });
-        del.setText("Remove from List");
         if (isCurrentFile) {
             del.setEnabled(false);
         }

@@ -3,6 +3,7 @@ package ui.audiofiles;
 import core.util.IndexedUniqueList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.ListModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -24,12 +25,12 @@ import javax.swing.event.ListDataListener;
 public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener {
 
     private final IndexedUniqueList<AudioFile> collection;
-    private final HashSet<ListDataListener> listeners;
+    private final Set<ListDataListener> listeners;
 
     /** Creates a new <code>AudioFileListModel</code>. */
     protected AudioFileListModel() {
-        listeners = new HashSet<ListDataListener>();
-        collection = new IndexedUniqueList<AudioFile>();
+        listeners = new HashSet<>();
+        collection = new IndexedUniqueList<>();
     }
 
     /** {@inheritDoc} */
@@ -55,10 +56,8 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
             throw new IllegalArgumentException("index not in file set: " + index);
         }
         collection.remove(index).removeAllChangeListeners();
-        ListDataEvent e = new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index);
-        for (ListDataListener ldl : listeners) {
-            ldl.contentsChanged(e);
-        }
+        var e = new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index);
+        listeners.forEach(ldl -> ldl.contentsChanged(e));
     }
 
     /**
@@ -78,11 +77,8 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
         collection.sort();
         // we fire a CONTENTS_CHANGED event instead of INTERVAL_ADDED, because after sorting there
         // is no guarantee that a clean interval is all that has been changed
-        ListDataEvent e =
-                new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size());
-        for (ListDataListener ldl : listeners) {
-            ldl.contentsChanged(e);
-        }
+        var e = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size());
+        listeners.forEach(ldl -> ldl.contentsChanged(e));
     }
 
     /**
@@ -103,10 +99,8 @@ public class AudioFileListModel implements ListModel<AudioFile>, ChangeListener 
     @Override
     public void stateChanged(ChangeEvent e) {
         collection.sort();
-        for (ListDataListener ldl : listeners) {
-            ldl.contentsChanged(
-                    new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size()));
-        }
+        var event = new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, collection.size());
+        listeners.forEach(ldl -> ldl.contentsChanged(event));
     }
 
     /** {@inheritDoc} */

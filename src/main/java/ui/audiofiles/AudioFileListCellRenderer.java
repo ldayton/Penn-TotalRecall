@@ -34,23 +34,20 @@ public class AudioFileListCellRenderer extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(
             JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        AudioFile audioFile = (value instanceof AudioFile) ? (AudioFile) value : null;
-        if (audioFile != null && audioFile.isDone()) {
-            setEnabled(false);
-            setFont(strikethrough);
-        } else {
-            // Get the current file from the AudioFileList
-            AudioFileList audioFileList =
-                    (list instanceof AudioFileList) ? (AudioFileList) list : null;
-            if (audioFileList != null) {
-                AudioFile currentFile = audioFileList.getCurrentAudioFile();
-                if (currentFile != null
-                        && audioFile != null
-                        && audioFile.getAbsolutePath().equals(currentFile.getAbsolutePath())) {
-                    setFont(bold);
-                } else {
-                    setFont(plain);
-                }
+
+        if (value instanceof AudioFile audioFile) {
+            if (audioFile.isDone()) {
+                setEnabled(false);
+                setFont(strikethrough);
+            } else if (list instanceof AudioFileList audioFileList) {
+                var currentFile = audioFileList.getCurrentAudioFile();
+                setFont(
+                        currentFile != null
+                                        && audioFile
+                                                .getAbsolutePath()
+                                                .equals(currentFile.getAbsolutePath())
+                                ? bold
+                                : plain);
             } else {
                 setFont(plain);
             }

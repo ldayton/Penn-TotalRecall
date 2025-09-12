@@ -38,8 +38,8 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        AudioFileList list = (AudioFileList) e.getSource();
-        AudioFile file = getAssociatedFile(e, list);
+        var list = (AudioFileList) e.getSource();
+        var file = getAssociatedFile(e, list);
         if (file == null) {
             return; // event not on a File
         }
@@ -78,12 +78,12 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      */
     public void evaluatePopup(MouseEvent e) {
         if (e.isPopupTrigger()) {
-            AudioFileList list = (AudioFileList) e.getSource();
-            AudioFile file = getAssociatedFile(e, list);
+            var list = (AudioFileList) e.getSource();
+            var file = getAssociatedFile(e, list);
             if (file == null) {
                 return; // event not on a File
             }
-            AudioFilePopupMenu popupMenu =
+            var popupMenu =
                     popupMenuFactory.createPopupMenu(file, list.locationToIndex(e.getPoint()));
             popupMenu.show(e.getComponent(), e.getX(), e.getY());
         }
@@ -98,11 +98,10 @@ public class AudioFileListMouseAdapter extends MouseAdapter {
      *     event was not on an <code>AudioFile</code>.
      */
     private AudioFile getAssociatedFile(MouseEvent e, AudioFileList list) {
-        int index = list.locationToIndex(e.getPoint());
+        var index = list.locationToIndex(e.getPoint());
         if (index < 0) {
             return null; // event not on a File
         }
-        AudioFile file = list.getModel().getElementAt(index);
-        return file;
+        return list.getModel().getElementAt(index);
     }
 }

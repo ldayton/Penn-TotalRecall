@@ -28,10 +28,9 @@ import javax.swing.event.ChangeListener;
  */
 public class AudioFile extends File {
 
-    private final ConcurrentHashMap<ChangeListener, Boolean>
-            listeners; // thread-safe collection for listeners
+    private final ConcurrentHashMap<ChangeListener, Boolean> listeners;
 
-    private final AtomicBoolean done; // atomic boolean for completion status
+    private final AtomicBoolean done;
 
     /**
      * Creates a new <code>AudioFile</code> from the given path.
@@ -87,20 +86,12 @@ public class AudioFile extends File {
      */
     @Override
     public int compareTo(File f) {
-        if (f instanceof AudioFile == false) {
-            return 1;
-        } else {
-            AudioFile ff = (AudioFile) f;
-            if ((ff.isDone() && isDone()) || (ff.isDone() == false && isDone() == false)) {
-                return toString().compareTo(ff.toString());
-            } else {
-                if (isDone()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-        }
+        return switch (f) {
+            case AudioFile af when af.isDone() == isDone() -> toString().compareTo(af.toString());
+            case AudioFile af when isDone() -> 1;
+            case AudioFile _ -> -1;
+            case null, default -> 1;
+        };
     }
 
     /**
@@ -121,12 +112,8 @@ public class AudioFile extends File {
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AudioFile audioFile) {
-            if (audioFile.getAbsolutePath().equals(getAbsolutePath())) {
-                return true;
-            }
-        }
-        return false;
+        return o instanceof AudioFile audioFile
+                && audioFile.getAbsolutePath().equals(getAbsolutePath());
     }
 
     /**
@@ -139,30 +126,14 @@ public class AudioFile extends File {
      * @throws AudioFilePathException If both the temporary and final annotation files are present
      */
     public void updateDoneStatus() throws AudioFilePathException {
-        boolean savedStatus = done.get();
-        boolean updatedStatus = savedStatus;
-        boolean annFileExists = false;
-        boolean tmpFileExists = false;
+        var savedStatus = done.get();
+        var basePath = OsPath.basename(getAbsolutePath());
+        var annFile = new File(basePath + "." + Constants.completedAnnotationFileExtension);
+        var tmpFile = new File(basePath + "." + Constants.temporaryAnnotationFileExtension);
 
-        File annFile =
-                new File(
-                        OsPath.basename(getAbsolutePath())
-                                + "."
-                                + Constants.completedAnnotationFileExtension);
-        File tmpFile =
-                new File(
-                        OsPath.basename(getAbsolutePath())
-                                + "."
-                                + Constants.temporaryAnnotationFileExtension);
+        var annFileExists = annFile.exists();
+        var tmpFileExists = tmpFile.exists();
 
-        if (annFile.exists()) {
-            annFileExists = true;
-            updatedStatus = true;
-        }
-        if (tmpFile.exists()) {
-            tmpFileExists = true;
-            updatedStatus = false;
-        }
         if (annFileExists && tmpFileExists) {
             throw new AudioFilePathException(
                     "Both exist, so I don't know if I'm completed or not:\n"
@@ -171,13 +142,13 @@ public class AudioFile extends File {
                             + tmpFile.getPath());
         }
 
+        var updatedStatus = annFileExists || (!tmpFileExists && savedStatus);
+
         // Atomic update - only notify listeners if status actually changed
-        boolean statusChanged = done.compareAndSet(savedStatus, updatedStatus);
-        if (statusChanged) {
+        if (done.compareAndSet(savedStatus, updatedStatus)) {
             // Thread-safe iteration over listeners
-            for (ChangeListener listener : listeners.keySet()) {
-                listener.stateChanged(new ChangeEvent(this));
-            }
+            var event = new ChangeEvent(this);
+            listeners.keySet().forEach(listener -> listener.stateChanged(event));
         }
     }
 
@@ -207,9 +178,9 @@ public class AudioFile extends File {
      * Exception thrown when this <code>AudioFile</code>'s directory contains both temporary and
      * final annotation files for this <code>AudioFile</code>.
      */
-    public static class AudioFilePathException extends Exception {
-        private AudioFilePathException(String str) {
-            super(str);
+    public static final class AudioFilePathException extends Exception {
+        private AudioFilePathException(String message) {
+            super(message);
         }
     }
 }

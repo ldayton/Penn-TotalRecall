@@ -75,28 +75,21 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 var selectedValues = getSelectedValuesList();
-                                Object[] objs = selectedValues.toArray();
-                                int index = getSelectedIndex();
-                                if (index < 0) {
-                                    return;
-                                }
-                                if (objs.length == 0) {
+                                if (selectedValues.size() != 1) {
                                     return;
                                 }
 
-                                if (objs.length
-                                        == 1) { // in case multiple selection mode is used in the
-                                    // future
-                                    AudioFile ff = (AudioFile) objs[0];
-                                    if (ff == null) {
-                                        return;
-                                    }
-                                    // Don't remove if it's the currently loaded file
-                                    if (currentAudioFile != null && currentAudioFile.equals(ff)) {
-                                        return;
-                                    }
-                                    model.removeElementAt(index);
+                                var index = getSelectedIndex();
+                                if (index < 0) {
+                                    return;
                                 }
+
+                                var file = selectedValues.getFirst();
+                                // Don't remove if it's the currently loaded file
+                                if (currentAudioFile != null && currentAudioFile.equals(file)) {
+                                    return;
+                                }
+                                model.removeElementAt(index);
                             }
                         });
         // hitting enter can be used to switch to a file on the list
@@ -112,13 +105,10 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 var selectedValues = getSelectedValuesList();
-                                Object[] objs = selectedValues.toArray();
-                                if (objs.length
-                                        == 1) { // in case multiple selection mode is used in the
-                                    // future
+                                if (selectedValues.size() == 1) {
                                     audioFileDisplayProvider
                                             .get()
-                                            .askToSwitchFile((AudioFile) objs[0]);
+                                            .askToSwitchFile(selectedValues.getFirst());
                                 }
                             }
                         });
@@ -211,10 +201,9 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     @Subscribe
     public void onAppStateChanged(AppStateChangedEvent event) {
-        if (event.isAudioLoaded() && event.context() instanceof File) {
-            File loadedFile = (File) event.context();
+        if (event.isAudioLoaded() && event.context() instanceof File loadedFile) {
             for (int i = 0; i < model.getSize(); i++) {
-                AudioFile audioFile = model.getElementAt(i);
+                var audioFile = model.getElementAt(i);
                 if (audioFile.getAbsolutePath().equals(loadedFile.getAbsolutePath())) {
                     currentAudioFile = audioFile;
                     setSelectedIndex(i);
@@ -242,7 +231,7 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
             // Check if the index is valid
             if (event.index() >= 0 && event.index() < model.getSize()) {
                 // Don't remove if it's the currently playing file
-                AudioFile fileToRemove = model.getElementAt(event.index());
+                var fileToRemove = model.getElementAt(event.index());
                 if (currentAudioFile != null && currentAudioFile.equals(fileToRemove)) {
                     return; // Don't remove currently playing file
                 }

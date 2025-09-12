@@ -34,12 +34,11 @@ public class AudioFilePopupMenuFactory {
      * @return A configured AudioFilePopupMenu instance
      */
     public AudioFilePopupMenu createPopupMenu(AudioFile file, int index) {
-        AudioFilePopupMenu popupMenu =
-                new AudioFilePopupMenu(/*continueAnnotatingAction,*/ eventBus);
+        var popupMenu = new AudioFilePopupMenu(/*continueAnnotatingAction,*/ eventBus);
 
         // Check if this file is the currently loaded one
-        AudioFile currentFile = audioFileListProvider.get().getCurrentAudioFile();
-        boolean isCurrentFile =
+        var currentFile = audioFileListProvider.get().getCurrentAudioFile();
+        var isCurrentFile =
                 currentFile != null && currentFile.getAbsolutePath().equals(file.getAbsolutePath());
 
         popupMenu.configureForFile(file, index, isCurrentFile);
