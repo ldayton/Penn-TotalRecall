@@ -1,6 +1,5 @@
 package ui.preferences;
 
-import app.swing.SwingApp;
 import core.preferences.BadPreferenceException;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -16,9 +15,11 @@ public class SavePreferencesAction extends AbstractAction {
     private static final Logger logger = LoggerFactory.getLogger(SavePreferencesAction.class);
 
     private final PreferencesFrame preferencesFrame;
+    private final DialogService dialogService;
 
-    public SavePreferencesAction(PreferencesFrame preferencesFrame) {
+    public SavePreferencesAction(PreferencesFrame preferencesFrame, DialogService dialogService) {
         this.preferencesFrame = preferencesFrame;
+        this.dialogService = dialogService;
     }
 
     /**
@@ -57,10 +58,6 @@ public class SavePreferencesAction extends AbstractAction {
                 if (i < errorMessages.size() - 1) {
                     bigMessage += "\n";
                 }
-            }
-            DialogService dialogService = SwingApp.getInjectedInstance(DialogService.class);
-            if (dialogService == null) {
-                throw new IllegalStateException("DialogService not available via DI");
             }
             dialogService.showError(bigMessage);
             preferencesFrame.toFront(); // to make sure PreferenceFrame will be in foreground

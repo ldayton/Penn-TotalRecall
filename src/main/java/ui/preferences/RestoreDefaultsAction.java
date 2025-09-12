@@ -1,6 +1,5 @@
 package ui.preferences;
 
-import app.swing.SwingApp;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -11,9 +10,11 @@ import ui.DialogService;
 public class RestoreDefaultsAction extends AbstractAction {
 
     private final PreferencesFrame preferencesFrame;
+    private final DialogService dialogService;
 
-    public RestoreDefaultsAction(PreferencesFrame preferencesFrame) {
+    public RestoreDefaultsAction(PreferencesFrame preferencesFrame, DialogService dialogService) {
         this.preferencesFrame = preferencesFrame;
+        this.dialogService = dialogService;
     }
 
     /**
@@ -27,10 +28,6 @@ public class RestoreDefaultsAction extends AbstractAction {
         List<AbstractPreferenceDisplay> allPrefs = preferencesFrame.getAbstractPreferences();
         for (int i = 0; i < allPrefs.size(); i++) {
             allPrefs.get(i).restoreDefault();
-        }
-        DialogService dialogService = SwingApp.getInjectedInstance(DialogService.class);
-        if (dialogService == null) {
-            throw new IllegalStateException("DialogService not available via DI");
         }
         dialogService.showInfo("All preferences successfully restored to defaults.");
 

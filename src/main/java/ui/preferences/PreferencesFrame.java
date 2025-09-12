@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import ui.DialogCentering;
+import ui.DialogService;
 import ui.KeyboardManager;
 import ui.layout.MainFrame;
 import ui.layout.MainWindowAccess;
@@ -35,6 +36,7 @@ import ui.layout.MainWindowAccess;
 @Singleton
 public class PreferencesFrame extends JFrame implements WindowListener {
     private final KeyboardManager keyboardManager;
+    private final DialogService dialogService;
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
@@ -56,8 +58,10 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     public PreferencesFrame(
             KeyboardManager keyboardManager,
             ui.LookAndFeelManager lookAndFeelManager,
-            MainWindowAccess windowService) {
+            MainWindowAccess windowService,
+            DialogService dialogService) {
         this.keyboardManager = keyboardManager;
+        this.dialogService = dialogService;
         // Actions are constructed locally within initButtonsPanel to avoid circular DI
 
         // force handling by the WindowListener (this.windowClosing())
@@ -191,12 +195,12 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         // frame
 
         JButton jbSavePrefs = new JButton("Save Preferences");
-        jbSavePrefs.addActionListener(new SavePreferencesAction(this));
+        jbSavePrefs.addActionListener(new SavePreferencesAction(this, dialogService));
         buttonPanel.add(jbSavePrefs);
         buttonPanel.add(Box.createHorizontalGlue());
 
         JButton jbRestoreDefaults = new JButton("Restore Defaults");
-        jbRestoreDefaults.addActionListener(new RestoreDefaultsAction(this));
+        jbRestoreDefaults.addActionListener(new RestoreDefaultsAction(this, dialogService));
         buttonPanel.add(jbRestoreDefaults);
         buttonPanel.add(Box.createHorizontalGlue());
 
