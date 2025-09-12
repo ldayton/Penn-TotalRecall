@@ -322,6 +322,7 @@ test {
 }
 
 tasks.named('check') {
+    dependsOn tasks.named('spotlessApply')
     dependsOn tasks.named('packageTest')
 }
 

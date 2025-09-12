@@ -1,6 +1,5 @@
 package ui.preferences;
 
-import app.swing.SwingApp;
 import core.preferences.PreferencesManager;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
@@ -27,6 +26,7 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
 
     private final String prefKey;
     private final String prefTitle;
+    private final PreferencesManager preferencesManager;
 
     /**
      * Creates a new <code>BooleanPreferences</code> hooked up to the provided Preferences object,
@@ -40,26 +40,25 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
      * @param falsePrefName The name of the option corresponding to <code>false</code>, will be
      *     displayed graphically for the user
      * @param defValue The default value, should be stored in <code>info.PreferenceKeys</code>
+     * @param preferencesManager The preferences manager for accessing preferences
      */
     protected BooleanPreference(
             String prefTitle,
             String prefKey,
             String truePrefName,
             String falsePrefName,
-            boolean defValue) {
+            boolean defValue,
+            PreferencesManager preferencesManager) {
         super(prefTitle);
         this.prefKey = prefKey;
         this.prefTitle = prefTitle;
         this.defValue = defValue;
+        this.preferencesManager = preferencesManager;
         trueButton = new JRadioButton(truePrefName);
         falseButton = new JRadioButton(falsePrefName);
         ButtonGroup group = new ButtonGroup();
         group.add(falseButton);
         group.add(trueButton);
-
-        var preferencesManager =
-                SwingApp.getRequiredInjectedInstance(
-                        PreferencesManager.class, "PreferencesManager");
         if (preferencesManager.getBoolean(prefKey, defValue) == false) {
             preferencesManager.putBoolean(prefKey, false);
             falseButton.setSelected(true);
@@ -79,9 +78,6 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     /** {@inheritDoc} */
     @Override
     protected boolean save() {
-        var preferencesManager =
-                SwingApp.getRequiredInjectedInstance(
-                        PreferencesManager.class, "PreferencesManager");
         if (trueButton.isSelected()) {
             lastPref = true;
             preferencesManager.putBoolean(prefKey, true);
@@ -123,9 +119,6 @@ public class BooleanPreference extends AbstractPreferenceDisplay {
     /** {@inheritDoc} */
     @Override
     protected void restoreDefault() {
-        var preferencesManager =
-                SwingApp.getRequiredInjectedInstance(
-                        PreferencesManager.class, "PreferencesManager");
         preferencesManager.putBoolean(prefKey, defValue);
         if (defValue == true) {
             trueButton.setSelected(true);

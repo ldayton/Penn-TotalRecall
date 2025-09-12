@@ -1,6 +1,7 @@
 package ui.preferences;
 
 import core.env.PreferenceKeys;
+import core.preferences.PreferencesManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.Component;
@@ -38,6 +39,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     private final KeyboardManager keyboardManager;
     private final DialogService dialogService;
     private final MainWindowAccess windowService;
+    private final PreferencesManager preferencesManager;
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
@@ -60,10 +62,12 @@ public class PreferencesFrame extends JFrame implements WindowListener {
             KeyboardManager keyboardManager,
             ui.LookAndFeelManager lookAndFeelManager,
             MainWindowAccess windowService,
-            DialogService dialogService) {
+            DialogService dialogService,
+            PreferencesManager preferencesManager) {
         this.keyboardManager = keyboardManager;
         this.dialogService = dialogService;
         this.windowService = windowService;
+        this.preferencesManager = preferencesManager;
         // Actions are constructed locally within initButtonsPanel to avoid circular DI
 
         // force handling by the WindowListener (this.windowClosing())
@@ -148,20 +152,27 @@ public class PreferencesFrame extends JFrame implements WindowListener {
         //		prefPanel.add(new AudioSystemPreference());
         prefPanel.add(
                 new SeekSizePreference(
-                        "Small Seek (ms)", SeekSizePreference.ShiftSize.SMALL_SHIFT));
+                        "Small Seek (ms)",
+                        SeekSizePreference.ShiftSize.SMALL_SHIFT,
+                        preferencesManager));
         prefPanel.add(
                 new SeekSizePreference(
-                        "Medium Seek (ms)", SeekSizePreference.ShiftSize.MEDIUM_SHIFT));
+                        "Medium Seek (ms)",
+                        SeekSizePreference.ShiftSize.MEDIUM_SHIFT,
+                        preferencesManager));
         prefPanel.add(
                 new SeekSizePreference(
-                        "Large Seek (ms)", SeekSizePreference.ShiftSize.LARGE_SHIFT));
+                        "Large Seek (ms)",
+                        SeekSizePreference.ShiftSize.LARGE_SHIFT,
+                        preferencesManager));
         BooleanPreference warnExitPref =
                 new BooleanPreference(
                         "Warn on Exit",
                         PreferenceKeys.WARN_ON_EXIT,
                         "Yes",
                         "No",
-                        PreferenceKeys.DEFAULT_WARN_ON_EXIT);
+                        PreferenceKeys.DEFAULT_WARN_ON_EXIT,
+                        preferencesManager);
         prefPanel.add(warnExitPref);
         BooleanPreference warnSwitchPref =
                 new BooleanPreference(
@@ -169,7 +180,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                         PreferenceKeys.WARN_FILE_SWITCH,
                         "Yes",
                         "No",
-                        PreferenceKeys.DEFAULT_WARN_FILE_SWITCH);
+                        PreferenceKeys.DEFAULT_WARN_FILE_SWITCH,
+                        preferencesManager);
         prefPanel.add(warnSwitchPref);
         if (keyboardManager.shouldShowEmacsKeybindingOption()) {
             BooleanPreference useEmacs =
@@ -178,7 +190,8 @@ public class PreferencesFrame extends JFrame implements WindowListener {
                             PreferenceKeys.USE_EMACS,
                             "Yes",
                             "No",
-                            PreferenceKeys.DEFAULT_USE_EMACS);
+                            PreferenceKeys.DEFAULT_USE_EMACS,
+                            preferencesManager);
             prefPanel.add(useEmacs);
         }
 

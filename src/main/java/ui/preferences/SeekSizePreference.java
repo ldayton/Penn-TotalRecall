@@ -1,6 +1,5 @@
 package ui.preferences;
 
-import app.swing.SwingApp;
 import core.env.PreferenceKeys;
 import core.preferences.PreferencesManager;
 import java.text.DecimalFormat;
@@ -30,10 +29,13 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private final ShiftSize size;
+    private final PreferencesManager preferencesManager;
 
-    protected SeekSizePreference(String title, ShiftSize size) {
+    protected SeekSizePreference(
+            String title, ShiftSize size, PreferencesManager preferencesManager) {
         super(title);
         this.size = size;
+        this.preferencesManager = preferencesManager;
         defValue =
                 switch (size) {
                     case SMALL_SHIFT -> PreferenceKeys.DEFAULT_SMALL_SHIFT;
@@ -53,9 +55,6 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private int getCurrentVal() {
-        var preferencesManager =
-                SwingApp.getRequiredInjectedInstance(
-                        PreferencesManager.class, "PreferencesManager");
         return switch (size) {
             case SMALL_SHIFT ->
                     preferencesManager.getInt(
@@ -105,9 +104,6 @@ public class SeekSizePreference extends AbstractPreferenceDisplay {
     }
 
     private void saveVal(int nVal) {
-        var preferencesManager =
-                SwingApp.getRequiredInjectedInstance(
-                        PreferencesManager.class, "PreferencesManager");
         switch (size) {
             case SMALL_SHIFT -> preferencesManager.putInt(PreferenceKeys.SMALL_SHIFT, nVal);
             case MEDIUM_SHIFT -> preferencesManager.putInt(PreferenceKeys.MEDIUM_SHIFT, nVal);
