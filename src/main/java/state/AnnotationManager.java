@@ -1,5 +1,6 @@
 package state;
 
+import core.annotations.Annotation;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
@@ -13,6 +14,7 @@ import jakarta.inject.Singleton;
 import java.io.File;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import ui.annotations.AnnotationDisplay;
 import ui.audiofiles.AudioFile;
 import ui.audiofiles.AudioFile.AudioFilePathException;
 
@@ -23,13 +25,17 @@ public class AnnotationManager {
 
     private final EventDispatchBus eventBus;
     private final WaveformSessionDataSource sessionSource;
+    private final AnnotationDisplay annotationDisplay;
     private AudioFile currentAudioFile = null;
 
     @Inject
     public AnnotationManager(
-            @NonNull EventDispatchBus eventBus, @NonNull WaveformSessionDataSource sessionSource) {
+            @NonNull EventDispatchBus eventBus,
+            @NonNull WaveformSessionDataSource sessionSource,
+            @NonNull AnnotationDisplay annotationDisplay) {
         this.eventBus = eventBus;
         this.sessionSource = sessionSource;
+        this.annotationDisplay = annotationDisplay;
         eventBus.subscribe(this);
     }
 
@@ -80,6 +86,32 @@ public class AnnotationManager {
         } else {
             eventBus.publish(new DialogErrorEvent("You have not made any annotations yet."));
         }
+    }
+
+    // Annotation display operations - delegating to the injected AnnotationDisplay instance
+
+    public Annotation[] getAnnotationsInOrder() {
+        return annotationDisplay.getAnnotationsInOrder();
+    }
+
+    public void addAnnotation(Annotation ann) {
+        annotationDisplay.addAnnotation(ann);
+    }
+
+    public void addAnnotations(Iterable<Annotation> anns) {
+        annotationDisplay.addAnnotations(anns);
+    }
+
+    public void removeAnnotation(int rowIndex) {
+        annotationDisplay.removeAnnotation(rowIndex);
+    }
+
+    public void removeAllAnnotations() {
+        annotationDisplay.removeAllAnnotations();
+    }
+
+    public int getNumAnnotations() {
+        return annotationDisplay.getNumAnnotations();
     }
 
     // We'll need to track the current audio file when it's loaded

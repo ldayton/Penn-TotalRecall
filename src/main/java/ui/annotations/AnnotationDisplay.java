@@ -1,6 +1,5 @@
 package ui.annotations;
 
-import app.swing.SwingApp;
 import core.annotations.Annotation;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
@@ -22,7 +21,6 @@ public class AnnotationDisplay extends JScrollPane {
 
     private static final String title = "Annotations";
     private static final Dimension PREFERRED_SIZE = new Dimension(300, Integer.MAX_VALUE);
-    private static AnnotationTable table;
     private final AnnotationTable annotationTable;
 
     /**
@@ -32,8 +30,7 @@ public class AnnotationDisplay extends JScrollPane {
     @Inject
     public AnnotationDisplay(AnnotationTable annotationTable, EventDispatchBus eventBus) {
         this.annotationTable = annotationTable;
-        table = annotationTable;
-        getViewport().setView(table);
+        getViewport().setView(annotationTable);
         setPreferredSize(PREFERRED_SIZE);
         setMaximumSize(PREFERRED_SIZE);
 
@@ -47,8 +44,8 @@ public class AnnotationDisplay extends JScrollPane {
                 new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if (table.isFocusable()) {
-                            table.requestFocusInWindow();
+                        if (annotationTable.isFocusable()) {
+                            annotationTable.requestFocusInWindow();
                         } else {
                             getParent().requestFocusInWindow();
                         }
@@ -65,42 +62,34 @@ public class AnnotationDisplay extends JScrollPane {
         eventBus.subscribe(this);
     }
 
-    public static Annotation[] getAnnotationsInOrder() {
-        var instance = SwingApp.getInjectedInstance(AnnotationDisplay.class);
-        if (instance == null) {
-            throw new IllegalStateException("AnnotationDisplay not available via DI");
-        }
-        return instance.annotationTable.getModel().toArray();
+    public Annotation[] getAnnotationsInOrder() {
+        return annotationTable.getModel().toArray();
     }
 
-    public static void addAnnotation(Annotation ann) {
+    public void addAnnotation(Annotation ann) {
         if (ann == null) {
             throw new IllegalArgumentException("annotation/s cannot be null");
         }
-        var instance = SwingApp.getInjectedInstance(AnnotationDisplay.class);
-        if (instance == null) {
-            throw new IllegalStateException("AnnotationDisplay not available via DI");
-        }
-        instance.annotationTable.getModel().addElement(ann);
+        annotationTable.getModel().addElement(ann);
     }
 
-    public static void addAnnotations(Iterable<Annotation> anns) {
+    public void addAnnotations(Iterable<Annotation> anns) {
         if (anns == null) {
             throw new IllegalArgumentException("annotations cannot be null");
         }
-        table.getModel().addElements(anns);
+        annotationTable.getModel().addElements(anns);
     }
 
-    public static void removeAnnotation(int rowIndex) {
-        table.getModel().removeElementAt(rowIndex);
+    public void removeAnnotation(int rowIndex) {
+        annotationTable.getModel().removeElementAt(rowIndex);
     }
 
-    public static void removeAllAnnotations() {
-        table.getModel().removeAllElements();
+    public void removeAllAnnotations() {
+        annotationTable.getModel().removeAllElements();
     }
 
-    public static int getNumAnnotations() {
-        return table.getModel().size();
+    public int getNumAnnotations() {
+        return annotationTable.getModel().size();
     }
 
     @Subscribe
