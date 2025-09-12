@@ -1,11 +1,11 @@
 package core.annotations;
 
-import core.annotations.events.AnnotationAddedEvent;
-import core.annotations.events.AnnotationDeletedEvent;
-import core.annotations.events.AnnotationUpdatedEvent;
-import core.annotations.events.AnnotationsClearedEvent;
-import core.annotations.events.AnnotationsLoadedEvent;
 import core.dispatch.EventDispatchBus;
+import core.events.AnnotationAddedEvent;
+import core.events.AnnotationDeletedEvent;
+import core.events.AnnotationUpdatedEvent;
+import core.events.AnnotationsClearedEvent;
+import core.events.AnnotationsLoadedEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.nio.file.Path;

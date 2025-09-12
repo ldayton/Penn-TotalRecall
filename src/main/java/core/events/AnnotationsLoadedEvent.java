@@ -1,4 +1,4 @@
-package core.annotations.events;
+package core.events;
 
 import core.annotations.AnnotationEntry;
 import java.util.List;
