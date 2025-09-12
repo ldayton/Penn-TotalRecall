@@ -1,5 +1,8 @@
 package ui;
 
+import core.actions.impl.AboutAction;
+import core.actions.impl.ExitAction;
+import core.actions.impl.PreferencesAction;
 import core.env.AppConfig;
 import core.env.Platform;
 import core.env.ProgramName;
@@ -25,15 +28,24 @@ public class LookAndFeelManager {
     private final AppConfig appConfig;
     private final ProgramName programName;
     private final Platform platform;
+    private final AboutAction aboutAction;
+    private final PreferencesAction preferencesAction;
+    private final ExitAction exitAction;
 
     @Inject
     public LookAndFeelManager(
             @NonNull AppConfig appConfig,
             @NonNull ProgramName programName,
-            @NonNull Platform platform) {
+            @NonNull Platform platform,
+            @NonNull AboutAction aboutAction,
+            @NonNull PreferencesAction preferencesAction,
+            @NonNull ExitAction exitAction) {
         this.appConfig = appConfig;
         this.programName = programName;
         this.platform = platform;
+        this.aboutAction = aboutAction;
+        this.preferencesAction = preferencesAction;
+        this.exitAction = exitAction;
     }
 
     /** Configures platform properties and enables native integration. */
@@ -62,25 +74,12 @@ public class LookAndFeelManager {
         Desktop desktop = Desktop.getDesktop();
         // About menu handler
         if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
-            desktop.setAboutHandler(
-                    _ -> {
-                        var aboutAction =
-                                app.swing.SwingApp.getRequiredInjectedInstance(
-                                        core.actions.impl.AboutAction.class, "AboutAction");
-                        aboutAction.execute();
-                    });
+            desktop.setAboutHandler(_ -> aboutAction.execute());
         }
 
         // Preferences menu handler
         if (desktop.isSupported(Desktop.Action.APP_PREFERENCES)) {
-            desktop.setPreferencesHandler(
-                    _ -> {
-                        var preferencesAction =
-                                app.swing.SwingApp.getRequiredInjectedInstance(
-                                        core.actions.impl.PreferencesAction.class,
-                                        "PreferencesAction");
-                        preferencesAction.execute();
-                    });
+            desktop.setPreferencesHandler(_ -> preferencesAction.execute());
         }
 
         // Quit handler with proper cleanup
@@ -88,10 +87,6 @@ public class LookAndFeelManager {
             desktop.setQuitHandler(
                     (_, response) -> {
                         try {
-                            // Use the DI-managed ExitAction - fail fast if not available
-                            var exitAction =
-                                    app.swing.SwingApp.getRequiredInjectedInstance(
-                                            core.actions.impl.ExitAction.class, "ExitAction");
                             exitAction.execute();
                             response.performQuit();
                         } catch (Exception ex) {

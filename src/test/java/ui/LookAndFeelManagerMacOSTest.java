@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import annotations.MacOS;
 import app.swing.SwingApp;
+import core.actions.impl.AboutAction;
 import core.actions.impl.ExitAction;
+import core.actions.impl.PreferencesAction;
 import core.env.AppConfig;
 import core.env.Platform;
 import core.env.ProgramName;
@@ -25,6 +27,8 @@ class LookAndFeelManagerMacOSTest {
     private AppConfig config;
     private Platform platform;
     private LookAndFeelManager manager;
+    @Mock private AboutAction aboutAction;
+    @Mock private PreferencesAction preferencesAction;
     @Mock private ExitAction exitAction;
 
     @BeforeEach
@@ -39,7 +43,14 @@ class LookAndFeelManagerMacOSTest {
 
         config = new AppConfig();
         platform = new Platform();
-        manager = new LookAndFeelManager(config, new ProgramName(config), platform);
+        manager =
+                new LookAndFeelManager(
+                        config,
+                        new ProgramName(config),
+                        platform,
+                        aboutAction,
+                        preferencesAction,
+                        exitAction);
     }
 
     @Test
@@ -109,7 +120,13 @@ class LookAndFeelManagerMacOSTest {
 
         // Create and initialize the Look and Feel manager
         LookAndFeelManager manager =
-                new LookAndFeelManager(config, new ProgramName(config), platform);
+                new LookAndFeelManager(
+                        config,
+                        new ProgramName(config),
+                        platform,
+                        aboutAction,
+                        preferencesAction,
+                        exitAction);
         manager.initialize();
 
         // Verify the system property is set correctly

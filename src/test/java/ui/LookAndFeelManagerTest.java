@@ -3,7 +3,9 @@ package ui;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import core.actions.impl.AboutAction;
 import core.actions.impl.ExitAction;
+import core.actions.impl.PreferencesAction;
 import core.env.AppConfig;
 import core.env.Platform;
 import core.env.ProgramName;
@@ -18,11 +20,16 @@ class LookAndFeelManagerTest {
     void macOSHidesPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
 
         LookAndFeelManager manager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
+                new LookAndFeelManager(
+                        config,
+                        mock(ProgramName.class),
+                        platform,
+                        mock(AboutAction.class),
+                        mock(PreferencesAction.class),
+                        mock(ExitAction.class));
 
         assertFalse(manager.shouldShowPreferencesInMenu());
     }
@@ -32,11 +39,16 @@ class LookAndFeelManagerTest {
     void nonMacOSShowsPreferencesMenu() {
         AppConfig config = mock(AppConfig.class);
         Platform platform = mock(Platform.class);
-        mock(ExitAction.class);
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
 
         LookAndFeelManager manager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
+                new LookAndFeelManager(
+                        config,
+                        mock(ProgramName.class),
+                        platform,
+                        mock(AboutAction.class),
+                        mock(PreferencesAction.class),
+                        mock(ExitAction.class));
 
         assertTrue(manager.shouldShowPreferencesInMenu());
     }
@@ -49,21 +61,38 @@ class LookAndFeelManagerTest {
 
         // Test Windows
         when(platform.detect()).thenReturn(Platform.PlatformType.WINDOWS);
-        mock(ExitAction.class);
         LookAndFeelManager windowsManager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
+                new LookAndFeelManager(
+                        config,
+                        mock(ProgramName.class),
+                        platform,
+                        mock(AboutAction.class),
+                        mock(PreferencesAction.class),
+                        mock(ExitAction.class));
         assertEquals("/images/headphones48.png", windowsManager.getAppIconPath());
 
         // Test macOS
         when(platform.detect()).thenReturn(Platform.PlatformType.MACOS);
         LookAndFeelManager macManager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
+                new LookAndFeelManager(
+                        config,
+                        mock(ProgramName.class),
+                        platform,
+                        mock(AboutAction.class),
+                        mock(PreferencesAction.class),
+                        mock(ExitAction.class));
         assertEquals("/images/headphones16.png", macManager.getAppIconPath());
 
         // Test Linux
         when(platform.detect()).thenReturn(Platform.PlatformType.LINUX);
         LookAndFeelManager linuxManager =
-                new LookAndFeelManager(config, mock(ProgramName.class), platform);
+                new LookAndFeelManager(
+                        config,
+                        mock(ProgramName.class),
+                        platform,
+                        mock(AboutAction.class),
+                        mock(PreferencesAction.class),
+                        mock(ExitAction.class));
         assertEquals("/images/headphones16.png", linuxManager.getAppIconPath());
     }
 
