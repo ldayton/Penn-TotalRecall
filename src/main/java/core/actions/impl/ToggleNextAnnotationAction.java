@@ -2,7 +2,6 @@ package core.actions.impl;
 
 import core.actions.Action;
 import jakarta.inject.Inject;
-import java.util.Optional;
 
 public class ToggleNextAnnotationAction extends Action {
 
@@ -15,15 +14,5 @@ public class ToggleNextAnnotationAction extends Action {
     @Override
     public boolean isEnabled() {
         return false;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Toggle Next Annotation";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Move to next annotation");
     }
 }

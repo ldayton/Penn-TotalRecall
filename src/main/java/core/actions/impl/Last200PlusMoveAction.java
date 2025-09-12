@@ -9,7 +9,6 @@ import core.events.PlayLast200MillisThenMoveEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /** Moves the audio position by a small amount and then replays the last 200ms. */
@@ -18,6 +17,11 @@ public class Last200PlusMoveAction extends Action {
     private final EventDispatchBus eventBus;
     private final boolean forward;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+
+    @Override
+    protected String getDefaultLabel() {
+        return "Move and Replay Last 200ms";
+    }
 
     @Inject
     public Last200PlusMoveAction(EventDispatchBus eventBus) {
@@ -44,16 +48,6 @@ public class Last200PlusMoveAction extends Action {
             case READY, PAUSED -> true;
             default -> false;
         };
-    }
-
-    @Override
-    public String getLabel() {
-        return "Last200PlusMove";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Move and replay last 200ms");
     }
 
     @Subscribe

@@ -5,7 +5,6 @@ import core.env.UpdateManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /** Checks for program updates. */
 @Singleton
@@ -26,15 +25,5 @@ public class CheckUpdatesAction extends Action {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Check For Updates";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Check for program updates");
     }
 }

@@ -9,7 +9,6 @@ import core.events.ZoomOutEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /** Zooms the waveform display out. */
@@ -37,16 +36,6 @@ public class ZoomOutAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Zoom Out";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Zoom out the waveform display");
     }
 
     @Subscribe

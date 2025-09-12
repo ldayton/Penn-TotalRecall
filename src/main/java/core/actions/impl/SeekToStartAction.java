@@ -9,7 +9,6 @@ import core.events.SeekEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -42,16 +41,6 @@ public class SeekToStartAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Seek to Start";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Seek to the beginning of the audio file");
     }
 
     @Subscribe

@@ -10,7 +10,6 @@ import core.state.AudioSessionStateMachine;
 import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -50,16 +49,6 @@ public class ReplayLast200MillisAction extends Action {
             return position > 0.2; // Enable if we're past 200ms
         }
         return false;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Replay Last 200ms";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Replay the last 200 milliseconds of audio");
     }
 
     @Subscribe

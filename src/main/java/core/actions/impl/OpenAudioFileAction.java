@@ -12,7 +12,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /** Opens a file selection dialog for audio files and publishes an event when files are selected. */
@@ -71,15 +70,5 @@ public class OpenAudioFileAction extends Action {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Open Audio File";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Select audio files");
     }
 }

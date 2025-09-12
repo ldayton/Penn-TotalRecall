@@ -9,7 +9,6 @@ import core.events.SeekScreenEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /** Seeks the audio position backward by one screen width. */
@@ -37,16 +36,6 @@ public class ScreenSeekBackwardAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Screen Backward";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Seek backward by screen width");
     }
 
     @Subscribe

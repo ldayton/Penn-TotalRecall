@@ -9,7 +9,6 @@ import core.events.ZoomInEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /** Zooms the waveform display in. */
@@ -37,16 +36,6 @@ public class ZoomInAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Zoom In";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Zoom in the waveform display");
     }
 
     @Subscribe

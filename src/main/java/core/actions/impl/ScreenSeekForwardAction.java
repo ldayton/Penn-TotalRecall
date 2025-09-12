@@ -9,7 +9,6 @@ import core.events.SeekScreenEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /** Seeks the audio position forward by one screen width. */
@@ -37,16 +36,6 @@ public class ScreenSeekForwardAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Screen Forward";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Seek forward by screen width");
     }
 
     @Subscribe

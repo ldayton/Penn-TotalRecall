@@ -2,7 +2,6 @@ package core.actions.impl;
 
 import core.actions.Action;
 import jakarta.inject.Inject;
-import java.util.Optional;
 
 public class ReturnToLastPositionAction extends Action {
 
@@ -15,15 +14,5 @@ public class ReturnToLastPositionAction extends Action {
     @Override
     public boolean isEnabled() {
         return false;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Undo Play";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Return to the position prior to hitting play");
     }
 }

@@ -12,7 +12,6 @@ import core.services.FileSelectionService.FileSelectionRequest;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -73,15 +72,5 @@ public class OpenWordpoolAction extends Action {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Open Wordpool...";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Load words from a text file into the wordpool");
     }
 }

@@ -8,7 +8,6 @@ import core.env.ProgramVersion;
 import core.events.DialogInfoEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /** Displays information about the program to the user */
 @Singleton
@@ -37,16 +36,6 @@ public class AboutAction extends Action {
     @Override
     public boolean isEnabled() {
         return true; // Always enabled
-    }
-
-    @Override
-    public String getLabel() {
-        return "About";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Display information about the program");
     }
 
     /**

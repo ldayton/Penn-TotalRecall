@@ -9,7 +9,6 @@ import core.events.FocusEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -43,16 +42,6 @@ public class DoneAction extends Action {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String getLabel() {
-        return "Mark Complete";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Mark current annotation file complete");
     }
 
     @Subscribe

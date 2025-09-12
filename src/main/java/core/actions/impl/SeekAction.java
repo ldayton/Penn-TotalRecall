@@ -9,7 +9,6 @@ import core.events.FocusEvent;
 import core.events.SeekByAmountEvent;
 import core.preferences.PreferencesManager;
 import core.state.AudioSessionStateMachine;
-import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -29,6 +28,11 @@ public abstract class SeekAction extends Action {
     private final SeekByAmountEvent.Direction direction;
     private final Size size;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
+
+    @Override
+    protected String getDefaultLabel() {
+        return "Seek";
+    }
 
     protected SeekAction(
             EventDispatchBus eventBus,
@@ -56,31 +60,6 @@ public abstract class SeekAction extends Action {
             case READY, PAUSED -> true;
             default -> false;
         };
-    }
-
-    @Override
-    public String getLabel() {
-        String directionStr =
-                direction == SeekByAmountEvent.Direction.FORWARD ? "Forward" : "Backward";
-        String sizeStr =
-                switch (size) {
-                    case SMALL -> "Small";
-                    case MEDIUM -> "Medium";
-                    case LARGE -> "Large";
-                };
-        return directionStr + " " + sizeStr + " Amount";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of(
-                "Seek audio position "
-                        + (direction == SeekByAmountEvent.Direction.FORWARD
-                                ? "forward"
-                                : "backward")
-                        + " by "
-                        + size.toString().toLowerCase()
-                        + " amount");
     }
 
     private int getShiftAmount() {

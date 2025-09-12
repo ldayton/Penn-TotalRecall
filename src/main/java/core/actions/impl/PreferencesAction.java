@@ -5,7 +5,6 @@ import core.dispatch.EventDispatchBus;
 import core.events.PreferencesEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /** Launches the preferences window. */
 @Singleton
@@ -33,15 +32,5 @@ public class PreferencesAction extends Action {
     @Override
     public boolean isEnabled() {
         return true; // Always enabled
-    }
-
-    @Override
-    public String getLabel() {
-        return "Preferences";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Open preferences window");
     }
 }

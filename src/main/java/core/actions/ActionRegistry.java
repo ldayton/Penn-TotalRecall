@@ -51,6 +51,10 @@ public class ActionRegistry {
             }
 
             logger.info("Loaded {} action configurations", configs.size());
+
+            // Set this registry on the Action base class so actions can access their configs
+            Action.setActionRegistry(this);
+
             initialized = true;
         } catch (Exception e) {
             logger.error("Failed to initialize ActionRegistry", e);

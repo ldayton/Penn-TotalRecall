@@ -6,7 +6,6 @@ import core.env.Constants;
 import core.events.OpenUrlEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /** Attempts to bring the user to the program's tutorial website. */
 @Singleton
@@ -39,15 +38,5 @@ public class VisitTutorialSiteAction extends Action {
     @Override
     public boolean isEnabled() {
         return true; // Always enabled
-    }
-
-    @Override
-    public String getLabel() {
-        return "Visit Tutorial Site";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Open tutorial website in browser");
     }
 }

@@ -9,7 +9,6 @@ import core.events.PlayPauseEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 import lombok.NonNull;
 
 /**
@@ -21,13 +20,10 @@ import lombok.NonNull;
 @Singleton
 public class PlayPauseAction extends Action {
 
-    private static final String PLAY_TEXT = "Play";
-    private static final String PAUSE_TEXT = "Pause";
-
     private final EventDispatchBus eventBus;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
     private boolean enabled = false;
-    private String label = PLAY_TEXT;
+    private boolean isPlaying = false;
 
     @Inject
     public PlayPauseAction(EventDispatchBus eventBus) {
@@ -50,12 +46,8 @@ public class PlayPauseAction extends Action {
 
     @Override
     public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Play or pause audio playback");
+        // Dynamic label based on playback state
+        return isPlaying ? "Pause" : "Play";
     }
 
     @Subscribe
@@ -67,15 +59,15 @@ public class PlayPauseAction extends Action {
     private void updateActionState() {
         switch (currentState) {
             case NO_AUDIO, LOADING, ERROR -> {
-                label = PLAY_TEXT;
+                isPlaying = false;
                 enabled = false;
             }
             case READY, PAUSED -> {
-                label = PLAY_TEXT;
+                isPlaying = false;
                 enabled = true;
             }
             case PLAYING -> {
-                label = PAUSE_TEXT;
+                isPlaying = true;
                 enabled = true;
             }
         }

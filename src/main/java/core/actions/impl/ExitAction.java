@@ -5,7 +5,6 @@ import core.dispatch.EventDispatchBus;
 import core.events.ExitEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /**
  * Exits the application using the event-driven system.
@@ -31,15 +30,5 @@ public class ExitAction extends Action {
     @Override
     public boolean isEnabled() {
         return true; // Always enabled
-    }
-
-    @Override
-    public String getLabel() {
-        return "Exit";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Exit the application");
     }
 }

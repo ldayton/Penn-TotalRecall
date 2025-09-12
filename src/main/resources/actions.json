@@ -169,6 +169,16 @@
       }
     },
     {
+      "class": "ScreenSeekForwardAction",
+      "name": "Seek Forward by Screen",
+      "tooltip": "Move forward by one screen width"
+    },
+    {
+      "class": "ScreenSeekBackwardAction", 
+      "name": "Seek Backward by Screen",
+      "tooltip": "Move backward by one screen width"
+    },
+    {
       "class": "Last200PlusMoveForwardAction",
       "name": "Forward Small Amount then Replay Last 200 ms",
       "shortcut": {

@@ -5,7 +5,6 @@ import core.dispatch.EventDispatchBus;
 import core.events.DialogInfoEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.util.Optional;
 
 /**
  * Displays a dialog containing information on available keybindings (and mouse actions) not listed
@@ -73,15 +72,5 @@ public class TipsMessageAction extends Action {
     @Override
     public boolean isEnabled() {
         return true; // Always enabled
-    }
-
-    @Override
-    public String getLabel() {
-        return "Tips";
-    }
-
-    @Override
-    public Optional<String> getTooltip() {
-        return Optional.of("Show keyboard shortcuts and tips");
     }
 }

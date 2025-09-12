@@ -14,18 +14,56 @@ import lombok.NonNull;
 public abstract class Action {
 
     private final List<Runnable> observers = new CopyOnWriteArrayList<>();
+    private static ActionRegistry actionRegistry;
+
+    public static void setActionRegistry(@NonNull ActionRegistry registry) {
+        actionRegistry = registry;
+    }
 
     public abstract void execute();
 
     public abstract boolean isEnabled();
 
-    public abstract String getLabel();
+    public String getLabel() {
+        if (actionRegistry != null) {
+            Optional<ActionConfig> config = actionRegistry.getConfig(getClass().getSimpleName());
+            if (config.isPresent()) {
+                return config.get().name();
+            }
+        }
+        // Fallback to default implementation if not in registry
+        return getDefaultLabel();
+    }
+
+    protected String getDefaultLabel() {
+        // Subclasses can override this to provide a default
+        return getClass().getSimpleName();
+    }
 
     public Optional<String> getTooltip() {
+        if (actionRegistry != null) {
+            Optional<ActionConfig> config = actionRegistry.getConfig(getClass().getSimpleName());
+            if (config.isPresent()) {
+                return config.get().tooltip();
+            }
+        }
+        // Fallback to default implementation if not in registry
+        return getDefaultTooltip();
+    }
+
+    protected Optional<String> getDefaultTooltip() {
+        // No default tooltips - only from configuration
         return Optional.empty();
     }
 
     public Optional<ShortcutSpec> getShortcut() {
+        if (actionRegistry != null) {
+            Optional<ActionConfig> config = actionRegistry.getConfig(getClass().getSimpleName());
+            if (config.isPresent()) {
+                return config.get().shortcut();
+            }
+        }
+        // No default shortcuts - must be configured
         return Optional.empty();
     }
 
