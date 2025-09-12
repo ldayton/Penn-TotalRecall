@@ -41,6 +41,7 @@ public class ShortcutManager extends JFrame {
     private final ShortcutPreferences shortcutPreferences;
     private final ShortcutPreferences.ActionConfigListener listener;
     private final KeyboardManager keyboardManager;
+    private final DialogService dialogService;
     private final ContentPane contentPane;
 
     /**
@@ -51,12 +52,14 @@ public class ShortcutManager extends JFrame {
             List<SwingActionConfig> actionConfigs,
             ShortcutPreferences.ActionConfigListener listener,
             PreferencesManager preferencesManager,
-            KeyboardManager keyboardManager) {
+            KeyboardManager keyboardManager,
+            DialogService dialogService) {
         this.defaultActionConfigs = actionConfigs;
         this.shortcutPreferences =
                 new ShortcutPreferences(preferencesManager, actionConfigs, listener);
         this.listener = listener;
         this.keyboardManager = keyboardManager;
+        this.dialogService = dialogService;
 
         shortcutPreferences.persistDefaults(false);
 
@@ -101,7 +104,8 @@ public class ShortcutManager extends JFrame {
                                 defaultActionConfigs.toArray(new SwingActionConfig[0]),
                                 shortcutPreferences,
                                 listener,
-                                keyboardManager));
+                                keyboardManager,
+                                dialogService));
 
                 setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
                 setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -134,11 +138,8 @@ public class ShortcutManager extends JFrame {
                                 new AbstractAction("Restore Defaults") {
                                     @Override
                                     public void actionPerformed(ActionEvent e) {
-                                        DialogService ds =
-                                                app.swing.SwingApp.getRequiredInjectedInstance(
-                                                        DialogService.class, "DialogService");
                                         boolean res =
-                                                ds.showConfirm(
+                                                dialogService.showConfirm(
                                                         "Restore all shortcuts to defaults?");
                                         if (res) {
                                             shortcutPreferences.persistDefaults(true);
@@ -167,6 +168,7 @@ class ShortcutTable extends JTable {
     private final SwingActionConfig[] defaultActionConfigs;
     private final ShortcutPreferences shortcutPreferences;
     private final KeyboardManager keyboardManager;
+    private final DialogService dialogService;
 
     private final int leftRightPad = 10;
     private final ShortcutTableModel shortcutTableModel;
@@ -175,10 +177,12 @@ class ShortcutTable extends JTable {
             SwingActionConfig[] defaultActionConfigs,
             ShortcutPreferences shortcutPreferences,
             ShortcutPreferences.ActionConfigListener listener,
-            KeyboardManager keyboardManager) {
+            KeyboardManager keyboardManager,
+            DialogService dialogService) {
         this.defaultActionConfigs = defaultActionConfigs;
         this.shortcutPreferences = shortcutPreferences;
         this.keyboardManager = keyboardManager;
+        this.dialogService = dialogService;
         this.shortcutTableModel = new ShortcutTableModel();
 
         setModel(shortcutTableModel);
@@ -266,10 +270,7 @@ class ShortcutTable extends JTable {
                 for (Shortcut existingShortcut : allShortcuts.values()) {
                     if (shortcut.equals(existingShortcut)) {
                         String msg = shortcut + " is already taken.";
-                        DialogService ds =
-                                app.swing.SwingApp.getRequiredInjectedInstance(
-                                        DialogService.class, "DialogService");
-                        ds.showError(msg);
+                        dialogService.showError(msg);
                         return;
                     }
                 }

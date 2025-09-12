@@ -25,12 +25,14 @@ public class ShortcutFrame extends ShortcutManager {
             EventDispatchBus eventBus,
             MainWindowAccess windowService,
             PreferencesManager preferencesManager,
-            KeyboardManager keyboardManager) {
+            KeyboardManager keyboardManager,
+            DialogService dialogService) {
         super(
                 actionsManager.getAllActionConfigs(),
                 createActionConfigListener(actionsManager),
                 preferencesManager,
-                keyboardManager);
+                keyboardManager,
+                dialogService);
         this.windowService = windowService;
         eventBus.subscribe(this);
     }
