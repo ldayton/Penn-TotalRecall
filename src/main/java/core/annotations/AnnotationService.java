@@ -148,7 +148,7 @@ public class AnnotationService {
     public Optional<AnnotationEntry> getPreviousAnnotation(double fromTime) {
         return annotations.stream()
                 .filter(a -> a.time() < fromTime - 1.0)
-                .reduce((first, second) -> second); // Get last matching
+                .reduce((_, second) -> second); // Get last matching
     }
 
     /** Gets all annotations in time order. */

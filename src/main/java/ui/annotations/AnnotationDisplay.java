@@ -19,8 +19,6 @@ import lombok.NonNull;
 @Singleton
 public class AnnotationDisplay extends JScrollPane {
 
-    private static final String title = "Annotations";
-    private static final int INNER_PADDING_PX = 8;
     private static final Dimension PREFERRED_SIZE = new Dimension(300, 180);
     private final AnnotationTable annotationTable;
 

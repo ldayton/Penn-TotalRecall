@@ -31,9 +31,6 @@ import ui.layout.MainFrame;
 @Singleton
 public class DialogService {
 
-    /** Title of all yes/no dialogs in the program. */
-    private static final String YES_NO_DIALOG_TITLE = "Select an Option";
-
     /** Standard String asking whether or not user would like to see similar dialogs again. */
     private static final String DONT_SHOW_AGAIN_STRING = "Do not show this message again.";
 

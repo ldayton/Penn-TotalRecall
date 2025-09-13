@@ -2,15 +2,13 @@ package ui.wordpool;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import ui.layout.UiStyles;
 
 /**
  * A custom interface component for displaying wordpool and lst words to the user and a text field
@@ -28,8 +26,6 @@ import ui.layout.UiStyles;
 @Singleton
 public class WordpoolDisplay extends JPanel {
 
-    private static final String title = "Wordpool";
-    private static final int INNER_PADDING_PX = 8;
     private static final Dimension PREFERRED_SIZE = new Dimension(250, 180);
 
     private static JTextField field;
@@ -44,28 +40,24 @@ public class WordpoolDisplay extends JPanel {
      */
     @Inject
     public WordpoolDisplay(WordpoolTextField wordpoolTextField, WordpoolList wordpoolList) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        // Single large white area (like other sections): no inner padding
+        setLayout(new BorderLayout());
         this.wordpoolTextField = wordpoolTextField;
         this.wordpoolList = wordpoolList;
         field = wordpoolTextField;
         pane = new WordpoolScrollPane(wordpoolList);
-        add(field);
-        // Small vertical gap between input field and list
-        add(Box.createRigidArea(new Dimension(0, 8)));
-        add(pane);
+        // Add input at the top, list fills remaining area. No extra padding between.
+        add(field, BorderLayout.NORTH);
+        add(pane, BorderLayout.CENTER);
 
         setPreferredSize(PREFERRED_SIZE);
         // Allow vertical growth; keep initial width
         setMaximumSize(new Dimension(PREFERRED_SIZE.width, Integer.MAX_VALUE));
 
-        // Add inner padding inside the titled border for breathing room
-        setBorder(UiStyles.roundedBox(INNER_PADDING_PX));
+        // No inner padding/border; outer container provides section border
+        setBorder(null);
 
-        // since WordpoolDisplay is a clickable area, we must write focus handling code for the
-        // event it is clicked on
-        // this case is rare, since only a very small amount of this component is exposed (the area
-        // around the border title),
-        // the rest being obscured by the WordpoolList and WordpoolTextField
+        // Clicks on empty area should move focus to the input field for quick typing
         addMouseListener(
                 new MouseAdapter() {
                     @Override

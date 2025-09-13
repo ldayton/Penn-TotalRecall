@@ -142,7 +142,6 @@ public class AudioFile implements Comparable<AudioFile> {
      */
     @Override
     public int compareTo(@NonNull AudioFile other) {
-        if (other == null) return -1;
         if (other.isDone() == isDone()) {
             return toString().compareTo(other.toString());
         }

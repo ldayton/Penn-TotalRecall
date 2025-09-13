@@ -52,37 +52,6 @@ public class AppMenuBar extends JMenuBar {
 
     private final SwingActionRegistry swingActions;
 
-    private final OpenWordpoolAction openWordpoolAction;
-    private final ExitAction exitAction;
-    private final EditShortcutsAction editShortcutsAction;
-    private final PreferencesAction preferencesAction;
-    private final PlayPauseAction playPauseAction;
-    private final SeekToStartAction seekToStartAction;
-    private final ReplayLast200MillisAction replayLast200MillisAction;
-    // private final ReturnToLastPositionAction returnToLastPositionAction;
-    // private final ReplayLastPositionAction replayLastPositionAction;
-    private final DoneAction doneAction;
-    private final AboutAction aboutAction;
-    private final TipsMessageAction tipsMessageAction;
-    private final VisitTutorialSiteAction visitTutorialSiteAction;
-    private final CheckUpdatesAction checkUpdatesAction;
-    private final Last200PlusMoveAction last200PlusMoveAction;
-    // private final AnnotateRegularAction annotateRegularAction;
-    // private final AnnotateIntrusionAction annotateIntrusionAction;
-    // private final actions.ToggleAnnotationsAction toggleAnnotationsAction;
-    private final core.actions.impl.ZoomInAction zoomInAction;
-    private final core.actions.impl.ZoomOutAction zoomOutAction;
-    private final core.actions.impl.OpenAudioFileAction openAudioFileAction;
-    private final core.actions.impl.OpenAudioFolderAction openAudioFolderAction;
-    private final core.actions.impl.SeekForwardSmallAction seekForwardSmallAction;
-    private final core.actions.impl.SeekBackwardSmallAction seekBackwardSmallAction;
-    private final core.actions.impl.SeekForwardMediumAction seekForwardMediumAction;
-    private final core.actions.impl.SeekBackwardMediumAction seekBackwardMediumAction;
-    private final core.actions.impl.SeekForwardLargeAction seekForwardLargeAction;
-    private final core.actions.impl.SeekBackwardLargeAction seekBackwardLargeAction;
-    private final core.actions.impl.ScreenSeekForwardAction screenSeekForwardAction;
-    private final core.actions.impl.ScreenSeekBackwardAction screenSeekBackwardAction;
-
     /** Creates a new instance of the object, filling the menus and creating the actions. */
     @Inject
     public AppMenuBar(
@@ -96,17 +65,12 @@ public class AppMenuBar extends JMenuBar {
             PlayPauseAction playPauseAction,
             SeekToStartAction seekToStartAction,
             ReplayLast200MillisAction replayLast200MillisAction,
-            // ReturnToLastPositionAction returnToLastPositionAction,
-            // ReplayLastPositionAction replayLastPositionAction,
             DoneAction doneAction,
             AboutAction aboutAction,
             TipsMessageAction tipsMessageAction,
             VisitTutorialSiteAction visitTutorialSiteAction,
             CheckUpdatesAction checkUpdatesAction,
             Last200PlusMoveAction last200PlusMoveAction,
-            // AnnotateRegularAction annotateRegularAction,
-            // AnnotateIntrusionAction annotateIntrusionAction,
-            // actions.ToggleAnnotationsAction toggleAnnotationsAction,
             core.actions.impl.ZoomInAction zoomInAction,
             core.actions.impl.ZoomOutAction zoomOutAction,
             core.actions.impl.OpenAudioFileAction openAudioFileAction,
@@ -120,36 +84,6 @@ public class AppMenuBar extends JMenuBar {
             core.actions.impl.ScreenSeekForwardAction screenSeekForwardAction,
             core.actions.impl.ScreenSeekBackwardAction screenSeekBackwardAction) {
         this.swingActions = swingActions;
-        this.openWordpoolAction = openWordpoolAction;
-        this.exitAction = exitAction;
-        this.editShortcutsAction = editShortcutsAction;
-        this.preferencesAction = preferencesAction;
-        this.playPauseAction = playPauseAction;
-        this.seekToStartAction = seekToStartAction;
-        this.replayLast200MillisAction = replayLast200MillisAction;
-        // this.returnToLastPositionAction = returnToLastPositionAction;
-        // this.replayLastPositionAction = replayLastPositionAction;
-        this.doneAction = doneAction;
-        this.aboutAction = aboutAction;
-        this.tipsMessageAction = tipsMessageAction;
-        this.visitTutorialSiteAction = visitTutorialSiteAction;
-        this.checkUpdatesAction = checkUpdatesAction;
-        this.last200PlusMoveAction = last200PlusMoveAction;
-        // this.annotateRegularAction = annotateRegularAction;
-        // this.annotateIntrusionAction = annotateIntrusionAction;
-        // this.toggleAnnotationsAction = toggleAnnotationsAction;
-        this.zoomInAction = zoomInAction;
-        this.zoomOutAction = zoomOutAction;
-        this.openAudioFileAction = openAudioFileAction;
-        this.openAudioFolderAction = openAudioFolderAction;
-        this.seekForwardSmallAction = seekForwardSmallAction;
-        this.seekBackwardSmallAction = seekBackwardSmallAction;
-        this.seekForwardMediumAction = seekForwardMediumAction;
-        this.seekBackwardMediumAction = seekBackwardMediumAction;
-        this.seekForwardLargeAction = seekForwardLargeAction;
-        this.seekBackwardLargeAction = seekBackwardLargeAction;
-        this.screenSeekForwardAction = screenSeekForwardAction;
-        this.screenSeekBackwardAction = screenSeekBackwardAction;
         showPreferencesInMenu = lookAndFeelManager.shouldShowPreferencesInMenu();
         initFileMenu();
         initControlsMenu();
@@ -246,12 +180,6 @@ public class AppMenuBar extends JMenuBar {
         JMenu jmAnnotation = new JMenu("Annotation");
         JMenuItem jmiDone = new JMenuItem(swingActions.get(DoneAction.class));
         jmAnnotation.add(jmiDone);
-        // JMenuItem jmiNextAnn = new JMenuItem(toggleAnnotationsAction);
-        // jmiNextAnn.setText("Next Annotation");
-        // jmAnnotation.add(jmiNextAnn);
-        // JMenuItem jmiPrevAnn = new JMenuItem(toggleAnnotationsAction);
-        // jmiPrevAnn.setText("Previous Annotation");
-        // jmAnnotation.add(jmiPrevAnn);
         add(jmAnnotation);
     }
 

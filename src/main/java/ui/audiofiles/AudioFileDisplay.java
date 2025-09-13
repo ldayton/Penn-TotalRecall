@@ -37,8 +37,6 @@ import ui.audiofiles.AudioFile.AudioFilePathException;
 public class AudioFileDisplay extends JScrollPane implements AudioFileDisplayInterface {
     private static final Logger logger = LoggerFactory.getLogger(AudioFileDisplay.class);
 
-    private static final String title = "Audio Files";
-    private static final int INNER_PADDING_PX = 8;
     private static final Dimension PREFERRED_SIZE = new Dimension(250, 180);
 
     private final PreferencesManager preferencesManager;

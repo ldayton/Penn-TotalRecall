@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import app.headless.HeadlessTestFixture;
 import core.dispatch.EventDispatchBus;
-import core.state.AudioSessionManager;
 import core.state.AudioSessionStateMachine;
 import java.io.File;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ class PlayLast200MillisEventTest extends HeadlessTestFixture {
     @Test
     void replayLast200msInPausedState() throws Exception {
         EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
-        AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
         AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
 
         // Load test audio

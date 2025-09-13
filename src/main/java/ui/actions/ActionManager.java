@@ -14,8 +14,6 @@ import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ui.adapters.ShortcutConverter;
 import ui.adapters.SwingActionConfig;
 import ui.adapters.SwingActionRegistry;
@@ -23,7 +21,6 @@ import ui.shortcuts.Shortcut;
 
 @Singleton
 public class ActionManager {
-    private static final Logger logger = LoggerFactory.getLogger(ActionManager.class);
 
     private final ActionRegistry actionRegistry;
     private final ShortcutConverter converter;

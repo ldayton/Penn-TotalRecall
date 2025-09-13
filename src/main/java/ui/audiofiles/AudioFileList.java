@@ -29,7 +29,6 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
 
     private final AudioFileListModel model;
     private final AudioFileListCellRenderer render;
-    private final Provider<AudioFileDisplayInterface> audioFileDisplayProvider;
     private AudioFile currentAudioFile = null;
 
     /**
@@ -41,7 +40,6 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
             @NonNull AudioFileListMouseAdapter mouseAdapter,
             @NonNull Provider<AudioFileDisplayInterface> audioFileDisplayProvider,
             @NonNull EventDispatchBus eventBus) {
-        this.audioFileDisplayProvider = audioFileDisplayProvider;
         model = new AudioFileListModel();
         setModel(model);
 
