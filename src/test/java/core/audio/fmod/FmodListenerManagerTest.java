@@ -152,8 +152,10 @@ class FmodListenerManagerTest {
     void testProgressMonitoring() throws Exception {
         // Load audio and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
-        assertNotNull(sound);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
 
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         assertNotNull(playbackHandle);
@@ -197,7 +199,10 @@ class FmodListenerManagerTest {
     void testMonitoringWithoutListeners() throws Exception {
         // Load audio and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Start monitoring without any listeners
@@ -241,7 +246,10 @@ class FmodListenerManagerTest {
 
         // Create a mock playback handle
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Notify state changes
@@ -278,7 +286,10 @@ class FmodListenerManagerTest {
     void testPlaybackCompletion() throws Exception {
         // Load a short audio file
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
 
         // Create a range playback that will complete quickly using high-level API
         long endFrames = 1000;
@@ -313,7 +324,10 @@ class FmodListenerManagerTest {
     void testCompletionOnChannelInvalid() throws Exception {
         // Load audio and create playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Add listener and start monitoring
@@ -348,7 +362,10 @@ class FmodListenerManagerTest {
 
         // Start playback for notifications
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
 
@@ -476,7 +493,10 @@ class FmodListenerManagerTest {
 
         // Create playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Send notifications - bad listener should not prevent good listener from receiving
@@ -506,7 +526,10 @@ class FmodListenerManagerTest {
 
         // Start monitoring
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
 
@@ -540,7 +563,10 @@ class FmodListenerManagerTest {
         listenerManager.addListener(listener);
 
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         long totalFrames = getAudioFrameCount(sound);
 
         // Rapid start/stop cycles
@@ -565,7 +591,10 @@ class FmodListenerManagerTest {
 
         // Load and start playback
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Start monitoring
@@ -606,7 +635,10 @@ class FmodListenerManagerTest {
         listenerManager.addListener(listener);
 
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         listenerManager.startMonitoring(playbackHandle, getAudioFrameCount(sound));
@@ -632,7 +664,10 @@ class FmodListenerManagerTest {
 
     private long getAudioFrameCount(MemorySegment sound) {
         // Use the high-level loading manager to extract metadata instead of direct FMOD calls
-        return loadingManager.getCurrentMetadata().map(AudioMetadata::frameCount).orElse(0L);
+        return loadingManager
+                .getCurrentMetadata()
+                .map(AudioMetadata::frameCount)
+                .orElseThrow(() -> new IllegalStateException("No audio metadata available"));
     }
 
     // ========== Test Listener Implementation ==========

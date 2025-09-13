@@ -3,6 +3,7 @@ package core.audio.fmod;
 import static org.junit.jupiter.api.Assertions.*;
 
 import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
 import core.audio.exceptions.AudioPlaybackException;
 import core.env.Platform;
 import java.lang.foreign.MemorySegment;
@@ -329,7 +330,12 @@ class FmodPlaybackManagerTest {
         // Load test audio and fetch metadata
         AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
         MemorySegment sound = loadSound(SAMPLE_WAV);
-        int sampleRate = loadingManager.getCurrentMetadata().map(m -> m.sampleRate()).orElse(44100);
+        AudioMetadata metadata =
+                loadingManager
+                        .getCurrentMetadata()
+                        .orElseThrow(
+                                () -> new IllegalStateException("No audio metadata available"));
+        int sampleRate = metadata.sampleRate();
 
         // Define a short range of ~200 ms starting at ~1s
         long startFrame = sampleRate; // ~1.0s

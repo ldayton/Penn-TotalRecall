@@ -3,6 +3,7 @@ package core.audio.fmod;
 import static org.junit.jupiter.api.Assertions.*;
 
 import core.audio.AudioHandle;
+import core.audio.AudioMetadata;
 import core.audio.fmod.panama.FmodCore;
 import core.audio.fmod.panama.FmodCore_1;
 import core.env.Platform;
@@ -74,7 +75,10 @@ class FmodDspClockTest {
     @Timeout(3)
     void testDspClockMonotonic() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         long previousClock = -1;
@@ -114,7 +118,10 @@ class FmodDspClockTest {
     @Timeout(3)
     void testDspClockVsChannelPosition() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Let playback run briefly to establish buffering
@@ -183,10 +190,18 @@ class FmodDspClockTest {
     @Timeout(3)
     void testDspClockRangeEndDetection() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
 
         // Get sample rate for timing calculations
-        int sampleRate = 44100; // Default sample rate
+        int sampleRate =
+                loadingManager
+                        .getCurrentMetadata()
+                        .map(AudioMetadata::sampleRate)
+                        .orElseThrow(
+                                () -> new IllegalStateException("No audio metadata available"));
         try (Arena arena = Arena.ofConfined()) {
             var typeRef = arena.allocate(ValueLayout.JAVA_INT);
             var formatRef = arena.allocate(ValueLayout.JAVA_INT);
@@ -253,7 +268,10 @@ class FmodDspClockTest {
     @Timeout(3)
     void testDspClockWhilePaused() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         // Let it play briefly
@@ -320,7 +338,10 @@ class FmodDspClockTest {
     @Timeout(3)
     void testDspClockAfterSeek() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
-        MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
+        MemorySegment sound =
+                loadingManager
+                        .getCurrentSound()
+                        .orElseThrow(() -> new IllegalStateException("No sound loaded"));
         FmodPlaybackHandle playbackHandle = playbackManager.play(sound, audioHandle);
 
         Thread.sleep(100);
