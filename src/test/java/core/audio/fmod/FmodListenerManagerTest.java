@@ -419,7 +419,8 @@ class FmodListenerManagerTest {
                             try {
                                 barrier.await();
                                 for (int i = 0; i < 100; i++) {
-                                    listenerManager.notifyProgress(playbackHandle, i * 0.1, 10.0);
+                                    listenerManager.notifyProgress(
+                                            playbackHandle, i * 1000L, 10000L);
                                     Thread.sleep(5);
                                 }
                             } catch (Exception e) {
@@ -451,7 +452,7 @@ class FmodListenerManagerTest {
                 new PlaybackListener() {
                     @Override
                     public void onProgress(
-                            PlaybackHandle handle, double positionSeconds, double totalSeconds) {
+                            PlaybackHandle handle, long positionFrames, long totalFrames) {
                         throw new TestListenerException("Progress error");
                     }
 
@@ -481,7 +482,7 @@ class FmodListenerManagerTest {
         // Send notifications - bad listener should not prevent good listener from receiving
         listenerManager.notifyStateChanged(
                 playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-        listenerManager.notifyProgress(playbackHandle, 1.0, 10.0);
+        listenerManager.notifyProgress(playbackHandle, 1000L, 10000L);
         listenerManager.notifyPlaybackComplete(playbackHandle);
 
         // Good listener should still receive all notifications
@@ -617,11 +618,10 @@ class FmodListenerManagerTest {
         assertTrue(positions.size() >= 10, "Should have enough samples");
 
         // Positions should be reasonable (not negative, not huge)
-        int sr = loadingManager.getCurrentMetadata().map(AudioMetadata::sampleRate).orElse(44100);
-        double totalSec = getAudioFrameCount(sound) / (double) sr;
+        long totalFrames = getAudioFrameCount(sound);
         for (Double pos : positions) {
             assertTrue(pos >= 0, "Position should not be negative");
-            assertTrue(pos <= totalSec + 1e-6, "Position should not exceed total seconds");
+            assertTrue(pos <= totalFrames, "Position should not exceed total frames");
         }
 
         listenerManager.stopMonitoring();
@@ -651,9 +651,9 @@ class FmodListenerManagerTest {
         }
 
         @Override
-        public void onProgress(PlaybackHandle handle, double hearingSeconds, double totalSeconds) {
+        public void onProgress(PlaybackHandle handle, long positionFrames, long totalFrames) {
             progressCount.incrementAndGet();
-            progressPositions.add(hearingSeconds);
+            progressPositions.add((double) positionFrames);
             CountDownLatch latch = progressLatch.get();
             if (latch != null) {
                 latch.countDown();

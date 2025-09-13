@@ -155,7 +155,7 @@ class FmodAudioEngineTest {
         // Start first playback
         PlaybackHandle playback1 = engine.play(handle);
         assertTrue(engine.isPlaying(playback1));
-        double pos1 = engine.getHearingSeconds(playback1);
+        long pos1 = engine.getPosition(playback1);
 
         // Cannot start second playback with same handle
         assertThrows(AudioPlaybackException.class, () -> engine.play(handle));
@@ -163,7 +163,7 @@ class FmodAudioEngineTest {
         // First playback should still be active
         assertTrue(engine.isPlaying(playback1));
         Thread.sleep(100);
-        double pos2 = engine.getHearingSeconds(playback1);
+        long pos2 = engine.getPosition(playback1);
         assertTrue(pos2 > pos1, "Playback should be progressing");
 
         engine.stop(playback1);
@@ -184,7 +184,7 @@ class FmodAudioEngineTest {
 
         // Old handle operations should fail gracefully
         assertFalse(engine.isPlaying(playback1));
-        assertEquals(0.0, engine.getHearingSeconds(playback1), 0.001);
+        assertEquals(0L, engine.getPosition(playback1));
 
         engine.stop(playback2);
     }
@@ -215,15 +215,12 @@ class FmodAudioEngineTest {
         assertEquals(PlaybackState.PAUSED, engine.getState(playback));
         // State already changed, just verify it was recorded
         assertTrue(listener.stateChanges.contains(PlaybackState.PAUSED));
-        double pausePos = engine.getHearingSeconds(playback);
+        long pausePos = engine.getPosition(playback);
 
         // Verify position doesn't change while paused
         Thread.sleep(100);
         assertEquals(
-                pausePos,
-                engine.getHearingSeconds(playback),
-                0.02,
-                "Position should not change while paused (>20ms drift)");
+                pausePos, engine.getPosition(playback), "Position should not change while paused");
 
         // Resume
         engine.resume(playback);
@@ -234,9 +231,11 @@ class FmodAudioEngineTest {
         long seekTarget = metadata.frameCount() / 2;
         engine.seek(playback, seekTarget);
         Thread.sleep(50); // Give FMOD time to process seek
-        double actualSec = engine.getHearingSeconds(playback);
-        double targetSec = seekTarget / (double) metadata.sampleRate();
-        assertEquals(targetSec, actualSec, 0.07, "Seek position should be close to target");
+        long actualFrames = engine.getPosition(playback);
+        // Allow some tolerance for seek (within 3000 frames)
+        assertTrue(
+                Math.abs(actualFrames - seekTarget) < 3000,
+                "Seek position should be close to target");
 
         // Stop
         engine.stop(playback);
@@ -265,7 +264,7 @@ class FmodAudioEngineTest {
         assertTrue(listener.waitForProgress(5, 2, TimeUnit.SECONDS));
 
         // Progress should be increasing
-        List<Double> positions = listener.getProgressPositions();
+        List<Long> positions = listener.getProgressPositions();
         for (int i = 1; i < positions.size(); i++) {
             assertTrue(
                     positions.get(i) >= positions.get(i - 1),
@@ -319,9 +318,9 @@ class FmodAudioEngineTest {
 
         // Playback might stop or clamp to end
         Thread.sleep(100);
-        double pos = engine.getHearingSeconds(playback);
-        double lengthSec = metadata.frameCount() / (double) metadata.sampleRate();
-        assertTrue(pos <= lengthSec + 5e-5, "Position should not exceed audio length");
+        long pos = engine.getPosition(playback);
+        long maxFrames = metadata.frameCount();
+        assertTrue(pos <= maxFrames, "Position should not exceed audio length in frames");
 
         // Seek to negative should fail
         assertThrows(AudioPlaybackException.class, () -> engine.seek(playback, -1));
@@ -436,7 +435,7 @@ class FmodAudioEngineTest {
                             try {
                                 barrier.await();
                                 for (int i = 0; i < 40; i++) {
-                                    engine.getHearingSeconds(playback);
+                                    engine.getPosition(playback);
                                     engine.getState(playback);
                                     Thread.sleep(10);
                                 }
@@ -754,7 +753,7 @@ class FmodAudioEngineTest {
     // Test listener implementation
     private static class TestListener implements PlaybackListener {
         final List<PlaybackState> stateChanges = Collections.synchronizedList(new ArrayList<>());
-        final List<Double> progressPositions = Collections.synchronizedList(new ArrayList<>());
+        final List<Long> progressPositions = Collections.synchronizedList(new ArrayList<>());
         final AtomicInteger progressCount = new AtomicInteger();
         final AtomicInteger playbackCompleteCount = new AtomicInteger();
 
@@ -763,9 +762,9 @@ class FmodAudioEngineTest {
         private final AtomicReference<PlaybackState> expectedState = new AtomicReference<>();
 
         @Override
-        public void onProgress(PlaybackHandle handle, double hearingSeconds, double totalSeconds) {
+        public void onProgress(PlaybackHandle handle, long positionFrames, long totalFrames) {
             progressCount.incrementAndGet();
-            progressPositions.add(hearingSeconds);
+            progressPositions.add(positionFrames);
             CountDownLatch latch = progressLatch.get();
             if (latch != null) {
                 latch.countDown();
@@ -813,7 +812,7 @@ class FmodAudioEngineTest {
             return latch.await(timeout, unit);
         }
 
-        List<Double> getProgressPositions() {
+        List<Long> getProgressPositions() {
             return new ArrayList<>(progressPositions);
         }
     }

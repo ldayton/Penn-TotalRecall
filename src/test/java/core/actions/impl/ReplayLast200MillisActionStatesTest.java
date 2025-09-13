@@ -81,7 +81,18 @@ class ReplayLast200MillisActionStatesTest extends SwingTestFixture {
         // Load and start playback
         File testFile = new File("src/test/resources/audio/freerecall.wav");
         eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
-        Thread.sleep(500);
+
+        // Wait for load to complete (freerecall.wav is ~4MB)
+        for (int i = 0; i < 20; i++) {
+            if (stateMachine.getCurrentState() == AudioSessionStateMachine.State.READY) {
+                break;
+            }
+            Thread.sleep(100);
+        }
+
+        assertEquals(AudioSessionStateMachine.State.READY, stateMachine.getCurrentState());
+
+        // Now start playback
         eventBus.publish(new PlayPauseEvent());
         Thread.sleep(100); // Wait for playback to start
 

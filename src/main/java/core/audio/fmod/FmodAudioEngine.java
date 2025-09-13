@@ -366,26 +366,17 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     @Override
-    public double getHearingSeconds(@NonNull PlaybackHandle playback) {
+    public long getPosition(@NonNull PlaybackHandle playback) {
         checkOperational();
         if (!(playback instanceof FmodPlaybackHandle)) {
             throw new IllegalArgumentException("Invalid playback handle type");
         }
         FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
         if (!fmodPlayback.isActive()) {
-            return 0.0;
+            return 0L;
         }
-        // Return latest hearing-time from listener manager, clamped to audio length
-        double sec = listenerManager.getCurrentHearingSeconds();
-        try {
-            AudioMetadata md = getMetadata(fmodPlayback.getAudioHandle());
-            double lengthSec = md.frameCount() / (double) md.sampleRate();
-            if (lengthSec > 0) {
-                sec = Math.max(0.0, Math.min(lengthSec, sec));
-            }
-        } catch (Exception ignored) {
-        }
-        return sec;
+        // Return position from playback manager
+        return playbackManager.getPosition();
     }
 
     @Override

@@ -26,9 +26,11 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
     private final WaveformSessionDataSource sessionSource;
     private final Provider<AudioEngine> audioEngineProvider;
 
-    // Cached hearing-time position from progress callbacks (seconds)
-    private volatile double progressCallbackPositionSeconds = 0.0;
-    private volatile double progressCallbackTotalSeconds = 0.0;
+    // Cached position from progress callbacks (frames)
+    private volatile long progressCallbackPositionFrames = 0L;
+    private volatile long progressCallbackTotalFrames = 0L;
+    // Sample rate for frame-to-seconds conversion
+    private volatile int cachedSampleRate = 44100;
     private boolean listenerRegistered = false;
     // Track last known play state to detect transitions
     private boolean lastIsPlaying = false;
@@ -53,33 +55,19 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
         // Ensure we're registered as a listener
         ensureListenerRegistered();
 
+        // Update sample rate if available
+        sessionSource.getSampleRate().ifPresent(rate -> cachedSampleRate = rate);
+
         // Determine playback position source based on play state
         boolean isPlaying = sessionSource.isPlaying();
         double realPosition =
                 isPlaying
                         // When playing, use cached position from frequent progress callbacks for
                         // smooth rendering
-                        ? getProgressCallbackPosition()
+                        ? getProgressCallbackPositionSeconds()
                         // When not playing (READY/PAUSED), fall back to session source position
                         : sessionSource.getPlaybackPosition().orElse(0.0);
         double totalDuration = sessionSource.getTotalDuration().orElse(0.0);
-
-        // Debug: on transition to PLAYING, report large deltas between DSP(progress) and Engine
-        if (isPlaying && !lastIsPlaying) {
-            double dspSeconds = getProgressCallbackPosition();
-            double engineSeconds = sessionSource.getPlaybackPosition().orElse(-1.0);
-            if (engineSeconds >= 0) {
-                double delta = Math.abs(dspSeconds - engineSeconds);
-                // Consider jumps >100ms as notable
-                if (delta > 0.10) {
-                    System.out.println(
-                            String.format(
-                                    "[Waveform DEBUG] State PLAYING: DSP(progress)=%.6fs,"
-                                            + " Engine=%.6fs, Δ=%.6fs",
-                                    dspSeconds, engineSeconds, delta));
-                }
-            }
-        }
 
         // Update viewport to follow playback with centered playhead
         viewport.followPlayback(realPosition, totalDuration, isPlaying);
@@ -123,31 +111,31 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
 
     @Override
     public double getPlaybackPositionSeconds() {
-        // Return cached position from progress callbacks
-        return getProgressCallbackPosition();
+        // Return cached position from progress callbacks, converted to seconds
+        return getProgressCallbackPositionSeconds();
     }
 
     /**
-     * Get the cached position from progress callbacks. This is updated every ~15ms and used for
-     * smooth UI rendering.
+     * Get the cached position from progress callbacks converted to seconds. This is updated every
+     * ~15ms and used for smooth UI rendering.
      */
-    private double getProgressCallbackPosition() {
+    private double getProgressCallbackPositionSeconds() {
         // Convert cached frames to seconds
-        if (progressCallbackTotalSeconds == 0.0) {
+        if (progressCallbackTotalFrames == 0L || cachedSampleRate == 0) {
             // No audio loaded or no progress updates yet
             return 0.0;
         }
-        return progressCallbackPositionSeconds;
+        return (double) progressCallbackPositionFrames / cachedSampleRate;
     }
 
     // PlaybackListener implementation
 
     @Override
     public void onProgress(
-            @NonNull PlaybackHandle playback, double hearingSeconds, double totalSeconds) {
-        // Cache the position for smooth UI rendering (hearing-time seconds)
-        this.progressCallbackPositionSeconds = hearingSeconds;
-        this.progressCallbackTotalSeconds = totalSeconds;
+            @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {
+        // Cache the position for smooth UI rendering
+        this.progressCallbackPositionFrames = positionFrames;
+        this.progressCallbackTotalFrames = totalFrames;
     }
 
     @Override
@@ -157,25 +145,8 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
             @NonNull PlaybackState oldState) {
         // When playback stops or finishes, clear cached progress so UI doesn't stick on old value
         if (newState == PlaybackState.STOPPED || newState == PlaybackState.FINISHED) {
-            this.progressCallbackPositionSeconds = 0.0;
-            this.progressCallbackTotalSeconds = 0.0;
-        }
-
-        // Debug: detect discrepancies between DSP progress (cached) and engine/session position
-        if (newState == PlaybackState.PAUSED || newState == PlaybackState.PLAYING) {
-            double dspSeconds = getProgressCallbackPosition();
-            double engineSeconds = sessionSource.getPlaybackPosition().orElse(-1.0);
-            if (engineSeconds >= 0) {
-                double delta = Math.abs(dspSeconds - engineSeconds);
-                // Print only if notable discrepancy (> 20ms)
-                if (delta > 0.02) {
-                    System.out.println(
-                            String.format(
-                                    "[Waveform DEBUG] State %s: DSP(progress)=%.6fs, Engine=%.6fs,"
-                                            + " Δ=%.6fs",
-                                    newState, dspSeconds, engineSeconds, delta));
-                }
-            }
+            this.progressCallbackPositionFrames = 0L;
+            this.progressCallbackTotalFrames = 0L;
         }
     }
 
