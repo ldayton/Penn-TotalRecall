@@ -20,7 +20,6 @@ public class AnnotationTableModel implements TableModel {
 
     private static final String colErr = "column index out of range";
     private static final String rowErr = "row index out of range";
-    private static final String stateErr = "inconsistency in internal column handling";
 
     protected AnnotationTableModel() {
         listeners = new HashSet<>();

@@ -28,5 +28,8 @@ public class Module extends AbstractModule {
 
         // Bind the interface to the implementation for session data
         bind(WaveformSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
+
+        // Wordpool management (listens for WordpoolFileSelectedEvent)
+        bind(WordpoolManager.class).in(Singleton.class);
     }
 }

@@ -24,7 +24,6 @@ public class DevModeFileAutoLoader {
     private static final String SAMPLE_FILE_PATH = "src/test/resources/audio/freerecall.wav";
     private static final String SAMPLE_WORDPOOL_PATH = "src/test/resources/audio/wordpool.txt";
 
-    private final AppConfig appConfig;
     private final AudioFileList audioFileList;
     private final AudioFileDisplay audioFileDisplay;
     private final EventDispatchBus eventBus;
@@ -37,7 +36,6 @@ public class DevModeFileAutoLoader {
             AudioFileDisplay audioFileDisplay,
             PlayPauseAction playPauseAction,
             EventDispatchBus eventBus) {
-        this.appConfig = appConfig;
         this.audioFileList = audioFileList;
         this.audioFileDisplay = audioFileDisplay;
         this.eventBus = eventBus;
