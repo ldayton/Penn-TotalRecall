@@ -28,6 +28,7 @@ public class DevModeFileAutoLoader {
     private final AudioFileDisplay audioFileDisplay;
     private final EventDispatchBus eventBus;
     private final PlayPauseAction playPauseAction;
+    private final AppConfig appConfig;
 
     @Inject
     public DevModeFileAutoLoader(
@@ -36,6 +37,7 @@ public class DevModeFileAutoLoader {
             AudioFileDisplay audioFileDisplay,
             PlayPauseAction playPauseAction,
             EventDispatchBus eventBus) {
+        this.appConfig = appConfig;
         this.audioFileList = audioFileList;
         this.audioFileDisplay = audioFileDisplay;
         this.eventBus = eventBus;
@@ -117,16 +119,22 @@ public class DevModeFileAutoLoader {
                                 loadedFile.getName(),
                                 audioFileList.getModel().getSize());
 
-                        // Auto-start playback after a short delay to ensure waveform is loaded
-                        Timer autoPlayTimer =
-                                new Timer(
-                                        200,
-                                        _ -> {
-                                            logger.info("Development mode: auto-starting playback");
-                                            playPauseAction.execute();
-                                        });
-                        autoPlayTimer.setRepeats(false);
-                        autoPlayTimer.start();
+                        // Auto-start playback only if app.run.dev.autoplay=true
+                        boolean shouldAutoPlay = appConfig.getBooleanProperty("app.run.dev.autoplay", false);
+                        if (shouldAutoPlay) {
+                            // Auto-start playback after a short delay to ensure waveform is loaded
+                            Timer autoPlayTimer =
+                                    new Timer(
+                                            200,
+                                            _ -> {
+                                                logger.info("Development mode: auto-starting playback");
+                                                playPauseAction.execute();
+                                            });
+                            autoPlayTimer.setRepeats(false);
+                            autoPlayTimer.start();
+                        } else {
+                            logger.info("Development mode: auto-play disabled (set app.run.dev.autoplay=true to enable)");
+                        }
                     });
         }
 
