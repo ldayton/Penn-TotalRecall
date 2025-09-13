@@ -15,6 +15,8 @@ import core.audio.fmod.panama.FmodCore;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ public class FmodAudioEngine implements AudioEngine {
     // Runtime state
     private FmodPlaybackHandle currentPlayback;
     private MemorySegment currentSound;
+    private Timer updateTimer;
 
     @Inject
     public FmodAudioEngine(
@@ -72,6 +75,22 @@ public class FmodAudioEngine implements AudioEngine {
                     FmodSystemStateManager.State.INITIALIZED)) {
                 throw new AudioEngineException("Engine was closed during initialization");
             }
+
+            // Start FMOD update timer (50Hz updates, matching FMOD's internal 20ms cycle)
+            updateTimer = new Timer("FMOD-Update", true);
+            updateTimer.scheduleAtFixedRate(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                systemManager.update();
+                            } catch (Exception e) {
+                                log.error("Error updating FMOD system", e);
+                            }
+                        }
+                    },
+                    0,
+                    20); // 20ms = 50Hz updates
 
         } catch (Exception e) {
             if (systemManager != null) {
@@ -453,6 +472,11 @@ public class FmodAudioEngine implements AudioEngine {
                 } catch (Exception e) {
                 }
                 currentPlayback = null;
+            }
+
+            if (updateTimer != null) {
+                updateTimer.cancel();
+                updateTimer = null;
             }
 
             if (listenerManager != null) {
