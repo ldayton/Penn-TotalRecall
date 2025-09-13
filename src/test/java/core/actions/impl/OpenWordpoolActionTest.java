@@ -6,7 +6,6 @@ import app.swing.SwingTestFixture;
 import core.dispatch.EventDispatchBus;
 import core.preferences.PreferencesManager;
 import core.services.FileSelectionService;
-import core.services.FileSelectionService.FileSelectionRequest;
 import java.io.File;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
