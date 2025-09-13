@@ -63,11 +63,18 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     public void onAudioFileLoadRequested(@NonNull AudioFileLoadRequestedEvent event) {
         log.debug("Loading audio file: {}", event.getFile().getAbsolutePath());
 
+        // If currently playing or paused, stop first and transition to READY
+        var previousState = stateManager.getCurrentState();
+        if (previousState == AudioSessionStateMachine.State.PLAYING
+                || previousState == AudioSessionStateMachine.State.PAUSED) {
+            stopPlayback(); // This transitions to READY
+        }
+
         // Close current file if any
         closeCurrentSession();
 
         // Transition to loading state
-        var previousState = stateManager.getCurrentState();
+        var currentState = stateManager.getCurrentState();
         stateManager.transitionToLoading();
         currentFile = Optional.of(event.getFile());
         eventBus.publish(

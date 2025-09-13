@@ -79,7 +79,7 @@ public class AudioSessionStateMachine {
     }
 
     /**
-     * Transition to LOADING state from NO_AUDIO or ERROR.
+     * Transition to LOADING state from NO_AUDIO, ERROR, or READY.
      *
      * @throws IllegalStateException if the transition is invalid
      */

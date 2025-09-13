@@ -116,9 +116,8 @@ public class WaveformViewport {
     }
 
     /**
-     * Update viewport position to follow playback with smooth scrolling. Keeps playhead centered
-     * (50%) when possible, but allows it to move from 0-50% at the start and 50-100% at the end of
-     * the core.audio.
+     * Update viewport position to follow playback. Keeps playhead always centered at 50% of the
+     * viewport. The waveform scrolls underneath the fixed center playhead.
      */
     public void followPlayback(double playbackPosition, double totalDuration, boolean isPlaying) {
         if (totalDuration <= 0) {
@@ -128,43 +127,30 @@ public class WaveformViewport {
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
         double halfWidth = widthSeconds / 2.0;
 
-        // Calculate target viewport start position
-        double targetStart;
+        // Always keep playhead centered - waveform scrolls underneath
+        // This means the viewport starts at (playbackPosition - halfWidth)
+        double targetStart = playbackPosition - halfWidth;
 
-        if (playbackPosition < halfWidth) {
-            // Zone 1: Beginning - viewport locked at 0, playhead moves from left to center
-            targetStart = 0;
-        } else if (playbackPosition > totalDuration - halfWidth) {
-            // Zone 3: End - viewport locked to show end, playhead moves from center to right
-            targetStart = Math.max(0, totalDuration - widthSeconds);
-        } else {
-            // Zone 2: Middle - keep playhead centered at 50%
-            targetStart = playbackPosition - halfWidth;
-        }
-
-        // Apply stabilization with dead zone to prevent jitter
-        double deltaPixels = Math.abs(targetStart - startSeconds) * pixelsPerSecond;
-
-        if (deltaPixels < 0.5) {
-            // Less than half a pixel - don't move to prevent wobble
-            return;
-        } else if (deltaPixels < 2.0 && isPlaying) {
-            // Small movement during playback - apply smoothing
-            startSeconds += (targetStart - startSeconds) * 0.3; // 30% lerp for smoothness
-        } else {
-            // Large movement or not playing - jump directly
-            startSeconds = targetStart;
-        }
-
-        // Round to avoid sub-pixel positioning
-        double pixelGranularity = 1.0 / pixelsPerSecond;
-        startSeconds = Math.round(startSeconds / pixelGranularity) * pixelGranularity;
+        // Allow negative start to show waveform starting from center
+        // The waveform renderer should handle negative time ranges appropriately
+        startSeconds = targetStart;
     }
 
     /** Get the current visible time range. */
     public TimeRange getTimeRange() {
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
-        return new TimeRange(startSeconds, startSeconds + widthSeconds);
+        // Clamp to valid range for TimeRange (which doesn't allow negative values)
+        double clampedStart = Math.max(0, startSeconds);
+        double clampedEnd = Math.max(0.001, startSeconds + widthSeconds); // Ensure end > start
+        return new TimeRange(clampedStart, clampedEnd);
+    }
+
+    /**
+     * Get the raw viewport start position (can be negative). Used for calculating where to position
+     * the waveform.
+     */
+    public double getRawStartSeconds() {
+        return startSeconds;
     }
 
     /** Get the current zoom level. */

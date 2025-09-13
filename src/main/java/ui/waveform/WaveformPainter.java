@@ -23,7 +23,7 @@ import lombok.NonNull;
  */
 public class WaveformPainter {
 
-    private static final int FPS = 30;
+    private static final int FPS = 60;
     private final Timer repaintTimer;
     private final AudioSessionStateMachine stateMachine;
     private volatile WaveformViewport viewport;
@@ -186,7 +186,12 @@ public class WaveformPainter {
             clearBackground(g, bounds);
         }
 
-        // Playhead drawing removed
+        // Draw fixed center playhead (always at 50% of viewport width)
+        if (state == AudioSessionStateMachine.State.READY
+                || state == AudioSessionStateMachine.State.PLAYING
+                || state == AudioSessionStateMachine.State.PAUSED) {
+            paintPlayhead(g, bounds);
+        }
     }
 
     /**
@@ -198,6 +203,35 @@ public class WaveformPainter {
      */
     public void paintWaveform(
             @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull Image waveformImage) {
+        // Check if we need to offset the waveform for negative viewport start (when playback is at
+        // 0)
+        if (dataSource != null && dataSource instanceof state.WaveformPaintDataSource) {
+            state.WaveformPaintDataSource paintDataSource =
+                    (state.WaveformPaintDataSource) dataSource;
+
+            // Get playback position - if it's near 0, we need to offset the waveform
+            double playbackPos = paintDataSource.getPlaybackPositionSeconds();
+            double halfViewportSeconds =
+                    bounds.width() / (2.0 * paintDataSource.getPixelsPerSecond());
+
+            if (playbackPos < halfViewportSeconds) {
+                // We're at the beginning - offset waveform so playhead appears centered
+                int offsetPixels =
+                        (int)
+                                ((halfViewportSeconds - playbackPos)
+                                        * paintDataSource.getPixelsPerSecond());
+                g.drawImage(
+                        waveformImage,
+                        bounds.x() + offsetPixels,
+                        bounds.y(),
+                        bounds.width(),
+                        bounds.height(),
+                        null);
+                return;
+            }
+        }
+
+        // Normal drawing
         g.drawImage(waveformImage, bounds.x(), bounds.y(), bounds.width(), bounds.height(), null);
     }
 
@@ -258,5 +292,22 @@ public class WaveformPainter {
     public void clearBackground(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.WHITE);
         g.fillRect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+    }
+
+    /**
+     * Paint the playhead at the center of the viewport.
+     *
+     * @param g Graphics context
+     * @param bounds Area to paint in
+     */
+    public void paintPlayhead(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
+        // Playhead is always at exactly 50% of viewport width
+        int playheadX = bounds.x() + bounds.width() / 2;
+
+        // Draw a vertical black line with XOR mode for visibility
+        g.setXORMode(Color.WHITE);
+        g.setColor(Color.BLACK);
+        g.drawLine(playheadX, bounds.y(), playheadX, bounds.y() + bounds.height());
+        g.setPaintMode(); // Reset to normal paint mode
     }
 }
