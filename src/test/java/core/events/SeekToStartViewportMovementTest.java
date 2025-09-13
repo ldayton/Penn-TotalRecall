@@ -58,7 +58,10 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
 
         // Verify viewport is centered at 0 after seek to start
         double viewportAfterSeek = viewport.getRawStartSeconds();
-        assertEquals(-2.5, viewportAfterSeek, 0.01,
+        assertEquals(
+                -2.5,
+                viewportAfterSeek,
+                0.01,
                 "Viewport should be centered at position 0 after SeekToStart");
 
         // SECOND PLAY: This is where the bug occurs
@@ -68,13 +71,17 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
         Thread.sleep(100);
 
         // Debug: verify play state
-        assertEquals(AudioSessionStateMachine.State.PLAYING, stateMachine.getCurrentState(),
+        assertEquals(
+                AudioSessionStateMachine.State.PLAYING,
+                stateMachine.getCurrentState(),
                 "Should be playing after second play");
 
         // Get actual playback position after 100ms
         double actualPosition = sessionManager.getPlaybackPosition().orElse(0.0);
-        assertTrue(actualPosition > 0.05,
-                "Playback should have progressed at least 50ms after 100ms wait, but was " + actualPosition);
+        assertTrue(
+                actualPosition > 0.05,
+                "Playback should have progressed at least 50ms after 100ms wait, but was "
+                        + actualPosition);
 
         // Get viewport position - it should be following the actual playback
         double viewportPosition = viewport.getRawStartSeconds();
@@ -85,15 +92,20 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
 
         // Allow some tolerance but viewport should definitely have moved
         double difference = Math.abs(viewportPosition - expectedViewportStart);
-        assertTrue(difference < 0.1,
-                String.format("Viewport should be following playback after 100ms. " +
-                        "Expected viewport at %.3f (centered on playback %.3f), but was at %.3f. " +
-                        "Difference: %.3f seconds",
+        assertTrue(
+                difference < 0.1,
+                String.format(
+                        "Viewport should be following playback after 100ms. Expected viewport at"
+                            + " %.3f (centered on playback %.3f), but was at %.3f. Difference: %.3f"
+                            + " seconds",
                         expectedViewportStart, actualPosition, viewportPosition, difference));
 
         // Also verify viewport has moved from its SeekToStart position
-        assertTrue(viewportPosition > -2.5,
-                String.format("Viewport should have moved from initial position -2.5, but is still at %.3f",
+        assertTrue(
+                viewportPosition > -2.5,
+                String.format(
+                        "Viewport should have moved from initial position -2.5, but is still at"
+                                + " %.3f",
                         viewportPosition));
     }
 }

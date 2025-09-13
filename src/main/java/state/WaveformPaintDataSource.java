@@ -5,8 +5,8 @@ import core.audio.AudioEngine;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
-import core.state.WaveformSessionDataSource;
 import core.state.ViewportPositionManager;
+import core.state.WaveformSessionDataSource;
 import core.waveform.TimeRange;
 import core.waveform.Waveform;
 import core.waveform.WaveformPaintingDataSource;
@@ -78,10 +78,9 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
 
         // Update viewport to follow playback with centered playhead
         viewport.followPlayback(realPosition, totalDuration, isPlaying);
-
     }
 
-/** Update viewport width from canvas. Should be called when canvas size changes. */
+    /** Update viewport width from canvas. Should be called when canvas size changes. */
     public void updateViewportWidth(int widthPixels) {
         viewport.setWidth(widthPixels);
     }

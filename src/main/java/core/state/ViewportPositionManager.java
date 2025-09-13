@@ -4,6 +4,7 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.SeekEvent;
 import core.events.SeekScreenEvent;
+import core.events.SeekToStartEvent;
 import core.events.ZoomEvent;
 import core.waveform.TimeRange;
 import jakarta.inject.Inject;
@@ -159,6 +160,17 @@ public class ViewportPositionManager {
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
         double halfWidth = widthSeconds / 2.0;
         startSeconds = posSeconds - halfWidth;
+    }
+
+    @Subscribe
+    public void onSeekToStartRequested(@NonNull SeekToStartEvent event) {
+        // Center viewport at position 0 when seeking to start
+        if (viewportWidthPixels <= 0 || pixelsPerSecond <= 0) {
+            return;
+        }
+        double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
+        double halfWidth = widthSeconds / 2.0;
+        startSeconds = 0.0 - halfWidth; // Center at 0, allowing negative start
     }
 
     /** Get the current visible time range. */
