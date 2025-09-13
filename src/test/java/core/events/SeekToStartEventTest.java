@@ -76,9 +76,6 @@ class SeekToStartEventTest {
         // Simulate position advancing
         when(audioEngine.getPosition(playbackHandle)).thenReturn(22050L); // 0.5 seconds
 
-        // Notify the manager of position change
-        sessionManager.onProgress(playbackHandle, 22050L, 44100L);
-
         // Verify position has moved forward
         assertTrue(
                 sessionManager.getPlaybackPosition().orElse(0.0) > 0.4,

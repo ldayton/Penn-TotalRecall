@@ -4,7 +4,6 @@ import com.google.inject.Provider;
 import core.audio.AudioEngine;
 import core.audio.AudioHandle;
 import core.audio.PlaybackHandle;
-import core.audio.PlaybackListener;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
@@ -29,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton
 @Slf4j
-public class AudioSessionManager implements PlaybackListener, WaveformSessionDataSource {
+public class AudioSessionManager implements WaveformSessionDataSource {
 
     private final AudioSessionStateMachine stateManager;
     private final Provider<AudioEngine> audioEngineProvider;
@@ -41,8 +40,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     private Optional<PlaybackHandle> currentPlaybackHandle = Optional.empty();
     private String errorMessage = null;
 
-    // Progress tracking
-    private volatile long currentPositionFrames = 0;
+    // Audio metadata
     private volatile long totalFrames = 0;
     private volatile int sampleRate = 0;
 
@@ -74,7 +72,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         closeCurrentSession();
 
         // Transition to loading state
-        var currentState = stateManager.getCurrentState();
         stateManager.transitionToLoading();
         currentFile = Optional.of(event.getFile());
         eventBus.publish(
@@ -84,7 +81,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         // Initialize audio engine if needed
         if (audioEngine.isEmpty()) {
             var engine = audioEngineProvider.get();
-            engine.addPlaybackListener(this);
             audioEngine = Optional.of(engine);
         }
 
@@ -97,7 +93,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             var metadata = audioEngine.get().getMetadata(handle);
             this.sampleRate = metadata.sampleRate();
             this.totalFrames = metadata.frameCount();
-            this.currentPositionFrames = 0;
 
             var prevState = stateManager.getCurrentState();
             stateManager.transitionToReady();
@@ -124,8 +119,9 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
                 // Start playback from current cached frame (avoids glitch after READY seeks)
                 currentAudioHandle.ifPresent(
                         handle -> {
-                            long startFrame =
-                                    Math.max(0, Math.min(currentPositionFrames, totalFrames));
+                            // When playing, start from position 0 (will be overridden if seeking in
+                            // READY)
+                            long startFrame = 0;
                             long endFrame = totalFrames; // exclusive upper bound
                             var playback = audioEngine.get().play(handle, startFrame, endFrame);
                             currentPlaybackHandle = Optional.of(playback);
@@ -190,12 +186,21 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
     @Subscribe
     public void onSeekByAmountRequested(@NonNull SeekByAmountEvent event) {
-        // Calculate target frame based on current position and requested amount
+        // Get the actual current position from FMOD instead of using cached value
+        long actualPosition = 0;
+        if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
+            actualPosition = audioEngine.get().getPosition(currentPlaybackHandle.get());
+        } else {
+            // No active playback, use position 0
+            actualPosition = 0;
+        }
+
+        // Calculate target frame based on actual position and requested amount
         long shiftFrames = (long) ((event.milliseconds() / 1000.0) * sampleRate);
         long targetFrame =
                 event.direction() == SeekByAmountEvent.Direction.FORWARD
-                        ? currentPositionFrames + shiftFrames
-                        : currentPositionFrames - shiftFrames;
+                        ? actualPosition + shiftFrames
+                        : actualPosition - shiftFrames;
 
         // Ensure within bounds
         targetFrame = Math.max(0, Math.min(targetFrame, totalFrames - 1));
@@ -213,16 +218,14 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             audioEngine.ifPresent(
                     engine -> {
                         engine.seek(currentPlaybackHandle.get(), event.frame());
-                        currentPositionFrames = event.frame(); // Update cached position
+                        // Don't update currentPositionFrames here - let onProgress handle it
                         log.debug("Seeked to frame: {}", event.frame());
                     });
         } else if (state == AudioSessionStateMachine.State.READY
                 && currentAudioHandle.isPresent()) {
-            // Avoid creating a playback handle in READY to prevent audible glitches.
-            // Cache the target frame; apply when playback starts.
-            long clamped = Math.max(0, Math.min(event.frame(), Math.max(0, totalFrames)));
-            currentPositionFrames = clamped;
-            log.debug("Cached seek target in READY: frame {}", clamped);
+            // In READY state, we can't actually seek since there's no playback.
+            // The seek position will need to be handled when playback starts.
+            log.debug("Cannot seek in READY state - no active playback");
         }
     }
 
@@ -236,9 +239,8 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             stopPlayback();
             log.debug("Stopped playback and reset to beginning");
         } else if (state == AudioSessionStateMachine.State.READY) {
-            // Already stopped, just reset position
-            currentPositionFrames = 0;
-            log.debug("Reset position to beginning");
+            // Already stopped
+            log.debug("Already at beginning (READY state)");
         }
     }
 
@@ -314,48 +316,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         }
     }
 
-    // PlaybackListener
-    @Override
-    public void onProgress(
-            @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {
-        // Store progress for efficient access
-        this.currentPositionFrames = positionFrames;
-        this.totalFrames = totalFrames;
-    }
-
-    @Override
-    public void onStateChanged(
-            @NonNull PlaybackHandle handle,
-            @NonNull core.audio.PlaybackState newState,
-            @NonNull core.audio.PlaybackState oldState) {
-        // Handle state changes from audio engine
-        log.debug("Playback state changed: {} -> {}", oldState, newState);
-
-        // If audio engine reports an error during playback, transition to error state
-        if (newState == core.audio.PlaybackState.ERROR
-                && stateManager.getCurrentState() == AudioSessionStateMachine.State.PLAYING) {
-            var prevState = stateManager.getCurrentState();
-            stateManager.transitionToError();
-            errorMessage = "Playback error occurred";
-            eventBus.publish(
-                    new AppStateChangedEvent(
-                            prevState, AudioSessionStateMachine.State.ERROR, "Playback error"));
-        }
-    }
-
-    @Override
-    public void onPlaybackComplete(@NonNull PlaybackHandle playback) {
-        // Playback finished, transition to ready state
-        var prevState = stateManager.getCurrentState();
-        stateManager.transitionToReady();
-        currentPlaybackHandle = Optional.empty();
-        currentPositionFrames = 0; // Reset position
-        eventBus.publish(
-                new AppStateChangedEvent(
-                        prevState, AudioSessionStateMachine.State.READY, "completed"));
-        log.debug("Playback completed");
-    }
-
     // WaveformSessionSource implementation
 
     @Override
@@ -363,8 +323,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         if (currentAudioHandle.isEmpty() || sampleRate == 0) {
             return Optional.empty();
         }
-        // Use cached position for efficiency
-        return Optional.of((double) currentPositionFrames / sampleRate);
+        // Get actual position from FMOD
+        if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
+            long positionFrames = audioEngine.get().getPosition(currentPlaybackHandle.get());
+            return Optional.of((double) positionFrames / sampleRate);
+        }
+        // No active playback, position is 0
+        return Optional.of(0.0);
     }
 
     @Override
@@ -416,8 +381,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         if (currentAudioHandle.isEmpty()) {
             return Optional.empty();
         }
-        // Return the exact frame position without conversion
-        return Optional.of(currentPositionFrames);
+        // Get actual position from FMOD if we have an active playback
+        if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
+            long actualPosition = audioEngine.get().getPosition(currentPlaybackHandle.get());
+            return Optional.of(actualPosition);
+        }
+        // No active playback, position is 0
+        return Optional.of(0L);
     }
 
     @Override
@@ -438,7 +408,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             audioEngine.get().stop(currentPlaybackHandle.get());
             currentPlaybackHandle.get().close();
             currentPlaybackHandle = Optional.empty();
-            currentPositionFrames = 0; // Reset position on stop
 
             if (prevState == AudioSessionStateMachine.State.PLAYING
                     || prevState == AudioSessionStateMachine.State.PAUSED) {
@@ -465,7 +434,6 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
         // Clear state and cached values
         currentFile = Optional.empty();
         errorMessage = null;
-        currentPositionFrames = 0;
         totalFrames = 0;
         sampleRate = 0;
     }
