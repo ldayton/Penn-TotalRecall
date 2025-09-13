@@ -263,8 +263,10 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
             long startFrame = Math.max(0, currentFrame - framesToReplay);
             long endFrame = currentFrame;
 
-            // Play the interval from 200ms ago to current position
-            audioEngine.get().play(currentAudioHandle.get(), startFrame, endFrame);
+            // Only play if there's actually something to replay (endFrame > startFrame)
+            if (endFrame > startFrame) {
+                audioEngine.get().play(currentAudioHandle.get(), startFrame, endFrame);
+            }
 
             log.debug("Replaying last 200ms from frame {} to {}", startFrame, endFrame);
         }

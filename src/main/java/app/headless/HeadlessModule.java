@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import core.CoreModule;
 import core.dispatch.EventDispatcher;
 import core.services.FileSelectionService;
-import core.state.WaveformSessionDataSource;
 
 /**
  * Guice module for headless application dependency injection configuration.
@@ -22,9 +21,7 @@ public class HeadlessModule extends AbstractModule {
         bind(FileSelectionService.class)
                 .to(app.headless.adapters.HeadlessFileSelectionService.class)
                 .asEagerSingleton();
-        bind(WaveformSessionDataSource.class)
-                .to(app.headless.adapters.HeadlessWaveformSessionDataSource.class)
-                .asEagerSingleton();
+        // WaveformSessionDataSource will be provided by state.Module
 
         // Install shared core module
         install(new CoreModule());
@@ -32,9 +29,11 @@ public class HeadlessModule extends AbstractModule {
         // Install core actions module (no UI dependencies)
         install(new core.actions.Module());
 
+        // Install state module for AudioSessionManager
+        install(new state.Module());
+
         // Note: In headless mode, we don't install:
         // - waveform.Module (has UI dependencies)
-        // - state.Module (has UI dependencies)
         // - ui.Module (Swing UI)
     }
 }
