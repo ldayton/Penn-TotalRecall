@@ -3,6 +3,7 @@ package state;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
+import core.events.AppStateChangedEvent;
 import core.events.DialogEvent;
 import core.events.WordpoolFileSelectedEvent;
 import core.state.WaveformSessionDataSource;
@@ -49,35 +50,52 @@ public class WordpoolManager {
             List<WordpoolWord> words = WordpoolFileParser.parse(file, false);
             wordpoolDisplay.removeAllWords();
             wordpoolDisplay.addWordpoolWords(words);
-
-            // Check if audio is loaded and look for matching LST file
-            if (sessionDataSource.isAudioLoaded()) {
-                sessionDataSource
-                        .getCurrentAudioFilePath()
-                        .ifPresent(
-                                audioPath -> {
-                                    File lstFile =
-                                            new File(
-                                                    OsPath.basename(audioPath)
-                                                            + "."
-                                                            + Constants.lstFileExtension);
-                                    if (lstFile.exists()) {
-                                        try {
-                                            wordpoolDisplay.distinguishAsLst(
-                                                    WordpoolFileParser.parse(lstFile, true));
-                                        } catch (IOException e) {
-                                            logger.error(
-                                                    "Failed to parse LST file: "
-                                                            + lstFile.getAbsolutePath(),
-                                                    e);
-                                        }
-                                    }
-                                });
-            }
+            // Attempt to apply LST markings based on current audio (order-independent)
+            applyLstForCurrentAudioIfPossible();
         } catch (IOException e) {
             logger.error("Error processing wordpool file", e);
             eventBus.publish(
                     new DialogEvent("Cannot process wordpool file!", DialogEvent.Type.ERROR));
         }
+    }
+
+    /**
+     * If audio is loaded, attempts to locate and apply the matching LST file for the current audio
+     * by marking words in the wordpool display. Safe to call repeatedly.
+     */
+    private void applyLstForCurrentAudioIfPossible() {
+        if (!sessionDataSource.isAudioLoaded()) {
+            return;
+        }
+        sessionDataSource
+                .getCurrentAudioFilePath()
+                .ifPresent(
+                        audioPath -> {
+                            File lstFile =
+                                    new File(
+                                            OsPath.basename(audioPath)
+                                                    + "."
+                                                    + Constants.lstFileExtension);
+                            if (lstFile.exists()) {
+                                try {
+                                    wordpoolDisplay.distinguishAsLst(
+                                            WordpoolFileParser.parse(lstFile, true));
+                                } catch (IOException e) {
+                                    logger.error(
+                                            "Failed to parse LST file: "
+                                                    + lstFile.getAbsolutePath(),
+                                            e);
+                                }
+                            }
+                        });
+    }
+
+    /**
+     * When app state changes (e.g., audio loaded and transitions to READY/PLAYING), re-apply LST
+     * markings if possible. This makes LST application order-independent.
+     */
+    @Subscribe
+    public void onAppStateChanged(@NonNull AppStateChangedEvent event) {
+        applyLstForCurrentAudioIfPossible();
     }
 }

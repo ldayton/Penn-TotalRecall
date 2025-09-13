@@ -64,4 +64,41 @@ class OpenWordpoolActionTest extends SwingTestFixture {
                 list.getModel().getSize() > 0,
                 "Wordpool list should be populated after OpenWordpoolAction");
     }
+
+    @Test
+    void lstMarksWordsEvenIfAudioLoadedAfterWordpool() throws Exception {
+        // Arrange: load wordpool first
+        File wordpool = new File("src/test/resources/audio/wordpool.txt");
+        assertTrue(wordpool.exists(), "Sample wordpool file should exist for the test");
+
+        PreferencesManager prefs = getInstance(PreferencesManager.class);
+        core.env.UserHomeProvider home = getInstance(core.env.UserHomeProvider.class);
+        EventDispatchBus bus = getInstance(EventDispatchBus.class);
+        FileSelectionService testSelector = new TestFileSelectionService(wordpool);
+
+        OpenWordpoolAction action = new OpenWordpoolAction(prefs, home, bus, testSelector);
+        onEdt(action::execute);
+        Thread.sleep(100);
+
+        WordpoolList list = getInstance(WordpoolList.class);
+        assertTrue(list.getModel().getSize() > 0, "Wordpool should be populated");
+
+        // Act: now load audio that has a matching .lst file
+        File wav = new File("src/test/resources/audio/freerecall.wav");
+        assertTrue(wav.exists(), "Sample wav must exist");
+        bus.publish(new core.events.AudioFileLoadRequestedEvent(wav));
+
+        // Allow time for audio load and LST marking
+        Thread.sleep(500);
+
+        // Assert: at least one word is marked as LST
+        boolean anyLst = false;
+        for (int i = 0; i < list.getModel().getSize(); i++) {
+            if (list.getModel().getElementAt(i).isLst()) {
+                anyLst = true;
+                break;
+            }
+        }
+        assertTrue(anyLst, "Expected some words to be marked as LST after audio load");
+    }
 }
