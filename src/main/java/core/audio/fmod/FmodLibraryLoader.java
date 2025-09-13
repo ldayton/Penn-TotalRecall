@@ -195,7 +195,7 @@ public class FmodLibraryLoader {
         var filename = getLibraryFilename(libraryType);
         var base = properties.libraryPathMacos();
         if (base == null || base.isBlank()) {
-            base = "src/main/resources/fmod/macos"; // fallback for safety; should not happen
+            throw new IllegalStateException("FMOD library path for macOS is not configured");
         }
         if (base.endsWith("/") || base.endsWith("\\")) {
             return base + filename;

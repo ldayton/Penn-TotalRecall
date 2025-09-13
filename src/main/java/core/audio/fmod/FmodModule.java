@@ -47,6 +47,10 @@ public class FmodModule extends AbstractModule {
     @Provides
     @Singleton
     FmodListenerManager provideFmodListenerManager(@NonNull MemorySegment fmodSystemPointer) {
-        return new FmodListenerManager(fmodSystemPointer);
+        try {
+            return new FmodListenerManager(fmodSystemPointer);
+        } catch (core.audio.exceptions.AudioEngineException e) {
+            throw new RuntimeException("Failed to create FMOD listener manager", e);
+        }
     }
 }

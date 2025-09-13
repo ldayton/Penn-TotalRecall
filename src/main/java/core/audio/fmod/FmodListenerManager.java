@@ -4,7 +4,10 @@ import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
+import core.audio.exceptions.AudioEngineException;
+import core.audio.exceptions.AudioPlaybackException;
 import core.audio.fmod.panama.FmodCore;
+import core.audio.fmod.panama.FmodCore_1;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -52,6 +55,11 @@ class FmodListenerManager {
     // Current position in frames
     private volatile long currentPositionFrames;
 
+    // DSP clock tracking for accurate position
+    private volatile int sourceRate; // Source sample rate (Hz) of the current channel
+    private volatile long dspStartSamples; // DSP clock baseline at start of monitoring
+    private final int mixRate; // FMOD software mix rate (samples per second)
+
     // Listener management
     private final List<PlaybackListener> listeners = new CopyOnWriteArrayList<>();
     private final AtomicBoolean isShutdown = new AtomicBoolean(false);
@@ -60,8 +68,9 @@ class FmodListenerManager {
      * Creates a new listener manager with default progress interval.
      *
      * @param system The FMOD system pointer
+     * @throws AudioEngineException if FMOD system query fails
      */
-    FmodListenerManager(@NonNull MemorySegment system) {
+    FmodListenerManager(@NonNull MemorySegment system) throws AudioEngineException {
         this(system, DEFAULT_PROGRESS_INTERVAL_MS);
     }
 
@@ -71,9 +80,12 @@ class FmodListenerManager {
      * @param system The FMOD system pointer
      * @param progressIntervalMs Interval between progress updates in milliseconds
      */
-    FmodListenerManager(@NonNull MemorySegment system, long progressIntervalMs) {
+    FmodListenerManager(@NonNull MemorySegment system, long progressIntervalMs)
+            throws AudioEngineException {
         this.system = system;
         this.progressIntervalMs = progressIntervalMs;
+        // Query FMOD software format once for mix rate
+        this.mixRate = FmodSystemUtil.getSoftwareMixRate(system);
     }
 
     /**
@@ -108,7 +120,8 @@ class FmodListenerManager {
      * @param handle The playback handle to monitor
      * @param totalFrames The total duration in frames for progress calculations
      */
-    void startMonitoring(@NonNull FmodPlaybackHandle handle, long totalFrames) {
+    void startMonitoring(@NonNull FmodPlaybackHandle handle, long totalFrames)
+            throws AudioPlaybackException {
         if (isShutdown.get()) {
             log.warn("Cannot start monitoring on shutdown manager");
             return;
@@ -122,6 +135,22 @@ class FmodListenerManager {
         this.totalFrames = totalFrames;
         this.startFrame = handle.getStartFrame();
         this.currentPositionFrames = startFrame;
+
+        // Get source sample rate from channel
+        this.sourceRate = FmodSystemUtil.getSourceSampleRate(system, handle);
+
+        // Capture DSP start clock for relative timing
+        try (Arena arena = Arena.ofConfined()) {
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            int result =
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
+            this.dspStartSamples =
+                    (result == FmodConstants.FMOD_OK)
+                            ? dspClockRef.get(ValueLayout.JAVA_LONG, 0)
+                            : 0L;
+        }
 
         // Start progress timer if we have listeners
         if (!listeners.isEmpty()) {
@@ -148,6 +177,8 @@ class FmodListenerManager {
         currentHandle = null;
         totalFrames = 0L;
         currentPositionFrames = 0L;
+        sourceRate = 0;
+        dspStartSamples = 0L;
 
         ScheduledExecutorService timer = progressTimer;
         if (timer != null) {
@@ -299,16 +330,26 @@ class FmodListenerManager {
             log.warn("Error checking channel playing status", e);
         }
 
-        // Query current position from FMOD
+        // Query current DSP clock position from FMOD
         try (Arena arena = Arena.ofConfined()) {
-            var positionRef = arena.allocate(ValueLayout.JAVA_INT);
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+
             int result =
-                    FmodCore.FMOD_Channel_GetPosition(
-                            handle.getChannel(), positionRef, FmodConstants.FMOD_TIMEUNIT_PCM);
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
 
             if (result == FmodConstants.FMOD_OK) {
-                // Get frame-accurate position
-                long absoluteFrames = positionRef.get(ValueLayout.JAVA_INT, 0);
+                // DSP clock gives us the sample-accurate position that's actually playing
+                long currentDspSamples = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
+
+                // Calculate elapsed DSP samples since start
+                long dspDelta = Math.max(0, currentDspSamples - dspStartSamples);
+
+                // Convert DSP samples (at mixRate) to source frames (at sourceRate)
+                long elapsedFrames =
+                        sourceRate > 0 && mixRate > 0 ? (dspDelta * sourceRate) / mixRate : 0;
+                long absoluteFrames = startFrame + elapsedFrames;
                 currentPositionFrames = absoluteFrames;
 
                 // Check if we've reached or passed the end frame
@@ -381,5 +422,20 @@ class FmodListenerManager {
         }
         long clamped = Math.max(handle.getStartFrame(), Math.min(newFrame, handle.getEndFrame()));
         this.currentPositionFrames = clamped;
+        this.startFrame = clamped; // Update start frame to the seek position
+
+        // Reset DSP clock baseline after seek
+        try (Arena arena = Arena.ofConfined()) {
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            int result =
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
+            if (result == FmodConstants.FMOD_OK) {
+                // Capture new DSP baseline at seek position
+                this.dspStartSamples = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

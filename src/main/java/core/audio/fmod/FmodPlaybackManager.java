@@ -159,28 +159,34 @@ class FmodPlaybackManager {
                     int res =
                             FmodCore_1.FMOD_Channel_GetDSPClock(
                                     channel, dspClockRef, parentClockRef);
-                    if (res == FmodConstants.FMOD_OK) {
-                        long parentNow = parentClockRef.get(ValueLayout.JAVA_LONG, 0);
-
-                        // Get channel frequency (source rate under resampling)
-                        var freqRef = arena.allocate(ValueLayout.JAVA_FLOAT);
-                        res = FmodCore.FMOD_Channel_GetFrequency(channel, freqRef);
-                        float chanHz =
-                                (res == FmodConstants.FMOD_OK)
-                                        ? Math.max(1.0f, freqRef.get(ValueLayout.JAVA_FLOAT, 0))
-                                        : 44100.0f;
-
-                        // Get software mix rate
-                        int mixRate = FmodSystemUtil.getSoftwareMixRate(system);
-
-                        // Convert frame range to seconds, then to mix-rate samples
-                        long frames = Math.max(0, endFrame - startFrame);
-                        double durSec = frames / chanHz;
-                        long endParent = parentNow + (long) (durSec * Math.max(1, mixRate));
-
-                        // Set start and end delay in parent clock; stopchannels=1 to force stop
-                        FmodCore_1.FMOD_Channel_SetDelay(channel, parentNow, endParent, 1);
+                    if (res != FmodConstants.FMOD_OK) {
+                        throw FmodError.toPlaybackException(
+                                res, "get DSP clock for delay scheduling");
                     }
+                    long parentNow = parentClockRef.get(ValueLayout.JAVA_LONG, 0);
+
+                    // Get channel frequency (source rate under resampling)
+                    var freqRef = arena.allocate(ValueLayout.JAVA_FLOAT);
+                    res = FmodCore.FMOD_Channel_GetFrequency(channel, freqRef);
+                    if (res != FmodConstants.FMOD_OK) {
+                        throw FmodError.toPlaybackException(
+                                res, "get channel frequency for delay scheduling");
+                    }
+                    float chanHz = freqRef.get(ValueLayout.JAVA_FLOAT, 0);
+                    if (chanHz <= 0) {
+                        throw new AudioPlaybackException("Invalid channel frequency: " + chanHz);
+                    }
+
+                    // Get software mix rate
+                    int mixRate = FmodSystemUtil.getSoftwareMixRate(system);
+
+                    // Convert frame range to seconds, then to mix-rate samples
+                    long frames = Math.max(0, endFrame - startFrame);
+                    double durSec = frames / chanHz;
+                    long endParent = parentNow + (long) (durSec * mixRate);
+
+                    // Set start and end delay in parent clock; stopchannels=1 to force stop
+                    FmodCore_1.FMOD_Channel_SetDelay(channel, parentNow, endParent, 1);
                 } catch (Throwable t) {
                     // Non-fatal: if scheduling fails, playback will continue; higher layers may
                     // stop it
