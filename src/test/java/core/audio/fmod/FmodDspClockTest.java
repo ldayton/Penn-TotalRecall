@@ -179,59 +179,70 @@ class FmodDspClockTest {
     }
 
     @Test
-    @DisplayName("DSP clock should handle range playback end detection correctly")
+    @DisplayName("Range playback should stop automatically at end frame")
     @Timeout(3)
     void testDspClockRangeEndDetection() throws Exception {
         AudioHandle audioHandle = loadingManager.loadAudio(SAMPLE_WAV);
         MemorySegment sound = loadingManager.getCurrentSound().orElse(null);
 
-        // Play a specific range
-        long startFrame = 1000;
-        long endFrame = 5000;
-        FmodPlaybackHandle playbackHandle =
-                playbackManager.playRange(sound, audioHandle, startFrame, endFrame, false);
-
-        // Monitor until we approach the end
-        boolean reachedEnd = false;
-        long lastValidClock = 0;
-
+        // Get sample rate for timing calculations
+        int sampleRate = 44100; // Default sample rate
         try (Arena arena = Arena.ofConfined()) {
-            for (int i = 0; i < 100; i++) {
-                var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
-                var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
-
-                int result =
-                        FmodCore_1.FMOD_Channel_GetDSPClock(
-                                playbackHandle.getChannel(), dspClockRef, parentClockRef);
-
-                if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
-                    // Channel was released - playback ended
-                    reachedEnd = true;
-                    break;
-                } else if (result == FmodConstants.FMOD_OK) {
-                    long dspClock = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
-                    lastValidClock = dspClock;
-
-                    // Check if we're near the end
-                    if (dspClock >= endFrame - 1000) {
-                        log.info(
-                                "Approaching end: DSP clock = {}, end frame = {}",
-                                dspClock,
-                                endFrame);
-                    }
-
-                    if (dspClock >= endFrame) {
-                        reachedEnd = true;
-                        break;
-                    }
-                }
-
-                Thread.sleep(50);
+            var typeRef = arena.allocate(ValueLayout.JAVA_INT);
+            var formatRef = arena.allocate(ValueLayout.JAVA_INT);
+            var channelsRef = arena.allocate(ValueLayout.JAVA_INT);
+            var rateRef = arena.allocate(ValueLayout.JAVA_INT);
+            int result =
+                    FmodCore.FMOD_Sound_GetFormat(sound, typeRef, formatRef, channelsRef, rateRef);
+            if (result == FmodConstants.FMOD_OK) {
+                sampleRate = rateRef.get(ValueLayout.JAVA_INT, 0);
             }
         }
 
-        assertTrue(reachedEnd, "Should detect end of range playback");
-        log.info("Last valid DSP clock position: {}", lastValidClock);
+        // Play a short range (100ms worth of frames)
+        long startFrame = 1000;
+        long rangeFrames = (long) (sampleRate * 0.1); // 100ms
+        long endFrame = startFrame + rangeFrames;
+
+        log.info(
+                "Playing range: {} to {} ({} frames, ~{}ms at {}Hz)",
+                startFrame,
+                endFrame,
+                rangeFrames,
+                (int) (rangeFrames * 1000.0 / sampleRate),
+                sampleRate);
+
+        FmodPlaybackHandle playbackHandle =
+                playbackManager.playRange(sound, audioHandle, startFrame, endFrame, false);
+
+        // Verify channel is initially playing
+        boolean initiallyPlaying = false;
+        try (Arena arena = Arena.ofConfined()) {
+            var isPlayingRef = arena.allocate(ValueLayout.JAVA_INT);
+            int result = FmodCore.FMOD_Channel_IsPlaying(playbackHandle.getChannel(), isPlayingRef);
+            if (result == FmodConstants.FMOD_OK) {
+                initiallyPlaying = isPlayingRef.get(ValueLayout.JAVA_INT, 0) != 0;
+            }
+        }
+        assertTrue(initiallyPlaying, "Channel should be playing initially");
+
+        // Wait for playback to complete (with some buffer time)
+        // 100ms playback + 200ms buffer = 300ms total wait
+        Thread.sleep(300);
+
+        // Check that playback has stopped
+        boolean stillPlaying = false;
+        try (Arena arena = Arena.ofConfined()) {
+            var isPlayingRef = arena.allocate(ValueLayout.JAVA_INT);
+            int result = FmodCore.FMOD_Channel_IsPlaying(playbackHandle.getChannel(), isPlayingRef);
+            if (result == FmodConstants.FMOD_OK) {
+                stillPlaying = isPlayingRef.get(ValueLayout.JAVA_INT, 0) != 0;
+            }
+            // If we get FMOD_ERR_INVALID_HANDLE, that's also fine - channel was released
+        }
+
+        assertFalse(stillPlaying, "Channel should have stopped after range duration");
+        log.info("Range playback stopped automatically as expected");
 
         // Clean up
         playbackManager.stop();

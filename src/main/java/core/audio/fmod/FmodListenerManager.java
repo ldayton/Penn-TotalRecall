@@ -4,6 +4,7 @@ import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
+import core.audio.fmod.panama.FmodCore;
 import core.audio.fmod.panama.FmodCore_1;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -300,6 +301,26 @@ class FmodListenerManager {
             return;
         }
 
+        // Check if channel is still playing (FMOD may have stopped it via SetDelay)
+        try (Arena arena = Arena.ofConfined()) {
+            var isPlayingRef = arena.allocate(ValueLayout.JAVA_INT);
+            int result = FmodCore.FMOD_Channel_IsPlaying(handle.getChannel(), isPlayingRef);
+
+            if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
+                // Channel was released
+                handlePlaybackStopped();
+                return;
+            }
+
+            if (result == FmodConstants.FMOD_OK && isPlayingRef.get(ValueLayout.JAVA_INT, 0) == 0) {
+                // Channel stopped playing (e.g., reached dspclock_end from SetDelay)
+                handlePlaybackStopped();
+                return;
+            }
+        } catch (Exception e) {
+            log.warn("Error checking channel playing status", e);
+        }
+
         // Query current DSP clock position from FMOD
         try (Arena arena = Arena.ofConfined()) {
             var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
@@ -316,6 +337,16 @@ class FmodListenerManager {
                 long delta = Math.max(0, dspClock - dspStartSamples);
                 double elapsed = (double) delta / Math.max(1, mixRate);
                 double hearingSecondsAbs = offsetSeconds + elapsed;
+
+                // Check if we've reached the end BEFORE clamping (for range playback)
+                if (handle.getEndFrame() != Long.MAX_VALUE) {
+                    double elapsedTime = hearingSecondsAbs - offsetSeconds;
+                    if (elapsedTime >= totalSeconds) {
+                        handlePlaybackStopped();
+                        return;
+                    }
+                }
+
                 // Clamp to segment bounds before notifying
                 if (totalSeconds > 0.0) {
                     double min = offsetSeconds;
@@ -324,12 +355,6 @@ class FmodListenerManager {
                 }
                 this.lastHearingSeconds = hearingSecondsAbs;
                 notifyProgress(handle, hearingSecondsAbs, totalSeconds);
-
-                // Check if we've reached the end (for range playback)
-                if (handle.getEndFrame() != Long.MAX_VALUE
-                        && (this.lastHearingSeconds - offsetSeconds) >= totalSeconds) {
-                    handlePlaybackStopped();
-                }
             } else if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                 // Channel has been released
                 handlePlaybackStopped();

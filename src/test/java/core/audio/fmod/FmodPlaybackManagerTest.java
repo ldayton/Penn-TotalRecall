@@ -324,6 +324,34 @@ class FmodPlaybackManagerTest {
     }
 
     @Test
+    @Timeout(3)
+    void testPlayRangeStopsAtEnd() throws Exception {
+        // Load test audio and fetch metadata
+        AudioHandle handle = loadingManager.loadAudio(SAMPLE_WAV);
+        MemorySegment sound = loadSound(SAMPLE_WAV);
+        int sampleRate = loadingManager.getCurrentMetadata().map(m -> m.sampleRate()).orElse(44100);
+
+        // Define a short range of ~200 ms starting at ~1s
+        long startFrame = sampleRate; // ~1.0s
+        long rangeFrames = (long) (sampleRate * 0.2); // 200ms
+        long endFrame = startFrame + rangeFrames; // exclusive
+
+        // Play the range
+        FmodPlaybackHandle ph =
+                playbackManager.playRange(sound, handle, startFrame, endFrame, true);
+        assertNotNull(ph);
+        assertTrue(ph.isActive());
+
+        // Wait a bit longer than range duration to allow natural completion
+        Thread.sleep(400);
+
+        // Expect the channel to have stopped automatically at end of range
+        assertFalse(
+                playbackManager.hasActivePlayback(),
+                "Range playback should auto-stop at end but is still active");
+    }
+
+    @Test
     void testGetCurrentPlayback() throws Exception {
         assertFalse(playbackManager.getCurrentPlayback().isPresent());
 

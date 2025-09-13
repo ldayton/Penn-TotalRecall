@@ -4,6 +4,7 @@ import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.AudioHandle;
 import core.audio.exceptions.AudioPlaybackException;
 import core.audio.fmod.panama.FmodCore;
+import core.audio.fmod.panama.FmodCore_1;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -148,6 +149,43 @@ class FmodPlaybackManager {
 
                 currentPlayback = Optional.of(playbackHandle);
                 currentChannel = Optional.of(channel);
+
+                // Schedule an automatic stop at the end frame using DSP clock delay for
+                // frame-accurate range termination.
+                try {
+                    // Get current DSP clock
+                    var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+                    var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+                    int res =
+                            FmodCore_1.FMOD_Channel_GetDSPClock(
+                                    channel, dspClockRef, parentClockRef);
+                    if (res == FmodConstants.FMOD_OK) {
+                        long parentNow = parentClockRef.get(ValueLayout.JAVA_LONG, 0);
+
+                        // Get channel frequency (source rate under resampling)
+                        var freqRef = arena.allocate(ValueLayout.JAVA_FLOAT);
+                        res = FmodCore.FMOD_Channel_GetFrequency(channel, freqRef);
+                        float chanHz =
+                                (res == FmodConstants.FMOD_OK)
+                                        ? Math.max(1.0f, freqRef.get(ValueLayout.JAVA_FLOAT, 0))
+                                        : 44100.0f;
+
+                        // Get software mix rate
+                        int mixRate = FmodSystemUtil.getSoftwareMixRate(system);
+
+                        // Convert frame range to seconds, then to mix-rate samples
+                        long frames = Math.max(0, endFrame - startFrame);
+                        double durSec = frames / chanHz;
+                        long endParent = parentNow + (long) (durSec * Math.max(1, mixRate));
+
+                        // Set start and end delay in parent clock; stopchannels=1 to force stop
+                        FmodCore_1.FMOD_Channel_SetDelay(channel, parentNow, endParent, 1);
+                    }
+                } catch (Throwable t) {
+                    // Non-fatal: if scheduling fails, playback will continue; higher layers may
+                    // stop it
+                    log.debug("Failed to schedule end delay for range playback", t);
+                }
 
                 return playbackHandle;
             }
@@ -364,7 +402,22 @@ class FmodPlaybackManager {
     boolean hasActivePlayback() {
         playbackLock.lock();
         try {
-            return currentChannel.isPresent();
+            if (!currentChannel.isPresent()) {
+                return false;
+            }
+
+            // Check if the channel is actually playing or paused
+            try (Arena arena = Arena.ofConfined()) {
+                var isPlayingRef = arena.allocate(ValueLayout.JAVA_INT);
+                int result = FmodCore_1.FMOD_Channel_IsPlaying(currentChannel.get(), isPlayingRef);
+
+                if (result != FmodConstants.FMOD_OK) {
+                    // Channel is invalid or stopped
+                    return false;
+                }
+
+                return isPlayingRef.get(ValueLayout.JAVA_INT, 0) != 0;
+            }
         } finally {
             playbackLock.unlock();
         }
