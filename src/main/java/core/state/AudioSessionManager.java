@@ -114,10 +114,13 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
         switch (state) {
             case READY -> {
-                // Start playback from beginning
+                // Start playback from current cached frame (avoids glitch after READY seeks)
                 currentAudioHandle.ifPresent(
                         handle -> {
-                            var playback = audioEngine.get().play(handle);
+                            long startFrame =
+                                    Math.max(0, Math.min(currentPositionFrames, totalFrames));
+                            long endFrame = totalFrames; // exclusive upper bound
+                            var playback = audioEngine.get().play(handle, startFrame, endFrame);
                             currentPlaybackHandle = Optional.of(playback);
                             var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPlaying();
@@ -127,7 +130,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
                                             prevState,
                                             AudioSessionStateMachine.State.PLAYING,
                                             position));
-                            log.debug("Started playback");
+                            log.debug("Started playback from frame {}", startFrame);
                         });
             }
             case PLAYING -> {
@@ -208,30 +211,11 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
                     });
         } else if (state == AudioSessionStateMachine.State.READY
                 && currentAudioHandle.isPresent()) {
-            // TODO: Fix audio glitch when seeking in READY state
-            // Problem: We need a playback handle to seek, but creating one via play()
-            // causes a brief moment of audio playback before pause() takes effect.
-            // This creates an audible glitch when seeking from READY state.
-            // Possible solutions:
-            // 1. Track desired position without playback handle, apply on play
-            // 2. Add engine support for creating paused playback handles
-            // 3. Use play(startFrame, startFrame+1) with immediate stop
-
-            // If in READY state with no playback handle, create one and immediately pause it
-            var playback = audioEngine.get().play(currentAudioHandle.get());
-            currentPlaybackHandle = Optional.of(playback);
-            audioEngine.get().pause(playback);
-            audioEngine.get().seek(playback, event.frame());
-            currentPositionFrames = event.frame();
-
-            // Transition to PAUSED since we now have a paused playback handle
-            var prevState = stateManager.getCurrentState();
-            stateManager.transitionToPaused();
-            eventBus.publish(
-                    new AppStateChangedEvent(
-                            prevState, AudioSessionStateMachine.State.PAUSED, event.frame()));
-
-            log.debug("Created paused playback and seeked to frame: {}", event.frame());
+            // Avoid creating a playback handle in READY to prevent audible glitches.
+            // Cache the target frame; apply when playback starts.
+            long clamped = Math.max(0, Math.min(event.frame(), Math.max(0, totalFrames)));
+            currentPositionFrames = clamped;
+            log.debug("Cached seek target in READY: frame {}", clamped);
         }
     }
 
