@@ -230,10 +230,15 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
     public void onAudioStopRequested(@NonNull SeekToStartEvent event) {
         var state = stateManager.getCurrentState();
 
-        if (state == AudioSessionStateMachine.State.PLAYING) {
+        if (state == AudioSessionStateMachine.State.PLAYING
+                || state == AudioSessionStateMachine.State.PAUSED) {
             // Stop playback and reset position to beginning
             stopPlayback();
             log.debug("Stopped playback and reset to beginning");
+        } else if (state == AudioSessionStateMachine.State.READY) {
+            // Already stopped, just reset position
+            currentPositionFrames = 0;
+            log.debug("Reset position to beginning");
         }
     }
 
@@ -353,7 +358,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
     @Override
     public Optional<Double> getPlaybackPosition() {
-        if (currentPlaybackHandle.isEmpty() || sampleRate == 0) {
+        if (currentAudioHandle.isEmpty() || sampleRate == 0) {
             return Optional.empty();
         }
         // Use cached position for efficiency
@@ -406,7 +411,7 @@ public class AudioSessionManager implements PlaybackListener, WaveformSessionDat
 
     @Override
     public Optional<Long> getPlaybackPositionFrames() {
-        if (currentPlaybackHandle.isEmpty()) {
+        if (currentAudioHandle.isEmpty()) {
             return Optional.empty();
         }
         // Return the exact frame position without conversion

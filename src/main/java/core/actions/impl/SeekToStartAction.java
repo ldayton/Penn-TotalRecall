@@ -5,16 +5,16 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
-import core.events.SeekEvent;
+import core.events.SeekToStartEvent;
 import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
 
 /**
- * Seeks audio playback to the beginning of the file.
+ * Stops audio playback and resets position to the beginning of the file.
  *
- * <p>Publishes AudioSeekRequestedEvent with frame 0 to reset position to the start.
+ * <p>Publishes SeekToStartEvent to stop playback and reset position to the start.
  */
 @Singleton
 public class SeekToStartAction extends Action {
@@ -32,8 +32,8 @@ public class SeekToStartAction extends Action {
     @Override
     public void execute() {
         if (isEnabled()) {
-            // Seek to frame 0 (start of file)
-            eventBus.publish(new SeekEvent(0));
+            // Stop playback and reset to start
+            eventBus.publish(new SeekToStartEvent());
             eventBus.publish(new FocusEvent(FocusEvent.Component.MAIN_WINDOW));
         }
     }
