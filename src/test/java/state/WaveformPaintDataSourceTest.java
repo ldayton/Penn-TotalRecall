@@ -9,7 +9,7 @@ import com.google.inject.Provider;
 import core.audio.AudioEngine;
 import core.audio.PlaybackHandle;
 import core.state.WaveformSessionDataSource;
-import core.state.WaveformViewport;
+import core.state.ViewportPositionManager;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import org.mockito.MockitoAnnotations;
 class WaveformPaintDataSourceTest {
 
     @Mock private WaveformManager waveformManager;
-    @Mock private WaveformViewport viewport;
+    @Mock private ViewportPositionManager viewport;
     @Mock private WaveformSessionDataSource sessionSource;
     @Mock private Provider<AudioEngine> audioEngineProvider;
     @Mock private AudioEngine audioEngine;

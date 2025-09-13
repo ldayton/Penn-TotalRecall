@@ -2,63 +2,31 @@ package core.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-import com.google.inject.Provider;
-import core.audio.AudioEngine;
-import core.audio.AudioHandle;
-import core.audio.AudioMetadata;
-import core.audio.PlaybackHandle;
+import app.headless.HeadlessTestFixture;
 import core.dispatch.EventDispatchBus;
-import core.dispatch.EventDispatcher;
 import core.state.AudioSessionManager;
 import core.state.AudioSessionStateMachine;
+import core.state.ViewportPositionManager;
 import java.io.File;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 /** Test that SeekToStartEvent properly resets position and updates waveform. */
-class SeekToStartEventTest {
-
-    @Mock private AudioEngine audioEngine;
-    @Mock private Provider<AudioEngine> audioEngineProvider;
-    @Mock private AudioHandle audioHandle;
-    @Mock private PlaybackHandle playbackHandle;
-    @Mock private EventDispatcher eventDispatcher;
-
-    private EventDispatchBus eventBus;
-    private AudioSessionStateMachine stateMachine;
-    private AudioSessionManager sessionManager;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        eventBus = new EventDispatchBus(eventDispatcher);
-        stateMachine = new AudioSessionStateMachine();
-
-        // Setup mock audio engine provider
-        when(audioEngineProvider.get()).thenReturn(audioEngine);
-
-        // Create AudioSessionManager with dependencies
-        sessionManager = new AudioSessionManager(stateMachine, audioEngineProvider, eventBus);
-
-        // Setup mock audio engine behavior
-        when(audioEngine.loadAudio(any(String.class))).thenReturn(audioHandle);
-        when(audioEngine.getMetadata(audioHandle))
-                .thenReturn(
-                        new AudioMetadata(44100, 2, 16, "PCM", 44100L, 1.0)); // 1 second of audio
-        when(audioEngine.play(eq(audioHandle), anyLong(), anyLong())).thenReturn(playbackHandle);
-    }
+class SeekToStartEventTest extends HeadlessTestFixture {
 
     @Test
     void seekToStartShouldResetPositionInReadyState() throws Exception {
-        // Load test audio file - call method directly since event bus is mocked
+        // Get instances from DI container
+        EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
+        AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
+        AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
+
+        // Load test audio file
         File testFile = new File("src/test/resources/audio/sweep.wav");
-        sessionManager.onAudioFileLoadRequested(new AudioFileLoadRequestedEvent(testFile));
+        eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
+
+        // Wait for audio to load
+        Thread.sleep(500);
 
         // Verify in READY state after loading
         assertEquals(
@@ -66,23 +34,25 @@ class SeekToStartEventTest {
                 stateMachine.getCurrentState(),
                 "Should be in READY state after loading");
 
-        // Start playback - call method directly
-        sessionManager.onAudioPlayPauseRequested(new PlayPauseEvent());
+        // Start playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
         assertEquals(
                 AudioSessionStateMachine.State.PLAYING,
                 stateMachine.getCurrentState(),
                 "Should be in PLAYING state");
 
-        // Simulate position advancing (0.5 seconds = 22050 frames at 44100 Hz)
-        when(audioEngine.getPosition(playbackHandle)).thenReturn(22050L);
+        // Let playback advance for a bit
+        Thread.sleep(500);
 
         // Verify position has moved forward
         assertTrue(
                 sessionManager.getPlaybackPosition().orElse(0.0) > 0.4,
                 "Position should have moved forward during playback");
 
-        // Stop playback (go to start) - call method directly
-        sessionManager.onAudioStopRequested(new SeekToStartEvent());
+        // Stop playback (go to start)
+        eventBus.publish(new SeekToStartEvent());
+        Thread.sleep(100);
 
         // Should be in READY state
         assertEquals(
@@ -100,5 +70,166 @@ class SeekToStartEventTest {
                 sessionManager.getPlaybackPosition().orElse(-1.0),
                 0.001,
                 "Position should be reset to 0 after SeekToStartEvent");
+    }
+
+    @Test
+    void seekToStartShouldCenterViewportAtZero() throws Exception {
+        // Get instances from DI container
+        EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
+        ViewportPositionManager viewport = getInstance(ViewportPositionManager.class);
+        AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
+
+        // Set viewport dimensions
+        viewport.setWidth(1000);
+        viewport.setZoom(200); // 200 pixels per second = 5 seconds visible
+
+        // Load test audio file
+        File testFile = new File("src/test/resources/audio/sweep.wav");
+        eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
+        Thread.sleep(500);
+
+        // Start playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+
+        // Let it play for a bit to move viewport forward
+        Thread.sleep(1000);
+
+        // Pause playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+
+        // Viewport should have moved from initial position
+        double beforeStart = viewport.getRawStartSeconds();
+        assertTrue(beforeStart > -2.0, "Viewport should have moved forward during playback");
+
+        // When: SeekToStartEvent is triggered
+        eventBus.publish(new SeekToStartEvent());
+        Thread.sleep(100);
+
+        // Then: Viewport should be centered at position 0
+        // With 1000px width and 200px/sec zoom, viewport shows 5 seconds
+        // Centered at 0 means viewport starts at -2.5 seconds
+        double expectedStart = -2.5;
+        double actualStart = viewport.getRawStartSeconds();
+
+        assertEquals(
+                expectedStart,
+                actualStart,
+                0.01,
+                "Viewport should be centered at position 0 after SeekToStartEvent");
+    }
+
+    @Test
+    void seekToStartAfterPauseShouldAllowPlaybackToRestart() throws Exception {
+        // Get instances from DI container
+        EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
+        AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
+        AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
+
+        // Load test audio file
+        File testFile = new File("src/test/resources/audio/sweep.wav");
+        eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
+        Thread.sleep(500);
+
+        // Start playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+        assertEquals(
+                AudioSessionStateMachine.State.PLAYING,
+                stateMachine.getCurrentState(),
+                "Should be PLAYING after first play");
+
+        // Let it play for a moment
+        Thread.sleep(200);
+
+        // Pause playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+        assertEquals(
+                AudioSessionStateMachine.State.PAUSED,
+                stateMachine.getCurrentState(),
+                "Should be PAUSED after pause");
+
+        // Seek to start
+        eventBus.publish(new SeekToStartEvent());
+        Thread.sleep(100);
+
+        // Verify state is READY and playback handle is cleared
+        assertEquals(
+                AudioSessionStateMachine.State.READY,
+                stateMachine.getCurrentState(),
+                "Should be READY after seek to start");
+        assertTrue(
+                sessionManager.getCurrentPlaybackHandle().isEmpty(),
+                "Playback handle should be cleared after seek to start");
+
+        // Try to play again - this should work without throwing an exception
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+
+        // Should be playing again without error
+        assertEquals(
+                AudioSessionStateMachine.State.PLAYING,
+                stateMachine.getCurrentState(),
+                "Should be able to play again after seek to start from paused state");
+        assertTrue(
+                sessionManager.getCurrentPlaybackHandle().isPresent(),
+                "Should have a new playback handle after restarting playback");
+    }
+
+    @Test
+    void seekToStartWithInvalidPlaybackHandleShouldTransitionToReady() throws Exception {
+        // Get instances from DI container
+        EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
+        AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
+        AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
+
+        // Load test audio file
+        File testFile = new File("src/test/resources/audio/sweep.wav");
+        eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
+        Thread.sleep(500);
+
+        // Start playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+        assertEquals(AudioSessionStateMachine.State.PLAYING, stateMachine.getCurrentState());
+
+        // Pause playback
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+        assertEquals(AudioSessionStateMachine.State.PAUSED, stateMachine.getCurrentState());
+
+        // Simulate a scenario where the playback handle becomes invalid
+        // First get the handle to close it properly, then clear the reference
+        var playbackHandle = sessionManager.getCurrentPlaybackHandle();
+        assertTrue(playbackHandle.isPresent(), "Should have playback handle while paused");
+
+        // Close the handle properly in FMOD
+        playbackHandle.get().close();
+
+        // Now clear the reference using reflection (simulates lost reference after close)
+        var field = AudioSessionManager.class.getDeclaredField("currentPlaybackHandle");
+        field.setAccessible(true);
+        field.set(sessionManager, java.util.Optional.empty());
+
+        // Now seek to start - this should still transition to READY even though handle is gone
+        eventBus.publish(new SeekToStartEvent());
+        Thread.sleep(100);
+
+        // Should be in READY state even though stopPlayback() couldn't stop an invalid handle
+        assertEquals(
+                AudioSessionStateMachine.State.READY,
+                stateMachine.getCurrentState(),
+                "Should transition to READY even when playback handle is invalid");
+
+        // Try to play again - should work without error
+        eventBus.publish(new PlayPauseEvent());
+        Thread.sleep(100);
+
+        assertEquals(
+                AudioSessionStateMachine.State.PLAYING,
+                stateMachine.getCurrentState(),
+                "Should be able to play after seek to start with invalid handle");
     }
 }

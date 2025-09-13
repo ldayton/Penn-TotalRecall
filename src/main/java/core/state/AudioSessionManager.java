@@ -244,6 +244,18 @@ public class AudioSessionManager implements WaveformSessionDataSource {
                 || state == AudioSessionStateMachine.State.PAUSED) {
             // Stop playback and reset position to beginning
             stopPlayback();
+
+            // Ensure we're in READY state even if stopPlayback didn't transition
+            // (e.g., if playback handle was already invalid)
+            var currentState = stateManager.getCurrentState();
+            if (currentState == AudioSessionStateMachine.State.PLAYING
+                    || currentState == AudioSessionStateMachine.State.PAUSED) {
+                stateManager.transitionToReady();
+                eventBus.publish(
+                        new AppStateChangedEvent(
+                                currentState, AudioSessionStateMachine.State.READY, "stopped"));
+                log.debug("Forced transition to READY after SeekToStart with invalid handle");
+            }
             log.debug("Stopped playback and reset to beginning");
         } else if (state == AudioSessionStateMachine.State.READY) {
             // Already stopped
@@ -404,6 +416,11 @@ public class AudioSessionManager implements WaveformSessionDataSource {
             return Optional.empty();
         }
         return Optional.of(totalFrames);
+    }
+
+    // Public for testing
+    public Optional<PlaybackHandle> getCurrentPlaybackHandle() {
+        return currentPlaybackHandle;
     }
 
     /**

@@ -9,7 +9,7 @@ import core.events.AudioFileLoadRequestedEvent;
 import core.events.PlayLast200MillisEvent;
 import core.events.PlayPauseEvent;
 import core.state.AudioSessionStateMachine;
-import core.state.WaveformViewport;
+import core.state.ViewportPositionManager;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class ReplayLast200MillisActionTest extends SwingTestFixture {
     void replayLast200msDoesNotScrollWaveformSwing() throws Exception {
         EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
         AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
-        WaveformViewport viewport = getInstance(WaveformViewport.class);
+        ViewportPositionManager viewport = getInstance(ViewportPositionManager.class);
 
         // Load audio and wait for READY
         File testFile = new File("src/test/resources/audio/freerecall.wav");

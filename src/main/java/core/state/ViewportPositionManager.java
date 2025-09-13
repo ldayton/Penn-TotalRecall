@@ -15,7 +15,7 @@ import lombok.NonNull;
  * playback and manual scrolling.
  */
 @Singleton
-public class WaveformViewport {
+public class ViewportPositionManager {
 
     private static final int DEFAULT_PIXELS_PER_SECOND = 200; // Show ~5 seconds on a 1000px canvas
     private static final int MIN_PIXELS_PER_SECOND = 50;
@@ -29,7 +29,7 @@ public class WaveformViewport {
     private final WaveformSessionDataSource sessionDataSource;
 
     @Inject
-    public WaveformViewport(
+    public ViewportPositionManager(
             @NonNull EventDispatchBus eventBus,
             @NonNull WaveformSessionDataSource sessionDataSource) {
         this.eventBus = eventBus;

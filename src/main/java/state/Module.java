@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import core.state.AudioSessionManager;
 import core.state.AudioSessionStateMachine;
 import core.state.WaveformSessionDataSource;
-import core.state.WaveformViewport;
+import core.state.ViewportPositionManager;
 
 /**
  * Guice module for the s2 (session) package.
@@ -23,7 +23,7 @@ public class Module extends AbstractModule {
 
         // Waveform data sources and management
         bind(WaveformManager.class).in(Singleton.class);
-        bind(WaveformViewport.class).in(Singleton.class);
+        bind(ViewportPositionManager.class).in(Singleton.class);
         bind(WaveformPaintDataSource.class).in(Singleton.class);
 
         // Bind the interface to the implementation for session data

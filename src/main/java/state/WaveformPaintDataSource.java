@@ -6,7 +6,7 @@ import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
 import core.audio.PlaybackState;
 import core.state.WaveformSessionDataSource;
-import core.state.WaveformViewport;
+import core.state.ViewportPositionManager;
 import core.waveform.TimeRange;
 import core.waveform.Waveform;
 import core.waveform.WaveformPaintingDataSource;
@@ -22,7 +22,7 @@ import lombok.NonNull;
 public class WaveformPaintDataSource implements WaveformPaintingDataSource, PlaybackListener {
 
     private final WaveformManager waveformManager;
-    private final WaveformViewport viewport;
+    private final ViewportPositionManager viewport;
     private final WaveformSessionDataSource sessionSource;
     private final Provider<AudioEngine> audioEngineProvider;
 
@@ -31,20 +31,21 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
     private volatile long progressCallbackTotalFrames = 0L;
     // Sample rate for frame-to-seconds conversion
     private volatile int cachedSampleRate = 44100;
-    private boolean listenerRegistered = false;
-    // Track last known play state to detect transitions
-    private boolean lastIsPlaying = false;
 
     @Inject
     public WaveformPaintDataSource(
             @NonNull WaveformManager waveformManager,
-            @NonNull WaveformViewport viewport,
+            @NonNull ViewportPositionManager viewport,
             @NonNull WaveformSessionDataSource sessionSource,
             @NonNull Provider<AudioEngine> audioEngineProvider) {
         this.waveformManager = waveformManager;
         this.viewport = viewport;
         this.sessionSource = sessionSource;
         this.audioEngineProvider = audioEngineProvider;
+
+        // Register as PlaybackListener immediately to avoid missing initial progress events
+        AudioEngine engine = audioEngineProvider.get();
+        engine.addPlaybackListener(this);
     }
 
     /**
@@ -52,43 +53,35 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
      * Should be called before each paint operation.
      */
     public void prepareFrame() {
-        // Ensure we're registered as a listener
-        ensureListenerRegistered();
 
         // Update sample rate if available
         sessionSource.getSampleRate().ifPresent(rate -> cachedSampleRate = rate);
 
         // Determine playback position source based on play state
         boolean isPlaying = sessionSource.isPlaying();
-        double realPosition =
-                isPlaying
-                        // When playing, use cached position from frequent progress callbacks for
-                        // smooth rendering
-                        ? getProgressCallbackPositionSeconds()
-                        // When not playing (READY/PAUSED), fall back to session source position
-                        : sessionSource.getPlaybackPosition().orElse(0.0);
+        double realPosition;
+        if (isPlaying) {
+            // When playing, prefer cached position from progress callbacks for smooth rendering
+            double cachedPosition = getProgressCallbackPositionSeconds();
+            // But if cached position is 0 and we're playing, use actual position to avoid lag
+            // This handles the case when playback just started and callbacks haven't arrived yet
+            if (cachedPosition == 0.0) {
+                realPosition = sessionSource.getPlaybackPosition().orElse(0.0);
+            } else {
+                realPosition = cachedPosition;
+            }
+        } else {
+            // When not playing (READY/PAUSED), use session source position
+            realPosition = sessionSource.getPlaybackPosition().orElse(0.0);
+        }
         double totalDuration = sessionSource.getTotalDuration().orElse(0.0);
 
         // Update viewport to follow playback with centered playhead
         viewport.followPlayback(realPosition, totalDuration, isPlaying);
 
-        // Remember state for next frame
-        lastIsPlaying = isPlaying;
     }
 
-    /**
-     * Ensure this instance is registered as a playback listener. Called lazily on first use to
-     * avoid circular dependency issues.
-     */
-    private void ensureListenerRegistered() {
-        if (!listenerRegistered) {
-            AudioEngine engine = audioEngineProvider.get();
-            engine.addPlaybackListener(this);
-            listenerRegistered = true;
-        }
-    }
-
-    /** Update viewport width from canvas. Should be called when canvas size changes. */
+/** Update viewport width from canvas. Should be called when canvas size changes. */
     public void updateViewportWidth(int widthPixels) {
         viewport.setWidth(widthPixels);
     }
