@@ -4,6 +4,7 @@ import com.google.inject.Provider;
 import core.audio.AudioEngine;
 import core.audio.PlaybackHandle;
 import core.audio.PlaybackListener;
+import core.audio.PlaybackState;
 import core.state.WaveformSessionDataSource;
 import core.state.WaveformViewport;
 import core.waveform.TimeRange;
@@ -50,10 +51,16 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
         // Ensure we're registered as a listener
         ensureListenerRegistered();
 
-        // Use cached position from progress callbacks for smooth 60 FPS rendering
-        double realPosition = getProgressCallbackPosition();
-        double totalDuration = sessionSource.getTotalDuration().orElse(0.0);
+        // Determine playback position source based on play state
         boolean isPlaying = sessionSource.isPlaying();
+        double realPosition =
+                isPlaying
+                        // When playing, use cached position from frequent progress callbacks for
+                        // smooth rendering
+                        ? getProgressCallbackPosition()
+                        // When not playing (READY/PAUSED), fall back to session source position
+                        : sessionSource.getPlaybackPosition().orElse(0.0);
+        double totalDuration = sessionSource.getTotalDuration().orElse(0.0);
 
         // Update viewport to follow playback with centered playhead
         viewport.followPlayback(realPosition, totalDuration, isPlaying);
@@ -122,6 +129,18 @@ public class WaveformPaintDataSource implements WaveformPaintingDataSource, Play
         // Cache the position for smooth UI rendering
         this.progressCallbackPositionFrames = positionFrames;
         this.progressCallbackTotalFrames = totalFrames;
+    }
+
+    @Override
+    public void onStateChanged(
+            @NonNull PlaybackHandle playback,
+            @NonNull PlaybackState newState,
+            @NonNull PlaybackState oldState) {
+        // When playback stops or finishes, clear cached progress so UI doesn't stick on old value
+        if (newState == PlaybackState.STOPPED || newState == PlaybackState.FINISHED) {
+            this.progressCallbackPositionFrames = 0;
+            this.progressCallbackTotalFrames = 0;
+        }
     }
 
     @Override
