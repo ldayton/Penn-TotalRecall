@@ -9,11 +9,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import lombok.NonNull;
-import ui.layout.UiStyles;
 
 /** A custom interface component for displaying committed annotations to the user. */
 @Singleton
@@ -37,8 +37,9 @@ public class AnnotationDisplay extends JScrollPane {
         // Allow vertical growth; keep initial width
         setMaximumSize(new Dimension(PREFERRED_SIZE.width, Integer.MAX_VALUE));
 
-        // Subtle rounded border with inner padding
-        setBorder(UiStyles.roundedBox(INNER_PADDING_PX));
+        // Remove LAF's outer/viewport border; the white table area will draw its own.
+        setBorder(BorderFactory.createEmptyBorder());
+        setViewportBorder(BorderFactory.createEmptyBorder());
 
         // since AnnotationDisplay is a clickable area, we must write focus handling code for the
         // event it is clicked on

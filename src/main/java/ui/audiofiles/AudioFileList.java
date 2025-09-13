@@ -21,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import lombok.NonNull;
+import ui.layout.UiStyles;
 
 /** A <code>JList</code> for displaying the available <code>AudioFiles</code>. */
 @Singleton
@@ -59,6 +60,10 @@ public class AudioFileList extends JList<AudioFile> implements FocusListener {
         // focus listener makes the containing AudioFileDisplay look focused at the appropriate
         // times
         addFocusListener(this);
+
+        // Draw a rounded border directly on the white list area with no inner padding
+        // so the selection highlight spans edge-to-edge.
+        setBorder(UiStyles.roundedBox(0));
 
         // users can remove an AudioFile from the display by hitting delete or backspace (necessary
         // for mac which conflates the two)

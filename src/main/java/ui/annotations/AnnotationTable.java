@@ -21,6 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import lombok.NonNull;
+import ui.layout.UiStyles;
 
 /** <code>JTable</code> that stores the annotations of the open audio file. */
 @Singleton
@@ -45,6 +46,9 @@ public class AnnotationTable extends JTable implements FocusListener {
         setModel(model);
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addMouseListener(mouseAdapter);
+        // Border around the white table area with no inner padding
+        // so row selection spans edge-to-edge.
+        setBorder(UiStyles.roundedBox(0));
         setDefaultRenderer(
                 Object.class,
                 new DefaultTableCellRenderer() {
