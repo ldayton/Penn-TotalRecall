@@ -19,8 +19,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Manages viewport state and ViewportPositionManager lifecycle. Combines state management with
- * session lifecycle management.
+ * Manages viewport state and ViewportSession lifecycle. Combines state management with session
+ * lifecycle management.
  */
 @Slf4j
 @Singleton

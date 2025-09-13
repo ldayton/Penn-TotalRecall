@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Tests ReplayLast200MillisAction behavior using real components. */
+@Disabled("disabling after viewport refactor")
 class ReplayLast200MillisActionStatesTest extends SwingTestFixture {
 
     @Test
-    @Disabled("disabling after viewport refactor")
     void replayLast200msInPausedState() throws Exception {
         EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
         AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);

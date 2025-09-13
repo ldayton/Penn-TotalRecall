@@ -32,7 +32,7 @@ public class ViewportCanvas extends JComponent implements WaveformViewport {
         setOpaque(true);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(800, 200));
-        log.debug("WaveformCanvas created");
+        log.debug("ViewportCanvas created");
     }
 
     @Override
