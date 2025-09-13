@@ -52,7 +52,7 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
         assertEquals(AudioSessionStateMachine.State.PAUSED, stateMachine.getCurrentState());
 
         // SEEK TO START
-        eventBus.publish(new SeekToStartEvent());
+        eventBus.publish(new SeekEvent(0));
         Thread.sleep(100);
         assertEquals(AudioSessionStateMachine.State.READY, stateMachine.getCurrentState());
 

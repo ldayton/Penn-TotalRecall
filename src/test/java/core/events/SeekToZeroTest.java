@@ -12,9 +12,9 @@ import java.io.File;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-/** Test that SeekToStartEvent properly resets position and updates waveform. */
+/** Test that seeking to zero properly resets position and updates waveform. */
 @Disabled("disabling after viewport refactor")
-class SeekToStartEventTest extends HeadlessTestFixture {
+class SeekToZeroTest extends HeadlessTestFixture {
 
     @Test
     void seekToStartShouldResetPositionInReadyState() throws Exception {
@@ -53,7 +53,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
                 "Position should have moved forward during playback");
 
         // Stop playback (go to start)
-        eventBus.publish(new SeekToStartEvent());
+        eventBus.publish(new SeekEvent(0));
         Thread.sleep(100);
 
         // Should be in READY state
@@ -71,7 +71,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
                 0.0,
                 sessionManager.getPlaybackPosition().orElse(-1.0),
                 0.001,
-                "Position should be reset to 0 after SeekToStartEvent");
+                "Position should be reset to 0 after seeking to start");
     }
 
     @Test
@@ -114,7 +114,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
         assertTrue(beforeStart > -2.0, "Viewport should have moved forward during playback");
 
         // When: SeekToStartEvent is triggered
-        eventBus.publish(new SeekToStartEvent());
+        eventBus.publish(new SeekEvent(0));
         Thread.sleep(100);
 
         // Then: Viewport should be centered at position 0
@@ -127,7 +127,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
                 expectedStart,
                 actualStart,
                 0.01,
-                "Viewport should be centered at position 0 after SeekToStartEvent");
+                "Viewport should be centered at position 0 after seeking to start");
     }
 
     @Test
@@ -162,7 +162,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
                 "Should be PAUSED after pause");
 
         // Seek to start
-        eventBus.publish(new SeekToStartEvent());
+        eventBus.publish(new SeekEvent(0));
         Thread.sleep(100);
 
         // Verify state is READY and playback handle is cleared
@@ -224,7 +224,7 @@ class SeekToStartEventTest extends HeadlessTestFixture {
         field.set(sessionManager, java.util.Optional.empty());
 
         // Now seek to start - this should still transition to READY even though handle is gone
-        eventBus.publish(new SeekToStartEvent());
+        eventBus.publish(new SeekEvent(0));
         Thread.sleep(100);
 
         // Should be in READY state even though stopPlayback() couldn't stop an invalid handle

@@ -11,7 +11,6 @@ import core.events.PlayLast200MillisThenMoveEvent;
 import core.events.PlayPauseEvent;
 import core.events.SeekByAmountEvent;
 import core.events.SeekEvent;
-import core.events.SeekToStartEvent;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
@@ -230,33 +229,6 @@ public class AudioSessionManager implements AudioSessionDataSource {
             // In READY state, we can't actually seek since there's no playback.
             // The seek position will need to be handled when playback starts.
             log.debug("Cannot seek in READY state - no active playback");
-        }
-    }
-
-    @Subscribe
-    public void onAudioStopRequested(@NonNull SeekToStartEvent event) {
-        var state = stateManager.getCurrentState();
-
-        if (state == AudioSessionStateMachine.State.PLAYING
-                || state == AudioSessionStateMachine.State.PAUSED) {
-            // Stop playback and reset position to beginning
-            stopPlayback();
-
-            // Ensure we're in READY state even if stopPlayback didn't transition
-            // (e.g., if playback handle was already invalid)
-            var currentState = stateManager.getCurrentState();
-            if (currentState == AudioSessionStateMachine.State.PLAYING
-                    || currentState == AudioSessionStateMachine.State.PAUSED) {
-                stateManager.transitionToReady();
-                eventBus.publish(
-                        new AppStateChangedEvent(
-                                currentState, AudioSessionStateMachine.State.READY, "stopped"));
-                log.debug("Forced transition to READY after SeekToStart with invalid handle");
-            }
-            log.debug("Stopped playback and reset to beginning");
-        } else if (state == AudioSessionStateMachine.State.READY) {
-            // Already stopped
-            log.debug("Already at beginning (READY state)");
         }
     }
 

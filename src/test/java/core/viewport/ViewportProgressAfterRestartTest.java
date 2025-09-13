@@ -48,7 +48,7 @@ class ViewportProgressAfterRestartTest {
         // Simulate playback with progress callbacks
         viewportManager.onPlaybackUpdate(1.0); // 1 second position
 
-        // Now stop playback (like what happens with SeekToStartEvent)
+        // Now stop playback (like what happens with seek to start)
         viewportManager.onPlaybackUpdate(0.0); // Reset to position 0
 
         // Verify viewport position was reset to 0
