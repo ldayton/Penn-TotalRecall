@@ -30,6 +30,6 @@ public class Module extends AbstractModule {
         bind(WaveformSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
 
         // Wordpool management (listens for WordpoolFileSelectedEvent)
-        bind(WordpoolManager.class).in(Singleton.class);
+        bind(WordpoolManager.class).asEagerSingleton();
     }
 }
