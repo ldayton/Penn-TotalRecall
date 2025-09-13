@@ -45,7 +45,18 @@ class FmodListenerManager {
 
     // Current monitoring state
     private volatile FmodPlaybackHandle currentHandle;
-    private volatile long totalFrames;
+    // Total duration in seconds for the monitored segment
+    private volatile double totalSeconds;
+    // Source sample rate (Hz) of the current channel
+    private volatile int sourceRate;
+    // Absolute offset in seconds at segment start (startFrame / sourceRate)
+    private volatile double offsetSeconds;
+    // FMOD software mix rate (samples per second)
+    private final int mixRate;
+    // DSP clock baseline at start of monitoring (samples at mixRate)
+    private volatile long dspStartSamples;
+    // Last computed hearing-time seconds
+    private volatile double lastHearingSeconds;
 
     // Listener management
     private final List<PlaybackListener> listeners = new CopyOnWriteArrayList<>();
@@ -69,6 +80,8 @@ class FmodListenerManager {
     FmodListenerManager(@NonNull MemorySegment system, long progressIntervalMs) {
         this.system = system;
         this.progressIntervalMs = progressIntervalMs;
+        // Query FMOD software format once for mix rate
+        this.mixRate = FmodSystemUtil.getSoftwareMixRate(system);
     }
 
     /**
@@ -114,7 +127,22 @@ class FmodListenerManager {
 
         // Store the new handle and duration
         this.currentHandle = handle;
-        this.totalFrames = totalFrames;
+        // Convert to seconds using source sample rate
+        this.sourceRate = FmodSystemUtil.getSourceSampleRate(system, handle);
+        this.totalSeconds = sourceRate > 0 ? (double) totalFrames / sourceRate : 0.0;
+        this.offsetSeconds = sourceRate > 0 ? (double) handle.getStartFrame() / sourceRate : 0.0;
+        // Capture DSP start clock for relative timing
+        try (Arena arena = Arena.ofConfined()) {
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            int result =
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
+            this.dspStartSamples =
+                    (result == FmodConstants.FMOD_OK)
+                            ? dspClockRef.get(ValueLayout.JAVA_LONG, 0)
+                            : 0L;
+        }
 
         // Start progress timer if we have listeners
         if (!listeners.isEmpty()) {
@@ -139,7 +167,7 @@ class FmodListenerManager {
     /** Stop monitoring the current playback. Progress callbacks will cease after this call. */
     void stopMonitoring() {
         currentHandle = null;
-        totalFrames = 0;
+        totalSeconds = 0.0;
 
         ScheduledExecutorService timer = progressTimer;
         if (timer != null) {
@@ -214,10 +242,11 @@ class FmodListenerManager {
      * @param positionFrames Current position in frames
      * @param totalFrames Total duration in frames
      */
-    void notifyProgress(@NonNull PlaybackHandle handle, long positionFrames, long totalFrames) {
+    void notifyProgress(
+            @NonNull PlaybackHandle handle, double hearingSeconds, double totalSeconds) {
         for (PlaybackListener listener : listeners) {
             try {
-                listener.onProgress(handle, positionFrames, totalFrames);
+                listener.onProgress(handle, hearingSeconds, totalSeconds);
             } catch (Exception e) {
                 // Check if this is a test exception by class name (avoids dependency on test code)
                 if (e.getClass().getName().endsWith("TestListenerException")) {
@@ -284,16 +313,21 @@ class FmodListenerManager {
                 // DSP clock gives us the sample-accurate position that's actually playing
                 // No latency compensation needed - DSP clock already accounts for buffering
                 long dspClock = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
-
-                // Convert DSP clock to frame position
-                // DSP clock is in samples at the output rate
-                long hearingPosition = dspClock;
-
-                notifyProgress(handle, hearingPosition, totalFrames);
+                long delta = Math.max(0, dspClock - dspStartSamples);
+                double elapsed = (double) delta / Math.max(1, mixRate);
+                double hearingSecondsAbs = offsetSeconds + elapsed;
+                // Clamp to segment bounds before notifying
+                if (totalSeconds > 0.0) {
+                    double min = offsetSeconds;
+                    double max = offsetSeconds + totalSeconds;
+                    hearingSecondsAbs = Math.max(min, Math.min(max, hearingSecondsAbs));
+                }
+                this.lastHearingSeconds = hearingSecondsAbs;
+                notifyProgress(handle, hearingSecondsAbs, totalSeconds);
 
                 // Check if we've reached the end (for range playback)
                 if (handle.getEndFrame() != Long.MAX_VALUE
-                        && hearingPosition >= handle.getEndFrame()) {
+                        && (this.lastHearingSeconds - offsetSeconds) >= totalSeconds) {
                     handlePlaybackStopped();
                 }
             } else if (result == FmodConstants.FMOD_ERR_INVALID_HANDLE) {
@@ -340,5 +374,56 @@ class FmodListenerManager {
      */
     boolean isShutdown() {
         return isShutdown.get();
+    }
+
+    /** Latest hearing-time seconds as observed by the monitor. */
+    double getCurrentHearingSeconds() {
+        double val = this.computeCurrentHearingSeconds();
+        if (totalSeconds > 0.0) {
+            double min = offsetSeconds;
+            double max = offsetSeconds + totalSeconds;
+            return Math.max(min, Math.min(max, val));
+        }
+        return val;
+    }
+
+    private double computeCurrentHearingSeconds() {
+        // Best effort: if timer thread hasn't run yet, query directly
+        FmodPlaybackHandle handle = currentHandle;
+        if (handle == null) return 0.0;
+        try (Arena arena = Arena.ofConfined()) {
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            int result =
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
+            if (result == FmodConstants.FMOD_OK) {
+                long dspClock = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
+                long delta = Math.max(0, dspClock - dspStartSamples);
+                return offsetSeconds + ((double) delta / Math.max(1, mixRate));
+            }
+        } catch (Exception ignored) {
+        }
+        return 0.0;
+    }
+
+    /** Update baseline after a seek to a new absolute frame position. */
+    void onSeek(@NonNull FmodPlaybackHandle handle, long newFrame) {
+        if (currentHandle != handle) {
+            return;
+        }
+        long clamped = Math.max(handle.getStartFrame(), Math.min(newFrame, handle.getEndFrame()));
+        this.offsetSeconds = sourceRate > 0 ? (double) clamped / sourceRate : 0.0;
+        try (Arena arena = Arena.ofConfined()) {
+            var dspClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            var parentClockRef = arena.allocate(ValueLayout.JAVA_LONG);
+            int result =
+                    FmodCore_1.FMOD_Channel_GetDSPClock(
+                            handle.getChannel(), dspClockRef, parentClockRef);
+            if (result == FmodConstants.FMOD_OK) {
+                this.dspStartSamples = dspClockRef.get(ValueLayout.JAVA_LONG, 0);
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

@@ -181,8 +181,8 @@ public class FmodAudioEngine implements AudioEngine {
             }
 
             currentPlayback = playbackHandle;
-            long duration = endFrame - startFrame;
-            listenerManager.startMonitoring(playbackHandle, duration);
+            long durationFrames = endFrame - startFrame;
+            listenerManager.startMonitoring(playbackHandle, durationFrames);
             listenerManager.notifyStateChanged(
                     playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
             return playbackHandle;
@@ -302,6 +302,8 @@ public class FmodAudioEngine implements AudioEngine {
                         (result == FmodConstants.FMOD_OK
                                 && pausedRef.get(ValueLayout.JAVA_INT, 0) != 0);
                 playbackManager.seek(frame);
+                // Update hearing-time baseline to reflect new absolute position
+                listenerManager.onSeek(fmodPlayback, frame);
                 if (!playbackManager.hasActivePlayback()) {
                     fmodPlayback.markInactive();
                     currentPlayback = null;
@@ -364,21 +366,26 @@ public class FmodAudioEngine implements AudioEngine {
     }
 
     @Override
-    public long getPosition(@NonNull PlaybackHandle playback) {
+    public double getHearingSeconds(@NonNull PlaybackHandle playback) {
         checkOperational();
         if (!(playback instanceof FmodPlaybackHandle)) {
             throw new IllegalArgumentException("Invalid playback handle type");
         }
         FmodPlaybackHandle fmodPlayback = (FmodPlaybackHandle) playback;
         if (!fmodPlayback.isActive()) {
-            return 0;
+            return 0.0;
         }
-        long position = playbackManager.getPosition();
-        if (position == 0 && !playbackManager.hasActivePlayback()) {
-            fmodPlayback.markInactive();
-            currentPlayback = null;
+        // Return latest hearing-time from listener manager, clamped to audio length
+        double sec = listenerManager.getCurrentHearingSeconds();
+        try {
+            AudioMetadata md = getMetadata(fmodPlayback.getAudioHandle());
+            double lengthSec = md.frameCount() / (double) md.sampleRate();
+            if (lengthSec > 0) {
+                sec = Math.max(0.0, Math.min(lengthSec, sec));
+            }
+        } catch (Exception ignored) {
         }
-        return position;
+        return sec;
     }
 
     @Override

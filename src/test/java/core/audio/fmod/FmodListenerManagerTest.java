@@ -170,7 +170,7 @@ class FmodListenerManagerTest {
         assertTrue(received, "Should receive at least 5 progress updates");
 
         // Verify progress is increasing
-        List<Long> positions = listener.getProgressPositions();
+        List<Double> positions = listener.getProgressPositions();
         for (int i = 1; i < positions.size(); i++) {
             assertTrue(
                     positions.get(i) >= positions.get(i - 1),
@@ -419,7 +419,7 @@ class FmodListenerManagerTest {
                             try {
                                 barrier.await();
                                 for (int i = 0; i < 100; i++) {
-                                    listenerManager.notifyProgress(playbackHandle, i * 100, 10000);
+                                    listenerManager.notifyProgress(playbackHandle, i * 0.1, 10.0);
                                     Thread.sleep(5);
                                 }
                             } catch (Exception e) {
@@ -450,7 +450,8 @@ class FmodListenerManagerTest {
         PlaybackListener badListener =
                 new PlaybackListener() {
                     @Override
-                    public void onProgress(PlaybackHandle handle, long position, long total) {
+                    public void onProgress(
+                            PlaybackHandle handle, double positionSeconds, double totalSeconds) {
                         throw new TestListenerException("Progress error");
                     }
 
@@ -480,7 +481,7 @@ class FmodListenerManagerTest {
         // Send notifications - bad listener should not prevent good listener from receiving
         listenerManager.notifyStateChanged(
                 playbackHandle, PlaybackState.PLAYING, PlaybackState.STOPPED);
-        listenerManager.notifyProgress(playbackHandle, 1000, 10000);
+        listenerManager.notifyProgress(playbackHandle, 1.0, 10.0);
         listenerManager.notifyPlaybackComplete(playbackHandle);
 
         // Good listener should still receive all notifications
@@ -612,13 +613,15 @@ class FmodListenerManagerTest {
         // Collect several progress updates
         listener.waitForProgressUpdates(10, 2, TimeUnit.SECONDS);
 
-        List<Long> positions = listener.getProgressPositions();
+        List<Double> positions = listener.getProgressPositions();
         assertTrue(positions.size() >= 10, "Should have enough samples");
 
         // Positions should be reasonable (not negative, not huge)
-        for (Long pos : positions) {
+        int sr = loadingManager.getCurrentMetadata().map(AudioMetadata::sampleRate).orElse(44100);
+        double totalSec = getAudioFrameCount(sound) / (double) sr;
+        for (Double pos : positions) {
             assertTrue(pos >= 0, "Position should not be negative");
-            assertTrue(pos <= getAudioFrameCount(sound), "Position should not exceed total frames");
+            assertTrue(pos <= totalSec + 1e-6, "Position should not exceed total seconds");
         }
 
         listenerManager.stopMonitoring();
@@ -637,7 +640,7 @@ class FmodListenerManagerTest {
     private static class TestListener implements PlaybackListener {
         final String name;
         final List<PlaybackState> stateChanges = Collections.synchronizedList(new ArrayList<>());
-        final List<Long> progressPositions = Collections.synchronizedList(new ArrayList<>());
+        final List<Double> progressPositions = Collections.synchronizedList(new ArrayList<>());
         final AtomicInteger progressCount = new AtomicInteger();
         final AtomicInteger completionCount = new AtomicInteger();
         final AtomicReference<CountDownLatch> progressLatch = new AtomicReference<>();
@@ -648,9 +651,9 @@ class FmodListenerManagerTest {
         }
 
         @Override
-        public void onProgress(PlaybackHandle handle, long positionFrames, long totalFrames) {
+        public void onProgress(PlaybackHandle handle, double hearingSeconds, double totalSeconds) {
             progressCount.incrementAndGet();
-            progressPositions.add(positionFrames);
+            progressPositions.add(hearingSeconds);
             CountDownLatch latch = progressLatch.get();
             if (latch != null) {
                 latch.countDown();
@@ -685,7 +688,7 @@ class FmodListenerManagerTest {
             return latch.await(timeout, unit);
         }
 
-        List<Long> getProgressPositions() {
+        List<Double> getProgressPositions() {
             return new ArrayList<>(progressPositions);
         }
 

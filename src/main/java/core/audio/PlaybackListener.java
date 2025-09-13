@@ -6,15 +6,15 @@ import lombok.NonNull;
 public interface PlaybackListener {
 
     /**
-     * Called periodically during playback with progress updates. Frequency is
-     * implementation-defined but typically every 100-250ms.
+     * Called periodically during playback with progress updates, using hearing-time seconds derived
+     * from the DSP clock (what the listener actually hears).
      *
      * @param playback The playback handle
-     * @param positionFrames Current position in frames
-     * @param totalFrames Total duration in frames
+     * @param hearingSeconds Current position in seconds (hearing-time)
+     * @param totalSeconds Total duration in seconds for this playback (hearing-time)
      */
     default void onProgress(
-            @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {}
+            @NonNull PlaybackHandle playback, double hearingSeconds, double totalSeconds) {}
 
     /**
      * Called when playback state changes.

@@ -74,7 +74,7 @@ class SeekToStartEventTest {
                 "Should be in PLAYING state");
 
         // Simulate position advancing
-        when(audioEngine.getPosition(playbackHandle)).thenReturn(22050L); // 0.5 seconds
+        when(audioEngine.getHearingSeconds(playbackHandle)).thenReturn(0.5); // 0.5 seconds
 
         // Verify position has moved forward
         assertTrue(

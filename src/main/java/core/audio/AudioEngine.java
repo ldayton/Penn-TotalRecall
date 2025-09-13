@@ -29,7 +29,8 @@ public interface AudioEngine extends AutoCloseable {
 
     PlaybackState getState(@NonNull PlaybackHandle playback);
 
-    long getPosition(@NonNull PlaybackHandle playback);
+    /** Get current hearing-time position in seconds for the given playback. */
+    double getHearingSeconds(@NonNull PlaybackHandle playback);
 
     boolean isPlaying(@NonNull PlaybackHandle playback);
 

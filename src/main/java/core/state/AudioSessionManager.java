@@ -127,7 +127,7 @@ public class AudioSessionManager implements WaveformSessionDataSource {
                             currentPlaybackHandle = Optional.of(playback);
                             var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPlaying();
-                            var position = audioEngine.get().getPosition(playback);
+                            var position = audioEngine.get().getHearingSeconds(playback);
                             eventBus.publish(
                                     new AppStateChangedEvent(
                                             prevState,
@@ -143,7 +143,7 @@ public class AudioSessionManager implements WaveformSessionDataSource {
                             audioEngine.get().pause(playback);
                             var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPaused();
-                            var position = audioEngine.get().getPosition(playback);
+                            var position = audioEngine.get().getHearingSeconds(playback);
                             eventBus.publish(
                                     new AppStateChangedEvent(
                                             prevState,
@@ -159,7 +159,7 @@ public class AudioSessionManager implements WaveformSessionDataSource {
                             audioEngine.get().resume(playback);
                             var prevState = stateManager.getCurrentState();
                             stateManager.transitionToPlaying();
-                            var position = audioEngine.get().getPosition(playback);
+                            var position = audioEngine.get().getHearingSeconds(playback);
                             eventBus.publish(
                                     new AppStateChangedEvent(
                                             prevState,
@@ -189,7 +189,10 @@ public class AudioSessionManager implements WaveformSessionDataSource {
         // Get the actual current position from FMOD instead of using cached value
         long actualPosition = 0;
         if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
-            actualPosition = audioEngine.get().getPosition(currentPlaybackHandle.get());
+            // Convert hearing seconds to frames for seek-by-amount baseline
+            double hearingSeconds =
+                    audioEngine.get().getHearingSeconds(currentPlaybackHandle.get());
+            actualPosition = (long) (hearingSeconds * sampleRate);
         } else {
             // No active playback, use position 0
             actualPosition = 0;
@@ -255,7 +258,9 @@ public class AudioSessionManager implements WaveformSessionDataSource {
             // Get current position
             long currentFrame = 0;
             if (currentPlaybackHandle.isPresent()) {
-                currentFrame = audioEngine.get().getPosition(currentPlaybackHandle.get());
+                double hearingSeconds =
+                        audioEngine.get().getHearingSeconds(currentPlaybackHandle.get());
+                currentFrame = (long) (hearingSeconds * sampleRate);
             }
 
             // Calculate 200ms in frames
@@ -284,7 +289,9 @@ public class AudioSessionManager implements WaveformSessionDataSource {
                 && currentAudioHandle.isPresent()) {
 
             // Get current position
-            long currentFrame = audioEngine.get().getPosition(currentPlaybackHandle.get());
+            double hearingSeconds =
+                    audioEngine.get().getHearingSeconds(currentPlaybackHandle.get());
+            long currentFrame = (long) (hearingSeconds * sampleRate);
 
             // Calculate shift (200ms)
             int currentSampleRate = this.sampleRate != 0 ? this.sampleRate : 44100;
@@ -325,8 +332,8 @@ public class AudioSessionManager implements WaveformSessionDataSource {
         }
         // Get actual position from FMOD
         if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
-            long positionFrames = audioEngine.get().getPosition(currentPlaybackHandle.get());
-            return Optional.of((double) positionFrames / sampleRate);
+            double posSec = audioEngine.get().getHearingSeconds(currentPlaybackHandle.get());
+            return Optional.of(posSec);
         }
         // No active playback, position is 0
         return Optional.of(0.0);
@@ -383,8 +390,9 @@ public class AudioSessionManager implements WaveformSessionDataSource {
         }
         // Get actual position from FMOD if we have an active playback
         if (currentPlaybackHandle.isPresent() && audioEngine.isPresent()) {
-            long actualPosition = audioEngine.get().getPosition(currentPlaybackHandle.get());
-            return Optional.of(actualPosition);
+            double posSec = audioEngine.get().getHearingSeconds(currentPlaybackHandle.get());
+            long frames = (long) (posSec * sampleRate);
+            return Optional.of(frames);
         }
         // No active playback, position is 0
         return Optional.of(0L);
