@@ -1,15 +1,18 @@
-package core.events;
+package core.actions.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.headless.HeadlessTestFixture;
+import app.swing.SwingTestFixture;
 import core.dispatch.EventDispatchBus;
+import core.events.AudioFileLoadRequestedEvent;
+import core.events.PlayLast200MillisEvent;
+import core.events.PlayPauseEvent;
 import core.state.AudioSessionStateMachine;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 
-/** Test PlayLast200MillisEvent behavior using real components. */
-class PlayLast200MillisEventTest extends HeadlessTestFixture {
+/** Tests ReplayLast200MillisAction behavior using real components. */
+class ReplayLast200MillisActionStatesTest extends SwingTestFixture {
 
     @Test
     void replayLast200msInPausedState() throws Exception {

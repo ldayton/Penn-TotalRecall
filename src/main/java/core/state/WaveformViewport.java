@@ -124,6 +124,12 @@ public class WaveformViewport {
             return;
         }
 
+        // Only auto-follow while actually playing. When paused/ready, viewport remains stable
+        // unless explicitly navigated (e.g., via seek events).
+        if (!isPlaying) {
+            return;
+        }
+
         double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
         double halfWidth = widthSeconds / 2.0;
 
@@ -134,6 +140,25 @@ public class WaveformViewport {
         // Allow negative start to show waveform starting from center
         // The waveform renderer should handle negative time ranges appropriately
         startSeconds = targetStart;
+    }
+
+    /**
+     * Center the viewport on an explicit seek position, even when not playing. This keeps
+     * navigation responsive in READY/PAUSED while preserving fire-and-forget replays that should
+     * not scroll the viewport.
+     */
+    @Subscribe
+    public void onSeekRequested(@NonNull SeekEvent event) {
+        var srOpt = sessionDataSource.getSampleRate();
+        if (srOpt.isEmpty() || viewportWidthPixels <= 0 || pixelsPerSecond <= 0) {
+            return;
+        }
+        int sr = srOpt.get();
+        double posSeconds = Math.max(0.0, event.frame() / (double) sr);
+
+        double widthSeconds = viewportWidthPixels / (double) pixelsPerSecond;
+        double halfWidth = widthSeconds / 2.0;
+        startSeconds = posSeconds - halfWidth;
     }
 
     /** Get the current visible time range. */
