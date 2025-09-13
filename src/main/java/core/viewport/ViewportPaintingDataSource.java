@@ -1,10 +1,13 @@
-package core.waveform;
+package core.viewport;
+
+import core.waveform.TimeRange;
+import core.waveform.Waveform;
 
 /**
- * Data source for waveform painting operations. Provides temporal information needed by the painter
- * to render waveforms.
+ * Data source for viewport painting operations. Provides temporal information needed by the painter
+ * to render the viewport.
  */
-public interface WaveformPaintingDataSource {
+public interface ViewportPaintingDataSource {
 
     /**
      * Get the current time range to display.

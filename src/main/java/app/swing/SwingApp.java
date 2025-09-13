@@ -72,14 +72,15 @@ public class SwingApp {
         // WaveformMouseSetup disabled during refactoring
         // globalInjector.getInstance(ui.waveform.WaveformMouseSetup.class);
 
-        globalInjector.getInstance(state.WaveformManager.class);
-        var paintDataSource = globalInjector.getInstance(state.WaveformPaintDataSource.class);
-        var painter = globalInjector.getInstance(ui.waveform.WaveformPainter.class);
+        globalInjector.getInstance(core.waveform.WaveformManager.class);
+        var paintDataSource =
+                globalInjector.getInstance(core.viewport.ViewportPaintingDataSource.class);
+        var painter = globalInjector.getInstance(ui.viewport.ViewportPainter.class);
         painter.setDataSource(paintDataSource);
         painter.start(); // Start the repaint timer
 
         // Initialize annotation manager to handle annotation events
-        globalInjector.getInstance(state.AnnotationManager.class);
+        globalInjector.getInstance(ui.annotations.AnnotationManager.class);
 
         // Initialize browser launcher to handle URL open requests
         globalInjector.getInstance(ui.BrowserLauncher.class);
@@ -187,7 +188,7 @@ public class SwingApp {
 
         // Wait for UI to be fully ready before publishing UIReadyEvent
         // This ensures canvas is sized and initial paint has occurred
-        var canvas = globalInjector.getInstance(ui.layout.WaveformCanvas.class);
+        var canvas = globalInjector.getInstance(ui.viewport.ViewportCanvas.class);
         var eventBus = globalInjector.getInstance(EventDispatchBus.class);
 
         Timer readyTimer =

@@ -1,6 +1,7 @@
 package ui.layout;
 
 import core.actions.impl.ExitAction;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
@@ -12,7 +13,6 @@ import core.events.ExitEvent;
 import core.events.FocusEvent;
 import core.events.PreferencesEvent;
 import core.preferences.PreferencesManager;
-import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.awt.KeyEventPostProcessor;

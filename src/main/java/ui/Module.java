@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import ui.adapters.SwingEventDispatcher;
 import ui.adapters.SwingFileSelectionService;
 import ui.annotations.AnnotationDisplay;
+import ui.annotations.AnnotationManager;
 import ui.annotations.AnnotationTable;
 import ui.audiofiles.AudioFileDisplay;
 import ui.audiofiles.AudioFileDisplayInterface;
@@ -15,12 +16,13 @@ import ui.layout.ContentSplitPane;
 import ui.layout.ControlPanel;
 import ui.layout.MainFrame;
 import ui.layout.MainWindowAccess;
-import ui.layout.WaveformCanvas;
 import ui.layout.WindowLayoutPersistence;
 import ui.preferences.PreferencesFrame;
-import ui.waveform.WaveformPainter;
+import ui.viewport.ViewportCanvas;
+import ui.viewport.ViewportPainter;
 import ui.wordpool.WordpoolDisplay;
 import ui.wordpool.WordpoolList;
+import ui.wordpool.WordpoolManager;
 import ui.wordpool.WordpoolTextField;
 
 /**
@@ -46,7 +48,7 @@ public class Module extends AbstractModule {
         bind(ContentSplitPane.class).in(Singleton.class);
         bind(ControlPanel.class).in(Singleton.class);
         bind(DoneButton.class).in(Singleton.class);
-        bind(WaveformCanvas.class).in(Singleton.class);
+        bind(ViewportCanvas.class).in(Singleton.class);
 
         // Window management and persistence
         bind(WindowLayoutPersistence.class).in(Singleton.class);
@@ -56,8 +58,8 @@ public class Module extends AbstractModule {
         bind(PreferencesFrame.class).in(Singleton.class);
         bind(ShortcutFrame.class).in(Singleton.class);
 
-        // Waveform
-        bind(WaveformPainter.class).in(Singleton.class);
+        // Viewport painter
+        bind(ViewportPainter.class).in(Singleton.class);
 
         // Audio file display
         bind(AudioFileDisplay.class).in(Singleton.class);
@@ -67,11 +69,13 @@ public class Module extends AbstractModule {
         // Annotation display
         bind(AnnotationDisplay.class).in(Singleton.class);
         bind(AnnotationTable.class).in(Singleton.class);
+        bind(AnnotationManager.class).in(Singleton.class);
 
         // Wordpool display
         bind(WordpoolDisplay.class).in(Singleton.class);
         bind(WordpoolList.class).in(Singleton.class);
         bind(WordpoolTextField.class).in(Singleton.class);
+        bind(WordpoolManager.class).asEagerSingleton();
 
         // Utility services
         bind(DialogService.class).in(Singleton.class);

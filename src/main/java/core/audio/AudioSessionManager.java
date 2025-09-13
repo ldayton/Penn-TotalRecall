@@ -1,9 +1,6 @@
-package core.state;
+package core.audio;
 
 import com.google.inject.Provider;
-import core.audio.AudioEngine;
-import core.audio.AudioHandle;
-import core.audio.PlaybackHandle;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
@@ -28,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton
 @Slf4j
-public class AudioSessionManager implements WaveformSessionDataSource {
+public class AudioSessionManager implements AudioSessionDataSource {
 
     private final AudioSessionStateMachine stateManager;
     private final Provider<AudioEngine> audioEngineProvider;

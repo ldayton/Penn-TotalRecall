@@ -18,11 +18,8 @@ public class SwingModule extends AbstractModule {
         // Bind Swing event dispatcher
         bind(EventDispatcher.class).to(SwingEventDispatcher.class).asEagerSingleton();
 
-        // Install shared core module
+        // Install shared core module (includes core.state, core.waveform, core.viewport)
         install(new CoreModule());
-
-        // Install state module for session management bindings
-        install(new state.Module());
 
         // Install ui module for user interface bindings
         // Note: ui.Module now installs ui.actions.Module automatically

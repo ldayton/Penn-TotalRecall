@@ -3,10 +3,10 @@ package core.events;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.headless.HeadlessTestFixture;
+import core.audio.AudioSessionManager;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
-import core.state.AudioSessionManager;
-import core.state.AudioSessionStateMachine;
-import core.state.ViewportPositionManager;
+import core.viewport.ViewportSessionManager;
 import java.io.File;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -23,11 +23,11 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
         EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
         AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
         AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
-        ViewportPositionManager viewport = getInstance(ViewportPositionManager.class);
+        ViewportSessionManager viewport = getInstance(ViewportSessionManager.class);
 
         // Set viewport dimensions
-        viewport.setWidth(1000);
-        viewport.setZoom(200); // 200 pixels per second = 5 seconds visible
+        viewport.onCanvasResize(1000, 600);
+        viewport.onUserZoom(200); // 200 pixels per second = 5 seconds visible
 
         // Load freerecall.wav
         File testFile = new File("src/test/resources/audio/freerecall.wav");
@@ -57,7 +57,7 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
         assertEquals(AudioSessionStateMachine.State.READY, stateMachine.getCurrentState());
 
         // Verify viewport is centered at 0 after seek to start
-        double viewportAfterSeek = viewport.getRawStartSeconds();
+        double viewportAfterSeek = viewport.getContext().getViewportStartTime();
         assertEquals(
                 -2.5,
                 viewportAfterSeek,
@@ -84,7 +84,7 @@ class SeekToStartViewportMovementTest extends HeadlessTestFixture {
                         + actualPosition);
 
         // Get viewport position - it should be following the actual playback
-        double viewportPosition = viewport.getRawStartSeconds();
+        double viewportPosition = viewport.getContext().getViewportStartTime();
 
         // The viewport should have moved from its initial -2.5 position
         // It should be centered on the actual playback position

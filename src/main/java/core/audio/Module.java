@@ -20,5 +20,12 @@ public class Module extends AbstractModule {
         // Bind sample reader interface to FMOD implementation
         // Note: Not singleton because each Waveform needs its own reader instance
         bind(SampleReader.class).to(FmodSampleReader.class);
+
+        // Core session management
+        bind(AudioSessionManager.class).in(Singleton.class);
+        bind(AudioSessionStateMachine.class).in(Singleton.class);
+
+        // Bind the interface to the implementation for session data
+        bind(AudioSessionDataSource.class).to(AudioSessionManager.class).in(Singleton.class);
     }
 }

@@ -1,11 +1,11 @@
-package ui.waveform;
+package ui.viewport;
 
-import core.state.AudioSessionStateMachine;
+import core.audio.AudioSessionStateMachine;
+import core.viewport.ViewportPaintingDataSource;
 import core.waveform.ScreenDimension;
 import core.waveform.TimeRange;
 import core.waveform.ViewportContext;
 import core.waveform.Waveform;
-import core.waveform.WaveformPaintingDataSource;
 import core.waveform.WaveformViewport;
 import jakarta.inject.Inject;
 import java.awt.Color;
@@ -21,17 +21,17 @@ import lombok.NonNull;
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform
  * image, playback cursor, and status messages.
  */
-public class WaveformPainter {
+public class ViewportPainter {
 
     private static final int FPS = 60;
     private final Timer repaintTimer;
     private final AudioSessionStateMachine stateMachine;
     private volatile WaveformViewport viewport;
-    private volatile WaveformPaintingDataSource dataSource;
+    private volatile ViewportPaintingDataSource dataSource;
 
     /** Create a painter with dependency injection. */
     @Inject
-    public WaveformPainter(AudioSessionStateMachine stateMachine) {
+    public ViewportPainter(AudioSessionStateMachine stateMachine) {
         this.stateMachine = stateMachine;
         this.viewport = null;
         this.dataSource = null;
@@ -40,20 +40,6 @@ public class WaveformPainter {
                         1000 / FPS,
                         _ -> {
                             if (viewport != null && viewport.isVisible()) {
-                                // Prepare data for next frame if we have a WaveformPaintDataSource
-                                if (dataSource != null
-                                        && dataSource instanceof state.WaveformPaintDataSource) {
-                                    state.WaveformPaintDataSource paintDataSource =
-                                            (state.WaveformPaintDataSource) dataSource;
-                                    // Update viewport width in case canvas was resized
-                                    paintDataSource.updateViewportWidth(
-                                            viewport.getViewportBounds().width());
-
-                                    // Only prepare frame if audio is actually loaded
-                                    if (stateMachine.isAudioLoaded()) {
-                                        paintDataSource.prepareFrame();
-                                    }
-                                }
                                 viewport.repaint();
                             }
                         });
@@ -65,7 +51,7 @@ public class WaveformPainter {
     }
 
     /** Set the data source for painting information. */
-    public void setDataSource(WaveformPaintingDataSource dataSource) {
+    public void setDataSource(ViewportPaintingDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -205,21 +191,17 @@ public class WaveformPainter {
             @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull Image waveformImage) {
         // Check if we need to offset the waveform for negative viewport start (when playback is at
         // 0)
-        if (dataSource != null && dataSource instanceof state.WaveformPaintDataSource) {
-            state.WaveformPaintDataSource paintDataSource =
-                    (state.WaveformPaintDataSource) dataSource;
-
+        if (dataSource != null) {
             // Get playback position - if it's near 0, we need to offset the waveform
-            double playbackPos = paintDataSource.getPlaybackPositionSeconds();
-            double halfViewportSeconds =
-                    bounds.width() / (2.0 * paintDataSource.getPixelsPerSecond());
+            double playbackPos = dataSource.getPlaybackPositionSeconds();
+            double halfViewportSeconds = bounds.width() / (2.0 * dataSource.getPixelsPerSecond());
 
             if (playbackPos < halfViewportSeconds) {
                 // We're at the beginning - offset waveform so playhead appears centered
                 int offsetPixels =
                         (int)
                                 ((halfViewportSeconds - playbackPos)
-                                        * paintDataSource.getPixelsPerSecond());
+                                        * dataSource.getPixelsPerSecond());
                 g.drawImage(
                         waveformImage,
                         bounds.x() + offsetPixels,

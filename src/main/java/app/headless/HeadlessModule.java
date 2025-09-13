@@ -21,16 +21,13 @@ public class HeadlessModule extends AbstractModule {
         bind(FileSelectionService.class)
                 .to(app.headless.adapters.HeadlessFileSelectionService.class)
                 .asEagerSingleton();
-        // WaveformSessionDataSource will be provided by state.Module
+        // AudioSessionDataSource will be provided by core.audio.Module
 
-        // Install shared core module
+        // Install shared core module (includes core.audio, core.waveform, core.viewport)
         install(new CoreModule());
 
         // Install core actions module (no UI dependencies)
         install(new core.actions.Module());
-
-        // Install state module for AudioSessionManager
-        install(new state.Module());
 
         // Note: In headless mode, we don't install:
         // - waveform.Module (has UI dependencies)

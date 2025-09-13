@@ -61,6 +61,34 @@ public class EventDispatchBus {
     }
 
     /**
+     * Unsubscribe an object from all events.
+     *
+     * @param subscriber The object to unsubscribe
+     */
+    public void unsubscribe(Object subscriber) {
+        if (subscriber == null) {
+            logger.warn("Attempted to unsubscribe null subscriber");
+            return;
+        }
+
+        int removedCount = 0;
+        for (List<Object> eventSubscribers : subscribers.values()) {
+            if (eventSubscribers.remove(subscriber)) {
+                removedCount++;
+            }
+        }
+
+        if (removedCount > 0) {
+            logger.debug(
+                    "Unsubscribed {} from {} event type(s)",
+                    subscriber.getClass().getSimpleName(),
+                    removedCount);
+        } else {
+            logger.trace("No subscriptions found for {}", subscriber.getClass().getSimpleName());
+        }
+    }
+
+    /**
      * Publish an event to all subscribers.
      *
      * <p>Events can be published from any thread. All subscribers will be executed on the Event

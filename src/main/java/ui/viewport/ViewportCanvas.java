@@ -1,4 +1,4 @@
-package ui.layout;
+package ui.viewport;
 
 import core.waveform.ScreenDimension;
 import core.waveform.WaveformViewport;
@@ -11,24 +11,22 @@ import java.awt.Graphics2D;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
-import ui.waveform.WaveformPainter;
 
 /**
- * A clean canvas for waveform rendering. Unlike WaveformDisplay, this component has no internal
- * state about audio timing or position. It simply provides a surface for painting and reports its
- * dimensions.
+ * A clean canvas for viewport rendering. This component has no internal state about audio timing or
+ * position. It simply provides a surface for painting and reports its dimensions.
  */
 @Singleton
 @Slf4j
-public class WaveformCanvas extends JComponent implements WaveformViewport {
+public class ViewportCanvas extends JComponent implements WaveformViewport {
 
     private static final Color BACKGROUND_COLOR = UIManager.getColor("Panel.background");
 
-    private final WaveformPainter painter;
+    private final ViewportPainter painter;
     private Graphics2D currentGraphics; // Only valid during paintComponent
 
     @Inject
-    public WaveformCanvas(WaveformPainter painter) {
+    public ViewportCanvas(ViewportPainter painter) {
         this.painter = painter;
         painter.setViewport(this); // Register ourselves as the viewport
         setOpaque(true);

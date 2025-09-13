@@ -1,12 +1,12 @@
 package core.actions.impl;
 
 import core.actions.Action;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.CompleteAnnotationEvent;
 import core.events.FocusEvent;
-import core.state.AudioSessionStateMachine;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;

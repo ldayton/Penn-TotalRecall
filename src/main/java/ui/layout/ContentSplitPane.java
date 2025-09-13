@@ -39,7 +39,7 @@ public class ContentSplitPane extends JSplitPane {
     @Inject
     public ContentSplitPane(
             ControlPanel controlPanel,
-            WaveformCanvas waveformCanvas,
+            ui.viewport.ViewportCanvas waveformCanvas,
             ActionManager actionsManager,
             SwingActionRegistry swingActions,
             PlayPauseAction playPauseAction,

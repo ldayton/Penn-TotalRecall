@@ -1,15 +1,14 @@
-package state;
+package core.waveform;
 
 import com.google.inject.Provider;
 import core.audio.AudioEngine;
 import core.audio.AudioHandle;
+import core.audio.AudioSessionDataSource;
+import core.audio.AudioSessionStateMachine;
 import core.audio.SampleReader;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
-import core.state.AudioSessionStateMachine;
-import core.state.WaveformSessionDataSource;
-import core.waveform.Waveform;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;
@@ -24,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WaveformManager {
 
-    private final WaveformSessionDataSource sessionSource;
+    private final AudioSessionDataSource sessionSource;
     private final Provider<AudioEngine> audioEngineProvider;
     private final Provider<SampleReader> sampleReaderProvider;
 
@@ -33,7 +32,7 @@ public class WaveformManager {
 
     @Inject
     public WaveformManager(
-            @NonNull WaveformSessionDataSource sessionSource,
+            @NonNull AudioSessionDataSource sessionSource,
             @NonNull Provider<AudioEngine> audioEngineProvider,
             @NonNull Provider<SampleReader> sampleReaderProvider,
             @NonNull EventDispatchBus eventBus) {

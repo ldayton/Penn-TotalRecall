@@ -3,9 +3,9 @@ package core.events;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.headless.HeadlessTestFixture;
+import core.audio.AudioSessionManager;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
-import core.state.AudioSessionManager;
-import core.state.AudioSessionStateMachine;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 

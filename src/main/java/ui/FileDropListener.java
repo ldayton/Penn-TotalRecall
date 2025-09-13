@@ -1,9 +1,9 @@
 package ui;
 
+import core.audio.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.env.Constants;
 import core.events.WordpoolFileSelectedEvent;
-import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -25,14 +25,14 @@ public class FileDropListener implements FileDrop.Listener {
     private static final Logger logger = LoggerFactory.getLogger(FileDropListener.class);
 
     private final EventDispatchBus eventBus;
-    private final WaveformSessionDataSource sessionDataSource;
+    private final AudioSessionDataSource sessionDataSource;
     private final WordpoolDisplay wordpoolDisplay;
     private final AudioFileDisplay audioFileDisplay;
 
     @Inject
     public FileDropListener(
             EventDispatchBus eventBus,
-            WaveformSessionDataSource sessionDataSource,
+            AudioSessionDataSource sessionDataSource,
             WordpoolDisplay wordpoolDisplay,
             AudioFileDisplay audioFileDisplay) {
         this.eventBus = eventBus;

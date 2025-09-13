@@ -28,5 +28,11 @@ public class CoreModule extends AbstractModule {
 
         // Install preferences module
         install(new core.preferences.Module());
+
+        // Install waveform module
+        install(new core.waveform.Module());
+
+        // Install viewport module
+        install(new core.viewport.Module());
     }
 }

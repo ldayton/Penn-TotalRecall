@@ -1,12 +1,12 @@
-package state;
+package ui.wordpool;
 
+import core.audio.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.events.AppStateChangedEvent;
 import core.events.DialogEvent;
 import core.events.WordpoolFileSelectedEvent;
-import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -16,9 +16,6 @@ import java.util.List;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.wordpool.WordpoolDisplay;
-import ui.wordpool.WordpoolFileParser;
-import ui.wordpool.WordpoolWord;
 
 /** Manages wordpool loading and display. */
 @Singleton
@@ -27,13 +24,13 @@ public class WordpoolManager {
 
     private final EventDispatchBus eventBus;
     private final WordpoolDisplay wordpoolDisplay;
-    private final WaveformSessionDataSource sessionDataSource;
+    private final AudioSessionDataSource sessionDataSource;
 
     @Inject
     public WordpoolManager(
             @NonNull EventDispatchBus eventBus,
             @NonNull WordpoolDisplay wordpoolDisplay,
-            @NonNull WaveformSessionDataSource sessionDataSource) {
+            @NonNull AudioSessionDataSource sessionDataSource) {
         this.eventBus = eventBus;
         this.wordpoolDisplay = wordpoolDisplay;
         this.sessionDataSource = sessionDataSource;

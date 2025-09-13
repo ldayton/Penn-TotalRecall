@@ -1,14 +1,14 @@
 package app.headless.adapters;
 
 import core.audio.AudioHandle;
-import core.state.WaveformSessionDataSource;
+import core.audio.AudioSessionDataSource;
 import java.util.Optional;
 
 /**
- * Headless implementation of WaveformSessionDataSource that returns empty/default results. Used for
+ * Headless implementation of AudioSessionDataSource that returns empty/default results. Used for
  * testing and headless environments where waveform data is not available.
  */
-public class HeadlessWaveformSessionDataSource implements WaveformSessionDataSource {
+public class HeadlessAudioSessionDataSource implements AudioSessionDataSource {
 
     @Override
     public Optional<Double> getPlaybackPosition() {

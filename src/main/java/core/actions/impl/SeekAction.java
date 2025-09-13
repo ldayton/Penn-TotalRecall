@@ -1,6 +1,7 @@
 package core.actions.impl;
 
 import core.actions.Action;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;
@@ -8,7 +9,6 @@ import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.SeekByAmountEvent;
 import core.preferences.PreferencesManager;
-import core.state.AudioSessionStateMachine;
 import lombok.NonNull;
 
 /**

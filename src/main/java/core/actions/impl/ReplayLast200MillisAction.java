@@ -1,13 +1,13 @@
 package core.actions.impl;
 
 import core.actions.Action;
+import core.audio.AudioSessionDataSource;
+import core.audio.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.FocusEvent;
 import core.events.PlayLast200MillisEvent;
-import core.state.AudioSessionStateMachine;
-import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import lombok.NonNull;
@@ -22,12 +22,12 @@ public class ReplayLast200MillisAction extends Action {
     public static final int DURATION_MS = 200;
 
     private final EventDispatchBus eventBus;
-    private final WaveformSessionDataSource sessionSource;
+    private final AudioSessionDataSource sessionSource;
     private AudioSessionStateMachine.State currentState = AudioSessionStateMachine.State.NO_AUDIO;
 
     @Inject
     public ReplayLast200MillisAction(
-            EventDispatchBus eventBus, WaveformSessionDataSource sessionSource) {
+            EventDispatchBus eventBus, AudioSessionDataSource sessionSource) {
         this.eventBus = eventBus;
         this.sessionSource = sessionSource;
         eventBus.subscribe(this);

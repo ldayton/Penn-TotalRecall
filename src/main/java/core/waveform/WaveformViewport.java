@@ -3,7 +3,7 @@ package core.waveform;
 import java.awt.Graphics2D;
 
 /**
- * Interface for a waveform display viewport. Decouples WaveformPainter from Swing-specific
+ * Interface for a waveform display viewport. Decouples ViewportPainter from Swing-specific
  * components.
  */
 public interface WaveformViewport {

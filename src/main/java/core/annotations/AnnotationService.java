@@ -1,12 +1,12 @@
 package core.annotations;
 
+import core.audio.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.events.AnnotationAddedEvent;
 import core.events.AnnotationDeletedEvent;
 import core.events.AnnotationUpdatedEvent;
 import core.events.AnnotationsClearedEvent;
 import core.events.AnnotationsLoadedEvent;
-import core.state.WaveformSessionDataSource;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.nio.file.Path;
@@ -31,7 +31,7 @@ public class AnnotationService {
 
     private final List<AnnotationEntry> annotations = new CopyOnWriteArrayList<>();
     private final EventDispatchBus eventBus;
-    private final WaveformSessionDataSource audioState;
+    private final AudioSessionDataSource audioState;
     private final AnnotationRepository repository;
 
     private Optional<String> currentAnnotatorName = Optional.empty();
@@ -41,7 +41,7 @@ public class AnnotationService {
     @Inject
     public AnnotationService(
             @NonNull EventDispatchBus eventBus,
-            @NonNull WaveformSessionDataSource audioState,
+            @NonNull AudioSessionDataSource audioState,
             @NonNull AnnotationRepository repository) {
         this.eventBus = eventBus;
         this.audioState = audioState;

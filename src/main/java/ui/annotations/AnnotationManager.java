@@ -1,20 +1,19 @@
-package state;
+package ui.annotations;
 
 import core.annotations.Annotation;
+import core.audio.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
 import core.events.CloseAudioFileEvent;
 import core.events.CompleteAnnotationEvent;
 import core.events.DialogEvent;
-import core.state.WaveformSessionDataSource;
 import core.util.OsPath;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.io.File;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import ui.annotations.AnnotationDisplay;
 import ui.audiofiles.AudioFile;
 import ui.audiofiles.AudioFile.AudioFilePathException;
 
@@ -24,14 +23,14 @@ import ui.audiofiles.AudioFile.AudioFilePathException;
 public class AnnotationManager {
 
     private final EventDispatchBus eventBus;
-    private final WaveformSessionDataSource sessionSource;
+    private final AudioSessionDataSource sessionSource;
     private final AnnotationDisplay annotationDisplay;
     private AudioFile currentAudioFile = null;
 
     @Inject
     public AnnotationManager(
             @NonNull EventDispatchBus eventBus,
-            @NonNull WaveformSessionDataSource sessionSource,
+            @NonNull AudioSessionDataSource sessionSource,
             @NonNull AnnotationDisplay annotationDisplay) {
         this.eventBus = eventBus;
         this.sessionSource = sessionSource;
