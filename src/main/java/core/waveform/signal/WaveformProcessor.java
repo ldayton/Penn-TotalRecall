@@ -68,10 +68,14 @@ public final class WaveformProcessor {
             long frameCount = (long) (chunkDurationSeconds * sampleRate);
             long overlapFrames = (long) (overlapSeconds * sampleRate);
 
+            // Only use overlap for chunks after the first one
+            int actualOverlapFrames = 0;
+
             // Adjust for overlap
             if (chunkIndex > 0) {
                 startFrame -= overlapFrames;
                 frameCount += overlapFrames;
+                actualOverlapFrames = (int) overlapFrames;
             }
 
             // Read samples asynchronously but wait for result
@@ -83,7 +87,7 @@ public final class WaveformProcessor {
                     audioData.sampleRate(),
                     0.0, // Peak calculated after processing
                     (int) audioData.frameCount(),
-                    (int) overlapFrames);
+                    actualOverlapFrames);
         } catch (Exception e) {
             throw new IOException("Failed to read audio chunk: " + e.getMessage(), e);
         }

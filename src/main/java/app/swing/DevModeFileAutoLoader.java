@@ -120,20 +120,24 @@ public class DevModeFileAutoLoader {
                                 audioFileList.getModel().getSize());
 
                         // Auto-start playback only if app.run.dev.autoplay=true
-                        boolean shouldAutoPlay = appConfig.getBooleanProperty("app.run.dev.autoplay", false);
+                        boolean shouldAutoPlay =
+                                appConfig.getBooleanProperty("app.run.dev.autoplay", false);
                         if (shouldAutoPlay) {
                             // Auto-start playback after a short delay to ensure waveform is loaded
                             Timer autoPlayTimer =
                                     new Timer(
                                             200,
                                             _ -> {
-                                                logger.info("Development mode: auto-starting playback");
+                                                logger.info(
+                                                        "Development mode: auto-starting playback");
                                                 playPauseAction.execute();
                                             });
                             autoPlayTimer.setRepeats(false);
                             autoPlayTimer.start();
                         } else {
-                            logger.info("Development mode: auto-play disabled (set app.run.dev.autoplay=true to enable)");
+                            logger.info(
+                                    "Development mode: auto-play disabled (set"
+                                            + " app.run.dev.autoplay=true to enable)");
                         }
                     });
         }
