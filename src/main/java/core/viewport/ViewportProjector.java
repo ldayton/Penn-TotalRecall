@@ -2,7 +2,6 @@ package core.viewport;
 
 import core.audio.session.AudioSessionStateMachine;
 import core.viewport.ViewportPaintingDataSource.PaintMode;
-import core.waveform.ScreenDimension;
 import core.waveform.WaveformViewportSpec;
 import java.util.Optional;
 
@@ -12,41 +11,27 @@ import java.util.Optional;
  */
 public interface ViewportProjector {
 
-    /** Immutable UI-only state the viewport controls. */
-    record ViewportUiState(int canvasWidthPx, int canvasHeightPx, int pixelsPerSecond) {}
+    /** Immutable UI-only state the viewport controls (frame-based). */
+    record ViewportUiState(int canvasWidthPx, int canvasHeightPx, double pixelsPerFrame) {}
 
-    /**
-     * Immutable snapshot of audio session state needed for projection. currentFrame is present when
-     * playing/paused; pendingStartFrame is used in READY state.
-     */
+    /** Immutable snapshot of audio session state needed for projection (explicit playhead). */
     record AudioSessionSnapshot(
             AudioSessionStateMachine.State state,
             long totalFrames,
-            int sampleRate,
-            Optional<Long> currentFrame,
-            Optional<Long> pendingStartFrame,
+            long playheadFrame,
             Optional<String> errorMessage) {}
 
-    /**
-     * Result of projecting audio + UI state into a concrete viewport window. The projector computes
-     * both the frame window and pixel-space padding required to keep the playhead centered when
-     * near the start of the file.
-     */
+    /** Result of projecting audio + UI state into a concrete viewport window (frame-based). */
     record Projection(
             PaintMode mode,
-            long playheadFrame,
             long startFrame,
             long endFrame,
-            int leftPadPixels,
-            double pixelsPerFrame,
+            long generation,
             Optional<String> errorMessage) {}
 
     /** Compute a deterministic projection for the given audio snapshot and UI state. */
     Projection project(AudioSessionSnapshot audio, ViewportUiState ui);
 
-    /**
-     * Convert a Projection to a waveform ViewportContext for rendering. Implementations may choose
-     * how to map frames to seconds internally.
-     */
-    WaveformViewportSpec toWaveformViewport(Projection p, ScreenDimension bounds, int sampleRate);
+    /** Convert a Projection to a waveform spec for rendering (seconds-based renderer boundary). */
+    WaveformViewportSpec toWaveformViewport(Projection p, ViewportUiState ui, int sampleRate);
 }

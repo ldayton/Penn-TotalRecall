@@ -13,5 +13,8 @@ public class Module extends AbstractModule {
 
         // Bind the ViewportPaintingDataSource interface to ViewportSessionManager
         bind(ViewportPaintingDataSource.class).to(ViewportSessionManager.class).in(Singleton.class);
+
+        // Bind projector implementation
+        bind(ViewportProjector.class).to(DefaultViewportProjector.class).in(Singleton.class);
     }
 }

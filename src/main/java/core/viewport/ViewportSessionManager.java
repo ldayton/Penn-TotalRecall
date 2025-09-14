@@ -1,26 +1,26 @@
 package core.viewport;
 
 import com.google.errorprone.annotations.ThreadSafe;
-import com.google.inject.Provider;
-import core.audio.AudioEngine;
 import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
+import core.events.ZoomEvent;
 import core.waveform.ScreenDimension;
-import core.waveform.TimeRange;
 import core.waveform.Waveform;
 import core.waveform.WaveformManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Manages viewport state and ViewportSession lifecycle. Combines state management with session
- * lifecycle management.
+ * Manages viewport state and produces render specs for the painter.
+ *
+ * <p>Thread-safety: This class is annotated as thread-safe because it may be accessed from non-EDT
+ * threads (e.g., background event dispatchers, headless mode). While the Swing painter marshals UI
+ * work to the EDT, core events can arrive off-EDT, so internal state (e.g., zoom) uses atomics.
  */
 @Slf4j
 @Singleton
@@ -29,26 +29,25 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
 
     private final EventDispatchBus eventBus;
     private final AudioSessionDataSource sessionDataSource;
-    private final Provider<AudioEngine> audioEngineProvider;
     private final WaveformManager waveformManager;
+    private final ViewportProjector projector;
 
     // Viewport state
-    private final AtomicReference<ViewportContext> currentContext;
+    private final java.util.concurrent.atomic.AtomicInteger pixelsPerSecond =
+            new java.util.concurrent.atomic.AtomicInteger(200);
 
-    // Session management
-    private Optional<ViewportSession> currentSession = Optional.empty();
+    // Session management removed; viewport does not maintain per-audio sessions
 
     @Inject
     public ViewportSessionManager(
             @NonNull EventDispatchBus eventBus,
             @NonNull AudioSessionDataSource sessionDataSource,
-            @NonNull Provider<AudioEngine> audioEngineProvider,
-            @NonNull WaveformManager waveformManager) {
+            @NonNull WaveformManager waveformManager,
+            @NonNull ViewportProjector projector) {
         this.eventBus = eventBus;
         this.sessionDataSource = sessionDataSource;
-        this.audioEngineProvider = audioEngineProvider;
         this.waveformManager = waveformManager;
-        this.currentContext = new AtomicReference<>(ViewportContext.createDefault());
+        this.projector = projector;
         eventBus.subscribe(this);
     }
 
@@ -57,146 +56,30 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         var newState = event.newState();
 
         switch (newState) {
-            case READY -> {
-                // Audio loaded, create viewport session
-                sessionDataSource
-                        .getSampleRate()
-                        .ifPresent(
-                                sampleRate -> {
-                                    // Dispose old session if exists
-                                    currentSession.ifPresent(
-                                            session -> session.dispose(audioEngineProvider));
-
-                                    // Create new session with sample rate
-                                    var session =
-                                            new ViewportSession(
-                                                    eventBus,
-                                                    this,
-                                                    audioEngineProvider,
-                                                    sampleRate);
-                                    currentSession = Optional.of(session);
-
-                                    log.debug(
-                                            "Created ViewportSession for sample rate: {} Hz",
-                                            sampleRate);
-                                });
-            }
-
-            case NO_AUDIO -> {
-                // Audio closed, dispose viewport session
-                currentSession.ifPresent(
-                        session -> {
-                            session.dispose(audioEngineProvider);
-                            log.debug("Disposed ViewportSession");
-                        });
-                currentSession = Optional.empty();
-            }
-
-            default -> {
-                // Other states don't affect viewport lifecycle
-            }
+            default -> {}
         }
     }
 
-    // ViewportManager interface methods
-
-    public void onPlaybackUpdate(double playheadSeconds) {
-        ViewportCommand command =
-                new ViewportCommand.PlaybackUpdate(
-                        System.currentTimeMillis(), "PLAYBACK", playheadSeconds);
-        applyCommand(command);
-    }
-
-    public void onUserZoom(int newPixelsPerSecond) {
-        if (newPixelsPerSecond <= 0) {
-            log.warn("Invalid zoom level: {} pixels per second", newPixelsPerSecond);
-            return;
-        }
-        ViewportCommand command =
-                new ViewportCommand.UserZoom(
-                        System.currentTimeMillis(), "USER_ZOOM", newPixelsPerSecond);
-        applyCommand(command);
-    }
-
-    public void onUserSeek(double targetSeconds) {
-        ViewportCommand command =
-                new ViewportCommand.UserSeek(
-                        System.currentTimeMillis(), "USER_SEEK", targetSeconds);
-        applyCommand(command);
-    }
-
-    public void onCanvasResize(int width, int height) {
-        ViewportCommand command =
-                new ViewportCommand.CanvasResize(
-                        System.currentTimeMillis(), "CANVAS", width, height);
-        applyCommand(command);
-    }
-
-    private void applyCommand(ViewportCommand command) {
-        // Update context atomically
-        ViewportContext newContext =
-                currentContext.updateAndGet(ctx -> computeNewContext(ctx, command));
-
-        if (log.isDebugEnabled()) {
-            log.debug(
-                    "Viewport command: {} -> playhead={}s, start={}s, end={}s",
-                    command.getClass().getSimpleName(),
-                    String.format("%.2f", newContext.playheadSeconds()),
-                    String.format("%.2f", newContext.getViewportStartTime()),
-                    String.format("%.2f", newContext.getViewportEndTime()));
-        }
-    }
-
-    private ViewportContext computeNewContext(ViewportContext ctx, ViewportCommand command) {
-        return switch (command) {
-            case ViewportCommand.PlaybackUpdate e ->
-                    new ViewportContext(
-                            e.playheadSeconds(),
-                            ctx.pixelsPerSecond(),
-                            ctx.canvasWidth(),
-                            ctx.canvasHeight());
-
-            case ViewportCommand.UserZoom e ->
-                    new ViewportContext(
-                            ctx.playheadSeconds(),
-                            e.newPixelsPerSecond(),
-                            ctx.canvasWidth(),
-                            ctx.canvasHeight());
-
-            case ViewportCommand.UserSeek e ->
-                    new ViewportContext(
-                            e.targetSeconds(),
-                            ctx.pixelsPerSecond(),
-                            ctx.canvasWidth(),
-                            ctx.canvasHeight());
-
-            case ViewportCommand.CanvasResize e ->
-                    new ViewportContext(
-                            ctx.playheadSeconds(),
-                            ctx.pixelsPerSecond(),
-                            e.newWidth(),
-                            e.newHeight());
-        };
-    }
-
-    public ViewportContext getContext() {
-        return currentContext.get();
-    }
-
-    /** Get the current viewport session if one exists. */
-    public Optional<ViewportSession> getCurrentSession() {
-        return currentSession;
-    }
+    // getCurrentSession() removed with session elimination
 
     /**
      * Expose current playback position in seconds for tests and diagnostics. Returns 0.0 if no
      * session is active.
      */
     public double getPlaybackPositionSeconds() {
-        return currentSession.map(ViewportSession::getPlaybackPositionSeconds).orElse(0.0);
+        return sessionDataSource.getPlaybackPosition().orElse(0.0);
     }
 
     // Command history removed; use debug logs for traceability.
+    /** Adjust zoom level based on user ZoomEvent (IN/OUT). */
+    @Subscribe
+    public void onZoom(@NonNull ZoomEvent event) {
+        int cur = pixelsPerSecond.get();
+        double factor = event.direction() == ZoomEvent.Direction.IN ? 1.5 : (1.0 / 1.5);
+        int next = Math.max(1, (int) Math.round(cur * factor));
+        pixelsPerSecond.set(next);
+        log.debug("Zoom {} -> {} px/s", event.direction(), next);
+    }
 
     @Override
     public ViewportRenderSpec getRenderSpec(@NonNull ScreenDimension bounds) {
@@ -237,26 +120,33 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                     0L);
         }
 
-        // Build waveform viewport context from a fresh playhead-centric context using current
-        // bounds
-        var ctx = currentContext.get();
-        int pps = ctx.pixelsPerSecond();
-        // Recompute time range for provided bounds to ensure playhead is centered at 50%
-        var tempCtx =
-                new ViewportContext(ctx.playheadSeconds(), pps, bounds.width(), bounds.height());
-        TimeRange tr = tempCtx.getTimeRange();
-        var wfCtx =
-                new core.waveform.WaveformViewportSpec(
-                        tr.startSeconds(), tr.endSeconds(), bounds.width(), bounds.height(), pps);
+        // Build UI + audio snapshots and project
+        var sampleRateOpt = sessionDataSource.getSampleRate();
+        if (sampleRateOpt.isEmpty()) {
+            return new ViewportRenderSpec(
+                    PaintMode.LOADING,
+                    Optional.empty(),
+                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    0L);
+        }
+        int sampleRate = sampleRateOpt.get();
+        double pixelsPerFrame = Math.max(1e-9, pixelsPerSecond.get() / (double) sampleRate);
+        ViewportProjector.ViewportUiState uiState =
+                new ViewportProjector.ViewportUiState(
+                        bounds.width(), bounds.height(), pixelsPerFrame);
+        long playheadFrame = sessionDataSource.getPlaybackPositionFrames().orElse(0L);
+        long totalFrames = sessionDataSource.getTotalFrames().orElse(0L);
+        ViewportProjector.AudioSessionSnapshot audioSnap =
+                new ViewportProjector.AudioSessionSnapshot(
+                        core.audio.session.AudioSessionStateMachine.State.READY,
+                        totalFrames,
+                        playheadFrame,
+                        Optional.empty());
 
+        var projection = projector.project(audioSnap, uiState);
+        var wfCtx = projector.toWaveformViewport(projection, uiState, sampleRate);
         var imageFuture = waveform.renderViewport(wfCtx);
-
-        long generation =
-                Double.doubleToLongBits(tr.startSeconds())
-                        ^ (Double.doubleToLongBits(tr.endSeconds()) << 1)
-                        ^ (((long) bounds.width()) << 32)
-                        ^ (((long) bounds.height()) << 16)
-                        ^ (pps & 0xFFFF);
+        long generation = projection.generation();
 
         return new ViewportRenderSpec(PaintMode.RENDER, Optional.empty(), imageFuture, generation);
     }
