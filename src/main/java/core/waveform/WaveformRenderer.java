@@ -189,8 +189,12 @@ class WaveformRenderer {
     /** Render single 200px segment. */
     private CompletableFuture<Image> renderSegment(@NonNull WaveformSegmentCache.SegmentKey key) {
 
-        // Safety check: don't render segments with negative time
-        if (key.startTime() < 0) {
+        // For segments that start before 0, we'll render partial content
+        // Calculate the segment duration
+        double segmentDuration = key.duration();
+
+        // If segment ends before 0, return empty segment
+        if (key.startTime() + segmentDuration <= 0) {
             return CompletableFuture.completedFuture(null);
         }
 
@@ -208,11 +212,20 @@ class WaveformRenderer {
                     // Calculate which 10-second chunk this segment belongs to
                     final double CHUNK_DURATION_SECONDS = 10.0;
                     final double PRE_DATA_SECONDS = 0.25; // Match original overlap
-                    int chunkIndex = (int) (key.startTime() / CHUNK_DURATION_SECONDS);
 
-                    // Calculate position of this segment within the chunk
-                    double chunkStartTime = chunkIndex * CHUNK_DURATION_SECONDS;
-                    double segmentOffsetInChunk = key.startTime() - chunkStartTime;
+                    // Handle segments that start before 0
+                    int chunkIndex = 0;
+                    double segmentOffsetInChunk = 0;
+
+                    if (key.startTime() >= 0) {
+                        chunkIndex = (int) (key.startTime() / CHUNK_DURATION_SECONDS);
+                        double chunkStartTime = chunkIndex * CHUNK_DURATION_SECONDS;
+                        segmentOffsetInChunk = key.startTime() - chunkStartTime;
+                    } else {
+                        // Segment starts before 0, we'll use chunk 0 but offset differently
+                        chunkIndex = 0;
+                        segmentOffsetInChunk = key.startTime(); // Will be negative
+                    }
 
                     // Process the full 10-second chunk (matching original implementation)
                     double[] tempChunkData;
@@ -250,10 +263,14 @@ class WaveformRenderer {
                     // Extract the 200px segment we need from the full chunk
                     double[] valsToDraw = new double[SEGMENT_WIDTH_PX];
                     int segmentStartPixel = (int) (segmentOffsetInChunk * key.pixelsPerSecond());
-                    for (int i = 0;
-                            i < SEGMENT_WIDTH_PX && segmentStartPixel + i < fullChunkData.length;
-                            i++) {
-                        valsToDraw[i] = fullChunkData[segmentStartPixel + i];
+
+                    // Handle segments that start before 0
+                    for (int i = 0; i < SEGMENT_WIDTH_PX; i++) {
+                        int dataIndex = segmentStartPixel + i;
+                        if (dataIndex >= 0 && dataIndex < fullChunkData.length) {
+                            valsToDraw[i] = fullChunkData[dataIndex];
+                        }
+                        // else leave as 0 (silence for out-of-bounds regions)
                     }
 
                     Graphics2D g = image.createGraphics();
@@ -340,12 +357,13 @@ class WaveformRenderer {
             for (Image segment : segments) {
                 if (segment != null) {
                     g.drawImage(segment, x, 0, null);
-                    x += SEGMENT_WIDTH_PX;
+                }
+                // Always advance position, even for null segments (pre-audio silence)
+                x += SEGMENT_WIDTH_PX;
 
-                    // Stop if we've filled the viewport
-                    if (x >= viewport.viewportWidthPx()) {
-                        break;
-                    }
+                // Stop if we've filled the viewport
+                if (x >= viewport.viewportWidthPx()) {
+                    break;
                 }
             }
 
@@ -377,13 +395,29 @@ class WaveformRenderer {
             return;
         }
 
-        for (int i = 0; i < width; i += pixelsPerSecond) {
+        // Snap markers to absolute second boundaries (…, -2, -1, 0, 1, 2, …)
+        // Find the first integer second that is >= startTimeSeconds, but include start if exact.
+        final double epsilon = 1e-9;
+        double startFloor = Math.floor(startTimeSeconds + epsilon);
+        double firstSecond =
+                (Math.abs(startTimeSeconds - startFloor) <= epsilon)
+                        ? startFloor
+                        : (startFloor + 1.0);
+
+        // Pixel offset from the left edge to the first whole-second tick
+        double offsetSeconds = firstSecond - startTimeSeconds;
+        int x = (int) Math.round(offsetSeconds * pixelsPerSecond);
+
+        double tickSecond = firstSecond;
+        while (x < width) {
             g.setColor(WAVEFORM_SCALE_LINE);
-            g.drawLine(i, 0, i, height - 1);
+            g.drawLine(x, 0, x, height - 1);
 
             g.setColor(WAVEFORM_SCALE_TEXT);
-            double seconds = startTimeSeconds + (i / (double) pixelsPerSecond);
-            g.drawString(SEC_FORMAT.format(seconds), i + 5, height - 5);
+            g.drawString(SEC_FORMAT.format(tickSecond), x + 5, height - 5);
+
+            x += pixelsPerSecond; // advance exactly 1s in pixels
+            tickSecond += 1.0;
         }
     }
 

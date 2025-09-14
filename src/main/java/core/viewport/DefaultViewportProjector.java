@@ -27,9 +27,8 @@ public class DefaultViewportProjector implements ViewportProjector {
 
         // frames across the viewport = pixels * (frames/pixel)
         long widthFrames = Math.max(1L, Math.round(ui.canvasWidthPx() * ui.framesPerPixel()));
-        long desiredStart = audio.playheadFrame() - (widthFrames / 2);
-        long startFrame = Math.max(0L, desiredStart);
-        long endFrame = Math.min(audio.totalFrames(), startFrame + widthFrames);
+        long startFrame = audio.playheadFrame() - (widthFrames / 2);
+        long endFrame = startFrame + widthFrames;
 
         long generation =
                 (startFrame & 0xFFFFFFFFL)

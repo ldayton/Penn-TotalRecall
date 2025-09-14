@@ -36,7 +36,9 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
     // Zoom stored as frames-per-pixel (frame-based, sample-rate agnostic)
     private static final double MIN_FRAMES_PER_PIXEL = 1e-9;
     private static final double MAX_FRAMES_PER_PIXEL = 1e9;
-    private final AtomicReference<Double> framesPerPixel = new AtomicReference<>(10.0);
+    // framesPerPixel is derived from DEFAULT_PIXELS_PER_SECOND and the current audio sample rate.
+    // We initialize it lazily when the sample rate is known to keep DEFAULT_PPS as the sole source.
+    private final AtomicReference<Double> framesPerPixel = new AtomicReference<>(Double.NaN);
 
     @Inject
     public ViewportSessionManager(
@@ -109,9 +111,19 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                     CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
-        double fpp =
-                Math.max(
-                        MIN_FRAMES_PER_PIXEL, Math.min(MAX_FRAMES_PER_PIXEL, framesPerPixel.get()));
+        double fpp = framesPerPixel.get();
+        if (Double.isNaN(fpp)) {
+            // Initialize lazily from the single PPS default once sample rate is known
+            if (sampleRate > 0) {
+                double init = sampleRate / (double) ViewportDefaults.DEFAULT_PIXELS_PER_SECOND;
+                // only set if still uninitialized to avoid stomping on user zoom
+                framesPerPixel.compareAndSet(Double.NaN, init);
+                fpp = init;
+            } else {
+                fpp = 10.0; // temporary safe fallback until sampleRate is available
+            }
+        }
+        fpp = Math.max(MIN_FRAMES_PER_PIXEL, Math.min(MAX_FRAMES_PER_PIXEL, fpp));
         ViewportProjector.ViewportUiState uiState =
                 new ViewportProjector.ViewportUiState(bounds.width(), bounds.height(), fpp);
         long playheadFrame = snap.playheadFrame();

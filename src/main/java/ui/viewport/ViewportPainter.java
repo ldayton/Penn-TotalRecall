@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -118,6 +119,9 @@ public final class ViewportPainter {
                                     bounds.width(),
                                     bounds.height(),
                                     image);
+                            // Only draw reference line and playhead when waveform is ready
+                            paintReferenceLine(g, bounds);
+                            paintPlayhead(g, bounds);
                         } else {
                             clearBackground(g, bounds);
                         }
@@ -159,7 +163,6 @@ public final class ViewportPainter {
                                 }
                             });
                 }
-                paintPlayhead(g, bounds);
             }
         }
     }
@@ -213,15 +216,25 @@ public final class ViewportPainter {
         g.fillRect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
     }
 
+    /** Paint a horizontal reference line across the viewport. */
+    public void paintReferenceLine(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
+        g.setPaintMode();
+        g.setColor(Color.BLACK);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        // Draw horizontal line across entire viewport width at center
+        g.fillRect(bounds.x(), bounds.y() + bounds.height() / 2, bounds.width(), 1);
+    }
+
     /** Paint the playhead at the center of the viewport. */
     public void paintPlayhead(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         // Playhead is always at exactly 50% of viewport width
         int playheadX = bounds.x() + bounds.width() / 2;
 
-        // Draw a vertical black line with XOR mode for visibility
+        // Use XOR mode for the playhead
         g.setXORMode(Color.WHITE);
         g.setColor(Color.BLACK);
-        g.drawLine(playheadX, bounds.y(), playheadX, bounds.y() + bounds.height());
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        g.fillRect(playheadX, bounds.y(), 1, bounds.height());
         g.setPaintMode(); // Reset to normal paint mode
     }
 }

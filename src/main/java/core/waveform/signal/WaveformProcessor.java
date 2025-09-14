@@ -82,12 +82,16 @@ public final class WaveformProcessor {
             Path audioPath = Paths.get(audioFilePath);
             AudioData audioData = sampleReader.readSamples(audioPath, startFrame, frameCount).get();
 
+            // If the read returned no frames (e.g., beyond EOF), disable overlap to avoid
+            // invalid skip counts during pixel scaling.
+            int safeOverlapFrames = (audioData.frameCount() <= 0) ? 0 : actualOverlapFrames;
+
             return new AudioChunkData(
                     audioData.samples(),
                     audioData.sampleRate(),
                     0.0, // Peak calculated after processing
                     (int) audioData.frameCount(),
-                    actualOverlapFrames);
+                    safeOverlapFrames);
         } catch (Exception e) {
             throw new IOException("Failed to read audio chunk: " + e.getMessage(), e);
         }
