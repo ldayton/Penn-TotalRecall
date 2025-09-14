@@ -2,9 +2,7 @@ package core.viewport;
 
 import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.session.AudioSessionDataSource;
-import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.AppStateChangedEvent;
 import core.events.ZoomEvent;
 import core.waveform.ScreenDimension;
 import core.waveform.Waveform;
@@ -12,6 +10,7 @@ import core.waveform.WaveformManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,59 +25,37 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 @ThreadSafe
 public class ViewportSessionManager implements ViewportPaintingDataSource {
-
-    private final EventDispatchBus eventBus;
     private final AudioSessionDataSource sessionDataSource;
     private final WaveformManager waveformManager;
     private final ViewportProjector projector;
 
-    // Viewport state
-    private final java.util.concurrent.atomic.AtomicInteger pixelsPerSecond =
-            new java.util.concurrent.atomic.AtomicInteger(200);
-
-    // Session management removed; viewport does not maintain per-audio sessions
+    // Zoom stored as frames-per-pixel (frame-based, sample-rate agnostic)
+    private static final double MIN_FRAMES_PER_PIXEL = 1e-9;
+    private static final double MAX_FRAMES_PER_PIXEL = 1e9;
+    private final AtomicReference<Double> framesPerPixel = new AtomicReference<>(10.0);
 
     @Inject
     public ViewportSessionManager(
-            @NonNull EventDispatchBus eventBus,
+            @NonNull core.dispatch.EventDispatchBus eventBus,
             @NonNull AudioSessionDataSource sessionDataSource,
             @NonNull WaveformManager waveformManager,
             @NonNull ViewportProjector projector) {
-        this.eventBus = eventBus;
         this.sessionDataSource = sessionDataSource;
         this.waveformManager = waveformManager;
         this.projector = projector;
         eventBus.subscribe(this);
     }
 
-    @Subscribe
-    public void onAppStateChanged(@NonNull AppStateChangedEvent event) {
-        var newState = event.newState();
-
-        switch (newState) {
-            default -> {}
-        }
-    }
-
-    // getCurrentSession() removed with session elimination
-
-    /**
-     * Expose current playback position in seconds for tests and diagnostics. Returns 0.0 if no
-     * session is active.
-     */
-    public double getPlaybackPositionSeconds() {
-        return sessionDataSource.getPlaybackPosition().orElse(0.0);
-    }
-
     // Command history removed; use debug logs for traceability.
     /** Adjust zoom level based on user ZoomEvent (IN/OUT). */
     @Subscribe
     public void onZoom(@NonNull ZoomEvent event) {
-        int cur = pixelsPerSecond.get();
-        double factor = event.direction() == ZoomEvent.Direction.IN ? 1.5 : (1.0 / 1.5);
-        int next = Math.max(1, (int) Math.round(cur * factor));
-        pixelsPerSecond.set(next);
-        log.debug("Zoom {} -> {} px/s", event.direction(), next);
+        double cur = framesPerPixel.get();
+        double next = event.direction() == ZoomEvent.Direction.IN ? (cur / 1.5) : (cur * 1.5);
+        if (next < MIN_FRAMES_PER_PIXEL) next = MIN_FRAMES_PER_PIXEL;
+        if (next > MAX_FRAMES_PER_PIXEL) next = MAX_FRAMES_PER_PIXEL;
+        framesPerPixel.set(next);
+        log.debug("Zoom {} -> {} frames/pixel", event.direction(), next);
     }
 
     @Override
@@ -94,7 +71,8 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         }
 
         // Loading or empty states
-        if (sessionDataSource.isLoading()) {
+        var snap = sessionDataSource.getTimelineSnapshot();
+        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.LOADING) {
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
@@ -102,7 +80,7 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                     0L);
         }
 
-        if (!sessionDataSource.isAudioLoaded()) {
+        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.NO_AUDIO) {
             return new ViewportRenderSpec(
                     PaintMode.EMPTY,
                     Optional.empty(),
@@ -130,18 +108,16 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                     0L);
         }
         int sampleRate = sampleRateOpt.get();
-        double pixelsPerFrame = Math.max(1e-9, pixelsPerSecond.get() / (double) sampleRate);
+        double fpp =
+                Math.max(
+                        MIN_FRAMES_PER_PIXEL, Math.min(MAX_FRAMES_PER_PIXEL, framesPerPixel.get()));
         ViewportProjector.ViewportUiState uiState =
-                new ViewportProjector.ViewportUiState(
-                        bounds.width(), bounds.height(), pixelsPerFrame);
-        long playheadFrame = sessionDataSource.getPlaybackPositionFrames().orElse(0L);
-        long totalFrames = sessionDataSource.getTotalFrames().orElse(0L);
+                new ViewportProjector.ViewportUiState(bounds.width(), bounds.height(), fpp);
+        long playheadFrame = snap.playheadFrame();
+        long totalFrames = snap.totalFrames();
         ViewportProjector.AudioSessionSnapshot audioSnap =
                 new ViewportProjector.AudioSessionSnapshot(
-                        core.audio.session.AudioSessionStateMachine.State.READY,
-                        totalFrames,
-                        playheadFrame,
-                        Optional.empty());
+                        snap.state(), totalFrames, playheadFrame, snap.errorMessage());
 
         var projection = projector.project(audioSnap, uiState);
         var wfCtx = projector.toWaveformViewport(projection, uiState, sampleRate);

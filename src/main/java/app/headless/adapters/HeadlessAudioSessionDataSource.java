@@ -25,10 +25,7 @@ public class HeadlessAudioSessionDataSource implements AudioSessionDataSource {
         return false;
     }
 
-    @Override
-    public boolean isPlaying() {
-        return false;
-    }
+    // isPlaying() removed from AudioSessionDataSource
 
     @Override
     public boolean isLoading() {
@@ -63,5 +60,14 @@ public class HeadlessAudioSessionDataSource implements AudioSessionDataSource {
     @Override
     public Optional<Long> getTotalFrames() {
         return Optional.empty();
+    }
+
+    @Override
+    public AudioTimelineSnapshot getTimelineSnapshot() {
+        return new AudioTimelineSnapshot(
+                core.audio.session.AudioSessionStateMachine.State.NO_AUDIO,
+                0L,
+                0L,
+                Optional.empty());
     }
 }

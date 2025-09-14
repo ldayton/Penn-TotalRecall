@@ -17,6 +17,7 @@ public record AudioSessionContext(
         Optional<AudioHandle> audioHandle,
         Optional<PlaybackHandle> playbackHandle,
         Optional<Long> pendingStartFrame,
+        long playheadFrame,
         long totalFrames,
         int sampleRate,
         Optional<String> errorMessage) {
@@ -29,6 +30,7 @@ public record AudioSessionContext(
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
+                0L,
                 0L,
                 0,
                 Optional.empty());
@@ -44,6 +46,7 @@ public record AudioSessionContext(
                             Optional.of(cmd.audioHandle()),
                             Optional.empty(),
                             pendingStartFrame,
+                            0L,
                             cmd.totalFrames(),
                             cmd.sampleRate(),
                             Optional.empty());
@@ -56,6 +59,7 @@ public record AudioSessionContext(
                             Optional.empty(),
                             Optional.empty(),
                             0L,
+                            0L,
                             0,
                             Optional.empty());
 
@@ -67,6 +71,7 @@ public record AudioSessionContext(
                             Optional.empty(),
                             Optional.empty(),
                             0L,
+                            0L,
                             0,
                             Optional.of(cmd.errorMessage()));
 
@@ -77,6 +82,7 @@ public record AudioSessionContext(
                             audioHandle,
                             Optional.of(cmd.playbackHandle()),
                             Optional.empty(), // Clear pending seek after starting
+                            cmd.startFrame(),
                             totalFrames,
                             sampleRate,
                             errorMessage);
@@ -88,6 +94,7 @@ public record AudioSessionContext(
                             audioHandle,
                             playbackHandle,
                             pendingStartFrame,
+                            cmd.positionFrames(),
                             totalFrames,
                             sampleRate,
                             errorMessage);
@@ -99,6 +106,7 @@ public record AudioSessionContext(
                             audioHandle,
                             playbackHandle,
                             pendingStartFrame,
+                            cmd.positionFrames(),
                             totalFrames,
                             sampleRate,
                             errorMessage);
@@ -110,6 +118,7 @@ public record AudioSessionContext(
                             audioHandle,
                             Optional.empty(),
                             pendingStartFrame,
+                            playheadFrame,
                             totalFrames,
                             sampleRate,
                             errorMessage);
@@ -121,6 +130,7 @@ public record AudioSessionContext(
                             audioHandle,
                             playbackHandle,
                             Optional.of(cmd.targetFrame()),
+                            cmd.targetFrame(),
                             totalFrames,
                             sampleRate,
                             errorMessage);
@@ -132,13 +142,22 @@ public record AudioSessionContext(
                             audioHandle,
                             playbackHandle,
                             Optional.empty(),
+                            playheadFrame,
                             totalFrames,
                             sampleRate,
                             errorMessage);
 
             case AudioSessionCommand.UpdatePosition cmd ->
-                    // Position updates don't change context state
-                    this;
+                    new AudioSessionContext(
+                            machineState,
+                            currentFile,
+                            audioHandle,
+                            playbackHandle,
+                            pendingStartFrame,
+                            cmd.positionFrames(),
+                            totalFrames,
+                            sampleRate,
+                            errorMessage);
         };
     }
 

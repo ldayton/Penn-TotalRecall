@@ -18,9 +18,6 @@ public interface AudioSessionDataSource {
     /** Check if audio is currently loaded. */
     boolean isAudioLoaded();
 
-    /** Check if currently playing. */
-    boolean isPlaying();
-
     /** Check if currently loading core.audio. */
     boolean isLoading();
 
@@ -41,4 +38,14 @@ public interface AudioSessionDataSource {
 
     /** Get the total duration in frames. Returns empty if no audio is loaded. */
     Optional<Long> getTotalFrames();
+
+    /** Minimal snapshot of audio timeline state for projection. */
+    record AudioTimelineSnapshot(
+            AudioSessionStateMachine.State state,
+            long totalFrames,
+            long playheadFrame,
+            Optional<String> errorMessage) {}
+
+    /** Build and return a minimal, frame-based snapshot of the current audio session. */
+    AudioTimelineSnapshot getTimelineSnapshot();
 }

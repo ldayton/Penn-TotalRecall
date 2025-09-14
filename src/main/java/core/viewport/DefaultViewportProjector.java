@@ -25,7 +25,8 @@ public class DefaultViewportProjector implements ViewportProjector {
             return new Projection(mode, 0L, 0L, 0L, audio.errorMessage());
         }
 
-        long widthFrames = Math.max(1L, Math.round(ui.canvasWidthPx() * ui.pixelsPerFrame()));
+        // frames across the viewport = pixels * (frames/pixel)
+        long widthFrames = Math.max(1L, Math.round(ui.canvasWidthPx() * ui.framesPerPixel()));
         long desiredStart = audio.playheadFrame() - (widthFrames / 2);
         long startFrame = Math.max(0L, desiredStart);
         long endFrame = Math.min(audio.totalFrames(), startFrame + widthFrames);
@@ -35,7 +36,7 @@ public class DefaultViewportProjector implements ViewportProjector {
                         ^ ((endFrame & 0xFFFFFFFFL) << 1)
                         ^ (((long) ui.canvasWidthPx()) << 32)
                         ^ (((long) ui.canvasHeightPx()) << 16)
-                        ^ (Double.doubleToLongBits(ui.pixelsPerFrame()));
+                        ^ (Double.doubleToLongBits(ui.framesPerPixel()));
 
         return new Projection(
                 PaintMode.RENDER, startFrame, endFrame, generation, audio.errorMessage());
@@ -46,7 +47,9 @@ public class DefaultViewportProjector implements ViewportProjector {
             @NonNull Projection p, @NonNull ViewportUiState ui, int sampleRate) {
         double startSeconds = p.startFrame() / (double) sampleRate;
         double endSeconds = p.endFrame() / (double) sampleRate;
-        int pixelsPerSecond = Math.max(1, (int) Math.round(ui.pixelsPerFrame() * sampleRate));
+        // px/s = (px/frame) * (frames/s) = (1 / framesPerPixel) * sampleRate
+        int pixelsPerSecond =
+                Math.max(1, (int) Math.round((1.0 / ui.framesPerPixel()) * sampleRate));
         return new WaveformViewportSpec(
                 startSeconds, endSeconds, ui.canvasWidthPx(), ui.canvasHeightPx(), pixelsPerSecond);
     }

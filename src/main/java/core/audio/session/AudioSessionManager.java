@@ -185,11 +185,6 @@ public class AudioSessionManager implements AudioSessionDataSource {
     }
 
     @Override
-    public boolean isPlaying() {
-        return stateMachine.getCurrentState() == AudioSessionStateMachine.State.PLAYING;
-    }
-
-    @Override
     public Optional<Double> getTotalDuration() {
         return currentSession.map(
                 session -> {
@@ -223,6 +218,16 @@ public class AudioSessionManager implements AudioSessionDataSource {
     @Override
     public Optional<String> getErrorMessage() {
         return lastErrorMessage;
+    }
+
+    @Override
+    public AudioTimelineSnapshot getTimelineSnapshot() {
+        var state = stateMachine.getCurrentState();
+        long total = getTotalFrames().orElse(0L);
+        int sr = getSampleRate().orElse(0);
+        long playhead = getPlaybackPositionFrames().orElse(0L);
+        var err = getErrorMessage();
+        return new AudioTimelineSnapshot(state, total, playhead, err);
     }
 
     // Getters

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ViewportProjector {
 
     /** Immutable UI-only state the viewport controls (frame-based). */
-    record ViewportUiState(int canvasWidthPx, int canvasHeightPx, double pixelsPerFrame) {}
+    record ViewportUiState(int canvasWidthPx, int canvasHeightPx, double framesPerPixel) {}
 
     /** Immutable snapshot of audio session state needed for projection (explicit playhead). */
     record AudioSessionSnapshot(

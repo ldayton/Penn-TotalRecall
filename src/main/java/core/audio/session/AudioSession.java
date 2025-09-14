@@ -199,20 +199,14 @@ public class AudioSession {
     /** Get current playback position in seconds. */
     public double getCurrentPositionSeconds() {
         var ctx = context.get();
-        if (ctx.hasPlayback()) {
-            long frames = audioEngine.getPosition(ctx.playbackHandle().get());
-            return ctx.sampleRate() > 0 ? (double) frames / ctx.sampleRate() : 0.0;
-        }
-        return 0.0;
+        long frames = ctx.playheadFrame();
+        return ctx.sampleRate() > 0 ? (double) frames / ctx.sampleRate() : 0.0;
     }
 
     /** Get current playback position in frames. */
     public long getCurrentPositionFrames() {
         var ctx = context.get();
-        if (ctx.hasPlayback()) {
-            return audioEngine.getPosition(ctx.playbackHandle().get());
-        }
-        return ctx.pendingStartFrame().orElse(0L);
+        return ctx.playheadFrame();
     }
 
     /** Dispose of this session and release resources. */
