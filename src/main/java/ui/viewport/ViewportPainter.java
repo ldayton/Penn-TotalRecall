@@ -131,9 +131,8 @@ public final class ViewportPainter {
                 } else {
                     clearBackground(g, bounds);
                     // Non-blocking: schedule a repaint when rendering completes (with timeout)
-                    var repaintFuture =
-                            future.completeOnTimeout(
-                                    null, RENDER_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+                    // completeOnTimeout will cancel the original future if it times out
+                    var repaintFuture = future.orTimeout(RENDER_TIMEOUT_MS, TimeUnit.MILLISECONDS);
                     repaintFuture.whenComplete(
                             (img, ex) -> {
                                 if (viewport != null && viewport.isVisible()) {
@@ -147,17 +146,32 @@ public final class ViewportPainter {
                                                 if (latest.generation() == id) {
                                                     viewport.repaint();
                                                 } else {
-                                                    log.warn(
+                                                    log.debug(
                                                             "Discarding stale render completion:"
                                                                     + " staleId={}, latestId={}",
                                                             id,
                                                             latest.generation());
                                                 }
                                                 if (ex != null) {
-                                                    log.warn(
-                                                            "Waveform render completed"
-                                                                    + " exceptionally: {}",
-                                                            ex.toString());
+                                                    // Check if it's a timeout or cancellation
+                                                    if (ex
+                                                            instanceof
+                                                            java.util.concurrent.TimeoutException) {
+                                                        log.debug(
+                                                                "Waveform render timed out after"
+                                                                        + " {}ms",
+                                                                RENDER_TIMEOUT_MS);
+                                                    } else if (ex.getCause()
+                                                            instanceof
+                                                            java.util.concurrent
+                                                                    .CancellationException) {
+                                                        log.debug("Waveform render was cancelled");
+                                                    } else {
+                                                        log.warn(
+                                                                "Waveform render completed"
+                                                                        + " exceptionally: {}",
+                                                                ex.toString());
+                                                    }
                                                 }
                                             });
                                 }

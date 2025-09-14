@@ -127,7 +127,17 @@ class WaveformRenderer {
                         })
                 .exceptionally(
                         e -> {
-                            e.printStackTrace();
+                            // Check if this is a cancellation
+                            Throwable cause = e.getCause();
+                            if (cause instanceof java.util.concurrent.CancellationException) {
+                                // Don't log cancellations - they're expected during navigation
+                                logger.debug(
+                                        "Waveform render cancelled for viewport at {}s",
+                                        viewport.startTimeSeconds());
+                            } else {
+                                // Log other errors
+                                logger.warn("Error rendering waveform viewport: ", e);
+                            }
                             return null;
                         });
     }
@@ -152,6 +162,11 @@ class WaveformRenderer {
 
     /** Add symmetric prefetch tasks (no scroll direction). */
     private void addPrefetchTasks(@NonNull WaveformViewportSpec viewport) {
+        // Check for interruption before starting prefetch
+        if (Thread.currentThread().isInterrupted()) {
+            return; // Skip prefetch if interrupted
+        }
+
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
 
         // Prefetch forward
@@ -200,9 +215,9 @@ class WaveformRenderer {
 
         return CompletableFuture.supplyAsync(
                 () -> {
-                    // Check for cancellation
+                    // Check for cancellation at start
                     if (Thread.currentThread().isInterrupted()) {
-                        return null;
+                        throw new java.util.concurrent.CancellationException("Render cancelled");
                     }
 
                     BufferedImage image =
@@ -225,6 +240,11 @@ class WaveformRenderer {
                         // Segment starts before 0, we'll use chunk 0 but offset differently
                         chunkIndex = 0;
                         segmentOffsetInChunk = key.startTime(); // Will be negative
+                    }
+
+                    // Check for cancellation before expensive operation
+                    if (Thread.currentThread().isInterrupted()) {
+                        throw new java.util.concurrent.CancellationException("Render cancelled");
                     }
 
                     // Process the full 10-second chunk (matching original implementation)
@@ -313,8 +333,11 @@ class WaveformRenderer {
 
                         // Draw waveform
                         for (int i = 0; i < valsToDraw.length && i < SEGMENT_WIDTH_PX; i++) {
-                            if (Thread.currentThread().isInterrupted()) {
-                                return null;
+                            // Check for interruption periodically (every 10 pixels for performance)
+                            if (i % 10 == 0 && Thread.currentThread().isInterrupted()) {
+                                g.dispose();
+                                throw new java.util.concurrent.CancellationException(
+                                        "Render cancelled during draw");
                             }
 
                             double scaledSample = valsToDraw[i] * yScale;
@@ -336,6 +359,11 @@ class WaveformRenderer {
     /** Composite segments into single viewport image. */
     private Image compositeSegments(
             @NonNull List<Image> segments, @NonNull WaveformViewportSpec viewport) {
+        // Check for interruption before compositing
+        if (Thread.currentThread().isInterrupted()) {
+            throw new java.util.concurrent.CancellationException("Composite cancelled");
+        }
+
         if (segments.isEmpty()) {
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
@@ -355,6 +383,12 @@ class WaveformRenderer {
             // Draw each segment at its position
             int x = 0;
             for (Image segment : segments) {
+                // Check for interruption during compositing
+                if (Thread.currentThread().isInterrupted()) {
+                    throw new java.util.concurrent.CancellationException(
+                            "Composite cancelled during draw");
+                }
+
                 if (segment != null) {
                     g.drawImage(segment, x, 0, null);
                 }
