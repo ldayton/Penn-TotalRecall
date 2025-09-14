@@ -326,6 +326,14 @@ class FmodListenerManager {
                 handlePlaybackStopped();
                 return;
             }
+
+            // Check if channel is paused - if so, don't update position
+            var isPausedRef = arena.allocate(ValueLayout.JAVA_INT);
+            result = FmodCore.FMOD_Channel_GetPaused(handle.getChannel(), isPausedRef);
+            if (result == FmodConstants.FMOD_OK && isPausedRef.get(ValueLayout.JAVA_INT, 0) == 1) {
+                // Channel is paused, skip position update
+                return;
+            }
         } catch (Exception e) {
             log.warn("Error checking channel playing status", e);
         }

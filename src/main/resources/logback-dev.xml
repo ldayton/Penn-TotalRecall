@@ -1,0 +1,27 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File appender that clobbers on each run (dev mode only) -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>totalrecall.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Drive level from system property 'logging.level' with WARN default -->
+    <root level="${logging.level:-WARN}">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Set specific loggers if needed -->
+    <logger name="control.Start" level="${logging.level:-WARN}" />
+    <logger name="audio" level="${logging.level:-WARN}" />
+    <logger name="components" level="${logging.level:-WARN}" />
+</configuration>

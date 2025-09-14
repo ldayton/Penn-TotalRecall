@@ -386,6 +386,7 @@ tasks.register('runDev', JavaExec) {
     jvmArgs = nativeAccessJvmArgs
     loadEnvironmentConfig(runDev, 'development')
     systemProperty 'app.run.dev', 'true'
+    systemProperty 'logback.configurationFile', 'logback-dev.xml'
     systemProperty 'apple.awt.application.name', appProps.getProperty('app.name')
 }
 

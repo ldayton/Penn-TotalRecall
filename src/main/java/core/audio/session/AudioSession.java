@@ -4,6 +4,8 @@ import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.AudioEngine;
 import core.audio.AudioHandle;
 import core.audio.PlaybackHandle;
+import core.audio.PlaybackListener;
+import core.audio.PlaybackState;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.PlayPauseEvent;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @ThreadSafe
 @Slf4j
-public class AudioSession {
+public class AudioSession implements PlaybackListener {
 
     private final EventDispatchBus eventBus;
     private final AudioEngine audioEngine;
@@ -53,6 +55,9 @@ public class AudioSession {
 
         log.info("Loading audio file - frames: {}, sampleRate: {}", totalFrames, sampleRate);
         eventBus.subscribe(this);
+
+        // Register as a playback listener to receive progress updates
+        audioEngine.addPlaybackListener(this);
 
         log.debug("Created audio session for file: {}", audioFile.getName());
     }
@@ -204,6 +209,7 @@ public class AudioSession {
     public void dispose() {
         stop();
         eventBus.unsubscribe(this);
+        audioEngine.removePlaybackListener(this);
         log.debug("Disposed audio session for file: {}", audioFile.getName());
     }
 
@@ -242,5 +248,36 @@ public class AudioSession {
 
     public AudioSessionStateMachine.State getState() {
         return stateMachine.getCurrentState();
+    }
+
+    // PlaybackListener implementation
+
+    @Override
+    public void onProgress(
+            @NonNull PlaybackHandle playback, long positionFrames, long totalFrames) {
+        // Update the playhead position as playback progresses
+        applyCommand(new AudioSessionCommand.UpdatePosition(positionFrames));
+    }
+
+    @Override
+    public void onStateChanged(
+            @NonNull PlaybackHandle playback,
+            @NonNull PlaybackState newState,
+            @NonNull PlaybackState oldState) {
+        log.debug("Playback state changed from {} to {}", oldState, newState);
+    }
+
+    @Override
+    public void onPlaybackComplete(@NonNull PlaybackHandle playback) {
+        log.info("Playback completed");
+        applyCommand(new AudioSessionCommand.StopPlayback());
+        stateMachine.transitionToReady();
+    }
+
+    @Override
+    public void onPlaybackError(PlaybackHandle playback, @NonNull String error) {
+        log.error("Playback error: {}", error);
+        applyCommand(new AudioSessionCommand.SetLoadError(error));
+        stateMachine.transitionToError(0.0); // Error occurred at current position
     }
 }
