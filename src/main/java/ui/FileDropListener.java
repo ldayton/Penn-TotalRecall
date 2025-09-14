@@ -1,6 +1,6 @@
 package ui;
 
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.env.Constants;
 import core.events.WordpoolFileSelectedEvent;

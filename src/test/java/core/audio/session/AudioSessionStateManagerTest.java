@@ -1,4 +1,4 @@
-package core.audio;
+package core.audio.session;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,7 +1,7 @@
 package core.actions.impl;
 
 import core.actions.Action;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;

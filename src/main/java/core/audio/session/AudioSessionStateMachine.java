@@ -1,4 +1,4 @@
-package core.audio;
+package core.audio.session;
 
 import com.google.errorprone.annotations.ThreadSafe;
 import java.util.Arrays;

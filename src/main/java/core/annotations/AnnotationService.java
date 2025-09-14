@@ -1,6 +1,6 @@
 package core.annotations;
 
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.events.AnnotationAddedEvent;
 import core.events.AnnotationDeletedEvent;

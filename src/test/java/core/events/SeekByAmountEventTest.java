@@ -3,8 +3,8 @@ package core.events;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.headless.HeadlessTestFixture;
-import core.audio.AudioSessionManager;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionManager;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import java.io.File;
 import org.junit.jupiter.api.Test;

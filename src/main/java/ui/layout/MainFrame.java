@@ -1,7 +1,7 @@
 package ui.layout;
 
 import core.actions.impl.ExitAction;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.PreferenceKeys;

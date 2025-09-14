@@ -1,6 +1,6 @@
 package ui.viewport;
 
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import core.viewport.ViewportPaintingDataSource;
 import core.waveform.ScreenDimension;
 import core.waveform.TimeRange;

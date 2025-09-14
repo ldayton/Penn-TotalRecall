@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import app.swing.SwingTestFixture;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.events.AudioFileLoadRequestedEvent;
 import core.events.PlayLast200MillisEvent;

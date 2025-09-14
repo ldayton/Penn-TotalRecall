@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import core.audio.fmod.FmodAudioEngine;
 import core.audio.fmod.FmodSampleReader;
+import core.audio.session.AudioSessionDataSource;
+import core.audio.session.AudioSessionManager;
+import core.audio.session.AudioSessionStateMachine;
 
 /**
  * Guice module for the a2 (audio engine) package.

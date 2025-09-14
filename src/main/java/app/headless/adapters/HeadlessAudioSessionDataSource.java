@@ -1,7 +1,7 @@
 package app.headless.adapters;
 
 import core.audio.AudioHandle;
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import java.util.Optional;
 
 /**

@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 
 import com.google.inject.Provider;
 import core.audio.AudioEngine;
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.waveform.WaveformManager;
 import java.util.Optional;

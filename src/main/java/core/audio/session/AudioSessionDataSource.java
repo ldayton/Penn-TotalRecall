@@ -1,5 +1,6 @@
-package core.audio;
+package core.audio.session;
 
+import core.audio.AudioHandle;
 import java.util.Optional;
 
 /**

@@ -1,6 +1,6 @@
 package core.events;
 
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import lombok.NonNull;
 
 /**

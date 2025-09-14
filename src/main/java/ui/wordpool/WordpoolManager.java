@@ -1,6 +1,6 @@
 package ui.wordpool;
 
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;

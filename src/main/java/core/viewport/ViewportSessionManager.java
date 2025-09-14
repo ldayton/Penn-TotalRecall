@@ -3,7 +3,7 @@ package core.viewport;
 import com.google.errorprone.annotations.ThreadSafe;
 import com.google.inject.Provider;
 import core.audio.AudioEngine;
-import core.audio.AudioSessionDataSource;
+import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;

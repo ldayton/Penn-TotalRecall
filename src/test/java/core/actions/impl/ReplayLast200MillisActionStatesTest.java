@@ -3,7 +3,7 @@ package core.actions.impl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.swing.SwingTestFixture;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.events.AudioFileLoadRequestedEvent;
 import core.events.PlayLast200MillisEvent;

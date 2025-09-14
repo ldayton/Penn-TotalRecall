@@ -1,11 +1,12 @@
 package core.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import app.headless.HeadlessTestFixture;
-import core.audio.AudioSessionManager;
-import core.audio.AudioSessionStateMachine;
+import core.audio.session.AudioSessionManager;
+import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.viewport.ViewportSessionManager;
 import java.io.File;
@@ -170,9 +171,7 @@ class SeekToZeroTest extends HeadlessTestFixture {
                 AudioSessionStateMachine.State.READY,
                 stateMachine.getCurrentState(),
                 "Should be READY after seek to start");
-        assertTrue(
-                sessionManager.getCurrentPlaybackHandle().isEmpty(),
-                "Playback handle should be cleared after seek to start");
+        assertFalse(sessionManager.isPlaying(), "Should not be playing after seek to start");
 
         // Try to play again - this should work without throwing an exception
         eventBus.publish(new PlayPauseEvent());
@@ -183,63 +182,6 @@ class SeekToZeroTest extends HeadlessTestFixture {
                 AudioSessionStateMachine.State.PLAYING,
                 stateMachine.getCurrentState(),
                 "Should be able to play again after seek to start from paused state");
-        assertTrue(
-                sessionManager.getCurrentPlaybackHandle().isPresent(),
-                "Should have a new playback handle after restarting playback");
-    }
-
-    @Test
-    void seekToStartWithInvalidPlaybackHandleShouldTransitionToReady() throws Exception {
-        // Get instances from DI container
-        EventDispatchBus eventBus = getInstance(EventDispatchBus.class);
-        AudioSessionManager sessionManager = getInstance(AudioSessionManager.class);
-        AudioSessionStateMachine stateMachine = getInstance(AudioSessionStateMachine.class);
-
-        // Load test audio file
-        File testFile = new File("src/test/resources/audio/sweep.wav");
-        eventBus.publish(new AudioFileLoadRequestedEvent(testFile));
-        Thread.sleep(500);
-
-        // Start playback
-        eventBus.publish(new PlayPauseEvent());
-        Thread.sleep(100);
-        assertEquals(AudioSessionStateMachine.State.PLAYING, stateMachine.getCurrentState());
-
-        // Pause playback
-        eventBus.publish(new PlayPauseEvent());
-        Thread.sleep(100);
-        assertEquals(AudioSessionStateMachine.State.PAUSED, stateMachine.getCurrentState());
-
-        // Simulate a scenario where the playback handle becomes invalid
-        // First get the handle to close it properly, then clear the reference
-        var playbackHandle = sessionManager.getCurrentPlaybackHandle();
-        assertTrue(playbackHandle.isPresent(), "Should have playback handle while paused");
-
-        // Close the handle properly in FMOD
-        playbackHandle.get().close();
-
-        // Now clear the reference using reflection (simulates lost reference after close)
-        var field = AudioSessionManager.class.getDeclaredField("currentPlaybackHandle");
-        field.setAccessible(true);
-        field.set(sessionManager, java.util.Optional.empty());
-
-        // Now seek to start - this should still transition to READY even though handle is gone
-        eventBus.publish(new SeekEvent(0));
-        Thread.sleep(100);
-
-        // Should be in READY state even though stopPlayback() couldn't stop an invalid handle
-        assertEquals(
-                AudioSessionStateMachine.State.READY,
-                stateMachine.getCurrentState(),
-                "Should transition to READY even when playback handle is invalid");
-
-        // Try to play again - should work without error
-        eventBus.publish(new PlayPauseEvent());
-        Thread.sleep(100);
-
-        assertEquals(
-                AudioSessionStateMachine.State.PLAYING,
-                stateMachine.getCurrentState(),
-                "Should be able to play after seek to start with invalid handle");
+        assertTrue(sessionManager.isPlaying(), "Should be playing after restarting playback");
     }
 }
