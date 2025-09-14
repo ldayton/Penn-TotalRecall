@@ -138,20 +138,11 @@ public final class ViewportPainter {
                                 if (viewport != null && viewport.isVisible()) {
                                     SwingUtilities.invokeLater(
                                             () -> {
-                                                // Prevent out-of-order renders by verifying
-                                                // generation id
-                                                ViewportRenderSpec latest =
-                                                        dataSource.getRenderSpec(
-                                                                viewport.getViewportBounds());
-                                                if (latest.generation() == id) {
-                                                    viewport.repaint();
-                                                } else {
-                                                    log.debug(
-                                                            "Discarding stale render completion:"
-                                                                    + " staleId={}, latestId={}",
-                                                            id,
-                                                            latest.generation());
-                                                }
+                                                // Temporarily disabled generation checking
+                                                // to fix waveform disappearing during playback
+                                                // TODO: Re-enable with smarter logic that allows
+                                                // slightly stale renders during continuous playback
+                                                viewport.repaint();
                                                 if (ex != null) {
                                                     // Check if it's a timeout or cancellation
                                                     if (ex

@@ -194,14 +194,21 @@ public class AudioSession implements PlaybackListener {
 
     /** Get current playback position in seconds. */
     public double getCurrentPositionSeconds() {
+        long frames = getCurrentPositionFrames();
         var ctx = context.get();
-        long frames = ctx.playheadFrame();
         return ctx.sampleRate() > 0 ? (double) frames / ctx.sampleRate() : 0.0;
     }
 
     /** Get current playback position in frames. */
     public long getCurrentPositionFrames() {
         var ctx = context.get();
+
+        // If actively playing, get real-time position from audio engine
+        if (ctx.hasPlayback() && getState() == AudioSessionStateMachine.State.PLAYING) {
+            return audioEngine.getPosition(ctx.playbackHandle().get());
+        }
+
+        // Otherwise return stored position (paused, stopped, or seeking)
         return ctx.playheadFrame();
     }
 

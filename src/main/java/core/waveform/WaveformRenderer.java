@@ -123,7 +123,13 @@ class WaveformRenderer {
                         _ -> {
                             List<Image> segments =
                                     segmentFutures.stream().map(f -> f.getNow(null)).toList();
-                            return compositeSegments(segments, viewport);
+                            Image compositeImage = compositeSegments(segments, viewport);
+                            logger.debug(
+                                    "Successfully rendered viewport [{}s - {}s] with {} segments",
+                                    String.format("%.2f", viewport.startTimeSeconds()),
+                                    String.format("%.2f", viewport.endTimeSeconds()),
+                                    segments.size());
+                            return compositeImage;
                         })
                 .exceptionally(
                         e -> {
@@ -351,6 +357,12 @@ class WaveformRenderer {
                     } finally {
                         g.dispose();
                     }
+
+                    logger.debug(
+                            "Successfully rendered segment at {}s ({}x{} px)",
+                            key.startTime(),
+                            SEGMENT_WIDTH_PX,
+                            key.height());
                     return image;
                 },
                 renderPool);

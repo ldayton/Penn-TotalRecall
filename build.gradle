@@ -388,6 +388,11 @@ tasks.register('runDev', JavaExec) {
     systemProperty 'app.run.dev', 'true'
     systemProperty 'logback.configurationFile', 'logback-dev.xml'
     systemProperty 'apple.awt.application.name', appProps.getProperty('app.name')
+
+    // Pass through the autoplay property if provided
+    if (project.hasProperty('app.run.dev.autoplay')) {
+        systemProperty 'app.run.dev.autoplay', project.property('app.run.dev.autoplay')
+    }
 }
 
 spotless {
