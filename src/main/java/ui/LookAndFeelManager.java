@@ -86,13 +86,11 @@ public class LookAndFeelManager {
         if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
             desktop.setQuitHandler(
                     (_, response) -> {
-                        try {
-                            exitAction.execute();
-                            response.performQuit();
-                        } catch (Exception ex) {
-                            logger.error("Error during application quit", ex);
-                            response.cancelQuit();
-                        }
+                        // Don't call performQuit here - let the ExitAction handle everything
+                        // The ExitAction will call System.exit() if the user confirms
+                        exitAction.execute();
+                        // Always cancel the native quit since we handle it ourselves
+                        response.cancelQuit();
                     });
         }
 
