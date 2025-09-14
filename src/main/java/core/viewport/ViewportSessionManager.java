@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 @ThreadSafe
 public class ViewportSessionManager implements ViewportPaintingDataSource {
-    private static final int MAX_EVENT_HISTORY = 100;
+    private static final int MAX_COMMAND_HISTORY = 100;
 
     private final EventDispatchBus eventBus;
     private final AudioSessionDataSource sessionDataSource;
@@ -35,7 +35,7 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
 
     // Viewport state
     private final AtomicReference<ViewportContext> currentContext;
-    private final ConcurrentLinkedDeque<ViewportEvent> eventHistory;
+    private final ConcurrentLinkedDeque<ViewportCommand> commandHistory;
 
     // Session management
     private Optional<ViewportSession> currentSession = Optional.empty();
@@ -51,7 +51,7 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         this.audioEngineProvider = audioEngineProvider;
         this.waveformManager = waveformManager;
         this.currentContext = new AtomicReference<>(ViewportContext.createDefault());
-        this.eventHistory = new ConcurrentLinkedDeque<>();
+        this.commandHistory = new ConcurrentLinkedDeque<>();
         eventBus.subscribe(this);
     }
 
@@ -104,10 +104,10 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
     // ViewportManager interface methods
 
     public void onPlaybackUpdate(double playheadSeconds) {
-        ViewportEvent event =
-                new ViewportEvent.PlaybackUpdateEvent(
+        ViewportCommand command =
+                new ViewportCommand.PlaybackUpdate(
                         System.currentTimeMillis(), "PLAYBACK", playheadSeconds);
-        applyEvent(event);
+        applyCommand(command);
     }
 
     public void onUserZoom(int newPixelsPerSecond) {
@@ -115,71 +115,71 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
             log.warn("Invalid zoom level: {} pixels per second", newPixelsPerSecond);
             return;
         }
-        ViewportEvent event =
-                new ViewportEvent.UserZoomEvent(
+        ViewportCommand command =
+                new ViewportCommand.UserZoom(
                         System.currentTimeMillis(), "USER_ZOOM", newPixelsPerSecond);
-        applyEvent(event);
+        applyCommand(command);
     }
 
     public void onUserSeek(double targetSeconds) {
-        ViewportEvent event =
-                new ViewportEvent.UserSeekEvent(
+        ViewportCommand command =
+                new ViewportCommand.UserSeek(
                         System.currentTimeMillis(), "USER_SEEK", targetSeconds);
-        applyEvent(event);
+        applyCommand(command);
     }
 
     public void onCanvasResize(int width, int height) {
-        ViewportEvent event =
-                new ViewportEvent.CanvasResizeEvent(
+        ViewportCommand command =
+                new ViewportCommand.CanvasResize(
                         System.currentTimeMillis(), "CANVAS", width, height);
-        applyEvent(event);
+        applyCommand(command);
     }
 
-    private void applyEvent(ViewportEvent event) {
+    private void applyCommand(ViewportCommand command) {
         // Add to history
-        eventHistory.addLast(event);
-        while (eventHistory.size() > MAX_EVENT_HISTORY) {
-            eventHistory.removeFirst();
+        commandHistory.addLast(command);
+        while (commandHistory.size() > MAX_COMMAND_HISTORY) {
+            commandHistory.removeFirst();
         }
 
         // Update context atomically
         ViewportContext newContext =
-                currentContext.updateAndGet(ctx -> computeNewContext(ctx, event));
+                currentContext.updateAndGet(ctx -> computeNewContext(ctx, command));
 
         if (log.isDebugEnabled()) {
             log.debug(
-                    "Viewport event: {} -> playhead={}s, start={}s, end={}s",
-                    event.getClass().getSimpleName(),
+                    "Viewport command: {} -> playhead={}s, start={}s, end={}s",
+                    command.getClass().getSimpleName(),
                     String.format("%.2f", newContext.playheadSeconds()),
                     String.format("%.2f", newContext.getViewportStartTime()),
                     String.format("%.2f", newContext.getViewportEndTime()));
         }
     }
 
-    private ViewportContext computeNewContext(ViewportContext ctx, ViewportEvent event) {
-        return switch (event) {
-            case ViewportEvent.PlaybackUpdateEvent e ->
+    private ViewportContext computeNewContext(ViewportContext ctx, ViewportCommand command) {
+        return switch (command) {
+            case ViewportCommand.PlaybackUpdate e ->
                     new ViewportContext(
                             e.playheadSeconds(),
                             ctx.pixelsPerSecond(),
                             ctx.canvasWidth(),
                             ctx.canvasHeight());
 
-            case ViewportEvent.UserZoomEvent e ->
+            case ViewportCommand.UserZoom e ->
                     new ViewportContext(
                             ctx.playheadSeconds(),
                             e.newPixelsPerSecond(),
                             ctx.canvasWidth(),
                             ctx.canvasHeight());
 
-            case ViewportEvent.UserSeekEvent e ->
+            case ViewportCommand.UserSeek e ->
                     new ViewportContext(
                             e.targetSeconds(),
                             ctx.pixelsPerSecond(),
                             ctx.canvasWidth(),
                             ctx.canvasHeight());
 
-            case ViewportEvent.CanvasResizeEvent e ->
+            case ViewportCommand.CanvasResize e ->
                     new ViewportContext(
                             ctx.playheadSeconds(),
                             ctx.pixelsPerSecond(),
@@ -197,26 +197,26 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         return currentSession;
     }
 
-    public String getEventHistoryDebugString() {
-        StringBuilder sb = new StringBuilder("Recent viewport events (newest first):\n");
+    public String getCommandHistoryDebugString() {
+        StringBuilder sb = new StringBuilder("Recent viewport commands (newest first):\n");
         long now = System.currentTimeMillis();
 
-        eventHistory
+        commandHistory
                 .descendingIterator()
                 .forEachRemaining(
-                        event -> {
-                            long ageMs = now - event.timestamp();
+                        command -> {
+                            long ageMs = now - command.timestamp();
                             String details =
-                                    switch (event) {
-                                        case ViewportEvent.PlaybackUpdateEvent e ->
+                                    switch (command) {
+                                        case ViewportCommand.PlaybackUpdate e ->
                                                 String.format(
                                                         "playhead=%.2fs", e.playheadSeconds());
-                                        case ViewportEvent.UserZoomEvent e ->
+                                        case ViewportCommand.UserZoom e ->
                                                 String.format(
                                                         "zoom=%dpx/s", e.newPixelsPerSecond());
-                                        case ViewportEvent.UserSeekEvent e ->
+                                        case ViewportCommand.UserSeek e ->
                                                 String.format("seek=%.2fs", e.targetSeconds());
-                                        case ViewportEvent.CanvasResizeEvent e ->
+                                        case ViewportCommand.CanvasResize e ->
                                                 String.format(
                                                         "size=%dx%d", e.newWidth(), e.newHeight());
                                     };
@@ -224,8 +224,8 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                                     String.format(
                                             "  %4dms ago: %-20s from %-10s [%s]\n",
                                             ageMs,
-                                            event.getClass().getSimpleName(),
-                                            event.source(),
+                                            command.getClass().getSimpleName(),
+                                            command.source(),
                                             details));
                         });
 
