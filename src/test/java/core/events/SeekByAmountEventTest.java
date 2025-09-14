@@ -41,7 +41,7 @@ class SeekByAmountEventTest extends HeadlessTestFixture {
         assertEquals(AudioSessionStateMachine.State.PAUSED, stateMachine.getCurrentState());
 
         // Get initial position
-        long initialPosition = sessionManager.getPlaybackPositionFrames().orElse(0L);
+        long initialPosition = sessionManager.snapshot().playheadFrame();
         assertTrue(initialPosition > 0, "Should have played forward from the start");
 
         // Seek backward by 100ms
@@ -49,7 +49,7 @@ class SeekByAmountEventTest extends HeadlessTestFixture {
         Thread.sleep(100); // Give it time to process
 
         // Check that position actually moved backward
-        long newPosition = sessionManager.getPlaybackPositionFrames().orElse(0L);
+        long newPosition = sessionManager.snapshot().playheadFrame();
         assertTrue(
                 newPosition < initialPosition,
                 String.format(
@@ -61,7 +61,7 @@ class SeekByAmountEventTest extends HeadlessTestFixture {
         for (int i = 0; i < 3; i++) {
             eventBus.publish(new SeekByAmountEvent(SeekByAmountEvent.Direction.BACKWARD, 100));
             Thread.sleep(100);
-            newPosition = sessionManager.getPlaybackPositionFrames().orElse(0L);
+            newPosition = sessionManager.snapshot().playheadFrame();
             assertTrue(
                     newPosition < previousPosition,
                     String.format(

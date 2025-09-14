@@ -2,6 +2,8 @@ package core.viewport;
 
 import com.google.errorprone.annotations.ThreadSafe;
 import core.audio.session.AudioSessionDataSource;
+import core.audio.session.AudioSessionStateMachine;
+import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.ZoomEvent;
 import core.waveform.ScreenDimension;
@@ -9,7 +11,9 @@ import core.waveform.Waveform;
 import core.waveform.WaveformManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import java.awt.Image;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +40,7 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
 
     @Inject
     public ViewportSessionManager(
-            @NonNull core.dispatch.EventDispatchBus eventBus,
+            @NonNull EventDispatchBus eventBus,
             @NonNull AudioSessionDataSource sessionDataSource,
             @NonNull WaveformManager waveformManager,
             @NonNull ViewportProjector projector) {
@@ -60,31 +64,28 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
 
     @Override
     public ViewportRenderSpec getRenderSpec(@NonNull ScreenDimension bounds) {
-        // Error state takes precedence if present
-        var errorOpt = sessionDataSource.getErrorMessage();
-        if (errorOpt.isPresent()) {
+        // Loading or empty states
+        var snap = sessionDataSource.snapshot();
+        if (snap.state() == AudioSessionStateMachine.State.ERROR) {
             return new ViewportRenderSpec(
                     PaintMode.ERROR,
-                    errorOpt,
-                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    snap.errorMessage(),
+                    CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
-
-        // Loading or empty states
-        var snap = sessionDataSource.getTimelineSnapshot();
-        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.LOADING) {
+        if (snap.state() == AudioSessionStateMachine.State.LOADING) {
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
-                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
 
-        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.NO_AUDIO) {
+        if (snap.state() == AudioSessionStateMachine.State.NO_AUDIO) {
             return new ViewportRenderSpec(
                     PaintMode.EMPTY,
                     Optional.empty(),
-                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
 
@@ -94,20 +95,20 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
-                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
 
         // Build UI + audio snapshots and project
-        var sampleRateOpt = sessionDataSource.getSampleRate();
-        if (sampleRateOpt.isEmpty()) {
+        var audioSnapshot = sessionDataSource.snapshot();
+        int sampleRate = audioSnapshot.sampleRate();
+        if (sampleRate == 0) {
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
-                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    CompletableFuture.<Image>completedFuture(null),
                     0L);
         }
-        int sampleRate = sampleRateOpt.get();
         double fpp =
                 Math.max(
                         MIN_FRAMES_PER_PIXEL, Math.min(MAX_FRAMES_PER_PIXEL, framesPerPixel.get()));

@@ -11,7 +11,6 @@ import core.events.PlayPauseEvent;
 import core.events.SeekByAmountEvent;
 import core.events.SeekEvent;
 import java.io.File;
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AudioSession {
 
-    private static final int MAX_COMMAND_HISTORY = 50;
-
     private final EventDispatchBus eventBus;
     private final AudioEngine audioEngine;
     private final AudioSessionStateMachine stateMachine;
@@ -33,7 +30,6 @@ public class AudioSession {
 
     // Immutable state managed through commands
     private final AtomicReference<AudioSessionContext> context;
-    private final LinkedList<AudioSessionCommand> commandHistory = new LinkedList<>();
 
     /** Create a new audio session for a loaded file. */
     public AudioSession(
@@ -56,7 +52,7 @@ public class AudioSession {
                 new AudioSessionCommand.LoadFile(audioFile, audioHandle, totalFrames, sampleRate);
         this.context = new AtomicReference<>(initialContext.apply(loadCommand));
 
-        recordCommand(loadCommand);
+        log.info("Loading audio file - frames: {}, sampleRate: {}", totalFrames, sampleRate);
         eventBus.subscribe(this);
 
         log.debug("Created audio session for file: {}", audioFile.getName());
@@ -67,14 +63,18 @@ public class AudioSession {
         AudioSessionContext oldContext = context.get();
         AudioSessionContext newContext = context.updateAndGet(ctx -> ctx.apply(command));
 
-        recordCommand(command);
+        // Log command application and state changes
+        log.debug(
+                "Applied command: {} at frame {}",
+                command.getClass().getSimpleName(),
+                oldContext.playheadFrame());
 
-        // Log state transitions
         if (oldContext.machineState() != newContext.machineState()) {
-            log.debug(
-                    "Session state transition: {} -> {}",
+            log.info(
+                    "State transition: {} -> {} (frame: {})",
                     oldContext.machineState(),
-                    newContext.machineState());
+                    newContext.machineState(),
+                    newContext.playheadFrame());
         }
 
         // Publish state change events when machine state changes
@@ -83,14 +83,6 @@ public class AudioSession {
             eventBus.publish(
                     new AppStateChangedEvent(
                             oldContext.machineState(), newContext.machineState(), position));
-        }
-    }
-
-    /** Record command in history for debugging. */
-    private void recordCommand(AudioSessionCommand command) {
-        commandHistory.addLast(command);
-        while (commandHistory.size() > MAX_COMMAND_HISTORY) {
-            commandHistory.removeFirst();
         }
     }
 
@@ -106,6 +98,7 @@ public class AudioSession {
         long endFrame = ctx.totalFrames();
 
         PlaybackHandle playback = audioEngine.play(ctx.audioHandle().get(), startFrame, endFrame);
+        log.info("Starting playback from frame {} to {}", startFrame, endFrame);
         applyCommand(new AudioSessionCommand.StartPlayback(playback, startFrame));
 
         // Update state machine
@@ -123,6 +116,7 @@ public class AudioSession {
         PlaybackHandle playback = ctx.playbackHandle().get();
         audioEngine.pause(playback);
         long position = audioEngine.getPosition(playback);
+        log.info("Pausing playback at frame {}", position);
 
         applyCommand(new AudioSessionCommand.PausePlayback(position));
         stateMachine.transitionToPaused();
@@ -139,6 +133,7 @@ public class AudioSession {
         PlaybackHandle playback = ctx.playbackHandle().get();
         audioEngine.resume(playback);
         long position = audioEngine.getPosition(playback);
+        log.info("Resuming playback from frame {}", position);
 
         applyCommand(new AudioSessionCommand.ResumePlayback(position));
         stateMachine.transitionToPlaying();
@@ -150,6 +145,7 @@ public class AudioSession {
         if (ctx.hasPlayback()) {
             audioEngine.stop(ctx.playbackHandle().get());
             ctx.playbackHandle().get().close();
+            log.info("Stopping playback");
         }
 
         applyCommand(new AudioSessionCommand.StopPlayback());
@@ -163,11 +159,23 @@ public class AudioSession {
         if (ctx.hasPlayback()) {
             // Active playback - seek immediately
             audioEngine.seek(ctx.playbackHandle().get(), targetFrame);
-            log.debug("Seeked to frame: {}", targetFrame);
+            log.info(
+                    "Seeking to frame {} ({}s)",
+                    targetFrame,
+                    ctx.sampleRate() > 0
+                            ? String.format("%.2f", targetFrame / (double) ctx.sampleRate())
+                            : "0");
+            // Keep explicit playhead in sync with engine position
+            applyCommand(new AudioSessionCommand.UpdatePosition(targetFrame));
         } else if (ctx.machineState() == AudioSessionStateMachine.State.READY) {
             // No playback - set pending position
             applyCommand(new AudioSessionCommand.SetPendingSeek(targetFrame));
-            log.debug("Set pending seek to frame: {}", targetFrame);
+            log.info(
+                    "Set pending seek to frame {} ({}s)",
+                    targetFrame,
+                    ctx.sampleRate() > 0
+                            ? String.format("%.2f", targetFrame / (double) ctx.sampleRate())
+                            : "0");
         }
     }
 

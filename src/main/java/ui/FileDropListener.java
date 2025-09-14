@@ -65,7 +65,12 @@ public class FileDropListener implements FileDrop.Listener {
                 if (files[0].getName().toLowerCase().endsWith(Constants.wordpoolFileExtension)) {
                     eventBus.publish(new WordpoolFileSelectedEvent(files[0]));
 
-                    if (sessionDataSource.isAudioLoaded()) {
+                    var snap = sessionDataSource.snapshot();
+                    if (snap.state() != core.audio.session.AudioSessionStateMachine.State.NO_AUDIO
+                            && snap.state()
+                                    != core.audio.session.AudioSessionStateMachine.State.LOADING
+                            && snap.state()
+                                    != core.audio.session.AudioSessionStateMachine.State.ERROR) {
                         sessionDataSource
                                 .getCurrentAudioFilePath()
                                 .ifPresent(

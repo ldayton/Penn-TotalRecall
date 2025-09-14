@@ -44,9 +44,12 @@ public class ReplayLast200MillisAction extends Action {
         // User can replay last 200 millis when audio is open, not playing, and not at the beginning
         if (currentState == AudioSessionStateMachine.State.READY
                 || currentState == AudioSessionStateMachine.State.PAUSED) {
-            // Check if we're not at the beginning
-            double position = sessionSource.getPlaybackPosition().orElse(0.0);
-            return position > 0.2; // Enable if we're past 200ms
+            // Check if we're not at the beginning (200ms worth of frames)
+            var snapshot = sessionSource.snapshot();
+            if (snapshot.sampleRate() > 0) {
+                long minFrames = (long) (snapshot.sampleRate() * 0.2); // 200ms in frames
+                return snapshot.playheadFrame() > minFrames;
+            }
         }
         return false;
     }

@@ -160,50 +160,11 @@ public class AudioSessionManager implements AudioSessionDataSource {
 
     // AudioSessionDataSource implementation
 
-    @Override
-    public boolean isAudioLoaded() {
-        return currentSession.isPresent();
-    }
-
-    @Override
-    public Optional<Long> getTotalFrames() {
-        return currentSession.map(session -> session.getContext().totalFrames());
-    }
-
-    @Override
-    public Optional<Integer> getSampleRate() {
-        return currentSession.map(session -> session.getContext().sampleRate());
-    }
-
     public Optional<File> getCurrentFile() {
         return currentSession.map(AudioSession::getAudioFile);
     }
 
-    @Override
-    public boolean isLoading() {
-        return stateMachine.getCurrentState() == AudioSessionStateMachine.State.LOADING;
-    }
-
-    @Override
-    public Optional<Double> getTotalDuration() {
-        return currentSession.map(
-                session -> {
-                    var ctx = session.getContext();
-                    return ctx.sampleRate() > 0
-                            ? (double) ctx.totalFrames() / ctx.sampleRate()
-                            : 0.0;
-                });
-    }
-
-    @Override
-    public Optional<Double> getPlaybackPosition() {
-        return currentSession.map(AudioSession::getCurrentPositionSeconds);
-    }
-
-    @Override
-    public Optional<Long> getPlaybackPositionFrames() {
-        return currentSession.map(AudioSession::getCurrentPositionFrames);
-    }
+    // isLoading() removed; use snapshot().state
 
     @Override
     public Optional<AudioHandle> getCurrentAudioHandle() {
@@ -216,18 +177,13 @@ public class AudioSessionManager implements AudioSessionDataSource {
     }
 
     @Override
-    public Optional<String> getErrorMessage() {
-        return lastErrorMessage;
-    }
-
-    @Override
-    public AudioTimelineSnapshot getTimelineSnapshot() {
+    public AudioSessionSnapshot snapshot() {
         var state = stateMachine.getCurrentState();
-        long total = getTotalFrames().orElse(0L);
-        int sr = getSampleRate().orElse(0);
-        long playhead = getPlaybackPositionFrames().orElse(0L);
-        var err = getErrorMessage();
-        return new AudioTimelineSnapshot(state, total, playhead, err);
+        long total = currentSession.map(session -> session.getContext().totalFrames()).orElse(0L);
+        int sr = currentSession.map(session -> session.getContext().sampleRate()).orElse(0);
+        long playhead = currentSession.map(AudioSession::getCurrentPositionFrames).orElse(0L);
+        var err = lastErrorMessage;
+        return new AudioSessionSnapshot(state, total, playhead, sr, err);
     }
 
     // Getters

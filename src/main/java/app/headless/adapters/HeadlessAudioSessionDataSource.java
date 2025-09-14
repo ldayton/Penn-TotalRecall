@@ -11,33 +11,6 @@ import java.util.Optional;
 public class HeadlessAudioSessionDataSource implements AudioSessionDataSource {
 
     @Override
-    public Optional<Double> getPlaybackPosition() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Double> getTotalDuration() {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isAudioLoaded() {
-        return false;
-    }
-
-    // isPlaying() removed from AudioSessionDataSource
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public Optional<String> getErrorMessage() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<AudioHandle> getCurrentAudioHandle() {
         return Optional.empty();
     }
@@ -48,26 +21,12 @@ public class HeadlessAudioSessionDataSource implements AudioSessionDataSource {
     }
 
     @Override
-    public Optional<Integer> getSampleRate() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Long> getPlaybackPositionFrames() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Long> getTotalFrames() {
-        return Optional.empty();
-    }
-
-    @Override
-    public AudioTimelineSnapshot getTimelineSnapshot() {
-        return new AudioTimelineSnapshot(
+    public AudioSessionSnapshot snapshot() {
+        return new AudioSessionSnapshot(
                 core.audio.session.AudioSessionStateMachine.State.NO_AUDIO,
                 0L,
                 0L,
+                0,
                 Optional.empty());
     }
 }

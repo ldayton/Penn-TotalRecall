@@ -86,17 +86,15 @@ public class AnnotationService {
     /** Adds an annotation at the current audio position. */
     public AnnotationEntry addAnnotationAtCurrentTime(
             @NonNull String text, @NonNull AnnotationType type) {
-        if (!audioState.isAudioLoaded()) {
-            throw new IllegalStateException("No audio file open");
+        var snap = audioState.snapshot();
+        switch (snap.state()) {
+            case NO_AUDIO, LOADING, ERROR -> throw new IllegalStateException("No audio file open");
+            default -> {}
         }
-        double currentTime =
-                audioState
-                                .getPlaybackPosition()
-                                .orElseThrow(
-                                        () ->
-                                                new IllegalStateException(
-                                                        "Cannot get current playback position"))
-                        * 1000;
+        if (snap.sampleRate() <= 0) {
+            throw new IllegalStateException("Invalid sample rate");
+        }
+        double currentTime = (snap.playheadFrame() / (double) snap.sampleRate()) * 1000.0;
         return addAnnotation(text, type, currentTime);
     }
 
@@ -225,7 +223,10 @@ public class AnnotationService {
 
     /** Checks if an annotation can be placed at the specified time. */
     public boolean canAnnotateAt(double time) {
-        if (!audioState.isAudioLoaded()) {
+        var snap = audioState.snapshot();
+        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.NO_AUDIO
+                || snap.state() == core.audio.session.AudioSessionStateMachine.State.LOADING
+                || snap.state() == core.audio.session.AudioSessionStateMachine.State.ERROR) {
             return false;
         }
         validateTime(time);
@@ -247,10 +248,12 @@ public class AnnotationService {
         if (time < 0) {
             throw new IllegalArgumentException("Time cannot be negative: " + time);
         }
-        if (audioState.isAudioLoaded()) {
+        var snap = audioState.snapshot();
+        if (snap.state() != core.audio.session.AudioSessionStateMachine.State.NO_AUDIO) {
             double duration =
-                    audioState.getTotalDuration().orElse(0.0)
-                            * 1000; // Convert seconds to milliseconds
+                    snap.sampleRate() > 0
+                            ? (snap.totalFrames() / (double) snap.sampleRate()) * 1000.0
+                            : 0.0;
             if (time > duration) {
                 throw new IllegalArgumentException(
                         "Time exceeds audio duration: " + time + " > " + duration);

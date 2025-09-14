@@ -61,7 +61,10 @@ public class WordpoolManager {
      * by marking words in the wordpool display. Safe to call repeatedly.
      */
     private void applyLstForCurrentAudioIfPossible() {
-        if (!sessionDataSource.isAudioLoaded()) {
+        var snap = sessionDataSource.snapshot();
+        if (snap.state() == core.audio.session.AudioSessionStateMachine.State.NO_AUDIO
+                || snap.state() == core.audio.session.AudioSessionStateMachine.State.LOADING
+                || snap.state() == core.audio.session.AudioSessionStateMachine.State.ERROR) {
             return;
         }
         sessionDataSource
