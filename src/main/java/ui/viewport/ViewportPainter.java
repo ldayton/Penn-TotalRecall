@@ -2,16 +2,13 @@ package ui.viewport;
 
 import core.audio.session.AudioSessionStateMachine;
 import core.viewport.ViewportPaintingDataSource;
+import core.viewport.ViewportPaintingDataSource.PlayheadAnchoredContext;
 import core.waveform.ScreenDimension;
-import core.waveform.TimeRange;
-import core.waveform.ViewportContext;
-import core.waveform.Waveform;
 import core.waveform.WaveformViewport;
 import jakarta.inject.Inject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
@@ -100,83 +97,30 @@ public class ViewportPainter {
         if (viewport == null || dataSource == null) {
             return;
         }
-
         ScreenDimension bounds = viewport.getViewportBounds();
-
-        // Check state to determine what to paint
-        AudioSessionStateMachine.State state = stateMachine.getCurrentState();
-
-        if (state == AudioSessionStateMachine.State.NO_AUDIO) {
-            paintEmptyState(g, bounds);
-            return;
-        }
-
-        if (state == AudioSessionStateMachine.State.LOADING) {
-            paintLoadingIndicator(g, bounds);
-            return;
-        }
-
-        if (state == AudioSessionStateMachine.State.ERROR) {
-            paintErrorMessage(g, bounds, "Audio loading failed");
-            return;
-        }
-
-        // If we're in READY, PLAYING, or PAUSED, we should have audio
-        TimeRange timeRange = dataSource.getTimeRange();
-        if (timeRange == null) {
-            // This shouldn't happen if state machine is correct
-            return;
-        }
-
-        // Construct ViewportContext from the pieces
-        ViewportContext context =
-                new ViewportContext(
-                        timeRange.startSeconds(),
-                        timeRange.endSeconds(),
-                        bounds.width(),
-                        bounds.height(),
-                        dataSource.getPixelsPerSecond());
-
-        // Get the waveform
-        Waveform waveform = dataSource.getWaveform();
-        if (waveform == null) {
-            paintLoadingIndicator(g, bounds);
-            return;
-        }
-
-        // Get rendered waveform image
-        try {
-            CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
-
-            // Try to get the image with a short timeout for responsiveness
-            Image waveformImage = imageFuture.get(100, TimeUnit.MILLISECONDS);
-
-            if (waveformImage != null) {
-                paintWaveform(g, bounds, waveformImage);
-            } else {
-                clearBackground(g, bounds);
+        PlayheadAnchoredContext ctx = dataSource.getPlayheadAnchoredContext(bounds);
+        switch (ctx.mode()) {
+            case EMPTY -> paintEmptyState(g, bounds);
+            case LOADING -> paintLoadingIndicator(g, bounds);
+            case ERROR ->
+                    paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
+            case RENDER -> {
+                try {
+                    Image image = ctx.image().get().get(100, TimeUnit.MILLISECONDS);
+                    if (image != null) {
+                        paintWaveform(
+                                g, bounds.x(), bounds.y(), bounds.width(), bounds.height(), image);
+                    } else {
+                        clearBackground(g, bounds);
+                    }
+                } catch (TimeoutException e) {
+                    paintLoadingIndicator(g, bounds);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    clearBackground(g, bounds);
+                }
+                paintPlayhead(g, bounds);
             }
-        } catch (TimeoutException e) {
-            // Still rendering, show loading indicator
-            paintLoadingIndicator(g, bounds);
-
-            // Request a repaint when the rendering completes
-            CompletableFuture<Image> imageFuture = waveform.renderViewport(context);
-            imageFuture.whenComplete(
-                    (image, _) -> {
-                        if (image != null) {}
-                    });
-        } catch (Exception e) {
-            // Error rendering
-            e.printStackTrace();
-            clearBackground(g, bounds);
-        }
-
-        // Draw fixed center playhead (always at 50% of viewport width)
-        if (state == AudioSessionStateMachine.State.READY
-                || state == AudioSessionStateMachine.State.PLAYING
-                || state == AudioSessionStateMachine.State.PAUSED) {
-            paintPlayhead(g, bounds);
         }
     }
 
@@ -188,33 +132,13 @@ public class ViewportPainter {
      * @param waveformImage The rendered waveform image from w2
      */
     public void paintWaveform(
-            @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull Image waveformImage) {
-        // Check if we need to offset the waveform for negative viewport start (when playback is at
-        // 0)
-        if (dataSource != null) {
-            // Get playback position - if it's near 0, we need to offset the waveform
-            double playbackPos = dataSource.getPlaybackPositionSeconds();
-            double halfViewportSeconds = bounds.width() / (2.0 * dataSource.getPixelsPerSecond());
-
-            if (playbackPos < halfViewportSeconds) {
-                // We're at the beginning - offset waveform so playhead appears centered
-                int offsetPixels =
-                        (int)
-                                ((halfViewportSeconds - playbackPos)
-                                        * dataSource.getPixelsPerSecond());
-                g.drawImage(
-                        waveformImage,
-                        bounds.x() + offsetPixels,
-                        bounds.y(),
-                        bounds.width(),
-                        bounds.height(),
-                        null);
-                return;
-            }
-        }
-
-        // Normal drawing
-        g.drawImage(waveformImage, bounds.x(), bounds.y(), bounds.width(), bounds.height(), null);
+            @NonNull Graphics2D g,
+            int x,
+            int y,
+            int width,
+            int height,
+            @NonNull Image waveformImage) {
+        g.drawImage(waveformImage, x, y, width, height, null);
     }
 
     /**

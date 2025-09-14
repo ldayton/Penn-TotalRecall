@@ -7,6 +7,7 @@ import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
+import core.waveform.ScreenDimension;
 import core.waveform.TimeRange;
 import core.waveform.Waveform;
 import core.waveform.WaveformManager;
@@ -197,6 +198,14 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         return currentSession;
     }
 
+    /**
+     * Expose current playback position in seconds for tests and diagnostics. Returns 0.0 if no
+     * session is active.
+     */
+    public double getPlaybackPositionSeconds() {
+        return currentSession.map(ViewportSession::getPlaybackPositionSeconds).orElse(0.0);
+    }
+
     public String getCommandHistoryDebugString() {
         StringBuilder sb = new StringBuilder("Recent viewport commands (newest first):\n");
         long now = System.currentTimeMillis();
@@ -232,35 +241,59 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         return sb.toString();
     }
 
-    // ViewportPaintingDataSource implementation
-
     @Override
-    public TimeRange getTimeRange() {
-        // Return null if no audio loaded (no valid time range)
-        if (!sessionDataSource.isAudioLoaded()) {
-            return null;
+    public PlayheadAnchoredContext getPlayheadAnchoredContext(@NonNull ScreenDimension bounds) {
+        // Error state takes precedence if present
+        var errorOpt = sessionDataSource.getErrorMessage();
+        if (errorOpt.isPresent()) {
+            return new PlayheadAnchoredContext(
+                    PaintMode.ERROR, errorOpt, Optional.empty(), 0L, 0.0);
         }
-        return currentContext.get().getTimeRange();
-    }
 
-    @Override
-    public int getPixelsPerSecond() {
-        return currentContext.get().pixelsPerSecond();
-    }
+        // Loading or empty states
+        if (sessionDataSource.isLoading()) {
+            return new PlayheadAnchoredContext(
+                    PaintMode.LOADING, Optional.empty(), Optional.empty(), 0L, 0.0);
+        }
 
-    @Override
-    public double getPlaybackPositionSeconds() {
-        // Get playback position from the session's playback listener if available
-        return currentSession.map(ViewportSession::getPlaybackPositionSeconds).orElse(0.0);
-    }
+        if (!sessionDataSource.isAudioLoaded()) {
+            return new PlayheadAnchoredContext(
+                    PaintMode.EMPTY, Optional.empty(), Optional.empty(), 0L, 0.0);
+        }
 
-    @Override
-    public Waveform getWaveform() {
-        return waveformManager.getCurrentWaveform().orElse(null);
-    }
+        // Ready to render if waveform exists; otherwise still loading
+        Waveform waveform = waveformManager.getCurrentWaveform().orElse(null);
+        if (waveform == null) {
+            return new PlayheadAnchoredContext(
+                    PaintMode.LOADING, Optional.empty(), Optional.empty(), 0L, 0.0);
+        }
 
-    @Override
-    public boolean isPlaying() {
-        return currentSession.map(ViewportSession::isPlaying).orElse(false);
+        // Build waveform viewport context from a fresh playhead-centric context using current
+        // bounds
+        var ctx = currentContext.get();
+        int pps = ctx.pixelsPerSecond();
+        // Recompute time range for provided bounds to ensure playhead is centered at 50%
+        var tempCtx =
+                new ViewportContext(ctx.playheadSeconds(), pps, bounds.width(), bounds.height());
+        TimeRange tr = tempCtx.getTimeRange();
+        var wfCtx =
+                new core.waveform.ViewportContext(
+                        tr.startSeconds(), tr.endSeconds(), bounds.width(), bounds.height(), pps);
+
+        var imageFuture = waveform.renderViewport(wfCtx);
+
+        long playheadFrame = sessionDataSource.getPlaybackPositionFrames().orElse(0L);
+        double pixelsPerFrame =
+                sessionDataSource
+                        .getSampleRate()
+                        .map(sr -> sr > 0 ? (pps / (double) sr) : 0.0)
+                        .orElse(0.0);
+
+        return new PlayheadAnchoredContext(
+                PaintMode.RENDER,
+                Optional.empty(),
+                Optional.of(imageFuture),
+                playheadFrame,
+                pixelsPerFrame);
     }
 }
