@@ -2,6 +2,7 @@ package core.actions.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import annotations.Windowing;
 import app.swing.SwingTestFixture;
 import core.env.PreferenceKeys;
 import core.preferences.PreferencesManager;
@@ -15,6 +16,7 @@ import ui.layout.MainFrame;
  * Tests for ExitAction to ensure proper quit dialog behavior. Verifies that clicking "No" on the
  * quit confirmation dialog prevents exit.
  */
+@Windowing
 class ExitActionTest extends SwingTestFixture {
 
     @Test
