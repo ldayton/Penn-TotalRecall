@@ -1,8 +1,7 @@
 package ui.viewport;
 
-import core.audio.session.AudioSessionStateMachine;
 import core.viewport.ViewportPaintingDataSource;
-import core.viewport.ViewportPaintingDataSource.PlayheadAnchoredContext;
+import core.viewport.ViewportPaintingDataSource.ViewportRenderSpec;
 import core.waveform.ScreenDimension;
 import core.waveform.WaveformViewport;
 import jakarta.inject.Inject;
@@ -10,26 +9,26 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import javax.swing.Timer;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Paints waveform display components with configurable refresh rate. Handles rendering of waveform
  * image, playback cursor, and status messages.
  */
-public class ViewportPainter {
+@Slf4j
+public final class ViewportPainter {
 
     private static final int FPS = 60;
+    private static final int RENDER_TIMEOUT_MS = 750;
     private final Timer repaintTimer;
-    private final AudioSessionStateMachine stateMachine;
     private volatile WaveformViewport viewport;
     private volatile ViewportPaintingDataSource dataSource;
 
     /** Create a painter with dependency injection. */
     @Inject
-    public ViewportPainter(AudioSessionStateMachine stateMachine) {
-        this.stateMachine = stateMachine;
+    public ViewportPainter() {
         this.viewport = null;
         this.dataSource = null;
         this.repaintTimer =
@@ -67,10 +66,7 @@ public class ViewportPainter {
         return repaintTimer.isRunning();
     }
 
-    /**
-     * Called by the viewport during its paint cycle to suggest painting. The painter decides
-     * whether and what to paint.
-     */
+    /** Suggest a paint during the viewport's paint cycle. */
     public void suggestPaint() {
         if (viewport == null) {
             return;
@@ -87,50 +83,80 @@ public class ViewportPainter {
         paint(g);
     }
 
-    /**
-     * Main paint orchestration method. Queries data sources, constructs ViewportContext, gets
-     * rendered image, and paints.
-     *
-     * @param g Graphics context from the viewport
-     */
+    /** Main paint orchestration: query data source, render, and draw. */
     private void paint(@NonNull Graphics2D g) {
         if (viewport == null || dataSource == null) {
             return;
         }
         ScreenDimension bounds = viewport.getViewportBounds();
-        PlayheadAnchoredContext ctx = dataSource.getPlayheadAnchoredContext(bounds);
+        ViewportRenderSpec ctx = dataSource.getRenderSpec(bounds);
         switch (ctx.mode()) {
-            case EMPTY -> paintEmptyState(g, bounds);
-            case LOADING -> paintLoadingIndicator(g, bounds);
-            case ERROR ->
-                    paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
+            case EMPTY -> {
+                clearBackground(g, bounds);
+                paintEmptyState(g, bounds);
+            }
+            case LOADING -> {
+                clearBackground(g, bounds);
+                paintLoadingIndicator(g, bounds);
+            }
+            case ERROR -> {
+                clearBackground(g, bounds);
+                paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
+            }
             case RENDER -> {
-                try {
-                    Image image = ctx.image().get().get(100, TimeUnit.MILLISECONDS);
-                    if (image != null) {
-                        paintWaveform(
-                                g, bounds.x(), bounds.y(), bounds.width(), bounds.height(), image);
-                    } else {
+                long id = ctx.generation();
+                var future = ctx.image();
+                if (future.isDone()) {
+                    try {
+                        Image image = future.getNow(null);
+                        if (image != null) {
+                            paintWaveform(
+                                    g,
+                                    bounds.x(),
+                                    bounds.y(),
+                                    bounds.width(),
+                                    bounds.height(),
+                                    image);
+                        } else {
+                            clearBackground(g, bounds);
+                        }
+                    } catch (Exception e) {
                         clearBackground(g, bounds);
                     }
-                } catch (TimeoutException e) {
-                    paintLoadingIndicator(g, bounds);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
                     clearBackground(g, bounds);
+                    // Non-blocking: schedule a repaint when rendering completes (with timeout)
+                    var repaintFuture =
+                            future.completeOnTimeout(
+                                    null, RENDER_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+                    repaintFuture.whenComplete(
+                            (img, ex) -> {
+                                if (viewport != null && viewport.isVisible()) {
+                                    // Prevent out-of-order renders by verifying generation id
+                                    ViewportRenderSpec latest = dataSource.getRenderSpec(bounds);
+                                    if (latest.generation() == id) {
+                                        viewport.repaint();
+                                    } else {
+                                        log.warn(
+                                                "Discarding stale render completion: staleId={},"
+                                                        + " latestId={}",
+                                                id,
+                                                latest.generation());
+                                    }
+                                    if (ex != null) {
+                                        log.warn(
+                                                "Waveform render completed exceptionally: {}",
+                                                ex.toString());
+                                    }
+                                }
+                            });
                 }
                 paintPlayhead(g, bounds);
             }
         }
     }
 
-    /**
-     * Paint the waveform image within the given bounds.
-     *
-     * @param g Graphics context
-     * @param bounds Area to paint in
-     * @param waveformImage The rendered waveform image from w2
-     */
+    /** Paint the waveform image within the given bounds. */
     public void paintWaveform(
             @NonNull Graphics2D g,
             int x,
@@ -141,12 +167,7 @@ public class ViewportPainter {
         g.drawImage(waveformImage, x, y, width, height, null);
     }
 
-    /**
-     * Paint loading indicator while audio is being loaded.
-     *
-     * @param g Graphics context
-     * @param bounds Area to paint in
-     */
+    /** Paint loading indicator while audio is being loaded. */
     public void paintLoadingIndicator(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.GRAY);
         String message = "Loading...";
@@ -157,13 +178,7 @@ public class ViewportPainter {
         g.drawString(message, x, y);
     }
 
-    /**
-     * Paint error message when audio fails to load.
-     *
-     * @param g Graphics context
-     * @param bounds Area to paint in
-     * @param errorMessage The error message to display
-     */
+    /** Paint error message when audio fails to load. */
     public void paintErrorMessage(
             @NonNull Graphics2D g, @NonNull ScreenDimension bounds, @NonNull String errorMessage) {
         g.setColor(Color.RED);
@@ -173,12 +188,7 @@ public class ViewportPainter {
         g.drawString("Error: " + errorMessage, x, y);
     }
 
-    /**
-     * Paint empty state when no audio is loaded.
-     *
-     * @param g Graphics context
-     * @param bounds Area to paint in
-     */
+    /** Paint empty state when no audio is loaded. */
     public void paintEmptyState(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.GRAY);
         String message = "No audio loaded";
@@ -189,23 +199,13 @@ public class ViewportPainter {
         g.drawString(message, x, y);
     }
 
-    /**
-     * Clear the background before painting.
-     *
-     * @param g Graphics context
-     * @param bounds Area to clear
-     */
+    /** Clear the background before painting. */
     public void clearBackground(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         g.setColor(Color.WHITE);
         g.fillRect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
     }
 
-    /**
-     * Paint the playhead at the center of the viewport.
-     *
-     * @param g Graphics context
-     * @param bounds Area to paint in
-     */
+    /** Paint the playhead at the center of the viewport. */
     public void paintPlayhead(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
         // Playhead is always at exactly 50% of viewport width
         int playheadX = bounds.x() + bounds.width() / 2;

@@ -24,22 +24,15 @@ public interface ViewportPaintingDataSource {
     }
 
     /**
-     * Immutable, playhead-anchored, frame-based context.
-     *
-     * @param mode High-level instruction for what to draw.
-     * @param errorMessage Error text when {@code mode == ERROR}; empty otherwise.
-     * @param image Future for the waveform image sized to the viewport when {@code mode == RENDER};
-     *     empty otherwise.
-     * @param playheadFrame Absolute audio frame at the playhead.
-     * @param pixelsPerFrame Effective zoom for overlays/ticks, in pixels per audio frame.
+     * Immutable viewport render spec: everything the painter needs to draw a frame, frame-based and
+     * centered at the playhead.
      */
-    record PlayheadAnchoredContext(
+    record ViewportRenderSpec(
             PaintMode mode,
             Optional<String> errorMessage,
-            Optional<CompletableFuture<Image>> image,
-            long playheadFrame,
-            double pixelsPerFrame) {}
+            CompletableFuture<Image> image,
+            long generation) {}
 
-    /** Build a playhead-anchored, frame-based painting context for the given viewport bounds. */
-    PlayheadAnchoredContext getPlayheadAnchoredContext(ScreenDimension bounds);
+    /** Build a render spec for the given viewport bounds. */
+    ViewportRenderSpec getRenderSpec(ScreenDimension bounds);
 }

@@ -1,7 +1,7 @@
 package core.waveform;
 
-/** Viewport context for intelligent caching decisions. */
-public record ViewportContext(
+/** Viewport spec for waveform rendering and caching decisions. */
+public record WaveformViewportSpec(
         double startTimeSeconds,
         double endTimeSeconds,
         int viewportWidthPx,

@@ -20,7 +20,7 @@ public class WaveformSegmentCache {
     private CacheEntry[] entries;
     private int size;
     private int head = 0;
-    private ViewportContext currentViewport;
+    private WaveformViewportSpec currentViewport;
 
     record CacheEntry(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {}
 
@@ -34,7 +34,7 @@ public class WaveformSegmentCache {
         }
     }
 
-    WaveformSegmentCache(@NonNull ViewportContext viewport) {
+    WaveformSegmentCache(@NonNull WaveformViewportSpec viewport) {
         int visibleSegments =
                 (int) Math.ceil((double) viewport.viewportWidthPx() / SEGMENT_WIDTH_PX);
         int prefetchSegments = 4; // 2 each direction
@@ -98,7 +98,7 @@ public class WaveformSegmentCache {
      * Update cache for new viewport context. Clears cache if pixelsPerSecond or height changed,
      * resizes if width changed.
      */
-    void updateViewport(@NonNull ViewportContext newViewport) {
+    void updateViewport(@NonNull WaveformViewportSpec newViewport) {
         lock.writeLock().lock();
         try {
             if (currentViewport.pixelsPerSecond() != newViewport.pixelsPerSecond()

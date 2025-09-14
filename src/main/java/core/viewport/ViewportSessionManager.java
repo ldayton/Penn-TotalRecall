@@ -14,7 +14,6 @@ import core.waveform.WaveformManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 @ThreadSafe
 public class ViewportSessionManager implements ViewportPaintingDataSource {
-    private static final int MAX_COMMAND_HISTORY = 100;
 
     private final EventDispatchBus eventBus;
     private final AudioSessionDataSource sessionDataSource;
@@ -36,7 +34,6 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
 
     // Viewport state
     private final AtomicReference<ViewportContext> currentContext;
-    private final ConcurrentLinkedDeque<ViewportCommand> commandHistory;
 
     // Session management
     private Optional<ViewportSession> currentSession = Optional.empty();
@@ -52,7 +49,6 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         this.audioEngineProvider = audioEngineProvider;
         this.waveformManager = waveformManager;
         this.currentContext = new AtomicReference<>(ViewportContext.createDefault());
-        this.commandHistory = new ConcurrentLinkedDeque<>();
         eventBus.subscribe(this);
     }
 
@@ -137,12 +133,6 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
     }
 
     private void applyCommand(ViewportCommand command) {
-        // Add to history
-        commandHistory.addLast(command);
-        while (commandHistory.size() > MAX_COMMAND_HISTORY) {
-            commandHistory.removeFirst();
-        }
-
         // Update context atomically
         ViewportContext newContext =
                 currentContext.updateAndGet(ctx -> computeNewContext(ctx, command));
@@ -206,66 +196,45 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         return currentSession.map(ViewportSession::getPlaybackPositionSeconds).orElse(0.0);
     }
 
-    public String getCommandHistoryDebugString() {
-        StringBuilder sb = new StringBuilder("Recent viewport commands (newest first):\n");
-        long now = System.currentTimeMillis();
-
-        commandHistory
-                .descendingIterator()
-                .forEachRemaining(
-                        command -> {
-                            long ageMs = now - command.timestamp();
-                            String details =
-                                    switch (command) {
-                                        case ViewportCommand.PlaybackUpdate e ->
-                                                String.format(
-                                                        "playhead=%.2fs", e.playheadSeconds());
-                                        case ViewportCommand.UserZoom e ->
-                                                String.format(
-                                                        "zoom=%dpx/s", e.newPixelsPerSecond());
-                                        case ViewportCommand.UserSeek e ->
-                                                String.format("seek=%.2fs", e.targetSeconds());
-                                        case ViewportCommand.CanvasResize e ->
-                                                String.format(
-                                                        "size=%dx%d", e.newWidth(), e.newHeight());
-                                    };
-                            sb.append(
-                                    String.format(
-                                            "  %4dms ago: %-20s from %-10s [%s]\n",
-                                            ageMs,
-                                            command.getClass().getSimpleName(),
-                                            command.source(),
-                                            details));
-                        });
-
-        return sb.toString();
-    }
+    // Command history removed; use debug logs for traceability.
 
     @Override
-    public PlayheadAnchoredContext getPlayheadAnchoredContext(@NonNull ScreenDimension bounds) {
+    public ViewportRenderSpec getRenderSpec(@NonNull ScreenDimension bounds) {
         // Error state takes precedence if present
         var errorOpt = sessionDataSource.getErrorMessage();
         if (errorOpt.isPresent()) {
-            return new PlayheadAnchoredContext(
-                    PaintMode.ERROR, errorOpt, Optional.empty(), 0L, 0.0);
+            return new ViewportRenderSpec(
+                    PaintMode.ERROR,
+                    errorOpt,
+                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    0L);
         }
 
         // Loading or empty states
         if (sessionDataSource.isLoading()) {
-            return new PlayheadAnchoredContext(
-                    PaintMode.LOADING, Optional.empty(), Optional.empty(), 0L, 0.0);
+            return new ViewportRenderSpec(
+                    PaintMode.LOADING,
+                    Optional.empty(),
+                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    0L);
         }
 
         if (!sessionDataSource.isAudioLoaded()) {
-            return new PlayheadAnchoredContext(
-                    PaintMode.EMPTY, Optional.empty(), Optional.empty(), 0L, 0.0);
+            return new ViewportRenderSpec(
+                    PaintMode.EMPTY,
+                    Optional.empty(),
+                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    0L);
         }
 
         // Ready to render if waveform exists; otherwise still loading
         Waveform waveform = waveformManager.getCurrentWaveform().orElse(null);
         if (waveform == null) {
-            return new PlayheadAnchoredContext(
-                    PaintMode.LOADING, Optional.empty(), Optional.empty(), 0L, 0.0);
+            return new ViewportRenderSpec(
+                    PaintMode.LOADING,
+                    Optional.empty(),
+                    java.util.concurrent.CompletableFuture.<java.awt.Image>completedFuture(null),
+                    0L);
         }
 
         // Build waveform viewport context from a fresh playhead-centric context using current
@@ -277,23 +246,18 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                 new ViewportContext(ctx.playheadSeconds(), pps, bounds.width(), bounds.height());
         TimeRange tr = tempCtx.getTimeRange();
         var wfCtx =
-                new core.waveform.ViewportContext(
+                new core.waveform.WaveformViewportSpec(
                         tr.startSeconds(), tr.endSeconds(), bounds.width(), bounds.height(), pps);
 
         var imageFuture = waveform.renderViewport(wfCtx);
 
-        long playheadFrame = sessionDataSource.getPlaybackPositionFrames().orElse(0L);
-        double pixelsPerFrame =
-                sessionDataSource
-                        .getSampleRate()
-                        .map(sr -> sr > 0 ? (pps / (double) sr) : 0.0)
-                        .orElse(0.0);
+        long generation =
+                Double.doubleToLongBits(tr.startSeconds())
+                        ^ (Double.doubleToLongBits(tr.endSeconds()) << 1)
+                        ^ (((long) bounds.width()) << 32)
+                        ^ (((long) bounds.height()) << 16)
+                        ^ (pps & 0xFFFF);
 
-        return new PlayheadAnchoredContext(
-                PaintMode.RENDER,
-                Optional.empty(),
-                Optional.of(imageFuture),
-                playheadFrame,
-                pixelsPerFrame);
+        return new ViewportRenderSpec(PaintMode.RENDER, Optional.empty(), imageFuture, generation);
     }
 }

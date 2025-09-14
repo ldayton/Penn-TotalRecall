@@ -92,7 +92,7 @@ class WaveformRenderer {
     }
 
     /** Fill cache for viewport with priority-based rendering. */
-    CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
+    CompletableFuture<Image> renderViewport(@NonNull WaveformViewportSpec viewport) {
         // Update cache for new viewport
         cache.updateViewport(viewport);
 
@@ -134,7 +134,7 @@ class WaveformRenderer {
 
     /** Calculate which segments are needed for the viewport. */
     private List<WaveformSegmentCache.SegmentKey> calculateVisibleSegments(
-            @NonNull ViewportContext viewport) {
+            @NonNull WaveformViewportSpec viewport) {
         List<WaveformSegmentCache.SegmentKey> segments = new ArrayList<>();
 
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
@@ -151,7 +151,7 @@ class WaveformRenderer {
     }
 
     /** Add symmetric prefetch tasks (no scroll direction). */
-    private void addPrefetchTasks(@NonNull ViewportContext viewport) {
+    private void addPrefetchTasks(@NonNull WaveformViewportSpec viewport) {
         double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
 
         // Prefetch forward
@@ -318,7 +318,7 @@ class WaveformRenderer {
 
     /** Composite segments into single viewport image. */
     private Image compositeSegments(
-            @NonNull List<Image> segments, @NonNull ViewportContext viewport) {
+            @NonNull List<Image> segments, @NonNull WaveformViewportSpec viewport) {
         if (segments.isEmpty()) {
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }

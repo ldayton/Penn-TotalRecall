@@ -4,12 +4,10 @@ import core.waveform.ScreenDimension;
 import core.waveform.WaveformViewport;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton
 @Slf4j
-public class ViewportCanvas extends JComponent implements WaveformViewport {
-
-    private static final Color BACKGROUND_COLOR = UIManager.getColor("Panel.background");
+public final class ViewportCanvas extends JComponent implements WaveformViewport {
 
     private final ViewportPainter painter;
     private Graphics2D currentGraphics; // Only valid during paintComponent
@@ -30,7 +26,8 @@ public class ViewportCanvas extends JComponent implements WaveformViewport {
         this.painter = painter;
         painter.setViewport(this); // Register ourselves as the viewport
         setOpaque(true);
-        setBackground(BACKGROUND_COLOR);
+        // Use component's current background from LAF
+        setBackground(getBackground());
         setPreferredSize(new Dimension(800, 200));
         log.debug("ViewportCanvas created");
     }

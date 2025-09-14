@@ -47,7 +47,7 @@ public class Waveform {
                         });
 
         // Initialize with default viewport (will be updated on first render)
-        ViewportContext defaultViewport = new ViewportContext(0.0, 10.0, 1000, 200, 100);
+        WaveformViewportSpec defaultViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100);
 
         this.cache = new WaveformSegmentCache(defaultViewport);
 
@@ -61,7 +61,7 @@ public class Waveform {
                 new WaveformRenderer(audioFilePath, cache, renderPool, sampleReader, sampleRate);
     }
 
-    public CompletableFuture<Image> renderViewport(@NonNull ViewportContext viewport) {
+    public CompletableFuture<Image> renderViewport(@NonNull WaveformViewportSpec viewport) {
         if (renderer == null) {
             return CompletableFuture.completedFuture(null);
         }
