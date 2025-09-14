@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.concurrent.TimeUnit;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -132,22 +133,29 @@ public final class ViewportPainter {
                     repaintFuture.whenComplete(
                             (img, ex) -> {
                                 if (viewport != null && viewport.isVisible()) {
-                                    // Prevent out-of-order renders by verifying generation id
-                                    ViewportRenderSpec latest = dataSource.getRenderSpec(bounds);
-                                    if (latest.generation() == id) {
-                                        viewport.repaint();
-                                    } else {
-                                        log.warn(
-                                                "Discarding stale render completion: staleId={},"
-                                                        + " latestId={}",
-                                                id,
-                                                latest.generation());
-                                    }
-                                    if (ex != null) {
-                                        log.warn(
-                                                "Waveform render completed exceptionally: {}",
-                                                ex.toString());
-                                    }
+                                    SwingUtilities.invokeLater(
+                                            () -> {
+                                                // Prevent out-of-order renders by verifying
+                                                // generation id
+                                                ViewportRenderSpec latest =
+                                                        dataSource.getRenderSpec(
+                                                                viewport.getViewportBounds());
+                                                if (latest.generation() == id) {
+                                                    viewport.repaint();
+                                                } else {
+                                                    log.warn(
+                                                            "Discarding stale render completion:"
+                                                                    + " staleId={}, latestId={}",
+                                                            id,
+                                                            latest.generation());
+                                                }
+                                                if (ex != null) {
+                                                    log.warn(
+                                                            "Waveform render completed"
+                                                                    + " exceptionally: {}",
+                                                            ex.toString());
+                                                }
+                                            });
                                 }
                             });
                 }
