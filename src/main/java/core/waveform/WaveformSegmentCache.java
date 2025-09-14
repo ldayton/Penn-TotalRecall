@@ -6,12 +6,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Circular cache for 200px-wide waveform segments. Optimized for timeline scrolling with
  * fixed-width segment compositing.
  */
 @ThreadSafe
+@Slf4j
 public class WaveformSegmentCache {
 
     private static final int SEGMENT_WIDTH_PX = 200;
@@ -21,6 +23,7 @@ public class WaveformSegmentCache {
     private int size;
     private int head = 0;
     private WaveformViewportSpec currentViewport;
+    private final CacheStats stats = new CacheStats();
 
     record CacheEntry(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {}
 
@@ -47,11 +50,14 @@ public class WaveformSegmentCache {
     CompletableFuture<Image> get(@NonNull SegmentKey key) {
         lock.readLock().lock();
         try {
+            stats.recordRequest();
             for (CacheEntry entry : entries) {
                 if (entry != null && entry.key().equals(key)) {
+                    stats.recordHit();
                     return entry.future();
                 }
             }
+            stats.recordMiss();
             return null;
         } finally {
             lock.readLock().unlock();
@@ -66,13 +72,18 @@ public class WaveformSegmentCache {
             for (int i = 0; i < entries.length; i++) {
                 if (entries[i] != null && entries[i].key().equals(key)) {
                     entries[i] = new CacheEntry(key, future);
+                    stats.recordUpdate();
                     return;
                 }
             }
 
             // Add new entry at head position
+            if (entries[head] != null) {
+                stats.recordEviction();
+            }
             entries[head] = new CacheEntry(key, future);
             head = (head + 1 >= size) ? 0 : head + 1;
+            stats.recordPut();
         } finally {
             lock.writeLock().unlock();
         }
@@ -82,13 +93,16 @@ public class WaveformSegmentCache {
     void clear() {
         lock.writeLock().lock();
         try {
+            int cleared = 0;
             for (int i = 0; i < entries.length; i++) {
                 if (entries[i] != null) {
                     entries[i].future().cancel(true);
                     entries[i] = null;
+                    cleared++;
                 }
             }
             head = 0;
+            stats.recordClear(cleared);
         } finally {
             lock.writeLock().unlock();
         }
@@ -137,5 +151,11 @@ public class WaveformSegmentCache {
         entries = newEntries;
         size = newSize;
         head = copied % newSize;
+        stats.recordResize(size, newSize);
+    }
+
+    /** Get cache statistics. */
+    public CacheStats getStats() {
+        return stats;
     }
 }

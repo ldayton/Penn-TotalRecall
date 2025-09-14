@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class ViewportPainter {
 
-    private static final int FPS = 60;
+    private static final int FPS = 30;
     private static final int RENDER_TIMEOUT_MS = 750;
     private final Timer repaintTimer;
     private volatile WaveformViewport viewport;
