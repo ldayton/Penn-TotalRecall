@@ -6,6 +6,7 @@ import core.dispatch.EventDispatchBus;
 import core.env.UpdateManager;
 import core.events.UiReadyEvent;
 import jakarta.inject.Inject;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,6 +178,17 @@ public class SwingApp {
 
     /** Initializes and starts the GUI application. */
     public void startApplication() {
+        // Ensure all UI operations happen on the EDT
+        if (!SwingUtilities.isEventDispatchThread()) {
+            try {
+                SwingUtilities.invokeAndWait(this::startApplication);
+                return;
+            } catch (Exception e) {
+                logger.error("Failed to start application on EDT", e);
+                throw new RuntimeException("Failed to start application", e);
+            }
+        }
+
         // Initialize Look and Feel with proper DI (includes macOS handlers)
         lookAndFeelManager.initialize();
 
