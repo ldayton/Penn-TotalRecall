@@ -12,7 +12,6 @@ import java.util.Optional;
  */
 @Immutable
 public record AudioSessionContext(
-        AudioSessionStateMachine.State machineState,
         Optional<File> currentFile,
         Optional<AudioHandle> audioHandle,
         Optional<PlaybackHandle> playbackHandle,
@@ -25,7 +24,6 @@ public record AudioSessionContext(
     /** Create an empty initial context. */
     public static AudioSessionContext createInitial() {
         return new AudioSessionContext(
-                AudioSessionStateMachine.State.NO_AUDIO,
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
@@ -41,7 +39,6 @@ public record AudioSessionContext(
         return switch (command) {
             case AudioSessionCommand.LoadFile cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.READY,
                             Optional.of(cmd.file()),
                             Optional.of(cmd.audioHandle()),
                             Optional.empty(),
@@ -53,7 +50,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.CloseFile cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.NO_AUDIO,
                             Optional.empty(),
                             Optional.empty(),
                             Optional.empty(),
@@ -65,7 +61,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.SetLoadError cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.ERROR,
                             currentFile,
                             Optional.empty(),
                             Optional.empty(),
@@ -77,7 +72,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.StartPlayback cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.PLAYING,
                             currentFile,
                             audioHandle,
                             Optional.of(cmd.playbackHandle()),
@@ -89,7 +83,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.PausePlayback cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.PAUSED,
                             currentFile,
                             audioHandle,
                             playbackHandle,
@@ -101,7 +94,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.ResumePlayback cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.PLAYING,
                             currentFile,
                             audioHandle,
                             playbackHandle,
@@ -113,7 +105,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.StopPlayback cmd ->
                     new AudioSessionContext(
-                            AudioSessionStateMachine.State.READY,
                             currentFile,
                             audioHandle,
                             Optional.empty(),
@@ -125,7 +116,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.SetPendingSeek cmd ->
                     new AudioSessionContext(
-                            machineState,
                             currentFile,
                             audioHandle,
                             playbackHandle,
@@ -137,7 +127,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.ClearPendingSeek cmd ->
                     new AudioSessionContext(
-                            machineState,
                             currentFile,
                             audioHandle,
                             playbackHandle,
@@ -149,7 +138,6 @@ public record AudioSessionContext(
 
             case AudioSessionCommand.UpdatePosition cmd ->
                     new AudioSessionContext(
-                            machineState,
                             currentFile,
                             audioHandle,
                             playbackHandle,

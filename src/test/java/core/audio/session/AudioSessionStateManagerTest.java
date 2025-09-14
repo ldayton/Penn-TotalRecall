@@ -21,7 +21,20 @@ class AudioSessionStateManagerTest {
 
     @BeforeEach
     void setUp() {
-        stateManager = new AudioSessionStateMachine();
+        var dispatcher =
+                new core.dispatch.EventDispatcher() {
+                    @Override
+                    public void dispatch(Runnable task) {
+                        task.run(); // Execute immediately for tests
+                    }
+
+                    @Override
+                    public boolean isEventDispatchThread() {
+                        return true; // Treat all threads as EDT for tests
+                    }
+                };
+        var eventBus = new core.dispatch.EventDispatchBus(dispatcher);
+        stateManager = new AudioSessionStateMachine(eventBus);
     }
 
     @Test

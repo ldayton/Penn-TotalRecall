@@ -1,9 +1,14 @@
 package core.audio.session;
 
 import com.google.errorprone.annotations.ThreadSafe;
+import core.dispatch.EventDispatchBus;
+import core.events.AppStateChangedEvent;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  */
 @ThreadSafe
+@Singleton
 @Slf4j
 public class AudioSessionStateMachine {
 
@@ -47,7 +53,13 @@ public class AudioSessionStateMachine {
     }
 
     private final ReentrantLock stateLock = new ReentrantLock();
+    private final EventDispatchBus eventBus;
     private volatile State currentState = State.NO_AUDIO;
+
+    @Inject
+    public AudioSessionStateMachine(@NonNull EventDispatchBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
     /**
      * Get the current application state.
@@ -84,8 +96,13 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToLoading() {
+        transitionToLoading(0.0);
+    }
+
+    public void transitionToLoading(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.NO_AUDIO
                     && currentState != State.ERROR
                     && currentState != State.READY) {
@@ -93,6 +110,9 @@ public class AudioSessionStateMachine {
             }
             log.debug("State transition: {} -> LOADING", currentState);
             currentState = State.LOADING;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
         } finally {
             stateLock.unlock();
         }
@@ -104,8 +124,13 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToReady() {
+        transitionToReady(0.0);
+    }
+
+    public void transitionToReady(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.LOADING
                     && currentState != State.PLAYING
                     && currentState != State.PAUSED) {
@@ -114,6 +139,35 @@ public class AudioSessionStateMachine {
             }
             log.debug("State transition: {} -> READY", currentState);
             currentState = State.READY;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
+        } finally {
+            stateLock.unlock();
+        }
+    }
+
+    /**
+     * Transition to READY while publishing a specific context object (e.g., the loaded File).
+     *
+     * <p>Use this overload for LOADING -> READY transitions where consumers expect the loaded
+     * resource to be attached to the event.
+     */
+    public void transitionToReady(@NonNull Object context) {
+        stateLock.lock();
+        try {
+            State oldState = currentState;
+            if (currentState != State.LOADING
+                    && currentState != State.PLAYING
+                    && currentState != State.PAUSED) {
+                throw new IllegalStateException(
+                        "Cannot transition to READY from state: " + currentState);
+            }
+            log.debug("State transition: {} -> READY", currentState);
+            currentState = State.READY;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, context));
+            }
         } finally {
             stateLock.unlock();
         }
@@ -125,13 +179,21 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToPlaying() {
+        transitionToPlaying(0.0);
+    }
+
+    public void transitionToPlaying(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.READY && currentState != State.PAUSED) {
                 throw new IllegalStateException("Cannot start playing from state: " + currentState);
             }
             log.debug("State transition: {} -> PLAYING", currentState);
             currentState = State.PLAYING;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
         } finally {
             stateLock.unlock();
         }
@@ -143,13 +205,21 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToPaused() {
+        transitionToPaused(0.0);
+    }
+
+    public void transitionToPaused(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.PLAYING) {
                 throw new IllegalStateException("Cannot pause from state: " + currentState);
             }
             log.debug("State transition: {} -> PAUSED", currentState);
             currentState = State.PAUSED;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
         } finally {
             stateLock.unlock();
         }
@@ -161,8 +231,13 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToNoAudio() {
+        transitionToNoAudio(0.0);
+    }
+
+    public void transitionToNoAudio(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.READY
                     && currentState != State.LOADING
                     && currentState != State.ERROR
@@ -171,6 +246,9 @@ public class AudioSessionStateMachine {
             }
             log.debug("State transition: {} -> NO_AUDIO", currentState);
             currentState = State.NO_AUDIO;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
         } finally {
             stateLock.unlock();
         }
@@ -182,14 +260,22 @@ public class AudioSessionStateMachine {
      * @throws IllegalStateException if the transition is invalid
      */
     public void transitionToError() {
+        transitionToError(0.0);
+    }
+
+    public void transitionToError(double position) {
         stateLock.lock();
         try {
+            State oldState = currentState;
             if (currentState != State.LOADING && currentState != State.PLAYING) {
                 throw new IllegalStateException(
                         "Cannot transition to ERROR from state: " + currentState);
             }
             log.debug("State transition: {} -> ERROR", currentState);
             currentState = State.ERROR;
+            if (oldState != currentState) {
+                eventBus.publish(new AppStateChangedEvent(oldState, currentState, position));
+            }
         } finally {
             stateLock.unlock();
         }

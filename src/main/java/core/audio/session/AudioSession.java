@@ -6,7 +6,6 @@ import core.audio.AudioHandle;
 import core.audio.PlaybackHandle;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
-import core.events.AppStateChangedEvent;
 import core.events.PlayPauseEvent;
 import core.events.SeekByAmountEvent;
 import core.events.SeekEvent;
@@ -63,27 +62,11 @@ public class AudioSession {
         AudioSessionContext oldContext = context.get();
         AudioSessionContext newContext = context.updateAndGet(ctx -> ctx.apply(command));
 
-        // Log command application and state changes
+        // Log command application
         log.debug(
                 "Applied command: {} at frame {}",
                 command.getClass().getSimpleName(),
                 oldContext.playheadFrame());
-
-        if (oldContext.machineState() != newContext.machineState()) {
-            log.info(
-                    "State transition: {} -> {} (frame: {})",
-                    oldContext.machineState(),
-                    newContext.machineState(),
-                    newContext.playheadFrame());
-        }
-
-        // Publish state change events when machine state changes
-        if (oldContext.machineState() != newContext.machineState()) {
-            double position = getCurrentPositionSeconds();
-            eventBus.publish(
-                    new AppStateChangedEvent(
-                            oldContext.machineState(), newContext.machineState(), position));
-        }
     }
 
     /** Start playback from current or pending position. */
@@ -102,7 +85,7 @@ public class AudioSession {
         applyCommand(new AudioSessionCommand.StartPlayback(playback, startFrame));
 
         // Update state machine
-        stateMachine.transitionToPlaying();
+        stateMachine.transitionToPlaying(getCurrentPositionSeconds());
     }
 
     /** Pause current playback. */
@@ -119,7 +102,7 @@ public class AudioSession {
         log.info("Pausing playback at frame {}", position);
 
         applyCommand(new AudioSessionCommand.PausePlayback(position));
-        stateMachine.transitionToPaused();
+        stateMachine.transitionToPaused(getCurrentPositionSeconds());
     }
 
     /** Resume paused playback. */
@@ -136,7 +119,7 @@ public class AudioSession {
         log.info("Resuming playback from frame {}", position);
 
         applyCommand(new AudioSessionCommand.ResumePlayback(position));
-        stateMachine.transitionToPlaying();
+        stateMachine.transitionToPlaying(getCurrentPositionSeconds());
     }
 
     /** Stop playback and return to ready state. */
@@ -149,7 +132,7 @@ public class AudioSession {
         }
 
         applyCommand(new AudioSessionCommand.StopPlayback());
-        stateMachine.transitionToReady();
+        stateMachine.transitionToReady(getCurrentPositionSeconds());
     }
 
     /** Seek to a specific position. */
@@ -167,7 +150,7 @@ public class AudioSession {
                             : "0");
             // Keep explicit playhead in sync with engine position
             applyCommand(new AudioSessionCommand.UpdatePosition(targetFrame));
-        } else if (ctx.machineState() == AudioSessionStateMachine.State.READY) {
+        } else if (stateMachine.getCurrentState() == AudioSessionStateMachine.State.READY) {
             // No playback - set pending position
             applyCommand(new AudioSessionCommand.SetPendingSeek(targetFrame));
             log.info(
@@ -228,7 +211,7 @@ public class AudioSession {
 
     @Subscribe
     public void onPlayPause(@NonNull PlayPauseEvent event) {
-        var state = context.get().machineState();
+        var state = stateMachine.getCurrentState();
         switch (state) {
             case READY -> play();
             case PLAYING -> pause();
@@ -258,6 +241,6 @@ public class AudioSession {
     }
 
     public AudioSessionStateMachine.State getState() {
-        return context.get().machineState();
+        return stateMachine.getCurrentState();
     }
 }

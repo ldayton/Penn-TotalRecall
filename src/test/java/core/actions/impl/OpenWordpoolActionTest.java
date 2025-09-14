@@ -8,7 +8,6 @@ import core.preferences.PreferencesManager;
 import core.services.FileSelectionService;
 import java.io.File;
 import java.util.Optional;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ui.wordpool.WordpoolList;
 
@@ -18,7 +17,6 @@ import ui.wordpool.WordpoolList;
  * <p>This test avoids dev-mode autoloading and drives the loading through the action itself using a
  * test FileSelectionService that returns the sample wordpool file.
  */
-@Disabled("Test is flaky with async audio loading")
 class OpenWordpoolActionTest extends SwingTestFixture {
 
     private static class TestFileSelectionService implements FileSelectionService {
@@ -89,16 +87,19 @@ class OpenWordpoolActionTest extends SwingTestFixture {
         assertTrue(wav.exists(), "Sample wav must exist");
         bus.publish(new core.events.AudioFileLoadRequestedEvent(wav));
 
-        // Allow time for audio load and LST marking
-        Thread.sleep(500);
-
-        // Assert: at least one word is marked as LST
+        // Wait up to 3s for audio load and LST marking (async + EDT delivery)
         boolean anyLst = false;
-        for (int i = 0; i < list.getModel().getSize(); i++) {
-            if (list.getModel().getElementAt(i).isLst()) {
-                anyLst = true;
-                break;
+        long deadline = System.currentTimeMillis() + 3000;
+        while (System.currentTimeMillis() < deadline) {
+            anyLst = false;
+            for (int i = 0; i < list.getModel().getSize(); i++) {
+                if (list.getModel().getElementAt(i).isLst()) {
+                    anyLst = true;
+                    break;
+                }
             }
+            if (anyLst) break;
+            Thread.sleep(50);
         }
         assertTrue(anyLst, "Expected some words to be marked as LST after audio load");
     }

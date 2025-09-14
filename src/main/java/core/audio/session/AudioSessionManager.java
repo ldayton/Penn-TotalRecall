@@ -97,7 +97,8 @@ public class AudioSessionManager implements AudioSessionDataSource {
 
             currentSession = Optional.of(session);
             lastErrorMessage = Optional.empty(); // Clear any previous error
-            stateMachine.transitionToReady();
+            // Publish READY with the loaded file as context so UI listeners can react
+            stateMachine.transitionToReady(file);
 
             log.info(
                     "Successfully loaded: {} ({} frames at {} Hz)",
