@@ -49,13 +49,35 @@ public class WaveformSegmentCache {
         this.stats = stats;
     }
 
+    /** Calculate optimal cache size based on viewport and prefetch requirements. */
+    private int calculateCacheSize(int viewportWidthPx) {
+        int visibleSegments = (int) Math.ceil((double) viewportWidthPx / SEGMENT_WIDTH_PX);
+        int prefetchSegments = PREFETCH_COUNT * 2; // Prefetch in both directions
+
+        // Calculate cache size with buffer for concurrent operations
+        // Need space for: visible segments + prefetch segments + buffer for async operations
+        // Add 50% buffer to prevent thrashing during concurrent rendering
+        int cacheSize = (int) ((visibleSegments + prefetchSegments) * 1.5);
+
+        // Ensure minimum cache size to handle edge cases
+        return Math.max(cacheSize, visibleSegments + prefetchSegments + 10);
+    }
+
     void initialize(@NonNull WaveformViewportSpec viewport) {
         int visibleSegments =
                 (int) Math.ceil((double) viewport.viewportWidthPx() / SEGMENT_WIDTH_PX);
         int prefetchSegments = PREFETCH_COUNT * 2; // Prefetch in both directions
-        this.size = visibleSegments + prefetchSegments;
+
+        this.size = calculateCacheSize(viewport.viewportWidthPx());
         this.entries = new CacheEntry[size];
         this.currentViewport = viewport;
+
+        log.debug(
+                "Initialized cache with size {} (visible: {}, prefetch: {}, buffer: {})",
+                size,
+                visibleSegments,
+                prefetchSegments,
+                size - visibleSegments - prefetchSegments);
     }
 
     /** Get cached segment or null if not found. */
@@ -69,6 +91,17 @@ public class WaveformSegmentCache {
         try {
             if (recordStats) {
                 stats.recordRequest();
+            }
+            if (entries == null) {
+                if (recordStats) {
+                    stats.recordMiss();
+                    log.warn(
+                            "Cache not initialized, returning null for segment {} ({}s at {}pps)",
+                            key.segmentIndex(),
+                            key.startTime(),
+                            key.pixelsPerSecond());
+                }
+                return null;
             }
             for (CacheEntry entry : entries) {
                 if (entry != null && entry.key().equals(key)) {
@@ -101,6 +134,10 @@ public class WaveformSegmentCache {
     void put(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {
         lock.writeLock().lock();
         try {
+            if (entries == null) {
+                log.warn("Cache not initialized, cannot put segment {}", key.segmentIndex());
+                return;
+            }
             // Check if key already exists
             for (int i = 0; i < entries.length; i++) {
                 if (entries[i] != null && entries[i].key().equals(key)) {
@@ -112,9 +149,18 @@ public class WaveformSegmentCache {
 
             // Add new entry at head position
             if (entries[head] != null) {
+                log.debug(
+                        "Evicting segment {} to make room for segment {}",
+                        entries[head].key().segmentIndex(),
+                        key.segmentIndex());
                 stats.recordEviction();
             }
             entries[head] = new CacheEntry(key, future);
+            log.debug(
+                    "Put segment {} at position {} (cache size: {})",
+                    key.segmentIndex(),
+                    head,
+                    size);
             head = (head + 1 >= size) ? 0 : head + 1;
             stats.recordPut();
         } finally {
@@ -148,10 +194,27 @@ public class WaveformSegmentCache {
     void updateViewport(@NonNull WaveformViewportSpec newViewport) {
         lock.writeLock().lock();
         try {
+            if (currentViewport == null) {
+                // First time initialization
+                initialize(newViewport);
+                return;
+            }
             if (currentViewport.pixelsPerSecond() != newViewport.pixelsPerSecond()
                     || currentViewport.viewportHeightPx() != newViewport.viewportHeightPx()) {
+                log.debug(
+                        "Clearing cache due to viewport change: pps {} -> {}, height {} -> {}",
+                        currentViewport.pixelsPerSecond(),
+                        newViewport.pixelsPerSecond(),
+                        currentViewport.viewportHeightPx(),
+                        newViewport.viewportHeightPx());
                 clear();
+                initialize(newViewport);
+                return;
             } else if (currentViewport.viewportWidthPx() != newViewport.viewportWidthPx()) {
+                log.debug(
+                        "Resizing cache due to viewport width change: {} -> {}",
+                        currentViewport.viewportWidthPx(),
+                        newViewport.viewportWidthPx());
                 resize(newViewport.viewportWidthPx());
             }
             currentViewport = newViewport;
@@ -163,9 +226,7 @@ public class WaveformSegmentCache {
     /** Resize cache array to accommodate new viewport width. Preserves existing valid segments. */
     private void resize(int newViewportWidthPx) {
         // Called from updateViewport() which already holds write lock
-        int visibleSegments = (int) Math.ceil((double) newViewportWidthPx / SEGMENT_WIDTH_PX);
-        int prefetchSegments = PREFETCH_COUNT * 2; // Prefetch in both directions
-        int newSize = visibleSegments + prefetchSegments;
+        int newSize = calculateCacheSize(newViewportWidthPx);
 
         if (newSize == size) {
             return; // No resize needed
