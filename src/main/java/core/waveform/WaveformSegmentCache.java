@@ -17,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WaveformSegmentCache {
 
-    private static final int SEGMENT_WIDTH_PX = 200;
+    static final int SEGMENT_WIDTH_PX = 200;
+    static final int PREFETCH_COUNT = 10; // Segments to prefetch in each direction
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private CacheEntry[] entries;
@@ -28,13 +29,18 @@ public class WaveformSegmentCache {
 
     record CacheEntry(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {}
 
-    record SegmentKey(double startTime, int pixelsPerSecond, int height) {
+    record SegmentKey(long segmentIndex, int pixelsPerSecond, int height) {
         double duration() {
             return (double) SEGMENT_WIDTH_PX / pixelsPerSecond;
         }
 
+        double startTime() {
+            // Calculate start time from segment index
+            return (segmentIndex * SEGMENT_WIDTH_PX) / (double) pixelsPerSecond;
+        }
+
         double endTime() {
-            return startTime + duration();
+            return startTime() + duration();
         }
     }
 
@@ -46,7 +52,7 @@ public class WaveformSegmentCache {
     void initialize(@NonNull WaveformViewportSpec viewport) {
         int visibleSegments =
                 (int) Math.ceil((double) viewport.viewportWidthPx() / SEGMENT_WIDTH_PX);
-        int prefetchSegments = 4; // 2 each direction
+        int prefetchSegments = PREFETCH_COUNT * 2; // Prefetch in both directions
         this.size = visibleSegments + prefetchSegments;
         this.entries = new CacheEntry[size];
         this.currentViewport = viewport;
@@ -54,16 +60,37 @@ public class WaveformSegmentCache {
 
     /** Get cached segment or null if not found. */
     CompletableFuture<Image> get(@NonNull SegmentKey key) {
+        return get(key, true);
+    }
+
+    /** Get cached segment or null if not found, optionally recording stats. */
+    CompletableFuture<Image> get(@NonNull SegmentKey key, boolean recordStats) {
         lock.readLock().lock();
         try {
-            stats.recordRequest();
+            if (recordStats) {
+                stats.recordRequest();
+            }
             for (CacheEntry entry : entries) {
                 if (entry != null && entry.key().equals(key)) {
-                    stats.recordHit();
+                    if (recordStats) {
+                        stats.recordHit();
+                        log.trace(
+                                "Cache HIT for segment {} ({}s at {}pps)",
+                                key.segmentIndex(),
+                                key.startTime(),
+                                key.pixelsPerSecond());
+                    }
                     return entry.future();
                 }
             }
-            stats.recordMiss();
+            if (recordStats) {
+                stats.recordMiss();
+                log.warn(
+                        "Cache MISS for segment {} ({}s at {}pps)",
+                        key.segmentIndex(),
+                        key.startTime(),
+                        key.pixelsPerSecond());
+            }
             return null;
         } finally {
             lock.readLock().unlock();
@@ -137,7 +164,7 @@ public class WaveformSegmentCache {
     private void resize(int newViewportWidthPx) {
         // Called from updateViewport() which already holds write lock
         int visibleSegments = (int) Math.ceil((double) newViewportWidthPx / SEGMENT_WIDTH_PX);
-        int prefetchSegments = 4; // 2 each direction
+        int prefetchSegments = PREFETCH_COUNT * 2; // Prefetch in both directions
         int newSize = visibleSegments + prefetchSegments;
 
         if (newSize == size) {

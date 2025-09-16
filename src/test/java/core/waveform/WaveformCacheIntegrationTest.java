@@ -10,6 +10,7 @@ import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.AppStateChangedEvent;
 import core.events.AudioFileLoadRequestedEvent;
+import core.events.PlayPauseEvent;
 import core.viewport.ViewportSessionManager;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -190,42 +191,84 @@ class WaveformCacheIntegrationTest extends HeadlessTestFixture {
                 initialHits,
                 initialMisses);
 
-        // Start playback
-        log.info("Starting playback");
-        assertTrue(
-                stateMachine.compareAndSetState(
-                        AudioSessionStateMachine.State.READY,
-                        AudioSessionStateMachine.State.PLAYING),
-                "Should transition to PLAYING state");
+        // Record initial playhead position before playback
+        long initialPlayheadFrame = sessionSource.snapshot().playheadFrame();
+        log.info("Initial playhead position: {} frames", initialPlayheadFrame);
 
-        // Fire playing state event
-        eventBus.publish(
-                new AppStateChangedEvent(
-                        AudioSessionStateMachine.State.READY,
-                        AudioSessionStateMachine.State.PLAYING,
-                        0L)); // Start position
+        // Start playback the correct way - trigger PlayPauseEvent which will:
+        // 1. Call AudioSession.onPlayPause()
+        // 2. Which calls play()
+        // 3. Which starts actual audio playback via audioEngine.play()
+        // 4. Which causes position updates and viewport shifts
+        log.info("Starting playback via PlayPauseEvent");
+        eventBus.publish(new PlayPauseEvent());
 
         // Wait for PLAYING state confirmation
         AppStateChangedEvent playingEvent =
                 playingStateFuture.get(STATE_CHANGE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         assertNotNull(playingEvent, "Should receive PLAYING state event");
+        assertEquals(
+                AudioSessionStateMachine.State.PLAYING,
+                stateMachine.getCurrentState(),
+                "Should be in PLAYING state after PlayPauseEvent");
+
+        // Verify playhead starts moving after a short delay
+        Thread.sleep(500); // Give playback time to start
+        long playheadAfterStart = sessionSource.snapshot().playheadFrame();
+        log.info("Playhead position 500ms after start: {} frames", playheadAfterStart);
+        assertTrue(
+                playheadAfterStart > initialPlayheadFrame,
+                String.format(
+                        "Playhead should advance during playback. Initial: %d, After 500ms: %d",
+                        initialPlayheadFrame, playheadAfterStart));
 
         // Monitor cache misses for 10 seconds with simulated render cycle
         log.info(
                 "Monitoring cache misses during playback for 10 seconds at {} FPS",
                 ViewportPainter.FPS);
         long lastMissCount = initialMisses; // Start from post-warmup miss count
+        long lastPlayheadFrame = playheadAfterStart;
 
         int millisPerFrame = 1000 / ViewportPainter.FPS;
         int framesPerSecond = ViewportPainter.FPS;
 
         for (int second = 1; second <= 10; second++) {
+            long startOfSecondPlayhead = sessionSource.snapshot().playheadFrame();
+
             // Simulate render cycle at 30 FPS
             for (int frame = 0; frame < framesPerSecond; frame++) {
                 // Trigger waveform rendering
                 viewportManager.getRenderSpec(viewportBounds);
                 Thread.sleep(millisPerFrame);
             }
+
+            // Check playhead progress at end of each second
+            long endOfSecondPlayhead = sessionSource.snapshot().playheadFrame();
+            long playheadAdvance = endOfSecondPlayhead - startOfSecondPlayhead;
+
+            log.debug(
+                    "Second {}: Playhead moved from {} to {} (advanced {} frames)",
+                    second,
+                    startOfSecondPlayhead,
+                    endOfSecondPlayhead,
+                    playheadAdvance);
+
+            // Assert playhead is advancing (at 44100Hz sample rate, ~44100 frames per second)
+            assertTrue(
+                    endOfSecondPlayhead > lastPlayheadFrame,
+                    String.format(
+                            "Playhead should continue advancing at second %d. Was: %d, Now: %d",
+                            second, lastPlayheadFrame, endOfSecondPlayhead));
+
+            // For a typical audio file at 44100Hz, we expect roughly 44100 frames per second
+            // Allow some tolerance for timing
+            int expectedMinFramesPerSecond = 20000; // Conservative minimum
+            assertTrue(
+                    playheadAdvance >= expectedMinFramesPerSecond,
+                    String.format(
+                            "Playhead should advance by at least %d frames per second, but only"
+                                    + " advanced %d frames",
+                            expectedMinFramesPerSecond, playheadAdvance));
 
             long currentRequests = cacheStats.getRequests();
             long currentHits = cacheStats.getHits();
@@ -255,15 +298,21 @@ class WaveformCacheIntegrationTest extends HeadlessTestFixture {
             }
 
             lastMissCount = currentMisses;
+            lastPlayheadFrame = endOfSecondPlayhead;
         }
 
-        // Stop playback
-        log.info("Stopping playback");
-        assertTrue(
-                stateMachine.compareAndSetState(
-                        AudioSessionStateMachine.State.PLAYING,
-                        AudioSessionStateMachine.State.READY),
-                "Should transition back to READY state");
+        // Stop playback the correct way - another PlayPauseEvent will pause
+        log.info("Stopping playback via PlayPauseEvent");
+        eventBus.publish(new PlayPauseEvent());
+
+        // Give it a moment to process
+        Thread.sleep(100);
+
+        // Verify we're now paused (not playing)
+        assertEquals(
+                AudioSessionStateMachine.State.PAUSED,
+                stateMachine.getCurrentState(),
+                "Should be in PAUSED state after second PlayPauseEvent");
 
         // Log final cache statistics
         log.info("Final cache statistics:");

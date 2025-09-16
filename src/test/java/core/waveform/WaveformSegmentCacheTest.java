@@ -44,7 +44,7 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testBasicPutAndGet() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         var future = CompletableFuture.completedFuture(mockImage);
 
         cache.put(key, future);
@@ -53,7 +53,7 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testGetNonExistentKey() {
-        var key = new WaveformSegmentCache.SegmentKey(5.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(5L, 100, 200);
         assertNull(cache.get(key));
     }
 
@@ -61,25 +61,32 @@ class WaveformSegmentCacheTest {
     @Test
     void testCircularOverwrite() {
         // Fill cache beyond capacity to test circular overwrite
-        // Cache size = 5 visible + 4 prefetch = 9 slots
-        var futures = new CompletableFuture[15];
-        for (int i = 0; i < 15; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200);
+        // Cache size = 5 visible + (PREFETCH_COUNT * 2) prefetch
+        int prefetchTotal = WaveformSegmentCache.PREFETCH_COUNT * 2;
+        int cacheSize = 5 + prefetchTotal; // 5 + 20 = 25 slots
+        int entriesToAdd = cacheSize + 10; // Add 10 more than capacity
+
+        var futures = new CompletableFuture[entriesToAdd];
+        for (int i = 0; i < entriesToAdd; i++) {
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200);
             futures[i] = CompletableFuture.completedFuture(mockImage);
             cache.put(key, futures[i]);
         }
 
-        // Early entries should be overwritten
-        assertNull(cache.get(new WaveformSegmentCache.SegmentKey(0.0, 100, 200)));
-        assertNull(cache.get(new WaveformSegmentCache.SegmentKey(2.0, 100, 200)));
+        // Early entries should be overwritten (first 10 entries)
+        assertNull(cache.get(new WaveformSegmentCache.SegmentKey(0L, 100, 200)));
+        assertNull(cache.get(new WaveformSegmentCache.SegmentKey(2L, 100, 200)));
 
-        // Recent entries should still exist
-        assertNotNull(cache.get(new WaveformSegmentCache.SegmentKey(28.0, 100, 200)));
+        // Recent entries should still exist (last added)
+        assertNotNull(
+                cache.get(
+                        new WaveformSegmentCache.SegmentKey(
+                                (long) ((entriesToAdd - 1) * 2), 100, 200)));
     }
 
     @Test
     void testDuplicateKeyUpdate() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         var future1 = CompletableFuture.completedFuture(mockImage);
         var future2 = CompletableFuture.completedFuture(mockImage);
 
@@ -92,7 +99,7 @@ class WaveformSegmentCacheTest {
         // Verify no duplicates by filling cache
         for (int i = 1; i < 20; i++) {
             cache.put(
-                    new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200),
+                    new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200),
                     CompletableFuture.completedFuture(mockImage));
         }
 
@@ -105,7 +112,7 @@ class WaveformSegmentCacheTest {
     void testClear() {
         // Add multiple entries
         for (int i = 0; i < 5; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200);
             cache.put(key, CompletableFuture.completedFuture(mockImage));
         }
 
@@ -113,14 +120,14 @@ class WaveformSegmentCacheTest {
 
         // All entries should be gone
         for (int i = 0; i < 5; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200);
             assertNull(cache.get(key));
         }
     }
 
     @Test
     void testViewportPixelsPerSecondChangeClearsCache() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change pixels per second
@@ -133,7 +140,7 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testViewportHeightChangeClearsCache() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change height
@@ -146,8 +153,8 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testViewportWidthChangePreservesEntries() {
-        var key1 = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
-        var key2 = new WaveformSegmentCache.SegmentKey(2.0, 100, 200);
+        var key1 = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
+        var key2 = new WaveformSegmentCache.SegmentKey(2L, 100, 200);
         var future1 = CompletableFuture.completedFuture(mockImage);
         var future2 = CompletableFuture.completedFuture(mockImage);
 
@@ -165,7 +172,7 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testViewportPositionChangeNoEffect() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         var future = CompletableFuture.completedFuture(mockImage);
         cache.put(key, future);
 
@@ -184,24 +191,24 @@ class WaveformSegmentCacheTest {
         cache = new WaveformSegmentCache(cacheStats);
         cache.initialize(viewport);
 
-        // Expected cache size = ceil(width/200) + 4
+        // Expected cache size = ceil(width/200) + (PREFETCH_COUNT * 2)
         int expectedVisible = (int) Math.ceil(width / 200.0);
-        int expectedSize = expectedVisible + 4;
+        int expectedSize = expectedVisible + (WaveformSegmentCache.PREFETCH_COUNT * 2);
 
         // Fill cache to capacity
         for (int i = 0; i < expectedSize; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200);
             cache.put(key, CompletableFuture.completedFuture(mockImage));
         }
 
         // All should fit
         for (int i = 0; i < expectedSize; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 2.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 2), 100, 200);
             assertNotNull(cache.get(key), "Entry " + i + " should exist");
         }
 
         // Add one more - should overwrite oldest
-        var overflowKey = new WaveformSegmentCache.SegmentKey(expectedSize * 2.0, 100, 200);
+        var overflowKey = new WaveformSegmentCache.SegmentKey((long) (expectedSize * 2), 100, 200);
         cache.put(overflowKey, CompletableFuture.completedFuture(mockImage));
         assertNotNull(cache.get(overflowKey));
     }
@@ -217,7 +224,7 @@ class WaveformSegmentCacheTest {
             executor.submit(
                     () -> {
                         try {
-                            var key = new WaveformSegmentCache.SegmentKey(index * 0.1, 100, 200);
+                            var key = new WaveformSegmentCache.SegmentKey((long) index, 100, 200);
                             cache.put(key, CompletableFuture.completedFuture(mockImage));
                         } finally {
                             latch.countDown();
@@ -231,7 +238,7 @@ class WaveformSegmentCacheTest {
             executor.submit(
                     () -> {
                         try {
-                            var key = new WaveformSegmentCache.SegmentKey(index * 0.1, 100, 200);
+                            var key = new WaveformSegmentCache.SegmentKey((long) index, 100, 200);
                             cache.get(key); // May or may not find it
                         } finally {
                             latch.countDown();
@@ -254,7 +261,7 @@ class WaveformSegmentCacheTest {
                     () -> {
                         try {
                             for (int j = 0; j < 10; j++) {
-                                var key = new WaveformSegmentCache.SegmentKey(j * 0.5, 100, 200);
+                                var key = new WaveformSegmentCache.SegmentKey((long) j, 100, 200);
                                 cache.get(key);
                                 Thread.sleep(1);
                             }
@@ -272,7 +279,7 @@ class WaveformSegmentCacheTest {
             executor.submit(
                     () -> {
                         try {
-                            var key = new WaveformSegmentCache.SegmentKey(index * 0.5, 100, 200);
+                            var key = new WaveformSegmentCache.SegmentKey((long) index, 100, 200);
                             cache.put(key, CompletableFuture.completedFuture(mockImage));
                             Thread.sleep(5);
                         } catch (InterruptedException e) {
@@ -306,7 +313,7 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testPendingFutures() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         var future = new CompletableFuture<Image>();
 
         cache.put(key, future);
@@ -323,9 +330,9 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testSegmentKeyEquality() {
-        var key1 = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
-        var key2 = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
-        var key3 = new WaveformSegmentCache.SegmentKey(0.0, 100, 300);
+        var key1 = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
+        var key2 = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
+        var key3 = new WaveformSegmentCache.SegmentKey(0L, 100, 300);
 
         assertEquals(key1, key2);
         assertNotEquals(key1, key3);
@@ -333,11 +340,11 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testSegmentKeyDuration() {
-        var key = new WaveformSegmentCache.SegmentKey(0.0, 100, 200);
+        var key = new WaveformSegmentCache.SegmentKey(0L, 100, 200);
         assertEquals(2.0, key.duration(), 0.001);
         assertEquals(2.0, key.endTime(), 0.001);
 
-        var key2 = new WaveformSegmentCache.SegmentKey(5.0, 200, 200);
+        var key2 = new WaveformSegmentCache.SegmentKey(5L, 200, 200);
         assertEquals(1.0, key2.duration(), 0.001);
         assertEquals(6.0, key2.endTime(), 0.001);
     }
@@ -347,10 +354,11 @@ class WaveformSegmentCacheTest {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
         var smallViewport = new WaveformViewportSpec(0.0, 10.0, 200, 200, 100);
         var smallCache = new WaveformSegmentCache(cacheStats);
-        smallCache.initialize(smallViewport); // size = 1 + 4 = 5
+        smallCache.initialize(smallViewport); // size = 1 + (PREFETCH_COUNT * 2)
+        int cacheSize = 1 + (WaveformSegmentCache.PREFETCH_COUNT * 2); // 1 + 20 = 21
 
         // Fill exactly to size
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < cacheSize; i++) {
             smallCache.put(
                     new WaveformSegmentCache.SegmentKey(i, 100, 200),
                     CompletableFuture.completedFuture(mockImage));
@@ -367,8 +375,9 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testResizeWhileCacheFull() {
-        // Fill cache completely (size = 5 + 4 = 9)
-        for (int i = 0; i < 9; i++) {
+        // Fill cache completely (size = 5 + PREFETCH_COUNT * 2)
+        int cacheSize = 5 + (WaveformSegmentCache.PREFETCH_COUNT * 2); // 5 + 20 = 25
+        for (int i = 0; i < cacheSize; i++) {
             cache.put(
                     new WaveformSegmentCache.SegmentKey(i, 100, 200),
                     CompletableFuture.completedFuture(mockImage));
@@ -376,7 +385,7 @@ class WaveformSegmentCacheTest {
 
         // Shrink viewport - resize() must handle head > newSize
         var smaller = new WaveformViewportSpec(0.0, 10.0, 400, 200, 100);
-        cache.updateViewport(smaller); // size 9 -> 6
+        cache.updateViewport(smaller); // size changes to 2 + 20 = 22
 
         // Verify cache still functional after resize
         var testKey = new WaveformSegmentCache.SegmentKey(100, 100, 200);
@@ -406,9 +415,9 @@ class WaveformSegmentCacheTest {
         var future3 = new CompletableFuture<Image>();
 
         // Add them to cache
-        cache.put(new WaveformSegmentCache.SegmentKey(0.0, 100, 200), future1);
-        cache.put(new WaveformSegmentCache.SegmentKey(2.0, 100, 200), future2);
-        cache.put(new WaveformSegmentCache.SegmentKey(4.0, 100, 200), future3);
+        cache.put(new WaveformSegmentCache.SegmentKey(0L, 100, 200), future1);
+        cache.put(new WaveformSegmentCache.SegmentKey(2L, 100, 200), future2);
+        cache.put(new WaveformSegmentCache.SegmentKey(4L, 100, 200), future3);
 
         // Clear should cancel all pending futures
         cache.clear();
@@ -443,7 +452,7 @@ class WaveformSegmentCacheTest {
                             return mockImage;
                         });
 
-        cache.put(new WaveformSegmentCache.SegmentKey(0.0, 100, 200), future);
+        cache.put(new WaveformSegmentCache.SegmentKey(0L, 100, 200), future);
 
         // Wait for computation to start
         assertTrue(startedLatch.await(1, TimeUnit.SECONDS));
@@ -521,7 +530,7 @@ class WaveformSegmentCacheTest {
         // Add entries
         var futures = new CompletableFuture[entriesToAdd];
         for (int i = 0; i < entriesToAdd; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 1.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 1), 100, 200);
             futures[i] = CompletableFuture.completedFuture(mockImage);
             cache.put(key, futures[i]);
         }
@@ -531,11 +540,12 @@ class WaveformSegmentCacheTest {
         cache.updateViewport(newViewport);
 
         // Verify entries are preserved (up to new cache size)
-        int newCacheSize = (int) Math.ceil(newWidth / 200.0) + 4;
+        int newCacheSize =
+                (int) Math.ceil(newWidth / 200.0) + (WaveformSegmentCache.PREFETCH_COUNT * 2);
 
         int found = 0;
         for (int i = 0; i < entriesToAdd; i++) {
-            var key = new WaveformSegmentCache.SegmentKey(i * 1.0, 100, 200);
+            var key = new WaveformSegmentCache.SegmentKey((long) (i * 1), 100, 200);
             if (cache.get(key) != null) {
                 found++;
             }

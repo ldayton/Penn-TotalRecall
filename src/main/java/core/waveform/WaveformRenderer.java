@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 class WaveformRenderer {
     private static final Logger logger = LoggerFactory.getLogger(WaveformRenderer.class);
 
-    private static final int SEGMENT_WIDTH_PX = 200;
-    private static final int PREFETCH_COUNT = 2; // Segments to prefetch in each direction
+    private static final int SEGMENT_WIDTH_PX = WaveformSegmentCache.SEGMENT_WIDTH_PX;
+    private static final int PREFETCH_COUNT = WaveformSegmentCache.PREFETCH_COUNT;
 
     // Waveform rendering constants (from original WaveformRenderer)
     private static final Color WAVEFORM_BACKGROUND = Color.WHITE;
@@ -153,14 +153,33 @@ class WaveformRenderer {
             @NonNull WaveformViewportSpec viewport) {
         List<WaveformSegmentCache.SegmentKey> segments = new ArrayList<>();
 
-        double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
-        double currentTime = viewport.startTimeSeconds();
+        // Calculate segment indices based on viewport time range
+        // Each segment represents SEGMENT_WIDTH_PX pixels worth of audio
+        long startIndex =
+                (long)
+                        Math.floor(
+                                viewport.startTimeSeconds()
+                                        * viewport.pixelsPerSecond()
+                                        / SEGMENT_WIDTH_PX);
+        long endIndex =
+                (long)
+                        Math.ceil(
+                                viewport.endTimeSeconds()
+                                        * viewport.pixelsPerSecond()
+                                        / SEGMENT_WIDTH_PX);
 
-        while (currentTime < viewport.endTimeSeconds()) {
+        logger.trace(
+                "Viewport: {}s to {}s, segments {} to {}",
+                viewport.startTimeSeconds(),
+                viewport.endTimeSeconds(),
+                startIndex,
+                endIndex);
+
+        // Generate segment keys for the index range
+        for (long index = startIndex; index <= endIndex; index++) {
             segments.add(
                     new WaveformSegmentCache.SegmentKey(
-                            currentTime, viewport.pixelsPerSecond(), viewport.viewportHeightPx()));
-            currentTime += segmentDuration;
+                            index, viewport.pixelsPerSecond(), viewport.viewportHeightPx()));
         }
 
         return segments;
@@ -173,34 +192,53 @@ class WaveformRenderer {
             return; // Skip prefetch if interrupted
         }
 
-        double segmentDuration = (double) SEGMENT_WIDTH_PX / viewport.pixelsPerSecond();
+        // Calculate the last visible segment index
+        long endIndex =
+                (long)
+                        Math.ceil(
+                                viewport.endTimeSeconds()
+                                        * viewport.pixelsPerSecond()
+                                        / SEGMENT_WIDTH_PX);
+        long startIndex =
+                (long)
+                        Math.floor(
+                                viewport.startTimeSeconds()
+                                        * viewport.pixelsPerSecond()
+                                        / SEGMENT_WIDTH_PX);
 
-        // Prefetch forward
-        double forwardStart = viewport.endTimeSeconds();
-        for (int i = 0; i < PREFETCH_COUNT; i++) {
+        logger.trace(
+                "Prefetching for viewport {}s-{}s, segments {}-{}, will prefetch up to segment {}",
+                viewport.startTimeSeconds(),
+                viewport.endTimeSeconds(),
+                startIndex,
+                endIndex,
+                endIndex + PREFETCH_COUNT);
+
+        // Prefetch forward (segments after the viewport)
+        for (int i = 1; i <= PREFETCH_COUNT; i++) {
+            long prefetchIndex = endIndex + i;
             var key =
                     new WaveformSegmentCache.SegmentKey(
-                            forwardStart + i * segmentDuration,
-                            viewport.pixelsPerSecond(),
-                            viewport.viewportHeightPx());
-            if (cache.get(key) == null) {
+                            prefetchIndex, viewport.pixelsPerSecond(), viewport.viewportHeightPx());
+            // Use no-stats version for prefetch checks
+            if (cache.get(key, false) == null) {
                 CompletableFuture<Image> future = renderSegment(key);
                 cache.put(key, future);
             }
         }
 
-        // Prefetch backward
-        double backStart = viewport.startTimeSeconds() - segmentDuration;
-        for (int i = 0; i < PREFETCH_COUNT; i++) {
-            double segmentTime = backStart - i * segmentDuration;
+        // Prefetch backward (segments before the viewport)
+        for (int i = 1; i <= PREFETCH_COUNT; i++) {
+            long prefetchIndex = startIndex - i;
             // Don't prefetch segments before the start of the audio
-            if (segmentTime < 0) {
+            if (prefetchIndex < 0) {
                 continue;
             }
             var key =
                     new WaveformSegmentCache.SegmentKey(
-                            segmentTime, viewport.pixelsPerSecond(), viewport.viewportHeightPx());
-            if (cache.get(key) == null) {
+                            prefetchIndex, viewport.pixelsPerSecond(), viewport.viewportHeightPx());
+            // Use no-stats version for prefetch checks
+            if (cache.get(key, false) == null) {
                 CompletableFuture<Image> future = renderSegment(key);
                 cache.put(key, future);
             }

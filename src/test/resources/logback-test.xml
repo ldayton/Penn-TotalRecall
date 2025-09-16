@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Test-specific logging configuration -->
+
+    <!-- Allow dynamic log level via system property -->
+    <property name="LOG_LEVEL" value="${log.level:-WARN}" />
     
     <!-- Console appender that suppresses stack traces -->
     <appender name="CONSOLE_NO_STACK" class="ch.qos.logback.core.ConsoleAppender">
@@ -23,7 +26,10 @@
     </logger>
 
     <!-- Default log level for tests -->
-    <root level="WARN">
+    <root level="${LOG_LEVEL}">
         <appender-ref ref="CONSOLE"/>
     </root>
+
+    <!-- Trace level for WaveformRenderer during debugging -->
+    <logger name="core.waveform.WaveformRenderer" level="TRACE"/>
 </configuration>

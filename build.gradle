@@ -285,6 +285,13 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         showStandardStreams = true
     }
+
+    // Support debug logging with -Pdebug or -Plog.level=DEBUG
+    if (project.hasProperty('debug')) {
+        systemProperty 'log.level', 'DEBUG'
+    } else if (project.hasProperty('log.level')) {
+        systemProperty 'log.level', project.property('log.level')
+    }
     def configProps = new Properties()
     def devConfigFile = file("src/main/resources/development.properties")
     if (devConfigFile.exists()) {
