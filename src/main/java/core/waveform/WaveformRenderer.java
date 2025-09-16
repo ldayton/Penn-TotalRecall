@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -50,9 +49,7 @@ class WaveformRenderer {
     private final ExecutorService renderPool;
     private final String audioFilePath;
     private final WaveformProcessor processor;
-
-    // Cache global peak per resolution for consistent scaling
-    private final ConcurrentHashMap<Integer, Double> resolutionPeaks = new ConcurrentHashMap<>();
+    private final WaveformPeakDetector peakDetector;
 
     enum Priority {
         VISIBLE(1),
@@ -89,6 +86,18 @@ class WaveformRenderer {
         this.cache = cache;
         this.renderPool = renderPool;
         this.processor = new WaveformProcessor(sampleReader, sampleRate, new PixelScaler());
+        this.peakDetector = new WaveformPeakDetector(audioFilePath, processor);
+
+        // Initialize the peak detector asynchronously to pre-calculate common resolutions
+        CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        peakDetector.initialize();
+                    } catch (Exception e) {
+                        logger.error("Failed to initialize peak detector: {}", e.getMessage());
+                    }
+                },
+                renderPool);
     }
 
     /** Fill cache for viewport with priority-based rendering. */
@@ -168,10 +177,13 @@ class WaveformRenderer {
                                         * viewport.pixelsPerSecond()
                                         / SEGMENT_WIDTH_PX);
 
-        logger.trace(
-                "Viewport: {}s to {}s, segments {} to {}",
+        logger.info(
+                "calculateVisibleSegments: viewport=[{}-{}s] @ {}px/s, HEIGHT={},"
+                        + " segmentIndices=[{}-{}]",
                 viewport.startTimeSeconds(),
                 viewport.endTimeSeconds(),
+                viewport.pixelsPerSecond(),
+                viewport.viewportHeightPx(),
                 startIndex,
                 endIndex);
 
@@ -264,6 +276,10 @@ class WaveformRenderer {
                         throw new java.util.concurrent.CancellationException("Render cancelled");
                     }
 
+                    logger.info(
+                            "renderSegment: Creating image for segment {} with HEIGHT={}",
+                            key.segmentIndex(),
+                            key.height());
                     BufferedImage image =
                             new BufferedImage(
                                     SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_RGB);
@@ -314,16 +330,6 @@ class WaveformRenderer {
                     }
                     final double[] fullChunkData = tempChunkData;
 
-                    // Initialize global peak on first chunk if not already set
-                    resolutionPeaks.computeIfAbsent(
-                            key.pixelsPerSecond(),
-                            pps -> {
-                                double p = getRenderingPeak(fullChunkData, Math.max(1, pps / 2));
-                                // logger.debug("Initialized rendering peak: {} for {} px/s", p,
-                                // pps);
-                                return p;
-                            });
-
                     // Extract the 200px segment we need from the full chunk
                     double[] valsToDraw = new double[SEGMENT_WIDTH_PX];
                     int segmentStartPixel = (int) (segmentOffsetInChunk * key.pixelsPerSecond());
@@ -363,7 +369,7 @@ class WaveformRenderer {
                         g.setColor(FIRST_CHANNEL_WAVEFORM);
 
                         // Use global peak for consistent scaling across all segments
-                        double peak = resolutionPeaks.getOrDefault(key.pixelsPerSecond(), 0.0);
+                        double peak = peakDetector.getPeak(key.pixelsPerSecond());
 
                         double yScale;
                         if (peak <= 0) {
@@ -374,6 +380,15 @@ class WaveformRenderer {
                                 yScale = 0;
                             }
                         }
+
+                        logger.info(
+                                "Segment {} render scaling: height={}, centerY={}, peak={},"
+                                        + " yScale={}",
+                                key.segmentIndex(),
+                                key.height(),
+                                centerY,
+                                peak,
+                                yScale);
 
                         // Draw waveform
                         for (int i = 0; i < valsToDraw.length && i < SEGMENT_WIDTH_PX; i++) {
@@ -418,6 +433,10 @@ class WaveformRenderer {
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
 
+        logger.info(
+                "Creating composite image: width={}, HEIGHT={}",
+                viewport.viewportWidthPx(),
+                viewport.viewportHeightPx());
         BufferedImage composite =
                 new BufferedImage(
                         viewport.viewportWidthPx(),
@@ -441,9 +460,22 @@ class WaveformRenderer {
 
             // Calculate where in pixels the first segment should start
             // This will be negative if the viewport starts partway through the segment
-            double firstSegmentStartTime = (firstSegmentIndex * SEGMENT_WIDTH_PX) / (double) viewport.pixelsPerSecond();
+            double firstSegmentStartTime =
+                    (firstSegmentIndex * SEGMENT_WIDTH_PX) / (double) viewport.pixelsPerSecond();
             double offsetSeconds = firstSegmentStartTime - viewport.startTimeSeconds();
             int offsetPixels = (int) Math.round(offsetSeconds * viewport.pixelsPerSecond());
+
+            logger.info(
+                    "Compositing: viewport=[{}-{}s], viewportHEIGHT={}, firstSegIdx={},"
+                            + " segStartTime={}, offsetSec={}, offsetPx={}, segmentCount={}",
+                    viewport.startTimeSeconds(),
+                    viewport.endTimeSeconds(),
+                    viewport.viewportHeightPx(),
+                    firstSegmentIndex,
+                    firstSegmentStartTime,
+                    offsetSeconds,
+                    offsetPixels,
+                    segments.size());
 
             // Draw each segment at its position
             int x = offsetPixels;
@@ -458,6 +490,14 @@ class WaveformRenderer {
                     // Center the segment vertically if there's a height mismatch
                     int segmentHeight = segment.getHeight(null);
                     int y = (viewport.viewportHeightPx() - segmentHeight) / 2;
+                    if (y != 0) {
+                        logger.warn(
+                                "HEIGHT MISMATCH: viewport height={}, segment height={}, y"
+                                        + " offset={}",
+                                viewport.viewportHeightPx(),
+                                segmentHeight,
+                                y);
+                    }
                     g.drawImage(segment, x, y, null);
                 }
                 // Always advance position, even for null segments (pre-audio silence)
@@ -523,20 +563,5 @@ class WaveformRenderer {
             x += pixelsPerSecond; // advance exactly 1s in pixels
             tickSecond += 1.0;
         }
-    }
-
-    /** Calculate rendering peak using consecutive pixel minimum - matches original */
-    private double getRenderingPeak(@NonNull double[] pixelValues, int skipInitialPixels) {
-        if (pixelValues.length < skipInitialPixels + 2) {
-            return 0;
-        }
-
-        double maxConsecutive = 0;
-        for (int i = skipInitialPixels; i < pixelValues.length - 1; i++) {
-            double consecutiveVals = Math.min(pixelValues[i], pixelValues[i + 1]);
-            maxConsecutive = Math.max(consecutiveVals, maxConsecutive);
-        }
-
-        return maxConsecutive;
     }
 }
