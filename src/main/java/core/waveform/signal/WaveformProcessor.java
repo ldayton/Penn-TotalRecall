@@ -13,12 +13,13 @@ import org.slf4j.LoggerFactory;
 /** Audio-to-display processing pipeline for waveform visualization. */
 public final class WaveformProcessor {
     private static final Logger logger = LoggerFactory.getLogger(WaveformProcessor.class);
-    
-    public static final double STANDARD_CHUNK_DURATION_SECONDS = 10.0; // Standard chunk size for processing
+
+    public static final double STANDARD_CHUNK_DURATION_SECONDS =
+            10.0; // Standard chunk size for processing
 
     // Signal processing constants
     private static final double MIN_FREQUENCY = 0.001; // 0.1% of Nyquist frequency
-    private static final double MAX_FREQUENCY = 0.45;  // 45% of Nyquist frequency
+    private static final double MAX_FREQUENCY = 0.45; // 45% of Nyquist frequency
     private static final double PRE_DATA_OVERLAP_SECONDS = 0.25; // Overlap for chunk boundaries
 
     private final SampleReader sampleReader;
@@ -36,13 +37,15 @@ public final class WaveformProcessor {
 
     /** Processes audio and scales for display in one call. */
     public double[] processAudioForDisplay(
-            String audioFilePath,
-            int chunkIndex,
-            int targetPixelWidth) {
+            String audioFilePath, int chunkIndex, int targetPixelWidth) {
 
         try {
             AudioChunkData rawAudio =
-                    loadChunk(audioFilePath, chunkIndex, STANDARD_CHUNK_DURATION_SECONDS, PRE_DATA_OVERLAP_SECONDS);
+                    loadChunk(
+                            audioFilePath,
+                            chunkIndex,
+                            STANDARD_CHUNK_DURATION_SECONDS,
+                            PRE_DATA_OVERLAP_SECONDS);
 
             FrequencyRange frequencyFilter = new FrequencyRange(MIN_FREQUENCY, MAX_FREQUENCY);
             AudioChunkData processedAudio = processSignal(rawAudio, frequencyFilter);

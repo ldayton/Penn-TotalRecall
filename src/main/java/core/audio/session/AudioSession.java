@@ -70,15 +70,9 @@ public class AudioSession implements PlaybackListener {
         // Log command application
         String commandName = command.getClass().getSimpleName();
         if ("UpdatePosition".equals(commandName)) {
-            log.trace(
-                    "Applied command: {} at frame {}",
-                    commandName,
-                    oldContext.playheadFrame());
+            log.trace("Applied command: {} at frame {}", commandName, oldContext.playheadFrame());
         } else {
-            log.debug(
-                    "Applied command: {} at frame {}",
-                    commandName,
-                    oldContext.playheadFrame());
+            log.debug("Applied command: {} at frame {}", commandName, oldContext.playheadFrame());
         }
     }
 

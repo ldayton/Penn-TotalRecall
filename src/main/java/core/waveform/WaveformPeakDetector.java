@@ -36,7 +36,7 @@ public class WaveformPeakDetector {
 
     // Thread pool for parallel chunk processing
     private static final ExecutorService executor =
-        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     // Common resolutions calculated dynamically based on zoom factor
     private static final int[] COMMON_RESOLUTIONS = calculateCommonResolutions();
@@ -95,25 +95,42 @@ public class WaveformPeakDetector {
             List<CompletableFuture<Double>> futures = new ArrayList<>();
             for (double time : sampleTimes) {
                 futures.add(
-                    CompletableFuture.supplyAsync(() -> {
-                        int chunkIndex = (int) (time / WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS);
-                        try {
-                            double[] pixelValues =
-                                    processor.processAudioForDisplay(
-                                            audioFilePath,
-                                            chunkIndex,
-                                            (int) (WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS * pixelsPerSecond));
+                        CompletableFuture.supplyAsync(
+                                () -> {
+                                    int chunkIndex =
+                                            (int)
+                                                    (time
+                                                            / WaveformProcessor
+                                                                    .STANDARD_CHUNK_DURATION_SECONDS);
+                                    try {
+                                        double[] pixelValues =
+                                                processor.processAudioForDisplay(
+                                                        audioFilePath,
+                                                        chunkIndex,
+                                                        (int)
+                                                                (WaveformProcessor
+                                                                                .STANDARD_CHUNK_DURATION_SECONDS
+                                                                        * pixelsPerSecond));
 
-                            double chunkPeak =
-                                    getRenderingPeak(pixelValues, Math.max(1, pixelsPerSecond / 2));
-                            log.trace("Chunk {} at {}s: peak = {}", chunkIndex, time, chunkPeak);
-                            return chunkPeak;
-                        } catch (Exception e) {
-                            log.debug("Failed to process chunk at {}s: {}", time, e.getMessage());
-                            return 0.0;
-                        }
-                    }, executor)
-                );
+                                        double chunkPeak =
+                                                getRenderingPeak(
+                                                        pixelValues,
+                                                        Math.max(1, pixelsPerSecond / 2));
+                                        log.trace(
+                                                "Chunk {} at {}s: peak = {}",
+                                                chunkIndex,
+                                                time,
+                                                chunkPeak);
+                                        return chunkPeak;
+                                    } catch (Exception e) {
+                                        log.debug(
+                                                "Failed to process chunk at {}s: {}",
+                                                time,
+                                                e.getMessage());
+                                        return 0.0;
+                                    }
+                                },
+                                executor));
             }
 
             // Wait for all chunks and find maximum peak
@@ -145,9 +162,7 @@ public class WaveformPeakDetector {
         }
     }
 
-    /**
-     * Calculate rendering peak using maximum absolute value for accurate peak detection.
-     */
+    /** Calculate rendering peak using maximum absolute value for accurate peak detection. */
     private double getRenderingPeak(@NonNull double[] pixelValues, int skipInitialPixels) {
         if (pixelValues.length <= skipInitialPixels) {
             return 0;
@@ -176,8 +191,8 @@ public class WaveformPeakDetector {
     }
 
     /**
-     * Dynamically calculates common resolutions based on the zoom factor.
-     * Pre-calculates resolutions for N zoom levels in and out from the default.
+     * Dynamically calculates common resolutions based on the zoom factor. Pre-calculates
+     * resolutions for N zoom levels in and out from the default.
      */
     private static int[] calculateCommonResolutions() {
         int defaultRes = ViewportDefaults.DEFAULT_PIXELS_PER_SECOND;

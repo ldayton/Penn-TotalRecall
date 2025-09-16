@@ -56,10 +56,7 @@ class WaveformProcessorTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // When: Processing audio for display
-        processor.processAudioForDisplay(
-                TEST_AUDIO_PATH,
-                chunkIndex,
-                TARGET_PIXEL_WIDTH);
+        processor.processAudioForDisplay(TEST_AUDIO_PATH, chunkIndex, TARGET_PIXEL_WIDTH);
 
         // Then: Verify that NO samples are skipped for the first chunk
         ArgumentCaptor<Integer> skipSamplesCaptor = ArgumentCaptor.forClass(Integer.class);

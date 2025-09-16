@@ -291,8 +291,13 @@ class WaveformRenderer {
                     double segmentOffsetInChunk = 0;
 
                     if (key.startTime() >= 0) {
-                        chunkIndex = (int) (key.startTime() / WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS);
-                        double chunkStartTime = chunkIndex * WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS;
+                        chunkIndex =
+                                (int)
+                                        (key.startTime()
+                                                / WaveformProcessor
+                                                        .STANDARD_CHUNK_DURATION_SECONDS);
+                        double chunkStartTime =
+                                chunkIndex * WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS;
                         segmentOffsetInChunk = key.startTime() - chunkStartTime;
                     } else {
                         // Segment starts before 0, we'll use chunk 0 but offset differently
@@ -309,12 +314,12 @@ class WaveformRenderer {
                     double[] tempChunkData;
                     try {
                         int chunkWidthPixels =
-                                (int) (WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS * key.pixelsPerSecond());
+                                (int)
+                                        (WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS
+                                                * key.pixelsPerSecond());
                         tempChunkData =
                                 processor.processAudioForDisplay(
-                                        audioFilePath,
-                                        chunkIndex,
-                                        chunkWidthPixels);
+                                        audioFilePath, chunkIndex, chunkWidthPixels);
                     } catch (Exception e) {
                         logger.warn(
                                 "Failed to process audio for segment at {}s: {}",
