@@ -131,21 +131,21 @@ public class WaveformPeakDetector {
     }
 
     /**
-     * Calculate rendering peak using consecutive pixel minimum. This matches the original algorithm
-     * for consistency.
+     * Calculate rendering peak using maximum absolute value for accurate peak detection.
      */
     private double getRenderingPeak(@NonNull double[] pixelValues, int skipInitialPixels) {
-        if (pixelValues.length < skipInitialPixels + 2) {
+        if (pixelValues.length <= skipInitialPixels) {
             return 0;
         }
 
-        double maxConsecutive = 0;
-        for (int i = skipInitialPixels; i < pixelValues.length - 1; i++) {
-            double consecutiveVals = Math.min(pixelValues[i], pixelValues[i + 1]);
-            maxConsecutive = Math.max(consecutiveVals, maxConsecutive);
+        double maxPeak = 0;
+
+        for (int i = skipInitialPixels; i < pixelValues.length; i++) {
+            double value = Math.abs(pixelValues[i]);
+            maxPeak = Math.max(maxPeak, value);
         }
 
-        return maxConsecutive;
+        return maxPeak;
     }
 
     /** Clear the cache and recalculate peaks. Useful if the audio file changes or for testing. */
