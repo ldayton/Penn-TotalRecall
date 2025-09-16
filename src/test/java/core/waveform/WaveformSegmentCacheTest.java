@@ -2,6 +2,7 @@ package core.waveform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import core.dispatch.EventDispatchBus;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.*;
@@ -18,11 +19,26 @@ class WaveformSegmentCacheTest {
     private WaveformSegmentCache cache;
     private WaveformViewportSpec viewport;
     private Image mockImage;
+    private CacheStats cacheStats;
 
     @BeforeEach
     void setUp() {
         viewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100);
-        cache = new WaveformSegmentCache(viewport);
+        // Create a mock EventDispatchBus that does nothing
+        EventDispatchBus mockEventBus =
+                new EventDispatchBus(null) {
+                    @Override
+                    public void subscribe(Object subscriber) {}
+
+                    @Override
+                    public void unsubscribe(Object subscriber) {}
+
+                    @Override
+                    public void publish(Object event) {}
+                };
+        cacheStats = new CacheStats(mockEventBus);
+        cache = new WaveformSegmentCache(cacheStats);
+        cache.initialize(viewport);
         mockImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -165,7 +181,8 @@ class WaveformSegmentCacheTest {
     @ValueSource(ints = {200, 400, 800, 1600, 3200})
     void testVariousViewportWidths(int width) {
         viewport = new WaveformViewportSpec(0.0, 10.0, width, 200, 100);
-        cache = new WaveformSegmentCache(viewport);
+        cache = new WaveformSegmentCache(cacheStats);
+        cache.initialize(viewport);
 
         // Expected cache size = ceil(width/200) + 4
         int expectedVisible = (int) Math.ceil(width / 200.0);
@@ -329,7 +346,8 @@ class WaveformSegmentCacheTest {
     void testHeadPointerWraparound() {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
         var smallViewport = new WaveformViewportSpec(0.0, 10.0, 200, 200, 100);
-        var smallCache = new WaveformSegmentCache(smallViewport); // size = 1 + 4 = 5
+        var smallCache = new WaveformSegmentCache(cacheStats);
+        smallCache.initialize(smallViewport); // size = 1 + 4 = 5
 
         // Fill exactly to size
         for (int i = 0; i < 5; i++) {
@@ -497,7 +515,8 @@ class WaveformSegmentCacheTest {
     void testResizeScenarios(int initialWidth, int newWidth, int entriesToAdd) {
         // Create initial cache
         viewport = new WaveformViewportSpec(0.0, 10.0, initialWidth, 200, 100);
-        cache = new WaveformSegmentCache(viewport);
+        cache = new WaveformSegmentCache(cacheStats);
+        cache.initialize(viewport);
 
         // Add entries
         var futures = new CompletableFuture[entriesToAdd];

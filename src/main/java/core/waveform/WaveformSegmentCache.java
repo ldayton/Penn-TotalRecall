@@ -1,6 +1,7 @@
 package core.waveform;
 
 import com.google.errorprone.annotations.ThreadSafe;
+import com.google.inject.Inject;
 import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -23,7 +24,7 @@ public class WaveformSegmentCache {
     private int size;
     private int head = 0;
     private WaveformViewportSpec currentViewport;
-    private final CacheStats stats = new CacheStats();
+    private final CacheStats stats;
 
     record CacheEntry(@NonNull SegmentKey key, @NonNull CompletableFuture<Image> future) {}
 
@@ -37,7 +38,12 @@ public class WaveformSegmentCache {
         }
     }
 
-    WaveformSegmentCache(@NonNull WaveformViewportSpec viewport) {
+    @Inject
+    WaveformSegmentCache(@NonNull CacheStats stats) {
+        this.stats = stats;
+    }
+
+    void initialize(@NonNull WaveformViewportSpec viewport) {
         int visibleSegments =
                 (int) Math.ceil((double) viewport.viewportWidthPx() / SEGMENT_WIDTH_PX);
         int prefetchSegments = 4; // 2 each direction

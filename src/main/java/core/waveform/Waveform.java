@@ -31,7 +31,8 @@ public class Waveform {
             @NonNull String audioFilePath,
             @NonNull AudioEngine audioEngine,
             @NonNull AudioHandle audioHandle,
-            @NonNull SampleReader sampleReader) {
+            @NonNull SampleReader sampleReader,
+            @NonNull WaveformSegmentCache cache) {
 
         // Create thread pool for rendering (leave 1 core for UI)
         int threads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -53,7 +54,8 @@ public class Waveform {
         // Initialize with default viewport (will be updated on first render)
         WaveformViewportSpec defaultViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100);
 
-        this.cache = new WaveformSegmentCache(defaultViewport);
+        this.cache = cache;
+        this.cache.initialize(defaultViewport);
 
         // Get sample rate from audio metadata
         AudioMetadata metadata = audioEngine.getMetadata(audioHandle);

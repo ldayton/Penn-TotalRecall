@@ -1,10 +1,17 @@
 package core.waveform;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import core.dispatch.EventDispatchBus;
+import core.dispatch.Subscribe;
+import core.events.AppStateChangedEvent;
 import java.util.concurrent.atomic.AtomicLong;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /** Thread-safe cache statistics tracker for waveform segment cache. */
 @Slf4j
+@Singleton
 public class CacheStats {
     private final AtomicLong requests = new AtomicLong();
     private final AtomicLong hits = new AtomicLong();
@@ -14,6 +21,22 @@ public class CacheStats {
     private final AtomicLong evictions = new AtomicLong();
     private final AtomicLong clears = new AtomicLong();
     private final AtomicLong resizes = new AtomicLong();
+
+    @Inject
+    public CacheStats(@NonNull EventDispatchBus eventBus) {
+        eventBus.subscribe(this);
+    }
+
+    @Subscribe
+    public void onStateChanged(@NonNull AppStateChangedEvent event) {
+        switch (event.newState()) {
+            case NO_AUDIO, LOADING -> {
+                log.debug("Resetting cache stats on state change to: {}", event.newState());
+                reset();
+            }
+            default -> {}
+        }
+    }
 
     void recordRequest() {
         requests.incrementAndGet();

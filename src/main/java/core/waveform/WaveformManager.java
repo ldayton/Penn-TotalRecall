@@ -26,6 +26,7 @@ public class WaveformManager {
     private final AudioSessionDataSource sessionSource;
     private final Provider<AudioEngine> audioEngineProvider;
     private final Provider<SampleReader> sampleReaderProvider;
+    private final Provider<WaveformSegmentCache> cacheProvider;
 
     private Optional<Waveform> currentWaveform = Optional.empty();
     private Optional<AudioEngine> audioEngine = Optional.empty();
@@ -35,10 +36,12 @@ public class WaveformManager {
             @NonNull AudioSessionDataSource sessionSource,
             @NonNull Provider<AudioEngine> audioEngineProvider,
             @NonNull Provider<SampleReader> sampleReaderProvider,
+            @NonNull Provider<WaveformSegmentCache> cacheProvider,
             @NonNull EventDispatchBus eventBus) {
         this.sessionSource = sessionSource;
         this.audioEngineProvider = audioEngineProvider;
         this.sampleReaderProvider = sampleReaderProvider;
+        this.cacheProvider = cacheProvider;
         eventBus.subscribe(this);
     }
 
@@ -89,7 +92,8 @@ public class WaveformManager {
                             audioPath.get(),
                             audioEngine.get(),
                             audioHandle.get(),
-                            sampleReaderProvider.get());
+                            sampleReaderProvider.get(),
+                            cacheProvider.get());
 
             // Clean up old waveform if present
             currentWaveform.ifPresent(Waveform::shutdown);
