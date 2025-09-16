@@ -27,6 +27,7 @@ public final class ViewportPainter {
     private final Timer repaintTimer;
     private volatile WaveformViewport viewport;
     private volatile ViewportPaintingDataSource dataSource;
+    private volatile String lastSpecId = null;
 
     /** Create a painter with dependency injection. */
     @Inject
@@ -92,6 +93,40 @@ public final class ViewportPainter {
         }
         ScreenDimension bounds = viewport.getViewportBounds();
         ViewportRenderSpec ctx = dataSource.getRenderSpec(bounds);
+
+        // Skip repaint if spec hasn't changed (for RENDER mode only)
+        if (ctx.mode() == ViewportPaintingDataSource.PaintMode.RENDER) {
+            String currentSpecId = ctx.specId();
+            if (currentSpecId != null && currentSpecId.equals(lastSpecId)) {
+                // Check if the future is complete - if so, we can still paint
+                if (ctx.image().isDone()) {
+                    try {
+                        Image image = ctx.image().getNow(null);
+                        if (image != null) {
+                            log.trace("Avoiding repaint - spec unchanged: {}", currentSpecId);
+                            paintWaveform(
+                                    g,
+                                    bounds.x(),
+                                    bounds.y(),
+                                    bounds.width(),
+                                    bounds.height(),
+                                    image);
+                            paintReferenceLine(g, bounds);
+                            paintPlayhead(g, bounds);
+                        }
+                    } catch (Exception e) {
+                        // Fall through to normal painting logic
+                    }
+                } else {
+                    log.trace(
+                            "Avoiding repaint - spec unchanged and image still rendering: {}",
+                            currentSpecId);
+                }
+                return; // Skip redundant repaint
+            }
+            log.trace("Spec changed from {} to {}", lastSpecId, currentSpecId);
+            lastSpecId = currentSpecId;
+        }
         switch (ctx.mode()) {
             case EMPTY -> {
                 clearBackground(g, bounds);

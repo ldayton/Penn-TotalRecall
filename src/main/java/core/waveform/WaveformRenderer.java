@@ -129,34 +129,42 @@ class WaveformRenderer {
                 renderPool);
 
         // Composite segments when all ready
-        return CompletableFuture.allOf(segmentFutures.toArray(CompletableFuture[]::new))
-                .thenApply(
-                        _ -> {
-                            List<Image> segments =
-                                    segmentFutures.stream().map(f -> f.getNow(null)).toList();
-                            Image compositeImage = compositeSegments(segments, viewport);
-                            logger.trace(
-                                    "Successfully rendered viewport [{}s - {}s] with {} segments",
-                                    String.format("%.2f", viewport.startTimeSeconds()),
-                                    String.format("%.2f", viewport.endTimeSeconds()),
-                                    segments.size());
-                            return compositeImage;
-                        })
-                .exceptionally(
-                        e -> {
-                            // Check if this is a cancellation
-                            Throwable cause = e.getCause();
-                            if (cause instanceof java.util.concurrent.CancellationException) {
-                                // Don't log cancellations - they're expected during navigation
-                                logger.debug(
-                                        "Waveform render cancelled for viewport at {}s",
-                                        viewport.startTimeSeconds());
-                            } else {
-                                // Log other errors
-                                logger.warn("Error rendering waveform viewport: ", e);
-                            }
-                            return null;
-                        });
+        CompletableFuture<Image> compositeFuture =
+                CompletableFuture.allOf(segmentFutures.toArray(CompletableFuture[]::new))
+                        .thenApply(
+                                _ -> {
+                                    List<Image> segments =
+                                            segmentFutures.stream()
+                                                    .map(f -> f.getNow(null))
+                                                    .toList();
+                                    Image compositeImage = compositeSegments(segments, viewport);
+                                    logger.trace(
+                                            "Successfully rendered viewport [{}s - {}s] with {}"
+                                                    + " segments",
+                                            String.format("%.2f", viewport.startTimeSeconds()),
+                                            String.format("%.2f", viewport.endTimeSeconds()),
+                                            segments.size());
+                                    return compositeImage;
+                                })
+                        .exceptionally(
+                                e -> {
+                                    // Check if this is a cancellation
+                                    Throwable cause = e.getCause();
+                                    if (cause
+                                            instanceof java.util.concurrent.CancellationException) {
+                                        // Don't log cancellations - they're expected during
+                                        // navigation
+                                        logger.debug(
+                                                "Waveform render cancelled for viewport at {}s",
+                                                viewport.startTimeSeconds());
+                                    } else {
+                                        // Log other errors
+                                        logger.warn("Error rendering waveform viewport: ", e);
+                                    }
+                                    return null;
+                                });
+
+        return compositeFuture;
     }
 
     /** Calculate which segments are needed for the viewport. */

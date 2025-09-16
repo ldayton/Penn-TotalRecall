@@ -6,6 +6,7 @@ import core.audio.session.AudioSessionStateMachine;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.events.ZoomEvent;
+import core.viewport.ViewportPaintingDataSource.PaintMode;
 import core.waveform.ScreenDimension;
 import core.waveform.Waveform;
 import core.waveform.WaveformManager;
@@ -69,47 +70,62 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         // Loading or empty states
         var snap = sessionDataSource.snapshot();
         if (snap.state() == AudioSessionStateMachine.State.ERROR) {
+            String specId =
+                    String.format(
+                            "error-%s-%dx%d",
+                            snap.errorMessage().orElse(""), bounds.width(), bounds.height());
             return new ViewportRenderSpec(
                     PaintMode.ERROR,
                     snap.errorMessage(),
                     CompletableFuture.<Image>completedFuture(null),
-                    0L);
+                    0L,
+                    specId);
         }
         if (snap.state() == AudioSessionStateMachine.State.LOADING) {
+            String specId = String.format("loading-%dx%d", bounds.width(), bounds.height());
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
                     CompletableFuture.<Image>completedFuture(null),
-                    0L);
+                    0L,
+                    specId);
         }
 
         if (snap.state() == AudioSessionStateMachine.State.NO_AUDIO) {
+            String specId = String.format("empty-%dx%d", bounds.width(), bounds.height());
             return new ViewportRenderSpec(
                     PaintMode.EMPTY,
                     Optional.empty(),
                     CompletableFuture.<Image>completedFuture(null),
-                    0L);
+                    0L,
+                    specId);
         }
 
         // Ready to render if waveform exists; otherwise still loading
         Waveform waveform = waveformManager.getCurrentWaveform().orElse(null);
         if (waveform == null) {
+            String specId =
+                    String.format("loading-nowaveform-%dx%d", bounds.width(), bounds.height());
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
                     CompletableFuture.<Image>completedFuture(null),
-                    0L);
+                    0L,
+                    specId);
         }
 
         // Build UI + audio snapshots and project
         var audioSnapshot = sessionDataSource.snapshot();
         int sampleRate = audioSnapshot.sampleRate();
         if (sampleRate == 0) {
+            String specId =
+                    String.format("loading-nosamplerate-%dx%d", bounds.width(), bounds.height());
             return new ViewportRenderSpec(
                     PaintMode.LOADING,
                     Optional.empty(),
                     CompletableFuture.<Image>completedFuture(null),
-                    0L);
+                    0L,
+                    specId);
         }
         double fpp = framesPerPixel.get();
         if (Double.isNaN(fpp)) {
@@ -137,6 +153,10 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
         var imageFuture = waveform.renderViewport(wfCtx);
         long generation = projection.generation();
 
-        return new ViewportRenderSpec(PaintMode.RENDER, Optional.empty(), imageFuture, generation);
+        // Use the WaveformViewportSpec's built-in specId which captures all rendering parameters
+        String specId = "render-" + wfCtx.specId();
+
+        return new ViewportRenderSpec(
+                PaintMode.RENDER, Optional.empty(), imageFuture, generation, specId);
     }
 }

@@ -26,12 +26,16 @@ public interface ViewportPaintingDataSource {
     /**
      * Immutable viewport render spec: everything the painter needs to draw a frame, frame-based and
      * centered at the playhead.
+     *
+     * <p>The specId uniquely identifies this spec's content, incorporating the underlying segment
+     * cache keys to ensure changes at any layer trigger repaints.
      */
     record ViewportRenderSpec(
             PaintMode mode,
             Optional<String> errorMessage,
             CompletableFuture<Image> image,
-            long generation) {}
+            long generation,
+            String specId) {}
 
     /** Build a render spec for the given viewport bounds. */
     ViewportRenderSpec getRenderSpec(ScreenDimension bounds);

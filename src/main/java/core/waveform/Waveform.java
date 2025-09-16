@@ -71,8 +71,7 @@ public class Waveform {
             return CompletableFuture.completedFuture(null);
         }
         try {
-            CompletableFuture<Image> result = renderer.renderViewport(viewport);
-            return result;
+            return renderer.renderViewport(viewport);
         } catch (Exception e) {
             // Log error but don't rethrow
             return CompletableFuture.completedFuture(null);
