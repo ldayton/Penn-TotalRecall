@@ -286,17 +286,13 @@ class WaveformRenderer {
                             new BufferedImage(
                                     SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_RGB);
 
-                    // Calculate which 10-second chunk this segment belongs to
-                    final double CHUNK_DURATION_SECONDS = 10.0;
-                    final double PRE_DATA_SECONDS = 0.25; // Match original overlap
-
                     // Handle segments that start before 0
                     int chunkIndex = 0;
                     double segmentOffsetInChunk = 0;
 
                     if (key.startTime() >= 0) {
-                        chunkIndex = (int) (key.startTime() / CHUNK_DURATION_SECONDS);
-                        double chunkStartTime = chunkIndex * CHUNK_DURATION_SECONDS;
+                        chunkIndex = (int) (key.startTime() / WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS);
+                        double chunkStartTime = chunkIndex * WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS;
                         segmentOffsetInChunk = key.startTime() - chunkStartTime;
                     } else {
                         // Segment starts before 0, we'll use chunk 0 but offset differently
@@ -313,15 +309,11 @@ class WaveformRenderer {
                     double[] tempChunkData;
                     try {
                         int chunkWidthPixels =
-                                (int) (CHUNK_DURATION_SECONDS * key.pixelsPerSecond());
+                                (int) (WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS * key.pixelsPerSecond());
                         tempChunkData =
                                 processor.processAudioForDisplay(
                                         audioFilePath,
                                         chunkIndex,
-                                        CHUNK_DURATION_SECONDS,
-                                        PRE_DATA_SECONDS, // Match original overlap
-                                        0.001, // Min frequency for BandPassFilter
-                                        0.45, // Max frequency matching original
                                         chunkWidthPixels);
                     } catch (Exception e) {
                         logger.warn(

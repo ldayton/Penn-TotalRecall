@@ -20,7 +20,6 @@ class WaveformProcessorTest {
     private static final int SAMPLE_RATE = 44100;
     private static final String TEST_AUDIO_PATH = "/test/audio.wav";
     private static final double CHUNK_DURATION = 10.0;
-    private static final double OVERLAP_SECONDS = 0.25;
     private static final int TARGET_PIXEL_WIDTH = 200;
 
     @Mock private SampleReader sampleReader;
@@ -60,10 +59,6 @@ class WaveformProcessorTest {
         processor.processAudioForDisplay(
                 TEST_AUDIO_PATH,
                 chunkIndex,
-                CHUNK_DURATION,
-                OVERLAP_SECONDS,
-                0.001, // min frequency
-                0.45, // max frequency
                 TARGET_PIXEL_WIDTH);
 
         // Then: Verify that NO samples are skipped for the first chunk

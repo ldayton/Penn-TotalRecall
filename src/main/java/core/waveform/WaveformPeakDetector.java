@@ -1,9 +1,15 @@
 package core.waveform;
 
 import core.audio.AudioMetadata;
+import core.viewport.ViewportDefaults;
 import core.waveform.signal.WaveformProcessor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +30,16 @@ public class WaveformPeakDetector {
     private static final double MIN_PEAK = 0.01; // Prevent excessive scaling
     private static final double DEFAULT_PEAK = 0.1; // Fallback if calculation fails
 
-    // Common resolutions to pre-calculate
-    private static final int[] COMMON_RESOLUTIONS = {100, 200, 400};
+    // Zoom factor used by ViewportSessionManager
+    private static final double ZOOM_FACTOR = 1.5;
+    private static final int ZOOM_LEVELS_TO_CACHE = 2; // Cache 2 levels in each direction
+
+    // Thread pool for parallel chunk processing
+    private static final ExecutorService executor =
+        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    // Common resolutions calculated dynamically based on zoom factor
+    private static final int[] COMMON_RESOLUTIONS = calculateCommonResolutions();
 
     public WaveformPeakDetector(
             @NonNull String audioFilePath,
@@ -66,46 +80,47 @@ public class WaveformPeakDetector {
      */
     private double calculateGlobalPeak(int pixelsPerSecond) {
         try {
-            double maxPeak = 0.0;
-            int samplesProcessed = 0;
-
-            // Process chunks at regular intervals throughout the file
-            // We'll process 10-second chunks every SAMPLE_INTERVAL_SECONDS
-            double chunkDuration = 10.0; // Process 10-second chunks
-            double currentTime = 0.0;
-
-            // Sample the entire audio file
             double audioDuration = metadata.durationSeconds();
             log.info("Calculating peak for {}s audio file", audioDuration);
 
+            // Build list of time points to sample
+            List<Double> sampleTimes = new ArrayList<>();
+            double currentTime = 0.0;
             while (currentTime < audioDuration) {
-                int chunkIndex = (int) (currentTime / chunkDuration);
-
-                try {
-                    // Process this chunk
-                    double[] pixelValues =
-                            processor.processAudioForDisplay(
-                                    audioFilePath,
-                                    chunkIndex,
-                                    chunkDuration,
-                                    0.25, // Pre-data overlap
-                                    0.001, // Min frequency
-                                    0.45, // Max frequency
-                                    (int) (chunkDuration * pixelsPerSecond));
-
-                    // Calculate peak for this chunk using the same algorithm as before
-                    double chunkPeak =
-                            getRenderingPeak(pixelValues, Math.max(1, pixelsPerSecond / 2));
-                    maxPeak = Math.max(maxPeak, chunkPeak);
-
-                    log.debug("Chunk {} at {}s: peak = {}", chunkIndex, currentTime, chunkPeak);
-
-                } catch (Exception e) {
-                    log.debug("Failed to process chunk at {}s: {}", currentTime, e.getMessage());
-                }
-
+                sampleTimes.add(currentTime);
                 currentTime += SAMPLE_INTERVAL_SECONDS;
-                samplesProcessed++;
+            }
+
+            // Process chunks in parallel
+            List<CompletableFuture<Double>> futures = new ArrayList<>();
+            for (double time : sampleTimes) {
+                futures.add(
+                    CompletableFuture.supplyAsync(() -> {
+                        int chunkIndex = (int) (time / WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS);
+                        try {
+                            double[] pixelValues =
+                                    processor.processAudioForDisplay(
+                                            audioFilePath,
+                                            chunkIndex,
+                                            (int) (WaveformProcessor.STANDARD_CHUNK_DURATION_SECONDS * pixelsPerSecond));
+
+                            double chunkPeak =
+                                    getRenderingPeak(pixelValues, Math.max(1, pixelsPerSecond / 2));
+                            log.debug("Chunk {} at {}s: peak = {}", chunkIndex, time, chunkPeak);
+                            return chunkPeak;
+                        } catch (Exception e) {
+                            log.debug("Failed to process chunk at {}s: {}", time, e.getMessage());
+                            return 0.0;
+                        }
+                    }, executor)
+                );
+            }
+
+            // Wait for all chunks and find maximum peak
+            double maxPeak = 0.0;
+            for (CompletableFuture<Double> future : futures) {
+                double chunkPeak = future.join();
+                maxPeak = Math.max(maxPeak, chunkPeak);
             }
 
             // Apply minimum threshold to prevent excessive scaling
@@ -119,7 +134,7 @@ public class WaveformPeakDetector {
                             + " total)",
                     pixelsPerSecond,
                     maxPeak,
-                    samplesProcessed,
+                    sampleTimes.size(),
                     Math.min(currentTime, audioDuration),
                     audioDuration);
             return maxPeak;
@@ -158,5 +173,31 @@ public class WaveformPeakDetector {
     /** Get the number of cached peak values. */
     public int getCacheSize() {
         return peakCache.size();
+    }
+
+    /**
+     * Dynamically calculates common resolutions based on the zoom factor.
+     * Pre-calculates resolutions for N zoom levels in and out from the default.
+     */
+    private static int[] calculateCommonResolutions() {
+        int defaultRes = ViewportDefaults.DEFAULT_PIXELS_PER_SECOND;
+        List<Integer> resolutions = new ArrayList<>();
+
+        // Add zoom-out resolutions
+        for (int i = ZOOM_LEVELS_TO_CACHE; i > 0; i--) {
+            int zoomOutRes = (int) Math.round(defaultRes / Math.pow(ZOOM_FACTOR, i));
+            resolutions.add(zoomOutRes);
+        }
+
+        // Add default resolution
+        resolutions.add(defaultRes);
+
+        // Add zoom-in resolutions
+        for (int i = 1; i <= ZOOM_LEVELS_TO_CACHE; i++) {
+            int zoomInRes = (int) Math.round(defaultRes * Math.pow(ZOOM_FACTOR, i));
+            resolutions.add(zoomInRes);
+        }
+
+        return resolutions.stream().mapToInt(Integer::intValue).toArray();
     }
 }
