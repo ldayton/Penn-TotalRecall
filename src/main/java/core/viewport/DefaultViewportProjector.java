@@ -10,6 +10,8 @@ import lombok.NonNull;
  */
 public class DefaultViewportProjector implements ViewportProjector {
 
+    private long generationCounter = 0;
+
     @Override
     public Projection project(@NonNull AudioSessionSnapshot audio, @NonNull ViewportUiState ui) {
         // Map state to high-level mode first
@@ -22,7 +24,7 @@ public class DefaultViewportProjector implements ViewportProjector {
                 };
 
         if (mode != PaintMode.RENDER) {
-            return new Projection(mode, 0L, 0L, 0L, audio.errorMessage());
+            return new Projection(mode, 0L, 0L, ++generationCounter, audio.errorMessage());
         }
 
         // frames across the viewport = pixels * (frames/pixel)
@@ -30,12 +32,8 @@ public class DefaultViewportProjector implements ViewportProjector {
         long startFrame = audio.playheadFrame() - (widthFrames / 2);
         long endFrame = startFrame + widthFrames;
 
-        long generation =
-                (startFrame & 0xFFFFFFFFL)
-                        ^ ((endFrame & 0xFFFFFFFFL) << 1)
-                        ^ (((long) ui.canvasWidthPx()) << 32)
-                        ^ (((long) ui.canvasHeightPx()) << 16)
-                        ^ (Double.doubleToLongBits(ui.framesPerPixel()));
+        // Use incrementing counter for generation to detect out-of-order rendering
+        long generation = ++generationCounter;
 
         return new Projection(
                 PaintMode.RENDER, startFrame, endFrame, generation, audio.errorMessage());

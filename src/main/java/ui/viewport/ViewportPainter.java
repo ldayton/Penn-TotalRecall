@@ -28,6 +28,7 @@ public final class ViewportPainter {
     private volatile WaveformViewport viewport;
     private volatile ViewportPaintingDataSource dataSource;
     private volatile String lastSpecId = null;
+    private volatile long lastGeneration = -1;
 
     /** Create a painter with dependency injection. */
     @Inject
@@ -141,7 +142,24 @@ public final class ViewportPainter {
                 paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
             }
             case RENDER -> {
-                long id = ctx.generation();
+                long currentGeneration = ctx.generation();
+
+                // Check for out-of-order rendering (when a newer render completes before an older
+                // one)
+                if (lastGeneration >= 0 && currentGeneration < lastGeneration) {
+                    log.debug(
+                            "Out-of-order render detected: generation {} arrived after generation"
+                                    + " {} - ignoring stale render",
+                            currentGeneration,
+                            lastGeneration);
+                    // Could optionally skip this render entirely since it's stale
+                }
+
+                // Update lastGeneration only if this is a newer generation
+                if (currentGeneration > lastGeneration) {
+                    lastGeneration = currentGeneration;
+                }
+
                 var future = ctx.image();
                 if (future.isDone()) {
                     try {
