@@ -430,8 +430,23 @@ class WaveformRenderer {
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, viewport.viewportWidthPx(), viewport.viewportHeightPx());
 
+            // Calculate the offset for the first segment
+            // The first segment's index tells us its start time
+            long firstSegmentIndex =
+                    (long)
+                            Math.floor(
+                                    viewport.startTimeSeconds()
+                                            * viewport.pixelsPerSecond()
+                                            / SEGMENT_WIDTH_PX);
+
+            // Calculate where in pixels the first segment should start
+            // This will be negative if the viewport starts partway through the segment
+            double firstSegmentStartTime = (firstSegmentIndex * SEGMENT_WIDTH_PX) / (double) viewport.pixelsPerSecond();
+            double offsetSeconds = firstSegmentStartTime - viewport.startTimeSeconds();
+            int offsetPixels = (int) Math.round(offsetSeconds * viewport.pixelsPerSecond());
+
             // Draw each segment at its position
-            int x = 0;
+            int x = offsetPixels;
             for (Image segment : segments) {
                 // Check for interruption during compositing
                 if (Thread.currentThread().isInterrupted()) {
@@ -440,7 +455,10 @@ class WaveformRenderer {
                 }
 
                 if (segment != null) {
-                    g.drawImage(segment, x, 0, null);
+                    // Center the segment vertically if there's a height mismatch
+                    int segmentHeight = segment.getHeight(null);
+                    int y = (viewport.viewportHeightPx() - segmentHeight) / 2;
+                    g.drawImage(segment, x, y, null);
                 }
                 // Always advance position, even for null segments (pre-audio silence)
                 x += SEGMENT_WIDTH_PX;
@@ -456,9 +474,11 @@ class WaveformRenderer {
                 // Last segment might extend beyond viewport
                 Image lastSegment = segments.get(segments.size() - 1);
                 if (lastSegment != null) {
+                    int segmentHeight = lastSegment.getHeight(null);
+                    int y = (viewport.viewportHeightPx() - segmentHeight) / 2;
                     int remainingWidth = viewport.viewportWidthPx() - x + SEGMENT_WIDTH_PX;
                     g.setClip(x - SEGMENT_WIDTH_PX, 0, remainingWidth, viewport.viewportHeightPx());
-                    g.drawImage(lastSegment, x - SEGMENT_WIDTH_PX, 0, null);
+                    g.drawImage(lastSegment, x - SEGMENT_WIDTH_PX, y, null);
                 }
             }
         } finally {
