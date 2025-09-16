@@ -60,7 +60,7 @@ public class WaveformPeakDetector {
         for (int pixelsPerSecond : COMMON_RESOLUTIONS) {
             double peak = calculateGlobalPeak(pixelsPerSecond);
             peakCache.put(pixelsPerSecond, peak);
-            log.info("Pre-calculated peak for {}px/s: {}", pixelsPerSecond, peak);
+            log.trace("Pre-calculated peak for {}px/s: {}", pixelsPerSecond, peak);
         }
     }
 
@@ -69,7 +69,7 @@ public class WaveformPeakDetector {
         return peakCache.computeIfAbsent(
                 pixelsPerSecond,
                 pps -> {
-                    log.info("Calculating peak on-demand for {}px/s", pps);
+                    log.trace("Calculating peak on-demand for {}px/s", pps);
                     return calculateGlobalPeak(pps);
                 });
     }
@@ -81,7 +81,7 @@ public class WaveformPeakDetector {
     private double calculateGlobalPeak(int pixelsPerSecond) {
         try {
             double audioDuration = metadata.durationSeconds();
-            log.info("Calculating peak for {}s audio file", audioDuration);
+            log.trace("Calculating peak for {}s audio file", audioDuration);
 
             // Build list of time points to sample
             List<Double> sampleTimes = new ArrayList<>();
@@ -106,7 +106,7 @@ public class WaveformPeakDetector {
 
                             double chunkPeak =
                                     getRenderingPeak(pixelValues, Math.max(1, pixelsPerSecond / 2));
-                            log.debug("Chunk {} at {}s: peak = {}", chunkIndex, time, chunkPeak);
+                            log.trace("Chunk {} at {}s: peak = {}", chunkIndex, time, chunkPeak);
                             return chunkPeak;
                         } catch (Exception e) {
                             log.debug("Failed to process chunk at {}s: {}", time, e.getMessage());
@@ -129,7 +129,7 @@ public class WaveformPeakDetector {
                 maxPeak = MIN_PEAK;
             }
 
-            log.info(
+            log.trace(
                     "Global peak calculated for {}px/s: {} (from {} samples covering {}s of {}s"
                             + " total)",
                     pixelsPerSecond,

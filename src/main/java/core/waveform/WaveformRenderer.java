@@ -179,7 +179,7 @@ class WaveformRenderer {
                                         * viewport.pixelsPerSecond()
                                         / SEGMENT_WIDTH_PX);
 
-        logger.info(
+        logger.trace(
                 "calculateVisibleSegments: viewport=[{}-{}s] @ {}px/s, HEIGHT={},"
                         + " segmentIndices=[{}-{}]",
                 viewport.startTimeSeconds(),
@@ -278,7 +278,7 @@ class WaveformRenderer {
                         throw new java.util.concurrent.CancellationException("Render cancelled");
                     }
 
-                    logger.info(
+                    logger.trace(
                             "renderSegment: Creating image for segment {} with HEIGHT={}",
                             key.segmentIndex(),
                             key.height());
@@ -375,7 +375,7 @@ class WaveformRenderer {
                             }
                         }
 
-                        logger.info(
+                        logger.trace(
                                 "Segment {} render scaling: height={}, centerY={}, peak={},"
                                         + " yScale={}",
                                 key.segmentIndex(),
@@ -427,7 +427,7 @@ class WaveformRenderer {
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         }
 
-        logger.info(
+        logger.trace(
                 "Creating composite image: width={}, HEIGHT={}",
                 viewport.viewportWidthPx(),
                 viewport.viewportHeightPx());
@@ -459,7 +459,7 @@ class WaveformRenderer {
             double offsetSeconds = firstSegmentStartTime - viewport.startTimeSeconds();
             int offsetPixels = (int) Math.round(offsetSeconds * viewport.pixelsPerSecond());
 
-            logger.info(
+            logger.trace(
                     "Compositing: viewport=[{}-{}s], viewportHEIGHT={}, firstSegIdx={},"
                             + " segStartTime={}, offsetSec={}, offsetPx={}, segmentCount={}",
                     viewport.startTimeSeconds(),

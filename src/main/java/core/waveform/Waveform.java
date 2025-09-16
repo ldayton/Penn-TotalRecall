@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import lombok.NonNull;
@@ -24,7 +23,6 @@ public class Waveform {
     private final WaveformRenderer renderer;
     private final WaveformSegmentCache cache;
     private final ExecutorService renderPool;
-    private final ScheduledExecutorService statsTimer;
     private final SampleReader sampleReader;
 
     public Waveform(
@@ -66,27 +64,6 @@ public class Waveform {
         this.renderer =
                 new WaveformRenderer(
                         audioFilePath, cache, renderPool, sampleReader, sampleRate, metadata);
-
-        // Create timer for periodic stats logging
-        this.statsTimer =
-                Executors.newSingleThreadScheduledExecutor(
-                        r -> {
-                            Thread t = new Thread(r, "WaveformStatsTimer");
-                            t.setDaemon(true);
-                            return t;
-                        });
-
-        // Schedule stats logging every second
-        statsTimer.scheduleAtFixedRate(
-                () -> {
-                    CacheStats stats = cache.getStats();
-                    if (stats.getRequests() > 0) {
-                        log.debug("Waveform cache stats: {}", stats);
-                    }
-                },
-                1,
-                1,
-                TimeUnit.SECONDS);
     }
 
     public CompletableFuture<Image> renderViewport(@NonNull WaveformViewportSpec viewport) {
@@ -104,9 +81,6 @@ public class Waveform {
 
     /** Shutdown the renderer and release resources. */
     public void shutdown() {
-        // Stop stats timer
-        statsTimer.shutdown();
-
         // Log final cache stats before shutdown
         CacheStats stats = cache.getStats();
         if (stats.getRequests() > 0) {

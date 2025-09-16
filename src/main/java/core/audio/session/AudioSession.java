@@ -68,10 +68,18 @@ public class AudioSession implements PlaybackListener {
         AudioSessionContext newContext = context.updateAndGet(ctx -> ctx.apply(command));
 
         // Log command application
-        log.debug(
-                "Applied command: {} at frame {}",
-                command.getClass().getSimpleName(),
-                oldContext.playheadFrame());
+        String commandName = command.getClass().getSimpleName();
+        if ("UpdatePosition".equals(commandName)) {
+            log.trace(
+                    "Applied command: {} at frame {}",
+                    commandName,
+                    oldContext.playheadFrame());
+        } else {
+            log.debug(
+                    "Applied command: {} at frame {}",
+                    commandName,
+                    oldContext.playheadFrame());
+        }
     }
 
     /** Start playback from current or pending position. */
