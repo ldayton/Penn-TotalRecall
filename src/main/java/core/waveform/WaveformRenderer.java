@@ -1,5 +1,6 @@
 package core.waveform;
 
+import core.audio.AudioMetadata;
 import core.audio.SampleReader;
 import core.waveform.signal.PixelScaler;
 import core.waveform.signal.WaveformProcessor;
@@ -81,12 +82,13 @@ class WaveformRenderer {
             @NonNull WaveformSegmentCache cache,
             @NonNull ExecutorService renderPool,
             @NonNull SampleReader sampleReader,
-            int sampleRate) {
+            int sampleRate,
+            @NonNull AudioMetadata metadata) {
         this.audioFilePath = audioFilePath;
         this.cache = cache;
         this.renderPool = renderPool;
         this.processor = new WaveformProcessor(sampleReader, sampleRate, new PixelScaler());
-        this.peakDetector = new WaveformPeakDetector(audioFilePath, processor);
+        this.peakDetector = new WaveformPeakDetector(audioFilePath, processor, metadata);
 
         // Initialize the peak detector asynchronously to pre-calculate common resolutions
         CompletableFuture.runAsync(

@@ -64,7 +64,8 @@ public class Waveform {
         this.sampleReader = sampleReader;
 
         this.renderer =
-                new WaveformRenderer(audioFilePath, cache, renderPool, sampleReader, sampleRate);
+                new WaveformRenderer(
+                        audioFilePath, cache, renderPool, sampleReader, sampleRate, metadata);
 
         // Create timer for periodic stats logging
         this.statsTimer =

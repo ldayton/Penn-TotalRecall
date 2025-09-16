@@ -1,5 +1,6 @@
 package core.waveform;
 
+import core.audio.AudioMetadata;
 import core.waveform.signal.WaveformProcessor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +16,7 @@ public class WaveformPeakDetector {
 
     private final WaveformProcessor processor;
     private final String audioFilePath;
+    private final AudioMetadata metadata;
     private final Map<Integer, Double> peakCache = new ConcurrentHashMap<>();
 
     // Sample the audio every N seconds for efficiency
@@ -26,9 +28,12 @@ public class WaveformPeakDetector {
     private static final int[] COMMON_RESOLUTIONS = {100, 200, 400};
 
     public WaveformPeakDetector(
-            @NonNull String audioFilePath, @NonNull WaveformProcessor processor) {
+            @NonNull String audioFilePath,
+            @NonNull WaveformProcessor processor,
+            @NonNull AudioMetadata metadata) {
         this.audioFilePath = audioFilePath;
         this.processor = processor;
+        this.metadata = metadata;
     }
 
     /**
@@ -69,11 +74,11 @@ public class WaveformPeakDetector {
             double chunkDuration = 10.0; // Process 10-second chunks
             double currentTime = 0.0;
 
-            // Process up to 60 seconds of audio or 12 samples, whichever comes first
-            int maxSamples = 12;
-            double maxDuration = 60.0;
+            // Sample the entire audio file
+            double audioDuration = metadata.durationSeconds();
+            log.info("Calculating peak for {}s audio file", audioDuration);
 
-            while (samplesProcessed < maxSamples && currentTime < maxDuration) {
+            while (currentTime < audioDuration) {
                 int chunkIndex = (int) (currentTime / chunkDuration);
 
                 try {
@@ -110,10 +115,13 @@ public class WaveformPeakDetector {
             }
 
             log.info(
-                    "Global peak calculated for {}px/s: {} (from {} samples)",
+                    "Global peak calculated for {}px/s: {} (from {} samples covering {}s of {}s"
+                            + " total)",
                     pixelsPerSecond,
                     maxPeak,
-                    samplesProcessed);
+                    samplesProcessed,
+                    Math.min(currentTime, audioDuration),
+                    audioDuration);
             return maxPeak;
 
         } catch (Exception e) {
