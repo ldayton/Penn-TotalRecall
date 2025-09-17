@@ -149,14 +149,14 @@ public class WaveformSegmentCache {
 
             // Add new entry at head position
             if (entries[head] != null) {
-                log.debug(
+                log.trace(
                         "Evicting segment {} to make room for segment {}",
                         entries[head].key().segmentIndex(),
                         key.segmentIndex());
                 stats.recordEviction();
             }
             entries[head] = new CacheEntry(key, future);
-            log.debug(
+            log.trace(
                     "Put segment {} at position {} (cache size: {})",
                     key.segmentIndex(),
                     head,
