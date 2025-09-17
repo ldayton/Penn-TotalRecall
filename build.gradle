@@ -400,6 +400,11 @@ tasks.register('runDev', JavaExec) {
     if (project.hasProperty('app.run.dev.autoplay')) {
         systemProperty 'app.run.dev.autoplay', project.property('app.run.dev.autoplay')
     }
+
+    // Pass through the waveform smoothing property if provided
+    if (project.hasProperty('waveform.smoothing')) {
+        systemProperty 'waveform.smoothing', project.property('waveform.smoothing')
+    }
 }
 
 spotless {
