@@ -2,6 +2,7 @@ package core.waveform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import annotations.Audio;
 import app.headless.HeadlessTestFixture;
 import core.audio.AudioEngine;
 import core.audio.session.AudioSessionDataSource;
@@ -112,6 +113,7 @@ class WaveformCacheIntegrationTest extends HeadlessTestFixture {
 
     @Test
     @Timeout(20)
+    @Audio
     void testNoCacheMissesDuringPlayback() throws Exception {
         // Get required instances
         CacheStats cacheStats = getInstance(CacheStats.class);
