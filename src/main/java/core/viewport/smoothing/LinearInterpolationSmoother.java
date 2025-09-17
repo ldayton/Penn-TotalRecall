@@ -89,8 +89,8 @@ public class LinearInterpolationSmoother implements PlayheadSmoother {
         // Blend between extrapolated position and actual target to reduce lag
         // Use weighted average: favor actual target more to reduce lag
         double blendFactor = 0.8; // 80% weight to actual target, 20% to extrapolation
-        long smoothedPosition = Math.round(
-                targetFrame * blendFactor + extrapolatedPosition * (1.0 - blendFactor));
+        long smoothedPosition =
+                Math.round(targetFrame * blendFactor + extrapolatedPosition * (1.0 - blendFactor));
 
         // Ensure we don't fall too far behind
         long maxLagFrames = Math.round(newState.playbackRate * 10); // Max 10ms lag

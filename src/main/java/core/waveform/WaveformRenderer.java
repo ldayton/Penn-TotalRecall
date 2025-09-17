@@ -199,9 +199,16 @@ class WaveformRenderer {
 
         // Generate segment keys for the index range
         for (long index = startIndex; index <= endIndex; index++) {
-            segments.add(
+            WaveformSegmentCache.SegmentKey key =
                     new WaveformSegmentCache.SegmentKey(
-                            index, viewport.pixelsPerSecond(), viewport.viewportHeightPx()));
+                            index, viewport.pixelsPerSecond(), viewport.viewportHeightPx());
+
+            // Include segments that start before the audio ends or before time 0
+            // (segments before 0 will be rendered as null/empty)
+            double segmentStartTime = key.startTime();
+            if (segmentStartTime < viewport.audioDurationSeconds()) {
+                segments.add(key);
+            }
         }
 
         return segments;

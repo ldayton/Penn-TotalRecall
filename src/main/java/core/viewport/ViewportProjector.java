@@ -33,5 +33,6 @@ public interface ViewportProjector {
     Projection project(AudioSessionSnapshot audio, ViewportUiState ui);
 
     /** Convert a Projection to a waveform spec for rendering (seconds-based renderer boundary). */
-    WaveformViewportSpec toWaveformViewport(Projection p, ViewportUiState ui, int sampleRate);
+    WaveformViewportSpec toWaveformViewport(
+            Projection p, ViewportUiState ui, AudioSessionSnapshot audio, int sampleRate);
 }

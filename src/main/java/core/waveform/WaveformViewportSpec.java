@@ -6,7 +6,8 @@ public record WaveformViewportSpec(
         double endTimeSeconds,
         int viewportWidthPx,
         int viewportHeightPx,
-        int pixelsPerSecond) {
+        int pixelsPerSecond,
+        double audioDurationSeconds) {
 
     /**
      * Generate a unique ID that changes when any rendering parameter changes. This ensures we can

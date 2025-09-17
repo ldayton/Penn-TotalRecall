@@ -49,14 +49,15 @@ public class Waveform {
                             }
                         });
 
+        // Get sample rate from audio metadata
+        AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
+
         // Initialize with default viewport (will be updated on first render)
-        WaveformViewportSpec defaultViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100);
+        WaveformViewportSpec defaultViewport =
+                new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100, metadata.durationSeconds());
 
         this.cache = cache;
         this.cache.initialize(defaultViewport);
-
-        // Get sample rate from audio metadata
-        AudioMetadata metadata = audioEngine.getMetadata(audioHandle);
         int sampleRate = metadata.sampleRate();
 
         this.sampleReader = sampleReader;

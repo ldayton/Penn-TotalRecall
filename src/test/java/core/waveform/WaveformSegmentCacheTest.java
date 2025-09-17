@@ -23,7 +23,7 @@ class WaveformSegmentCacheTest {
 
     @BeforeEach
     void setUp() {
-        viewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100);
+        viewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 100, 60.0);
         // Create a mock EventDispatchBus that does nothing
         EventDispatchBus mockEventBus =
                 new EventDispatchBus(null) {
@@ -130,7 +130,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change pixels per second
-        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 200);
+        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 200, 200, 60.0);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -143,7 +143,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, CompletableFuture.completedFuture(mockImage));
 
         // Change height
-        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 400, 100);
+        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1000, 400, 100, 60.0);
         cache.updateViewport(newViewport);
 
         // Cache should be cleared
@@ -161,7 +161,7 @@ class WaveformSegmentCacheTest {
         cache.put(key2, future2);
 
         // Change width only
-        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1600, 200, 100);
+        var newViewport = new WaveformViewportSpec(0.0, 10.0, 1600, 200, 100, 60.0);
         cache.updateViewport(newViewport);
 
         // Entries should be preserved
@@ -176,7 +176,7 @@ class WaveformSegmentCacheTest {
         cache.put(key, future);
 
         // Change only position
-        var newViewport = new WaveformViewportSpec(5.0, 15.0, 1000, 200, 100);
+        var newViewport = new WaveformViewportSpec(5.0, 15.0, 1000, 200, 100, 60.0);
         cache.updateViewport(newViewport);
 
         // Entry should still exist
@@ -186,7 +186,7 @@ class WaveformSegmentCacheTest {
     @ParameterizedTest
     @ValueSource(ints = {200, 400, 800, 1600, 3200})
     void testVariousViewportWidths(int width) {
-        viewport = new WaveformViewportSpec(0.0, 10.0, width, 200, 100);
+        viewport = new WaveformViewportSpec(0.0, 10.0, width, 200, 100, 60.0);
         cache = new WaveformSegmentCache(cacheStats);
         cache.initialize(viewport);
 
@@ -295,7 +295,8 @@ class WaveformSegmentCacheTest {
             executor.submit(
                     () -> {
                         try {
-                            var newViewport = new WaveformViewportSpec(0.0, 10.0, width, 200, 100);
+                            var newViewport =
+                                    new WaveformViewportSpec(0.0, 10.0, width, 200, 100, 60.0);
                             cache.updateViewport(newViewport);
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
@@ -351,7 +352,7 @@ class WaveformSegmentCacheTest {
     @Test
     void testHeadPointerWraparound() {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
-        var smallViewport = new WaveformViewportSpec(0.0, 10.0, 200, 200, 100);
+        var smallViewport = new WaveformViewportSpec(0.0, 10.0, 200, 200, 100, 60.0);
         var smallCache = new WaveformSegmentCache(cacheStats);
         smallCache.initialize(smallViewport);
         int cacheSize = smallCache.getSize(); // Get actual size from cache
@@ -383,7 +384,7 @@ class WaveformSegmentCacheTest {
         }
 
         // Shrink viewport - resize() must handle head > newSize
-        var smaller = new WaveformViewportSpec(0.0, 10.0, 400, 200, 100);
+        var smaller = new WaveformViewportSpec(0.0, 10.0, 400, 200, 100, 60.0);
         cache.updateViewport(smaller); // size changes to 2 + 20 = 22
 
         // Verify cache still functional after resize
@@ -395,7 +396,7 @@ class WaveformSegmentCacheTest {
     @Test
     void testUpdateViewportBeforeAnyPuts() {
         // Immediate viewport change - currentViewport is set, but entries array empty
-        var newViewport = new WaveformViewportSpec(0.0, 10.0, 2000, 200, 100);
+        var newViewport = new WaveformViewportSpec(0.0, 10.0, 2000, 200, 100, 60.0);
 
         // Should not NPE even though no entries exist yet
         assertDoesNotThrow(() -> cache.updateViewport(newViewport));
@@ -522,7 +523,7 @@ class WaveformSegmentCacheTest {
     @MethodSource("resizeTestCases")
     void testResizeScenarios(int initialWidth, int newWidth, int entriesToAdd) {
         // Create initial cache
-        viewport = new WaveformViewportSpec(0.0, 10.0, initialWidth, 200, 100);
+        viewport = new WaveformViewportSpec(0.0, 10.0, initialWidth, 200, 100, 60.0);
         cache = new WaveformSegmentCache(cacheStats);
         cache.initialize(viewport);
 
@@ -535,7 +536,7 @@ class WaveformSegmentCacheTest {
         }
 
         // Resize
-        var newViewport = new WaveformViewportSpec(0.0, 10.0, newWidth, 200, 100);
+        var newViewport = new WaveformViewportSpec(0.0, 10.0, newWidth, 200, 100, 60.0);
         cache.updateViewport(newViewport);
 
         // Verify entries are preserved (up to new cache size)

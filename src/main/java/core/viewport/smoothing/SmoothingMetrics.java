@@ -1,12 +1,15 @@
 package core.viewport.smoothing;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 
 /**
- * Collects and analyzes smoothness metrics for playhead movement.
- * Stores a sliding window of position samples for calculating various smoothness scores.
- * Thread-safe for concurrent updates from audio thread and reads from UI thread.
+ * Collects and analyzes smoothness metrics for playhead movement. Stores a sliding window of
+ * position samples for calculating various smoothness scores. Thread-safe for concurrent updates
+ * from audio thread and reads from UI thread.
  */
 public class SmoothingMetrics {
 
@@ -15,15 +18,15 @@ public class SmoothingMetrics {
 
     /** Smoothness scores calculated from position samples */
     public record SmoothnessScores(
-        double sparcScore,      // Spectral Arc Length - lower is smoother
-        double jerkRMS,         // RMS of jerk (3rd derivative) - lower is smoother
-        double lagMs,           // Average lag behind target in milliseconds
-        double p95LagMs,        // 95th percentile lag in milliseconds
-        double p99LagMs,        // 99th percentile lag in milliseconds
-        double maxLagMs,        // Maximum lag observed in milliseconds
-        double overshoot,       // Percentage of samples that overshot target
-        int sampleCount         // Number of samples in calculation
-    ) {}
+            double sparcScore, // Spectral Arc Length - lower is smoother
+            double jerkRMS, // RMS of jerk (3rd derivative) - lower is smoother
+            double lagMs, // Average lag behind target in milliseconds
+            double p95LagMs, // 95th percentile lag in milliseconds
+            double p99LagMs, // 99th percentile lag in milliseconds
+            double maxLagMs, // Maximum lag observed in milliseconds
+            double overshoot, // Percentage of samples that overshot target
+            int sampleCount // Number of samples in calculation
+            ) {}
 
     private final int maxSamples;
     private final Deque<PositionSample> samples;
@@ -51,8 +54,8 @@ public class SmoothingMetrics {
     }
 
     /**
-     * Calculate smoothness scores from recent samples.
-     * Requires at least 10 samples for meaningful results.
+     * Calculate smoothness scores from recent samples. Requires at least 10 samples for meaningful
+     * results.
      *
      * @return Smoothness scores or null if insufficient data
      */
@@ -73,22 +76,21 @@ public class SmoothingMetrics {
             double overshoot = calculateOvershoot(sampleArray);
 
             return new SmoothnessScores(
-                sparcScore,
-                jerkRMS,
-                lagMs,
-                p95LagMs,
-                p99LagMs,
-                maxLagMs,
-                overshoot,
-                sampleArray.length
-            );
+                    sparcScore,
+                    jerkRMS,
+                    lagMs,
+                    p95LagMs,
+                    p99LagMs,
+                    maxLagMs,
+                    overshoot,
+                    sampleArray.length);
         }
     }
 
     /**
-     * Calculate SPARC (Spectral Arc Length) - a frequency-domain smoothness metric.
-     * Lower values indicate smoother movement.
-     * Based on: Balasubramanian et al. (2012) "On the analysis of movement smoothness"
+     * Calculate SPARC (Spectral Arc Length) - a frequency-domain smoothness metric. Lower values
+     * indicate smoother movement. Based on: Balasubramanian et al. (2012) "On the analysis of
+     * movement smoothness"
      */
     private double calculateSPARC(PositionSample[] samples) {
         if (samples.length < 3) return Double.NaN;
@@ -122,8 +124,8 @@ public class SmoothingMetrics {
     }
 
     /**
-     * Calculate RMS of jerk (third derivative of position).
-     * Lower values indicate smoother movement.
+     * Calculate RMS of jerk (third derivative of position). Lower values indicate smoother
+     * movement.
      */
     private double calculateJerkRMS(PositionSample[] samples) {
         if (samples.length < 4) return Double.NaN;
@@ -147,7 +149,7 @@ public class SmoothingMetrics {
                 // Third-order finite difference approximation
                 double dt = (t3 - t0) / 3.0;
                 if (dt > 0) {
-                    double jerk = (p3 - 3*p2 + 3*p1 - p0) / (dt * dt * dt);
+                    double jerk = (p3 - 3 * p2 + 3 * p1 - p0) / (dt * dt * dt);
                     jerkSum += jerk * jerk;
                     jerkCount++;
                 }
@@ -157,9 +159,7 @@ public class SmoothingMetrics {
         return jerkCount > 0 ? Math.sqrt(jerkSum / jerkCount) : 0;
     }
 
-    /**
-     * Calculate average lag behind target position.
-     */
+    /** Calculate average lag behind target position. */
     private double calculateAverageLag(PositionSample[] samples) {
         double totalLag = 0;
         int lagCount = 0;
@@ -177,12 +177,10 @@ public class SmoothingMetrics {
         return avgLagFrames / 44.1; // frames to ms at 44.1kHz
     }
 
-    /**
-     * Calculate 95th percentile lag behind target position.
-     */
+    /** Calculate 95th percentile lag behind target position. */
     private double calculateP95Lag(PositionSample[] samples) {
         // Collect only positive lag values (when behind target)
-        java.util.List<Double> positiveLags = new java.util.ArrayList<>();
+        List<Double> positiveLags = new ArrayList<>();
         for (PositionSample sample : samples) {
             long lag = sample.targetPosition - sample.position;
             if (lag > 0) {
@@ -198,7 +196,7 @@ public class SmoothingMetrics {
 
         // Convert to array and sort
         double[] lags = positiveLags.stream().mapToDouble(Double::doubleValue).toArray();
-        java.util.Arrays.sort(lags);
+        Arrays.sort(lags);
 
         // Calculate 95th percentile index
         int p95Index = (int) Math.ceil(0.95 * lags.length) - 1;
@@ -207,12 +205,10 @@ public class SmoothingMetrics {
         return lags[p95Index];
     }
 
-    /**
-     * Calculate 99th percentile lag behind target position.
-     */
+    /** Calculate 99th percentile lag behind target position. */
     private double calculateP99Lag(PositionSample[] samples) {
         // Collect only positive lag values (when behind target)
-        java.util.List<Double> positiveLags = new java.util.ArrayList<>();
+        List<Double> positiveLags = new ArrayList<>();
         for (PositionSample sample : samples) {
             long lag = sample.targetPosition - sample.position;
             if (lag > 0) {
@@ -228,7 +224,7 @@ public class SmoothingMetrics {
 
         // Convert to array and sort
         double[] lags = positiveLags.stream().mapToDouble(Double::doubleValue).toArray();
-        java.util.Arrays.sort(lags);
+        Arrays.sort(lags);
 
         // Calculate 99th percentile index
         int p99Index = (int) Math.ceil(0.99 * lags.length) - 1;
@@ -237,9 +233,7 @@ public class SmoothingMetrics {
         return lags[p99Index];
     }
 
-    /**
-     * Calculate maximum lag behind target position.
-     */
+    /** Calculate maximum lag behind target position. */
     private double calculateMaxLag(PositionSample[] samples) {
         double maxLag = 0;
 
@@ -255,9 +249,7 @@ public class SmoothingMetrics {
         return maxLag;
     }
 
-    /**
-     * Calculate percentage of samples that overshot the target.
-     */
+    /** Calculate percentage of samples that overshot the target. */
     private double calculateOvershoot(PositionSample[] samples) {
         int overshootCount = 0;
 
@@ -274,9 +266,7 @@ public class SmoothingMetrics {
         return samples.length > 1 ? (100.0 * overshootCount) / (samples.length - 1) : 0;
     }
 
-    /**
-     * Clear all collected samples.
-     */
+    /** Clear all collected samples. */
     public void reset() {
         synchronized (lock) {
             samples.clear();

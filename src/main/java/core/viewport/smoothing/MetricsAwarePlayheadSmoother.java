@@ -4,9 +4,9 @@ import core.audio.session.AudioSessionStateMachine;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Decorator that adds smoothness metrics collection to any PlayheadSmoother implementation.
- * Wraps an existing smoother and collects position samples for smoothness analysis.
- * Thread-safe for concurrent access from audio and UI threads.
+ * Decorator that adds smoothness metrics collection to any PlayheadSmoother implementation. Wraps
+ * an existing smoother and collects position samples for smoothness analysis. Thread-safe for
+ * concurrent access from audio and UI threads.
  */
 @Slf4j
 public class MetricsAwarePlayheadSmoother implements PlayheadSmoother {
@@ -84,20 +84,18 @@ public class MetricsAwarePlayheadSmoother implements PlayheadSmoother {
         return delegate;
     }
 
-    /**
-     * Log current smoothness metrics for debugging.
-     */
+    /** Log current smoothness metrics for debugging. */
     private void logMetrics() {
         SmoothingMetrics.SmoothnessScores scores = metrics.calculateScores();
         if (scores != null) {
             log.trace(
-                "Smoothness metrics - SPARC: {}, Jerk RMS: {}, Lag: {}ms, P95 Lag: {}ms, Overshoot: {}%",
-                scores.sparcScore(),
-                scores.jerkRMS(),
-                scores.lagMs(),
-                scores.p95LagMs(),
-                scores.overshoot()
-            );
+                    "Smoothness metrics - SPARC: {}, Jerk RMS: {}, Lag: {}ms, P95 Lag: {}ms,"
+                            + " Overshoot: {}%",
+                    scores.sparcScore(),
+                    scores.jerkRMS(),
+                    scores.lagMs(),
+                    scores.p95LagMs(),
+                    scores.overshoot());
         }
     }
 
@@ -113,21 +111,20 @@ public class MetricsAwarePlayheadSmoother implements PlayheadSmoother {
         }
 
         return String.format(
-            "Smoothness Metrics Report:\n" +
-            "  SPARC Score: %.3f (lower is smoother)\n" +
-            "  Jerk RMS: %.3f (lower is smoother)\n" +
-            "  Average Lag: %.1f ms\n" +
-            "  P95 Lag: %.1f ms\n" +
-            "  Overshoot: %.1f%%\n" +
-            "  Sample Count: %d\n" +
-            "  Smoother Type: %s",
-            scores.sparcScore(),
-            scores.jerkRMS(),
-            scores.lagMs(),
-            scores.p95LagMs(),
-            scores.overshoot(),
-            scores.sampleCount(),
-            delegate.getClass().getSimpleName()
-        );
+                "Smoothness Metrics Report:\n"
+                        + "  SPARC Score: %.3f (lower is smoother)\n"
+                        + "  Jerk RMS: %.3f (lower is smoother)\n"
+                        + "  Average Lag: %.1f ms\n"
+                        + "  P95 Lag: %.1f ms\n"
+                        + "  Overshoot: %.1f%%\n"
+                        + "  Sample Count: %d\n"
+                        + "  Smoother Type: %s",
+                scores.sparcScore(),
+                scores.jerkRMS(),
+                scores.lagMs(),
+                scores.p95LagMs(),
+                scores.overshoot(),
+                scores.sampleCount(),
+                delegate.getClass().getSimpleName());
     }
 }

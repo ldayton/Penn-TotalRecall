@@ -149,7 +149,7 @@ public class ViewportSessionManager implements ViewportPaintingDataSource {
                         snap.state(), totalFrames, playheadFrame, snap.errorMessage());
 
         var projection = projector.project(audioSnap, uiState);
-        var wfCtx = projector.toWaveformViewport(projection, uiState, sampleRate);
+        var wfCtx = projector.toWaveformViewport(projection, uiState, audioSnap, sampleRate);
         var imageFuture = waveform.renderViewport(wfCtx);
         long generation = projection.generation();
 
