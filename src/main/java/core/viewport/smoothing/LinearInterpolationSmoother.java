@@ -59,8 +59,8 @@ public class LinearInterpolationSmoother implements PlayheadSmoother {
                                     // Calculate observed playback rate
                                     newRate = (double) framesDelta / timeDelta;
                                     // Smooth the rate change to avoid jitter (blend with previous
-                                    // rate)
-                                    newRate = current.playbackRate * 0.7 + newRate * 0.3;
+                                    // rate) - more aggressive update for lower lag
+                                    newRate = current.playbackRate * 0.3 + newRate * 0.7;
                                 } else {
                                     // Keep existing rate
                                     newRate = current.playbackRate;
@@ -79,13 +79,24 @@ public class LinearInterpolationSmoother implements PlayheadSmoother {
                             return current;
                         });
 
-        // Interpolate position based on time elapsed since last audio update
+        // Calculate expected position based on time elapsed
         long timeSinceUpdate = currentTime - newState.targetUpdateTime;
-        long interpolatedAdvance = Math.round(timeSinceUpdate * newState.playbackRate);
-        long smoothedPosition =
-                Math.min(
-                        newState.currentTarget, // Don't overshoot the known target
-                        newState.previousTarget + interpolatedAdvance);
+        long expectedAdvance = Math.round(timeSinceUpdate * newState.playbackRate);
+
+        // Extrapolate from the last known target position
+        long extrapolatedPosition = newState.currentTarget + expectedAdvance;
+
+        // Blend between extrapolated position and actual target to reduce lag
+        // Use weighted average: favor actual target more to reduce lag
+        double blendFactor = 0.8; // 80% weight to actual target, 20% to extrapolation
+        long smoothedPosition = Math.round(
+                targetFrame * blendFactor + extrapolatedPosition * (1.0 - blendFactor));
+
+        // Ensure we don't fall too far behind
+        long maxLagFrames = Math.round(newState.playbackRate * 10); // Max 10ms lag
+        if (targetFrame - smoothedPosition > maxLagFrames) {
+            smoothedPosition = targetFrame - maxLagFrames;
+        }
 
         long distance = targetFrame - smoothedPosition;
 
