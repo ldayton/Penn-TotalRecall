@@ -61,9 +61,8 @@ class WaveformSegmentCacheTest {
     @Test
     void testCircularOverwrite() {
         // Fill cache beyond capacity to test circular overwrite
-        // Cache size = 5 visible + (PREFETCH_COUNT * 2) prefetch
-        int prefetchTotal = WaveformSegmentCache.PREFETCH_COUNT * 2;
-        int cacheSize = 5 + prefetchTotal; // 5 + 20 = 25 slots
+        // Get actual cache size from the cache itself
+        int cacheSize = cache.getSize();
         int entriesToAdd = cacheSize + 10; // Add 10 more than capacity
 
         var futures = new CompletableFuture[entriesToAdd];
@@ -354,8 +353,8 @@ class WaveformSegmentCacheTest {
         // Test the subtle head = (head + 1 >= size) ? 0 : head + 1 logic
         var smallViewport = new WaveformViewportSpec(0.0, 10.0, 200, 200, 100);
         var smallCache = new WaveformSegmentCache(cacheStats);
-        smallCache.initialize(smallViewport); // size = 1 + (PREFETCH_COUNT * 2)
-        int cacheSize = 1 + (WaveformSegmentCache.PREFETCH_COUNT * 2); // 1 + 20 = 21
+        smallCache.initialize(smallViewport);
+        int cacheSize = smallCache.getSize(); // Get actual size from cache
 
         // Fill exactly to size
         for (int i = 0; i < cacheSize; i++) {
@@ -375,8 +374,8 @@ class WaveformSegmentCacheTest {
 
     @Test
     void testResizeWhileCacheFull() {
-        // Fill cache completely (size = 5 + PREFETCH_COUNT * 2)
-        int cacheSize = 5 + (WaveformSegmentCache.PREFETCH_COUNT * 2); // 5 + 20 = 25
+        // Fill cache completely
+        int cacheSize = cache.getSize(); // Get actual size from cache
         for (int i = 0; i < cacheSize; i++) {
             cache.put(
                     new WaveformSegmentCache.SegmentKey(i, 100, 200),

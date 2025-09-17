@@ -252,4 +252,40 @@ public class WaveformSegmentCache {
     public CacheStats getStats() {
         return stats;
     }
+
+    /** Get the current cache size. */
+    public int getSize() {
+        lock.readLock().lock();
+        try {
+            return size;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    /** Check if any cache entries have incomplete futures. */
+    public boolean hasPendingLoads() {
+        lock.readLock().lock();
+        try {
+            if (entries == null) {
+                return false; // Cache not initialized yet
+            }
+            for (CacheEntry entry : entries) {
+                if (entry != null && !entry.future().isDone()) {
+                    return true;
+                }
+            }
+            return false;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    /** Wait for all pending cache loads to complete. */
+    public void waitForPendingLoads(long timeoutMs) throws InterruptedException {
+        long deadline = System.currentTimeMillis() + timeoutMs;
+        while (hasPendingLoads() && System.currentTimeMillis() < deadline) {
+            Thread.sleep(50);
+        }
+    }
 }

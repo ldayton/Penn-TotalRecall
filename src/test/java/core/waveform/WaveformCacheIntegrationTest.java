@@ -171,8 +171,9 @@ class WaveformCacheIntegrationTest extends HeadlessTestFixture {
                 cacheStats.getHits(),
                 cacheStats.getMisses());
 
-        // Wait for render to complete and cache to stabilize
-        Thread.sleep(2000);
+        // Wait for all cache segments to finish loading
+        WaveformSegmentCache cache = getInstance(WaveformSegmentCache.class);
+        cache.waitForPendingLoads(10000); // 10 second timeout
 
         log.debug(
                 "Cache after warmup - Requests: {}, Hits: {}, Misses: {}",
