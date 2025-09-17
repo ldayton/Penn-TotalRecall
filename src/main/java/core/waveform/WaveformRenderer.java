@@ -460,7 +460,7 @@ class WaveformRenderer {
         Graphics2D g = composite.createGraphics();
         try {
             // Fill background
-            g.setColor(Color.WHITE);
+            g.setColor(new Color(242, 242, 242));
             g.fillRect(0, 0, viewport.viewportWidthPx(), viewport.viewportHeightPx());
 
             // Calculate the offset for the first segment

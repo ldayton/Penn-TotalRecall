@@ -130,15 +130,12 @@ public final class ViewportPainter {
         }
         switch (ctx.mode()) {
             case EMPTY -> {
-                clearBackground(g, bounds);
                 paintEmptyState(g, bounds);
             }
             case LOADING -> {
-                clearBackground(g, bounds);
                 paintLoadingIndicator(g, bounds);
             }
             case ERROR -> {
-                clearBackground(g, bounds);
                 paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
             }
             case RENDER -> {
@@ -175,14 +172,10 @@ public final class ViewportPainter {
                             // Only draw reference line and playhead when waveform is ready
                             paintReferenceLine(g, bounds);
                             paintPlayhead(g, bounds);
-                        } else {
-                            clearBackground(g, bounds);
                         }
                     } catch (Exception e) {
-                        clearBackground(g, bounds);
                     }
                 } else {
-                    clearBackground(g, bounds);
                     // Non-blocking: schedule a repaint when rendering completes (with timeout)
                     // completeOnTimeout will cancel the original future if it times out
                     var repaintFuture = future.orTimeout(RENDER_TIMEOUT_MS, TimeUnit.MILLISECONDS);
@@ -266,12 +259,6 @@ public final class ViewportPainter {
         int x = bounds.x() + (bounds.width() - textWidth) / 2;
         int y = bounds.y() + (bounds.height() + textHeight) / 2;
         g.drawString(message, x, y);
-    }
-
-    /** Clear the background before painting. */
-    public void clearBackground(@NonNull Graphics2D g, @NonNull ScreenDimension bounds) {
-        g.setColor(Color.WHITE);
-        g.fillRect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
     }
 
     /** Paint a horizontal reference line across the viewport. */
