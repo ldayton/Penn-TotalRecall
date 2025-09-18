@@ -19,11 +19,11 @@ jobs:
     - name: Accept Xcode license
       run: sudo xcodebuild -license accept
       
-    - name: Set up Java 24 EA
+    - name: Set up Java 24
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '24-ea'
+        java-version: '24'
         
     - name: Cache Gradle dependencies only
       uses: actions/cache@v4
