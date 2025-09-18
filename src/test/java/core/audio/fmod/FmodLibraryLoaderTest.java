@@ -18,10 +18,7 @@ class FmodLibraryLoaderTest {
     void testFmodLoadingModeFromConfiguration() {
         FmodLibraryLoader loader =
                 new FmodLibraryLoader(
-                        new FmodProperties(
-                                "unpackaged",
-                                "standard",
-                                FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                        new FmodProperties("unpackaged", "standard"),
                         new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration
@@ -39,10 +36,7 @@ class FmodLibraryLoaderTest {
     void testLibraryTypeFromConfiguration() {
         FmodLibraryLoader loader =
                 new FmodLibraryLoader(
-                        new FmodProperties(
-                                "unpackaged",
-                                "standard",
-                                FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                        new FmodProperties("unpackaged", "standard"),
                         new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration

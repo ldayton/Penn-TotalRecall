@@ -286,6 +286,20 @@ test {
         showStandardStreams = true
     }
 
+    // Set library path for FMOD native libraries during tests
+    def osName = System.getProperty('os.name').toLowerCase()
+    def fmodLibPath = "${projectDir}/src/main/resources/fmod/"
+    if (osName.contains('mac')) {
+        fmodLibPath += "macos"
+        environment 'DYLD_LIBRARY_PATH', fmodLibPath
+    } else if (osName.contains('win')) {
+        fmodLibPath += "windows"
+        environment 'PATH', fmodLibPath + File.pathSeparator + System.getenv('PATH')
+    } else {
+        fmodLibPath += "linux"
+        environment 'LD_LIBRARY_PATH', fmodLibPath
+    }
+
     // Support debug logging with -Pdebug or -Plog.level=DEBUG
     if (project.hasProperty('debug')) {
         systemProperty 'log.level', 'DEBUG'
@@ -309,7 +323,6 @@ test {
             excludeTags 'windowing'
             excludeTags 'audio'
         }
-        def osName = System.getProperty('os.name').toLowerCase()
         if (!osName.contains('mac')) excludeTags 'macos'
         if (project.hasProperty('excludeTags')) {
             excludeTags project.property('excludeTags').toString().split(',')
@@ -436,8 +449,8 @@ tasks.withType(Checkstyle).configureEach {
 tasks.register('jextractFmod', Exec) {
     group = 'codegen'
     description = 'Generate Java Panama bindings for FMOD using jextract'
-    inputs.file('src/main/resources/fmod/macos/fmod.h')
-    inputs.files(fileTree('src/main/resources/fmod/macos') { include '*.h' })
+    inputs.file('src/main/resources/fmod/headers/fmod.h')
+    inputs.files(fileTree('src/main/resources/fmod/headers') { include '*.h' })
     outputs.dir('src/main/java/core/audio/fmod/panama')
     doFirst {
         def defaultJextract = "${System.getProperty('user.home')}/jextract-22/bin/jextract"
@@ -458,9 +471,9 @@ tasks.register('jextractFmod', Exec) {
         commandLine jextractPath,
                 '-t', 'core.audio.fmod.panama',
                 '--header-class-name', 'FmodCore',
-                '-I', 'src/main/resources/fmod/macos',
+                '-I', 'src/main/resources/fmod/headers',
                 '-l', 'fmod',
                 '--output', file('src/main/java').absolutePath,
-                'src/main/resources/fmod/macos/fmod.h'
+                'src/main/resources/fmod/headers/fmod.h'
     }
 }

@@ -49,10 +49,7 @@ class FmodPlaybackManagerTest {
         FmodSystemManager sm =
                 new FmodSystemManager(
                         new FmodLibraryLoader(
-                                new FmodProperties(
-                                        "unpackaged",
-                                        "standard",
-                                        FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                                new FmodProperties("unpackaged", "standard"),
                                 new Platform()));
         sm.initialize();
         system = sm.getSystem();

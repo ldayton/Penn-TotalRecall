@@ -57,8 +57,7 @@ class FmodListenerManagerTest {
         systemManager =
                 new FmodSystemManager(
                         new FmodLibraryLoader(
-                                new FmodProperties(
-                                        "unpackaged", "standard", "src/main/resources/fmod/macos"),
+                                new FmodProperties("unpackaged", "standard"),
                                 new Platform()));
         lifecycleManager = new FmodHandleLifecycleManager();
 

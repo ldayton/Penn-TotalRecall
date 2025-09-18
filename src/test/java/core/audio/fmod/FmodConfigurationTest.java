@@ -15,8 +15,7 @@ class FmodConfigurationTest {
 
     private final FmodLibraryLoader audioManager =
             new FmodLibraryLoader(
-                    new FmodProperties(
-                            "unpackaged", "standard", FmodProperties.FmodDefaults.MACOS_LIB_PATH),
+                    new FmodProperties("unpackaged", "standard"),
                     new Platform());
 
     @Test

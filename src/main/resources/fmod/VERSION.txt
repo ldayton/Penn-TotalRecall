@@ -4,12 +4,15 @@ Downloaded from: https://www.fmod.com/download
 Platform libraries:
 - macOS: libfmod.dylib, libfmodL.dylib (universal: x86_64 + arm64)
 - Linux: libfmod.so, libfmodL.so (x86_64)
+- Windows: fmod.dll, fmodL.dll (x86_64)
 
-Release = libfmod
-Logging = libfmodL
+Release = libfmod / fmod
+Logging = libfmodL / fmodL
 
 SHA256 checksums:
 macOS libfmod.dylib:  f6c0caed528a93d318e2b37ccaa1ee4f43efe79d0f89fec70cc1ace3d8b0cf3c
 macOS libfmodL.dylib: 66f2ef7726adfd3805ce254abead2b8fdf8f8194732f41f179c8d404cad72a53
 Linux libfmod.so:     c4495645adda386f6c4024e889aa9ed4e21c0c99636abc5be9e1988e4aaad175
 Linux libfmodL.so:    985aa35983f68223ec9f92fd587244e4d23ceace82f043f31f996d7e114f3cfb
+Windows fmod.dll:     eb52264b6a8d565ecf9b7c3cd9d5bb5fce26e449a4bee951298f356cae475eed
+Windows fmodL.dll:    11b1db22478c3913a53c231f0e6f8c98d9e020ccd30c8be0be83a0c50d1c617c

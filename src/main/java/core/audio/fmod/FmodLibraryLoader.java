@@ -163,14 +163,20 @@ public class FmodLibraryLoader {
     }
 
     /**
-     * Gets the custom audio library path for the specified platform.
+     * Gets the custom audio library path for the current platform.
      *
-     * @param platformType the target platform
      * @return the library path, or null if not configured
      */
     public String getLibraryPath() {
-        // macOS only
-        return properties.libraryPathMacos();
+        switch (platform.detect()) {
+            case MACOS:
+                return properties.libraryPathMacos();
+            case WINDOWS:
+                return properties.libraryPathWindows();
+            case LINUX:
+                return properties.libraryPathLinux();
+        }
+        throw new AssertionError("Unreachable: all platforms handled");
     }
 
     /**
@@ -180,8 +186,15 @@ public class FmodLibraryLoader {
      * @return the filename for the audio library on the current platform
      */
     public String getLibraryFilename(@NonNull LibraryType libraryType) {
-        // macOS only
-        return libraryType == LibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
+        switch (platform.detect()) {
+            case MACOS:
+                return libraryType == LibraryType.LOGGING ? "libfmodL.dylib" : "libfmod.dylib";
+            case WINDOWS:
+                return libraryType == LibraryType.LOGGING ? "fmodL.dll" : "fmod.dll";
+            case LINUX:
+                return libraryType == LibraryType.LOGGING ? "libfmodL.so" : "libfmod.so";
+        }
+        throw new AssertionError("Unreachable: all platforms handled");
     }
 
     /**
@@ -193,9 +206,23 @@ public class FmodLibraryLoader {
      */
     public String getLibraryDevelopmentPath(@NonNull LibraryType libraryType) {
         var filename = getLibraryFilename(libraryType);
-        var base = properties.libraryPathMacos();
+        String base;
+        switch (platform.detect()) {
+            case MACOS:
+                base = properties.libraryPathMacos();
+                break;
+            case WINDOWS:
+                base = properties.libraryPathWindows();
+                break;
+            case LINUX:
+                base = properties.libraryPathLinux();
+                break;
+            default:
+                throw new AssertionError("Unreachable: all platforms handled");
+        }
         if (base == null || base.isBlank()) {
-            throw new IllegalStateException("FMOD library path for macOS is not configured");
+            throw new IllegalStateException(
+                    "FMOD library path for " + platform.detect() + " is not configured");
         }
         if (base.endsWith("/") || base.endsWith("\\")) {
             return base + filename;
@@ -257,7 +284,7 @@ public class FmodLibraryLoader {
                     "Audio library not found at: "
                             + fullPath
                             + " (platform="
-                            + "macos"
+                            + platform.detect()
                             + ", type="
                             + libraryType
                             + ")");
@@ -275,33 +302,38 @@ public class FmodLibraryLoader {
      * @return The loaded library instance
      */
     private void loadPackaged(@NonNull LibraryType libraryType) {
-        if (platform.detect() == Platform.PlatformType.MACOS) {
-            // For macOS app bundles, must load from the Frameworks directory
-            String appPath = System.getProperty("java.home");
-            if (appPath == null || !appPath.contains(".app/Contents")) {
-                throw new UnsatisfiedLinkError("Not running from macOS app bundle");
-            }
+        switch (platform.detect()) {
+            case MACOS:
+                // For macOS app bundles, must load from the Frameworks directory
+                String appPath = System.getProperty("java.home");
+                if (appPath == null || !appPath.contains(".app/Contents")) {
+                    throw new UnsatisfiedLinkError("Not running from macOS app bundle");
+                }
 
-            // Navigate from java.home to Frameworks directory
-            // java.home is typically .app/Contents/runtime/Contents/Home
-            File javaHome = new File(appPath);
-            File contentsDir = javaHome.getParentFile().getParentFile().getParentFile();
-            File frameworksDir = new File(contentsDir, "Frameworks");
-            File libraryFile = new File(frameworksDir, getLibraryFilename(libraryType));
+                // Navigate from java.home to Frameworks directory
+                // java.home is typically .app/Contents/runtime/Contents/Home
+                File javaHome = new File(appPath);
+                File contentsDir = javaHome.getParentFile().getParentFile().getParentFile();
+                File frameworksDir = new File(contentsDir, "Frameworks");
+                File libraryFile = new File(frameworksDir, getLibraryFilename(libraryType));
 
-            if (!libraryFile.exists()) {
-                throw new UnsatisfiedLinkError(
-                        "FMOD library not found in app bundle: " + libraryFile.getAbsolutePath());
-            }
+                if (!libraryFile.exists()) {
+                    throw new UnsatisfiedLinkError(
+                            "FMOD library not found in app bundle: " + libraryFile.getAbsolutePath());
+                }
 
-            logger.debug(
-                    "Loading audio library from app bundle: {}", libraryFile.getAbsolutePath());
-            System.load(libraryFile.getAbsolutePath());
-        } else {
-            // For non-macOS packaged mode, use standard system library loading
-            String libraryName = getSystemLibraryName(libraryType);
-            logger.debug("Loading audio library from system library path: {}", libraryName);
-            System.loadLibrary(libraryName);
+                logger.debug(
+                        "Loading audio library from app bundle: {}", libraryFile.getAbsolutePath());
+                System.load(libraryFile.getAbsolutePath());
+                break;
+
+            case WINDOWS:
+            case LINUX:
+                // For Windows and Linux packaged mode, use standard system library loading
+                String libraryName = getSystemLibraryName(libraryType);
+                logger.debug("Loading audio library from system library path: {}", libraryName);
+                System.loadLibrary(libraryName);
+                break;
         }
     }
 
