@@ -6,9 +6,5 @@
 *~
 .DS_Store
 /.gradle/
-.classpath
 .factorypath
-.project
-.settings/
 *.class
-.idea/
