@@ -267,10 +267,11 @@ class IndexedUniqueListTest {
         @Test
         @DisplayName("should reject unsupported operations")
         void shouldRejectUnsupportedOperations() {
-            // These operations would break the uniqueness invariant
+            // Since we no longer implement List, set() and add(index, element) methods
+            // don't exist, so there's nothing to test here anymore.
+            // The class design itself prevents these operations.
             list.add("test");
-            assertThrows(UnsupportedOperationException.class, () -> list.set(0, "new"));
-            assertThrows(UnsupportedOperationException.class, () -> list.add(0, "new"));
+            assertEquals(1, list.size());
         }
     }
 

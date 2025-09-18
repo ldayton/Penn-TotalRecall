@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 /**
  * A collection that maintains uniqueness, provides index-based access, and supports manual sorting.
@@ -20,7 +18,7 @@ import java.util.ListIterator;
  *
  * @param <E> the type of elements in this collection, must be comparable
  */
-public class IndexedUniqueList<E extends Comparable<? super E>> implements List<E> {
+public class IndexedUniqueList<E extends Comparable<? super E>> implements Collection<E> {
 
     private final HashSet<E> set;
     private final ArrayList<E> list;
@@ -32,7 +30,7 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
 
     @Override
     public boolean add(E e) {
-        if (set.add(e) == false) {
+        if (!set.add(e)) {
             return false;
         } else {
             list.add(e);
@@ -40,7 +38,7 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
         }
     }
 
-    @Override
+    // List-like method for index-based removal (not from Collection interface)
     public E remove(int index) {
         if (index < 0 || index > list.size() - 1) {
             throw new IllegalArgumentException("index not in range: " + index);
@@ -69,7 +67,7 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
         return modified;
     }
 
-    @Override
+    // List-like method for index-based access (not from Collection interface)
     public E get(int index) {
         if (index < 0 || index > list.size() - 1) {
             throw new IllegalArgumentException("index not in range: " + index);
@@ -108,7 +106,7 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
         return list.toArray();
     }
 
-    // Required List<E> interface methods with default implementations
+    // Collection<E> interface methods
     @Override
     public boolean isEmpty() {
         return list.isEmpty();
@@ -131,12 +129,6 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        throw new UnsupportedOperationException(
-                "IndexedUniqueList does not support indexed addAll");
-    }
-
-    @Override
     public boolean retainAll(Collection<?> c) {
         boolean modified = list.retainAll(c);
         if (modified) {
@@ -145,39 +137,13 @@ public class IndexedUniqueList<E extends Comparable<? super E>> implements List<
         return modified;
     }
 
-    @Override
-    public E set(int index, E element) {
-        throw new UnsupportedOperationException("IndexedUniqueList does not support set operation");
-    }
-
-    @Override
-    public void add(int index, E element) {
-        throw new UnsupportedOperationException("IndexedUniqueList does not support indexed add");
-    }
-
-    @Override
+    // List-like methods (not from Collection interface)
     public int indexOf(Object o) {
         return list.indexOf(o);
     }
 
-    @Override
     public int lastIndexOf(Object o) {
         return list.lastIndexOf(o);
-    }
-
-    @Override
-    public ListIterator<E> listIterator() {
-        return list.listIterator();
-    }
-
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return list.listIterator(index);
-    }
-
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        throw new UnsupportedOperationException("IndexedUniqueList does not support subList");
     }
 
     @Override
