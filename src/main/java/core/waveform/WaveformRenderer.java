@@ -51,6 +51,7 @@ class WaveformRenderer {
     private final String audioFilePath;
     private final WaveformProcessor processor;
     private final WaveformPeakDetector peakDetector;
+    private final double audioDurationSeconds;
 
     enum Priority {
         VISIBLE(1),
@@ -89,6 +90,7 @@ class WaveformRenderer {
         this.renderPool = renderPool;
         this.processor = new WaveformProcessor(sampleReader, sampleRate, new PixelScaler());
         this.peakDetector = new WaveformPeakDetector(audioFilePath, processor, metadata);
+        this.audioDurationSeconds = metadata.durationSeconds();
 
         // Initialize the peak detector asynchronously to pre-calculate common resolutions
         CompletableFuture.runAsync(
@@ -299,7 +301,7 @@ class WaveformRenderer {
                             key.height());
                     BufferedImage image =
                             new BufferedImage(
-                                    SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_RGB);
+                                    SEGMENT_WIDTH_PX, key.height(), BufferedImage.TYPE_INT_ARGB);
 
                     // Handle segments that start before 0
                     int chunkIndex = 0;
@@ -348,13 +350,33 @@ class WaveformRenderer {
                     double[] valsToDraw = new double[SEGMENT_WIDTH_PX];
                     int segmentStartPixel = (int) (segmentOffsetInChunk * key.pixelsPerSecond());
 
-                    // Handle segments that start before 0
+                    // Calculate how many pixels contain actual audio data
+                    // We need to check both: data availability and audio duration
+                    int audioDataPixelCount = 0;
+
+                    // Calculate where the audio ends in pixels for this segment
+                    double segmentStartTime = key.startTime();
+                    double pixelsPerSecond = key.pixelsPerSecond();
+
                     for (int i = 0; i < SEGMENT_WIDTH_PX; i++) {
+                        // Calculate the time for this pixel
+                        double pixelTime = segmentStartTime + (i / (double) pixelsPerSecond);
+
+                        // Check if this pixel is within the audio duration
+                        if (pixelTime >= audioDurationSeconds) {
+                            break; // We've reached the end of audio
+                        }
+
                         int dataIndex = segmentStartPixel + i;
                         if (dataIndex >= 0 && dataIndex < fullChunkData.length) {
                             valsToDraw[i] = fullChunkData[dataIndex];
+                            audioDataPixelCount = i + 1; // Track the last pixel with data
+                        } else if (pixelTime >= 0) {
+                            // We're in valid time range but no data - still count as audio region
+                            // This handles edge cases at chunk boundaries
+                            audioDataPixelCount = i + 1;
                         }
-                        // else leave as 0 (silence for out-of-bounds regions)
+                        // else leave as 0 (silence for out-of-bounds regions before time 0)
                     }
 
                     Graphics2D g = image.createGraphics();
@@ -362,22 +384,31 @@ class WaveformRenderer {
                         // Enable antialiasing
                         g.setRenderingHints(RENDERING_HINTS);
 
-                        // Fill background
-                        g.setColor(WAVEFORM_BACKGROUND);
-                        g.fillRect(0, 0, SEGMENT_WIDTH_PX, key.height());
-
-                        // Draw reference line
-                        g.setColor(WAVEFORM_REFERENCE_LINE);
                         int centerY = key.height() / 2;
-                        g.drawLine(0, centerY, SEGMENT_WIDTH_PX, centerY);
 
-                        // Draw time scale (vertical lines and labels)
-                        drawTimeScale(
-                                g,
-                                SEGMENT_WIDTH_PX,
-                                key.height(),
-                                key.startTime(),
-                                key.pixelsPerSecond());
+                        // Only fill background where there's audio data
+                        if (audioDataPixelCount > 0) {
+                            g.setColor(WAVEFORM_BACKGROUND);
+                            g.fillRect(0, 0, audioDataPixelCount, key.height());
+                        }
+                        // The rest remains transparent (ARGB with alpha = 0)
+
+                        // Draw reference line only where there's audio data
+                        if (audioDataPixelCount > 0) {
+                            g.setColor(WAVEFORM_REFERENCE_LINE);
+                            g.drawLine(0, centerY, audioDataPixelCount, centerY);
+                        }
+
+                        // Draw time scale (vertical lines and labels) only where there's audio
+                        if (audioDataPixelCount > 0) {
+                            drawTimeScale(
+                                    g,
+                                    audioDataPixelCount, // Only draw scale up to where audio data
+                                    // ends
+                                    key.height(),
+                                    key.startTime(),
+                                    key.pixelsPerSecond());
+                        }
 
                         // Draw waveform using exact same logic as original
                         g.setColor(FIRST_CHANNEL_WAVEFORM);
@@ -404,8 +435,8 @@ class WaveformRenderer {
                                 peak,
                                 yScale);
 
-                        // Draw waveform
-                        for (int i = 0; i < valsToDraw.length && i < SEGMENT_WIDTH_PX; i++) {
+                        // Draw waveform only where there's audio data
+                        for (int i = 0; i < audioDataPixelCount; i++) {
                             // Check for interruption periodically (every 10 pixels for performance)
                             if (i % 10 == 0 && Thread.currentThread().isInterrupted()) {
                                 g.dispose();

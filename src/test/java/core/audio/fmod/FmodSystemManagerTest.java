@@ -30,8 +30,7 @@ class FmodSystemManagerTest {
         manager =
                 new FmodSystemManager(
                         new FmodLibraryLoader(
-                                new FmodProperties("unpackaged", "standard"),
-                                new Platform()));
+                                new FmodProperties("unpackaged", "standard"), new Platform()));
     }
 
     @AfterEach

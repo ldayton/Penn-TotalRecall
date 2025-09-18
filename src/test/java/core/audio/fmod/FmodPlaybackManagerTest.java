@@ -49,8 +49,7 @@ class FmodPlaybackManagerTest {
         FmodSystemManager sm =
                 new FmodSystemManager(
                         new FmodLibraryLoader(
-                                new FmodProperties("unpackaged", "standard"),
-                                new Platform()));
+                                new FmodProperties("unpackaged", "standard"), new Platform()));
         sm.initialize();
         system = sm.getSystem();
 

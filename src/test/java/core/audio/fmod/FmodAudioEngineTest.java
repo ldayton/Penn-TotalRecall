@@ -57,8 +57,7 @@ class FmodAudioEngineTest {
         systemManager =
                 new FmodSystemManager(
                         new FmodLibraryLoader(
-                                new FmodProperties("unpackaged", "standard"),
-                                new Platform()));
+                                new FmodProperties("unpackaged", "standard"), new Platform()));
         lifecycleManager = new FmodHandleLifecycleManager();
 
         // Initialize the system manager first to load FMOD

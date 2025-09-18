@@ -14,9 +14,7 @@ import org.junit.jupiter.api.Test;
 class FmodConfigurationTest {
 
     private final FmodLibraryLoader audioManager =
-            new FmodLibraryLoader(
-                    new FmodProperties("unpackaged", "standard"),
-                    new Platform());
+            new FmodLibraryLoader(new FmodProperties("unpackaged", "standard"), new Platform());
 
     @Test
     @DisplayName("FmodLibraryLoader provides correct FMOD library filenames for each platform")

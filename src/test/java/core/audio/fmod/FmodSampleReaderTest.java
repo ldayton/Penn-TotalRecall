@@ -32,9 +32,7 @@ class FmodSampleReaderTest {
     @BeforeEach
     void setUp() {
         libraryLoader =
-                new FmodLibraryLoader(
-                        new FmodProperties("unpackaged", "standard"),
-                        new Platform());
+                new FmodLibraryLoader(new FmodProperties("unpackaged", "standard"), new Platform());
         reader = new FmodSampleReader(libraryLoader);
     }
 

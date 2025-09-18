@@ -17,9 +17,7 @@ class FmodLibraryLoaderTest {
     @DisplayName("FmodLibraryLoader provides correct FMOD loading mode from configuration")
     void testFmodLoadingModeFromConfiguration() {
         FmodLibraryLoader loader =
-                new FmodLibraryLoader(
-                        new FmodProperties("unpackaged", "standard"),
-                        new Platform());
+                new FmodLibraryLoader(new FmodProperties("unpackaged", "standard"), new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration
         LibraryLoadingMode mode = loader.getLoadingMode();
@@ -35,9 +33,7 @@ class FmodLibraryLoaderTest {
     @DisplayName("FmodLibraryLoader provides correct FMOD library type from configuration")
     void testLibraryTypeFromConfiguration() {
         FmodLibraryLoader loader =
-                new FmodLibraryLoader(
-                        new FmodProperties("unpackaged", "standard"),
-                        new Platform());
+                new FmodLibraryLoader(new FmodProperties("unpackaged", "standard"), new Platform());
 
         // Test that FmodLibraryLoader correctly reads configuration
         LibraryType type = loader.getLibraryType();

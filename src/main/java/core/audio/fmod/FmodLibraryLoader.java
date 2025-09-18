@@ -319,7 +319,8 @@ public class FmodLibraryLoader {
 
                 if (!libraryFile.exists()) {
                     throw new UnsatisfiedLinkError(
-                            "FMOD library not found in app bundle: " + libraryFile.getAbsolutePath());
+                            "FMOD library not found in app bundle: "
+                                    + libraryFile.getAbsolutePath());
                 }
 
                 logger.debug(
