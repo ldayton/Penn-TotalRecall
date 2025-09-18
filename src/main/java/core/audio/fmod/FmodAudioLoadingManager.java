@@ -173,8 +173,9 @@ class FmodAudioLoadingManager {
                         if (result != FmodConstants.FMOD_OK
                                 && result != FmodConstants.FMOD_ERR_INVALID_HANDLE) {
                             log.warn(
-                                    "Error releasing sound for '{}': error code " + result,
-                                    audio.path());
+                                    "Error releasing sound for '{}': error code {}",
+                                    audio.path(),
+                                    result);
                         }
                     });
             // Always clear reference even if release failed to prevent use-after-free

@@ -125,8 +125,8 @@ public class AppFocusTraversalPolicy extends FocusTraversalPolicy {
         if (componentIndex < 0) {
             logger.error(
                     "can't find the next focus component because I don't recognize the current one:"
-                            + " "
-                            + aComponent);
+                            + " {}",
+                    aComponent);
         }
         return findNextEligible(
                 focusLoop,

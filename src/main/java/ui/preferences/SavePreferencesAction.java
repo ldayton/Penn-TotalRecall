@@ -51,15 +51,16 @@ public class SavePreferencesAction extends AbstractAction {
             preferencesFrame.windowClosing(
                     new WindowEvent(preferencesFrame, WindowEvent.WINDOW_CLOSING));
         } else {
-            String bigMessage = "The following preferences could not be saved:\n\n";
+            StringBuilder bigMessage =
+                    new StringBuilder("The following preferences could not be saved:\n\n");
             for (int i = 0; i < errorMessages.size(); i++) {
-                bigMessage += "-- " + errorMessages.get(i).getPrefName() + " --\n";
-                bigMessage += errorMessages.get(i).getMessage() + "\n";
+                bigMessage.append("-- ").append(errorMessages.get(i).getPrefName()).append(" --\n");
+                bigMessage.append(errorMessages.get(i).getMessage()).append("\n");
                 if (i < errorMessages.size() - 1) {
-                    bigMessage += "\n";
+                    bigMessage.append("\n");
                 }
             }
-            dialogService.showError(bigMessage);
+            dialogService.showError(bigMessage.toString());
             preferencesFrame.toFront(); // to make sure PreferenceFrame will be in foreground
         }
     }

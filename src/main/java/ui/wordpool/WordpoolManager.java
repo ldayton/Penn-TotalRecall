@@ -82,8 +82,8 @@ public class WordpoolManager {
                                             WordpoolFileParser.parse(lstFile, true));
                                 } catch (IOException e) {
                                     logger.error(
-                                            "Failed to parse LST file: "
-                                                    + lstFile.getAbsolutePath(),
+                                            "Failed to parse LST file: {}",
+                                            lstFile.getAbsolutePath(),
                                             e);
                                 }
                             }

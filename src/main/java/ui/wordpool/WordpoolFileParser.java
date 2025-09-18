@@ -46,7 +46,7 @@ public class WordpoolFileParser {
                     logger.warn("line #" + lineNum + " not a valid wordpool word: " + line);
                 } else {
                     String trimmed = line.trim();
-                    if (suppressLineNumbers == false) {
+                    if (!suppressLineNumbers) {
                         words.add(new WordpoolWord(trimmed, lineNum));
                     } else {
                         words.add(new WordpoolWord(trimmed, -1));

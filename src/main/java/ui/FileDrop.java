@@ -605,7 +605,6 @@ public class FileDrop {
      */
     public static class Event extends EventObject {
 
-        private static final long serialVersionUID = 1L;
         private final File[] files;
 
         /**

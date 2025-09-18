@@ -108,7 +108,7 @@ public class LookAndFeelManager {
                     }
                 }
             } catch (IOException e) {
-                logger.warn("Failed to load dock icon: " + e.getMessage());
+                logger.warn("Failed to load dock icon: {}", e.getMessage());
             }
         }
     }

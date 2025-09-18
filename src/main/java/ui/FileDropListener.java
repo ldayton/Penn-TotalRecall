@@ -88,8 +88,8 @@ public class FileDropListener implements FileDrop.Listener {
                                                 } catch (IOException e) {
                                                     logger.error(
                                                             "Error parsing wordpool file during"
-                                                                    + " drag and drop: "
-                                                                    + lstFile.getAbsolutePath(),
+                                                                    + " drag and drop: {}",
+                                                            lstFile.getAbsolutePath(),
                                                             e);
                                                 }
                                             }

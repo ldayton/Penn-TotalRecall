@@ -46,7 +46,7 @@ public class AudioIntegrationMode {
             logger.error("❌ Integration test timed out after {} seconds", TIMEOUT_SECONDS);
             return false;
         } catch (Throwable t) {
-            logger.error("❌ Integration test failed with throwable: " + t.getMessage(), t);
+            logger.error("❌ Integration test failed with throwable: {}", t.getMessage(), t);
             return false;
         }
     }

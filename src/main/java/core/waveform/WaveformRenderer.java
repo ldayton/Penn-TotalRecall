@@ -420,7 +420,7 @@ class WaveformRenderer {
                         if (peak <= 0) {
                             yScale = 0;
                         } else {
-                            yScale = ((key.height() / 2) - 1) / peak;
+                            yScale = (((double) key.height() / 2) - 1) / peak;
                             if (Double.isInfinite(yScale) || Double.isNaN(yScale)) {
                                 yScale = 0;
                             }
