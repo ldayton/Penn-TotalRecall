@@ -43,7 +43,6 @@ public class PreferencesFrame extends JFrame implements WindowListener {
     // Save/Restore actions are local UI actions owned by this frame to avoid DI cycles
 
     private JPanel prefPanel;
-    private final JScrollPane prefScrollPane;
     private JPanel buttonPanel;
 
     /**
@@ -97,7 +96,7 @@ public class PreferencesFrame extends JFrame implements WindowListener {
 
         // since there may be too many preferences in the prefPanel to fit in the PreferencesFrame,
         // we add prefPanel to a scroll pane
-        prefScrollPane = new JScrollPane();
+        JScrollPane prefScrollPane = new JScrollPane();
         prefScrollPane.setViewportView(prefPanel);
 
         prefScrollPane.getHorizontalScrollBar().setUnitIncrement(15);

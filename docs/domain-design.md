@@ -15,7 +15,7 @@ PLAYBACK (Audio Control) → VIEWPORT (Window into Audio) → WAVEFORM (Visual R
 *Controls audio playback and provides current state*
 
 | Class                            | Purpose                                | Key Data                                              |
-| -------------------------------- | -------------------------------------- | ----------------------------------------------------- |
+|----------------------------------|----------------------------------------|-------------------------------------------------------|
 | `core.playback.PlaybackEngine`   | Low-level audio operations             |                                                       |
 | `core.playback.PlaybackSession`  | Active playback session                | File, position, state                                 |
 | `core.playback.PlaybackSnapshot` | Immutable snapshot of current playback | `playheadFrame`, `totalFrames`, `sampleRate`, `state` |
@@ -26,7 +26,7 @@ PLAYBACK (Audio Control) → VIEWPORT (Window into Audio) → WAVEFORM (Visual R
 *The window through which we view the audio timeline*
 
 | Class                             | Purpose                   | Key Data                                               |
-| --------------------------------- | ------------------------- | ------------------------------------------------------ |
+|-----------------------------------|---------------------------|--------------------------------------------------------|
 | `core.viewport.Viewport`          | The viewing window        | `centerFrame`, `framesPerPixel`, `widthPx`, `heightPx` |
 | `core.viewport.ViewportManager`   | Manages viewport state    | Handles zoom, pan, follows playback                    |
 | `core.viewport.TimelineWindow`    | What the viewport sees    | `startFrame`, `endFrame`, `visibleDuration`            |
@@ -53,7 +53,7 @@ record Viewport(
 *Generates visual representations of audio*
 
 | Class                             | Purpose                  | Key Transformation                                   |
-| --------------------------------- | ------------------------ | ---------------------------------------------------- |
+|-----------------------------------|--------------------------|------------------------------------------------------|
 | `core.waveform.WaveformRequest`   | What to render           | `TimelineWindow` + dimensions → request              |
 | `core.waveform.WaveformImage`     | Generated waveform image | Contains `BufferedImage` + metadata                  |
 | `core.waveform.WaveformGenerator` | Creates waveform images  | `WaveformRequest → CompletableFuture<WaveformImage>` |
@@ -66,7 +66,7 @@ record Viewport(
 *Thin layer that combines everything for rendering*
 
 | Class                         | Purpose                    | Key Data                                         |
-| ----------------------------- | -------------------------- | ------------------------------------------------ |
+|-------------------------------|----------------------------|--------------------------------------------------|
 | `core.display.RenderState`    | What to display            | `EMPTY`, `LOADING`, `ERROR`, `READY`             |
 | `core.display.RenderSpec`     | Complete rendering package | `RenderState`, `WaveformImage?`, `errorMessage?` |
 | `core.display.DisplayService` | Coordinates rendering      | `(Viewport, PlaybackSnapshot) → RenderSpec`      |
@@ -77,7 +77,7 @@ record Viewport(
 *Swing-specific components*
 
 | Class                          | Purpose                         |
-| ------------------------------ | ------------------------------- |
+|--------------------------------|---------------------------------|
 | `ui.viewport.ViewportPanel`    | JComponent that owns a Viewport |
 | `ui.viewport.ViewportPainter`  | Paints RenderSpec to Graphics2D |
 | `ui.playback.PlaybackControls` | Play/pause/seek UI              |

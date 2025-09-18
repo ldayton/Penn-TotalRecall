@@ -129,15 +129,10 @@ public final class ViewportPainter {
             lastSpecId = currentSpecId;
         }
         switch (ctx.mode()) {
-            case EMPTY -> {
-                paintEmptyState(g, bounds);
-            }
-            case LOADING -> {
-                paintLoadingIndicator(g, bounds);
-            }
-            case ERROR -> {
-                paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
-            }
+            case EMPTY -> paintEmptyState(g, bounds);
+            case LOADING -> paintLoadingIndicator(g, bounds);
+            case ERROR ->
+                    paintErrorMessage(g, bounds, ctx.errorMessage().orElse("Audio loading failed"));
             case RENDER -> {
                 long currentGeneration = ctx.generation();
 

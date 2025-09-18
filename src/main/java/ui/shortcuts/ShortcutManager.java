@@ -42,7 +42,6 @@ public class ShortcutManager extends JFrame {
     private final ShortcutPreferences.ActionConfigListener listener;
     private final KeyboardManager keyboardManager;
     private final DialogService dialogService;
-    private final ContentPane contentPane;
 
     /**
      * Constructor that accepts ActionConfigs from the ActionsManager system. This replaces the old
@@ -64,7 +63,7 @@ public class ShortcutManager extends JFrame {
 
         shortcutPreferences.persistDefaults(false);
 
-        this.contentPane = new ContentPane();
+        ContentPane contentPane = new ContentPane();
         setSize(new Dimension(800, contentPane.getPreferredSize().height));
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new EscapeWindowListener());
@@ -85,13 +84,11 @@ public class ShortcutManager extends JFrame {
     }
 
     private class ContentPane extends JPanel {
-        private final Scroller scroller;
-        private final ResetButtonPanel resetButtonPanel;
 
         public ContentPane() {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            this.scroller = new Scroller();
-            this.resetButtonPanel = new ResetButtonPanel();
+            Scroller scroller = new Scroller();
+            ResetButtonPanel resetButtonPanel = new ResetButtonPanel();
 
             add(scroller);
             add(Box.createVerticalBox());

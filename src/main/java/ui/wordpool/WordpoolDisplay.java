@@ -32,8 +32,6 @@ public class WordpoolDisplay extends JPanel {
     private final WordpoolTextField wordpoolTextField;
     private final WordpoolList wordpoolList;
 
-    private static WordpoolScrollPane pane;
-
     /**
      * Creates a new instance of the component, initializing internal components, listeners, and
      * various aspects of appearance.
@@ -45,7 +43,7 @@ public class WordpoolDisplay extends JPanel {
         this.wordpoolTextField = wordpoolTextField;
         this.wordpoolList = wordpoolList;
         field = wordpoolTextField;
-        pane = new WordpoolScrollPane(wordpoolList);
+        WordpoolScrollPane pane = new WordpoolScrollPane(wordpoolList);
         // Add input at the top, list fills remaining area. No extra padding between.
         add(field, BorderLayout.NORTH);
         add(pane, BorderLayout.CENTER);

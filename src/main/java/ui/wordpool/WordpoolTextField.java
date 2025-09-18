@@ -170,7 +170,7 @@ public class WordpoolTextField extends JTextField implements KeyListener, FocusL
     public void keyPressed(KeyEvent e) {
         if (e.getModifiersEx() == 0) { // no modifiers
             if (e.getKeyCode() == KeyEvent.VK_TAB) {
-                if (getText().length() == 0) {
+                if (getText().isEmpty()) {
                     getFocusCycleRootAncestor()
                             .getFocusTraversalPolicy()
                             .getComponentAfter(getFocusCycleRootAncestor(), this)

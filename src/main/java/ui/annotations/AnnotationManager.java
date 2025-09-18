@@ -5,6 +5,7 @@ import core.audio.session.AudioSessionDataSource;
 import core.dispatch.EventDispatchBus;
 import core.dispatch.Subscribe;
 import core.env.Constants;
+import core.events.AppStateChangedEvent;
 import core.events.CloseAudioFileEvent;
 import core.events.CompleteAnnotationEvent;
 import core.events.DialogEvent;
@@ -25,7 +26,7 @@ public class AnnotationManager {
     private final EventDispatchBus eventBus;
     private final AudioSessionDataSource sessionSource;
     private final AnnotationDisplay annotationDisplay;
-    private AudioFile currentAudioFile = null;
+    private AudioFile currentAudioFile;
 
     @Inject
     public AnnotationManager(
@@ -36,6 +37,22 @@ public class AnnotationManager {
         this.sessionSource = sessionSource;
         this.annotationDisplay = annotationDisplay;
         eventBus.subscribe(this);
+    }
+
+    @Subscribe
+    public void onAppStateChanged(@NonNull AppStateChangedEvent event) {
+        if (event.isAudioLoaded() && event.context() instanceof File loadedFile) {
+            try {
+                currentAudioFile = new AudioFile(loadedFile);
+                log.debug("Tracking audio file: {}", currentAudioFile.getName());
+            } catch (AudioFilePathException e) {
+                log.error("Error creating AudioFile reference: {}", e.getMessage());
+                currentAudioFile = null;
+            }
+        } else if (event.isAudioClosed()) {
+            currentAudioFile = null;
+            log.debug("Cleared audio file reference");
+        }
     }
 
     @Subscribe
@@ -72,13 +89,17 @@ public class AnnotationManager {
                     eventBus.publish(new DialogEvent("Operation failed.", DialogEvent.Type.ERROR));
                     return;
                 } else {
-                    try {
-                        if (currentAudioFile != null) {
+                    // Update the done status on the current audio file
+                    if (currentAudioFile != null) {
+                        try {
                             currentAudioFile.updateDoneStatus();
+                            log.info(
+                                    "Updated done status for file: {}", currentAudioFile.getName());
+                        } catch (AudioFilePathException e) {
+                            log.error("Error updating done status: {}", e.getMessage());
                         }
-                    } catch (AudioFilePathException e1) {
-                        log.error("Failed to update audio file done status", e1);
                     }
+
                     // Close the audio file using the event system
                     eventBus.publish(new CloseAudioFileEvent());
                     log.info("Annotation marked complete and file closed");
@@ -116,7 +137,4 @@ public class AnnotationManager {
     public int getNumAnnotations() {
         return annotationDisplay.getNumAnnotations();
     }
-
-    // We'll need to track the current audio file when it's loaded
-    // This would be done through AppStateChangedEvent but that requires more context
 }
