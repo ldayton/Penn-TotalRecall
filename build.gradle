@@ -6,6 +6,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.52.+'
     id 'org.jetbrains.qodana' version '2025.2.1'
     id 'checkstyle'
+    id 'eclipse'
 }
 
 group = 'edu.upenn.psych.memory'
@@ -113,6 +114,22 @@ jar {
 
 clean {
     delete 'classes', 'dist'
+}
+
+// For configuring VS Code's Red Hat Java extension
+eclipse {
+    classpath {
+        file.whenMerged { classpath ->
+            // Exclude native libraries
+            classpath.entries.removeAll { entry ->
+                entry.path && (
+                    entry.path.endsWith('.so') ||
+                    entry.path.endsWith('.dll') ||
+                    entry.path.endsWith('.dylib')
+                )
+            }
+        }
+    }
 }
 
 tasks.register('createCustomRuntime') {
