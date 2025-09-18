@@ -157,15 +157,26 @@ public class AudioSession implements PlaybackListener {
                             : "0");
             // Keep explicit playhead in sync with engine position
             applyCommand(new AudioSessionCommand.UpdatePosition(targetFrame));
-        } else if (stateMachine.getCurrentState() == AudioSessionStateMachine.State.READY) {
-            // No playback - set pending position
-            applyCommand(new AudioSessionCommand.SetPendingSeek(targetFrame));
-            log.info(
-                    "Set pending seek to frame {} ({}s)",
-                    targetFrame,
-                    ctx.sampleRate() > 0
-                            ? String.format("%.2f", targetFrame / (double) ctx.sampleRate())
-                            : "0");
+        } else {
+            // No active playback - check if we should set pending seek
+            var state = stateMachine.getCurrentState();
+            if (state == AudioSessionStateMachine.State.READY
+                    || state == AudioSessionStateMachine.State.PAUSED) {
+                // Set pending position for READY or PAUSED state (e.g., after playback completes)
+                applyCommand(new AudioSessionCommand.SetPendingSeek(targetFrame));
+                log.info(
+                        "Set pending seek to frame {} ({}s) in {} state",
+                        targetFrame,
+                        ctx.sampleRate() > 0
+                                ? String.format("%.2f", targetFrame / (double) ctx.sampleRate())
+                                : "0",
+                        state);
+                // Log the updated position to verify it was set
+                log.debug(
+                        "After seek: playheadFrame={}, pendingStartFrame={}",
+                        context.get().playheadFrame(),
+                        context.get().pendingStartFrame());
+            }
         }
     }
 
@@ -178,7 +189,8 @@ public class AudioSession implements PlaybackListener {
         if (ctx.hasPlayback()) {
             currentFrame = audioEngine.getPosition(ctx.playbackHandle().get());
         } else {
-            currentFrame = ctx.pendingStartFrame().orElse(0L);
+            // Use the actual playhead position when there's no active playback
+            currentFrame = ctx.playheadFrame();
         }
 
         // Calculate target
@@ -230,7 +242,16 @@ public class AudioSession implements PlaybackListener {
         switch (state) {
             case READY -> play();
             case PLAYING -> pause();
-            case PAUSED -> resume();
+            case PAUSED -> {
+                // If we're paused but have no playback handle (e.g., after playback completed),
+                // start new playback instead of resuming
+                var ctx = context.get();
+                if (ctx.hasPlayback()) {
+                    resume();
+                } else {
+                    play();
+                }
+            }
             default -> log.warn("PlayPause in state: {}", state);
         }
     }
@@ -278,9 +299,11 @@ public class AudioSession implements PlaybackListener {
 
     @Override
     public void onPlaybackComplete(@NonNull PlaybackHandle playback) {
-        log.info("Playback completed");
+        log.info("Playback completed - transitioning to paused state");
+        // Note: StopPlayback command clears the playback handle but preserves position
         applyCommand(new AudioSessionCommand.StopPlayback());
-        stateMachine.transitionToReady();
+        // Transition to PAUSED instead of READY so playback ends in pause state
+        stateMachine.transitionToPaused();
     }
 
     @Override

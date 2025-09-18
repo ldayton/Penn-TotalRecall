@@ -174,12 +174,10 @@ class FmodListenerManager {
 
     /** Stop monitoring the current playback. Progress callbacks will cease after this call. */
     void stopMonitoring() {
+        // Clear handle first to prevent any further updates
         currentHandle = null;
-        totalFrames = 0L;
-        currentPositionFrames = 0L;
-        sourceRate = 0;
-        dspStartSamples = 0L;
 
+        // Shut down the timer before resetting state
         ScheduledExecutorService timer = progressTimer;
         if (timer != null) {
             progressTimer = null;
@@ -193,6 +191,12 @@ class FmodListenerManager {
                 Thread.currentThread().interrupt();
             }
         }
+
+        // Now reset state after timer is stopped
+        totalFrames = 0L;
+        currentPositionFrames = 0L;
+        sourceRate = 0;
+        dspStartSamples = 0L;
     }
 
     /**
@@ -386,6 +390,22 @@ class FmodListenerManager {
     private void handlePlaybackStopped() {
         FmodPlaybackHandle handle = currentHandle;
         if (handle != null) {
+            // Send final position update to exact end frame before completing
+            // This ensures the playhead stops at the exact end position
+            long finalPosition;
+            if (handle.getEndFrame() != Long.MAX_VALUE) {
+                // For range playback, set position to exact end frame
+                finalPosition = handle.getEndFrame();
+            } else {
+                // For full file playback, set to start + total duration
+                // This handles the case where we're playing the entire file
+                finalPosition = handle.getStartFrame() + totalFrames;
+            }
+
+            // Update internal position and notify listeners
+            currentPositionFrames = finalPosition;
+            notifyProgress(handle, finalPosition, totalFrames);
+
             handle.markInactive();
             notifyPlaybackComplete(handle);
         }
